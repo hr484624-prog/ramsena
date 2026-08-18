@@ -550,6 +550,7 @@ function shareApp(){
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -568,6 +569,69 @@ function shareApp(){
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const recaptchaVerifier = new RecaptchaVerifier(
+  auth,
+  "recaptcha-container",
+  {
+    size: "normal"
+  }
+);
+async function sendOTP() {
+  const phoneNumber = document.getElementById("phone-number").value;
+
+  if (!phoneNumber) {
+    alert("Please enter mobile number");
+    return;
+  }
+
+  try {
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      recaptchaVerifier
+    );
+
+    window.confirmationResult = confirmationResult;
+    alert("OTP sent successfully!");
+  } catch (error) {
+    alert(error.message);
+  }
+  }
+async function verifyOTP() {
+  const otp = document.getElementById("otp-code").value;
+
+  if (!otp) {
+    alert("Please enter OTP");
+    return;
+  }
+
+  try {
+    await window.confirmationResult.confirm(otp);
+    alert("Phone number verified successfully!");
+  } catch (error) {
+    alert(error.message);
+  }
+  }
 </script>
+<div id="phone-verification">
+  <h2>Mobile Number Verification</h2>
+
+  <input
+    type="tel"
+    id="phone-number"
+    placeholder="+91XXXXXXXXXX"
+  >
+
+  <button onclick="sendOTP()">Send OTP</button>
+<input
+  type="text"
+  id="otp-code"
+  placeholder="Enter OTP"
+>
+
+<button onclick="verifyOTP()">Verify OTP</button>
+  <div id="recaptcha-container"></div>
+</div>
 </body>
   </html>
