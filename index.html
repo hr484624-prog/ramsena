@@ -386,10 +386,11 @@ section {
 
 <body>
 
-<header>
+<header style="position:relative;">
   <div class="logo">🐯</div>
   <h1>RAMSENA XI</h1>
   <p>ONE TEAM • ONE PRIDE • ONE FAMILY</p>
+<button onclick="openSecretRoom()" style="position:absolute;right:15px;top:18px;background:transparent;border:0;font-size:30px;cursor:pointer;">🐯</button>
 </header>
 <div style="text-align:center;padding:18px;margin:15px 10px;border:2px solid #ff7800;border-radius:15px;background:#111;">
   <h3 style="color:#ff7800;margin:5px;">🐯 PLAYER OF THE DAY 🏆</h3>
@@ -625,6 +626,90 @@ boostBtn.onclick = () => {
 };
 
 document.body.appendChild(boostBtn);
+function openSecretRoom() {
+  const room = document.createElement("div");
+
+  room.id = "secretRoom";
+  room.style.cssText = `
+    position:fixed;
+    inset:0;
+    z-index:999999;
+    background:
+      radial-gradient(circle at center, #3a1800 0%, #090909 45%, #000 100%);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:25px;
+    box-sizing:border-box;
+    overflow:hidden;
+  `;
+
+  room.innerHTML = `
+    <div style="font-size:80px;margin-bottom:10px;
+      filter:drop-shadow(0 0 20px #ff7300);">
+      🐯
+    </div>
+
+    <div style="
+      color:#ff7800;
+      font-size:34px;
+      font-weight:900;
+      letter-spacing:3px;
+      text-shadow:0 0 15px #ff7300;
+      margin-bottom:10px;">
+      SECRET ROOM
+    </div>
+
+    <div style="
+      color:#ddd;
+      font-size:16px;
+      letter-spacing:2px;
+      margin-bottom:35px;">
+      🐯 ENTER THE DEN 🐯
+    </div>
+
+    <button onclick="enterTheDen()" style="
+      background:#ff7300;
+      color:white;
+      border:none;
+      padding:15px 35px;
+      border-radius:30px;
+      font-size:17px;
+      font-weight:bold;
+      box-shadow:0 0 25px rgba(255,115,0,.7);
+      cursor:pointer;">
+      🔥 ENTER THE DEN
+    </button>
+
+    <button onclick="closeSecretRoom()" style="
+      position:absolute;
+      top:20px;
+      right:20px;
+      background:rgba(255,255,255,.08);
+      color:white;
+      border:1px solid #ff7300;
+      border-radius:50%;
+      width:45px;
+      height:45px;
+      font-size:22px;">
+      ✕
+    </button>
+  `;
+
+  document.body.appendChild(room);
+}
+
+function closeSecretRoom() {
+  const room = document.getElementById("secretRoom");
+  if (room) room.remove();
+}
+
+function enterTheDen() {
+  alert("🐯 RAMSENA XI\n\n🔥 WELCOME TO THE DEN 🔥\n\nOnly the fearless enter.");
+  }
 </script>
 </body>
   </html>
