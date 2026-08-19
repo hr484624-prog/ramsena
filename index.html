@@ -368,6 +368,13 @@ body::after {
   }
 
 }
+section {
+    display: none;
+}
+
+#home {
+    display: block;
+  }
 </style>
 </head>
 
@@ -566,13 +573,17 @@ body::after {
 </footer>
 <script>
 function showSection(id) {
-  document.querySelectorAll("body > section").forEach(section => {
-    section.style.display = "none";
+  document.querySelectorAll("section").forEach(section => {
+    section.style.setProperty("display", "none", "important");
   });
 
-  document.getElementById(id).style.display = "block";
-  window.scrollTo(0, 0);
-}
+  const selected = document.getElementById(id);
+
+  if (selected) {
+    selected.style.setProperty("display", "block", "important");
+    window.scrollTo(0, 0);
+  }
+  }
 
 document.querySelectorAll("nav a").forEach(link => {
   link.addEventListener("click", function(e) {
