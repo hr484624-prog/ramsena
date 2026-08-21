@@ -1,4 +1,4 @@
-const CACHE_NAME = "ramsena-v1";
+const CACHE_NAME = "ramsena-v2";
 
 const FILES = [
   "./",
