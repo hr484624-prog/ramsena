@@ -212,30 +212,56 @@ body {
 
 <script>
 const SUPABASE_URL = "https://ijtkdsklbnnovssdxwca.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_3tqAUi3VectG_I85t8L0Qg_VNegXeSb";
 
 const supabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
-/* GET USER NAME FROM URL */
 
+/* TEST USERS */
+const USER_1 = "0cdfce16-f076-4f09-9da3-2383ff361a8f";
+const USER_2 = "6ec84f25-b03f-4c32-93dd-3b553f95fc6f";
+
+/* TEST: user=1 किंवा user=2 */
 const params = new URLSearchParams(window.location.search);
+const testUser = params.get("user") || "1";
 
-const userName = params.get("user") || "User";
+const senderId = testUser === "2" ? USER_2 : USER_1;
+const receiverId = testUser === "2" ? USER_1 : USER_2;
 
-document.getElementById("userName").innerText = userName;
+const userName =
+    testUser === "2" ? "User 2" : "User 1";
+
+const userNameElement = document.getElementById("userName");
+
+if (userNameElement) {
+    userNameElement.innerText = userName;
+}
 
 
 /* SEND MESSAGE */
-
-function sendMessage() {
+async function sendMessage() {
 
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
 
     if (text === "") {
+        return;
+    }
+
+    const { error } = await supabase
+        .from("messages")
+        .insert({
+            sender_id: senderId,
+            receiver_id: receiverId,
+            message: text,
+            messages_type: "text"
+        });
+
+    if (error) {
+        console.error("Message send error:", error);
+        alert("Message send झाला नाही ❌");
         return;
     }
 
@@ -250,7 +276,6 @@ function sendMessage() {
     const message = document.createElement("div");
 
     message.className = "message sent";
-
     message.innerText = text;
 
     chatArea.appendChild(message);
@@ -263,13 +288,16 @@ function sendMessage() {
 
 /* ENTER KEY */
 
-document.getElementById("messageInput").addEventListener("keydown", function(event) {
+document
+    .getElementById("messageInput")
+    .addEventListener("keydown", function(event) {
 
-    if (event.key === "Enter") {
-        sendMessage();
-    }
+        if (event.key === "Enter") {
+            sendMessage();
+        }
 
-});
+    });
+</script>
 
 
 /* BACK */
