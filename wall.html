@@ -469,7 +469,30 @@ function escapeHtml(text){
 
   return div.innerHTML;
 }
+function toggleFollow(button, playerName){
+  let following = JSON.parse(localStorage.getItem("ramsenaFollowing") || "{}");
 
+  if(following[playerName]){
+    delete following[playerName];
+    button.innerText = "➕ FOLLOW";
+    button.style.background = "#ff7300";
+  }else{
+    following[playerName] = true;
+    button.innerText = "✓ FOLLOWING";
+    button.style.background = "#555";
+  }
+
+  localStorage.setItem("ramsenaFollowing", JSON.stringify(following));
+}
+
+function loadFollowStatus(button, playerName){
+  let following = JSON.parse(localStorage.getItem("ramsenaFollowing") || "{}");
+
+  if(following[playerName]){
+    button.innerText = "✓ FOLLOWING";
+    button.style.background = "#555";
+  }
+  }
 </script>
 
 </body>
