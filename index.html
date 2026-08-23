@@ -499,8 +499,63 @@ window.openVerification = function(){
   `;
 
   document.body.appendChild(popup);
+const recaptchaContainer = document.createElement("div");
+recaptchaContainer.id = "recaptcha-container";
+popup.appendChild(recaptchaContainer);
+
+if (window.recaptchaVerifier) {
+  window.recaptchaVerifier.clear();
+}
+
+window.recaptchaVerifier = new RecaptchaVerifier(
+  auth,
+  recaptchaContainer,
+  {
+    size: "invisible"
+  }
+);
 };
+
+
+// 👇 इथे sendVerification() function paste करायचा
+let confirmationResult;
+async function sendVerification() {
+   
+  const phone = document.getElementById("verificationPhone").value.trim();
+
+    if (!phone) {
+        alert("📱 कृपया mobile number टाका.");
+        return;
+    }
+
+    try {
+        if (!phone.startsWith("+91")) {
+            alert("📱 Number +91 ने सुरू करा.");
+            return;
+        }
+
+        confirmationResult = await signInWithPhoneNumber(
+            auth,
+            phone,
+            window.recaptchaVerifier
+        );
+
+        const otp = prompt("📩 OTP टाका:");
+
+        if (!otp) return;
+
+        await confirmationResult.confirm(otp);
+
+        alert("✅ NUMBER VERIFIED!");
+
+    } catch (error) {
+        console.error(error);
+        alert("❌ OTP पाठवताना error आला.\n\n" + error.message);
+    }
+}
+
 </script>
+
 <!-- RAMSENA QUOTE OF THE DAY -->
 <div class="quote-box" id="quoteBox">
   <div class="quote-title">🐯 RAMSENA QUOTE OF THE DAY</div>
