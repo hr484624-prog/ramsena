@@ -424,6 +424,66 @@ import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.g
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 const auth = getAuth(app);
+window.openVerification = function(){
+  const popup = document.createElement("div");
+
+  popup.innerHTML = `
+    <div style="
+      position:fixed;inset:0;z-index:999999;
+      background:rgba(0,0,0,.88);
+      display:flex;align-items:center;justify-content:center;
+      padding:20px;
+    ">
+      <div style="
+        width:100%;max-width:390px;
+        background:#111;
+        border:2px solid #ff7300;
+        border-radius:25px;
+        padding:28px 22px;
+        text-align:center;
+        box-shadow:0 0 35px rgba(255,115,0,.6);
+      ">
+        <div style="font-size:45px;">📱</div>
+
+        <h2 style="color:#ff7800;margin:10px 0;">
+          NUMBER VERIFICATION
+        </h2>
+
+        <p style="color:#ddd;">
+          तुमचा मोबाइल नंबर verify करा
+        </p>
+
+        <input id="verificationPhone"
+          type="tel"
+          placeholder="+91 XXXXX XXXXX"
+          style="
+            width:100%;padding:14px;margin-top:18px;
+            border-radius:12px;border:1px solid #555;
+            background:#080808;color:white;font-size:16px;
+          ">
+
+        <button onclick="sendVerificationOTP()" style="
+          width:100%;margin-top:15px;padding:14px;
+          border:0;border-radius:25px;
+          background:#ff7300;color:white;
+          font-weight:bold;font-size:16px;
+        ">
+          📲 SEND OTP
+        </button>
+
+        <button onclick="this.closest('div[style*=fixed]').parentElement.remove()" style="
+          margin-top:12px;padding:10px 25px;
+          border-radius:20px;background:transparent;
+          color:#aaa;border:1px solid #555;
+        ">
+          CANCEL
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+};
 </script>
 <!-- RAMSENA QUOTE OF THE DAY -->
 <div class="quote-box" id="quoteBox">
