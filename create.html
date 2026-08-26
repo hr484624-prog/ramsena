@@ -91,10 +91,19 @@
   <div class="top">
     Create ✨
   </div>
-
   <div class="create-box">
 
-    <textarea id="postText" placeholder="What's on your mind?"></textarea>
+    <input
+      type="file"
+      id="postImage"
+      accept="image/*"
+      style="width:100%; margin-bottom:15px;"
+    >
+
+    <textarea
+      id="postText"
+      placeholder="What's on your mind?"
+    ></textarea>
 
     <button class="post-btn" onclick="createPost()">
       Create Post
@@ -116,20 +125,51 @@
 
   <script>
 
-    function createPost() {
+function createPost() {
 
-      let text = document.getElementById("postText").value.trim();
+  const imageInput =
+    document.getElementById("postImage");
 
-      if (text === "") {
-        alert("Please write something first.");
-        return;
-      }
+  const text =
+    document.getElementById("postText").value.trim();
 
-      document.getElementById("message").style.display = "block";
+  const file =
+    imageInput.files[0];
 
-      document.getElementById("postText").value = "";
+  if (!file) {
+    alert("Please select a photo first.");
+    return;
+  }
 
-    }
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+
+    localStorage.setItem(
+      "v_post_image",
+      e.target.result
+    );
+
+    localStorage.setItem(
+      "v_post_text",
+      text
+    );
+
+    document.getElementById("message").style.display =
+      "block";
+
+    imageInput.value = "";
+    document.getElementById("postText").value = "";
+
+    setTimeout(function() {
+      window.location.href = "index.html";
+    }, 1000);
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
 
   </script>
 
