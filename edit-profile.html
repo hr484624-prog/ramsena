@@ -58,11 +58,11 @@ body{
   margin:auto;
 }
 
-.profile-pic div{
+.profile-pic img{
   width:100%;
   height:100%;
   border-radius:50%;
-  background:#ddd;
+  object-fit:cover;
   border:3px solid white;
 }
 
@@ -115,12 +115,28 @@ textarea{
 
 <div class="form">
 
-  <div class="photo">
-    <div class="profile-pic">
-      <div></div>
-    </div>
-    <div class="change">Change profile photo</div>
+<div class="photo">
+
+  <div class="profile-pic">
+    <img id="profileImage" src="" alt="Profile Photo">
   </div>
+
+  <div
+    class="change"
+    onclick="document.getElementById('imageInput').click()"
+    style="cursor:pointer;"
+  >
+    Change profile photo
+  </div>
+
+  <input
+    type="file"
+    id="imageInput"
+    accept="image/*"
+    style="display:none;"
+  >
+
+</div>
 
   <label>Username</label>
   <input id="username" type="text" value="hitesh">
@@ -136,6 +152,43 @@ textarea{
 </div>
 
 <script>
+
+const imageInput = document.getElementById("imageInput");
+const profileImage = document.getElementById("profileImage");
+
+imageInput.addEventListener("change", function(){
+
+  const file = this.files[0];
+
+  if(file){
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+      profileImage.src = e.target.result;
+
+      localStorage.setItem(
+        "v_profile_image",
+        e.target.result
+      );
+
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+});
+
+
+const savedImage =
+  localStorage.getItem("v_profile_image");
+
+if(savedImage){
+  profileImage.src = savedImage;
+}
+
+
 function saveProfile(){
 
   const username =
@@ -160,6 +213,7 @@ function saveProfile(){
 
   window.location.href = "profile.html";
 }
+
 </script>
 
 </body>
