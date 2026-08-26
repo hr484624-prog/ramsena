@@ -133,6 +133,48 @@
       align-items: center;
       font-size: 25px;
     }
+ .popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.popup-box {
+  width: 85%;
+  max-width: 350px;
+  background: white;
+  border-radius: 15px;
+  padding: 22px;
+  text-align: center;
+}
+
+.popup-box h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.popup-box p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.popup-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.popup-buttons button {
+  flex: 1;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  font-weight: bold;
+    }
   </style>
 </head>
 
@@ -183,7 +225,7 @@
   <b>hitesh</b>
   <span id="homePostText">Welcome to VIBRA 🚀</span>
   </div>
-<button id="deletePostBtn" onclick="deletePost()" style="
+<button id="deletePostBtn" onclick="openDeletePopup()" style="
   margin: 0 12px 15px;
   padding: 8px 15px;
   border: 1px solid #ddd;
@@ -201,39 +243,49 @@
     <a href="likes.html" style="color:#111;text-decoration:none;">♡</a>
     <a href="profile.html" style="color:#111;text-decoration:none;">◯</a>
   </div>
+
+<div id="deletePopup" class="popup">
+
+  <div class="popup-box">
+
+    <h3>Delete Post?</h3>
+
+    <p>Are you sure you want to delete this post?</p>
+
+    <div class="popup-buttons">
+
+      <button onclick="closeDeletePopup()">
+        Cancel
+      </button>
+
+      <button onclick="confirmDeletePost()">
+        Delete
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 <script>
 
-const savedPostImage =
-  localStorage.getItem("v_post_image");
-
-const savedPostText =
-  localStorage.getItem("v_post_text");
-
-if (savedPostImage) {
-  document.getElementById("homePostImage").src =
-    savedPostImage;
+function openDeletePopup() {
+  document.getElementById("deletePopup").style.display = "flex";
 }
 
-if (savedPostText) {
-  document.getElementById("homePostText").textContent =
-    " " + savedPostText;
+function closeDeletePopup() {
+  document.getElementById("deletePopup").style.display = "none";
 }
-function deletePost() {
 
-  const confirmDelete =
-    confirm("Delete this post?");
-
-  if (!confirmDelete) {
-    return;
-  }
+function confirmDeletePost() {
 
   localStorage.removeItem("v_post_image");
   localStorage.removeItem("v_post_text");
 
-  alert("Post deleted successfully! ✅");
-
   location.reload();
-  }
+
+}
+
 </script>
 </body>
   </html>
