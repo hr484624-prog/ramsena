@@ -183,7 +183,13 @@
   <header>
     <div class="logo">VIBRA</div>
     <div class="icons">
-      <a href="likes.html" style="color:#111;text-decoration:none;">♡</a>
+     <button id="likeBtn" onclick="toggleLike()" style="
+  border:none;
+  background:none;
+  font-size:25px;
+  cursor:pointer;
+">♡</button>
+      <span id="likeCount">0</span>
       <a href="messages.html" style="color:#111;text-decoration:none;">✉</a>
     </div>
   </header>
@@ -315,5 +321,47 @@ function confirmDeletePost() {
 }
 
 </script>
-</body>
+<script>
+
+let liked = localStorage.getItem("v_liked") === "true";
+
+let likeCount =
+  Number(localStorage.getItem("v_like_count")) || 0;
+
+function updateLikeUI() {
+
+  const likeBtn =
+    document.getElementById("likeBtn");
+
+  const count =
+    document.getElementById("likeCount");
+
+  if (likeBtn && count) {
+    likeBtn.textContent = liked ? "♥" : "♡";
+    count.textContent = likeCount;
+  }
+
+}
+
+function toggleLike() {
+
+  if (liked) {
+    liked = false;
+    likeCount--;
+  } else {
+    liked = true;
+    likeCount++;
+  }
+
+  localStorage.setItem("v_liked", liked);
+  localStorage.setItem("v_like_count", likeCount);
+
+  updateLikeUI();
+
+}
+
+updateLikeUI();
+
+</script>
+    </body>
   </html>
