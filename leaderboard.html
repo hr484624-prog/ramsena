@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GyanSetu - Leaderboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #18264d;
+    }
+
+    .app {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: auto;
+      padding-bottom: 85px;
+    }
+
+    .header {
+      background: white;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+
+    .back {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .trophy {
+      font-size: 25px;
+    }
+
+    .hero {
+      margin: 18px 16px;
+      padding: 22px;
+      border-radius: 22px;
+      text-align: center;
+      background: linear-gradient(135deg, #fff0d9, #fffaf3);
+      border: 1px solid #ffe0bd;
+    }
+
+    .hero-icon {
+      font-size: 48px;
+    }
+
+    .hero h2 {
+      margin-top: 8px;
+      font-size: 22px;
+    }
+
+    .hero p {
+      margin-top: 6px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    .podium {
+      display: flex;
+      justify-content: center;
+      align-items: end;
+      gap: 10px;
+      margin: 25px 16px;
+    }
+
+    .person {
+      width: 30%;
+      text-align: center;
+    }
+
+    .person-avatar {
+      width: 58px;
+      height: 58px;
+      margin: auto;
+      border-radius: 50%;
+      background: #18264d;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    .person.first .person-avatar {
+      width: 72px;
+      height: 72px;
+      background: #ff7900;
+      font-size: 28px;
+    }
+
+    .person strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    .rank-number {
+      margin-top: 5px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .xp {
+      color: #ff7900;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .section-title {
+      margin: 25px 16px 12px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .list {
+      margin: 0 16px;
+    }
+
+    .row {
+      background: white;
+      border-radius: 16px;
+      padding: 13px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.05);
+    }
+
+    .number {
+      width: 28px;
+      text-align: center;
+      font-weight: bold;
+      color: #777;
+    }
+
+    .small-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #e9edf5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .user {
+      flex: 1;
+    }
+
+    .user strong {
+      display: block;
+      font-size: 14px;
+    }
+
+    .user small {
+      color: #888;
+      font-size: 11px;
+    }
+
+    .row-xp {
+      font-weight: bold;
+      color: #ff7900;
+      font-size: 13px;
+    }
+
+    .my-rank {
+      margin: 18px 16px;
+      padding: 15px;
+      border-radius: 17px;
+      background: white;
+      border: 2px solid #ff7900;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .my-rank strong {
+      font-size: 18px;
+    }
+
+    .my-rank span {
+      flex: 1;
+      font-size: 13px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 68px;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #eee;
+      z-index: 20;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #777;
+      cursor: pointer;
+    }
+
+    .nav-item .icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #ff7900;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="back" onclick="goHome()">‹</div>
+    <div class="title">Leaderboard</div>
+    <div class="trophy">🏆</div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-icon">🏆</div>
+    <h2>GyanSetu Champions</h2>
+    <p>शिका • Points मिळवा • पुढे जा 🚀</p>
+  </div>
+
+  <div class="podium">
+
+    <div class="person">
+      <div class="person-avatar">A</div>
+      <strong>Aditya</strong>
+      <div class="rank-number">🥈</div>
+      <div class="xp">850 XP</div>
+    </div>
+
+    <div class="person first">
+      <div class="person-avatar">R</div>
+      <strong>Riya</strong>
+      <div class="rank-number">🥇</div>
+      <div class="xp">1200 XP</div>
+    </div>
+
+    <div class="person">
+      <div class="person-avatar">S</div>
+      <strong>Sahil</strong>
+      <div class="rank-number">🥉</div>
+      <div class="xp">760 XP</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    📊 Top Learners
+  </div>
+
+  <div class="list">
+
+    <div class="row">
+      <div class="number">4</div>
+      <div class="small-avatar">P</div>
+      <div class="user">
+        <strong>Pranav</strong>
+        <small>Consistent Learner 🔥</small>
+      </div>
+      <div class="row-xp">690 XP</div>
+    </div>
+
+    <div class="row">
+      <div class="number">5</div>
+      <div class="small-avatar">N</div>
+      <div class="user">
+        <strong>Neha</strong>
+        <small>Quiz Master 🧠</small>
+      </div>
+      <div class="row-xp">620 XP</div>
+    </div>
+
+    <div class="row">
+      <div class="number">6</div>
+      <div class="small-avatar">V</div>
+      <div class="user">
+        <strong>Vivek</strong>
+        <small>Daily Learner 📚</small>
+      </div>
+      <div class="row-xp">580 XP</div>
+    </div>
+
+  </div>
+
+  <div class="my-rank">
+    <strong>7</strong>
+    <span id="myUsername">@student<br>Keep learning 🚀</span>
+    <b>0 XP</b>
+  </div>
+
+  <div class="bottom-nav">
+
+    <div class="nav-item" onclick="goHome()">
+      <span class="icon">🏠</span>
+      Home
+    </div>
+
+    <div class="nav-item">
+      <span class="icon">📚</span>
+      Learn
+    </div>
+
+    <div class="nav-item">
+      <span class="icon">➕</span>
+      Create
+    </div>
+
+    <div class="nav-item active">
+      <span class="icon">🏆</span>
+      Rank
+    </div>
+
+    <div class="nav-item" onclick="goProfile()">
+      <span class="icon">👤</span>
+      Profile
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  const username =
+    localStorage.getItem("gyansetu_username");
+
+  if (username) {
+    document.getElementById("myUsername").innerHTML =
+      "@" + username + "<br>Keep learning 🚀";
+  }
+
+  function goHome() {
+    window.location.href = "home.html";
+  }
+
+  function goProfile() {
+    window.location.href = "profile.html";
+  }
+
+</script>
+
+</body>
+      </html>
