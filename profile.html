@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GyanSetu - Profile</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #18264d;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: auto;
+      padding-bottom: 85px;
+    }
+
+    /* HEADER */
+    .header {
+      background: white;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .back {
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .menu {
+      font-size: 24px;
+    }
+
+    /* PROFILE */
+    .profile {
+      background: white;
+      padding: 25px 18px;
+      text-align: center;
+    }
+
+    .profile-photo {
+      width: 95px;
+      height: 95px;
+      margin: auto;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff7900, #ffad42);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      border: 5px solid white;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .username {
+      margin-top: 13px;
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .bio {
+      margin-top: 7px;
+      color: #777;
+      font-size: 14px;
+    }
+
+    .edit-btn {
+      margin-top: 17px;
+      border: none;
+      background: #ff7900;
+      color: white;
+      padding: 11px 25px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: white;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      padding: 17px 5px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .stat span {
+      font-size: 11px;
+      color: #777;
+    }
+
+    /* POINT CARD */
+    .points-card {
+      margin: 18px 16px;
+      padding: 19px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fff0db, #fffaf3);
+      border: 1px solid #ffe0bd;
+    }
+
+    .points-title {
+      font-size: 15px;
+      color: #777;
+    }
+
+    .points {
+      margin-top: 5px;
+      font-size: 30px;
+      font-weight: 800;
+      color: #ff7900;
+    }
+
+    .rank {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* BADGES */
+    .section {
+      padding: 0 16px;
+    }
+
+    .section-title {
+      font-size: 19px;
+      font-weight: 800;
+      margin: 20px 0 13px;
+    }
+
+    .badges {
+      display: flex;
+      gap: 10px;
+    }
+
+    .badge {
+      background: white;
+      border-radius: 17px;
+      width: 82px;
+      height: 82px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .badge-icon {
+      font-size: 28px;
+    }
+
+    .badge span {
+      font-size: 10px;
+      margin-top: 5px;
+      color: #666;
+    }
+
+    /* POSTS */
+    .empty-post {
+      background: white;
+      padding: 30px 15px;
+      border-radius: 18px;
+      text-align: center;
+      color: #777;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 68px;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #eee;
+      z-index: 20;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #777;
+      cursor: pointer;
+    }
+
+    .nav-item .icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #ff7900;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+
+    <div class="back" onclick="goHome()">‹</div>
+
+    <div class="title">Profile</div>
+
+    <div class="menu">⋮</div>
+
+  </div>
+
+
+  <!-- PROFILE -->
+  <div class="profile">
+
+    <div class="profile-photo">
+      👤
+    </div>
+
+    <div class="username" id="username">
+      @student
+    </div>
+
+    <div class="bio">
+      📚 Learning • Growing • Achieving 🇮🇳
+    </div>
+
+    <button class="edit-btn">
+      Edit Profile
+    </button>
+
+  </div>
+
+
+  <!-- STATS -->
+  <div class="stats">
+
+    <div class="stat">
+      <strong>0</strong>
+      <span>Posts</span>
+    </div>
+
+    <div class="stat">
+      <strong>0</strong>
+      <span>Followers</span>
+    </div>
+
+    <div class="stat">
+      <strong>0</strong>
+      <span>Following</span>
+    </div>
+
+    <div class="stat">
+      <strong>0</strong>
+      <span>Badges</span>
+    </div>
+
+  </div>
+
+
+  <!-- POINTS -->
+  <div class="points-card">
+
+    <div class="points-title">
+      🏆 My Gyan Points
+    </div>
+
+    <div class="points">
+      0 XP
+    </div>
+
+    <div class="rank">
+      Keep learning to climb the leaderboard 🚀
+    </div>
+
+  </div>
+
+
+  <!-- BADGES -->
+  <div class="section">
+
+    <div class="section-title">
+      🏅 Achievements
+    </div>
+
+    <div class="badges">
+
+      <div class="badge">
+        <div class="badge-icon">🌱</div>
+        <span>Starter</span>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon">📚</div>
+        <span>Learner</span>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon">🔥</div>
+        <span>Streak</span>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon">🏆</div>
+        <span>Topper</span>
+      </div>
+
+    </div>
+
+
+    <!-- POSTS -->
+    <div class="section-title">
+      📖 My Posts
+    </div>
+
+    <div class="empty-post">
+      अजून कोणतीही पोस्ट नाही.<br>
+      शिकायला सुरुवात करा आणि तुमची पहिली पोस्ट तयार करा! 🚀
+    </div>
+
+  </div>
+
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+
+    <div class="nav-item" onclick="goHome()">
+      <span class="icon">🏠</span>
+      Home
+    </div>
+
+    <div class="nav-item">
+      <span class="icon">📚</span>
+      Learn
+    </div>
+
+    <div class="nav-item">
+      <span class="icon">➕</span>
+      Create
+    </div>
+
+    <div class="nav-item">
+      <span class="icon">🏆</span>
+      Rank
+    </div>
+
+    <div class="nav-item active">
+      <span class="icon">👤</span>
+      Profile
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+  // Username Page वर save केलेला username
+  const savedUsername =
+    localStorage.getItem("gyansetu_username");
+
+  if (savedUsername) {
+    document.getElementById("username").textContent =
+      "@" + savedUsername;
+  }
+
+  function goHome() {
+    window.location.href = "home.html";
+  }
+
+</script>
+
+</body>
+  </html>
