@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>GyanSetu - AI Study</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f8fc;
+      color: #18264d;
+    }
+
+    .app {
+      max-width: 430px;
+      min-height: 100vh;
+      margin: auto;
+      padding-bottom: 90px;
+    }
+
+    .header {
+      background: white;
+      padding: 18px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back {
+      font-size: 28px;
+      cursor: pointer;
+    }
+
+    .title {
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .ai-icon {
+      font-size: 25px;
+    }
+
+    .hero {
+      margin: 18px 16px;
+      padding: 25px 18px;
+      border-radius: 23px;
+      text-align: center;
+      background: linear-gradient(135deg, #eef3ff, #ffffff);
+      border: 1px solid #dce5ff;
+      box-shadow: 0 5px 18px rgba(0,0,0,.05);
+    }
+
+    .robot {
+      width: 78px;
+      height: 78px;
+      margin: auto;
+      border-radius: 24px;
+      background: #18264d;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 8px 20px rgba(24,38,77,.2);
+    }
+
+    .hero h2 {
+      margin-top: 14px;
+      font-size: 22px;
+    }
+
+    .hero p {
+      margin-top: 7px;
+      color: #777;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .ask-card {
+      background: white;
+      margin: 0 16px;
+      padding: 18px;
+      border-radius: 20px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.06);
+    }
+
+    .ask-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 105px;
+      resize: none;
+      border: 2px solid #e5e5e5;
+      border-radius: 15px;
+      padding: 14px;
+      outline: none;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    textarea:focus {
+      border-color: #ff7900;
+    }
+
+    .ask-btn {
+      width: 100%;
+      margin-top: 12px;
+      height: 50px;
+      border: none;
+      border-radius: 13px;
+      background: #ff7900;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .section-title {
+      margin: 22px 16px 12px;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .quick {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 11px;
+      margin: 0 16px;
+    }
+
+    .quick-card {
+      background: white;
+      padding: 16px;
+      border-radius: 17px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.05);
+      cursor: pointer;
+    }
+
+    .quick-icon {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .quick-card h3 {
+      font-size: 14px;
+    }
+
+    .quick-card p {
+      color: #888;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .subjects {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 0 16px 5px;
+    }
+
+    .subject {
+      flex: 0 0 auto;
+      background: white;
+      border-radius: 13px;
+      padding: 11px 15px;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 430px;
+      height: 68px;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid #eee;
+      z-index: 20;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #777;
+      cursor: pointer;
+    }
+
+    .nav-item .icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: #ff7900;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div class="top">
+      <div class="back" onclick="goHome()">‹</div>
+      <div class="title">AI Study</div>
+      <div class="ai-icon">🤖</div>
+    </div>
+  </div>
+
+  <div class="hero">
+
+    <div class="robot">🤖</div>
+
+    <h2>Meet GyanSetu AI</h2>
+
+    <p>
+      तुमच्या अभ्यासातील प्रश्न विचारा,
+      समजून घ्या आणि नवीन गोष्टी शिका. 🧠📚
+    </p>
+
+  </div>
+
+  <div class="ask-card">
+
+    <div class="ask-title">
+      💬 GyanSetu AI ला विचारा
+    </div>
+
+    <textarea
+      id="question"
+      placeholder="उदा. प्रकाशसंश्लेषण सोप्या भाषेत समजावून सांग..."
+    ></textarea>
+
+    <button class="ask-btn" onclick="askAI()">
+      🤖 Ask GyanSetu AI
+    </button>
+
+  </div>
+
+  <div class="section-title">
+    ⚡ Quick Study
+  </div>
+
+  <div class="quick">
+
+    <div class="quick-card">
+      <div class="quick-icon">💡</div>
+      <h3>Explain Topic</h3>
+      <p>कोणताही topic समजून घ्या</p>
+    </div>
+
+    <div class="quick-card">
+      <div class="quick-icon">📝</div>
+      <h3>Make Quiz</h3>
+      <p>Quiz तयार करून सराव करा</p>
+    </div>
+
+    <div class="quick-card">
+      <div class="quick-icon">📖</div>
+      <h3>Make Notes</h3>
+      <p>सोप्या notes तयार करा</p>
+    </div>
+
+    <div class="quick-card">
+      <div class="quick-icon">🧠</div>
+      <h3>Study Help</h3>
+      <p>अभ्यासासाठी मार्गदर्शन</p>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    📚 Choose Subject
+  </div>
+
+  <div class="subjects">
+
+    <div class="subject">🔢 Maths</div>
+    <div class="subject">🔬 Science</div>
+    <div class="subject">🌍 History</div>
+    <div class="subject">🗺️ Geography</div>
+    <div class="subject">📖 English</div>
+    <div class="subject">🇮🇳 Marathi</div>
+
+  </div>
+
+  <div class="bottom-nav">
+
+    <div class="nav-item" onclick="goHome()">
+      <span class="icon">🏠</span>
+      Home
+    </div>
+
+    <div class="nav-item" onclick="goLearn()">
+      <span class="icon">📚</span>
+      Learn
+    </div>
+
+    <div class="nav-item active">
+      <span class="icon">🤖</span>
+      AI
+    </div>
+
+    <div class="nav-item" onclick="goRank()">
+      <span class="icon">🏆</span>
+      Rank
+    </div>
+
+    <div class="nav-item" onclick="goProfile()">
+      <span class="icon">👤</span>
+      Profile
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  function askAI() {
+    const question =
+      document.getElementById("question").value.trim();
+
+    if (question === "") {
+      alert("आधी तुमचा प्रश्न लिहा 😊");
+      return;
+    }
+
+    alert(
+      "🤖 GyanSetu AI लवकरच तुमच्या प्रश्नाचं उत्तर देईल!"
+    );
+  }
+
+  function goHome() {
+    window.location.href = "home.html";
+  }
+
+  function goLearn() {
+    window.location.href = "learn.html";
+  }
+
+  function goRank() {
+    window.location.href = "leaderboard.html";
+  }
+
+  function goProfile() {
+    window.location.href = "profile.html";
+  }
+
+</script>
+
+</body>
+  </html>
