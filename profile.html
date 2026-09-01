@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="mr">
+<!DOCTYPE html><html lang="mr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>GyanSetu - Profile</title>
-
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>GyanSetu - Profile</title>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -17,6 +12,7 @@
       font-family: Arial, sans-serif;
       background: #f7f8fc;
       color: #18264d;
+      transition: background 0.2s, color 0.2s;
     }
 
     .app {
@@ -49,6 +45,7 @@
 
     .menu {
       font-size: 24px;
+      cursor: pointer;
     }
 
     /* PROFILE */
@@ -120,7 +117,7 @@
       color: #777;
     }
 
-    /* POINT CARD */
+    /* POINTS */
     .points-card {
       margin: 18px 16px;
       padding: 19px;
@@ -147,7 +144,7 @@
       color: #555;
     }
 
-    /* BADGES */
+    /* SECTIONS */
     .section {
       padding: 0 16px;
     }
@@ -158,15 +155,17 @@
       margin: 20px 0 13px;
     }
 
+    /* BADGES */
     .badges {
       display: flex;
       gap: 10px;
+      overflow-x: auto;
     }
 
     .badge {
       background: white;
       border-radius: 17px;
-      width: 82px;
+      min-width: 82px;
       height: 82px;
       display: flex;
       flex-direction: column;
@@ -229,572 +228,636 @@
       color: #ff7900;
       font-weight: bold;
     }
-/* EDIT PROFILE POPUP */
 
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  padding: 20px;
-}
-
-.modal-overlay.show {
-  display: flex;
-}
-
-.modal-box {
-  width: 100%;
-  max-width: 360px;
-  background: white;
-  border-radius: 22px;
-  padding: 22px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-}
-
-.modal-title {
-  font-size: 21px;
-  font-weight: 800;
-  color: #18264d;
-}
-
-.modal-subtitle {
-  margin-top: 5px;
-  color: #777;
-  font-size: 13px;
-}
-
-#usernameInput {
-  width: 100%;
-  margin-top: 18px;
-  height: 48px;
-  border: 2px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 0 14px;
-  font-size: 15px;
-  outline: none;
-}
-
-#usernameInput:focus {
-  border-color: #ff7900;
-}
-
-.modal-buttons {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
-}
-
-.cancel-btn,
-.save-btn {
-  flex: 1;
-  height: 45px;
-  border: none;
-  border-radius: 12px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-.cancel-btn {
-  background: #eeeeee;
-  color: #555;
-}
-
-.save-btn {
-  background: #ff7900;
-  color: white;
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
     }
- .menu-options {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
 
-.menu-options button {
-  width: 100%;
-  min-height: 46px;
-  border: none;
-  border-radius: 12px;
-  background: #f7f8fc;
-  color: #18264d;
-  text-align: left;
-  padding: 0 15px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .modal-overlay.show {
+      display: flex;
+    }
 
-.menu-options button:active {
-  transform: scale(0.98);
-}
+    .modal-box {
+      width: 100%;
+      max-width: 360px;
+      max-height: 85vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
 
-.menu-options .danger-btn {
-  color: #d93025;
-  background: #fff0f0;
-      }
-body.dark-mode {
-  background: #121212;
-  color: #ffffff;
-}
+    .modal-title {
+      font-size: 21px;
+      font-weight: 800;
+      color: #18264d;
+    }
 
-body.dark-mode .header,
-body.dark-mode .profile,
-body.dark-mode .stats,
-body.dark-mode .points-card,
-body.dark-mode .badge,
-body.dark-mode .empty-post,
-body.dark-mode .bottom-nav,
-body.dark-mode .modal-box {
-  background: #1e1e1e;
-  color: #ffffff;
-}
+    .modal-subtitle {
+      margin-top: 5px;
+      color: #777;
+      font-size: 13px;
+    }
 
-body.dark-mode .bio,
-body.dark-mode .stat span,
-body.dark-mode .points-title,
-body.dark-mode .rank,
-body.dark-mode .badge span,
-body.dark-mode .empty-post,
-body.dark-mode .modal-subtitle {
-  color: #bbbbbb;
-  }
-  </style>
-</head>
+    #usernameInput {
+      width: 100%;
+      margin-top: 18px;
+      height: 48px;
+      border: 2px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 0 14px;
+      font-size: 15px;
+      outline: none;
+    }
 
-<body>
+    #usernameInput:focus {
+      border-color: #ff7900;
+    }
 
-<div class="app">
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
 
-  <!-- HEADER -->
-  <div class="header">
+    .cancel-btn,
+    .save-btn {
+      flex: 1;
+      height: 45px;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
 
-    <div class="back" onclick="goHome()">‹</div>
+    .cancel-btn {
+      background: #eeeeee;
+      color: #555;
+    }
 
-    <div class="title">Profile</div>
+    .save-btn {
+      background: #ff7900;
+      color: white;
+    }
 
-    <div class="menu" onclick="openMenu()">⋮</div>
+    /* MENU */
+    .menu-options {
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
 
+    .menu-options button {
+      width: 100%;
+      min-height: 46px;
+      border: none;
+      border-radius: 12px;
+      background: #f7f8fc;
+      color: #18264d;
+      text-align: left;
+      padding: 0 15px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .menu-options button:active {
+      transform: scale(0.98);
+    }
+
+    .menu-options .danger-btn {
+      color: #d93025;
+      background: #fff0f0;
+    }
+
+    /* DARK MODE */
+    body.dark-mode {
+      background: #121212;
+      color: #ffffff;
+    }
+
+    body.dark-mode .header,
+    body.dark-mode .profile,
+    body.dark-mode .stats,
+    body.dark-mode .points-card,
+    body.dark-mode .badge,
+    body.dark-mode .empty-post,
+    body.dark-mode .bottom-nav,
+    body.dark-mode .modal-box {
+      background: #1e1e1e;
+      color: #ffffff;
+    }
+
+    body.dark-mode .bio,
+    body.dark-mode .stat span,
+    body.dark-mode .points-title,
+    body.dark-mode .rank,
+    body.dark-mode .badge span,
+    body.dark-mode .empty-post,
+    body.dark-mode .modal-subtitle {
+      color: #bbbbbb;
+    }
+
+    body.dark-mode .menu-options button {
+      background: #2a2a2a;
+      color: #ffffff;
+    }
+
+    body.dark-mode .cancel-btn {
+      background: #333333;
+      color: #ffffff;
+    }
+  </style></head><body><div class="app">  <!-- HEADER -->  <div class="header"><div class="back" onclick="goHome()">‹</div>
+
+<div class="title">Profile</div>
+
+<div class="menu" onclick="openMenu()">⋮</div>
+
+  </div>  <!-- PROFILE -->  <div class="profile"><div class="profile-photo">
+  👤
+</div>
+
+<div class="username" id="username">
+  @student
+</div>
+
+<div class="bio">
+  📚 Learning • Growing • Achieving 🇮🇳
+</div>
+
+<button
+  class="edit-btn"
+  onclick="editProfile()"
+>
+  Edit Profile
+</button>
+
+  </div>  <!-- STATS -->  <div class="stats"><div class="stat">
+  <strong>0</strong>
+  <span>Posts</span>
+</div>
+
+<div class="stat">
+  <strong>0</strong>
+  <span>Followers</span>
+</div>
+
+<div class="stat">
+  <strong>0</strong>
+  <span>Following</span>
+</div>
+
+<div class="stat">
+  <strong>0</strong>
+  <span>Badges</span>
+</div>
+
+  </div>  <!-- POINTS -->  <div class="points-card"><div class="points-title">
+  🏆 My Gyan Points
+</div>
+
+<div class="points" id="pointsValue">
+  0 XP
+</div>
+
+<div class="rank">
+  Keep learning to climb the leaderboard 🚀
+</div>
+
+  </div>  <!-- BADGES -->  <div class="section"><div class="section-title">
+  🏅 Achievements
+</div>
+
+<div class="badges">
+
+  <div class="badge">
+    <div class="badge-icon">🌱</div>
+    <span>Starter</span>
   </div>
 
-
-  <!-- PROFILE -->
-  <div class="profile">
-
-    <div class="profile-photo">
-      👤
-    </div>
-
-    <div class="username" id="username">
-      @student
-    </div>
-
-    <div class="bio">
-      📚 Learning • Growing • Achieving 🇮🇳
-    </div>
-
-    <button class="edit-btn" onclick="editProfile()">
-  ✏️ Edit Profile
-    </button>
-
+  <div class="badge">
+    <div class="badge-icon">📚</div>
+    <span>Learner</span>
   </div>
 
-
-  <!-- STATS -->
-  <div class="stats">
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Posts</span>
-    </div>
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Followers</span>
-    </div>
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Following</span>
-    </div>
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Badges</span>
-    </div>
-
+  <div class="badge">
+    <div class="badge-icon">🔥</div>
+    <span>Streak</span>
   </div>
 
-
-  <!-- POINTS -->
-  <div class="points-card">
-
-    <div class="points-title">
-      🏆 My Gyan Points
-    </div>
-
-    <div class="points">
-      0 XP
-    </div>
-
-    <div class="rank">
-      Keep learning to climb the leaderboard 🚀
-    </div>
-
-  </div>
-
-
-  <!-- BADGES -->
-  <div class="section">
-
-    <div class="section-title">
-      🏅 Achievements
-    </div>
-
-    <div class="badges">
-
-      <div class="badge">
-        <div class="badge-icon">🌱</div>
-        <span>Starter</span>
-      </div>
-
-      <div class="badge">
-        <div class="badge-icon">📚</div>
-        <span>Learner</span>
-      </div>
-
-      <div class="badge">
-        <div class="badge-icon">🔥</div>
-        <span>Streak</span>
-      </div>
-
-      <div class="badge">
-        <div class="badge-icon">🏆</div>
-        <span>Topper</span>
-      </div>
-
-    </div>
-
-
-    <!-- POSTS -->
-    <div class="section-title">
-      📖 My Posts
-    </div>
-
-    <div class="empty-post">
-      अजून कोणतीही पोस्ट नाही.<br>
-      शिकायला सुरुवात करा आणि तुमची पहिली पोस्ट तयार करा! 🚀
-    </div>
-
-  </div>
-
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-
-    <div class="nav-item" onclick="goHome()">
-      <span class="icon">🏠</span>
-      Home
-    </div>
-
-    <div class="nav-item">
-      <span class="icon">📚</span>
-      Learn
-    </div>
-
-    <div class="nav-item">
-      <span class="icon">➕</span>
-      Create
-    </div>
-
-    <div class="nav-item">
-      <span class="icon">🏆</span>
-      Rank
-    </div>
-
-    <div class="nav-item active">
-      <span class="icon">👤</span>
-      Profile
-    </div>
-
+  <div class="badge">
+    <div class="badge-icon">🏆</div>
+    <span>Topper</span>
   </div>
 
 </div>
 
-<!-- EDIT PROFILE MODAL -->
-<div class="modal-overlay" id="editModal">
+<!-- POSTS -->
+<div class="section-title">
+  📖 My Posts
+</div>
 
-  <div class="modal-box">
+<div class="empty-post">
+  अजून कोणतीही पोस्ट नाही.<br>
+  शिकायला सुरुवात करा आणि तुमची पहिली पोस्ट तयार करा! 🚀
+</div>
 
-    <div class="modal-title">
-      ✏️ Edit Profile
-    </div>
+  </div>  <!-- BOTTOM NAV -->  <div class="bottom-nav"><div class="nav-item" onclick="goHome()">
+  <span class="icon">🏠</span>
+  Home
+</div>
 
-    <div class="modal-subtitle">
-      Update your username
-    </div>
+<div class="nav-item" onclick="goLearn()">
+  <span class="icon">📚</span>
+  Learn
+</div>
 
-    <input
-      type="text"
-      id="usernameInput"
-      placeholder="Enter username"
-      maxlength="20"
-    >
+<div class="nav-item" onclick="goCreate()">
+  <span class="icon">➕</span>
+  Create
+</div>
 
-    <div class="modal-buttons">
+<div class="nav-item" onclick="goRank()">
+  <span class="icon">🏆</span>
+  Rank
+</div>
 
-      <button
-        class="cancel-btn"
-        onclick="closeEditProfile()"
-      >
-        Cancel
-      </button>
+<div class="nav-item active">
+  <span class="icon">👤</span>
+  Profile
+</div>
 
-      <button
-        class="save-btn"
-        onclick="saveProfile()"
-      >
-        Save
-      </button>
+  </div></div><!-- EDIT PROFILE MODAL --><div class="modal-overlay" id="editModal">  <div class="modal-box"><div class="modal-title">
+  ✏️ Edit Profile
+</div>
 
-    </div>
+<div class="modal-subtitle">
+  Update your username
+</div>
 
-  </div>
+<input
+  type="text"
+  id="usernameInput"
+  placeholder="Enter username"
+  maxlength="20"
+>
 
-  </div>
-<script>
+<div class="modal-buttons">
 
-  // Username Page वर save केलेला username
+  <button
+    class="cancel-btn"
+    onclick="closeEditProfile()"
+  >
+    Cancel
+  </button>
+
+  <button
+    class="save-btn"
+    onclick="saveProfile()"
+  >
+    Save
+  </button>
+
+</div>
+
+  </div></div><!-- MENU MODAL --><div class="modal-overlay" id="menuModal">  <div class="modal-box"><div class="modal-title">
+  ⚙️ GyanSetu Menu
+</div>
+
+<div class="modal-subtitle">
+  Profile & App Settings
+</div>
+
+<div class="menu-options">
+
+  <button onclick="openAccountSettings()">
+    👤 Account Settings
+  </button>
+
+  <button onclick="openNotifications()">
+    🔔 Notifications
+  </button>
+
+  <button onclick="toggleDarkMode()">
+    🌙 Dark Mode
+  </button>
+
+  <button onclick="openPrivacy()">
+    🔒 Privacy
+  </button>
+
+  <button onclick="openAbout()">
+    ℹ️ About GyanSetu
+  </button>
+
+  <button onclick="openHelp()">
+    ❓ Help & Feedback
+  </button>
+
+  <button
+    onclick="resetAppData()"
+    class="danger-btn"
+  >
+    🚪 Reset App Data
+  </button>
+
+  <button
+    class="cancel-btn"
+    onclick="closeMenu()"
+  >
+    Close
+  </button>
+
+</div>
+
+  </div></div><script>
+
+  /* LOAD USERNAME */
+
   const savedUsername =
     localStorage.getItem("gyansetu_username");
 
   if (savedUsername) {
+
     document.getElementById("username").textContent =
       "@" + savedUsername;
-  }
-function editProfile() {
 
-  const currentUsername =
-    localStorage.getItem("gyansetu_username") || "student";
-
-  const newUsername =
-    prompt("Enter your username:", currentUsername);
-
-  if (!newUsername) {
-    return;
   }
 
-  const cleanUsername = newUsername.trim();
 
-  if (!cleanUsername) {
-    alert("Username cannot be empty.");
-    return;
+  /* LOAD DARK MODE */
+
+  if (
+    localStorage.getItem("gyansetu_dark_mode") === "on"
+  ) {
+
+    document.body.classList.add("dark-mode");
+
   }
 
-  localStorage.setItem(
-    "gyansetu_username",
-    cleanUsername
-  );
 
-  document.getElementById("username").textContent =
-    "@" + cleanUsername;
-  }
+  /* HOME */
+
   function goHome() {
+
     window.location.href = "home.html";
-  }
-function editProfile() {
-
-  const currentUsername =
-    localStorage.getItem("gyansetu_username") || "student";
-
-  document.getElementById("usernameInput").value =
-    currentUsername;
-
-  document.getElementById("editModal")
-    .classList.add("show");
-
-  setTimeout(function() {
-    document.getElementById("usernameInput").focus();
-  }, 100);
-}
-
-
-function closeEditProfile() {
-
-  document.getElementById("editModal")
-    .classList.remove("show");
-
-}
-
-
-function saveProfile() {
-
-  const input =
-    document.getElementById("usernameInput");
-
-  const newUsername =
-    input.value.trim();
-
-  if (!newUsername) {
-    alert("Please enter a username.");
-    input.focus();
-    return;
-  }
-
-  localStorage.setItem(
-    "gyansetu_username",
-    newUsername
-  );
-
-  document.getElementById("username").textContent =
-    "@" + newUsername;
-
-  closeEditProfile();
 
   }
-<!-- PROFILE MENU POPUP -->
-<div class="modal-overlay" id="menuModal">
-
-  <div class="modal-box">
-
-    <div class="modal-title">
-      ⚙️ GyanSetu Menu
-    </div>
-
-    <div class="menu-options">
-
-      <button onclick="openAccountSettings()">
-        👤 Account Settings
-      </button>
-
-      <button onclick="openNotifications()">
-        🔔 Notifications
-      </button>
-
-      <button onclick="toggleDarkMode()">
-        🌙 Dark Mode
-      </button>
-
-      <button onclick="openPrivacy()">
-        🔒 Privacy
-      </button>
-
-      <button onclick="openAbout()">
-        ℹ️ About GyanSetu
-      </button>
-
-      <button onclick="openHelp()">
-        ❓ Help & Feedback
-      </button>
-
-      <button onclick="resetAppData()" class="danger-btn">
-        🚪 Reset App Data
-      </button>
-
-      <button
-        class="cancel-btn"
-        onclick="closeMenu()"
-      >
-        Close
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-function openMenu() {
-  document.getElementById("menuModal")
-    .classList.add("show");
-}
-
-function closeMenu() {
-  document.getElementById("menuModal")
-    .classList.remove("show");
-}
 
 
-function openAccountSettings() {
-  closeMenu();
-  editProfile();
-}
+  /* LEARN */
+
+  function goLearn() {
+
+    window.location.href = "learn.html";
+
+  }
 
 
-function openNotifications() {
-  closeMenu();
+  /* CREATE */
 
-  alert(
-    "🔔 Notifications\n\nStudy reminders and achievement notifications will be available here."
-  );
-}
+  function goCreate() {
 
-
-function toggleDarkMode() {
-  closeMenu();
-
-  document.body.classList.toggle("dark-mode");
-
-  const darkMode =
-    document.body.classList.contains("dark-mode");
-
-  localStorage.setItem(
-    "gyansetu_dark_mode",
-    darkMode ? "on" : "off"
-  );
-}
-
-
-function openPrivacy() {
-  closeMenu();
-
-  alert(
-    "🔒 Privacy\n\nYour profile information is stored locally on your device."
-  );
-}
-
-
-function openAbout() {
-  closeMenu();
-
-  alert(
-    "ℹ️ About GyanSetu\n\nGyanSetu is a student learning app designed to help you learn, practice and grow. 📚"
-  );
-}
-
-
-function openHelp() {
-  closeMenu();
-
-  alert(
-    "❓ Help & Feedback\n\nIf you find a problem or have a suggestion, you can share your feedback here."
-  );
-}
-
-
-function resetAppData() {
-
-  const confirmReset =
-    confirm(
-      "⚠️ Reset App Data?\n\nThis will remove your saved username, XP and app settings."
+    alert(
+      "➕ Create\n\nCreate feature will be available here soon."
     );
 
-  if (!confirmReset) {
-    return;
   }
 
-  localStorage.clear();
 
-  alert("✅ App data has been reset.");
+  /* RANK */
 
-  window.location.reload();
+  function goRank() {
+
+    window.location.href = "leaderboard.html";
+
   }
-if (localStorage.getItem("gyansetu_dark_mode") === "on") {
-  document.body.classList.add("dark-mode");
-  }
-</script>
 
-</body>
+
+  /* EDIT PROFILE */
+
+  function editProfile() {
+
+    const currentUsername =
+      localStorage.getItem("gyansetu_username") || "student";
+
+    document.getElementById("usernameInput").value =
+      currentUsername;
+
+    document.getElementById("editModal")
+      .classList.add("show");
+
+    setTimeout(function() {
+
+      document.getElementById("usernameInput").focus();
+
+    }, 100);
+
+  }
+
+
+  function closeEditProfile() {
+
+    document.getElementById("editModal")
+      .classList.remove("show");
+
+  }
+
+
+  function saveProfile() {
+
+    const input =
+      document.getElementById("usernameInput");
+
+    const newUsername =
+      input.value.trim();
+
+    if (!newUsername) {
+
+      alert("Please enter a username.");
+
+      input.focus();
+
+      return;
+
+    }
+
+    localStorage.setItem(
+      "gyansetu_username",
+      newUsername
+    );
+
+    document.getElementById("username").textContent =
+      "@" + newUsername;
+
+    closeEditProfile();
+
+    alert("✅ Profile updated!");
+
+  }
+
+
+  /* MENU */
+
+  function openMenu() {
+
+    document.getElementById("menuModal")
+      .classList.add("show");
+
+  }
+
+
+  function closeMenu() {
+
+    document.getElementById("menuModal")
+      .classList.remove("show");
+
+  }
+
+
+  /* ACCOUNT SETTINGS */
+
+  function openAccountSettings() {
+
+    closeMenu();
+
+    editProfile();
+
+  }
+
+
+  /* NOTIFICATIONS */
+
+  function openNotifications() {
+
+    closeMenu();
+
+    alert(
+      "🔔 Notifications\n\nStudy reminders and achievement notifications will appear here."
+    );
+
+  }
+
+
+  /* DARK MODE */
+
+  function toggleDarkMode() {
+
+    document.body.classList.toggle("dark-mode");
+
+    const isDark =
+      document.body.classList.contains("dark-mode");
+
+    localStorage.setItem(
+      "gyansetu_dark_mode",
+      isDark ? "on" : "off"
+    );
+
+    closeMenu();
+
+  }
+
+
+  /* PRIVACY */
+
+  function openPrivacy() {
+
+    closeMenu();
+
+    alert(
+      "🔒 Privacy\n\nYour profile information is stored locally on your device."
+    );
+
+  }
+
+
+  /* ABOUT */
+
+  function openAbout() {
+
+    closeMenu();
+
+    alert(
+      "ℹ️ GyanSetu\n\nGyanSetu is a student learning app designed to help you learn, practice and grow. 📚"
+    );
+
+  }
+
+
+  /* HELP */
+
+  function openHelp() {
+
+    closeMenu();
+
+    alert(
+      "❓ Help & Feedback\n\nIf you find a problem or have a suggestion, you can share your feedback here."
+    );
+
+  }
+
+
+  /* RESET APP DATA */
+
+  function resetAppData() {
+
+    const confirmReset =
+      confirm(
+        "⚠️ Reset App Data?\n\nThis will remove your saved username and app settings."
+      );
+
+    if (!confirmReset) {
+
+      return;
+
+    }
+
+    localStorage.clear();
+
+    alert(
+      "✅ App data has been reset."
+    );
+
+    window.location.reload();
+
+  }
+
+
+  /* CLOSE MODAL WHEN TAPPING OUTSIDE */
+
+  document.getElementById("editModal")
+    .addEventListener("click", function(event) {
+
+      if (event.target === this) {
+
+        closeEditProfile();
+
+      }
+
+    });
+
+
+  document.getElementById("menuModal")
+    .addEventListener("click", function(event) {
+
+      if (event.target === this) {
+
+        closeMenu();
+
+      }
+
+    });
+
+</script></body>
   </html>
