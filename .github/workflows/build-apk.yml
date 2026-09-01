@@ -61,24 +61,20 @@ jobs:
       - name: Add Android platform
         run: |
           npx cap add android
-      - name: Add microphone permission
+            - name: Add microphone permission
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           p = Path("android/app/src/main/AndroidManifest.xml")
-
-          if not p.exists():
-              raise SystemExit("AndroidManifest.xml not found")
-
           text = p.read_text()
 
-          permission = '<uses-permission android:name="android.permission.RECORD_AUDIO" />'
+          permission = '    <uses-permission android:name="android.permission.RECORD_AUDIO" />'
 
-          if permission not in text:
+          if 'android.permission.RECORD_AUDIO' not in text:
               text = text.replace(
-                  '<manifest',
-                  '<manifest\n    ' + permission,
+                  '<application',
+                  permission + '\n    <application',
                   1
               )
 
