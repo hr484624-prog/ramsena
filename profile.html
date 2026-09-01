@@ -229,6 +229,84 @@
       color: #ff7900;
       font-weight: bold;
     }
+/* EDIT PROFILE POPUP */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 360px;
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+.modal-title {
+  font-size: 21px;
+  font-weight: 800;
+  color: #18264d;
+}
+
+.modal-subtitle {
+  margin-top: 5px;
+  color: #777;
+  font-size: 13px;
+}
+
+#usernameInput {
+  width: 100%;
+  margin-top: 18px;
+  height: 48px;
+  border: 2px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 0 14px;
+  font-size: 15px;
+  outline: none;
+}
+
+#usernameInput:focus {
+  border-color: #ff7900;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.cancel-btn,
+.save-btn {
+  flex: 1;
+  height: 45px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.cancel-btn {
+  background: #eeeeee;
+  color: #555;
+}
+
+.save-btn {
+  background: #ff7900;
+  color: white;
+    }
   </style>
 </head>
 
@@ -391,7 +469,47 @@
 
 </div>
 
+<!-- EDIT PROFILE MODAL -->
+<div class="modal-overlay" id="editModal">
 
+  <div class="modal-box">
+
+    <div class="modal-title">
+      ✏️ Edit Profile
+    </div>
+
+    <div class="modal-subtitle">
+      Update your username
+    </div>
+
+    <input
+      type="text"
+      id="usernameInput"
+      placeholder="Enter username"
+      maxlength="20"
+    >
+
+    <div class="modal-buttons">
+
+      <button
+        class="cancel-btn"
+        onclick="closeEditProfile()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="save-btn"
+        onclick="saveProfile()"
+      >
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+  </div>
 <script>
 
   // Username Page वर save केलेला username
@@ -432,7 +550,56 @@ function editProfile() {
   function goHome() {
     window.location.href = "home.html";
   }
+function editProfile() {
 
+  const currentUsername =
+    localStorage.getItem("gyansetu_username") || "student";
+
+  document.getElementById("usernameInput").value =
+    currentUsername;
+
+  document.getElementById("editModal")
+    .classList.add("show");
+
+  setTimeout(function() {
+    document.getElementById("usernameInput").focus();
+  }, 100);
+}
+
+
+function closeEditProfile() {
+
+  document.getElementById("editModal")
+    .classList.remove("show");
+
+}
+
+
+function saveProfile() {
+
+  const input =
+    document.getElementById("usernameInput");
+
+  const newUsername =
+    input.value.trim();
+
+  if (!newUsername) {
+    alert("Please enter a username.");
+    input.focus();
+    return;
+  }
+
+  localStorage.setItem(
+    "gyansetu_username",
+    newUsername
+  );
+
+  document.getElementById("username").textContent =
+    "@" + newUsername;
+
+  closeEditProfile();
+
+  }
 </script>
 
 </body>
