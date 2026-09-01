@@ -263,8 +263,8 @@
       📚 Learning • Growing • Achieving 🇮🇳
     </div>
 
-    <button class="edit-btn">
-      Edit Profile
+    <button class="edit-btn" onclick="editProfile()">
+  ✏️ Edit Profile
     </button>
 
   </div>
@@ -402,7 +402,33 @@
     document.getElementById("username").textContent =
       "@" + savedUsername;
   }
+function editProfile() {
 
+  const currentUsername =
+    localStorage.getItem("gyansetu_username") || "student";
+
+  const newUsername =
+    prompt("Enter your username:", currentUsername);
+
+  if (!newUsername) {
+    return;
+  }
+
+  const cleanUsername = newUsername.trim();
+
+  if (!cleanUsername) {
+    alert("Username cannot be empty.");
+    return;
+  }
+
+  localStorage.setItem(
+    "gyansetu_username",
+    cleanUsername
+  );
+
+  document.getElementById("username").textContent =
+    "@" + cleanUsername;
+  }
   function goHome() {
     window.location.href = "home.html";
   }
