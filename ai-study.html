@@ -252,7 +252,7 @@
 
     <textarea
       id="question"
-      placeholder="उदा. प्रकाशसंश्लेषण सोप्या भाषेत समजावून सांग..."
+      placeholder="Ask your question in Hindi or English..."
     ></textarea>
 
     <button class="ask-btn" onclick="askAI()">
@@ -341,18 +341,47 @@
 
 <script>
 
-  function askAI() {
-    const question =
-      document.getElementById("question").value.trim();
+  async function askAI() {
+  const question = document.getElementById("question").value.trim();
+  const button = document.querySelector(".ask-btn");
 
-    if (question === "") {
-      alert("आधी तुमचा प्रश्न लिहा 😊");
-      return;
+  if (!question) {
+    alert("Please enter your question.");
+    return;
+  }
+
+  button.disabled = true;
+  button.innerText = "🤖 Thinking...";
+
+  try {
+    const response = await fetch(
+      "https://gyan-setu-self.vercel.app/api/chat",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          question: question
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "AI request failed");
     }
 
-    alert(
-      "🤖 GyanSetu AI लवकरच तुमच्या प्रश्नाचं उत्तर देईल!"
-    );
+    alert("🤖 GyanSetu AI:\n\n" + data.answer);
+
+  } catch (error) {
+    console.error(error);
+    alert("❌ AI ला connect करता आलं नाही. पुन्हा try करा.");
+  } finally {
+    button.disabled = false;
+    button.innerText = "🤖 Ask GyanSetu AI";
+  }
   }
 
   function goHome() {
