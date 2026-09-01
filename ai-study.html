@@ -283,7 +283,24 @@
       id="question"
       placeholder="Ask your question in Hindi or English..."
     ></textarea>
-
+<button
+  id="micBtn"
+  onclick="startVoiceInput()"
+  style="
+    width:100%;
+    margin-top:10px;
+    height:45px;
+    border:none;
+    border-radius:12px;
+    background:#18264d;
+    color:white;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+  "
+>
+  🎤 Speak Question
+</button>
     <button class="ask-btn" onclick="askAI()">
       🤖 Ask GyanSetu AI
     </button>
@@ -516,6 +533,52 @@ function speakAnswer() {
   speech.pitch = 1;
 
   window.speechSynthesis.speak(speech);
+  }
+function startVoiceInput() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Voice input is not supported on this device.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "en-IN";
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  const micBtn =
+    document.getElementById("micBtn");
+
+  micBtn.innerText = "🎙️ Listening...";
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+
+    const text =
+      event.results[0][0].transcript;
+
+    document.getElementById("question").value = text;
+
+    micBtn.innerText = "🎤 Speak Question";
+  };
+
+  recognition.onerror = function() {
+
+    micBtn.innerText = "🎤 Speak Question";
+
+    alert("Could not hear you. Please try again.");
+  };
+
+  recognition.onend = function() {
+
+    micBtn.innerText = "🎤 Speak Question";
+  };
   }
 </script>
 
