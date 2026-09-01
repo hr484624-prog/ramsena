@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -131,6 +131,35 @@
       cursor: pointer;
     }
 
+    .ask-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    /* AI ANSWER */
+    .answer-card {
+      display: none;
+      background: white;
+      margin: 16px;
+      padding: 18px;
+      border-radius: 20px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.06);
+      border-left: 4px solid #ff7900;
+    }
+
+    .answer-title {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .answer-text {
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
     .section-title {
       margin: 22px 16px 12px;
       font-size: 19px;
@@ -238,8 +267,8 @@
     <h2>Meet GyanSetu AI</h2>
 
     <p>
-      तुमच्या अभ्यासातील प्रश्न विचारा,
-      समजून घ्या आणि नवीन गोष्टी शिका. 🧠📚
+      Ask your study questions,
+      understand concepts and learn new things. 🧠📚
     </p>
 
   </div>
@@ -247,7 +276,7 @@
   <div class="ask-card">
 
     <div class="ask-title">
-      💬 GyanSetu AI ला विचारा
+      💬 Ask GyanSetu AI
     </div>
 
     <textarea
@@ -261,34 +290,45 @@
 
   </div>
 
+  <!-- AI ANSWER -->
+  <div class="answer-card" id="answerCard">
+
+    <div class="answer-title">
+      🤖 GyanSetu AI
+    </div>
+
+    <div class="answer-text" id="answerText"></div>
+
+  </div>
+
   <div class="section-title">
     ⚡ Quick Study
   </div>
 
   <div class="quick">
 
-    <div class="quick-card">
+    <div class="quick-card" onclick="quickQuestion('Explain this topic in simple English')">
       <div class="quick-icon">💡</div>
       <h3>Explain Topic</h3>
-      <p>कोणताही topic समजून घ्या</p>
+      <p>Understand any topic</p>
     </div>
 
-    <div class="quick-card">
+    <div class="quick-card" onclick="quickQuestion('Create a quiz for me')">
       <div class="quick-icon">📝</div>
       <h3>Make Quiz</h3>
-      <p>Quiz तयार करून सराव करा</p>
+      <p>Create a quiz for practice</p>
     </div>
 
-    <div class="quick-card">
+    <div class="quick-card" onclick="quickQuestion('Make simple study notes about this topic')">
       <div class="quick-icon">📖</div>
       <h3>Make Notes</h3>
-      <p>सोप्या notes तयार करा</p>
+      <p>Create simple notes</p>
     </div>
 
-    <div class="quick-card">
+    <div class="quick-card" onclick="quickQuestion('Help me study this topic')">
       <div class="quick-icon">🧠</div>
       <h3>Study Help</h3>
-      <p>अभ्यासासाठी मार्गदर्शन</p>
+      <p>Get study guidance</p>
     </div>
 
   </div>
@@ -304,7 +344,7 @@
     <div class="subject">🌍 History</div>
     <div class="subject">🗺️ Geography</div>
     <div class="subject">📖 English</div>
-    <div class="subject">🇮🇳 Marathi</div>
+    <div class="subject">🇮🇳 Hindi</div>
 
   </div>
 
@@ -342,47 +382,82 @@
 <script>
 
   async function askAI() {
-  const question = document.getElementById("question").value.trim();
-  const button = document.querySelector(".ask-btn");
 
-  if (!question) {
-    alert("Please enter your question.");
-    return;
-  }
+    const question =
+      document.getElementById("question").value.trim();
 
-  button.disabled = true;
-  button.innerText = "🤖 Thinking...";
+    const button =
+      document.querySelector(".ask-btn");
 
-  try {
-    const response = await fetch(
-      "https://gyan-setu-self.vercel.app/api/chat",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          question: question
-        })
-      }
-    );
+    const answerCard =
+      document.getElementById("answerCard");
 
-    const data = await response.json();
+    const answerText =
+      document.getElementById("answerText");
 
-    if (!response.ok) {
-      throw new Error(data.error || "AI request failed");
+    if (!question) {
+      alert("Please enter your question.");
+      return;
     }
 
-    alert("🤖 GyanSetu AI:\n\n" + data.answer);
+    button.disabled = true;
+    button.innerText = "🤖 Thinking...";
 
-  } catch (error) {
-    console.error(error);
-    alert("❌ AI ला connect करता आलं नाही. पुन्हा try करा.");
-  } finally {
-    button.disabled = false;
-    button.innerText = "🤖 Ask GyanSetu AI";
+    answerCard.style.display = "block";
+    answerText.innerText = "GyanSetu AI is thinking... 🤔";
+
+    try {
+
+      const response = await fetch(
+        "https://gyan-setu-self.vercel.app/api/chat",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify({
+            question: question
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error || "AI request failed"
+        );
+      }
+
+      answerText.innerText =
+        data.answer || "No answer received.";
+
+    } catch (error) {
+
+      console.error(error);
+
+      answerText.innerText =
+        "❌ Sorry, GyanSetu AI could not connect. Please try again.";
+
+    } finally {
+
+      button.disabled = false;
+      button.innerText = "🤖 Ask GyanSetu AI";
+
+    }
   }
+
+
+  function quickQuestion(text) {
+
+    document.getElementById("question").value = text;
+
+    document.getElementById("question").focus();
+
   }
+
 
   function goHome() {
     window.location.href = "home.html";
