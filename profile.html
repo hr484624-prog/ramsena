@@ -307,6 +307,61 @@
   background: #ff7900;
   color: white;
     }
+ .menu-options {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.menu-options button {
+  width: 100%;
+  min-height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: #f7f8fc;
+  color: #18264d;
+  text-align: left;
+  padding: 0 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.menu-options button:active {
+  transform: scale(0.98);
+}
+
+.menu-options .danger-btn {
+  color: #d93025;
+  background: #fff0f0;
+      }
+body.dark-mode {
+  background: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .header,
+body.dark-mode .profile,
+body.dark-mode .stats,
+body.dark-mode .points-card,
+body.dark-mode .badge,
+body.dark-mode .empty-post,
+body.dark-mode .bottom-nav,
+body.dark-mode .modal-box {
+  background: #1e1e1e;
+  color: #ffffff;
+}
+
+body.dark-mode .bio,
+body.dark-mode .stat span,
+body.dark-mode .points-title,
+body.dark-mode .rank,
+body.dark-mode .badge span,
+body.dark-mode .empty-post,
+body.dark-mode .modal-subtitle {
+  color: #bbbbbb;
+  }
   </style>
 </head>
 
@@ -321,7 +376,7 @@
 
     <div class="title">Profile</div>
 
-    <div class="menu">⋮</div>
+    <div class="menu" onclick="openMenu()">⋮</div>
 
   </div>
 
@@ -599,6 +654,145 @@ function saveProfile() {
 
   closeEditProfile();
 
+  }
+<!-- PROFILE MENU POPUP -->
+<div class="modal-overlay" id="menuModal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      ⚙️ GyanSetu Menu
+    </div>
+
+    <div class="menu-options">
+
+      <button onclick="openAccountSettings()">
+        👤 Account Settings
+      </button>
+
+      <button onclick="openNotifications()">
+        🔔 Notifications
+      </button>
+
+      <button onclick="toggleDarkMode()">
+        🌙 Dark Mode
+      </button>
+
+      <button onclick="openPrivacy()">
+        🔒 Privacy
+      </button>
+
+      <button onclick="openAbout()">
+        ℹ️ About GyanSetu
+      </button>
+
+      <button onclick="openHelp()">
+        ❓ Help & Feedback
+      </button>
+
+      <button onclick="resetAppData()" class="danger-btn">
+        🚪 Reset App Data
+      </button>
+
+      <button
+        class="cancel-btn"
+        onclick="closeMenu()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+function openMenu() {
+  document.getElementById("menuModal")
+    .classList.add("show");
+}
+
+function closeMenu() {
+  document.getElementById("menuModal")
+    .classList.remove("show");
+}
+
+
+function openAccountSettings() {
+  closeMenu();
+  editProfile();
+}
+
+
+function openNotifications() {
+  closeMenu();
+
+  alert(
+    "🔔 Notifications\n\nStudy reminders and achievement notifications will be available here."
+  );
+}
+
+
+function toggleDarkMode() {
+  closeMenu();
+
+  document.body.classList.toggle("dark-mode");
+
+  const darkMode =
+    document.body.classList.contains("dark-mode");
+
+  localStorage.setItem(
+    "gyansetu_dark_mode",
+    darkMode ? "on" : "off"
+  );
+}
+
+
+function openPrivacy() {
+  closeMenu();
+
+  alert(
+    "🔒 Privacy\n\nYour profile information is stored locally on your device."
+  );
+}
+
+
+function openAbout() {
+  closeMenu();
+
+  alert(
+    "ℹ️ About GyanSetu\n\nGyanSetu is a student learning app designed to help you learn, practice and grow. 📚"
+  );
+}
+
+
+function openHelp() {
+  closeMenu();
+
+  alert(
+    "❓ Help & Feedback\n\nIf you find a problem or have a suggestion, you can share your feedback here."
+  );
+}
+
+
+function resetAppData() {
+
+  const confirmReset =
+    confirm(
+      "⚠️ Reset App Data?\n\nThis will remove your saved username, XP and app settings."
+    );
+
+  if (!confirmReset) {
+    return;
+  }
+
+  localStorage.clear();
+
+  alert("✅ App data has been reset.");
+
+  window.location.reload();
+  }
+if (localStorage.getItem("gyansetu_dark_mode") === "on") {
+  document.body.classList.add("dark-mode");
   }
 </script>
 
