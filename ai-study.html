@@ -298,7 +298,24 @@
     </div>
 
     <div class="answer-text" id="answerText"></div>
-
+<button
+  id="speakBtn"
+  onclick="speakAnswer()"
+  style="
+    margin-top:12px;
+    width:100%;
+    height:45px;
+    border:none;
+    border-radius:12px;
+    background:#18264d;
+    color:white;
+    font-size:14px;
+    font-weight:bold;
+    cursor:pointer;
+  "
+>
+  🔊 Listen
+</button>
   </div>
 
   <div class="section-title">
@@ -474,7 +491,32 @@
   function goProfile() {
     window.location.href = "profile.html";
   }
+function speakAnswer() {
 
+  const answer =
+    document.getElementById("answerText").innerText.trim();
+
+  if (!answer || answer.includes("could not connect")) {
+    alert("First ask GyanSetu AI a question.");
+    return;
+  }
+
+  if (!("speechSynthesis" in window)) {
+    alert("Voice is not supported on this device.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const speech =
+    new SpeechSynthesisUtterance(answer);
+
+  speech.lang = "en-US";
+  speech.rate = 0.9;
+  speech.pitch = 1;
+
+  window.speechSynthesis.speak(speech);
+  }
 </script>
 
 </body>
