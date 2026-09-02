@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Science Explorer</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f7f8fc;
+  color:#18264d;
+}
+
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:30px;
+}
+
+/* HEADER */
+
+.header{
+  background:white;
+  padding:18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.back{
+  font-size:30px;
+  cursor:pointer;
+}
+
+.title{
+  font-size:21px;
+  font-weight:800;
+}
+
+.xp{
+  background:#fff0dc;
+  color:#ff7900;
+  padding:8px 11px;
+  border-radius:12px;
+  font-weight:bold;
+  font-size:13px;
+}
+
+/* GAME */
+
+.game{
+  padding:18px;
+}
+
+.level{
+  text-align:center;
+  color:#777;
+  font-size:14px;
+  margin-bottom:7px;
+}
+
+.question{
+  text-align:center;
+  font-size:21px;
+  font-weight:800;
+  margin-bottom:5px;
+}
+
+.instruction{
+  text-align:center;
+  color:#777;
+  font-size:13px;
+  margin-bottom:18px;
+}
+
+/* 3D AREA */
+
+.scene{
+  height:280px;
+  background:linear-gradient(145deg,#101a38,#263b75);
+  border-radius:25px;
+  position:relative;
+  overflow:hidden;
+  perspective:800px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+}
+
+/* stars */
+
+.star{
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  opacity:.7;
+}
+
+.s1{left:10%;top:15%}
+.s2{left:80%;top:20%}
+.s3{left:30%;top:70%}
+.s4{left:70%;top:80%}
+.s5{left:55%;top:12%}
+.s6{left:15%;top:45%}
+.s7{left:90%;top:60%}
+
+/* ATOM */
+
+.atom{
+  position:absolute;
+  width:75px;
+  height:75px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:25px;
+  font-weight:bold;
+  cursor:grab;
+  user-select:none;
+  transform-style:preserve-3d;
+  transition:.5s;
+  box-shadow:
+    inset -10px -10px 20px rgba(0,0,0,.35),
+    inset 8px 8px 15px rgba(255,255,255,.3),
+    0 0 25px rgba(255,255,255,.25);
+}
+
+.atom:hover{
+  transform:scale(1.08) rotateY(20deg);
+}
+
+.hydrogen{
+  background:#5b9cff;
+}
+
+.oxygen{
+  background:#ef5757;
+}
+
+.carbon{
+  background:#555;
+}
+
+.nitrogen{
+  background:#775cff;
+}
+
+.sodium{
+  background:#f0a33c;
+}
+
+.chlorine{
+  background:#49b96d;
+}
+
+.atom small{
+  position:absolute;
+  bottom:-23px;
+  font-size:11px;
+  color:white;
+  font-weight:normal;
+}
+
+/* positions */
+
+.atom1{
+  left:25px;
+  top:95px;
+}
+
+.atom2{
+  left:150px;
+  top:55px;
+}
+
+.atom3{
+  right:35px;
+  top:125px;
+}
+
+/* ORBITS */
+
+.orbit{
+  position:absolute;
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:50%;
+  pointer-events:none;
+  animation:spin 3s linear infinite;
+}
+
+.orbit1{
+  width:100px;
+  height:42px;
+  left:-13px;
+  top:16px;
+  transform:rotateX(65deg);
+}
+
+.orbit2{
+  width:105px;
+  height:45px;
+  left:-15px;
+  top:16px;
+  transform:rotateY(65deg);
+  animation-duration:4s;
+}
+
+.electron{
+  position:absolute;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 10px #fff;
+}
+
+.e1{
+  left:8px;
+  top:15px;
+}
+
+.e2{
+  right:8px;
+  bottom:12px;
+}
+
+@keyframes spin{
+  from{
+    transform:rotateZ(0deg) rotateX(65deg);
+  }
+  to{
+    transform:rotateZ(360deg) rotateX(65deg);
+  }
+}
+
+/* TARGET */
+
+.target{
+  position:absolute;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  border:2px dashed rgba(255,255,255,.6);
+  padding:9px 18px;
+  border-radius:15px;
+  color:white;
+  font-size:12px;
+}
+
+/* FORMULA */
+
+.formula{
+  margin-top:18px;
+  background:white;
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.formula h3{
+  font-size:14px;
+  color:#777;
+  margin-bottom:8px;
+}
+
+.equation{
+  font-size:24px;
+  font-weight:900;
+}
+
+/* BUTTONS */
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.btn{
+  flex:1;
+  border:none;
+  border-radius:13px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.check{
+  background:#ff7900;
+  color:white;
+}
+
+.reset{
+  background:#eee;
+  color:#18264d;
+}
+
+/* MESSAGE */
+
+.message{
+  display:none;
+  margin-top:15px;
+  padding:14px;
+  border-radius:15px;
+  text-align:center;
+  font-weight:bold;
+}
+
+.correct{
+  background:#e4f8e9;
+  color:#18843c;
+}
+
+.wrong{
+  background:#ffe8e8;
+  color:#c62d2d;
+}
+
+/* NEXT */
+
+.next{
+  display:none;
+  width:100%;
+  margin-top:12px;
+  border:none;
+  padding:14px;
+  border-radius:14px;
+  background:#18264d;
+  color:white;
+  font-weight:bold;
+  font-size:15px;
+}
+
+/* COMPLETE */
+
+.complete{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.complete-box{
+  background:white;
+  width:100%;
+  max-width:380px;
+  border-radius:25px;
+  padding:30px 20px;
+  text-align:center;
+}
+
+.complete-box .emoji{
+  font-size:55px;
+}
+
+.complete-box h2{
+  margin-top:10px;
+}
+
+.final-xp{
+  margin:18px 0;
+  font-size:27px;
+  font-weight:900;
+  color:#ff7900;
+}
+
+.restart{
+  width:100%;
+  border:none;
+  background:#ff7900;
+  color:white;
+  padding:14px;
+  border-radius:13px;
+  font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HEADER -->
+
+<div class="header">
+
+  <div class="top">
+
+    <div class="back" onclick="goLearn()">‹</div>
+
+    <div class="title">🧪 Science Explorer</div>
+
+    <div class="xp">
+      ⭐ <span id="xp">0</span> XP
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="game">
+
+  <div class="level">
+    Level <span id="levelNo">1</span> / 10
+  </div>
+
+  <div class="question" id="question">
+    Hydrogen + Oxygen
+  </div>
+
+  <div class="instruction" id="instruction">
+    योग्य atoms एकत्र करा
+  </div>
+
+
+  <!-- 3D SCENE -->
+
+  <div class="scene" id="scene">
+
+    <div class="star s1"></div>
+    <div class="star s2"></div>
+    <div class="star s3"></div>
+    <div class="star s4"></div>
+    <div class="star s5"></div>
+    <div class="star s6"></div>
+    <div class="star s7"></div>
+
+    <div id="atoms"></div>
+
+    <div class="target">
+      ⚡ येथे reaction तयार करा
+    </div>
+
+  </div>
+
+
+  <!-- FORMULA -->
+
+  <div class="formula">
+
+    <h3>Reaction</h3>
+
+    <div
+      class="equation"
+      id="equation"
+    >
+      2H₂ + O₂ → 2H₂O
+    </div>
+
+  </div>
+
+
+  <!-- ACTIONS -->
+
+  <div class="actions">
+
+    <button
+      class="btn reset"
+      onclick="resetLevel()"
+    >
+      🔄 Reset
+    </button>
+
+    <button
+      class="btn check"
+      onclick="checkAnswer()"
+    >
+      ⚡ Check Reaction
+    </button>
+
+  </div>
+
+
+  <!-- MESSAGE -->
+
+  <div
+    id="message"
+    class="message"
+  ></div>
+
+
+  <button
+    id="nextButton"
+    class="next"
+    onclick="nextLevel()"
+  >
+    Next Level →
+  </button>
+
+</div>
+
+</div>
+
+
+<!-- COMPLETE -->
+
+<div
+  id="complete"
+  class="complete"
+>
+
+  <div class="complete-box">
+
+    <div class="emoji">
+      🏆
+    </div>
+
+    <h2>
+      Science Explorer Complete!
+    </h2>
+
+    <p style="margin-top:8px;color:#777;">
+      तू सर्व levels पूर्ण केलेस!
+    </p>
+
+    <div class="final-xp">
+      ⭐ <span id="finalXP">0</span> XP
+    </div>
+
+    <button
+      class="restart"
+      onclick="restartGame()"
+    >
+      🔄 Play Again
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* ==============================
+   LEVEL DATA
+============================== */
+
+const levels = [
+
+  {
+    question:"Hydrogen + Oxygen",
+    instruction:"2 Hydrogen molecules आणि 1 Oxygen molecule तयार करा.",
+    equation:"2H₂ + O₂ → 2H₂O",
+    atoms:[
+      ["H","hydrogen"],
+      ["H","hydrogen"],
+      ["O","oxygen"]
+    ]
+  },
+
+  {
+    question:"Carbon + Oxygen",
+    instruction:"Carbon आणि Oxygen combine करा.",
+    equation:"C + O₂ → CO₂",
+    atoms:[
+      ["C","carbon"],
+      ["O","oxygen"],
+      ["O","oxygen"]
+    ]
+  },
+
+  {
+    question:"Nitrogen + Hydrogen",
+    instruction:"Nitrogen आणि Hydrogen पासून Ammonia तयार करा.",
+    equation:"N₂ + 3H₂ → 2NH₃",
+    atoms:[
+      ["N","nitrogen"],
+      ["N","nitrogen"],
+      ["H","hydrogen"],
+      ["H","hydrogen"],
+      ["H","hydrogen"]
+    ]
+  },
+
+  {
+    question:"Sodium + Chlorine",
+    instruction:"Sodium आणि Chlorine combine करा.",
+    equation:"Na + Cl → NaCl",
+    atoms:[
+      ["Na","sodium"],
+      ["Cl","chlorine"]
+    ]
+  },
+
+  {
+    question:"Carbon Dioxide",
+    instruction:"Carbon atom भोवती दोन Oxygen atoms आणा.",
+    equation:"C + O₂ → CO₂",
+    atoms:[
+      ["C","carbon"],
+      ["O","oxygen"],
+      ["O","oxygen"]
+    ]
+  },
+
+  {
+    question:"Water Formation",
+    instruction:"Hydrogen आणि Oxygen योग्य प्रमाणात combine करा.",
+    equation:"2H₂ + O₂ → 2H₂O",
+    atoms:[
+      ["H","hydrogen"],
+      ["H","hydrogen"],
+      ["O","oxygen"]
+    ]
+  },
+
+  {
+    question:"Ammonia",
+    instruction:"Nitrogen + Hydrogen reaction पूर्ण करा.",
+    equation:"N₂ + 3H₂ → 2NH₃",
+    atoms:[
+      ["N","nitrogen"],
+      ["N","nitrogen"],
+      ["H","hydrogen"],
+      ["H","hydrogen"],
+      ["H","hydrogen"]
+    ]
+  },
+
+  {
+    question:"Salt Formation",
+    instruction:"Sodium आणि Chlorine एकत्र आणा.",
+    equation:"Na + Cl → NaCl",
+    atoms:[
+      ["Na","sodium"],
+      ["Cl","chlorine"]
+    ]
+  },
+
+  {
+    question:"Carbon Dioxide",
+    instruction:"Carbon ला दोन Oxygen atoms सोबत combine करा.",
+    equation:"C + O₂ → CO₂",
+    atoms:[
+      ["C","carbon"],
+      ["O","oxygen"],
+      ["O","oxygen"]
+    ]
+  },
+
+  {
+    question:"Final Reaction",
+    instruction:"Water molecule तयार करून final level complete करा!",
+    equation:"2H₂ + O₂ → 2H₂O",
+    atoms:[
+      ["H","hydrogen"],
+      ["H","hydrogen"],
+      ["O","oxygen"]
+    ]
+  }
+
+];
+
+
+/* ==============================
+   VARIABLES
+============================== */
+
+let currentLevel = 0;
+
+let xp =
+  Number(localStorage.getItem("gyansetu_xp")) || 0;
+
+let completed = false;
+
+
+/* ==============================
+   LOAD LEVEL
+============================== */
+
+function loadLevel(){
+
+  const data = levels[currentLevel];
+
+  document.getElementById("levelNo").textContent =
+    currentLevel + 1;
+
+  document.getElementById("question").textContent =
+    data.question;
+
+  document.getElementById("instruction").textContent =
+    data.instruction;
+
+  document.getElementById("equation").textContent =
+    data.equation;
+
+  document.getElementById("xp").textContent =
+    xp;
+
+  document.getElementById("message").style.display =
+    "none";
+
+  document.getElementById("nextButton").style.display =
+    "none";
+
+  createAtoms(data.atoms);
+
+}
+
+
+/* ==============================
+   CREATE ATOMS
+============================== */
+
+function createAtoms(atomList){
+
+  const container =
+    document.getElementById("atoms");
+
+  container.innerHTML = "";
+
+  atomList.forEach((atom,index)=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "atom " + atom[1];
+
+    div.classList.add(
+      "atom" + ((index % 3) + 1)
+    );
+
+    div.textContent =
+      atom[0];
+
+    const orbit1 =
+      document.createElement("div");
+
+    orbit1.className =
+      "orbit orbit1";
+
+    const orbit2 =
+      document.createElement("div");
+
+    orbit2.className =
+      "orbit orbit2";
+
+    const e1 =
+      document.createElement("div");
+
+    e1.className =
+      "electron e1";
+
+    const e2 =
+      document.createElement("div");
+
+    e2.className =
+      "electron e2";
+
+    orbit1.appendChild(e1);
+    orbit2.appendChild(e2);
+
+    div.appendChild(orbit1);
+    div.appendChild(orbit2);
+
+    div.setAttribute(
+      "draggable",
+      "true"
+    );
+
+    div.addEventListener(
+      "dragstart",
+      dragStart
+    );
+
+    div.addEventListener(
+      "touchstart",
+      touchStart,
+      {passive:true}
+    );
+
+    container.appendChild(div);
+
+  });
+
+}
+
+
+/* ==============================
+   DRAG
+============================== */
+
+let dragged = null;
+
+function dragStart(e){
+
+  dragged =
+    e.currentTarget;
+
+}
+
+document.addEventListener(
+  "dragover",
+  e => e.preventDefault()
+);
+
+document.addEventListener(
+  "drop",
+  e => {
+
+    e.preventDefault();
+
+    if(!dragged) return;
+
+    const scene =
+      document.getElementById("scene");
+
+    const rect =
+      scene.getBoundingClientRect();
+
+    let x =
+      e.clientX - rect.left - 37;
+
+    let y =
+      e.clientY - rect.top - 37;
+
+    x =
+      Math.max(5,Math.min(
+        x,
+        rect.width - 80
+      ));
+
+    y =
+      Math.max(5,Math.min(
+        y,
+        rect.height - 100
+      ));
+
+    dragged.style.left =
+      x + "px";
+
+    dragged.style.top =
+      y + "px";
+
+  }
+);
+
+
+/* ==============================
+   TOUCH DRAG
+============================== */
+
+let touchAtom = null;
+
+function touchStart(e){
+
+  touchAtom =
+    e.currentTarget;
+
+  touchAtom.style.zIndex = 50;
+
+  touchAtom.addEventListener(
+    "touchmove",
+    touchMove,
+    {passive:false}
+  );
+
+  touchAtom.addEventListener(
+    "touchend",
+    touchEnd,
+    {once:true}
+  );
+
+}
+
+function touchMove(e){
+
+  e.preventDefault();
+
+  const touch =
+    e.touches[0];
+
+  const scene =
+    document.getElementById("scene");
+
+  const rect =
+    scene.getBoundingClientRect();
+
+  let x =
+    touch.clientX - rect.left - 37;
+
+  let y =
+    touch.clientY - rect.top - 37;
+
+  x =
+    Math.max(5,Math.min(
+      x,
+      rect.width - 80
+    ));
+
+  y =
+    Math.max(5,Math.min(
+      y,
+      rect.height - 100
+    ));
+
+  touchAtom.style.left =
+    x + "px";
+
+  touchAtom.style.top =
+    y + "px";
+
+}
+
+function touchEnd(){
+
+  touchAtom.style.zIndex = 1;
+
+}
+
+
+/* ==============================
+   CHECK
+============================== */
+
+function checkAnswer(){
+
+  if(completed) return;
+
+  const message =
+    document.getElementById("message");
+
+  message.style.display =
+    "block";
+
+  message.className =
+    "message correct";
+
+  message.innerHTML =
+    "🎉 Excellent! Reaction successfully created!<br>⭐ +10 XP";
+
+  xp += 10;
+
+  localStorage.setItem(
+    "gyansetu_xp",
+    xp
+  );
+
+  document.getElementById("xp").textContent =
+    xp;
+
+  document.getElementById("nextButton")
+    .style.display =
+    "block";
+
+  completed = true;
+
+  animateReaction();
+
+}
+
+
+/* ==============================
+   REACTION ANIMATION
+============================== */
+
+function animateReaction(){
+
+  const atoms =
+    document.querySelectorAll(".atom");
+
+  atoms.forEach((atom,index)=>{
+
+    setTimeout(()=>{
+
+      atom.style.left =
+        "50%";
+
+      atom.style.top =
+        "80px";
+
+      atom.style.transform =
+        "translateX(-50%) scale(.8) rotateY(360deg)";
+
+    },index*180);
+
+  });
+
+}
+
+
+/* ==============================
+   NEXT LEVEL
+============================== */
+
+function nextLevel(){
+
+  if(!completed) return;
+
+  currentLevel++;
+
+  completed = false;
+
+  if(currentLevel >= levels.length){
+
+    document.getElementById("finalXP")
+      .textContent =
+      xp;
+
+    document.getElementById("complete")
+      .style.display =
+      "flex";
+
+    return;
+
+  }
+
+  loadLevel();
+
+}
+
+
+/* ==============================
+   RESET
+============================== */
+
+function resetLevel(){
+
+  completed = false;
+
+  loadLevel();
+
+}
+
+
+/* ==============================
+   RESTART
+============================== */
+
+function restartGame(){
+
+  currentLevel = 0;
+
+  completed = false;
+
+  document.getElementById("complete")
+    .style.display =
+    "none";
+
+  loadLevel();
+
+}
+
+
+/* ==============================
+   LEARN PAGE
+============================== */
+
+function goLearn(){
+
+  window.location.href =
+    "learn.html";
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+loadLevel();
+
+</script>
+
+</body>
+  </html>
