@@ -1786,7 +1786,70 @@ function closeStudentConnect(){
     .style.display = "none";
 
    }
+/* ===============================
+   CONNECT STUDENT TO SIR
+================================ */
 
+function connectToSir(){
+
+  const sirId =
+    document
+      .getElementById("sirPeerIdInput")
+      .value
+      .trim();
+
+  if(!sirId){
+
+    showToast("❌ Sir Live ID टाका.");
+
+    return;
+  }
+
+  initPeer();
+
+  function sendReady(){
+
+    const conn = peer.connect(sirId);
+
+    conn.on("open", function(){
+
+      conn.send({
+
+        type: "student-ready",
+
+        studentPeerId: myPeerId
+
+      });
+
+      closeStudentConnect();
+
+      showToast(
+        "⏳ Sir च्या Live ची वाट पाहत आहे..."
+      );
+
+    });
+
+    conn.on("error", function(){
+
+      showToast(
+        "❌ Sir शी connection झाला नाही."
+      );
+
+    });
+
+  }
+
+  if(peer.open){
+
+    sendReady();
+
+  }else{
+
+    peer.once("open", sendReady);
+
+  }
+
+   }
 /* ===============================
    START LIVE CAMERA
 ================================ */
