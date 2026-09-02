@@ -1382,7 +1382,7 @@ body{
   id="toast"
 ></div>
 
-
+<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
 <script>
 
 /* =====================================================
@@ -1392,8 +1392,55 @@ body{
 let liveStream = null;
 let mediaRecorder = null;
 let recordedChunks = [];
+let peer = null;
+let myPeerId = "";
+let activeCall = null;
+function initPeer(){
 
+  if(peer) return;
 
+  peer = new Peer();
+
+  peer.on("open", function(id){
+
+    myPeerId = id;
+
+    console.log("My Peer ID:", myPeerId);
+
+  });
+
+  peer.on("call", function(call){
+
+    activeCall = call;
+
+    call.answer();
+
+    call.on("stream", function(remoteStream){
+
+      const video =
+        document.getElementById("studentVideo");
+
+      video.srcObject = remoteStream;
+
+      document
+        .getElementById("studentVideoPopup")
+        .style.display = "flex";
+
+      video.play().catch(function(){});
+
+    });
+
+  });
+
+  peer.on("error", function(error){
+
+    console.log("PeerJS Error:", error);
+
+    showToast("❌ Live connection error");
+
+  });
+
+   }
 /* =====================================================
    HOME
 ===================================================== */
