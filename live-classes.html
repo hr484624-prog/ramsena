@@ -1,1262 +1,766 @@
 <!DOCTYPE html>
-<html lang="mr">
-
+<html lang="en">
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>GyanSetu - Live Classes</title>
-
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-    }
-
-
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-      padding-bottom: 90px;
-    }
-
-
-    /* HEADER */
-
-    .header {
-      background: white;
-      padding: 18px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    }
-
-
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-
-    .back {
-      font-size: 28px;
-      cursor: pointer;
-      width: 45px;
-    }
-
-
-    .title {
-      font-size: 21px;
-      font-weight: 800;
-    }
-
-
-    .camera {
-      font-size: 25px;
-      width: 45px;
-      text-align: right;
-    }
-
-
-    .hello {
-      margin-top: 15px;
-    }
-
-
-    .hello small {
-      color: #777;
-      font-size: 13px;
-    }
-
-
-    .hello h2 {
-      margin-top: 4px;
-      font-size: 20px;
-    }
-
-
-    /* CREATE CHANNEL */
-
-    .create-channel {
-      margin: 18px 16px 0;
-      padding: 17px;
-      border-radius: 19px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #fff1df,
-          #fffaf4
-        );
-
-      border: 1px solid #ffe0bd;
-    }
-
-
-    .create-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-
-    .create-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 15px;
-
-      background: #ff7900;
-      color: white;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 25px;
-    }
-
-
-    .create-text {
-      flex: 1;
-    }
-
-
-    .create-text h3 {
-      font-size: 16px;
-    }
-
-
-    .create-text p {
-      margin-top: 4px;
-      color: #777;
-      font-size: 11px;
-    }
-
-
-    .create-btn {
-      width: 100%;
-      height: 45px;
-
-      margin-top: 14px;
-
-      border: none;
-      border-radius: 12px;
-
-      background: #ff7900;
-      color: white;
-
-      font-size: 14px;
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* CHANNEL */
-
-    .channel-box {
-      display: none;
-
-      margin: 18px 16px 0;
-      padding: 18px;
-
-      border-radius: 20px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #18264d,
-          #294e9b
-        );
-
-      color: white;
-
-      box-shadow:
-        0 8px 25px
-        rgba(24,38,77,.22);
-
-      cursor: pointer;
-    }
-
-
-    .channel-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-
-    .channel-logo {
-      width: 52px;
-      height: 52px;
-
-      border-radius: 16px;
-
-      background: white;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 27px;
-    }
-
-
-    .channel-info {
-      flex: 1;
-    }
-
-
-    .channel-info small {
-      color: #cbd8f5;
-      font-size: 11px;
-    }
-
-
-    .channel-info h2 {
-      margin-top: 4px;
-      font-size: 18px;
-    }
-
-
-    .channel-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 15px;
-    }
-
-
-    .channel-action {
-      flex: 1;
-
-      border: none;
-      border-radius: 11px;
-
-      padding: 10px 5px;
-
-      background: rgba(255,255,255,.15);
-      color: white;
-
-      font-size: 11px;
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* LIVE BANNER */
-
-    .live-banner {
-      margin: 18px 16px;
-
-      padding: 20px;
-
-      border-radius: 21px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #fff0e6,
-          #ffffff
-        );
-
-      border: 1px solid #ffd8c2;
-    }
-
-
-    .live-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-
-      color: #d92323;
-
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-
-    .live-dot {
-      width: 9px;
-      height: 9px;
-
-      border-radius: 50%;
-
-      background: #d92323;
-
-      animation: liveBlink 1s infinite;
-    }
-
-
-    @keyframes liveBlink {
-
-      0%,100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: .3;
-      }
-
-    }
-
-
-    .live-banner h2 {
-      margin-top: 10px;
-      font-size: 21px;
-    }
-
-
-    .live-banner p {
-      margin-top: 6px;
-
-      color: #777;
-      font-size: 13px;
-    }
-
-
-    .join-main {
-      width: 100%;
-      height: 48px;
-
-      margin-top: 15px;
-
-      border: none;
-      border-radius: 12px;
-
-      background: #d92323;
-      color: white;
-
-      font-size: 15px;
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* SECTION */
-
-    .section-title {
-      margin: 22px 16px 13px;
-
-      font-size: 19px;
-      font-weight: 800;
-    }
-
-
-    /* CLASS CARD */
-
-    .class-card {
-      background: white;
-
-      margin: 0 16px 12px;
-
-      padding: 16px;
-
-      border-radius: 19px;
-
-      box-shadow:
-        0 5px 18px
-        rgba(0,0,0,.06);
-    }
-
-
-    .class-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-
-    .teacher {
-      width: 50px;
-      height: 50px;
-
-      border-radius: 15px;
-
-      background: #fff0dc;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 27px;
-    }
-
-
-    .class-info {
-      flex: 1;
-    }
-
-
-    .class-info h3 {
-      font-size: 15px;
-    }
-
-
-    .class-info p {
-      margin-top: 5px;
-
-      font-size: 11px;
-      color: #777;
-    }
-
-
-    .time {
-      margin-top: 13px;
-
-      padding-top: 12px;
-
-      border-top: 1px solid #eee;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-
-    .time span {
-      font-size: 12px;
-      color: #666;
-    }
-
-
-    .join-btn {
-      border: none;
-
-      border-radius: 10px;
-
-      padding: 9px 14px;
-
-      background: #ff7900;
-      color: white;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* RECORDED */
-
-    .recorded-card {
-      background: white;
-
-      margin: 0 16px 12px;
-
-      padding: 15px;
-
-      border-radius: 18px;
-
-      box-shadow:
-        0 5px 18px
-        rgba(0,0,0,.06);
-
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-
-    .video-icon {
-      width: 52px;
-      height: 52px;
-
-      border-radius: 15px;
-
-      background: #eef3ff;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 25px;
-    }
-
-
-    .video-info {
-      flex: 1;
-    }
-
-
-    .video-info h3 {
-      font-size: 14px;
-    }
-
-
-    .video-info p {
-      margin-top: 4px;
-
-      font-size: 11px;
-      color: #777;
-    }
-
-
-    .watch-btn {
-      border: none;
-
-      background: #18264d;
-      color: white;
-
-      padding: 9px 11px;
-
-      border-radius: 10px;
-
-      font-size: 11px;
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* REMINDER */
-
-    .reminder {
-      margin: 20px 16px;
-
-      padding: 17px;
-
-      border-radius: 18px;
-
-      background: white;
-
-      box-shadow:
-        0 5px 18px
-        rgba(0,0,0,.05);
-
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-
-    .reminder-icon {
-      font-size: 28px;
-    }
-
-
-    .reminder-text {
-      flex: 1;
-    }
-
-
-    .reminder-text strong {
-      font-size: 14px;
-    }
-
-
-    .reminder-text p {
-      margin-top: 4px;
-
-      color: #777;
-      font-size: 11px;
-    }
-
-
-    .reminder button {
-      border: none;
-
-      background: #f1f3f8;
-
-      padding: 9px;
-
-      border-radius: 10px;
-
-      font-size: 12px;
-
-      cursor: pointer;
-    }
-
-
-    /* POPUP */
-
-    .popup {
-      display: none;
-
-      position: fixed;
-
-      inset: 0;
-
-      background:
-        rgba(0,0,0,.65);
-
-      z-index: 100;
-
-      align-items: center;
-      justify-content: center;
-
-      padding: 18px;
-    }
-
-
-    .popup-box {
-      width: 100%;
-      max-width: 390px;
-
-      background: white;
-
-      border-radius: 23px;
-
-      padding: 21px;
-
-      box-shadow:
-        0 15px 50px
-        rgba(0,0,0,.25);
-
-      animation: popupIn .2s ease;
-    }
-
-
-    @keyframes popupIn {
-
-      from {
-        transform: scale(.85);
-        opacity: 0;
-      }
-
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-    }
-
-
-    .popup-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-
-    .popup-head h2 {
-      font-size: 20px;
-    }
-
-
-    .popup-close {
-      width: 34px;
-      height: 34px;
-
-      border: none;
-
-      border-radius: 50%;
-
-      background: #f1f3f8;
-
-      font-size: 18px;
-
-      cursor: pointer;
-    }
-
-
-    .popup-subtitle {
-      margin-top: 6px;
-
-      color: #777;
-
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-
-    .input-group {
-      margin-top: 16px;
-    }
-
-
-    .input-group label {
-      display: block;
-
-      margin-bottom: 6px;
-
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-
-    .input-group input {
-      width: 100%;
-
-      height: 45px;
-
-      border: 1px solid #ddd;
-
-      border-radius: 12px;
-
-      padding: 0 13px;
-
-      outline: none;
-
-      font-size: 14px;
-    }
-
-
-    .input-group input:focus {
-      border-color: #ff7900;
-    }
-
-
-    .popup-create {
-      width: 100%;
-
-      height: 46px;
-
-      margin-top: 18px;
-
-      border: none;
-
-      border-radius: 12px;
-
-      background: #ff7900;
-
-      color: white;
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    .popup-cancel {
-      width: 100%;
-
-      height: 42px;
-
-      margin-top: 8px;
-
-      border: none;
-
-      border-radius: 12px;
-
-      background: #f1f3f8;
-
-      color: #18264d;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* PASSWORD POPUP */
-
-    .password-popup-icon {
-      width: 58px;
-      height: 58px;
-
-      margin: 0 auto 12px;
-
-      border-radius: 18px;
-
-      background: #fff1df;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      font-size: 28px;
-    }
-
-
-    .password-title {
-      text-align: center;
-      font-size: 20px;
-    }
-
-
-    .password-text {
-      text-align: center;
-
-      color: #777;
-
-      font-size: 12px;
-
-      margin-top: 6px;
-    }
-
-
-    /* LIVE CAMERA POPUP */
-
-    #liveCameraPopup {
-      background: rgba(0,0,0,.92);
-      z-index: 200;
-    }
-
-
-    .live-camera-box {
-      width: 100%;
-      max-width: 410px;
-
-      background: #10131a;
-
-      border-radius: 22px;
-
-      padding: 15px;
-
-      color: white;
-
-      box-shadow:
-        0 15px 50px
-        rgba(0,0,0,.5);
-
-      animation: popupIn .2s ease;
-    }
-
-
-    .live-camera-top {
-      display: flex;
-
-      align-items: center;
-
-      justify-content: space-between;
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      margin-bottom: 12px;
-    }
-
-
-    .camera-live-dot {
-      display: inline-block;
-
-      width: 9px;
-      height: 9px;
-
-      background: #ff3030;
-
-      border-radius: 50%;
-
-      margin-right: 6px;
-
-      animation: liveBlink 1s infinite;
-    }
-
-
-    .camera-close {
-      width: 34px;
-      height: 34px;
-
-      border: none;
-
-      border-radius: 50%;
-
-      background: rgba(255,255,255,.12);
-
-      color: white;
-
-      font-size: 22px;
-
-      cursor: pointer;
-    }
-
-
-    .camera-video-wrap {
-      position: relative;
-
-      width: 100%;
-
-      aspect-ratio: 16 / 10;
-
-      background: #050505;
-
-      border-radius: 17px;
-
-      overflow: hidden;
-    }
-
-
-    #liveVideo {
-      width: 100%;
-      height: 100%;
-
-      object-fit: cover;
-
-      display: block;
-    }
-
-
-    .camera-status {
-      position: absolute;
-
-      left: 10px;
-      bottom: 10px;
-
-      background:
-        rgba(0,0,0,.65);
-
-      padding: 7px 10px;
-
-      border-radius: 9px;
-
-      font-size: 11px;
-    }
-
-
-    .live-camera-info {
-      padding: 13px 2px;
-    }
-
-
-    .live-camera-info h3 {
-      font-size: 15px;
-    }
-
-
-    .live-camera-info p {
-      margin-top: 4px;
-
-      color: #aaa;
-
-      font-size: 11px;
-    }
-
-
-    .end-live-btn {
-      width: 100%;
-      height: 46px;
-
-      border: none;
-
-      border-radius: 12px;
-
-      background: #d92323;
-
-      color: white;
-
-      font-size: 14px;
-
-      font-weight: bold;
-
-      cursor: pointer;
-    }
-
-
-    /* BOTTOM NAV */
-
-    .bottom-nav {
-      position: fixed;
-
-      bottom: 0;
-      left: 50%;
-
-      transform: translateX(-50%);
-
-      width: 100%;
-      max-width: 430px;
-
-      height: 68px;
-
-      background: white;
-
-      display: flex;
-
-      justify-content: space-around;
-
-      align-items: center;
-
-      border-top: 1px solid #eee;
-
-      z-index: 20;
-    }
-
-
-    .nav-item {
-      text-align: center;
-
-      font-size: 11px;
-
-      color: #777;
-
-      cursor: pointer;
-    }
-
-
-    .nav-item .icon {
-      display: block;
-
-      font-size: 22px;
-
-      margin-bottom: 3px;
-    }
-
-
-    .nav-item.active {
-      color: #ff7900;
-
-      font-weight: bold;
-    }
-
-
-    /* EMPTY */
-
-    .empty {
-      display: none;
-
-      margin: 15px 16px;
-
-      padding: 25px 15px;
-
-      text-align: center;
-
-      background: white;
-
-      border-radius: 18px;
-
-      color: #777;
-
-      font-size: 13px;
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Live Classes</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#eef4ff;
+  color:#172033;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#fff;
+  position:relative;
+  overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+  height:70px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:linear-gradient(135deg,#005bea,#00c6ff);
+  color:white;
+}
+
+.header h2{
+  font-size:20px;
+}
+
+.header p{
+  font-size:10px;
+  margin-top:3px;
+  opacity:.9;
+}
+
+.back-btn{
+  border:none;
+  background:rgba(255,255,255,.18);
+  color:white;
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* CONTENT */
+
+.content{
+  padding:16px;
+  padding-bottom:35px;
+}
+
+/* CREATE CHANNEL */
+
+.create-card{
+  background:linear-gradient(135deg,#f4f8ff,#ffffff);
+  border:1px solid #dbe7ff;
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 6px 18px rgba(0,80,200,.08);
+  margin-bottom:15px;
+}
+
+.create-card h3{
+  font-size:17px;
+}
+
+.create-card p{
+  color:#718096;
+  font-size:12px;
+  margin:7px 0 14px;
+}
+
+.create-btn{
+  width:100%;
+  height:45px;
+  border:none;
+  border-radius:13px;
+  background:linear-gradient(135deg,#005bea,#00aaff);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* CHANNEL */
+
+.channel-box{
+  background:#111827;
+  color:white;
+  border-radius:20px;
+  padding:17px;
+  margin-bottom:17px;
+  box-shadow:0 8px 25px rgba(0,0,0,.16);
+}
+
+.channel-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:13px;
+}
+
+.channel-name{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.live-badge{
+  background:#ef2929;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.channel-actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+}
+
+.channel-actions button{
+  border:none;
+  border-radius:10px;
+  padding:9px 3px;
+  font-size:11px;
+  cursor:pointer;
+}
+
+.channel-actions button.active{
+  background:#1677ff;
+  color:white;
+}
+
+.channel-actions button:not(.active){
+  background:#253047;
+  color:#cbd5e1;
+}
+
+/* LIVE BANNER */
+
+.live-card{
+  background:linear-gradient(135deg,#061a3b,#005bea);
+  color:white;
+  border-radius:20px;
+  padding:17px;
+  margin-bottom:16px;
+  position:relative;
+  overflow:hidden;
+}
+
+.live-card::after{
+  content:"";
+  position:absolute;
+  width:120px;
+  height:120px;
+  right:-35px;
+  top:-40px;
+  background:rgba(0,198,255,.25);
+  border-radius:50%;
+}
+
+.live-card small{
+  font-size:10px;
+  color:#9edbff;
+}
+
+.live-card h3{
+  margin-top:7px;
+  font-size:17px;
+}
+
+.live-card p{
+  margin-top:5px;
+  color:#c7dcff;
+  font-size:11px;
+}
+
+.join-btn{
+  margin-top:14px;
+  width:100%;
+  height:44px;
+  border:none;
+  border-radius:12px;
+  background:white;
+  color:#005bea;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* SECTIONS */
+
+.section-title{
+  font-size:16px;
+  margin:20px 0 10px;
+}
+
+.class-card{
+  background:white;
+  border:1px solid #e1e9f7;
+  border-radius:16px;
+  padding:14px;
+  margin-bottom:10px;
+  box-shadow:0 4px 13px rgba(0,60,150,.06);
+}
+
+.class-card h4{
+  font-size:14px;
+}
+
+.class-card p{
+  color:#718096;
+  font-size:11px;
+  margin-top:5px;
+}
+
+.card-btn{
+  margin-top:10px;
+  border:none;
+  background:#edf5ff;
+  color:#0064e6;
+  padding:8px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* RECORDED */
+
+.recorded-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.video-thumb{
+  width:70px;
+  height:50px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#005bea,#00c6ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:21px;
+  flex-shrink:0;
+}
+
+.recorded-info{
+  flex:1;
+}
+
+.recorded-info h4{
+  font-size:13px;
+}
+
+.recorded-info p{
+  font-size:10px;
+  color:#718096;
+  margin-top:4px;
+}
+
+/* REMINDER */
+
+.reminder{
+  margin-top:18px;
+  padding:15px;
+  background:#fff8e8;
+  border:1px solid #ffe3a3;
+  border-radius:16px;
+}
+
+.reminder h4{
+  font-size:14px;
+}
+
+.reminder p{
+  font-size:11px;
+  color:#806b3e;
+  margin-top:4px;
+}
+
+.reminder button{
+  margin-top:9px;
+  border:none;
+  background:#ffb300;
+  color:white;
+  padding:8px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+/* POPUP */
+
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:100;
+}
+
+.popup-box{
+  width:100%;
+  max-width:390px;
+  background:white;
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  animation:popupIn .2s ease;
+}
+
+@keyframes popupIn{
+  from{
+    transform:scale(.92);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.popup-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:17px;
+}
+
+.popup-head h3{
+  font-size:17px;
+}
+
+.popup-close{
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:50%;
+  background:#edf2f7;
+  font-size:21px;
+  cursor:pointer;
+}
+
+.input{
+  width:100%;
+  height:45px;
+  border:1px solid #d9e3f4;
+  border-radius:12px;
+  padding:0 13px;
+  outline:none;
+  margin-bottom:11px;
+}
+
+.input:focus{
+  border-color:#1680ff;
+}
+
+.popup-main-btn{
+  width:100%;
+  height:45px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#005bea,#00c6ff);
+  color:white;
+  font-weight:bold;
+}
+
+/* ROLE POPUP */
+
+.role-box{
+  text-align:center;
+}
+
+.role-box h3{
+  font-size:19px;
+}
+
+.role-box p{
+  font-size:11px;
+  color:#718096;
+  margin:7px 0 17px;
+}
+
+.role-btn{
+  width:100%;
+  height:58px;
+  border:none;
+  border-radius:15px;
+  margin-bottom:10px;
+  text-align:left;
+  padding:0 16px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.role-btn span{
+  display:block;
+  font-size:10px;
+  color:#718096;
+  margin-top:3px;
+}
+
+.sir{
+  background:#edf5ff;
+  color:#005bea;
+}
+
+.student{
+  background:#f2f0ff;
+  color:#673ab7;
+}
+
+/* CAMERA */
+
+#liveCameraPopup{
+  background:rgba(0,0,0,.93);
+  z-index:200;
+}
+
+.live-camera-box{
+  width:100%;
+  max-width:410px;
+  background:#10131a;
+  border-radius:22px;
+  padding:15px;
+  color:white;
+  box-shadow:0 15px 50px rgba(0,0,0,.5);
+}
+
+.live-camera-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+.camera-live-dot{
+  display:inline-block;
+  width:9px;
+  height:9px;
+  background:#ff3030;
+  border-radius:50%;
+  margin-right:6px;
+  animation:liveBlink 1s infinite;
+}
+
+@keyframes liveBlink{
+  50%{
+    opacity:.25;
+  }
+}
+
+.camera-close{
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  color:white;
+  font-size:22px;
+}
+
+.camera-video-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/10;
+  background:#050505;
+  border-radius:17px;
+  overflow:hidden;
+}
+
+#liveVideo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.camera-status{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  background:rgba(0,0,0,.7);
+  padding:7px 10px;
+  border-radius:9px;
+  font-size:11px;
+}
+
+.recording-indicator{
+  position:absolute;
+  right:10px;
+  top:10px;
+  background:#e52323;
+  padding:6px 9px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:bold;
+}
+
+.live-camera-info{
+  padding:13px 2px;
+}
+
+.live-camera-info h3{
+  font-size:15px;
+}
+
+.live-camera-info p{
+  margin-top:4px;
+  color:#aaa;
+  font-size:11px;
+}
+
+.end-live-btn{
+  width:100%;
+  height:46px;
+  border:none;
+  border-radius:12px;
+  background:#d92323;
+  color:white;
+  font-size:14px;
+  font-weight:bold;
+}
+
+/* STUDENT VIDEO */
+
+#studentVideoPopup{
+  background:#05070b;
+  z-index:180;
+}
+
+.student-video-box{
+  width:100%;
+  max-width:410px;
+  color:white;
+}
+
+.student-video-wrap{
+  width:100%;
+  aspect-ratio:16/10;
+  background:#000;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+#studentVideo{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.student-video-title{
+  padding:14px 2px;
+}
+
+.student-video-title h3{
+  font-size:16px;
+}
+
+.student-video-title p{
+  font-size:11px;
+  color:#aaa;
+  margin-top:4px;
+}
+
+/* RECORDED PAGE */
+
+#recordedPopup{
+  z-index:160;
+}
+
+.recorded-page{
+  max-height:80vh;
+  overflow-y:auto;
+}
+
+.empty-recorded{
+  text-align:center;
+  padding:25px 10px;
+  color:#718096;
+  font-size:12px;
+}
+
+.saved-video{
+  background:#f5f8ff;
+  border:1px solid #dfe8fa;
+  border-radius:15px;
+  padding:11px;
+  margin-bottom:10px;
+}
+
+.saved-video h4{
+  font-size:13px;
+}
+
+.saved-video p{
+  font-size:10px;
+  color:#718096;
+  margin-top:4px;
+}
+
+.saved-video button{
+  margin-top:9px;
+  border:none;
+  background:#006eff;
+  color:white;
+  padding:8px 12px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.delete-video{
+  background:#ffecec !important;
+  color:#e32626 !important;
+  margin-left:5px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%) translateY(20px);
+  background:#111827;
+  color:white;
+  padding:11px 15px;
+  border-radius:12px;
+  font-size:11px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:500;
+  white-space:nowrap;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+</style>
 </head>
-
 
 <body>
 
-
 <div class="app">
-
 
   <!-- HEADER -->
 
   <div class="header">
 
-    <div class="top">
+    <button class="back-btn" onclick="goHome()">‹</button>
 
-      <div
-        class="back"
-        onclick="goHome()"
-      >
-        ‹
-      </div>
-
-
-      <div class="title">
-        Live Classes
-      </div>
-
-
-      <div class="camera">
-        🎥
-      </div>
-
+    <div>
+      <h2>🎥 Live Classes</h2>
+      <p>Learn Live • Learn Better</p>
     </div>
 
-
-    <div class="hello">
-
-      <small>
-        शिक्षकांसोबत थेट शिका 👨‍🏫
-      </small>
-
-      <h2 id="username">
-        @student
-      </h2>
-
-    </div>
+    <div style="font-size:23px;">📡</div>
 
   </div>
 
 
+  <div class="content">
 
-  <!-- CREATE CHANNEL -->
+    <!-- CREATE CHANNEL -->
 
-  <div class="create-channel">
+    <div class="create-card">
 
-    <div class="create-top">
-
-      <div class="create-icon">
-        📺
-      </div>
-
-
-      <div class="create-text">
-
-        <h3>
-          तुमचे स्वतःचे Channel तयार करा
-        </h3>
-
-        <p>
-          Live आणि Recorded Classes एकाच ठिकाणी मिळवा
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <button
-      class="create-btn"
-      onclick="openCreatePopup()"
-    >
-      ➕ Create Channel
-    </button>
-
-  </div>
-
-
-
-  <!-- USER CHANNEL -->
-
-  <div
-    class="channel-box"
-    id="channelBox"
-    onclick="openChannel()"
-  >
-
-    <div class="channel-header">
-
-      <div class="channel-logo">
-        📺
-      </div>
-
-
-      <div class="channel-info">
-
-        <small>
-          तुमचा Channel
-        </small>
-
-        <h2 id="channelNameDisplay">
-          Channel
-        </h2>
-
-      </div>
-
-    </div>
-
-
-    <div class="channel-actions">
-
-      <button
-        class="channel-action"
-        onclick="event.stopPropagation(); showSection('live')"
-      >
-        🔴 Live
-      </button>
-
-
-      <button
-        class="channel-action"
-        onclick="event.stopPropagation(); showSection('recorded')"
-      >
-        🎥 Recorded
-      </button>
-
-
-      <button
-        class="channel-action"
-        onclick="event.stopPropagation(); showSection('all')"
-      >
-        📚 All
-      </button>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- LIVE NOW -->
-
-  <div id="liveSection">
-
-    <div class="live-banner">
-
-      <div class="live-label">
-
-        <span class="live-dot"></span>
-
-        LIVE NOW
-
-      </div>
-
-
-      <h2>
-        Mathematics — Algebra
-      </h2>
-
+      <h3>🎓 Create Your Channel</h3>
 
       <p>
-        👨‍🏫 Prof. Rahul • Class 10
+        Teachers can create their own channel and conduct live classes.
       </p>
 
-
       <button
-        class="join-main"
-        onclick="joinLive()"
+        class="create-btn"
+        onclick="openCreatePopup()"
       >
-        🔴 Join Live Class
+        ➕ Create Channel
       </button>
 
     </div>
 
 
+    <!-- CHANNEL -->
 
-    <!-- UPCOMING -->
+    <div
+      class="channel-box"
+      id="channelBox"
+      style="display:none;"
+      onclick="openChannel()"
+    >
 
-    <div class="section-title">
-      📅 Upcoming Classes
-    </div>
+      <div class="channel-top">
 
+        <div>
+          <div class="channel-name" id="channelName">
+            My Channel
+          </div>
 
-    <div class="class-card">
-
-      <div class="class-top">
-
-        <div class="teacher">
-          👨‍🏫
+          <div style="font-size:10px;color:#9ca3af;margin-top:3px;">
+            GyanSetu Live Channel
+          </div>
         </div>
 
-
-        <div class="class-info">
-
-          <h3>
-            Science — Human Biology
-          </h3>
-
-          <p>
-            Prof. Sneha • Class 10
-          </p>
-
+        <div class="live-badge">
+          ● LIVE
         </div>
 
       </div>
 
 
-      <div class="time">
-
-        <span>
-          ⏰ Today • 6:00 PM
-        </span>
+      <div class="channel-actions">
 
         <button
-          class="join-btn"
-          onclick="setReminder()"
+          class="active"
+          onclick="event.stopPropagation();showLiveSection()"
         >
-          Remind Me
+          🔴 Live
+        </button>
+
+        <button
+          onclick="event.stopPropagation();showRecordedSection()"
+        >
+          📚 Recorded
+        </button>
+
+        <button
+          onclick="event.stopPropagation();showAllSection()"
+        >
+          All
         </button>
 
       </div>
@@ -1264,42 +768,66 @@
     </div>
 
 
+    <!-- LIVE SECTION -->
 
-    <div class="class-card">
+    <div id="liveSection">
 
-      <div class="class-top">
+      <div class="live-card">
 
-        <div class="teacher">
-          👨‍🏫
-        </div>
+        <small>🔴 LIVE NOW</small>
 
+        <h3>Mathematics — Algebra</h3>
 
-        <div class="class-info">
+        <p>
+          👨‍🏫 Prof. Rahul • Class 10
+        </p>
 
-          <h3>
-            English — Grammar
-          </h3>
-
-          <p>
-            Prof. Amit • Class 9
-          </p>
-
-        </div>
+        <button
+          class="join-btn"
+          onclick="openRolePopup()"
+        >
+          ▶ Join Live Class
+        </button>
 
       </div>
 
 
-      <div class="time">
+      <h3 class="section-title">
+        📅 Upcoming Classes
+      </h3>
 
-        <span>
-          ⏰ Tomorrow • 5:00 PM
-        </span>
+
+      <div class="class-card">
+
+        <h4>⚡ Physics — Motion</h4>
+
+        <p>
+          Tomorrow • 10:00 AM • Class 10
+        </p>
 
         <button
-          class="join-btn"
-          onclick="setReminder()"
+          class="card-btn"
+          onclick="setReminder(this)"
         >
-          Remind Me
+          🔔 Set Reminder
+        </button>
+
+      </div>
+
+
+      <div class="class-card">
+
+        <h4>🧪 Chemistry — Mole Concept</h4>
+
+        <p>
+          Tomorrow • 4:00 PM • Class 11
+        </p>
+
+        <button
+          class="card-btn"
+          onclick="setReminder(this)"
+        >
+          🔔 Set Reminder
         </button>
 
       </div>
@@ -1307,273 +835,36 @@
     </div>
 
 
+    <!-- RECORDED SECTION -->
 
-    <div class="class-card">
+    <div id="recordedSection">
 
-      <div class="class-top">
+      <h3 class="section-title">
+        📚 Recorded Classes
+      </h3>
 
-        <div class="teacher">
-          👩‍🏫
-        </div>
-
-
-        <div class="class-info">
-
-          <h3>
-            History — Indian History
-          </h3>
-
-          <p>
-            Prof. Pooja • Class 8
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div class="time">
-
-        <span>
-          ⏰ Tomorrow • 7:00 PM
-        </span>
-
-        <button
-          class="join-btn"
-          onclick="setReminder()"
-        >
-          Remind Me
-        </button>
+      <div id="recordedList">
 
       </div>
 
     </div>
 
-  </div>
 
+    <!-- REMINDER -->
 
+    <div class="reminder">
 
-  <!-- RECORDED CLASSES -->
+      <h4>🔔 Never Miss a Class</h4>
 
-  <div id="recordedSection">
-
-    <div class="section-title">
-      🎥 Recorded Classes
-    </div>
-
-
-    <div class="recorded-card">
-
-      <div class="video-icon">
-        ▶️
-      </div>
-
-
-      <div class="video-info">
-
-        <h3>
-          गणित — बीजगणित भाग 1
-        </h3>
-
-        <p>
-          Class 10 • 42 मिनिटे
-        </p>
-
-      </div>
-
-
-      <button
-        class="watch-btn"
-        onclick="watchVideo()"
-      >
-        Watch
-      </button>
-
-    </div>
-
-
-
-    <div class="recorded-card">
-
-      <div class="video-icon">
-        ▶️
-      </div>
-
-
-      <div class="video-info">
-
-        <h3>
-          विज्ञान — मानव शरीर
-        </h3>
-
-        <p>
-          Class 10 • 38 मिनिटे
-        </p>
-
-      </div>
-
-
-      <button
-        class="watch-btn"
-        onclick="watchVideo()"
-      >
-        Watch
-      </button>
-
-    </div>
-
-
-
-    <div class="recorded-card">
-
-      <div class="video-icon">
-        ▶️
-      </div>
-
-
-      <div class="video-info">
-
-        <h3>
-          इतिहास — भारतीय इतिहास
-        </h3>
-
-        <p>
-          Class 8 • 35 मिनिटे
-        </p>
-
-      </div>
-
-
-      <button
-        class="watch-btn"
-        onclick="watchVideo()"
-      >
-        Watch
-      </button>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- REMINDER -->
-
-  <div class="reminder">
-
-    <div class="reminder-icon">
-      🔔
-    </div>
-
-
-    <div class="reminder-text">
-
-      <strong>
-        Class Reminder
-      </strong>
-
-      <p>
-        तुमच्या आवडत्या classes साठी reminder सेट करा.
+      <p class="reminder-text">
+        Set reminders for your upcoming live classes.
       </p>
-
-    </div>
-
-
-    <button
-      onclick="setReminder()"
-    >
-      Set
-    </button>
-
-  </div>
-
-
-
-  <!-- EMPTY -->
-
-  <div
-    class="empty"
-    id="emptySection"
-  >
-    या section मध्ये सध्या काही उपलब्ध नाही.
-  </div>
-
-
-
-  <!-- BOTTOM NAV -->
-
-  <div class="bottom-nav">
-
-    <div
-      class="nav-item"
-      onclick="goHome()"
-    >
-
-      <span class="icon">
-        🏠
-      </span>
-
-      Home
-
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="goLearn()"
-    >
-
-      <span class="icon">
-        📚
-      </span>
-
-      Learn
-
-    </div>
-
-
-    <div class="nav-item active">
-
-      <span class="icon">
-        🎥
-      </span>
-
-      Live
-
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="goRank()"
-    >
-
-      <span class="icon">
-        🏆
-      </span>
-
-      Rank
-
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="goProfile()"
-    >
-
-      <span class="icon">
-        👤
-      </span>
-
-      Profile
 
     </div>
 
   </div>
 
 </div>
-
 
 
 <!-- CREATE CHANNEL POPUP -->
@@ -1581,82 +872,51 @@
 <div
   class="popup"
   id="createPopup"
-  onclick="closeOutside(event, 'createPopup')"
+  onclick="closeCreateOutside(event)"
 >
 
   <div class="popup-box">
 
     <div class="popup-head">
 
-      <h2>
-        📺 Create Channel
-      </h2>
-
+      <h3>➕ Create Channel</h3>
 
       <button
         class="popup-close"
         onclick="closeCreatePopup()"
-            >
+      >
         ×
       </button>
 
     </div>
 
 
-    <p class="popup-subtitle">
-      तुमच्या Channel साठी नाव आणि Password तयार करा.
-    </p>
+    <input
+      class="input"
+      id="newChannelName"
+      type="text"
+      placeholder="Channel Name"
+    >
 
 
-    <div class="input-group">
-
-      <label>
-        Channel Name
-      </label>
-
-      <input
-        type="text"
-        id="channelNameInput"
-        placeholder="उदा. Hitesh Study Channel"
-      >
-
-    </div>
-
-
-    <div class="input-group">
-
-      <label>
-        Channel Password
-      </label>
-
-      <input
-        type="password"
-        id="channelPasswordInput"
-        placeholder="Password तयार करा"
-      >
-
-    </div>
+    <input
+      class="input"
+      id="newChannelPassword"
+      type="password"
+      placeholder="Create Channel Password"
+    >
 
 
     <button
-      class="popup-create"
+      class="popup-main-btn"
       onclick="createChannel()"
     >
-      ✅ Create Channel
-    </button>
-
-
-    <button
-      class="popup-cancel"
-      onclick="closeCreatePopup()"
-    >
-      Cancel
+      🚀 Create Channel
     </button>
 
   </div>
 
 </div>
-
 
 
 <!-- PASSWORD POPUP -->
@@ -1664,56 +924,110 @@
 <div
   class="popup"
   id="passwordPopup"
-  onclick="closeOutside(event, 'passwordPopup')"
 >
 
   <div class="popup-box">
 
-    <div class="password-popup-icon">
-      🔐
+    <div class="popup-head">
+
+      <h3>🔐 Channel Login</h3>
+
+      <button
+        class="popup-close"
+        onclick="closePasswordPopup()"
+      >
+        ×
+      </button>
+
     </div>
 
 
-    <h2 class="password-title">
-      Channel Password
-    </h2>
-
-
-    <p class="password-text">
-      तुमचा Channel उघडण्यासाठी Password टाका.
+    <p
+      style="
+        font-size:12px;
+        color:#718096;
+        margin-bottom:12px;
+      "
+    >
+      Enter your channel password.
     </p>
 
 
-    <div class="input-group">
-
-      <input
-        type="password"
-        id="loginPasswordInput"
-        placeholder="Password"
-      >
-
-    </div>
+    <input
+      class="input"
+      id="channelPasswordInput"
+      type="password"
+      placeholder="Channel Password"
+    >
 
 
     <button
-      class="popup-create"
+      class="popup-main-btn"
       onclick="loginChannel()"
     >
-      🔓 Channel उघडा
-    </button>
-
-
-    <button
-      class="popup-cancel"
-      onclick="closePasswordPopup()"
-    >
-      Cancel
+      🔓 Open Channel
     </button>
 
   </div>
 
 </div>
 
+
+<!-- ROLE POPUP -->
+
+<div
+  class="popup"
+  id="rolePopup"
+  onclick="closeRoleOutside(event)"
+>
+
+  <div class="popup-box role-box">
+
+    <div class="popup-head">
+
+      <h3>🎥 Live Class</h3>
+
+      <button
+        class="popup-close"
+        onclick="closeRolePopup()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <p>
+      Select how you want to enter the live class.
+    </p>
+
+
+    <button
+      class="role-btn sir"
+      onclick="sirLogin()"
+    >
+      👨‍🏫 Sir
+
+      <span>
+        Open your created channels
+      </span>
+    </button>
+
+
+    <button
+      class="role-btn student"
+      onclick="studentEnter()"
+    >
+      👨‍🎓 Student
+
+      <span>
+        Watch live video
+      </span>
+    </button>
+
+  </div>
+
+</div>
 
 
 <!-- LIVE CAMERA POPUP -->
@@ -1731,7 +1045,6 @@
         <span class="camera-live-dot"></span>
         LIVE CLASS
       </div>
-
 
       <button
         class="camera-close"
@@ -1752,6 +1065,13 @@
         muted
       ></video>
 
+      <div
+        class="recording-indicator"
+        id="recordingIndicator"
+        style="display:none;"
+      >
+        ● REC
+      </div>
 
       <div
         class="camera-status"
@@ -1788,484 +1108,1411 @@
 </div>
 
 
+<!-- STUDENT LIVE VIDEO -->
+
+<div
+  class="popup"
+  id="studentVideoPopup"
+>
+
+  <div class="student-video-box">
+
+    <div
+      class="live-camera-top"
+      style="padding:0 4px;"
+    >
+
+      <div>
+        <span class="camera-live-dot"></span>
+        LIVE
+      </div>
+
+      <button
+        class="camera-close"
+        onclick="closeStudentVideo()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="student-video-wrap">
+
+      <video
+        id="studentVideo"
+        autoplay
+        playsinline
+        controls
+      ></video>
+
+    </div>
+
+
+    <div class="student-video-title">
+
+      <h3>
+        Mathematics — Algebra
+      </h3>
+
+      <p>
+        👨‍🏫 Prof. Rahul • Class 10
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- RECORDED POPUP -->
+
+<div
+  class="popup"
+  id="recordedPopup"
+  onclick="closeRecordedOutside(event)"
+>
+
+  <div class="popup-box recorded-page">
+
+    <div class="popup-head">
+
+      <h3>📚 Recorded Classes</h3>
+
+      <button
+        class="popup-close"
+        onclick="closeRecordedPopup()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div id="recordedPopupList">
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- RECORDED PLAYER -->
+
+<div
+  class="popup"
+  id="recordedPlayerPopup"
+>
+
+  <div class="student-video-box">
+
+    <div
+      class="live-camera-top"
+      style="padding:0 4px;"
+    >
+
+      <div>
+        ▶ Recorded Class
+      </div>
+
+      <button
+        class="camera-close"
+        onclick="closeRecordedPlayer()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="student-video-wrap">
+
+      <video
+        id="recordedPlayer"
+        controls
+        playsinline
+      ></video>
+
+    </div>
+
+
+    <div class="student-video-title">
+
+      <h3 id="recordedPlayerTitle">
+        Recorded Class
+      </h3>
+
+      <p>
+        📚 GyanSetu Recorded Class
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
 
 <script>
 
-  /* USERNAME */
+/* =========================
+   BASIC NAVIGATION
+========================= */
 
-  const username =
-    localStorage.getItem(
-      "gyansetu_username"
-    );
+function goHome(){
+
+  window.location.href="home.html";
+
+}
 
 
-  if (username) {
+/* =========================
+   TOAST
+========================= */
 
-    document.getElementById(
-      "username"
-    ).textContent =
-      "@" + username;
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  setTimeout(function(){
+
+    toast.classList.remove("show");
+
+  },2500);
+
+}
+
+
+/* =========================
+   CREATE CHANNEL
+========================= */
+
+function openCreatePopup(){
+
+  document.getElementById("createPopup")
+    .style.display="flex";
+
+}
+
+
+function closeCreatePopup(){
+
+  document.getElementById("createPopup")
+    .style.display="none";
+
+}
+
+
+function closeCreateOutside(event){
+
+  if(event.target.id==="createPopup"){
+
+    closeCreatePopup();
+
+  }
+
+}
+
+
+function createChannel(){
+
+  const name =
+    document.getElementById("newChannelName")
+      .value.trim();
+
+  const password =
+    document.getElementById("newChannelPassword")
+      .value.trim();
+
+
+  if(name===""){
+
+    showToast("Please enter channel name.");
+
+    return;
 
   }
 
 
-  /* CHECK CHANNEL */
+  if(password===""){
 
-  const savedChannelName =
+    showToast("Please create a password.");
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "gyansetu_channel_name",
+    name
+  );
+
+
+  localStorage.setItem(
+    "gyansetu_channel_password",
+    password
+  );
+
+
+  localStorage.setItem(
+    "gyansetu_channel_created",
+    "true"
+  );
+
+
+  document.getElementById("channelName")
+    .textContent=name;
+
+
+  document.getElementById("channelBox")
+    .style.display="block";
+
+
+  closeCreatePopup();
+
+  showToast("🎉 Channel created successfully!");
+
+}
+
+
+/* =========================
+   OPEN CHANNEL
+========================= */
+
+function openChannel(){
+
+  const created =
     localStorage.getItem(
-      "gyansetu_channel_name"
+      "gyansetu_channel_created"
     );
 
 
-  const savedChannelPassword =
+  if(created==="true"){
+
+    document.getElementById("passwordPopup")
+      .style.display="flex";
+
+  }else{
+
+    showToast("First create your channel.");
+
+  }
+
+}
+
+
+function closePasswordPopup(){
+
+  document.getElementById("passwordPopup")
+    .style.display="none";
+
+}
+
+
+function loginChannel(){
+
+  const entered =
+    document.getElementById(
+      "channelPasswordInput"
+    ).value;
+
+
+  const saved =
     localStorage.getItem(
       "gyansetu_channel_password"
     );
 
+  if(entered===saved){
 
-  if (
-    savedChannelName &&
-    savedChannelPassword
-  ) {
+    closePasswordPopup();
 
-    document.getElementById(
-      "channelBox"
-    ).style.display = "block";
+    showToast("✅ Channel Login Successful!");
+
+    setTimeout(function(){
+      openChannel();
+    }, 300);
+
+  } else {
+
+    showToast("❌ Wrong Password!");
+
+  }
+}
 
 
-    document.getElementById(
-      "channelNameDisplay"
-    ).textContent =
-      savedChannelName;
+/* ===============================
+   CHANNEL PAGE
+================================ */
+
+function openChannel(){
+
+  document.getElementById("channelPage").style.display = "block";
+
+  document.getElementById("createChannelPopup").style.display = "none";
+  document.getElementById("passwordPopup").style.display = "none";
+
+  const channelName =
+    localStorage.getItem("gyansetu_channel_name");
+
+  if(channelName){
+
+    document.getElementById("channelTitle").textContent =
+      channelName;
 
   }
 
+}
 
-  /* OPEN CREATE POPUP */
 
-  function openCreatePopup() {
+/* ===============================
+   ROLE POPUP
+================================ */
 
-    document.getElementById(
-      "createPopup"
-    ).style.display = "flex";
+function openRolePopup(){
+
+  document.getElementById("rolePopup").style.display = "flex";
+
+}
+
+function closeRolePopup(){
+
+  document.getElementById("rolePopup").style.display = "none";
+
+}
+
+
+/* ===============================
+   SIR LOGIN
+================================ */
+
+function sirLogin(){
+
+  closeRolePopup();
+
+  const created =
+    localStorage.getItem("gyansetu_channel_created");
+
+  if(created === "true"){
+
+    openPasswordPopup();
+
+  }else{
+
+    openCreatePopup();
 
   }
 
+}
 
-  /* CLOSE CREATE POPUP */
 
-  function closeCreatePopup() {
+/* ===============================
+   STUDENT LIVE PAGE
+================================ */
 
-    document.getElementById(
-      "createPopup"
-    ).style.display = "none";
+function studentLogin(){
+
+  closeRolePopup();
+
+  openStudentLive();
+
+}
+
+
+/* ===============================
+   CREATE CHANNEL
+================================ */
+
+function openCreatePopup(){
+
+  document.getElementById("createChannelPopup").style.display = "flex";
+
+}
+
+function closeCreatePopup(){
+
+  document.getElementById("createChannelPopup").style.display = "none";
+
+}
+
+function createChannel(){
+
+  const name =
+    document.getElementById("channelNameInput").value.trim();
+
+  const password =
+    document.getElementById("createChannelPassword").value.trim();
+
+  if(name === "" || password === ""){
+
+    showToast("⚠️ Channel Name आणि Password भरा.");
+
+    return;
 
   }
 
+  localStorage.setItem(
+    "gyansetu_channel_name",
+    name
+  );
 
-  /* CREATE CHANNEL */
+  localStorage.setItem(
+    "gyansetu_channel_password",
+    password
+  );
 
-  function createChannel() {
+  localStorage.setItem(
+    "gyansetu_channel_created",
+    "true"
+  );
 
-    const name =
-      document.getElementById(
-        "channelNameInput"
-      ).value.trim();
+  closeCreatePopup();
+
+  showToast("🎉 Channel Created Successfully!");
+
+  setTimeout(function(){
+
+    openChannel();
+
+  }, 500);
+
+}
 
 
-    const password =
-      document.getElementById(
-        "channelPasswordInput"
-      ).value.trim();
+/* ===============================
+   PASSWORD POPUP
+================================ */
+
+function openPasswordPopup(){
+
+  document.getElementById("passwordPopup").style.display = "flex";
+
+  document.getElementById("channelPasswordInput").value = "";
+
+}
+
+function closePasswordPopup(){
+
+  document.getElementById("passwordPopup").style.display = "none";
+
+}
 
 
-    if (!name) {
+/* ===============================
+   LIVE CAMERA + RECORDING
+================================ */
 
-      document.getElementById(
-        "channelNameInput"
-      ).focus();
+let liveStream = null;
+let mediaRecorder = null;
+let recordedChunks = [];
 
-      return;
+
+function getSupportedMimeType(){
+
+  const types = [
+    "video/webm;codecs=vp9,opus",
+    "video/webm;codecs=vp8,opus",
+    "video/webm",
+    "video/mp4"
+  ];
+
+  for(let i = 0; i < types.length; i++){
+
+    if(
+      window.MediaRecorder &&
+      MediaRecorder.isTypeSupported(types[i])
+    ){
+
+      return types[i];
 
     }
 
+  }
 
-    if (!password) {
+  return "";
 
-      document.getElementById(
-        "channelPasswordInput"
-      ).focus();
-
-      return;
-
-    }
+}
 
 
-    if (password.length < 4) {
+async function joinLive(){
 
-      document.getElementById(
-        "channelPasswordInput"
-      ).focus();
+  const popup =
+    document.getElementById("liveCameraPopup");
 
-      return;
+  const video =
+    document.getElementById("liveVideo");
 
-    }
+  const status =
+    document.getElementById("cameraStatus");
 
+  popup.style.display = "flex";
 
-    localStorage.setItem(
-      "gyansetu_channel_name",
-      name
+  status.textContent =
+    "🎥 Camera आणि Microphone सुरू होत आहे...";
+
+  try{
+
+    liveStream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video:{
+          facingMode:"user"
+        },
+
+        audio:true
+
+      });
+
+    video.srcObject = liveStream;
+
+    status.textContent =
+      "🔴 LIVE • Recording सुरू आहे";
+
+    startRecording();
+
+  }catch(error){
+
+    console.log(error);
+
+    status.textContent =
+      "❌ Camera/Microphone permission द्या.";
+
+    showToast(
+      "Camera आणि Microphone permission द्या."
     );
 
+  }
 
-    localStorage.setItem(
-      "gyansetu_channel_password",
-      password
+}
+
+
+/* ===============================
+   START RECORDING
+================================ */
+
+function startRecording(){
+
+  if(!liveStream){
+
+    return;
+
+  }
+
+  if(!window.MediaRecorder){
+
+    showToast(
+      "❌ या browser मध्ये recording support नाही."
     );
 
+    return;
 
-    document.getElementById(
-      "channelNameDisplay"
-    ).textContent =
-      name;
+  }
 
+  recordedChunks = [];
 
-    document.getElementById(
-      "channelBox"
-    ).style.display =
-      "block";
+  const mimeType =
+    getSupportedMimeType();
 
+  try{
 
-    closeCreatePopup();
+    if(mimeType){
 
+      mediaRecorder =
+        new MediaRecorder(
+          liveStream,
+          {mimeType:mimeType}
+        );
 
-    document.getElementById(
-      "channelNameInput"
-    ).value = "";
+    }else{
 
+      mediaRecorder =
+        new MediaRecorder(liveStream);
 
-    document.getElementById(
-      "channelPasswordInput"
-    ).value = "";
+    }
+
+  }catch(error){
+
+    console.log(error);
+
+    showToast(
+      "❌ Recording सुरू होऊ शकली नाही."
+    );
+
+    return;
 
   }
 
 
-  /* OPEN CHANNEL */
+  mediaRecorder.ondataavailable =
+    function(event){
 
-  function openChannel() {
+      if(event.data && event.data.size > 0){
+
+        recordedChunks.push(event.data);
+
+      }
+
+    };
+
+
+  mediaRecorder.onstop =
+    function(){
+
+      saveRecording();
+
+    };
+
+
+  mediaRecorder.start();
+
+}
+
+
+/* ===============================
+   STOP LIVE CLASS
+================================ */
+
+function endLiveClass(){
+
+  if(mediaRecorder){
+
+    if(mediaRecorder.state !== "inactive"){
+
+      mediaRecorder.stop();
+
+    }
+
+  }
+
+  if(liveStream){
+
+    liveStream
+      .getTracks()
+      .forEach(function(track){
+
+        track.stop();
+
+      });
+
+    liveStream = null;
+
+  }
+
+
+  const video =
+    document.getElementById("liveVideo");
+
+  if(video){
+
+    video.srcObject = null;
+
+  }
+
+
+  document.getElementById(
+    "liveCameraPopup"
+  ).style.display = "none";
+
+
+  showToast(
+    "⏹️ Live Class Ended आणि Recording Saved!"
+  );
+
+}
+
+
+/* ===============================
+   SAVE RECORDING IN INDEXED DB
+================================ */
+
+const DB_NAME =
+  "GyanSetuLiveDB";
+
+const DB_VERSION = 1;
+
+const STORE_NAME =
+  "recordings";
+
+
+function openDatabase(){
+
+  return new Promise(function(resolve,reject){
+
+    const request =
+      indexedDB.open(
+        DB_NAME,
+        DB_VERSION
+      );
+
+
+    request.onupgradeneeded =
+      function(event){
+
+        const db =
+          event.target.result;
+
+        if(!db.objectStoreNames.contains(STORE_NAME)){
+
+          db.createObjectStore(
+            STORE_NAME,
+            {
+              keyPath:"id",
+              autoIncrement:true
+            }
+          );
+
+        }
+
+      };
+
+
+    request.onsuccess =
+      function(event){
+
+        resolve(event.target.result);
+
+      };
+
+
+    request.onerror =
+      function(){
+
+        reject(request.error);
+
+      };
+
+  });
+
+}
+
+
+async function saveRecording(){
+
+  if(recordedChunks.length === 0){
+
+    return;
+
+  }
+
+  try{
+
+    const mimeType =
+      getSupportedMimeType() ||
+      "video/webm";
+
+    const blob =
+      new Blob(
+        recordedChunks,
+        {
+          type:mimeType
+        }
+      );
+
+
+    const db =
+      await openDatabase();
+
+
+    const transaction =
+      db.transaction(
+        STORE_NAME,
+        "readwrite"
+      );
+
+
+    const store =
+      transaction.objectStore(
+        STORE_NAME
+      );
+
 
     const channelName =
       localStorage.getItem(
         "gyansetu_channel_name"
-      );
+      ) || "GyanSetu Live Class";
 
 
-    const channelPassword =
-      localStorage.getItem(
-        "gyansetu_channel_password"
-      );
+    store.add({
 
+      title:"Mathematics — Algebra",
 
-    if (
-      channelName &&
-      channelPassword
-    ) {
+      teacher:"Prof. Rahul",
 
-      document.getElementById(
-        "passwordPopup"
-      ).style.display =
-        "flex";
+      className:"Class 10",
 
-    }
+      channel:channelName,
 
-  }
+      date:new Date().toLocaleString(),
 
+      size:blob.size,
 
-  /* LOGIN CHANNEL */
+      blob:blob
 
-  function loginChannel() {
+    });
 
-    const password =
-      document.getElementById(
-        "loginPasswordInput"
-      ).value;
 
+    transaction.oncomplete =
+      function(){
 
-    const realPassword =
-      localStorage.getItem(
-        "gyansetu_channel_password"
-      );
+        showToast(
+          "🎥 Recording Saved Successfully!"
+        );
 
+        loadRecordedClasses();
 
-    if (
-      password === realPassword
-    ) {
+      };
 
-      closePasswordPopup();
 
-      showSection("all");
+  }catch(error){
 
-    }
+    console.log(error);
 
-  }
-
-
-  /* CLOSE PASSWORD POPUP */
-
-  function closePasswordPopup() {
-
-    document.getElementById(
-      "passwordPopup"
-    ).style.display =
-      "none";
-
-
-    document.getElementById(
-      "loginPasswordInput"
-    ).value = "";
-
-  }
-
-
-  /* CLOSE POPUP OUTSIDE */
-
-  function closeOutside(
-    event,
-    popupId
-  ) {
-
-    if (
-      event.target.id === popupId
-    ) {
-
-      document.getElementById(
-        popupId
-      ).style.display =
-        "none";
-
-    }
-
-  }
-
-
-  /* SHOW SECTION */
-
-  function showSection(section) {
-
-    const live =
-      document.getElementById(
-        "liveSection"
-      );
-
-
-    const recorded =
-      document.getElementById(
-        "recordedSection"
-      );
-
-
-    const empty =
-      document.getElementById(
-        "emptySection"
-      );
-
-
-    live.style.display = "none";
-
-    recorded.style.display = "none";
-
-    empty.style.display = "none";
-
-
-    if (section === "live") {
-
-      live.style.display = "block";
-
-    }
-
-
-    else if (section === "recorded") {
-
-      recorded.style.display = "block";
-
-    }
-
-
-    else if (section === "all") {
-
-      live.style.display = "block";
-
-      recorded.style.display = "block";
-
-    }
-
-  }
-
-
-  /* JOIN LIVE CLASS */
-
-  let liveStream = null;
-
-
-  async function joinLive() {
-
-    const popup =
-      document.getElementById(
-        "liveCameraPopup"
-      );
-
-
-    const video =
-      document.getElementById(
-        "liveVideo"
-      );
-
-
-    const status =
-      document.getElementById(
-        "cameraStatus"
-      );
-
-
-    popup.style.display = "flex";
-
-
-    status.textContent =
-      "🎥 Camera आणि Microphone सुरू होत आहे...";
-
-
-    try {
-
-      liveStream =
-        await navigator.mediaDevices.getUserMedia({
-
-          video: {
-            facingMode: "user"
-          },
-
-          audio: true
-
-        });
-
-
-      video.srcObject =
-        liveStream;
-
-
-      status.textContent =
-        "🔴 LIVE • Camera आणि Mic सुरू आहेत";
-
-    }
-
-
-    catch (error) {
-
-      console.log(error);
-
-
-      status.textContent =
-        "❌ Camera/Microphone permission द्या.";
-
-    }
-
-  }
-
-
-  /* END LIVE CLASS */
-
-  function endLiveClass() {
-
-    if (liveStream) {
-
-      liveStream
-        .getTracks()
-        .forEach(function(track) {
-          track.stop();
-        });
-
-      liveStream = null;
-
-    }
-
-
-    document.getElementById(
-      "liveVideo"
-    ).srcObject = null;
-
-
-    document.getElementById(
-      "liveCameraPopup"
-    ).style.display = "none";
-
-  }
-
-
-  /* WATCH RECORDED */
-
-  function watchVideo() {
-
-    console.log(
-      "Recorded video"
+    showToast(
+      "❌ Recording save झाली नाही."
     );
 
   }
 
+}
 
-  /* REMINDER */
 
-  function setReminder() {
+/* ===============================
+   LOAD ALL RECORDINGS
+================================ */
 
-    const reminder =
-      document.querySelector(
-        ".reminder-text strong"
+async function loadRecordedClasses(){
+
+  try{
+
+    const db =
+      await openDatabase();
+
+
+    const transaction =
+      db.transaction(
+        STORE_NAME,
+        "readonly"
       );
 
 
-    reminder.textContent =
+    const store =
+      transaction.objectStore(
+        STORE_NAME
+      );
+
+
+    const request =
+      store.getAll();
+
+
+    request.onsuccess =
+      function(){
+
+        const recordings =
+          request.result;
+
+
+        const container =
+          document.getElementById(
+            "recordedList"
+          );
+
+
+        if(!container){
+
+          return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        if(recordings.length === 0){
+
+          container.innerHTML = `
+            <div class="empty-recorded">
+              🎥 अजून कोणतीही Recorded Class नाही.
+            </div>
+          `;
+
+          return;
+
+        }
+
+
+        recordings.reverse();
+
+
+        recordings.forEach(
+          function(recording){
+
+            const card =
+              document.createElement("div");
+
+            card.className =
+              "recorded-card";
+
+
+            card.innerHTML = `
+
+              <div class="recorded-icon">
+                🎥
+              </div>
+
+              <div class="recorded-info">
+
+                <h3>
+                  ${recording.title}
+                </h3>
+
+                <p>
+                  👨‍🏫 ${recording.teacher}
+                </p>
+
+                <small>
+                  📅 ${recording.date}
+                </small>
+
+              </div>
+
+              <button
+                class="watch-recorded"
+                onclick="playRecording(${recording.id})"
+              >
+                ▶
+              </button>
+
+            `;
+
+
+            container.appendChild(card);
+
+          }
+        );
+
+      };
+
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
+
+/* ===============================
+   PLAY RECORDING
+================================ */
+
+async function playRecording(id){
+
+  try{
+
+    const db =
+      await openDatabase();
+
+
+    const transaction =
+      db.transaction(
+        STORE_NAME,
+        "readonly"
+      );
+
+
+    const store =
+      transaction.objectStore(
+        STORE_NAME
+      );
+
+
+    const request =
+      store.get(id);
+
+
+    request.onsuccess =
+      function(){
+
+        const recording =
+          request.result;
+
+
+        if(!recording){
+
+          showToast(
+            "❌ Recording सापडली नाही."
+          );
+
+          return;
+
+        }
+
+
+        const video =
+          document.getElementById(
+            "recordedVideo"
+          );
+
+
+        const title =
+          document.getElementById(
+            "recordedVideoTitle"
+          );
+
+
+        const videoURL =
+          URL.createObjectURL(
+            recording.blob
+          );
+
+
+        video.src =
+          videoURL;
+
+        video.controls = true;
+
+        title.textContent =
+          recording.title;
+
+
+        document.getElementById(
+          "recordedPlayerPopup"
+        ).style.display = "flex";
+
+
+        video.play().catch(
+          function(){}
+        );
+
+      };
+
+
+  }catch(error){
+
+    console.log(error);
+
+    showToast(
+      "❌ Video play होऊ शकला नाही."
+    );
+
+  }
+
+}
+
+
+function closeRecordedPlayer(){
+
+  const video =
+    document.getElementById(
+      "recordedVideo"
+    );
+
+
+  if(video){
+
+    video.pause();
+
+    video.src = "";
+
+  }
+
+
+  document.getElementById(
+    "recordedPlayerPopup"
+  ).style.display = "none";
+
+}
+
+
+/* ===============================
+   DELETE RECORDING
+================================ */
+
+async function deleteRecording(id){
+
+  try{
+
+    const db =
+      await openDatabase();
+
+
+    const transaction =
+      db.transaction(
+        STORE_NAME,
+        "readwrite"
+      );
+
+
+    const store =
+      transaction.objectStore(
+        STORE_NAME
+      );
+
+
+    store.delete(id);
+
+
+    transaction.oncomplete =
+      function(){
+
+        showToast(
+          "🗑️ Recording Deleted."
+        );
+
+        loadRecordedClasses();
+
+      };
+
+
+  }catch(error){
+
+    console.log(error);
+
+  }
+
+}
+
+
+/* ===============================
+   STUDENT LIVE VIDEO
+================================ */
+
+function openStudentLive(){
+
+  const popup =
+    document.getElementById(
+      "studentVideoPopup"
+    );
+
+
+  const studentVideo =
+    document.getElementById(
+      "studentVideo"
+    );
+
+
+  popup.style.display = "flex";
+
+
+  if(liveStream){
+
+    studentVideo.srcObject =
+      liveStream;
+
+  }else{
+
+    studentVideo.srcObject =
+      null;
+
+    showToast(
+      "🔴 Sir ची Live Class सध्या सुरू नाही."
+    );
+
+  }
+
+}
+
+
+function closeStudentLive(){
+
+  const video =
+    document.getElementById(
+      "studentVideo"
+    );
+
+
+  if(video){
+
+    video.srcObject = null;
+
+  }
+
+
+  document.getElementById(
+    "studentVideoPopup"
+  ).style.display = "none";
+
+}
+
+
+/* ===============================
+   RECORDED CLASSES
+================================ */
+
+async function showRecordedSection(){
+
+  await loadRecordedClasses();
+
+  document.getElementById(
+    "recordedPopup"
+  ).style.display = "flex";
+
+}
+
+
+function closeRecordedPopup(){
+
+  document.getElementById(
+    "recordedPopup"
+  ).style.display = "none";
+
+}
+
+
+/* ===============================
+   REMINDER
+================================ */
+
+function setReminder(){
+
+  const text =
+    document.querySelector(
+      ".reminder-text strong"
+    );
+
+
+  if(text){
+
+    text.textContent =
       "Reminder Set झाले! 🔔";
 
   }
 
 
-  /* NAVIGATION */
+  showToast(
+    "🔔 Reminder Set!"
+  );
 
-  function goHome() {
+}
 
-    window.location.href =
-      "home.html";
+
+/* ===============================
+   RECORDED VIDEO BUTTON
+================================ */
+
+function watchVideo(){
+
+  showRecordedSection();
+
+}
+
+
+/* ===============================
+   TOAST MESSAGE
+================================ */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  if(!toast){
+
+    return;
 
   }
 
 
-  function goLearn() {
+  toast.textContent =
+    message;
 
-    window.location.href =
-      "learn.html";
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    function(){
+
+      toast.classList.remove(
+        "show"
+      );
+
+    },
+    2500
+  );
+
+}
+
+
+/* ===============================
+   CLOSE POPUPS OUTSIDE
+================================ */
+
+window.addEventListener(
+  "click",
+  function(event){
+
+    const popups = [
+      "rolePopup",
+      "createChannelPopup",
+      "passwordPopup",
+      "liveCameraPopup",
+      "studentVideoPopup",
+      "recordedPopup",
+      "recordedPlayerPopup"
+    ];
+
+
+    popups.forEach(
+      function(id){
+
+        const popup =
+          document.getElementById(id);
+
+
+        if(
+          popup &&
+          event.target === popup
+        ){
+
+          popup.style.display =
+            "none";
+
+        }
+
+      }
+    );
 
   }
+);
 
 
-  function goRank() {
+/* ===============================
+   LOAD RECORDED CLASSES
+   WHEN PAGE OPENS
+================================ */
 
-    window.location.href =
-      "leaderboard.html";
+window.addEventListener(
+  "load",
+  function(){
+
+    loadRecordedClasses();
 
   }
-
-
-  function goProfile() {
-
-    window.location.href =
-      "profile.html";
-
-  }
-
-</script>
-
+);
+  </script>
 
 </body>
-
-  </html>
-  
- 
+</html>
