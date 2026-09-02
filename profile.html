@@ -1,857 +1,1328 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GyanSetu - Profile</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GyanSetu - Profile</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-      transition: background 0.25s, color 0.25s;
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-      padding-bottom: 85px;
-    }
+body{
+  font-family:Arial,sans-serif;
+  background:#f7f8fc;
+  color:#18264d;
+  transition:background .25s,color .25s;
+}
 
-    /* HEADER */
-    .header {
-      background: white;
-      padding: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:85px;
+}
 
-    .back,
-    .menu {
-      font-size: 25px;
-      cursor: pointer;
-    }
+/* HEADER */
 
-    .title {
-      font-size: 21px;
-      font-weight: 800;
-    }
+.header{
+  background:white;
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
 
-    /* PROFILE */
-    .profile {
-      background: white;
-      padding: 25px 18px;
-      text-align: center;
-    }
+.back,
+.menu{
+  font-size:26px;
+  cursor:pointer;
+  user-select:none;
+}
 
-    .profile-photo {
-      width: 95px;
-      height: 95px;
-      margin: auto;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ff7900, #ffad42);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-      border: 5px solid white;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
+.title{
+  font-size:21px;
+  font-weight:800;
+}
 
-    .username {
-      margin-top: 13px;
-      font-size: 23px;
-      font-weight: 800;
-    }
 
-    .bio {
-      margin-top: 7px;
-      color: #777;
-      font-size: 14px;
-    }
+/* PROFILE */
 
-    .edit-btn {
-      margin-top: 17px;
-      border: none;
-      background: #ff7900;
-      color: white;
-      padding: 11px 25px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.profile{
+  background:white;
+  padding:25px 18px;
+  text-align:center;
+}
 
-    /* STATS */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      background: white;
-      border-top: 1px solid #eee;
-      border-bottom: 1px solid #eee;
-      padding: 17px 5px;
-    }
+.profile-photo{
+  width:95px;
+  height:95px;
+  margin:auto;
+  border-radius:50%;
+  background:linear-gradient(135deg,#ff7900,#ffad42);
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  border:5px solid white;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
 
-    .stat {
-      text-align: center;
-    }
+.username{
+  margin-top:13px;
+  font-size:23px;
+  font-weight:800;
+}
 
-    .stat strong {
-      display: block;
-      font-size: 18px;
-    }
+.bio{
+  margin-top:7px;
+  color:#777;
+  font-size:14px;
+}
 
-    .stat span {
-      font-size: 11px;
-      color: #777;
-    }
+.edit-btn{
+  margin-top:17px;
+  border:none;
+  background:#ff7900;
+  color:white;
+  padding:11px 25px;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    /* POINTS */
-    .points-card {
-      margin: 18px 16px;
-      padding: 19px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #fff0db, #fffaf3);
-      border: 1px solid #ffe0bd;
-    }
 
-    .points-title {
-      font-size: 15px;
-      color: #777;
-    }
+/* STATS */
 
-    .points {
-      margin-top: 5px;
-      font-size: 30px;
-      font-weight: 800;
-      color: #ff7900;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:white;
+  border-top:1px solid #eee;
+  border-bottom:1px solid #eee;
+  padding:17px 5px;
+}
 
-    .rank {
-      margin-top: 5px;
-      font-size: 13px;
-      color: #555;
-    }
+.stat{
+  text-align:center;
+}
 
-    /* SECTIONS */
-    .section {
-      padding: 0 16px;
-    }
+.stat strong{
+  display:block;
+  font-size:18px;
+}
 
-    .section-title {
-      font-size: 19px;
-      font-weight: 800;
-      margin: 20px 0 13px;
-    }
+.stat span{
+  font-size:11px;
+  color:#777;
+}
 
-    /* BADGES */
-    .badges {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-    }
 
-    .badge {
-      background: white;
-      border-radius: 17px;
-      min-width: 82px;
-      height: 82px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-    }
+/* POINTS */
 
-    .badge-icon {
-      font-size: 28px;
-    }
+.points-card{
+  margin:18px 16px;
+  padding:19px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#fff0db,#fffaf3);
+  border:1px solid #ffe0bd;
+}
 
-    .badge span {
-      font-size: 10px;
-      margin-top: 5px;
-      color: #666;
-    }
+.points-title{
+  font-size:15px;
+  color:#777;
+}
 
-    /* POSTS */
-    .empty-post {
-      background: white;
-      padding: 30px 15px;
-      border-radius: 18px;
-      text-align: center;
-      color: #777;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
+.points{
+  margin-top:5px;
+  font-size:30px;
+  font-weight:800;
+  color:#ff7900;
+}
 
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      height: 68px;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid #eee;
-      z-index: 20;
-    }
+.rank{
+  margin-top:5px;
+  font-size:13px;
+  color:#555;
+}
 
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #777;
-      cursor: pointer;
-    }
 
-    .nav-item .icon {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 3px;
-    }
+/* CONTENT */
 
-    .nav-item.active {
-      color: #ff7900;
-      font-weight: bold;
-    }
+.section{
+  padding:0 16px;
+}
 
-    /* MODAL */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 20px;
-    }
+.section-title{
+  font-size:19px;
+  font-weight:800;
+  margin:20px 0 13px;
+}
 
-    .modal-overlay.show {
-      display: flex;
-    }
 
-    .modal-box {
-      width: 100%;
-      max-width: 360px;
-      max-height: 85vh;
-      overflow-y: auto;
-      background: white;
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-    }
+/* BADGES */
 
-    .modal-title {
-      font-size: 21px;
-      font-weight: 800;
-      color: #18264d;
-    }
+.badges{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+}
 
-    .modal-subtitle {
-      margin-top: 5px;
-      color: #777;
-      font-size: 13px;
-    }
+.badge{
+  background:white;
+  border-radius:17px;
+  min-width:82px;
+  height:82px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
 
-    #usernameInput {
-      width: 100%;
-      margin-top: 18px;
-      height: 48px;
-      border: 2px solid #e5e5e5;
-      border-radius: 12px;
-      padding: 0 14px;
-      font-size: 15px;
-      outline: none;
-    }
+.badge-icon{
+  font-size:28px;
+}
 
-    #usernameInput:focus {
-      border-color: #ff7900;
-    }
+.badge span{
+  font-size:10px;
+  margin-top:5px;
+  color:#666;
+}
 
-    .modal-buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
 
-    .cancel-btn,
-    .save-btn {
-      flex: 1;
-      height: 45px;
-      border: none;
-      border-radius: 12px;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-    }
+/* POSTS */
 
-    .cancel-btn {
-      background: #eeeeee;
-      color: #555;
-    }
+.empty-post{
+  background:white;
+  padding:30px 15px;
+  border-radius:18px;
+  text-align:center;
+  color:#777;
+  box-shadow:0 4px 15px rgba(0,0,0,.05);
+}
 
-    .save-btn {
-      background: #ff7900;
-      color: white;
-    }
 
-    /* MENU */
-    .menu-options {
-      margin-top: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
+/* BOTTOM NAV */
 
-    .menu-options button {
-      width: 100%;
-      min-height: 46px;
-      border: none;
-      border-radius: 12px;
-      background: #f7f8fc;
-      color: #18264d;
-      text-align: left;
-      padding: 0 15px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  height:68px;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  border-top:1px solid #eee;
+  z-index:20;
+}
 
-    .menu-options button:active {
-      transform: scale(0.98);
-    }
+.nav-item{
+  text-align:center;
+  font-size:11px;
+  color:#777;
+  cursor:pointer;
+}
 
-    .menu-options .danger-btn {
-      color: #d93025;
-      background: #fff0f0;
-    }
+.nav-item .icon{
+  display:block;
+  font-size:22px;
+  margin-bottom:3px;
+}
 
-    /* DARK MODE */
-    body.dark-mode {
-      background: #121212;
-      color: #ffffff;
-    }
+.nav-item.active{
+  color:#ff7900;
+  font-weight:bold;
+}
 
-    body.dark-mode .header,
-    body.dark-mode .profile,
-    body.dark-mode .stats,
-    body.dark-mode .points-card,
-    body.dark-mode .badge,
-    body.dark-mode .empty-post,
-    body.dark-mode .bottom-nav,
-    body.dark-mode .modal-box {
-      background: #1e1e1e;
-      color: #ffffff;
-    }
 
-    body.dark-mode .bio,
-    body.dark-mode .stat span,
-    body.dark-mode .points-title,
-    body.dark-mode .rank,
-    body.dark-mode .badge span,
-    body.dark-mode .empty-post,
-    body.dark-mode .modal-subtitle {
-      color: #bbbbbb;
-    }
+/* POPUP */
 
-    body.dark-mode .menu-options button {
-      background: #2a2a2a;
-      color: #ffffff;
-    }
+.modal-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  align-items:center;
+  justify-content:center;
+  z-index:100;
+  padding:20px;
+}
 
-    body.dark-mode .cancel-btn {
-      background: #333333;
-      color: #ffffff;
-    }
+.modal-overlay.show{
+  display:flex;
+}
 
-    body.dark-mode #usernameInput {
-      background: #2a2a2a;
-      color: #ffffff;
-      border-color: #444;
-    }
-  </style>
+.modal-box{
+  width:100%;
+  max-width:370px;
+  max-height:85vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+.modal-title{
+  font-size:21px;
+  font-weight:800;
+  color:#18264d;
+}
+
+.modal-subtitle{
+  margin-top:6px;
+  color:#777;
+  font-size:13px;
+  line-height:1.55;
+}
+
+
+/* INPUT */
+
+.modal-input{
+  width:100%;
+  height:48px;
+  margin-top:18px;
+  border:2px solid #e5e5e5;
+  border-radius:12px;
+  padding:0 14px;
+  font-size:15px;
+  outline:none;
+}
+
+.modal-input:focus{
+  border-color:#ff7900;
+}
+
+
+/* BUTTONS */
+
+.modal-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+
+.modal-btn{
+  flex:1;
+  min-height:45px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.primary-btn{
+  background:#ff7900;
+  color:white;
+}
+
+.cancel-btn{
+  background:#eeeeee;
+  color:#555;
+}
+
+.danger-btn{
+  background:#ffe8e6;
+  color:#d93025;
+}
+
+
+/* MENU */
+
+.menu-options{
+  margin-top:18px;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.menu-options button{
+  width:100%;
+  min-height:47px;
+  border:none;
+  border-radius:12px;
+  background:#f7f8fc;
+  color:#18264d;
+  text-align:left;
+  padding:0 15px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.menu-options .reset-menu{
+  color:#d93025;
+  background:#fff0f0;
+}
+
+
+/* SETTING */
+
+.setting-row{
+  margin-top:18px;
+  padding:15px;
+  background:#f7f8fc;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.setting-name{
+  font-weight:bold;
+  font-size:15px;
+}
+
+.setting-info{
+  margin-top:4px;
+  font-size:12px;
+  color:#777;
+}
+
+
+/* TOGGLE */
+
+.toggle{
+  width:52px;
+  height:30px;
+  border-radius:20px;
+  background:#ccc;
+  position:relative;
+  cursor:pointer;
+  flex-shrink:0;
+  transition:.2s;
+}
+
+.toggle::after{
+  content:"";
+  width:24px;
+  height:24px;
+  background:white;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:.2s;
+  box-shadow:0 2px 5px rgba(0,0,0,.2);
+}
+
+.toggle.on{
+  background:#ff7900;
+}
+
+.toggle.on::after{
+  left:25px;
+}
+
+
+/* DARK MODE */
+
+body.dark-mode{
+  background:#121212;
+  color:white;
+}
+
+body.dark-mode .header,
+body.dark-mode .profile,
+body.dark-mode .stats,
+body.dark-mode .points-card,
+body.dark-mode .badge,
+body.dark-mode .empty-post,
+body.dark-mode .bottom-nav,
+body.dark-mode .modal-box{
+  background:#1e1e1e;
+  color:white;
+}
+
+body.dark-mode .bio,
+body.dark-mode .stat span,
+body.dark-mode .points-title,
+body.dark-mode .rank,
+body.dark-mode .badge span,
+body.dark-mode .empty-post,
+body.dark-mode .modal-subtitle,
+body.dark-mode .setting-info{
+  color:#bbb;
+}
+
+body.dark-mode .menu-options button,
+body.dark-mode .setting-row{
+  background:#2a2a2a;
+  color:white;
+}
+
+body.dark-mode .cancel-btn{
+  background:#333;
+  color:white;
+}
+
+body.dark-mode .modal-input{
+  background:#2a2a2a;
+  color:white;
+  border-color:#444;
+}
+
+</style>
 </head>
+
 
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
-  <div class="header">
-    <div class="back" onclick="goHome()">‹</div>
-    <div class="title">Profile</div>
-    <div class="menu" onclick="openMenu()">⋮</div>
+
+<!-- HEADER -->
+
+<div class="header">
+
+  <div class="back" onclick="goHome()">‹</div>
+
+  <div class="title">Profile</div>
+
+  <div class="menu" onclick="openMenu()">⋮</div>
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="profile">
+
+  <div class="profile-photo">
+    👤
   </div>
 
-  <!-- PROFILE -->
-  <div class="profile">
+  <div class="username" id="username">
+    @student
+  </div>
 
-    <div class="profile-photo">👤</div>
+  <div class="bio">
+    📚 Learning • Growing • Achieving 🇮🇳
+  </div>
 
-    <div class="username" id="username">
-      @student
+  <button class="edit-btn" onclick="editProfile()">
+    Edit Profile
+  </button>
+
+</div>
+
+
+<!-- STATS -->
+
+<div class="stats">
+
+  <div class="stat">
+    <strong>0</strong>
+    <span>Posts</span>
+  </div>
+
+  <div class="stat">
+    <strong>0</strong>
+    <span>Followers</span>
+  </div>
+
+  <div class="stat">
+    <strong>0</strong>
+    <span>Following</span>
+  </div>
+
+  <div class="stat">
+    <strong>0</strong>
+    <span>Badges</span>
+  </div>
+
+</div>
+
+
+<!-- POINTS -->
+
+<div class="points-card">
+
+  <div class="points-title">
+    🏆 My Gyan Points
+  </div>
+
+  <div class="points">
+    0 XP
+  </div>
+
+  <div class="rank">
+    Keep learning to climb the leaderboard 🚀
+  </div>
+
+</div>
+
+
+<!-- CONTENT -->
+
+<div class="section">
+
+  <div class="section-title">
+    🏅 Achievements
+  </div>
+
+  <div class="badges">
+
+    <div class="badge">
+      <div class="badge-icon">🌱</div>
+      <span>Starter</span>
     </div>
 
-    <div class="bio">
-      📚 Learning • Growing • Achieving 🇮🇳
+    <div class="badge">
+      <div class="badge-icon">📚</div>
+      <span>Learner</span>
     </div>
 
-    <button class="edit-btn" onclick="editProfile()">
-      Edit Profile
+    <div class="badge">
+      <div class="badge-icon">🔥</div>
+      <span>Streak</span>
+    </div>
+
+    <div class="badge">
+      <div class="badge-icon">🏆</div>
+      <span>Topper</span>
+    </div>
+
+  </div>
+
+
+  <div class="section-title">
+    📖 My Posts
+  </div>
+
+  <div class="empty-post">
+    अजून कोणतीही पोस्ट नाही.<br>
+    शिकायला सुरुवात करा आणि तुमची पहिली पोस्ट तयार करा! 🚀
+  </div>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+
+<div class="bottom-nav">
+
+  <div class="nav-item" onclick="goHome()">
+    <span class="icon">🏠</span>
+    Home
+  </div>
+
+  <div class="nav-item" onclick="goLearn()">
+    <span class="icon">📚</span>
+    Learn
+  </div>
+
+  <div class="nav-item" onclick="goCreate()">
+    <span class="icon">➕</span>
+    Create
+  </div>
+
+  <div class="nav-item" onclick="goRank()">
+    <span class="icon">🏆</span>
+    Rank
+  </div>
+
+  <div class="nav-item active">
+    <span class="icon">👤</span>
+    Profile
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- EDIT PROFILE POPUP -->
+
+<div class="modal-overlay" id="editModal">
+
+<div class="modal-box">
+
+  <div class="modal-title">
+    ✏️ Edit Profile
+  </div>
+
+  <div class="modal-subtitle">
+    तुमचा username बदलू शकता.
+  </div>
+
+  <input
+    class="modal-input"
+    id="usernameInput"
+    type="text"
+    placeholder="Enter username"
+    maxlength="20"
+  >
+
+  <div class="modal-buttons">
+
+    <button
+      class="modal-btn cancel-btn"
+      onclick="closeEditProfile()">
+      Cancel
+    </button>
+
+    <button
+      class="modal-btn primary-btn"
+      onclick="saveProfile()">
+      Save
     </button>
 
   </div>
 
-  <!-- STATS -->
-  <div class="stats">
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Posts</span>
-    </div>
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Followers</span>
-    </div>
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Following</span>
-    </div>
-
-    <div class="stat">
-      <strong>0</strong>
-      <span>Badges</span>
-    </div>
-
-  </div>
-
-  <!-- POINTS -->
-  <div class="points-card">
-
-    <div class="points-title">
-      🏆 My Gyan Points
-    </div>
-
-    <div class="points" id="pointsValue">
-      0 XP
-    </div>
-
-    <div class="rank">
-      Keep learning to climb the leaderboard 🚀
-    </div>
-
-  </div>
-
-  <!-- CONTENT -->
-  <div class="section">
-
-    <div class="section-title">
-      🏅 Achievements
-    </div>
-
-    <div class="badges">
-
-      <div class="badge">
-        <div class="badge-icon">🌱</div>
-        <span>Starter</span>
-      </div>
-
-      <div class="badge">
-        <div class="badge-icon">📚</div>
-        <span>Learner</span>
-      </div>
-
-      <div class="badge">
-        <div class="badge-icon">🔥</div>
-        <span>Streak</span>
-      </div>
-
-      <div class="badge">
-        <div class="badge-icon">🏆</div>
-        <span>Topper</span>
-      </div>
-
-    </div>
-
-    <div class="section-title">
-      📖 My Posts
-    </div>
-
-    <div class="empty-post">
-      अजून कोणतीही पोस्ट नाही.<br>
-      शिकायला सुरुवात करा आणि तुमची पहिली पोस्ट तयार करा! 🚀
-    </div>
-
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-
-    <div class="nav-item" onclick="goHome()">
-      <span class="icon">🏠</span>
-      Home
-    </div>
-
-    <div class="nav-item" onclick="goLearn()">
-      <span class="icon">📚</span>
-      Learn
-    </div>
-
-    <div class="nav-item" onclick="goCreate()">
-      <span class="icon">➕</span>
-      Create
-    </div>
-
-    <div class="nav-item" onclick="goRank()">
-      <span class="icon">🏆</span>
-      Rank
-    </div>
-
-    <div class="nav-item active">
-      <span class="icon">👤</span>
-      Profile
-    </div>
-
-  </div>
+</div>
 
 </div>
 
 
-<!-- EDIT PROFILE MODAL -->
-
-<div class="modal-overlay" id="editModal">
-
-  <div class="modal-box">
-
-    <div class="modal-title">
-      ✏️ Edit Profile
-    </div>
-
-    <div class="modal-subtitle">
-      Update your username
-    </div>
-
-    <input
-      type="text"
-      id="usernameInput"
-      placeholder="Enter username"
-      maxlength="20"
-    >
-
-    <div class="modal-buttons">
-
-      <button
-        class="cancel-btn"
-        onclick="closeEditProfile()">
-        Cancel
-      </button>
-
-      <button
-        class="save-btn"
-        onclick="saveProfile()">
-        Save
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- MENU MODAL -->
+<!-- MENU POPUP -->
 
 <div class="modal-overlay" id="menuModal">
 
-  <div class="modal-box">
+<div class="modal-box">
 
-    <div class="modal-title">
-      ⚙️ GyanSetu Menu
+  <div class="modal-title">
+    ⚙️ GyanSetu Menu
+  </div>
+
+  <div class="modal-subtitle">
+    Profile आणि app settings
+  </div>
+
+  <div class="menu-options">
+
+    <button onclick="openAccountSettings()">
+      👤 Account Settings
+    </button>
+
+    <button onclick="openNotifications()">
+      🔔 Notifications
+    </button>
+
+    <button onclick="toggleDarkMode()">
+      🌙 Dark Mode
+    </button>
+
+    <button onclick="openPrivacy()">
+      🔒 Privacy
+    </button>
+
+    <button onclick="openAbout()">
+      ℹ️ About GyanSetu
+    </button>
+
+    <button onclick="openHelp()">
+      ❓ Help & Feedback
+    </button>
+
+    <button
+      class="reset-menu"
+      onclick="openResetPopup()">
+      🚪 Reset App Data
+    </button>
+
+    <button
+      class="modal-btn cancel-btn"
+      onclick="closeMenu()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- ACCOUNT SETTINGS -->
+
+<div class="modal-overlay" id="accountModal">
+
+<div class="modal-box">
+
+  <div class="modal-title">
+    👤 Account Settings
+  </div>
+
+  <div class="modal-subtitle">
+    तुमच्या account ची basic settings.
+  </div>
+
+  <div
+    class="setting-row"
+    onclick="editProfile()"
+    style="cursor:pointer;">
+
+    <div>
+
+      <div class="setting-name">
+        👤 Username
+      </div>
+
+      <div
+        class="setting-info"
+        id="accountUsername">
+        @student
+      </div>
+
     </div>
 
-    <div class="modal-subtitle">
-      Profile & App Settings
-    </div>
-
-    <div class="menu-options">
-
-      <button onclick="openAccountSettings()">
-        👤 Account Settings
-      </button>
-
-      <button onclick="openNotifications()">
-        🔔 Notifications
-      </button>
-
-      <button onclick="toggleDarkMode()">
-        🌙 Dark Mode
-      </button>
-
-      <button onclick="openPrivacy()">
-        🔒 Privacy
-      </button>
-
-      <button onclick="openAbout()">
-        ℹ️ About GyanSetu
-      </button>
-
-      <button onclick="openHelp()">
-        ❓ Help & Feedback
-      </button>
-
-      <button
-        onclick="resetAppData()"
-        class="danger-btn">
-        🚪 Reset App Data
-      </button>
-
-      <button
-        class="cancel-btn"
-        onclick="closeMenu()">
-        Close
-      </button>
-
+    <div style="font-size:22px;">
+      ›
     </div>
 
   </div>
+
+  <div class="modal-buttons">
+
+    <button
+      class="modal-btn cancel-btn"
+      onclick="closeAccountSettings()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- NOTIFICATIONS -->
+
+<div class="modal-overlay" id="notificationModal">
+
+<div class="modal-box">
+
+  <div class="modal-title">
+    🔔 Notifications
+  </div>
+
+  <div class="modal-subtitle">
+    तुमच्या अभ्यासासाठी Study Reminder सुरू किंवा बंद करा.
+  </div>
+
+  <div class="setting-row">
+
+    <div>
+
+      <div class="setting-name">
+        📚 Study Reminder
+      </div>
+
+      <div
+        class="setting-info"
+        id="reminderStatus">
+        Study Reminder OFF
+      </div>
+
+    </div>
+
+    <div
+      class="toggle"
+      id="reminderToggle"
+      onclick="toggleReminder()">
+    </div>
+
+  </div>
+
+  <div class="modal-buttons">
+
+    <button
+      class="modal-btn cancel-btn"
+      onclick="closeNotifications()">
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- ABOUT -->
+
+<div class="modal-overlay" id="aboutModal">
+
+<div class="modal-box">
+
+  <div class="modal-title">
+    🇮🇳 About GyanSetu
+  </div>
+
+  <div class="modal-subtitle">
+
+    📚 GyanSetu हे विद्यार्थ्यांच्या शिक्षणासाठी तयार केलेले digital learning app आहे.<br><br>
+
+    🎯 विद्यार्थ्यांना अभ्यासासाठी योग्य resources एका ठिकाणी मिळावेत हा आमचा प्रयत्न आहे.<br><br>
+
+    🧠 Smart learning आणि knowledge वाढवणे हे GyanSetu चे मुख्य उद्दिष्ट आहे.<br><br>
+
+    📖 अभ्यास अधिक सोपा, interesting आणि उपयोगी बनवण्याचा आम्ही प्रयत्न करतो.<br><br>
+
+    🚀 विद्यार्थ्यांना त्यांच्या future ची तयारी करण्यासाठी मदत करणे हे आमचे स्वप्न आहे.<br><br>
+
+    🌱 आजचे ज्ञान उद्याचे मजबूत भविष्य तयार करते.<br><br>
+
+    🏆 प्रत्येक विद्यार्थ्यामध्ये पुढे जाण्याची क्षमता आहे.<br><br>
+
+    💡 GyanSetu विद्यार्थ्यांना शिकण्यासाठी आणि स्वतःचा विकास करण्यासाठी प्रोत्साहित करते.<br><br>
+
+    🇮🇳 ज्ञानवान, आत्मविश्वासू आणि सक्षम विद्यार्थ्यांची पिढी तयार करणे हे आमचे ध्येय आहे.<br><br>
+
+    ❤️ तुमचे भविष्य उज्ज्वल करण्याच्या learning journey मध्ये GyanSetu तुमच्यासोबत आहे.
+
+  </div>
+
+  <div class="modal-buttons">
+
+    <button
+      class="modal-btn primary-btn"
+      onclick="closeAbout()">
+      Continue Learning 🚀
+    </button>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- RESET -->
+
+<div class="modal-overlay" id="resetModal">
+
+<div class="modal-box">
+
+  <div class="modal-title">
+    ⚠️ Reset App Data?
+  </div>
+
+  <div class="modal-subtitle">
+
+    Saved username, Dark Mode आणि Study Reminder settings
+    reset होतील.
+
+    <br><br>
+
+    ही action पूर्ववत करता येणार नाही.
+
+  </div>
+
+  <div class="modal-buttons">
+
+    <button
+      class="modal-btn cancel-btn"
+      onclick="closeResetPopup()">
+      Cancel
+    </button>
+
+    <button
+      class="modal-btn danger-btn"
+      onclick="confirmReset()">
+      Reset
+    </button>
+
+  </div>
+
+</div>
 
 </div>
 
 
 <script>
 
-  /* LOAD USERNAME */
 
-  const savedUsername =
-    localStorage.getItem("gyansetu_username");
+/* LOAD USERNAME */
 
-  if (savedUsername) {
-    document.getElementById("username").textContent =
-      "@" + savedUsername;
+function loadUsername(){
+
+  const saved =
+    localStorage.getItem("gyansetu_username")
+    || "student";
+
+  document.getElementById("username")
+    .textContent = "@" + saved;
+
+  document.getElementById("accountUsername")
+    .textContent = "@" + saved;
+
+}
+
+loadUsername();
+
+
+/* LOAD DARK MODE */
+
+if(
+  localStorage.getItem("gyansetu_dark_mode")
+  === "on"
+){
+
+  document.body.classList.add("dark-mode");
+
+}
+
+
+/* LOAD REMINDER */
+
+function updateReminder(){
+
+  const isOn =
+    localStorage.getItem(
+      "gyansetu_study_reminder"
+    ) === "on";
+
+  const toggle =
+    document.getElementById(
+      "reminderToggle"
+    );
+
+  const status =
+    document.getElementById(
+      "reminderStatus"
+    );
+
+  if(isOn){
+
+    toggle.classList.add("on");
+
+    status.textContent =
+      "Study Reminder ON";
+
+  }else{
+
+    toggle.classList.remove("on");
+
+    status.textContent =
+      "Study Reminder OFF";
+
   }
 
+}
 
-  /* LOAD DARK MODE */
+updateReminder();
 
-  if (
-    localStorage.getItem("gyansetu_dark_mode") === "on"
-  ) {
-    document.body.classList.add("dark-mode");
+
+/* NAVIGATION */
+
+function goHome(){
+  window.location.href="home.html";
+}
+
+function goLearn(){
+  window.location.href="learn.html";
+}
+
+function goCreate(){
+  window.location.href="create.html";
+}
+
+function goRank(){
+  window.location.href="leaderboard.html";
+}
+
+function goAIStudy(){
+  window.location.href="ai-study.html";
+}
+
+
+/* EDIT PROFILE */
+
+function editProfile(){
+
+  closeAccountSettings();
+
+  const current =
+    localStorage.getItem(
+      "gyansetu_username"
+    ) || "student";
+
+  document.getElementById(
+    "usernameInput"
+  ).value = current;
+
+  document.getElementById(
+    "editModal"
+  ).classList.add("show");
+
+}
+
+
+function closeEditProfile(){
+
+  document.getElementById(
+    "editModal"
+  ).classList.remove("show");
+
+}
+
+
+function saveProfile(){
+
+  const input =
+    document.getElementById(
+      "usernameInput"
+    );
+
+  const name =
+    input.value.trim();
+
+  if(!name){
+
+    input.focus();
+    return;
+
   }
 
+  localStorage.setItem(
+    "gyansetu_username",
+    name
+  );
 
-  /* NAVIGATION */
+  loadUsername();
 
-  function goHome() {
-    window.location.href = "home.html";
-  }
+  closeEditProfile();
 
-  function goLearn() {
-    window.location.href = "learn.html";
-  }
-
-  function goCreate() {
-    window.location.href = "create.html";
-  }
-
-  function goRank() {
-    window.location.href = "leaderboard.html";
-  }
+}
 
 
-  /* EDIT PROFILE */
+/* MENU */
 
-  function editProfile() {
+function openMenu(){
 
-    const currentUsername =
-      localStorage.getItem("gyansetu_username") ||
-      "student";
+  document.getElementById(
+    "menuModal"
+  ).classList.add("show");
 
-    document.getElementById("usernameInput").value =
-      currentUsername;
-
-    document.getElementById("editModal")
-      .classList.add("show");
-
-    setTimeout(function() {
-      document.getElementById("usernameInput").focus();
-    }, 100);
-
-  }
+}
 
 
-  function closeEditProfile() {
+function closeMenu(){
 
-    document.getElementById("editModal")
-      .classList.remove("show");
+  document.getElementById(
+    "menuModal"
+  ).classList.remove("show");
 
-  }
+}
 
 
-  function saveProfile() {
+/* ACCOUNT SETTINGS */
 
-    const input =
-      document.getElementById("usernameInput");
+function openAccountSettings(){
 
-    const newUsername =
-      input.value.trim();
+  closeMenu();
 
-    if (!newUsername) {
-      input.focus();
-      return;
+  loadUsername();
+
+  document.getElementById(
+    "accountModal"
+  ).classList.add("show");
+
+}
+
+
+function closeAccountSettings(){
+
+  document.getElementById(
+    "accountModal"
+  ).classList.remove("show");
+
+}
+
+
+/* NOTIFICATIONS */
+
+function openNotifications(){
+
+  closeMenu();
+
+  updateReminder();
+
+  document.getElementById(
+    "notificationModal"
+  ).classList.add("show");
+
+}
+
+
+function closeNotifications(){
+
+  document.getElementById(
+    "notificationModal"
+  ).classList.remove("show");
+
+}
+
+
+function toggleReminder(){
+
+  const old =
+    localStorage.getItem(
+      "gyansetu_study_reminder"
+    );
+
+  const newState =
+    old === "on" ? "off" : "on";
+
+  localStorage.setItem(
+    "gyansetu_study_reminder",
+    newState
+  );
+
+  updateReminder();
+
+}
+
+
+/* DARK MODE */
+
+function toggleDarkMode(){
+
+  const isDark =
+    document.body.classList.toggle(
+      "dark-mode"
+    );
+
+  localStorage.setItem(
+    "gyansetu_dark_mode",
+    isDark ? "on" : "off"
+  );
+
+  closeMenu();
+
+}
+
+
+/* PRIVACY */
+
+function openPrivacy(){
+
+  closeMenu();
+
+}
+
+
+/* ABOUT */
+
+function openAbout(){
+
+  closeMenu();
+
+  document.getElementById(
+    "aboutModal"
+  ).classList.add("show");
+
+}
+
+
+function closeAbout(){
+
+  document.getElementById(
+    "aboutModal"
+  ).classList.remove("show");
+
+}
+
+
+/* HELP */
+
+function openHelp(){
+
+  closeMenu();
+
+  goAIStudy();
+
+}
+
+
+/* RESET */
+
+function openResetPopup(){
+
+  closeMenu();
+
+  document.getElementById(
+    "resetModal"
+  ).classList.add("show");
+
+}
+
+
+function closeResetPopup(){
+
+  document.getElementById(
+    "resetModal"
+  ).classList.remove("show");
+
+}
+
+
+function confirmReset(){
+
+  localStorage.removeItem(
+    "gyansetu_username"
+  );
+
+  localStorage.removeItem(
+    "gyansetu_dark_mode"
+  );
+
+  localStorage.removeItem(
+    "gyansetu_study_reminder"
+  );
+
+  document.body.classList.remove(
+    "dark-mode"
+  );
+
+  loadUsername();
+
+  updateReminder();
+
+  closeResetPopup();
+
+}
+
+
+/* CLOSE POPUPS BY OUTSIDE TAP */
+
+document
+.querySelectorAll(".modal-overlay")
+.forEach(function(modal){
+
+  modal.addEventListener(
+    "click",
+    function(event){
+
+      if(event.target === modal){
+
+        modal.classList.remove(
+          "show"
+        );
+
+      }
+
     }
+  );
 
-    localStorage.setItem(
-      "gyansetu_username",
-      newUsername
-    );
-
-    document.getElementById("username")
-      .textContent = "@" + newUsername;
-
-    closeEditProfile();
-
-  }
-
-
-  /* MENU */
-
-  function openMenu() {
-
-    document.getElementById("menuModal")
-      .classList.add("show");
-
-  }
-
-
-  function closeMenu() {
-
-    document.getElementById("menuModal")
-      .classList.remove("show");
-
-  }
-
-
-  /* ACCOUNT SETTINGS */
-
-  function openAccountSettings() {
-
-    closeMenu();
-    editProfile();
-
-  }
-
-
-  /* NOTIFICATIONS */
-
-  function openNotifications() {
-
-    closeMenu();
-
-    document.getElementById("menuModal")
-      .classList.remove("show");
-
-  }
-
-
-  /* DARK MODE */
-
-  function toggleDarkMode() {
-
-    const isDark =
-      document.body.classList.toggle("dark-mode");
-
-    localStorage.setItem(
-      "gyansetu_dark_mode",
-      isDark ? "on" : "off"
-    );
-
-    closeMenu();
-
-  }
-
-
-  /* PRIVACY */
-
-  function openPrivacy() {
-
-    closeMenu();
-
-  }
-
-
-  /* ABOUT */
-
-  function openAbout() {
-
-    closeMenu();
-
-  }
-
-
-  /* HELP */
-
-  function openHelp() {
-
-    closeMenu();
-
-  }
-
-
-  /* RESET APP DATA */
-
-  function resetAppData() {
-
-    localStorage.removeItem("gyansetu_username");
-    localStorage.removeItem("gyansetu_dark_mode");
-
-    document.body.classList.remove("dark-mode");
-
-    document.getElementById("username")
-      .textContent = "@student";
-
-    closeMenu();
-
-  }
-
-
-  /* CLOSE MODALS BY BACKGROUND TAP */
-
-  document.getElementById("editModal")
-    .addEventListener("click", function(event) {
-
-      if (event.target === this) {
-        closeEditProfile();
-      }
-
-    });
-
-
-  document.getElementById("menuModal")
-    .addEventListener("click", function(event) {
-
-      if (event.target === this) {
-        closeMenu();
-      }
-
-    });
+});
 
 </script>
 
