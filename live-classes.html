@@ -1202,7 +1202,9 @@ body{
       <p>
         👨‍🏫 Prof. Rahul • Class 10
       </p>
-
+<p id="sirPeerIdText">
+  📡 Live ID: Connecting...
+</p>
     </div>
 
 
@@ -1406,7 +1408,15 @@ function initPeer(){
     myPeerId = id;
 
     console.log("My Peer ID:", myPeerId);
+const peerText =
+  document.getElementById("sirPeerIdText");
 
+if(peerText){
+
+  peerText.innerText =
+    "📡 Live ID: " + myPeerId;
+
+   }
   });
 
   peer.on("call", function(call){
@@ -1720,14 +1730,17 @@ function sirLogin(){
 /* ===============================
    STUDENT ENTER
 ================================ */
-
 function studentEnter(){
 
   closeRolePopup();
 
-  openStudentLive();
+  initPeer();
 
-}
+  document
+    .getElementById("studentConnectPopup")
+    .style.display = "flex";
+
+   }
 
 
 /* ===============================
@@ -1735,7 +1748,7 @@ function studentEnter(){
 ================================ */
 
 async function joinLive(){
-
+initPeer();
   const popup =
     document.getElementById(
       "liveCameraPopup"
