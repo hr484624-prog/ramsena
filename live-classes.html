@@ -190,6 +190,8 @@
       box-shadow:
         0 8px 25px
         rgba(24,38,77,.22);
+
+      cursor: pointer;
     }
 
 
@@ -297,6 +299,21 @@
       border-radius: 50%;
 
       background: #d92323;
+
+      animation: liveBlink 1s infinite;
+    }
+
+
+    @keyframes liveBlink {
+
+      0%,100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .3;
+      }
+
     }
 
 
@@ -503,6 +520,8 @@
 
       font-size: 11px;
       font-weight: bold;
+
+      cursor: pointer;
     }
 
 
@@ -560,10 +579,12 @@
       border-radius: 10px;
 
       font-size: 12px;
+
+      cursor: pointer;
     }
 
 
-    /* POPUP BACKGROUND */
+    /* POPUP */
 
     .popup {
       display: none;
@@ -583,8 +604,6 @@
       padding: 18px;
     }
 
-
-    /* POPUP BOX */
 
     .popup-box {
       width: 100%;
@@ -775,6 +794,164 @@
     }
 
 
+    /* LIVE CAMERA POPUP */
+
+    #liveCameraPopup {
+      background: rgba(0,0,0,.92);
+      z-index: 200;
+    }
+
+
+    .live-camera-box {
+      width: 100%;
+      max-width: 410px;
+
+      background: #10131a;
+
+      border-radius: 22px;
+
+      padding: 15px;
+
+      color: white;
+
+      box-shadow:
+        0 15px 50px
+        rgba(0,0,0,.5);
+
+      animation: popupIn .2s ease;
+    }
+
+
+    .live-camera-top {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      font-size: 14px;
+
+      font-weight: bold;
+
+      margin-bottom: 12px;
+    }
+
+
+    .camera-live-dot {
+      display: inline-block;
+
+      width: 9px;
+      height: 9px;
+
+      background: #ff3030;
+
+      border-radius: 50%;
+
+      margin-right: 6px;
+
+      animation: liveBlink 1s infinite;
+    }
+
+
+    .camera-close {
+      width: 34px;
+      height: 34px;
+
+      border: none;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,.12);
+
+      color: white;
+
+      font-size: 22px;
+
+      cursor: pointer;
+    }
+
+
+    .camera-video-wrap {
+      position: relative;
+
+      width: 100%;
+
+      aspect-ratio: 16 / 10;
+
+      background: #050505;
+
+      border-radius: 17px;
+
+      overflow: hidden;
+    }
+
+
+    #liveVideo {
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      display: block;
+    }
+
+
+    .camera-status {
+      position: absolute;
+
+      left: 10px;
+      bottom: 10px;
+
+      background:
+        rgba(0,0,0,.65);
+
+      padding: 7px 10px;
+
+      border-radius: 9px;
+
+      font-size: 11px;
+    }
+
+
+    .live-camera-info {
+      padding: 13px 2px;
+    }
+
+
+    .live-camera-info h3 {
+      font-size: 15px;
+    }
+
+
+    .live-camera-info p {
+      margin-top: 4px;
+
+      color: #aaa;
+
+      font-size: 11px;
+    }
+
+
+    .end-live-btn {
+      width: 100%;
+      height: 46px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background: #d92323;
+
+      color: white;
+
+      font-size: 14px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+    }
+
+
     /* BOTTOM NAV */
 
     .bottom-nav {
@@ -946,6 +1123,7 @@
   <div
     class="channel-box"
     id="channelBox"
+    onclick="openChannel()"
   >
 
     <div class="channel-header">
@@ -974,7 +1152,7 @@
 
       <button
         class="channel-action"
-        onclick="showSection('live')"
+        onclick="event.stopPropagation(); showSection('live')"
       >
         🔴 Live
       </button>
@@ -982,7 +1160,7 @@
 
       <button
         class="channel-action"
-        onclick="showSection('recorded')"
+        onclick="event.stopPropagation(); showSection('recorded')"
       >
         🎥 Recorded
       </button>
@@ -990,7 +1168,7 @@
 
       <button
         class="channel-action"
-        onclick="showSection('all')"
+        onclick="event.stopPropagation(); showSection('all')"
       >
         📚 All
       </button>
@@ -1418,7 +1596,7 @@
       <button
         class="popup-close"
         onclick="closeCreatePopup()"
-      >
+            >
         ×
       </button>
 
@@ -1538,13 +1716,87 @@
 
 
 
-<script>
+<!-- LIVE CAMERA POPUP -->
 
+<div
+  class="popup"
+  id="liveCameraPopup"
+>
+
+  <div class="live-camera-box">
+
+    <div class="live-camera-top">
+
+      <div>
+        <span class="camera-live-dot"></span>
+        LIVE CLASS
+      </div>
+
+
+      <button
+        class="camera-close"
+        onclick="endLiveClass()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="camera-video-wrap">
+
+      <video
+        id="liveVideo"
+        autoplay
+        playsinline
+        muted
+      ></video>
+
+
+      <div
+        class="camera-status"
+        id="cameraStatus"
+      >
+        🎥 Camera सुरू होत आहे...
+      </div>
+
+    </div>
+
+
+    <div class="live-camera-info">
+
+      <h3>
+        Mathematics — Algebra
+      </h3>
+
+      <p>
+        👨‍🏫 Prof. Rahul • Class 10
+      </p>
+
+    </div>
+
+
+    <button
+      class="end-live-btn"
+      onclick="endLiveClass()"
+    >
+      🔴 End Live Class
+    </button>
+
+  </div>
+
+</div>
+
+
+
+<script>
 
   /* USERNAME */
 
   const username =
-    localStorage.getItem("gyansetu_username");
+    localStorage.getItem(
+      "gyansetu_username"
+    );
 
 
   if (username) {
@@ -1555,7 +1807,6 @@
       "@" + username;
 
   }
-
 
 
   /* CHECK CHANNEL */
@@ -1580,6 +1831,7 @@
     document.getElementById(
       "channelBox"
     ).style.display = "block";
+
 
     document.getElementById(
       "channelNameDisplay"
@@ -1674,12 +1926,14 @@
 
     document.getElementById(
       "channelNameDisplay"
-    ).textContent = name;
+    ).textContent =
+      name;
 
 
     document.getElementById(
       "channelBox"
-    ).style.display = "block";
+    ).style.display =
+      "block";
 
 
     closeCreatePopup();
@@ -1701,14 +1955,27 @@
 
   function openChannel() {
 
+    const channelName =
+      localStorage.getItem(
+        "gyansetu_channel_name"
+      );
+
+
+    const channelPassword =
+      localStorage.getItem(
+        "gyansetu_channel_password"
+      );
+
+
     if (
-      savedChannelName &&
-      savedChannelPassword
+      channelName &&
+      channelPassword
     ) {
 
       document.getElementById(
         "passwordPopup"
-      ).style.display = "flex";
+      ).style.display =
+        "flex";
 
     }
 
@@ -1725,8 +1992,14 @@
       ).value;
 
 
+    const realPassword =
+      localStorage.getItem(
+        "gyansetu_channel_password"
+      );
+
+
     if (
-      password === savedChannelPassword
+      password === realPassword
     ) {
 
       closePasswordPopup();
@@ -1744,7 +2017,8 @@
 
     document.getElementById(
       "passwordPopup"
-    ).style.display = "none";
+    ).style.display =
+      "none";
 
 
     document.getElementById(
@@ -1767,7 +2041,8 @@
 
       document.getElementById(
         popupId
-      ).style.display = "none";
+      ).style.display =
+        "none";
 
     }
 
@@ -1783,10 +2058,12 @@
         "liveSection"
       );
 
+
     const recorded =
       document.getElementById(
         "recordedSection"
       );
+
 
     const empty =
       document.getElementById(
@@ -1826,13 +2103,100 @@
   }
 
 
-  /* JOIN LIVE */
+  /* JOIN LIVE CLASS */
 
-  function joinLive() {
+  let liveStream = null;
 
-    alert(
-      "Live Class लवकरच सुरू होईल! 🎥"
-    );
+
+  async function joinLive() {
+
+    const popup =
+      document.getElementById(
+        "liveCameraPopup"
+      );
+
+
+    const video =
+      document.getElementById(
+        "liveVideo"
+      );
+
+
+    const status =
+      document.getElementById(
+        "cameraStatus"
+      );
+
+
+    popup.style.display = "flex";
+
+
+    status.textContent =
+      "🎥 Camera आणि Microphone सुरू होत आहे...";
+
+
+    try {
+
+      liveStream =
+        await navigator.mediaDevices.getUserMedia({
+
+          video: {
+            facingMode: "user"
+          },
+
+          audio: true
+
+        });
+
+
+      video.srcObject =
+        liveStream;
+
+
+      status.textContent =
+        "🔴 LIVE • Camera आणि Mic सुरू आहेत";
+
+    }
+
+
+    catch (error) {
+
+      console.log(error);
+
+
+      status.textContent =
+        "❌ Camera/Microphone permission द्या.";
+
+    }
+
+  }
+
+
+  /* END LIVE CLASS */
+
+  function endLiveClass() {
+
+    if (liveStream) {
+
+      liveStream
+        .getTracks()
+        .forEach(function(track) {
+          track.stop();
+        });
+
+      liveStream = null;
+
+    }
+
+
+    document.getElementById(
+      "liveVideo"
+    ).srcObject = null;
+
+
+    document.getElementById(
+      "liveCameraPopup"
+    ).style.display = "none";
 
   }
 
@@ -1841,8 +2205,8 @@
 
   function watchVideo() {
 
-    alert(
-      "Recorded Class Video लवकरच उपलब्ध होईल! 🎥"
+    console.log(
+      "Recorded video"
     );
 
   }
@@ -1852,9 +2216,14 @@
 
   function setReminder() {
 
-    alert(
-      "Reminder सेट केला आहे! 🔔"
-    );
+    const reminder =
+      document.querySelector(
+        ".reminder-text strong"
+      );
+
+
+    reminder.textContent =
+      "Reminder Set झाले! 🔔";
 
   }
 
@@ -1897,4 +2266,6 @@
 
 </body>
 
-</html>
+  </html>
+  
+ 
