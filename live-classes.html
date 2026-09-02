@@ -1475,7 +1475,36 @@ if(peerText){
     });
 
   });
+/* ===============================
+   STUDENT CONNECTION
+================================ */
 
+peer.on("connection", function(conn){
+
+  conn.on("data", function(data){
+
+    if(data && data.type === "student-ready"){
+
+      if(!liveStream){
+
+        showToast("❌ आधी Live सुरू करा.");
+
+        return;
+      }
+
+      const call =
+        peer.call(
+          data.studentPeerId,
+          liveStream
+        );
+
+      activeCall = call;
+
+    }
+
+  });
+
+});
   peer.on("error", function(error){
 
     console.log("PeerJS Error:", error);
