@@ -1457,7 +1457,7 @@ if(peerText){
 
   peer.on("call", function(call){
 
-    activeCall = call;
+   activeCalls[call.peer] = call;
 
     call.answer();
 
@@ -2096,7 +2096,29 @@ function endLiveClass(){
     }
 
   }
+/* ===============================
+   TELL STUDENTS TO SAVE RECORDING
+================================ */
 
+Object.keys(activeCalls).forEach(function(studentId){
+
+  const call = activeCalls[studentId];
+
+  if(call && call.peer){
+
+    const conn = peer.connect(call.peer);
+
+    conn.on("open", function(){
+
+      conn.send({
+        type: "stop-student-recording"
+      });
+
+    });
+
+  }
+
+});
   /* ===============================
      CLOSE ALL STUDENT CALLS
   ================================ */
