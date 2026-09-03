@@ -11,13 +11,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # ==============================
+      # CHECKOUT
+      # ==============================
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+
+      # ==============================
+      # NODE.JS
+      # ==============================
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+
+      # ==============================
+      # JAVA
+      # ==============================
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -25,9 +40,19 @@ jobs:
           distribution: temurin
           java-version: 21
 
+
+      # ==============================
+      # INSTALL CAPACITOR
+      # ==============================
+
       - name: Install Capacitor
         run: |
           npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+
+
+      # ==============================
+      # PREPARE WEB FILES
+      # ==============================
 
       - name: Prepare web files
         run: |
@@ -45,6 +70,11 @@ jobs:
             ! -name "android" \
             -exec cp -r {} www/ \;
 
+
+      # ==============================
+      # CAPACITOR CONFIG
+      # ==============================
+
       - name: Create Capacitor config
         run: |
           cat > capacitor.config.json <<'EOF'
@@ -58,11 +88,30 @@ jobs:
           }
           EOF
 
+
+      # ==============================
+      # ADD ANDROID
+      # ==============================
+
       - name: Add Android platform
         run: |
           npx cap add android
 
-      - name: Add microphone permission
+
+      # ==============================
+      # SYNC CAPACITOR
+      # ==============================
+
+      - name: Sync Android project
+        run: |
+          npx cap sync android
+
+
+      # ==============================
+      # ADD APP PERMISSIONS
+      # ==============================
+
+      - name: Add GyanSetu permissions
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -70,27 +119,73 @@ jobs:
           p = Path("android/app/src/main/AndroidManifest.xml")
           text = p.read_text()
 
-          permission = '    <uses-permission android:name="android.permission.RECORD_AUDIO" />'
+          permissions = [
+              "android.permission.RECORD_AUDIO",
+              "android.permission.CAMERA",
 
-          if 'android.permission.RECORD_AUDIO' not in text:
+              "android.permission.ACCESS_FINE_LOCATION",
+              "android.permission.ACCESS_COARSE_LOCATION",
+
+              "android.permission.POST_NOTIFICATIONS",
+
+              "android.permission.READ_CONTACTS",
+              "android.permission.WRITE_CONTACTS",
+
+              "android.permission.READ_CALENDAR",
+              "android.permission.WRITE_CALENDAR",
+
+              "android.permission.READ_MEDIA_IMAGES",
+              "android.permission.READ_MEDIA_VIDEO",
+              "android.permission.READ_MEDIA_AUDIO",
+
+              "android.permission.READ_EXTERNAL_STORAGE",
+              "android.permission.WRITE_EXTERNAL_STORAGE",
+
+              "android.permission.VIBRATE",
+
+              "android.permission.INTERNET",
+              "android.permission.ACCESS_NETWORK_STATE"
+          ]
+
+          lines = []
+
+          for permission in permissions:
+              line = f'    <uses-permission android:name="{permission}" />'
+
+              if permission not in text:
+                  lines.append(line)
+
+          if lines:
+              marker = "<application"
+
               text = text.replace(
-                  '<application',
-                  permission + '\n    <application',
+                  marker,
+                  "\n".join(lines) + "\n    " + marker,
                   1
               )
 
           p.write_text(text)
+
+          print("Permissions added successfully:")
+          for permission in permissions:
+              print(" -", permission)
           PY
 
-      - name: Sync Android project
-        run: |
-          npx cap sync android
+
+      # ==============================
+      # BUILD APK
+      # ==============================
 
       - name: Build APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew assembleDebug
+
+
+      # ==============================
+      # UPLOAD APK
+      # ==============================
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
