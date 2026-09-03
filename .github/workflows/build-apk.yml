@@ -158,89 +158,50 @@ jobs:
 
           manifest.write_text(text)
 
-          print("====================================")
-          print("GyanSetu permissions added")
-          print("====================================")
-
-          for permission in permissions:
-              print(permission)
+          print("GyanSetu Android permissions added.")
           PY
 
 
       # =========================================
-      # ENABLE WEBVIEW FEATURES
+      # CREATE MAIN ACTIVITY
       # =========================================
 
-      - name: Configure Android WebView
+      - name: Configure MainActivity
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          activity = Path(
-              "android/app/src/main/java/com/ramsena/xi/MainActivity.java"
-          )
-
-          if not activity.exists():
-              print("MainActivity.java not found.")
-              exit(0)
-
-          text = activity.read_text()
-
-          if "android.webkit.PermissionRequest" not in text:
-
-              text = text.replace(
-                  "package com.ramsena.xi;",
-                  """package com.ramsena.xi;
+          cat > android/app/src/main/java/com/ramsena/xi/MainActivity.java <<'EOF'
+          package com.ramsena.xi;
 
           import android.Manifest;
           import android.content.pm.PackageManager;
+          import android.os.Bundle;
           import android.webkit.PermissionRequest;
+          import android.webkit.WebChromeClient;
           import android.webkit.WebView;
+
+          import androidx.annotation.NonNull;
           import androidx.core.app.ActivityCompat;
           import androidx.core.content.ContextCompat;
-          """
-              )
 
-              text = text.replace(
-                  "public class MainActivity extends BridgeActivity {",
-                  """public class MainActivity extends BridgeActivity {
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
 
               private static final int MEDIA_PERMISSION_REQUEST = 1001;
+
               private PermissionRequest pendingPermissionRequest;
-          """
-              )
 
-              text = text.replace(
-                  "super.onCreate(savedInstanceState);",
-                  """super.onCreate(savedInstanceState);
+              @Override
+              public void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
 
-              if (ContextCompat.checkSelfPermission(
-                      this,
-                      Manifest.permission.CAMERA
-                  ) != PackageManager.PERMISSION_GRANTED
-                  ||
-                  ContextCompat.checkSelfPermission(
-                      this,
-                      Manifest.permission.RECORD_AUDIO
-                  ) != PackageManager.PERMISSION_GRANTED) {
+                  requestCameraMicrophonePermission();
 
-                  ActivityCompat.requestPermissions(
-                      this,
-                      new String[] {
-                          Manifest.permission.CAMERA,
-                          Manifest.permission.RECORD_AUDIO
-                      },
-                      MEDIA_PERMISSION_REQUEST
-                  );
-              }
+                  WebView webView = getBridge().getWebView();
 
-              WebView webView = getBridge().getWebView();
+                  webView.getSettings().setJavaScriptEnabled(true);
+                  webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
 
-              webView.getSettings().setJavaScriptEnabled(true);
-              webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
-
-              webView.setWebChromeClient(
-                  new android.webkit.WebChromeClient() {
+                  webView.setWebChromeClient(new WebChromeClient() {
 
                       @Override
                       public void onPermissionRequest(
@@ -248,113 +209,125 @@ jobs:
 
                           runOnUiThread(() -> {
 
-                              String[] resources =
-                                      request.getResources();
+                              String[] resources = request.getResources();
 
-                              boolean camera = false;
-                              boolean microphone = false;
+                              boolean needsCamera = false;
+                              boolean needsMicrophone = false;
 
                               for (String resource : resources) {
 
                                   if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource)) {
-                                      camera = true;
+                                      needsCamera = true;
                                   }
 
                                   if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) {
-                                      microphone = true;
+                                      needsMicrophone = true;
                                   }
                               }
 
                               boolean cameraGranted =
-                                      !camera ||
+                                      !needsCamera ||
                                       ContextCompat.checkSelfPermission(
-                                          MainActivity.this,
-                                          Manifest.permission.CAMERA
+                                              MainActivity.this,
+                                              Manifest.permission.CAMERA
                                       ) == PackageManager.PERMISSION_GRANTED;
 
                               boolean microphoneGranted =
-                                      !microphone ||
+                                      !needsMicrophone ||
                                       ContextCompat.checkSelfPermission(
-                                          MainActivity.this,
-                                          Manifest.permission.RECORD_AUDIO
+                                              MainActivity.this,
+                                              Manifest.permission.RECORD_AUDIO
                                       ) == PackageManager.PERMISSION_GRANTED;
 
                               if (cameraGranted && microphoneGranted) {
+
                                   request.grant(resources);
+
                               } else {
+
                                   pendingPermissionRequest = request;
 
-                                  ActivityCompat.requestPermissions(
-                                      MainActivity.this,
-                                      new String[] {
-                                          Manifest.permission.CAMERA,
-                                          Manifest.permission.RECORD_AUDIO
-                                      },
-                                      MEDIA_PERMISSION_REQUEST
-                                  );
+                                  requestCameraMicrophonePermission();
                               }
                           });
                       }
+                  });
+              }
+
+              private void requestCameraMicrophonePermission() {
+
+                  boolean cameraGranted =
+                          ContextCompat.checkSelfPermission(
+                                  this,
+                                  Manifest.permission.CAMERA
+                          ) == PackageManager.PERMISSION_GRANTED;
+
+                  boolean microphoneGranted =
+                          ContextCompat.checkSelfPermission(
+                                  this,
+                                  Manifest.permission.RECORD_AUDIO
+                          ) == PackageManager.PERMISSION_GRANTED;
+
+                  if (!cameraGranted || !microphoneGranted) {
+
+                      ActivityCompat.requestPermissions(
+                              this,
+                              new String[]{
+                                      Manifest.permission.CAMERA,
+                                      Manifest.permission.RECORD_AUDIO
+                              },
+                              MEDIA_PERMISSION_REQUEST
+                      );
                   }
-              );
-          """
-              )
+              }
 
-              text += """
+              @Override
+              public void onRequestPermissionsResult(
+                      int requestCode,
+                      @NonNull String[] permissions,
+                      @NonNull int[] grantResults) {
 
-          @Override
-          public void onRequestPermissionsResult(
-                  int requestCode,
-                  String[] permissions,
-                  int[] grantResults) {
+                  super.onRequestPermissionsResult(
+                          requestCode,
+                          permissions,
+                          grantResults
+                  );
 
-              super.onRequestPermissionsResult(
-                  requestCode,
-                  permissions,
-                  grantResults
-              );
+                  if (requestCode == MEDIA_PERMISSION_REQUEST) {
 
-              if (requestCode == MEDIA_PERMISSION_REQUEST) {
+                      if (pendingPermissionRequest != null) {
 
-                  if (pendingPermissionRequest != null) {
+                          boolean cameraGranted =
+                                  ContextCompat.checkSelfPermission(
+                                          this,
+                                          Manifest.permission.CAMERA
+                                  ) == PackageManager.PERMISSION_GRANTED;
 
-                      boolean cameraGranted =
-                          ContextCompat.checkSelfPermission(
-                              this,
-                              Manifest.permission.CAMERA
-                          ) == PackageManager.PERMISSION_GRANTED;
+                          boolean microphoneGranted =
+                                  ContextCompat.checkSelfPermission(
+                                          this,
+                                          Manifest.permission.RECORD_AUDIO
+                                  ) == PackageManager.PERMISSION_GRANTED;
 
-                      boolean microphoneGranted =
-                          ContextCompat.checkSelfPermission(
-                              this,
-                              Manifest.permission.RECORD_AUDIO
-                          ) == PackageManager.PERMISSION_GRANTED;
+                          if (cameraGranted && microphoneGranted) {
 
-                      if (cameraGranted && microphoneGranted) {
+                              pendingPermissionRequest.grant(
+                                      pendingPermissionRequest.getResources()
+                              );
 
-                          pendingPermissionRequest.grant(
-                              pendingPermissionRequest.getResources()
-                          );
+                          } else {
 
-                      } else {
+                              pendingPermissionRequest.deny();
+                          }
 
-                          pendingPermissionRequest.deny();
-
+                          pendingPermissionRequest = null;
                       }
-
-                      pendingPermissionRequest = null;
                   }
               }
           }
-          """
+          EOF
 
-              activity.write_text(text)
-
-              print("WebView camera/microphone handling added.")
-
-          else:
-              print("WebView permission handling already exists.")
-          PY
+          echo "MainActivity.java created successfully."
 
 
       # =========================================
