@@ -1,301 +1,605 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GyanSetu - Create</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-    }
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-      padding-bottom: 90px;
-    }
+<title>GyanSetu - Notes</title>
 
-    .header {
-      background: white;
-      padding: 18px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    }
+<style>
 
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .back {
-      font-size: 28px;
-      cursor: pointer;
-    }
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f1f5f9;
+}
 
-    .title {
-      font-size: 22px;
-      font-weight: 800;
-    }
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#ffffff;
+}
 
-    .plus {
-      font-size: 26px;
-    }
+/* HEADER */
 
-    .intro {
-      margin: 18px 16px;
-      padding: 22px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, #fff0dc, #fffaf4);
-      border: 1px solid #ffe0bd;
-      text-align: center;
-    }
+.header{
+  background:linear-gradient(135deg,#2563eb,#38bdf8);
+  color:white;
+  padding:18px 16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
 
-    .intro-icon {
-      font-size: 45px;
-    }
+.back-btn{
+  border:none;
+  background:rgba(255,255,255,.2);
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:22px;
+  cursor:pointer;
+}
 
-    .intro h2 {
-      margin-top: 10px;
-      font-size: 21px;
-    }
+.header h2{
+  margin:0;
+  font-size:21px;
+}
 
-    .intro p {
-      margin-top: 7px;
-      color: #777;
-      font-size: 13px;
-      line-height: 1.5;
-    }
+/* CONTENT */
 
-    .section-title {
-      margin: 22px 16px 13px;
-      font-size: 19px;
-      font-weight: 800;
-    }
+.content{
+  padding:16px;
+}
 
-    .options {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin: 0 16px;
-    }
+/* NEW NOTE */
 
-    .option {
-      background: white;
-      border-radius: 19px;
-      padding: 18px;
-      min-height: 135px;
-      box-shadow: 0 5px 18px rgba(0,0,0,.06);
-      cursor: pointer;
-    }
+.note-editor{
+  background:#f8fafc;
+  border-radius:18px;
+  padding:15px;
+  border:1px solid #e2e8f0;
+  margin-bottom:18px;
+}
 
-    .option-icon {
-      font-size: 31px;
-      margin-bottom: 10px;
-    }
+.note-title{
+  width:100%;
+  padding:13px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:16px;
+  outline:none;
+  margin-bottom:10px;
+}
 
-    .option h3 {
-      font-size: 15px;
-    }
+.note-text{
+  width:100%;
+  min-height:150px;
+  padding:13px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:15px;
+  resize:vertical;
+  outline:none;
+  font-family:Arial,sans-serif;
+}
 
-    .option p {
-      margin-top: 5px;
-      color: #777;
-      font-size: 11px;
-      line-height: 1.4;
-    }
+.note-title:focus,
+.note-text:focus{
+  border-color:#2563eb;
+}
 
-    .tip {
-      margin: 20px 16px;
-      padding: 16px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.05);
-    }
+/* SAVE BUTTON */
 
-    .tip strong {
-      font-size: 14px;
-    }
+.save-btn{
+  width:100%;
+  margin-top:12px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#2563eb,#0ea5e9);
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .tip p {
-      margin-top: 7px;
-      color: #777;
-      font-size: 12px;
-      line-height: 1.5;
-    }
+/* SEARCH */
 
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      height: 68px;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid #eee;
-      z-index: 20;
-    }
+.search{
+  width:100%;
+  padding:13px;
+  border:1px solid #cbd5e1;
+  border-radius:12px;
+  font-size:15px;
+  outline:none;
+  margin-bottom:16px;
+}
 
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #777;
-      cursor: pointer;
-    }
+/* NOTES TITLE */
 
-    .nav-item .icon {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 3px;
-    }
+.saved-heading{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
 
-    .nav-item.active {
-      color: #ff7900;
-      font-weight: bold;
-    }
-  </style>
+/* NOTE CARD */
+
+.note-card{
+  background:white;
+  border:1px solid #e2e8f0;
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,.05);
+}
+
+.note-card h3{
+  margin:0 0 8px;
+  font-size:17px;
+  color:#0f172a;
+}
+
+.note-card p{
+  margin:0;
+  color:#475569;
+  font-size:14px;
+  line-height:1.6;
+  white-space:pre-wrap;
+}
+
+.note-date{
+  margin-top:10px;
+  font-size:12px;
+  color:#94a3b8;
+}
+
+.note-actions{
+  display:flex;
+  gap:8px;
+  margin-top:12px;
+}
+
+.edit-btn,
+.delete-btn{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.edit-btn{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.delete-btn{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+/* EMPTY */
+
+.empty{
+  text-align:center;
+  padding:35px 10px;
+  color:#94a3b8;
+}
+
+.empty-icon{
+  font-size:45px;
+  margin-bottom:8px;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
 <div class="app">
 
+  <!-- HEADER -->
+
   <div class="header">
-    <div class="top">
-      <div class="back" onclick="goHome()">‹</div>
-      <div class="title">Create</div>
-      <div class="plus">➕</div>
-    </div>
-  </div>
 
-  <div class="intro">
-    <div class="intro-icon">🚀</div>
+    <button
+      class="back-btn"
+      onclick="history.back()">
+      ←
+    </button>
 
-    <h2>Share Your Knowledge</h2>
-
-    <p>
-      तुम्हाला जे येतं ते इतर विद्यार्थ्यांसोबत share करा
-      आणि Gyan Points मिळवा! 📚
-    </p>
-  </div>
-
-  <div class="section-title">
-    ✨ What do you want to create?
-  </div>
-
-  <div class="options">
-
-    <div class="option">
-      <div class="option-icon">📝</div>
-      <h3>Study Post</h3>
-      <p>अभ्यासाची माहिती किंवा notes share करा.</p>
-    </div>
-
-    <div class="option">
-      <div class="option-icon">❓</div>
-      <h3>Ask Question</h3>
-      <p>तुमचा प्रश्न विचारा आणि उत्तर मिळवा.</p>
-    </div>
-
-    <div class="option">
-      <div class="option-icon">🧠</div>
-      <h3>Create Quiz</h3>
-      <p>स्वतःचा educational quiz तयार करा.</p>
-    </div>
-
-    <div class="option">
-      <div class="option-icon">📸</div>
-      <h3>Learning Photo</h3>
-      <p>अभ्यासाशी संबंधित फोटो share करा.</p>
-    </div>
-
-    <div class="option">
-      <div class="option-icon">🎥</div>
-      <h3>Learning Video</h3>
-      <p>Educational video share करा.</p>
-    </div>
-
-    <div class="option">
-      <div class="option-icon">💡</div>
-      <h3>Knowledge Tip</h3>
-      <p>उपयोगी study tip share करा.</p>
-    </div>
+    <h2>📝 Notes</h2>
 
   </div>
 
-  <div class="tip">
-    <strong>💡 GyanSetu Tip</strong>
 
-    <p>
-      चांगली माहिती share करा, इतरांना शिकायला मदत करा
-      आणि तुमचे Gyan Points वाढवा. 🏆
-    </p>
-  </div>
+  <!-- CONTENT -->
 
-  <div class="bottom-nav">
+  <div class="content">
 
-    <div class="nav-item" onclick="goHome()">
-      <span class="icon">🏠</span>
-      Home
+    <!-- NOTE EDITOR -->
+
+    <div class="note-editor">
+
+      <input
+        type="text"
+        id="noteTitle"
+        class="note-title"
+        placeholder="Note चे नाव लिहा...">
+
+      <textarea
+        id="noteText"
+        class="note-text"
+        placeholder="इथे तुमची Note लिहा..."></textarea>
+
+      <button
+        class="save-btn"
+        onclick="saveNote()">
+        💾 Save Note
+      </button>
+
     </div>
 
-    <div class="nav-item" onclick="goLearn()">
-      <span class="icon">📚</span>
-      Learn
+
+    <!-- SEARCH -->
+
+    <input
+      type="text"
+      id="searchNotes"
+      class="search"
+      placeholder="🔍 Notes search करा..."
+      oninput="displayNotes()">
+
+
+    <!-- SAVED NOTES -->
+
+    <div class="saved-heading">
+      📚 Saved Notes
     </div>
 
-    <div class="nav-item active">
-      <span class="icon">➕</span>
-      Create
-    </div>
-
-    <div class="nav-item" onclick="goRank()">
-      <span class="icon">🏆</span>
-      Rank
-    </div>
-
-    <div class="nav-item" onclick="goProfile()">
-      <span class="icon">👤</span>
-      Profile
-    </div>
+    <div id="notesList"></div>
 
   </div>
 
 </div>
 
+
 <script>
 
-  function goHome() {
-    window.location.href = "home.html";
+/* =========================
+   NOTES DATA
+========================= */
+
+let notes = JSON.parse(
+  localStorage.getItem("gyansetu_notes")
+) || [];
+
+let editingId = null;
+
+
+/* =========================
+   SAVE NOTE
+========================= */
+
+function saveNote(){
+
+  const title =
+    document
+      .getElementById("noteTitle")
+      .value
+      .trim();
+
+  const text =
+    document
+      .getElementById("noteText")
+      .value
+      .trim();
+
+
+  if(!title && !text){
+
+    alert("⚠️ आधी Note लिहा.");
+
+    return;
+
   }
 
-  function goLearn() {
-    window.location.href = "learn.html";
+
+  /* EDIT EXISTING NOTE */
+
+  if(editingId !== null){
+
+    const index =
+      notes.findIndex(
+        note => note.id === editingId
+      );
+
+    if(index !== -1){
+
+      notes[index].title =
+        title || "Untitled Note";
+
+      notes[index].text =
+        text;
+
+      notes[index].date =
+        new Date().toLocaleString("mr-IN");
+
+    }
+
+    editingId = null;
+
   }
 
-  function goRank() {
-    window.location.href = "leaderboard.html";
+  /* NEW NOTE */
+
+  else{
+
+    notes.unshift({
+
+      id:Date.now(),
+
+      title:
+        title || "Untitled Note",
+
+      text:text,
+
+      date:
+        new Date().toLocaleString("mr-IN")
+
+    });
+
   }
 
-  function goProfile() {
-    window.location.href = "profile.html";
+
+  localStorage.setItem(
+    "gyansetu_notes",
+    JSON.stringify(notes)
+  );
+
+
+  document
+    .getElementById("noteTitle")
+    .value = "";
+
+  document
+    .getElementById("noteText")
+    .value = "";
+
+
+  document.querySelector(".save-btn")
+    .innerText = "💾 Save Note";
+
+
+  displayNotes();
+
+}
+
+
+/* =========================
+   DISPLAY NOTES
+========================= */
+
+function displayNotes(){
+
+  const list =
+    document.getElementById("notesList");
+
+  const search =
+    document
+      .getElementById("searchNotes")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const filteredNotes =
+    notes.filter(function(note){
+
+      return (
+        note.title
+          .toLowerCase()
+          .includes(search)
+
+        ||
+
+        note.text
+          .toLowerCase()
+          .includes(search)
+      );
+
+    });
+
+
+  list.innerHTML = "";
+
+
+  if(filteredNotes.length === 0){
+
+    list.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          📝
+        </div>
+
+        <div>
+          अजून कोणतीही Note नाही.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
   }
+
+
+  filteredNotes.forEach(function(note){
+
+    const card =
+      document.createElement("div");
+
+    card.className = "note-card";
+
+
+    card.innerHTML = `
+
+      <h3>
+        ${escapeHTML(note.title)}
+      </h3>
+
+      <p>
+        ${escapeHTML(note.text)}
+      </p>
+
+      <div class="note-date">
+        🕒 ${escapeHTML(note.date)}
+      </div>
+
+      <div class="note-actions">
+
+        <button
+          class="edit-btn"
+          onclick="editNote(${note.id})">
+          ✏️ Edit
+        </button>
+
+        <button
+          class="delete-btn"
+          onclick="deleteNote(${note.id})">
+          🗑️ Delete
+        </button>
+
+      </div>
+
+    `;
+
+
+    list.appendChild(card);
+
+  });
+
+}
+
+
+/* =========================
+   EDIT NOTE
+========================= */
+
+function editNote(id){
+
+  const note =
+    notes.find(
+      note => note.id === id
+    );
+
+
+  if(!note) return;
+
+
+  document
+    .getElementById("noteTitle")
+    .value = note.title;
+
+
+  document
+    .getElementById("noteText")
+    .value = note.text;
+
+
+  editingId = id;
+
+
+  document.querySelector(".save-btn")
+    .innerText = "✏️ Update Note";
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   DELETE NOTE
+========================= */
+
+function deleteNote(id){
+
+  const confirmDelete =
+    confirm(
+      "ही Note Delete करायची आहे का?"
+    );
+
+
+  if(!confirmDelete) return;
+
+
+  notes =
+    notes.filter(
+      note => note.id !== id
+    );
+
+
+  localStorage.setItem(
+    "gyansetu_notes",
+    JSON.stringify(notes)
+  );
+
+
+  displayNotes();
+
+}
+
+
+/* =========================
+   SAFE TEXT
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   LOAD NOTES
+========================= */
+
+displayNotes();
 
 </script>
 
 </body>
-  </html>            
+
+</html>
