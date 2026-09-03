@@ -1,2032 +1,2499 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-
 <meta charset="UTF-8">
 
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
 
 <title>GyanSetu - Live Classes</title>
 
+<!-- PeerJS -->
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
 <style>
 
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
 }
 
 body{
-  background:#f3f6fb;
-  color:#172033;
+    background:#f5f9ff;
+    color:#102a43;
 }
 
 .app{
-  max-width:500px;
-  margin:auto;
-  min-height:100vh;
-  background:white;
+    width:100%;
+    max-width:600px;
+    min-height:100vh;
+    margin:auto;
+    background:#ffffff;
 }
 
 /* ================= HEADER ================= */
 
 .header{
-  height:65px;
-  background:#087ff5;
-  color:white;
-  display:flex;
-  align-items:center;
-  padding:0 18px;
-  gap:15px;
+    height:65px;
+    background:linear-gradient(135deg,#087cf5,#0057d9);
+    color:white;
+
+    display:flex;
+    align-items:center;
+    gap:15px;
+
+    padding:0 18px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,.15);
 }
 
 .back-btn{
-  border:0;
-  background:transparent;
-  color:white;
-  font-size:25px;
-  cursor:pointer;
+    border:none;
+    background:rgba(255,255,255,.18);
+    color:white;
+
+    width:42px;
+    height:42px;
+
+    border-radius:13px;
+
+    font-size:22px;
 }
 
 .header h2{
-  font-size:20px;
+    font-size:20px;
 }
 
 /* ================= CONTENT ================= */
 
 .content{
-  padding:25px 18px;
+    padding:25px 18px;
 }
 
+.hero{
+    background:linear-gradient(
+        135deg,
+        #eaf4ff,
+        #ffffff
+    );
+
+    border-radius:22px;
+
+    padding:25px 18px;
+
+    text-align:center;
+
+    border:1px solid #dcecff;
+
+    margin-bottom:25px;
+}
+
+.hero-icon{
+    width:75px;
+    height:75px;
+
+    margin:auto;
+    margin-bottom:15px;
+
+    border-radius:22px;
+
+    background:#087cf5;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+    font-size:36px;
+
+    box-shadow:0 8px 25px rgba(8,124,245,.25);
+}
+
+.hero h1{
+    font-size:24px;
+    margin-bottom:8px;
+}
+
+.hero p{
+    color:#64748b;
+    font-size:14px;
+}
+
+/* ================= MAIN BUTTON ================= */
+
 .live-main-btn{
-  width:100%;
-  border:0;
-  border-radius:18px;
-  padding:22px;
-  background:#087ff5;
-  color:white;
-  font-size:20px;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 7px 18px rgba(0,0,0,.15);
+    width:100%;
+
+    border:none;
+
+    padding:18px;
+
+    border-radius:17px;
+
+    background:linear-gradient(
+        135deg,
+        #087cf5,
+        #0057d9
+    );
+
+    color:white;
+
+    font-size:17px;
+    font-weight:bold;
+
+    box-shadow:
+        0 10px 25px rgba(8,124,245,.25);
+
+    cursor:pointer;
 }
 
 .live-main-btn:active{
-  transform:scale(.98);
+    transform:scale(.98);
 }
 
-/* ================= POPUP ================= */
+/* ================= MODAL ================= */
 
-.popup-bg{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:9999;
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(5,25,55,.55);
+
+    display:none;
+
+    align-items:flex-end;
+    justify-content:center;
+
+    z-index:1000;
+
+    backdrop-filter:blur(4px);
 }
 
-.popup-bg.show{
-  display:flex;
+.modal.show{
+    display:flex;
 }
 
-.popup{
-  width:100%;
-  max-width:430px;
-  background:white;
-  border-radius:22px;
-  padding:23px;
-  position:relative;
-  max-height:90vh;
-  overflow-y:auto;
+.modal-box{
+    width:100%;
+    max-width:600px;
+
+    background:white;
+
+    border-radius:28px 28px 0 0;
+
+    padding:25px 20px 30px;
+
+    animation:slideUp .25s ease;
 }
 
-.close-btn{
-  position:absolute;
-  right:16px;
-  top:12px;
-  width:35px;
-  height:35px;
-  border:0;
-  border-radius:50%;
-  background:#eef2f7;
-  font-size:22px;
-  cursor:pointer;
+@keyframes slideUp{
+
+    from{
+        transform:translateY(100%);
+    }
+
+    to{
+        transform:translateY(0);
+    }
 }
 
-.popup h2{
-  margin-bottom:8px;
+.modal-title{
+    text-align:center;
+
+    font-size:21px;
+
+    margin-bottom:20px;
 }
 
-.popup p{
-  color:#687386;
-  line-height:1.5;
-}
+.role-grid{
+    display:grid;
 
-/* ================= ROLE ================= */
+    grid-template-columns:1fr 1fr;
 
-.role-box{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:22px;
+    gap:14px;
 }
 
 .role-btn{
-  border:0;
-  border-radius:17px;
-  padding:22px 10px;
-  background:#f1f5fa;
-  cursor:pointer;
-  font-size:16px;
-  font-weight:bold;
+    border:none;
+
+    padding:24px 10px;
+
+    border-radius:20px;
+
+    background:#f1f7ff;
+
+    border:2px solid #e0efff;
+
+    color:#075fc7;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
 }
 
 .role-btn span{
-  display:block;
-  font-size:35px;
-  margin-bottom:8px;
+    display:block;
+
+    font-size:38px;
+
+    margin-bottom:10px;
 }
 
-/* ================= FORM ================= */
+/* ================= INPUT ================= */
 
 .input{
-  width:100%;
-  padding:15px;
-  border:1px solid #d7dce5;
-  border-radius:13px;
-  margin-top:15px;
-  font-size:16px;
-  outline:none;
+    width:100%;
+
+    border:2px solid #e1eaf5;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    outline:none;
+
+    font-size:16px;
+
+    margin-bottom:12px;
 }
 
 .input:focus{
-  border-color:#087ff5;
+    border-color:#087cf5;
 }
 
-.action-btn{
-  width:100%;
-  border:0;
-  border-radius:14px;
-  padding:15px;
-  margin-top:15px;
-  background:#087ff5;
-  color:white;
-  font-size:17px;
-  font-weight:bold;
-  cursor:pointer;
+.primary-btn{
+    width:100%;
+
+    border:none;
+
+    padding:15px;
+
+    border-radius:14px;
+
+    background:#087cf5;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    margin-top:5px;
 }
 
 .secondary-btn{
-  background:#eef4ff;
-  color:#087ff5;
+    width:100%;
+
+    border:none;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    background:#edf5ff;
+
+    color:#075fc7;
+
+    font-weight:bold;
+
+    margin-top:10px;
 }
 
-/* ================= STATUS ================= */
+/* ================= CUSTOM MESSAGE ================= */
 
-.status{
-  margin-top:15px;
-  padding:12px;
-  border-radius:12px;
-  background:#f1f5fa;
-  color:#526070;
-  font-size:14px;
-  line-height:1.5;
+.message{
+    position:fixed;
+
+    top:20px;
+    left:15px;
+    right:15px;
+
+    max-width:570px;
+
+    margin:auto;
+
+    background:white;
+
+    border-left:5px solid #087cf5;
+
+    border-radius:14px;
+
+    padding:15px;
+
+    box-shadow:0 8px 30px rgba(0,0,0,.18);
+
+    display:none;
+
+    z-index:5000;
 }
 
-.status.success{
-  background:#e9f9ef;
-  color:#137a38;
+.message.show{
+    display:block;
 }
 
-.status.error{
-  background:#fff0f0;
-  color:#c52a2a;
+.message-title{
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+.message-text{
+    color:#64748b;
+    font-size:14px;
+}
+
+/* ================= CLASS SCREEN ================= */
+
+.class-screen{
+    position:fixed;
+
+    inset:0;
+
+    background:#061b35;
+
+    display:none;
+
+    z-index:2000;
+
+    color:white;
+}
+
+.class-screen.show{
+    display:block;
+}
+
+.class-header{
+    height:60px;
+
+    background:#09294c;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    padding:0 14px;
+}
+
+.class-title{
+    font-weight:bold;
+}
+
+.live-status{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    font-size:13px;
+}
+
+.live-dot{
+    width:9px;
+    height:9px;
+
+    background:#ff3030;
+
+    border-radius:50%;
+
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+    50%{
+        opacity:.3;
+    }
+}
+
+.video-area{
+    position:absolute;
+
+    top:60px;
+    bottom:95px;
+    left:0;
+    right:0;
+
+    background:#020b16;
+
+    overflow:hidden;
+}
+
+.remote-video{
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    background:#020b16;
+}
+
+.local-video{
+    position:absolute;
+
+    width:120px;
+    height:165px;
+
+    right:12px;
+    bottom:12px;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+    border:2px solid white;
+
+    background:#111;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.5);
+}
+
+.no-video{
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    text-align:center;
+
+    color:#94a9c0;
+}
+
+.bottom-controls{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:95px;
+
+    background:#09294c;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:18px;
+}
+
+.control{
+    width:55px;
+    height:55px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#173e67;
+
+    color:white;
+
+    font-size:21px;
+}
+
+.end-btn{
+    width:65px;
+    height:55px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:#e53935;
+
+    color:white;
+
+    font-size:20px;
 }
 
 /* ================= CHANNEL ================= */
 
-.channel-box{
-  margin-top:17px;
-  padding:18px;
-  border-radius:16px;
-  background:#f5f8fc;
-  text-align:center;
-}
+.channel-card{
+    background:#eef6ff;
 
-.channel-label{
-  font-size:13px;
-  color:#6d7787;
+    border-radius:18px;
+
+    padding:15px;
+
+    margin-top:15px;
+
+    border:1px solid #dcecff;
 }
 
 .channel-id{
-  margin-top:8px;
-  font-size:23px;
-  font-weight:bold;
-  color:#087ff5;
-  letter-spacing:2px;
-  word-break:break-all;
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#075fc7;
+
+    word-break:break-all;
+
+    margin-top:6px;
 }
 
 .copy-btn{
-  margin-top:12px;
-  border:0;
-  background:#087ff5;
-  color:white;
-  padding:9px 16px;
-  border-radius:10px;
-  cursor:pointer;
+    border:none;
+
+    background:#087cf5;
+
+    color:white;
+
+    padding:10px 14px;
+
+    border-radius:10px;
+
+    margin-top:10px;
 }
 
-/* ================= VIDEO ================= */
+/* ================= STUDENT LIST ================= */
 
-.video-area{
-  margin-top:18px;
+.student-list{
+    margin-top:15px;
+
+    background:#f8fbff;
+
+    border-radius:16px;
+
+    padding:14px;
+
+    border:1px solid #e5effa;
 }
 
-.video-title{
-  font-weight:bold;
-  margin-bottom:8px;
+.student-item{
+    padding:8px 0;
+
+    border-bottom:1px solid #e6edf5;
+
+    font-size:14px;
 }
 
-.video-box{
-  width:100%;
-  aspect-ratio:16/10;
-  background:#111;
-  border-radius:16px;
-  overflow:hidden;
-  position:relative;
-}
-
-video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  background:#111;
-}
-
-.live-badge{
-  position:absolute;
-  left:10px;
-  top:10px;
-  background:#e00000;
-  color:white;
-  padding:6px 10px;
-  border-radius:8px;
-  font-size:12px;
-  font-weight:bold;
-  z-index:3;
-}
-
-.video-empty{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  text-align:center;
-  padding:20px;
-}
-
-/* ================= RECORDINGS ================= */
-
-.recordings{
-  margin-top:25px;
-}
-
-.record-card{
-  background:#f5f7fa;
-  border-radius:15px;
-  padding:15px;
-  margin-top:12px;
-}
-
-.record-card h4{
-  margin-bottom:6px;
-}
-
-.record-card small{
-  color:#6c7480;
-}
-
-.record-actions{
-  display:flex;
-  gap:8px;
-  margin-top:10px;
-}
-
-.record-actions button{
-  flex:1;
-  border:0;
-  border-radius:9px;
-  padding:10px;
-  cursor:pointer;
-  background:#087ff5;
-  color:white;
-}
-
-.record-actions button.delete{
-  background:#ffecec;
-  color:#d32323;
-}
-
-/* ================= HIDDEN ================= */
-
-.hidden{
-  display:none !important;
+.student-item:last-child{
+    border-bottom:none;
 }
 
 </style>
 </head>
 
-
 <body>
 
 <div class="app">
 
-  <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
 
-  <div class="header">
+    <div class="header">
 
-    <button class="back-btn"
-            onclick="goHome()">
-      ←
-    </button>
+        <button class="back-btn"
+                onclick="goHome()">
+            ←
+        </button>
 
-    <h2>🎥 Live Classes</h2>
-
-  </div>
-
-
-  <!-- ================= MAIN ================= -->
-
-  <div class="content">
-
-    <button class="live-main-btn"
-            onclick="openRolePopup()">
-
-      🔴 Live Class
-
-    </button>
-
-
-    <!-- ================= RECORDED ================= -->
-
-    <div class="recordings">
-
-      <h3>🎬 Recorded Classes</h3>
-
-      <div id="recordingsList">
-
-        <p style="margin-top:12px;color:#777;">
-          अजून कोणतीही recording नाही.
-        </p>
-
-      </div>
+        <h2>🎥 Live Classes</h2>
 
     </div>
 
-  </div>
 
-</div>
+    <!-- CONTENT -->
 
+    <div class="content">
 
+        <div class="hero">
 
-<!-- =================================================
-     ROLE POPUP
-================================================= -->
+            <div class="hero-icon">
+                🎥
+            </div>
 
-<div class="popup-bg"
-     id="rolePopup">
+            <h1>Live Classes</h1>
 
-  <div class="popup">
+            <p>
+                Join live classes and learn
+                directly from your teacher.
+            </p>
 
-    <button class="close-btn"
-            onclick="closeAllPopups()">
-      ×
-    </button>
-
-    <h2>🎥 Live Class</h2>
-
-    <p>
-      तुम्ही कोण म्हणून Live Class मध्ये प्रवेश करत आहात?
-    </p>
-
-
-    <div class="role-box">
-
-      <button class="role-btn"
-              onclick="openSirPopup()">
-
-        <span>👨‍🏫</span>
-
-        Sir
-
-      </button>
-
-
-      <button class="role-btn"
-              onclick="openStudentPopup()">
-
-        <span>👨‍🎓</span>
-
-        Student
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-
-<!-- =================================================
-     SIR POPUP
-================================================= -->
-
-<div class="popup-bg"
-     id="sirPopup">
-
-  <div class="popup">
-
-    <button class="close-btn"
-            onclick="closeAllPopups()">
-      ×
-    </button>
-
-
-    <h2>👨‍🏫 Sir Live Class</h2>
-
-    <p>
-      आधी Channel तयार करा. त्यानंतर Live Camera सुरू करा.
-    </p>
-
-
-    <button class="action-btn"
-            id="createChannelBtn"
-            onclick="createChannel()">
-
-      🔑 Create Channel
-
-    </button>
-
-
-    <div id="sirChannelArea"
-         class="hidden">
-
-      <div class="channel-box">
-
-        <div class="channel-label">
-          तुमचा Channel ID
         </div>
 
-        <div class="channel-id"
-             id="sirChannelId">
-        </div>
 
-        <button class="copy-btn"
-                onclick="copyChannelId()">
+        <button class="live-main-btn"
+                onclick="openRolePopup()">
 
-          📋 Copy ID
+            🔴 Start / Join Live Class
 
         </button>
 
-      </div>
-
-
-      <button class="action-btn"
-              id="startLiveBtn"
-              onclick="startSirLive()">
-
-        📹 Start Live Camera
-
-      </button>
-
-
-      <div class="video-area">
-
-        <div class="video-title">
-          तुमचा Camera
-        </div>
-
-        <div class="video-box">
-
-          <video id="sirVideo"
-                 autoplay
-                 muted
-                 playsinline>
-          </video>
-
-          <div class="video-empty"
-               id="sirVideoEmpty">
-
-            Camera अजून सुरू केलेला नाही.
-
-          </div>
-
-          <div class="live-badge hidden"
-               id="sirLiveBadge">
-
-            🔴 LIVE
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <button class="action-btn secondary-btn"
-              onclick="stopSirLive()">
-
-        ⏹ Stop Live & Save Recording
-
-      </button>
-
-
-      <div class="status"
-           id="sirStatus">
-
-        Channel तयार झाल्यावर Live सुरू करा.
-
-      </div>
-
     </div>
-
-  </div>
 
 </div>
 
 
+<!-- ================= ROLE POPUP ================= -->
 
-<!-- =================================================
-     STUDENT POPUP
-================================================= -->
+<div class="modal"
+     id="roleModal">
 
-<div class="popup-bg"
-     id="studentPopup">
+    <div class="modal-box">
 
-  <div class="popup">
+        <div class="modal-title">
+            Live Class मध्ये तुम्ही कोण आहात?
+        </div>
 
-    <button class="close-btn"
-            onclick="closeAllPopups()">
-      ×
-    </button>
+        <div class="role-grid">
 
+            <button class="role-btn"
+                    onclick="selectTeacher()">
 
-    <h2>👨‍🎓 Student Live Class</h2>
+                <span>👨‍🏫</span>
 
-    <p>
-      Sir ने दिलेला Channel ID खाली टाका.
-    </p>
+                Sir
 
-
-    <input
-      class="input"
-      id="studentChannelInput"
-      placeholder="उदा. GS-AB123456"
-      autocomplete="off"
-    >
+            </button>
 
 
-    <button class="action-btn"
-            onclick="joinLiveClass()">
+            <button class="role-btn"
+                    onclick="selectStudent()">
 
-      🔗 Join Live Class
+                <span>👨‍🎓</span>
 
-    </button>
+                Student
+
+            </button>
+
+        </div>
+
+        <button class="secondary-btn"
+                onclick="closeRolePopup()">
+
+            Cancel
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= TEACHER POPUP ================= -->
+
+<div class="modal"
+     id="teacherModal">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            👨‍🏫 Sir - Create Channel
+        </div>
+
+        <p style="
+            color:#64748b;
+            font-size:14px;
+            margin-bottom:15px;
+            text-align:center;
+        ">
+
+            Channel तयार करा आणि students ना
+            Channel ID द्या.
+
+        </p>
+
+        <button class="primary-btn"
+                onclick="createChannel()">
+
+            🔵 Create Live Channel
+
+        </button>
+
+        <button class="secondary-btn"
+                onclick="backToRoles()">
+
+            ← Back
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= STUDENT POPUP ================= -->
+
+<div class="modal"
+     id="studentModal">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            👨‍🎓 Student - Join Class
+        </div>
+
+        <input
+            class="input"
+            id="teacherIdInput"
+            placeholder="Sir चा Channel ID टाका">
+
+        <button class="primary-btn"
+                onclick="joinClass()">
+
+            🎥 Join Live Class
+
+        </button>
+
+        <button class="secondary-btn"
+                onclick="backToRoles()">
+
+            ← Back
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= CHANNEL CREATED ================= -->
+
+<div class="modal"
+     id="channelModal">
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            ✅ Channel तयार आहे
+        </div>
+
+        <p style="
+            text-align:center;
+            color:#64748b;
+            font-size:14px;
+        ">
+
+            हा Channel ID students ना द्या.
+
+        </p>
+
+        <div class="channel-card">
+
+            <div style="
+                font-size:13px;
+                color:#64748b;
+            ">
+                Channel ID
+            </div>
+
+            <div class="channel-id"
+                 id="channelIdText">
+            </div>
+
+            <button class="copy-btn"
+                    onclick="copyChannelId()">
+
+                📋 Copy ID
+
+            </button>
+
+        </div>
+
+        <button class="primary-btn"
+                onclick="startTeacherClass()">
+
+            🔴 Start Live Class
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MESSAGE ================= -->
+
+<div class="message"
+     id="message">
+
+    <div class="message-title"
+         id="messageTitle">
+    </div>
+
+    <div class="message-text"
+         id="messageText">
+    </div>
+
+</div>
+
+
+<!-- ================= CLASS SCREEN ================= -->
+
+<div class="class-screen"
+     id="classScreen">
+
+    <div class="class-header">
+
+        <div class="class-title"
+             id="classTitle">
+
+            GyanSetu Live Class
+
+        </div>
+
+        <div class="live-status">
+
+            <span class="live-dot"></span>
+
+            LIVE
+
+        </div>
+
+    </div>
 
 
     <div class="video-area">
 
-      <div class="video-title">
-        Sir चा Live Video
-      </div>
-
-      <div class="video-box">
-
-        <video id="studentVideo"
-               autoplay
-               playsinline>
+        <video
+            id="remoteVideo"
+            class="remote-video"
+            autoplay
+            playsinline>
         </video>
 
-        <div class="video-empty"
-             id="studentVideoEmpty">
+        <video
+            id="localVideo"
+            class="local-video"
+            autoplay
+            muted
+            playsinline>
+        </video>
 
-          Channel ID टाकून Join करा.
+        <div class="no-video"
+             id="noVideo">
+
+            <div>
+
+                <div style="
+                    font-size:45px;
+                    margin-bottom:10px;
+                ">
+                    🎥
+                </div>
+
+                <div id="videoMessage">
+                    Connecting...
+
+                </div>
+
+            </div>
 
         </div>
-
-        <div class="live-badge hidden"
-             id="studentLiveBadge">
-
-          🔴 LIVE
-
-        </div>
-
-      </div>
 
     </div>
 
 
-    <button class="action-btn secondary-btn"
-            onclick="stopStudentRecording()">
+    <div class="bottom-controls">
 
-      ⏹ Stop Recording & Save
+        <button class="control"
+                id="micBtn"
+                onclick="toggleMic()">
 
-    </button>
+            🎤
 
+        </button>
 
-    <div class="status"
-         id="studentStatus">
+        <button class="control"
+                id="cameraBtn"
+                onclick="toggleCamera()">
 
-      Sir च्या Live Class ला connect होण्यासाठी Channel ID टाका.
+            📹
+
+        </button>
+
+        <button class="end-btn"
+                onclick="endClass()">
+
+            ☎
+
+        </button>
 
     </div>
-
-  </div>
 
 </div>
 
 
-
 <script>
 
-/* =================================================
+/* =====================================================
    GLOBAL VARIABLES
-================================================= */
+===================================================== */
 
 let peer = null;
 
-let currentCall = null;
-
 let localStream = null;
 
-let remoteStream = null;
+let currentRole = null;
 
-let sirRecorder = null;
+let teacherPeerId = null;
 
-let studentRecorder = null;
+let activeCalls = [];
 
-let sirRecordingChunks = [];
+let studentConnections = [];
 
-let studentRecordingChunks = [];
+let mediaRecorder = null;
 
-let currentChannelId = null;
+let recordedChunks = [];
+
+let isClassEnded = false;
 
 
+/* =====================================================
+   CUSTOM MESSAGE
+===================================================== */
 
-/* =================================================
-   POPUP FUNCTIONS
-================================================= */
+function showMessage(title,text){
+
+    const box =
+        document.getElementById("message");
+
+    document.getElementById(
+        "messageTitle"
+    ).textContent = title;
+
+    document.getElementById(
+        "messageText"
+    ).textContent = text;
+
+    box.classList.add("show");
+
+    setTimeout(function(){
+
+        box.classList.remove("show");
+
+    },3500);
+}
+
+
+/* =====================================================
+   ROLE POPUP
+===================================================== */
 
 function openRolePopup(){
 
-  closeAllPopups();
-
-  document
-    .getElementById("rolePopup")
-    .classList
-    .add("show");
+    document
+        .getElementById("roleModal")
+        .classList.add("show");
 
 }
 
 
-function openSirPopup(){
+function closeRolePopup(){
 
-  closeAllPopups();
-
-  document
-    .getElementById("sirPopup")
-    .classList
-    .add("show");
+    document
+        .getElementById("roleModal")
+        .classList.remove("show");
 
 }
 
 
-function openStudentPopup(){
+function selectTeacher(){
 
-  closeAllPopups();
+    currentRole = "teacher";
 
-  document
-    .getElementById("studentPopup")
-    .classList
-    .add("show");
+    closeRolePopup();
+
+    document
+        .getElementById("teacherModal")
+        .classList.add("show");
 
 }
 
 
-function closeAllPopups(){
+function selectStudent(){
 
-  document
-    .querySelectorAll(".popup-bg")
-    .forEach(function(popup){
+    currentRole = "student";
 
-      popup.classList.remove("show");
+    closeRolePopup();
 
-    });
+    document
+        .getElementById("studentModal")
+        .classList.add("show");
 
 }
 
 
-
-/* =================================================
-   CREATE CHANNEL
-================================================= */
-
-function createChannel(){
-
-  const randomPart =
-    Math.random()
-      .toString(36)
-      .substring(2,8)
-      .toUpperCase();
-
-
-  currentChannelId =
-    "GS-" + randomPart;
-
-
-  setSirStatus(
-    "Channel तयार होत आहे..."
-  );
-
-
-  peer = new Peer(currentChannelId);
-
-
-  peer.on("open", function(id){
-
-    currentChannelId = id;
-
+function backToRoles(){
 
     document
-      .getElementById("sirChannelId")
-      .textContent = id;
-
-
-    document
-      .getElementById("sirChannelArea")
-      .classList
-      .remove("hidden");
-
+        .getElementById("teacherModal")
+        .classList.remove("show");
 
     document
-      .getElementById("createChannelBtn")
-      .classList
-      .add("hidden");
+        .getElementById("studentModal")
+        .classList.remove("show");
 
+    document
+        .getElementById("channelModal")
+        .classList.remove("show");
 
-    setSirStatus(
-      "✅ Channel तयार आहे. हा ID विद्यार्थ्यांना द्या."
-    );
-
-  });
-
-
-  peer.on("call", function(call){
-
-    currentCall = call;
-
-
-    /*
-      Student ने call केल्यावर
-      Sir चा local camera stream
-      student ला पाठवायचा आहे.
-    */
-
-    if(localStream){
-
-      call.answer(localStream);
-
-      setSirStatus(
-        "👨‍🎓 Student Live Class मध्ये connect झाला."
-      );
-
-    }else{
-
-      setSirStatus(
-        "Student connect झाला आहे. आधी Camera सुरू करा."
-      );
-
-    }
-
-
-    call.on("close",function(){
-
-      setSirStatus(
-        "Student connection बंद झाली."
-      );
-
-    });
-
-  });
-
-
-  peer.on("error", function(error){
-
-    setSirStatus(
-      "❌ Channel connection मध्ये समस्या आली."
-    );
-
-  });
+    openRolePopup();
 
 }
 
 
-
-/* =================================================
-   COPY CHANNEL ID
-================================================= */
-
-function copyChannelId(){
-
-  const id =
-    document
-      .getElementById("sirChannelId")
-      .textContent;
-
-
-  if(navigator.clipboard){
-
-    navigator.clipboard
-      .writeText(id)
-      .then(function(){
-
-        setSirStatus(
-          "✅ Channel ID copy झाला."
-        );
-
-      });
-
-  }
-
-}
-
-
-
-/* =================================================
-   SIR START LIVE
-================================================= */
-
-async function startSirLive(){
-
-  if(!peer){
-
-    setSirStatus(
-      "आधी Channel तयार करा."
-    );
-
-    return;
-
-  }
-
-
-  try{
-
-    localStream =
-      await navigator
-        .mediaDevices
-        .getUserMedia({
-
-          video:true,
-
-          audio:true
-
-        });
-
-
-    document
-      .getElementById("sirVideo")
-      .srcObject = localStream;
-
-
-    document
-      .getElementById("sirVideoEmpty")
-      .classList
-      .add("hidden");
-
-
-    document
-      .getElementById("sirLiveBadge")
-      .classList
-      .remove("hidden");
-
-
-    document
-      .getElementById("startLiveBtn")
-      .textContent =
-      "🟢 Live Camera चालू आहे";
-
-
-    startSirRecording();
-
-
-    setSirStatus(
-      "🔴 Live Class सुरू आहे. Recording देखील सुरू आहे."
-    );
-
-
-  }catch(error){
-
-    setSirStatus(
-      "❌ Camera/Microphone सुरू करता आले नाही. Browser ला permission द्या."
-    );
-
-  }
-
-}
-
-
-
-/* =================================================
-   SIR RECORDING
-================================================= */
-
-function startSirRecording(){
-
-  sirRecordingChunks = [];
-
-
-  const mimeType =
-    getSupportedMimeType();
-
-
-  try{
-
-    if(mimeType){
-
-      sirRecorder =
-        new MediaRecorder(
-          localStream,
-          {
-            mimeType:mimeType
-          }
-        );
-
-    }else{
-
-      sirRecorder =
-        new MediaRecorder(localStream);
-
-    }
-
-
-    sirRecorder.ondataavailable =
-      function(event){
-
-        if(event.data.size > 0){
-
-          sirRecordingChunks
-            .push(event.data);
-
-        }
-
-      };
-
-
-    sirRecorder.onstop =
-      async function(){
-
-        const blob =
-          new Blob(
-            sirRecordingChunks,
-            {
-              type:
-                sirRecorder.mimeType ||
-                "video/webm"
-            }
-          );
-
-
-        await saveRecording(
-          blob,
-          "GyanSetu - Sir Live Class"
-        );
-
-
-        sirRecordingChunks = [];
-
-      };
-
-
-    sirRecorder.start();
-
-  }catch(error){
-
-    console.log(
-      "Sir recording error",
-      error
-    );
-
-  }
-
-}
-
-
-
-/* =================================================
-   STOP SIR LIVE
-================================================= */
-
-function stopSirLive(){
-
-  if(sirRecorder &&
-     sirRecorder.state !== "inactive"){
-
-    sirRecorder.stop();
-
-  }
-
-
-  if(localStream){
-
-    localStream
-      .getTracks()
-      .forEach(function(track){
-
-        track.stop();
-
-      });
-
-  }
-
-
-  if(currentCall){
+/* =====================================================
+   CREATE TEACHER CHANNEL
+===================================================== */
+
+async function createChannel(){
 
     try{
-      currentCall.close();
-    }catch(e){}
 
-  }
+        await getCameraAndMic();
 
+        peer =
+            new Peer();
 
-  localStream = null;
+        peer.on(
+            "open",
+            function(id){
 
+                teacherPeerId = id;
 
-  document
-    .getElementById("sirVideo")
-    .srcObject = null;
+                document.getElementById(
+                    "channelIdText"
+                ).textContent = id;
 
+                document
+                    .getElementById("teacherModal")
+                    .classList.remove("show");
 
-  document
-    .getElementById("sirLiveBadge")
-    .classList
-    .add("hidden");
+                document
+                    .getElementById("channelModal")
+                    .classList.add("show");
 
-
-  document
-    .getElementById("sirVideoEmpty")
-    .classList
-    .remove("hidden");
-
-
-  document
-    .getElementById("startLiveBtn")
-    .textContent =
-    "📹 Start Live Camera";
+            }
+        );
 
 
-  setSirStatus(
-    "⏹ Live Class बंद झाली. Recording save होत आहे."
-  );
+        peer.on(
+            "error",
+            function(error){
 
-}
+                showMessage(
+                    "Connection Error",
+                    error.message
+                );
 
-
-
-/* =================================================
-   STUDENT JOIN
-================================================= */
-
-function joinLiveClass(){
-
-  const channelId =
-    document
-      .getElementById("studentChannelInput")
-      .value
-      .trim();
-
-
-  if(!channelId){
-
-    setStudentStatus(
-      "❗ आधी Sir चा Channel ID टाका."
-    );
-
-    return;
-
-  }
-
-
-  setStudentStatus(
-    "🔄 Sir च्या Live Class ला connect होत आहे..."
-  );
-
-
-  /*
-    Student स्वतःचा Peer तयार करतो.
-  */
-
-  peer = new Peer();
-
-
-  peer.on("open", function(studentId){
-
-    /*
-      Sir च्या channel ला call करतो.
-
-      Student कडे स्वतःचा camera आवश्यक नाही,
-      त्यामुळे null/empty media stream वापरता येईल.
-    */
-
-    const call =
-      peer.call(
-        channelId,
-        new MediaStream()
-      );
-
-
-    currentCall = call;
-
-
-    call.on(
-      "stream",
-      function(remoteStreamReceived){
-
-        remoteStream =
-          remoteStreamReceived;
-
-
-        document
-          .getElementById("studentVideo")
-          .srcObject =
-          remoteStream;
-
-
-        document
-          .getElementById("studentVideoEmpty")
-          .classList
-          .add("hidden");
-
-
-        document
-          .getElementById("studentLiveBadge")
-          .classList
-          .remove("hidden");
-
-
-        setStudentStatus(
-          "🔴 Live Class सुरू आहे. Recording सुरू झाली आहे."
+            }
         );
 
 
         /*
-          Student च्या mobile/browser वर
-          Sir चा remote video record होईल.
+          STUDENT CALLS TEACHER
         */
 
-        startStudentRecording(
-          remoteStream
+        peer.on(
+            "call",
+            function(call){
+
+                if(!localStream){
+                    return;
+                }
+
+                call.answer(localStream);
+
+                activeCalls.push(call);
+
+                call.on(
+                    "stream",
+                    function(studentStream){
+
+                        /*
+                          Student stream received.
+                          Teacher can see student camera
+                          if needed.
+                        */
+
+                        showMessage(
+                            "Student Connected",
+                            "एक student live class मध्ये आला."
+                        );
+
+                    }
+                );
+
+            }
         );
 
-      }
-    );
 
+        /*
+          DATA CONNECTION FROM STUDENT
+        */
 
-    call.on("close",function(){
+        peer.on(
+            "connection",
+            function(conn){
 
-      setStudentStatus(
-        "⏹ Sir ने Live Class बंद केली."
-      );
+                studentConnections.push(conn);
 
-    });
+                conn.on(
+                    "open",
+                    function(){
 
+                        conn.send({
+                            type:"CLASS_STATUS",
+                            status:"LIVE"
+                        });
 
-    call.on("error",function(){
+                    }
+                );
 
-      setStudentStatus(
-        "❌ Live Class शी connection झाले नाही."
-      );
+                conn.on(
+                    "data",
+                    function(data){
 
-    });
+                        if(
+                            data &&
+                            data.type === "STUDENT_JOINED"
+                        ){
 
-  });
+                            showMessage(
+                                "Student Joined",
+                                "नवीन student class मध्ये join झाला."
+                            );
 
+                        }
 
-  peer.on("error",function(error){
+                    }
+                );
 
-    setStudentStatus(
-      "❌ Channel ID चुकीचा असू शकतो किंवा Sir Live वर नाही."
-    );
-
-  });
-
-}
-
-
-
-/* =================================================
-   STUDENT RECORDING
-================================================= */
-
-function startStudentRecording(stream){
-
-  studentRecordingChunks = [];
-
-
-  const mimeType =
-    getSupportedMimeType();
-
-
-  try{
-
-    if(mimeType){
-
-      studentRecorder =
-        new MediaRecorder(
-          stream,
-          {
-            mimeType:mimeType
-          }
+            }
         );
-
-    }else{
-
-      studentRecorder =
-        new MediaRecorder(stream);
 
     }
 
+    catch(error){
 
-    studentRecorder.ondataavailable =
-      function(event){
+        showMessage(
+            "Camera Permission",
+            "Camera आणि microphone permission द्या."
+        );
 
-        if(event.data.size > 0){
+    }
 
-          studentRecordingChunks
-            .push(event.data);
-
-        }
-
-      };
+}
 
 
-    studentRecorder.onstop =
-      async function(){
+/* =====================================================
+   CAMERA + MICROPHONE
+===================================================== */
 
-        const blob =
-          new Blob(
-            studentRecordingChunks,
-            {
-              type:
-                studentRecorder.mimeType ||
-                "video/webm"
+async function getCameraAndMic(){
+
+    localStream =
+        await navigator.mediaDevices.getUserMedia({
+
+            video:{
+                facingMode:"user",
+                width:{
+                    ideal:1280
+                },
+                height:{
+                    ideal:720
+                }
+            },
+
+            audio:true
+
+        });
+
+}
+
+
+/* =====================================================
+   START TEACHER CLASS
+===================================================== */
+
+function startTeacherClass(){
+
+    document
+        .getElementById("channelModal")
+        .classList.remove("show");
+
+    openClassScreen("teacher");
+
+    const localVideo =
+        document.getElementById("localVideo");
+
+    localVideo.srcObject =
+        localStream;
+
+    document.getElementById(
+        "noVideo"
+    ).style.display="none";
+
+    document.getElementById(
+        "classTitle"
+    ).textContent =
+        "👨‍🏫 GyanSetu Live Class";
+
+    /*
+      Start teacher recording
+    */
+
+    startRecording(localStream);
+
+    showMessage(
+        "Live Class Started",
+        "Students आता Channel ID वापरून join करू शकतात."
+    );
+
+}
+
+
+/* =====================================================
+   STUDENT JOIN
+===================================================== */
+
+async function joinClass(){
+
+    const id =
+        document
+        .getElementById("teacherIdInput")
+        .value
+        .trim();
+
+    if(!id){
+
+        showMessage(
+            "Channel ID आवश्यक",
+            "Sir चा Channel ID टाका."
+        );
+
+        return;
+
+    }
+
+    try{
+
+        await getCameraAndMic();
+
+        teacherPeerId = id;
+
+        peer =
+            new Peer();
+
+        peer.on(
+            "open",
+            function(studentId){
+
+                /*
+                  Student calls teacher.
+                */
+
+                const call =
+                    peer.call(
+                        teacherPeerId,
+                        localStream
+                    );
+
+                activeCalls.push(call);
+
+                call.on(
+                    "stream",
+                    function(remoteStream){
+
+                        const remoteVideo =
+                            document.getElementById(
+                                "remoteVideo"
+                                 const remoteVideo =
+                            document.getElementById(
+                                "remoteVideo"
+                            );
+
+                        remoteVideo.srcObject =
+                            remoteStream;
+
+                        document.getElementById(
+                            "noVideo"
+                        ).style.display = "none";
+
+                        /*
+                          Teacher चा live stream
+                          student च्या screen वर दिसेल
+                        */
+
+                        showMessage(
+                            "Live Class Connected",
+                            "Sir चा live video आता सुरू आहे."
+                        );
+
+                        /*
+                          Teacher चा live stream record करा
+                        */
+
+                        startRecording(remoteStream);
+
+                    }
+                );
+
+                /*
+                  Data connection
+                  Teacher कडून class status मिळवण्यासाठी
+                */
+
+                const conn =
+                    peer.connect(
+                        teacherPeerId
+                    );
+
+                conn.on(
+                    "open",
+                    function(){
+
+                        conn.send({
+                            type: "STUDENT_JOINED"
+                        });
+
+                    }
+                );
+
+                conn.on(
+                    "data",
+                    function(data){
+
+                        if(!data){
+                            return;
+                        }
+
+                        /*
+                          Sir ने class end केली
+                        */
+
+                        if(
+                            data.type === "END_CLASS"
+                        ){
+
+                            studentClassEnded();
+
+                        }
+
+                    }
+                );
+
+                /*
+                  Student class screen open
+                */
+
+                openClassScreen(
+                    "student"
+                );
+
             }
-          );
-
-
-        await saveRecording(
-          blob,
-          "GyanSetu - Recorded Live Class"
         );
 
 
-        studentRecordingChunks = [];
+        /*
+          Teacher कडून direct data connection
+        */
 
-      };
+        peer.on(
+            "connection",
+            function(conn){
+
+                conn.on(
+                    "data",
+                    function(data){
+
+                        if(!data){
+                            return;
+                        }
+
+                        if(
+                            data.type === "END_CLASS"
+                        ){
+
+                            studentClassEnded();
+
+                        }
+
+                    }
+                );
+
+            }
+        );
 
 
-    studentRecorder.start();
+        /*
+          Connection error
+        */
 
-  }catch(error){
+        peer.on(
+            "error",
+            function(error){
 
-    setStudentStatus(
-      "⚠️ या browser मध्ये recording support उपलब्ध नाही."
-    );
+                console.log(
+                    "Peer error:",
+                    error
+                );
 
-  }
+                showMessage(
+                    "Connection Error",
+                    "Live class शी connection होऊ शकले नाही."
+                );
+
+            }
+        );
+
+    }
+
+    catch(error){
+
+        console.log(
+            error
+        );
+
+        showMessage(
+            "Permission Required",
+            "Camera आणि microphone permission द्या."
+        );
+
+    }
 
 }
 
 
+/* =====================================================
+   OPEN CLASS SCREEN
+===================================================== */
 
-/* =================================================
-   STOP STUDENT RECORDING
-================================================= */
+function openClassScreen(role){
 
-function stopStudentRecording(){
-
-  if(studentRecorder &&
-     studentRecorder.state !== "inactive"){
-
-    studentRecorder.stop();
+    document
+        .getElementById(
+            "classScreen"
+        )
+        .classList.add("show");
 
 
-    setStudentStatus(
-      "⏹ Recording बंद केली. Save होत आहे..."
-    );
+    document
+        .getElementById(
+            "noVideo"
+        )
+        .style.display = "flex";
 
-  }
+
+    document
+        .getElementById(
+            "videoMessage"
+        )
+        .textContent =
+        role === "teacher"
+        ? "Live class सुरू आहे..."
+        : "Sir च्या live class शी connecting...";
+
+
+    if(role === "teacher"){
+
+        document
+            .getElementById(
+                "classTitle"
+            )
+            .textContent =
+            "👨‍🏫 GyanSetu Live Class";
+
+    }
+    else{
+
+        document
+            .getElementById(
+                "classTitle"
+            )
+            .textContent =
+            "👨‍🎓 GyanSetu Live Class";
+
+    }
 
 }
 
 
+/* =====================================================
+   RECORDING
+===================================================== */
 
-/* =================================================
-   MIME TYPE
-================================================= */
+function startRecording(stream){
 
-function getSupportedMimeType(){
-
-  const types = [
-
-    "video/webm;codecs=vp9,opus",
-
-    "video/webm;codecs=vp8,opus",
-
-    "video/webm",
-
-    "video/mp4"
-
-  ];
+    if(!stream){
+        return;
+    }
 
 
-  for(
-    let i=0;
-    i<types.length;
-    i++
-  ){
+    /*
+      आधीचा recorder चालू असेल
+      तर नवीन सुरू करू नका
+    */
 
     if(
-      window.MediaRecorder &&
-      MediaRecorder.isTypeSupported(
-        types[i]
-      )
+        mediaRecorder &&
+        mediaRecorder.state !== "inactive"
     ){
 
-      return types[i];
+        return;
 
     }
 
-  }
+
+    recordedChunks = [];
 
 
-  return "";
-
-}
+    let options = {};
 
 
+    /*
+      Browser VP9 support
+    */
 
-/* =================================================
-   INDEXED DB
-   Recording mobile/browser मध्ये save करण्यासाठी
-================================================= */
+    if(
+        MediaRecorder.isTypeSupported(
+            "video/webm;codecs=vp9,opus"
+        )
+    ){
 
-let db;
+        options.mimeType =
+            "video/webm;codecs=vp9,opus";
+
+    }
+
+    /*
+      VP8 support
+    */
+
+    else if(
+        MediaRecorder.isTypeSupported(
+            "video/webm;codecs=vp8,opus"
+        )
+    ){
+
+        options.mimeType =
+            "video/webm;codecs=vp8,opus";
+
+    }
+
+    /*
+      Basic WebM
+    */
+
+    else{
+
+        options.mimeType =
+            "video/webm";
+
+    }
 
 
-function openDatabase(){
+    try{
 
-  return new Promise(
-    function(resolve,reject){
-
-            const request =
-        indexedDB.open(
-          "GyanSetuRecordings",
-          1
-        );
-
-
-      request.onupgradeneeded =
-        function(event){
-
-          const database =
-            event.target.result;
-
-
-          if(
-            !database.objectStoreNames.contains(
-              "recordings"
-            )
-          ){
-
-            database.createObjectStore(
-              "recordings",
-              {
-                keyPath:"id",
-                autoIncrement:true
-              }
+        mediaRecorder =
+            new MediaRecorder(
+                stream,
+                options
             );
 
-          }
 
-        };
+        /*
+          प्रत्येक 1 second ला data घ्या
+        */
+
+        mediaRecorder.ondataavailable =
+            function(event){
+
+                if(
+                    event.data &&
+                    event.data.size > 0
+                ){
+
+                    recordedChunks.push(
+                        event.data
+                    );
+
+                }
+
+            };
 
 
-      request.onsuccess =
-        function(event){
+        /*
+          Recording बंद झाल्यावर
+          file तयार करा
+        */
 
-          db =
-            event.target.result;
+        mediaRecorder.onstop =
+            function(){
 
-          resolve(db);
+                saveRecording();
 
-        };
+            };
 
 
-      request.onerror =
-        function(){
+        mediaRecorder.onerror =
+            function(event){
 
-          reject(
-            request.error
-          );
+                console.log(
+                    "Recording error:",
+                    event
+                );
 
-        };
+            };
+
+
+        mediaRecorder.start(
+            1000
+        );
+
 
     }
-  );
+    catch(error){
+
+        console.log(
+            "MediaRecorder error:",
+            error
+        );
+
+    }
 
 }
 
 
-
-/* =================================================
+/* =====================================================
    SAVE RECORDING
-================================================= */
+===================================================== */
 
-async function saveRecording(
-  blob,
-  title
-){
+function saveRecording(){
 
-  try{
+    if(
+        recordedChunks.length === 0
+    ){
 
-    if(!db){
-
-      await openDatabase();
+        return;
 
     }
 
 
-    const transaction =
-      db.transaction(
-        ["recordings"],
-        "readwrite"
-      );
-
-
-    const store =
-      transaction.objectStore(
-        "recordings"
-      );
-
-
-    store.add({
-
-      title:title,
-
-      date:new Date().toLocaleString(),
-
-      blob:blob
-
-    });
-
-
-    transaction.oncomplete =
-      function(){
-
-        loadRecordings();
-
-      };
-
-
-  }catch(error){
-
-    console.log(
-      "Save error:",
-      error
-    );
-
-  }
-
-}
-
-
-
-/* =================================================
-   LOAD RECORDINGS
-================================================= */
-
-async function loadRecordings(){
-
-  try{
-
-    if(!db){
-
-      await openDatabase();
-
-    }
-
-
-    const transaction =
-      db.transaction(
-        ["recordings"],
-        "readonly"
-      );
-
-
-    const store =
-      transaction.objectStore(
-        "recordings"
-      );
-
-
-    const request =
-      store.getAll();
-
-
-    request.onsuccess =
-      function(){
-
-        renderRecordings(
-          request.result
-        );
-
-      };
-
-  }catch(error){
-
-    console.log(error);
-
-  }
-
-}
-
-
-
-/* =================================================
-   SHOW RECORDINGS
-================================================= */
-
-function renderRecordings(
-  recordings
-){
-
-  const container =
-    document.getElementById(
-      "recordingsList"
-    );
-
-
-  if(
-    !recordings ||
-    recordings.length === 0
-  ){
-
-    container.innerHTML = `
-
-      <p style="
-        margin-top:12px;
-        color:#777;
-      ">
-
-        अजून कोणतीही recording नाही.
-
-      </p>
-
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML = "";
-
-
-  recordings
-    .slice()
-    .reverse()
-    .forEach(function(record){
-
-      const card =
-        document.createElement(
-          "div"
+    const blob =
+        new Blob(
+            recordedChunks,
+            {
+                type:
+                    "video/webm"
+            }
         );
 
 
-      card.className =
-        "record-card";
-
-
-      card.innerHTML = `
-
-        <h4>
-          🎬 ${escapeHTML(record.title)}
-        </h4>
-
-        <small>
-          ${escapeHTML(record.date)}
-        </small>
-
-        <div class="record-actions">
-
-          <button
-            onclick="
-              playRecording(${record.id})
-            ">
-
-            ▶ Play
-
-          </button>
-
-
-          <button
-            onclick="
-              downloadRecording(${record.id})
-            ">
-
-            ⬇ Save
-
-          </button>
-
-
-          <button
-            class="delete"
-            onclick="
-              deleteRecording(${record.id})
-            ">
-
-            🗑 Delete
-
-          </button>
-
-        </div>
-
-      `;
-
-
-      container.appendChild(
-        card
-      );
-
-    });
-
-}
-
-
-
-/* =================================================
-   PLAY RECORDING
-================================================= */
-
-function playRecording(id){
-
-  const transaction =
-    db.transaction(
-      ["recordings"],
-      "readonly"
-    );
-
-
-  const store =
-    transaction.objectStore(
-      "recordings"
-    );
-
-
-  const request =
-    store.get(id);
-
-
-  request.onsuccess =
-    function(){
-
-      const record =
-        request.result;
-
-
-      if(!record){
-
-        return;
-
-      }
-
-
-      const oldVideo =
-        document.getElementById(
-          "playingRecording"
-        );
-
-
-      if(oldVideo){
-
-        oldVideo.remove();
-
-      }
-
-
-      const video =
-        document.createElement(
-          "video"
-        );
-
-
-      video.id =
-        "playingRecording";
-
-
-      video.controls = true;
-
-      video.autoplay = true;
-
-      video.playsInline = true;
-
-
-      video.style.width =
-        "100%";
-
-      video.style.marginTop =
-        "15px";
-
-      video.style.borderRadius =
-        "15px";
-
-
-      const url =
+    const url =
         URL.createObjectURL(
-          record.blob
+            blob
         );
 
 
-      video.src = url;
-
-
-      document
-        .getElementById(
-          "recordingsList"
-        )
-        .prepend(
-          video
-        );
-
-    };
-
-}
-
-
-
-/* =================================================
-   DOWNLOAD RECORDING
-================================================= */
-
-function downloadRecording(id){
-
-  const transaction =
-    db.transaction(
-      ["recordings"],
-      "readonly"
-    );
-
-
-  const store =
-    transaction.objectStore(
-      "recordings"
-    );
-
-
-  const request =
-    store.get(id);
-
-
-  request.onsuccess =
-    function(){
-
-      const record =
-        request.result;
-
-
-      if(!record){
-
-        return;
-
-      }
-
-
-      const url =
-        URL.createObjectURL(
-          record.blob
-        );
-
-
-      const a =
+    const a =
         document.createElement(
-          "a"
+            "a"
         );
 
 
-      a.href =
-        url;
+    a.href = url;
 
 
-      a.download =
-        "GyanSetu-Live-Class-" +
-        Date.now() +
+    /*
+      Recording चं नाव
+    */
+
+    const now =
+        new Date();
+
+
+    const timestamp =
+        now.getFullYear() +
+        "-" +
+        String(
+            now.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        ) +
+        "-" +
+        String(
+            now.getDate()
+        ).padStart(
+            2,
+            "0"
+        ) +
+        "_" +
+        String(
+            now.getHours()
+        ).padStart(
+            2,
+            "0"
+        ) +
+        "-" +
+        String(
+            now.getMinutes()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    a.download =
+        "GyanSetu_Live_Class_" +
+        timestamp +
         ".webm";
 
 
-      document.body.appendChild(
+    document.body.appendChild(
         a
-      );
+    );
 
 
-      a.click();
+    /*
+      Browser download सुरू करतो
+    */
+
+    a.click();
 
 
-      a.remove();
+    document.body.removeChild(
+        a
+    );
 
 
-      setTimeout(
+    setTimeout(
         function(){
 
-          URL.revokeObjectURL(
-            url
-          );
+            URL.revokeObjectURL(
+                url
+            );
 
         },
-        1000
-      );
-
-    };
-
-}
-
-
-
-/* =================================================
-   DELETE RECORDING
-================================================= */
-
-function deleteRecording(id){
-
-  const transaction =
-    db.transaction(
-      ["recordings"],
-      "readwrite"
+        5000
     );
 
 
-  const store =
-    transaction.objectStore(
-      "recordings"
-    );
-
-
-  store.delete(id);
-
-
-  transaction.oncomplete =
-    function(){
-
-      loadRecordings();
-
-    };
-
-}
-
-
-
-/* =================================================
-   STATUS FUNCTIONS
-================================================= */
-
-function setSirStatus(
-  message
-){
-
-  const status =
-    document.getElementById(
-      "sirStatus"
-    );
-
-
-  if(status){
-
-    status.textContent =
-      message;
-
-  }
-
-}
-
-
-function setStudentStatus(
-  message
-){
-
-  const status =
-    document.getElementById(
-      "studentStatus"
-    );
-
-
-  if(status){
-
-    status.textContent =
-      message;
-
-  }
-
-}
-
-
-
-/* =================================================
-   HTML SAFETY
-================================================= */
-
-function escapeHTML(
-  text
-){
-
-  return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
+    showMessage(
+        "Recording Ready",
+        "Live class ची recording save/download करण्यासाठी तयार आहे."
     );
 
 }
 
 
+/* =====================================================
+   END CLASS
+===================================================== */
 
-/* =================================================
-   HOME
-================================================= */
+function endClass(){
+
+    /*
+      आधीच class बंद असेल तर
+      पुन्हा काही करू नका
+    */
+
+    if(isClassEnded){
+
+        return;
+
+    }
+
+
+    isClassEnded = true;
+
+
+    /*
+      ==============================
+      TEACHER
+      ==============================
+    */
+
+    if(
+        currentRole === "teacher"
+    ){
+
+        /*
+          सर्व connected students ना
+          END_CLASS message पाठवा
+        */
+
+        studentConnections.forEach(
+            function(conn){
+
+                try{
+
+                    if(
+                        conn &&
+                        conn.open
+                    ){
+
+                        conn.send({
+                            type:
+                                "END_CLASS"
+                        });
+
+                    }
+
+                }
+                catch(error){
+
+                    console.log(
+                        error
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    /*
+      ==============================
+      RECORDING STOP
+      ==============================
+    */
+
+    if(
+        mediaRecorder &&
+        mediaRecorder.state !== "inactive"
+    ){
+
+        try{
+
+            mediaRecorder.stop();
+
+        }
+        catch(error){
+
+            console.log(
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+      ==============================
+      CAMERA + MICROPHONE STOP
+      ==============================
+    */
+
+    if(localStream){
+
+        localStream
+            .getTracks()
+            .forEach(
+                function(track){
+
+                    track.stop();
+
+                }
+            );
+
+    }
+
+
+    /*
+      ==============================
+      ACTIVE CALLS CLOSE
+      ==============================
+    */
+
+    activeCalls.forEach(
+        function(call){
+
+            try{
+
+                call.close();
+
+            }
+            catch(error){
+
+                console.log(
+                    error
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+      ==============================
+      PEER CLOSE
+      ==============================
+    */
+
+    if(peer){
+
+        try{
+
+            peer.destroy();
+
+        }
+        catch(error){
+
+            console.log(
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+      ==============================
+      VIDEO RESET
+      ==============================
+    */
+
+    const remoteVideo =
+        document.getElementById(
+            "remoteVideo"
+        );
+
+
+    const localVideo =
+        document.getElementById(
+            "localVideo"
+        );
+
+
+    remoteVideo.srcObject =
+        null;
+
+
+    localVideo.srcObject =
+        null;
+
+
+    /*
+      ==============================
+      CLASS SCREEN CLOSE
+      ==============================
+    */
+
+    document
+        .getElementById(
+            "classScreen"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    /*
+      ==============================
+      MESSAGE
+      ==============================
+    */
+
+    showMessage(
+        "Class Ended",
+        "Live class बंद झाली. Recording save करण्याची प्रक्रिया सुरू झाली."
+    );
+
+
+    /*
+      ==============================
+      RESET VARIABLES
+      ==============================
+    */
+
+    localStream = null;
+
+    peer = null;
+
+    activeCalls = [];
+
+    studentConnections = [];
+
+    mediaRecorder = null;
+
+    recordedChunks = [];
+
+    teacherPeerId = null;
+
+    isClassEnded = false;
+
+}
+
+
+/* =====================================================
+   STUDENT CLASS ENDED
+===================================================== */
+
+function studentClassEnded(){
+
+    /*
+      Student ला Sir ने class बंद केली
+    */
+
+    if(
+        isClassEnded
+    ){
+
+        return;
+
+    }
+
+
+    isClassEnded = true;
+
+
+    /*
+      Recording stop
+    */
+
+    if(
+        mediaRecorder &&
+        mediaRecorder.state !== "inactive"
+    ){
+
+        try{
+
+            mediaRecorder.stop();
+
+        }
+        catch(error){
+
+            console.log(
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+      Student camera + microphone बंद
+    */
+
+    if(localStream){
+
+        localStream
+            .getTracks()
+            .forEach(
+                function(track){
+
+                    track.stop();
+
+                }
+            );
+
+    }
+
+
+    /*
+      Live video बंद
+    */
+
+    const remoteVideo =
+        document.getElementById(
+            "remoteVideo"
+        );
+
+
+    const localVideo =
+        document.getElementById(
+            "localVideo"
+        );
+
+
+    remoteVideo.srcObject =
+        null;
+
+
+    localVideo.srcObject =
+        null;
+
+
+    /*
+      सर्व calls बंद
+    */
+
+    activeCalls.forEach(
+        function(call){
+
+            try{
+
+                call.close();
+
+            }
+            catch(error){
+
+                console.log(
+                    error
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+      Peer बंद
+    */
+
+    if(peer){
+
+        try{
+
+            peer.destroy();
+
+        }
+        catch(error){
+
+            console.log(
+                error
+            );
+
+        }
+
+    }
+
+
+    /*
+      Class screen बंद
+    */
+
+    document
+        .getElementById(
+            "classScreen"
+        )
+        .classList.remove(
+            "show"
+        );
+
+
+    /*
+      Student ला custom message
+    */
+
+    showMessage(
+        "Live Class Ended",
+        "Sir ने live class बंद केली. Recording save करण्याची प्रक्रिया सुरू झाली."
+    );
+
+
+    /*
+      Reset
+    */
+
+    localStream = null;
+
+    peer = null;
+
+    activeCalls = [];
+
+    mediaRecorder = null;
+
+    recordedChunks = [];
+
+    teacherPeerId = null;
+
+    isClassEnded = false;
+
+}
+
+
+/* =====================================================
+   MICROPHONE TOGGLE
+===================================================== */
+
+function toggleMic(){
+
+    if(!localStream){
+
+        return;
+
+    }
+
+
+    const audioTracks =
+        localStream.getAudioTracks();
+
+
+    if(
+        audioTracks.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    const track =
+        audioTracks[0];
+
+
+    track.enabled =
+        !track.enabled;
+
+
+    const micBtn =
+        document.getElementById(
+            "micBtn"
+        );
+
+
+    micBtn.textContent =
+        track.enabled
+        ? "🎤"
+        : "🔇";
+
+
+    showMessage(
+        track.enabled
+        ? "Microphone On"
+        : "Microphone Off",
+        track.enabled
+        ? "तुमचा microphone चालू आहे."
+        : "तुमचा microphone बंद आहे."
+    );
+
+}
+
+
+/* =====================================================
+   CAMERA TOGGLE
+===================================================== */
+
+function toggleCamera(){
+
+    if(!localStream){
+
+        return;
+
+    }
+
+
+    const videoTracks =
+        localStream.getVideoTracks();
+
+
+    if(
+        videoTracks.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    const track =
+        videoTracks[0];
+
+
+    track.enabled =
+        !track.enabled;
+
+
+    const cameraBtn =
+        document.getElementById(
+            "cameraBtn"
+        );
+
+
+    cameraBtn.textContent =
+        track.enabled
+        ? "📹"
+        : "🚫";
+
+
+    showMessage(
+        track.enabled
+        ? "Camera On"
+        : "Camera Off",
+        track.enabled
+        ? "तुमचा camera चालू आहे."
+        : "तुमचा camera बंद आहे."
+    );
+
+}
+
+
+/* =====================================================
+   COPY CHANNEL ID
+===================================================== */
+
+function copyChannelId(){
+
+    const id =
+        document.getElementById(
+            "channelIdText"
+        ).textContent;
+
+
+    if(
+        !id
+    ){
+
+        return;
+
+    }
+
+
+    /*
+      Clipboard API
+    */
+
+    if(
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+    ){
+
+        navigator.clipboard
+            .writeText(id)
+            .then(
+                function(){
+
+                    showMessage(
+                        "Copied",
+                        "Channel ID copy झाला."
+                    );
+
+                }
+            )
+            .catch(
+                function(){
+
+                    showMessage(
+                        "Channel ID",
+                        id
+                    );
+
+                }
+            );
+
+    }
+
+    else{
+
+        showMessage(
+            "Channel ID",
+            id
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   GO HOME
+===================================================== */
 
 function goHome(){
 
-  closeAllPopups();
+    /*
+      जर live class चालू असेल तर
+      आधी बंद करू नका.
+    */
+
+    const classScreen =
+        document.getElementById(
+            "classScreen"
+        );
+
+
+    if(
+        classScreen.classList.contains(
+            "show"
+        )
+    ){
+
+        showMessage(
+            "Live Class चालू आहे",
+            "Home वर जाण्यापूर्वी class end करा."
+        );
+
+        return;
+
+    }
+
+
+    /*
+      तुझ्या main app मध्ये
+      इथे actual home navigation लाव.
+    */
+
+    showMessage(
+        "GyanSetu",
+        "Home page navigation इथे जोडता येईल."
+    );
 
 }
 
 
+/* =====================================================
+   BACKDROP CLICK
+===================================================== */
 
-/* =================================================
-   START DATABASE
-================================================= */
+document.querySelectorAll(
+    ".modal"
+).forEach(
+    function(modal){
 
-openDatabase()
+        modal.addEventListener(
+            "click",
+            function(event){
 
-  .then(
+                /*
+                  फक्त बाहेरच्या भागावर click झाल्यास
+                  popup बंद करा
+                */
+
+                if(
+                    event.target === modal
+                ){
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   PAGE LOAD
+===================================================== */
+
+window.addEventListener(
+    "load",
     function(){
 
-      loadRecordings();
+        console.log(
+            "GyanSetu Live Classes Ready"
+        );
 
     }
-  )
-
-  .catch(
-    function(error){
-
-      console.log(
-        "Database error:",
-        error
-      );
-
-    }
-  );
-
+);
 
 </script>
 
