@@ -12,17 +12,17 @@ jobs:
 
     steps:
 
-      # ==============================
+      # =========================================
       # CHECKOUT
-      # ==============================
+      # =========================================
 
       - name: Checkout repository
         uses: actions/checkout@v4
 
 
-      # ==============================
+      # =========================================
       # NODE.JS
-      # ==============================
+      # =========================================
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,9 +30,9 @@ jobs:
           node-version: 20
 
 
-      # ==============================
+      # =========================================
       # JAVA
-      # ==============================
+      # =========================================
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -41,18 +41,18 @@ jobs:
           java-version: 21
 
 
-      # ==============================
+      # =========================================
       # INSTALL CAPACITOR
-      # ==============================
+      # =========================================
 
       - name: Install Capacitor
         run: |
           npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
 
-      # ==============================
+      # =========================================
       # PREPARE WEB FILES
-      # ==============================
+      # =========================================
 
       - name: Prepare web files
         run: |
@@ -71,9 +71,9 @@ jobs:
             -exec cp -r {} www/ \;
 
 
-      # ==============================
+      # =========================================
       # CAPACITOR CONFIG
-      # ==============================
+      # =========================================
 
       - name: Create Capacitor config
         run: |
@@ -89,39 +89,36 @@ jobs:
           EOF
 
 
-      # ==============================
-      # ADD ANDROID
-      # ==============================
+      # =========================================
+      # ADD ANDROID PLATFORM
+      # =========================================
 
       - name: Add Android platform
         run: |
           npx cap add android
 
 
-      # ==============================
-      # SYNC CAPACITOR
-      # ==============================
+      # =========================================
+      # ADD ANDROID PERMISSIONS
+      # =========================================
 
-      - name: Sync Android project
-        run: |
-          npx cap sync android
-
-
-      # ==============================
-      # ADD APP PERMISSIONS
-      # ==============================
-
-      - name: Add GyanSetu permissions
+      - name: Add Android permissions
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
-          p = Path("android/app/src/main/AndroidManifest.xml")
-          text = p.read_text()
+          manifest = Path(
+              "android/app/src/main/AndroidManifest.xml"
+          )
+
+          text = manifest.read_text()
 
           permissions = [
-              "android.permission.RECORD_AUDIO",
+              "android.permission.INTERNET",
+              "android.permission.ACCESS_NETWORK_STATE",
+
               "android.permission.CAMERA",
+              "android.permission.RECORD_AUDIO",
 
               "android.permission.ACCESS_FINE_LOCATION",
               "android.permission.ACCESS_COARSE_LOCATION",
@@ -141,40 +138,237 @@ jobs:
               "android.permission.READ_EXTERNAL_STORAGE",
               "android.permission.WRITE_EXTERNAL_STORAGE",
 
-              "android.permission.VIBRATE",
-
-              "android.permission.INTERNET",
-              "android.permission.ACCESS_NETWORK_STATE"
+              "android.permission.VIBRATE"
           ]
 
-          lines = []
+          additions = []
 
           for permission in permissions:
-              line = f'    <uses-permission android:name="{permission}" />'
-
               if permission not in text:
-                  lines.append(line)
+                  additions.append(
+                      f'    <uses-permission android:name="{permission}" />'
+                  )
 
-          if lines:
-              marker = "<application"
-
+          if additions:
               text = text.replace(
-                  marker,
-                  "\n".join(lines) + "\n    " + marker,
+                  "<application",
+                  "\n".join(additions) + "\n\n    <application",
                   1
               )
 
-          p.write_text(text)
+          manifest.write_text(text)
 
-          print("Permissions added successfully:")
+          print("====================================")
+          print("GyanSetu permissions added")
+          print("====================================")
+
           for permission in permissions:
-              print(" -", permission)
+              print(permission)
           PY
 
 
-      # ==============================
+      # =========================================
+      # ENABLE WEBVIEW FEATURES
+      # =========================================
+
+      - name: Configure Android WebView
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          activity = Path(
+              "android/app/src/main/java/com/ramsena/xi/MainActivity.java"
+          )
+
+          if not activity.exists():
+              print("MainActivity.java not found.")
+              exit(0)
+
+          text = activity.read_text()
+
+          if "android.webkit.PermissionRequest" not in text:
+
+              text = text.replace(
+                  "package com.ramsena.xi;",
+                  """package com.ramsena.xi;
+
+          import android.Manifest;
+          import android.content.pm.PackageManager;
+          import android.webkit.PermissionRequest;
+          import android.webkit.WebView;
+          import androidx.core.app.ActivityCompat;
+          import androidx.core.content.ContextCompat;
+          """
+              )
+
+              text = text.replace(
+                  "public class MainActivity extends BridgeActivity {",
+                  """public class MainActivity extends BridgeActivity {
+
+              private static final int MEDIA_PERMISSION_REQUEST = 1001;
+              private PermissionRequest pendingPermissionRequest;
+          """
+              )
+
+              text = text.replace(
+                  "super.onCreate(savedInstanceState);",
+                  """super.onCreate(savedInstanceState);
+
+              if (ContextCompat.checkSelfPermission(
+                      this,
+                      Manifest.permission.CAMERA
+                  ) != PackageManager.PERMISSION_GRANTED
+                  ||
+                  ContextCompat.checkSelfPermission(
+                      this,
+                      Manifest.permission.RECORD_AUDIO
+                  ) != PackageManager.PERMISSION_GRANTED) {
+
+                  ActivityCompat.requestPermissions(
+                      this,
+                      new String[] {
+                          Manifest.permission.CAMERA,
+                          Manifest.permission.RECORD_AUDIO
+                      },
+                      MEDIA_PERMISSION_REQUEST
+                  );
+              }
+
+              WebView webView = getBridge().getWebView();
+
+              webView.getSettings().setJavaScriptEnabled(true);
+              webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+
+              webView.setWebChromeClient(
+                  new android.webkit.WebChromeClient() {
+
+                      @Override
+                      public void onPermissionRequest(
+                              final PermissionRequest request) {
+
+                          runOnUiThread(() -> {
+
+                              String[] resources =
+                                      request.getResources();
+
+                              boolean camera = false;
+                              boolean microphone = false;
+
+                              for (String resource : resources) {
+
+                                  if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource)) {
+                                      camera = true;
+                                  }
+
+                                  if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) {
+                                      microphone = true;
+                                  }
+                              }
+
+                              boolean cameraGranted =
+                                      !camera ||
+                                      ContextCompat.checkSelfPermission(
+                                          MainActivity.this,
+                                          Manifest.permission.CAMERA
+                                      ) == PackageManager.PERMISSION_GRANTED;
+
+                              boolean microphoneGranted =
+                                      !microphone ||
+                                      ContextCompat.checkSelfPermission(
+                                          MainActivity.this,
+                                          Manifest.permission.RECORD_AUDIO
+                                      ) == PackageManager.PERMISSION_GRANTED;
+
+                              if (cameraGranted && microphoneGranted) {
+                                  request.grant(resources);
+                              } else {
+                                  pendingPermissionRequest = request;
+
+                                  ActivityCompat.requestPermissions(
+                                      MainActivity.this,
+                                      new String[] {
+                                          Manifest.permission.CAMERA,
+                                          Manifest.permission.RECORD_AUDIO
+                                      },
+                                      MEDIA_PERMISSION_REQUEST
+                                  );
+                              }
+                          });
+                      }
+                  }
+              );
+          """
+              )
+
+              text += """
+
+          @Override
+          public void onRequestPermissionsResult(
+                  int requestCode,
+                  String[] permissions,
+                  int[] grantResults) {
+
+              super.onRequestPermissionsResult(
+                  requestCode,
+                  permissions,
+                  grantResults
+              );
+
+              if (requestCode == MEDIA_PERMISSION_REQUEST) {
+
+                  if (pendingPermissionRequest != null) {
+
+                      boolean cameraGranted =
+                          ContextCompat.checkSelfPermission(
+                              this,
+                              Manifest.permission.CAMERA
+                          ) == PackageManager.PERMISSION_GRANTED;
+
+                      boolean microphoneGranted =
+                          ContextCompat.checkSelfPermission(
+                              this,
+                              Manifest.permission.RECORD_AUDIO
+                          ) == PackageManager.PERMISSION_GRANTED;
+
+                      if (cameraGranted && microphoneGranted) {
+
+                          pendingPermissionRequest.grant(
+                              pendingPermissionRequest.getResources()
+                          );
+
+                      } else {
+
+                          pendingPermissionRequest.deny();
+
+                      }
+
+                      pendingPermissionRequest = null;
+                  }
+              }
+          }
+          """
+
+              activity.write_text(text)
+
+              print("WebView camera/microphone handling added.")
+
+          else:
+              print("WebView permission handling already exists.")
+          PY
+
+
+      # =========================================
+      # SYNC CAPACITOR
+      # =========================================
+
+      - name: Sync Capacitor
+        run: |
+          npx cap sync android
+
+
+      # =========================================
       # BUILD APK
-      # ==============================
+      # =========================================
 
       - name: Build APK
         run: |
@@ -183,9 +377,9 @@ jobs:
           ./gradlew assembleDebug
 
 
-      # ==============================
+      # =========================================
       # UPLOAD APK
-      # ==============================
+      # =========================================
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
