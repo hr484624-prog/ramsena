@@ -1431,7 +1431,9 @@ let recordedChunks = [];
 let peer = null;
 let myPeerId = "";
 let activeCalls = {};
-function initPeer(){
+let studentRecorder = null;
+let studentRecordedChunks = [];
+   function initPeer(){
 
   if(peer) return;
 
@@ -1473,7 +1475,64 @@ if(peerText){
       video.play().catch(function(){});
 
     });
+  /* ===============================
+     STUDENT AUTO RECORDING
+  =============================== */
 
+  studentRecordedChunks = [];
+
+  try {
+
+    studentRecorder =
+      new MediaRecorder(remoteStream);
+
+    studentRecorder.ondataavailable =
+      function(event){
+
+        if(event.data.size > 0){
+
+          studentRecordedChunks.push(
+            event.data
+          );
+
+        }
+
+      };
+
+    studentRecorder.onstop =
+      function(){
+
+        const blob =
+          new Blob(
+            studentRecordedChunks,
+            { type: "video/webm" }
+          );
+
+        saveRecordedVideo(blob);
+
+        studentRecordedChunks = [];
+        studentRecorder = null;
+
+        showToast(
+          "🎥 Live recording Student mobile मध्ये save झाली."
+        );
+
+      };
+
+    studentRecorder.start();
+
+    console.log(
+      "Student recording started"
+    );
+
+  } catch(error){
+
+    console.log(
+      "Student recorder error:",
+      error
+    );
+
+   }
   });
 /* ===============================
    STUDENT CONNECTION
