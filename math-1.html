@@ -1801,8 +1801,204 @@ function goBack(){
 
 }
 
-</script>
+<script>
 
+let quizScore = 0;
+let answeredQuestions = 0;
+
+function checkAnswer(
+  button,
+  questionIndex,
+  selectedIndex,
+  correctIndex
+){
+
+  const card = button.parentElement;
+
+  if(card.dataset.answered === "yes"){
+    return;
+  }
+
+  card.dataset.answered = "yes";
+
+  answeredQuestions++;
+
+  const buttons =
+    card.querySelectorAll(".option-btn");
+
+  buttons.forEach(function(btn){
+    btn.disabled = true;
+  });
+
+  if(selectedIndex === correctIndex){
+
+    button.classList.add("correct");
+
+    quizScore++;
+
+  }else{
+
+    button.classList.add("wrong");
+
+    buttons[correctIndex]
+      .classList.add("correct");
+
+  }
+
+  if(
+    answeredQuestions ===
+    currentChapter.quiz.length
+  ){
+
+    showQuizResult();
+
+  }
+
+}
+
+
+function showQuizResult(){
+
+  const result =
+    document.getElementById("quizResult");
+
+  const total =
+    currentChapter.quiz.length;
+
+  let message = "";
+
+  if(quizScore === total){
+
+    message = "🏆 Perfect! खूप छान!";
+
+  }
+  else if(quizScore >= 15){
+
+    message = "🌟 Excellent! खूपच छान!";
+
+  }
+  else if(quizScore >= 10){
+
+    message =
+      "👍 Good Job! अजून थोडा सराव करा.";
+
+  }
+  else{
+
+    message =
+      "💪 पुन्हा प्रयत्न करा. पुन्हा सराव करा!";
+
+  }
+
+  result.innerHTML = `
+
+    🎯 तुमचा Score
+
+    <br><br>
+
+    <strong>
+      ${quizScore} / ${total}
+    </strong>
+
+    <br><br>
+
+    ${message}
+
+  `;
+
+}
+
+
+function backToMedium(){
+
+  document
+    .getElementById("chapterOverlay")
+    .classList.remove("show");
+
+  openMediumPopup();
+
+}
+
+
+function backToChapters(){
+
+  document
+    .getElementById("chapterFullOverlay")
+    .classList.remove("show");
+
+  showChapters();
+
+}
+
+
+function closeChapterPopup(){
+
+  document
+    .getElementById("chapterOverlay")
+    .classList.remove("show");
+
+}
+
+
+function closeFullChapter(){
+
+  document
+    .getElementById("chapterFullOverlay")
+    .classList.remove("show");
+
+}
+
+
+document
+  .getElementById("mediumOverlay")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === this){
+        closeMediumPopup();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("chapterOverlay")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === this){
+        closeChapterPopup();
+      }
+
+    }
+  );
+
+
+document
+  .getElementById("chapterFullOverlay")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target === this){
+        closeFullChapter();
+      }
+
+    }
+  );
+
+
+function goBack(){
+
+  window.location.href =
+    "learn.html";
+
+}
+
+</script>
 
 </body>
 
