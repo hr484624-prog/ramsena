@@ -1,251 +1,514 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>GyanSetu - AI Study</title>
+<title>GyanSetu - AI Study</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-    }
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f8ff;
+  color:#18264d;
+}
 
-    .app {
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-      padding-bottom: 90px;
-    }
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:82px;
+  background:#fff;
+}
 
-    .header {
-      background: white;
-      padding: 18px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    }
+/* HEADER */
 
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+.header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:#fff;
+  padding:15px 16px;
+  box-shadow:0 2px 12px rgba(0,0,0,.07);
+}
 
-    .back {
-      font-size: 28px;
-      cursor: pointer;
-    }
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
 
-    .title {
-      font-size: 21px;
-      font-weight: 800;
-    }
+.back{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eef4ff;
+  color:#1769e0;
+  font-size:28px;
+  cursor:pointer;
+}
 
-    .ai-icon {
-      font-size: 25px;
-    }
+.title{
+  font-size:20px;
+  font-weight:800;
+}
 
-    .hero {
-      margin: 18px 16px;
-      padding: 25px 18px;
-      border-radius: 23px;
-      text-align: center;
-      background: linear-gradient(135deg, #eef3ff, #ffffff);
-      border: 1px solid #dce5ff;
-      box-shadow: 0 5px 18px rgba(0,0,0,.05);
-    }
+.ai-icon{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#1769e0;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:21px;
+}
 
-    .robot {
-      width: 78px;
-      height: 78px;
-      margin: auto;
-      border-radius: 24px;
-      background: #18264d;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-      box-shadow: 0 8px 20px rgba(24,38,77,.2);
-    }
+/* CHAT */
 
-    .hero h2 {
-      margin-top: 14px;
-      font-size: 22px;
-    }
+.chat-area{
+  padding:18px 14px 10px;
+}
 
-    .hero p {
-      margin-top: 7px;
-      color: #777;
-      font-size: 13px;
-      line-height: 1.5;
-    }
+.welcome{
+  text-align:center;
+  padding:24px 10px 20px;
+}
 
-    .ask-card {
-      background: white;
-      margin: 0 16px;
-      padding: 18px;
-      border-radius: 20px;
-      box-shadow: 0 5px 18px rgba(0,0,0,.06);
-    }
+.robot{
+  width:70px;
+  height:70px;
+  margin:auto;
+  border-radius:22px;
+  background:#1769e0;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  box-shadow:0 8px 22px rgba(23,105,224,.22);
+}
 
-    .ask-title {
-      font-size: 17px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
+.welcome h2{
+  margin-top:13px;
+  font-size:21px;
+}
 
-    textarea {
-      width: 100%;
-      min-height: 105px;
-      resize: none;
-      border: 2px solid #e5e5e5;
-      border-radius: 15px;
-      padding: 14px;
-      outline: none;
-      font-family: Arial, sans-serif;
-      font-size: 14px;
-    }
+.welcome p{
+  margin-top:6px;
+  color:#7b8494;
+  font-size:13px;
+  line-height:1.5;
+}
 
-    textarea:focus {
-      border-color: #ff7900;
-    }
+.messages{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
 
-    .ask-btn {
-      width: 100%;
-      margin-top: 12px;
-      height: 50px;
-      border: none;
-      border-radius: 13px;
-      background: #ff7900;
-      color: white;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-    }
+/* MESSAGE BUBBLES */
 
-    .ask-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
+.message{
+  display:flex;
+  width:100%;
+}
 
-    /* AI ANSWER */
-    .answer-card {
-      display: none;
-      background: white;
-      margin: 16px;
-      padding: 18px;
-      border-radius: 20px;
-      box-shadow: 0 5px 18px rgba(0,0,0,.06);
-      border-left: 4px solid #ff7900;
-    }
+.message.user{
+  justify-content:flex-end;
+}
 
-    .answer-title {
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
+.message.ai{
+  justify-content:flex-start;
+}
 
-    .answer-text {
-      color: #333;
-      font-size: 14px;
-      line-height: 1.6;
-      white-space: pre-wrap;
-    }
+.bubble{
+  max-width:88%;
+  padding:12px 14px;
+  border-radius:18px;
+  font-size:14px;
+  line-height:1.55;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
 
-    .section-title {
-      margin: 22px 16px 12px;
-      font-size: 19px;
-      font-weight: 800;
-    }
+.user .bubble{
+  background:#1769e0;
+  color:#fff;
+  border-bottom-right-radius:5px;
+}
 
-    .quick {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 11px;
-      margin: 0 16px;
-    }
+.ai .bubble{
+  background:#f0f5ff;
+  color:#18264d;
+  border-bottom-left-radius:5px;
+}
 
-    .quick-card {
-      background: white;
-      padding: 16px;
-      border-radius: 17px;
-      box-shadow: 0 4px 15px rgba(0,0,0,.05);
-      cursor: pointer;
-    }
+.ai-label{
+  font-size:11px;
+  font-weight:bold;
+  color:#1769e0;
+  margin-bottom:5px;
+}
 
-    .quick-icon {
-      font-size: 27px;
-      margin-bottom: 8px;
-    }
+/* IMAGE IN CHAT */
 
-    .quick-card h3 {
-      font-size: 14px;
-    }
+.chat-image{
+  width:100%;
+  max-width:240px;
+  max-height:260px;
+  object-fit:cover;
+  border-radius:13px;
+  margin-bottom:8px;
+  display:block;
+}
 
-    .quick-card p {
-      color: #888;
-      font-size: 11px;
-      margin-top: 4px;
-    }
+/* THINKING */
 
-    .subjects {
-      display: flex;
-      gap: 9px;
-      overflow-x: auto;
-      padding: 0 16px 5px;
-    }
+.thinking{
+  display:flex;
+  gap:5px;
+  align-items:center;
+}
 
-    .subject {
-      flex: 0 0 auto;
-      background: white;
-      border-radius: 13px;
-      padding: 11px 15px;
-      font-size: 13px;
-      box-shadow: 0 4px 12px rgba(0,0,0,.05);
-    }
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#1769e0;
+  animation:bounce 1.2s infinite;
+}
 
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      height: 68px;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid #eee;
-      z-index: 20;
-    }
+.dot:nth-child(2){
+  animation-delay:.15s;
+}
 
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #777;
-      cursor: pointer;
-    }
+.dot:nth-child(3){
+  animation-delay:.3s;
+}
 
-    .nav-item .icon {
-      display: block;
-      font-size: 22px;
-      margin-bottom: 3px;
-    }
+@keyframes bounce{
+  0%,60%,100%{
+    transform:translateY(0);
+  }
+  30%{
+    transform:translateY(-5px);
+  }
+}
 
-    .nav-item.active {
-      color: #ff7900;
-      font-weight: bold;
-    }
-  </style>
+/* COMPOSER */
+
+.composer-wrap{
+  position:fixed;
+  left:50%;
+  bottom:68px;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  padding:8px 10px;
+  background:rgba(255,255,255,.97);
+  border-top:1px solid #e6edf7;
+  z-index:19;
+}
+
+.composer{
+  border:1px solid #d9e3f2;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.07);
+  overflow:hidden;
+}
+
+/* PHOTO PREVIEW */
+
+.photo-preview{
+  display:none;
+  padding:9px;
+  border-bottom:1px solid #edf1f6;
+}
+
+.photo-preview.show{
+  display:flex;
+}
+
+.preview-box{
+  position:relative;
+  width:72px;
+  height:72px;
+}
+
+.preview-box img{
+  width:72px;
+  height:72px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1px solid #dce5f2;
+}
+
+.remove-photo{
+  position:absolute;
+  right:-7px;
+  top:-7px;
+  width:23px;
+  height:23px;
+  border:none;
+  border-radius:50%;
+  background:#18264d;
+  color:#fff;
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* INPUT */
+
+.input-row{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  padding:7px;
+}
+
+#question{
+  flex:1;
+  border:none;
+  outline:none;
+  resize:none;
+  min-height:42px;
+  max-height:110px;
+  padding:10px 8px;
+  font-family:Arial,sans-serif;
+  font-size:14px;
+  color:#18264d;
+  background:#fff;
+}
+
+#question::placeholder{
+  color:#8b95a6;
+}
+
+/* COMPOSER BUTTONS */
+
+.icon-btn{
+  flex:0 0 40px;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  background:#eef4ff;
+  color:#1769e0;
+  font-size:19px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.send-btn{
+  flex:0 0 40px;
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  background:#1769e0;
+  color:white;
+  font-size:18px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.send-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+#imageInput{
+  display:none;
+}
+
+/* QUICK */
+
+.quick-title{
+  font-size:17px;
+  font-weight:800;
+  margin:20px 16px 10px;
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  padding:0 16px;
+}
+
+.quick-card{
+  background:#f6f9ff;
+  border:1px solid #e2eaf7;
+  padding:14px;
+  border-radius:15px;
+  cursor:pointer;
+}
+
+.quick-icon{
+  font-size:25px;
+  margin-bottom:7px;
+}
+
+.quick-card h3{
+  font-size:13px;
+}
+
+.quick-card p{
+  color:#8791a1;
+  font-size:10px;
+  margin-top:4px;
+}
+
+/* BOTTOM NAV */
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  height:68px;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  border-top:1px solid #e7edf5;
+  z-index:30;
+}
+
+.nav-item{
+  text-align:center;
+  font-size:10px;
+  color:#777;
+  cursor:pointer;
+}
+
+.nav-item .icon{
+  display:block;
+  font-size:21px;
+  margin-bottom:3px;
+}
+
+.nav-item.active{
+  color:#1769e0;
+  font-weight:bold;
+}
+
+/* POPUP */
+
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,35,70,.48);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:100;
+  opacity:1;
+  transition:.2s;
+}
+
+.popup-overlay.hidden{
+  display:none;
+}
+
+.popup{
+  width:100%;
+  max-width:390px;
+  background:#fff;
+  border-radius:23px;
+  padding:22px;
+  box-shadow:0 15px 45px rgba(0,0,0,.2);
+  transform:scale(1);
+  animation:popupIn .2s ease;
+}
+
+@keyframes popupIn{
+  from{
+    transform:scale(.9);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.popup-icon{
+  width:58px;
+  height:58px;
+  margin:0 auto 12px;
+  border-radius:18px;
+  background:#eef4ff;
+  color:#1769e0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+}
+
+.popup h2{
+  text-align:center;
+  font-size:20px;
+}
+
+.popup p{
+  text-align:center;
+  color:#707b8d;
+  font-size:14px;
+  line-height:1.5;
+  margin-top:7px;
+}
+
+.popup-btn{
+  width:100%;
+  height:46px;
+  border:none;
+  border-radius:12px;
+  margin-top:16px;
+  background:#1769e0;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.popup-cancel{
+  width:100%;
+  height:44px;
+  border:none;
+  border-radius:12px;
+  margin-top:9px;
+  background:#eef3fa;
+  color:#18264d;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+@media(max-width:430px){
+  .composer-wrap,
+  .bottom-nav{
+    max-width:430px;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -254,124 +517,141 @@
 
   <div class="header">
     <div class="top">
+
       <div class="back" onclick="goHome()">‹</div>
+
       <div class="title">AI Study</div>
+
       <div class="ai-icon">🤖</div>
+
     </div>
   </div>
 
-  <div class="hero">
+  <div class="chat-area">
 
-    <div class="robot">🤖</div>
+    <div class="welcome" id="welcome">
 
-    <h2>Meet GyanSetu AI</h2>
+      <div class="robot">🤖</div>
 
-    <p>
-      Ask your study questions,
-      understand concepts and learn new things. 🧠📚
-    </p>
+      <h2>Meet GyanSetu AI</h2>
 
-  </div>
+      <p>
+        Ask anything, upload a question photo,
+        and learn step-by-step. 🧠📚
+      </p>
 
-  <div class="ask-card">
-
-    <div class="ask-title">
-      💬 Ask GyanSetu AI
     </div>
 
-    <textarea
-      id="question"
-      placeholder="Ask your question in Hindi or English..."
-    ></textarea>
-<button
-  id="micBtn"
-  onclick="startVoiceInput()"
-  style="
-    width:100%;
-    margin-top:10px;
-    height:45px;
-    border:none;
-    border-radius:12px;
-    background:#18264d;
-    color:white;
-    font-size:14px;
-    font-weight:bold;
-    cursor:pointer;
-  "
->
-  🎤 Speak Question
-</button>
-    <button class="ask-btn" onclick="askAI()">
-      🤖 Ask GyanSetu AI
-    </button>
+    <div class="messages" id="messages"></div>
 
   </div>
 
-  <!-- AI ANSWER -->
-  <div class="answer-card" id="answerCard">
-
-    <div class="answer-title">
-      🤖 GyanSetu AI
-    </div>
-
-    <div class="answer-text" id="answerText"></div>
-<button
-  id="speakBtn"
-  onclick="speakAnswer()"
-  style="
-    margin-top:12px;
-    width:100%;
-    height:45px;
-    border:none;
-    border-radius:12px;
-    background:#18264d;
-    color:white;
-    font-size:14px;
-    font-weight:bold;
-    cursor:pointer;
-  "
->
-  🔊 Listen
-</button>
-  </div>
-
-  <div class="section-title">
+  <div class="quick-title">
     ⚡ Quick Study
   </div>
 
   <div class="quick">
 
-    <div class="quick-card" onclick="quickQuestion('Explain this topic in simple English')">
+    <div class="quick-card"
+         onclick="quickQuestion('Explain this topic in simple English')">
+
       <div class="quick-icon">💡</div>
       <h3>Explain Topic</h3>
       <p>Understand any topic</p>
+
     </div>
 
-    <div class="quick-card" onclick="quickQuestion('Create a quiz for me')">
+    <div class="quick-card"
+         onclick="quickQuestion('Create a quiz for me')">
+
       <div class="quick-icon">📝</div>
       <h3>Make Quiz</h3>
-      <p>Create a quiz for practice</p>
+      <p>Create a quiz</p>
+
     </div>
 
-    <div class="quick-card" onclick="quickQuestion('Make simple study notes about this topic')">
+    <div class="quick-card"
+         onclick="quickQuestion('Make simple study notes about this topic')">
+
       <div class="quick-icon">📖</div>
       <h3>Make Notes</h3>
-      <p>Create simple notes</p>
+      <p>Simple study notes</p>
+
     </div>
 
-    <div class="quick-card" onclick="quickQuestion('Help me study this topic')">
+    <div class="quick-card"
+         onclick="quickQuestion('Help me study this topic')">
+
       <div class="quick-icon">🧠</div>
       <h3>Study Help</h3>
       <p>Get study guidance</p>
+
     </div>
 
   </div>
 
-  
+  <!-- COMPOSER -->
 
-  
+  <div class="composer-wrap">
 
+    <div class="composer">
 
+      <div class="photo-preview" id="photoPreview">
+
+        <div class="preview-box">
+
+          <img id="previewImage" src="" alt="Selected photo">
+
+          <button class="remove-photo"
+                  onclick="removePhoto()">
+            ×
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="input-row">
+
+        <button class="icon-btn"
+                onclick="openPhotoPicker()"
+                title="Upload photo">
+          📷
+        </button>
+
+        <button class="icon-btn"
+                id="micBtn"
+                onclick="startVoiceInput()"
+                title="Voice">
+          🎤
+        </button>
+
+        <textarea
+          id="question"
+          rows="1"
+          placeholder="Message GyanSetu AI..."
+        ></textarea>
+
+        <button class="send-btn"
+                id="sendBtn"
+                onclick="askAI()">
+          ➤
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <input
+    type="file"
+    id="imageInput"
+    accept="image/*"
+    onchange="handlePhoto(event)"
+  >
+
+  <!-- BOTTOM NAV -->
 
   <div class="bottom-nav">
 
@@ -404,174 +684,631 @@
 
 </div>
 
+<!-- CUSTOM MESSAGE POPUP -->
+
+<div class="popup-overlay hidden" id="messagePopup">
+
+  <div class="popup">
+
+    <div class="popup-icon" id="popupIcon">
+      ℹ️
+    </div>
+
+    <h2 id="popupTitle">
+      GyanSetu
+    </h2>
+
+    <p id="popupMessage"></p>
+
+    <button class="popup-btn"
+            onclick="closePopup()">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+<!-- CONFIRM POPUP -->
+
+<div class="popup-overlay hidden" id="confirmPopup">
+
+  <div class="popup">
+
+    <div class="popup-icon">
+      🗑️
+    </div>
+
+    <h2>Remove Photo?</h2>
+
+    <p>
+      Selected photo remove करायचा आहे का?
+    </p>
+
+    <button class="popup-btn"
+            onclick="confirmRemovePhoto()">
+      Remove
+    </button>
+
+    <button class="popup-cancel"
+            onclick="closeConfirmPopup()">
+      Cancel
+    </button>
+
+  </div>
+
+</div>
+
 <script>
+let selectedImageBase64 = "";
+let selectedImageType = "";
+let isAsking = false;
 
-  async function askAI() {
+function showPopup(title,message,icon="ℹ️"){
 
-    const question =
-      document.getElementById("question").value.trim();
+  document.getElementById("popupTitle").innerText=title;
 
-    const button =
-      document.querySelector(".ask-btn");
+  document.getElementById("popupMessage").innerText=message;
 
-    const answerCard =
-      document.getElementById("answerCard");
+  document.getElementById("popupIcon").innerText=icon;
 
-    const answerText =
-      document.getElementById("answerText");
+  document.getElementById("messagePopup")
+    .classList.remove("hidden");
+}
 
-    if (!question) {
-      alert("Please enter your question.");
-      return;
-    }
+function closePopup(){
 
-    button.disabled = true;
-    button.innerText = "🤖 Thinking...";
+  document.getElementById("messagePopup")
+    .classList.add("hidden");
+}
 
-    answerCard.style.display = "block";
-    answerText.innerText = "GyanSetu AI is thinking... 🤔";
+function showConfirmPopup(){
 
-    try {
+  document.getElementById("confirmPopup")
+    .classList.remove("hidden");
+}
 
-      const response = await fetch(
-        "https://gyan-setu-self.vercel.app/api/chat",
-        {
-          method: "POST",
+function closeConfirmPopup(){
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+  document.getElementById("confirmPopup")
+    .classList.add("hidden");
+}
 
-          body: JSON.stringify({
-            question: question
-          })
-        }
-      );
+function openPhotoPicker(){
 
-      const data = await response.json();
+  if(isAsking){
+    return;
+  }
 
-      if (!response.ok) {
-        throw new Error(
-          data.error || "AI request failed"
-        );
+  document.getElementById("imageInput").click();
+}
+
+function handlePhoto(event){
+
+  const file=event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  if(!file.type.startsWith("image/")){
+
+    showPopup(
+      "Invalid Photo",
+      "कृपया image/photo निवडा.",
+      "📷"
+    );
+
+    event.target.value="";
+    return;
+  }
+
+  if(file.size>8*1024*1024){
+
+    showPopup(
+      "Photo Too Large",
+      "कृपया 8 MB पेक्षा कमी photo निवडा.",
+      "⚠️"
+    );
+
+    event.target.value="";
+    return;
+  }
+
+  const reader=new FileReader();
+
+  reader.onload=function(e){
+
+    selectedImageBase64=e.target.result;
+    selectedImageType=file.type;
+
+    document.getElementById("previewImage").src=
+      selectedImageBase64;
+
+    document.getElementById("photoPreview")
+      .classList.add("show");
+  };
+
+  reader.readAsDataURL(file);
+}
+
+function removePhoto(){
+
+  if(!selectedImageBase64){
+    return;
+  }
+
+  showConfirmPopup();
+}
+
+function confirmRemovePhoto(){
+
+  selectedImageBase64="";
+  selectedImageType="";
+
+  document.getElementById("previewImage").src="";
+
+  document.getElementById("photoPreview")
+    .classList.remove("show");
+
+  document.getElementById("imageInput").value="";
+
+  closeConfirmPopup();
+}
+
+function addUserMessage(question,image){
+
+  const wrapper=
+    document.createElement("div");
+
+  wrapper.className="message user";
+
+  const bubble=
+    document.createElement("div");
+
+  bubble.className="bubble";
+
+  if(image){
+
+    const img=
+      document.createElement("img");
+
+    img.className="chat-image";
+    img.src=image;
+    img.alt="Uploaded question";
+
+    bubble.appendChild(img);
+  }
+
+  if(question){
+
+    const text=
+      document.createElement("div");
+
+    text.textContent=question;
+
+    bubble.appendChild(text);
+  }
+
+  if(!question && image){
+
+    const text=
+      document.createElement("div");
+
+    text.textContent="Please solve this question.";
+
+    bubble.appendChild(text);
+  }
+
+  wrapper.appendChild(bubble);
+
+  document.getElementById("messages")
+    .appendChild(wrapper);
+
+  document.getElementById("welcome")
+    .style.display="none";
+
+  scrollToBottom();
+}
+
+function addThinkingMessage(){
+
+  const wrapper=
+    document.createElement("div");
+
+  wrapper.className="message ai";
+  wrapper.id="thinkingMessage";
+
+  const bubble=
+    document.createElement("div");
+
+  bubble.className="bubble";
+
+  const label=
+    document.createElement("div");
+
+  label.className="ai-label";
+  label.textContent="🤖 GyanSetu AI";
+
+  const thinking=
+    document.createElement("div");
+
+  thinking.className="thinking";
+
+  thinking.innerHTML=
+    '<span class="dot"></span>'+
+    '<span class="dot"></span>'+
+    '<span class="dot"></span>';
+
+  bubble.appendChild(label);
+  bubble.appendChild(thinking);
+
+  wrapper.appendChild(bubble);
+
+  document.getElementById("messages")
+    .appendChild(wrapper);
+
+  scrollToBottom();
+}
+
+function removeThinkingMessage(){
+
+  const thinking=
+    document.getElementById("thinkingMessage");
+
+  if(thinking){
+    thinking.remove();
+  }
+}
+
+function addAIMessage(answer){
+
+  const wrapper=
+    document.createElement("div");
+
+  wrapper.className="message ai";
+
+  const bubble=
+    document.createElement("div");
+
+  bubble.className="bubble";
+
+  const label=
+    document.createElement("div");
+
+  label.className="ai-label";
+  label.textContent="🤖 GyanSetu AI";
+
+  const text=
+    document.createElement("div");
+
+  text.textContent=answer;
+
+  bubble.appendChild(label);
+  bubble.appendChild(text);
+
+  wrapper.appendChild(bubble);
+
+  document.getElementById("messages")
+    .appendChild(wrapper);
+
+  scrollToBottom();
+}
+
+function scrollToBottom(){
+
+  setTimeout(function(){
+
+    window.scrollTo({
+      top:document.body.scrollHeight,
+      behavior:"smooth"
+    });
+
+  },50);
+}
+  <script>
+async function askAI(){
+
+  if(isAsking){
+    return;
+  }
+
+  const textarea=
+    document.getElementById("question");
+
+  const sendBtn=
+    document.getElementById("sendBtn");
+
+  const question=
+    textarea.value.trim();
+
+  const image=
+    selectedImageBase64;
+
+  if(!question && !image){
+
+    showPopup(
+      "Ask GyanSetu AI",
+      "कृपया question लिहा किंवा photo upload करा.",
+      "🤖"
+    );
+
+    return;
+  }
+
+  isAsking=true;
+
+  sendBtn.disabled=true;
+  sendBtn.innerText="⏳";
+
+  addUserMessage(
+    question,
+    image
+  );
+
+  addThinkingMessage();
+
+  textarea.value="";
+
+  const imageToSend=image;
+
+  removePhotoWithoutPopup();
+
+  try{
+
+    /*
+      Existing GyanSetu API.
+      Text + image दोन्ही पाठवले आहेत.
+      Backend मध्ये image field handle केल्यास
+      AI photo मधील question वाचू शकतो.
+    */
+
+    const response=await fetch(
+      "https://gyan-setu-self.vercel.app/api/chat",
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          question:question,
+
+          image:imageToSend,
+
+          imageType:selectedImageType || null
+
+        })
       }
+    );
 
-      answerText.innerText =
-        data.answer || "No answer received.";
+    let data={};
 
-    } catch (error) {
-
-      console.error(error);
-
-      answerText.innerText =
-        "❌ Sorry, GyanSetu AI could not connect. Please try again.";
-
-    } finally {
-
-      button.disabled = false;
-      button.innerText = "🤖 Ask GyanSetu AI";
-
+    try{
+      data=await response.json();
+    }catch(error){
+      data={};
     }
+
+    removeThinkingMessage();
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "AI request failed"
+      );
+    }
+
+    const answer=
+      data.answer ||
+      data.message ||
+      "No answer received.";
+
+    addAIMessage(answer);
+
+  }catch(error){
+
+    console.error(error);
+
+    removeThinkingMessage();
+
+    addAIMessage(
+      "❌ Sorry, GyanSetu AI could not connect. Please try again."
+    );
+
+  }finally{
+
+    isAsking=false;
+
+    sendBtn.disabled=false;
+    sendBtn.innerText="➤";
   }
+}
 
+function removePhotoWithoutPopup(){
 
-  function quickQuestion(text) {
+  selectedImageBase64="";
+  selectedImageType="";
 
-    document.getElementById("question").value = text;
+  document.getElementById("previewImage").src="";
 
-    document.getElementById("question").focus();
+  document.getElementById("photoPreview")
+    .classList.remove("show");
 
-  }
+  document.getElementById("imageInput").value="";
+}
 
+function quickQuestion(text){
 
-  function goHome() {
-    window.location.href = "home.html";
-  }
+  const textarea=
+    document.getElementById("question");
 
-  function goLearn() {
-    window.location.href = "learn.html";
-  }
+  textarea.value=text;
 
-  function goRank() {
-    window.location.href = "leaderboard.html";
-  }
+  textarea.focus();
 
-  function goProfile() {
-    window.location.href = "profile.html";
-  }
-function speakAnswer() {
+  window.scrollTo({
+    top:document.body.scrollHeight,
+    behavior:"smooth"
+  });
+}
 
-  const answer =
-    document.getElementById("answerText").innerText.trim();
+/* VOICE INPUT */
 
-  if (!answer || answer.includes("could not connect")) {
-    alert("First ask GyanSetu AI a question.");
+function startVoiceInput(){
+
+  if(isAsking){
     return;
   }
 
-  if (!("speechSynthesis" in window)) {
-    alert("Voice is not supported on this device.");
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const speech =
-    new SpeechSynthesisUtterance(answer);
-
-  speech.lang = "en-US";
-  speech.rate = 0.9;
-  speech.pitch = 1;
-
-  window.speechSynthesis.speak(speech);
-  }
-function startVoiceInput() {
-
-  const SpeechRecognition =
+  const SpeechRecognition=
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-  if (!SpeechRecognition) {
-    alert("Voice input is not supported on this device.");
+  if(!SpeechRecognition){
+
+    showPopup(
+      "Voice Not Supported",
+      "या device/browser मध्ये voice input supported नाही.",
+      "🎤"
+    );
+
     return;
   }
 
-  const recognition = new SpeechRecognition();
+  const recognition=
+    new SpeechRecognition();
 
-  recognition.lang = "en-IN";
-  recognition.interimResults = false;
-  recognition.continuous = false;
+  recognition.lang="en-IN";
+  recognition.interimResults=false;
+  recognition.continuous=false;
 
-  const micBtn =
+  const micBtn=
     document.getElementById("micBtn");
 
-  micBtn.innerText = "🎙️ Listening...";
+  micBtn.innerText="🎙️";
+  micBtn.disabled=true;
 
   recognition.start();
 
-  recognition.onresult = function(event) {
+  recognition.onresult=function(event){
 
-    const text =
+    const text=
       event.results[0][0].transcript;
 
-    document.getElementById("question").value = text;
+    const textarea=
+      document.getElementById("question");
 
-    micBtn.innerText = "🎤 Speak Question";
+    textarea.value=
+      textarea.value
+      ? textarea.value+" "+text
+      : text;
   };
 
-  recognition.onerror = function() {
+  recognition.onerror=function(){
 
-    micBtn.innerText = "🎤 Speak Question";
-
-    alert("Could not hear you. Please try again.");
+    showPopup(
+      "Voice Input",
+      "तुमचा आवाज ऐकू आला नाही. पुन्हा try करा.",
+      "🎤"
+    );
   };
 
-  recognition.onend = function() {
+  recognition.onend=function(){
 
-    micBtn.innerText = "🎤 Speak Question";
+    micBtn.innerText="🎤";
+    micBtn.disabled=false;
   };
-  }
+}
+
+/* TEXTAREA AUTO HEIGHT */
+
+document.getElementById("question")
+  .addEventListener(
+    "input",
+    function(){
+
+      this.style.height="auto";
+
+      this.style.height=
+        Math.min(
+          this.scrollHeight,
+          110
+        )+"px";
+    }
+  );
+
+/* ENTER TO SEND */
+
+document.getElementById("question")
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key==="Enter" &&
+        !event.shiftKey
+      ){
+
+        event.preventDefault();
+
+        askAI();
+      }
+    }
+  );
+
+/* POPUP OUTSIDE CLICK */
+
+document.getElementById("messagePopup")
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target===
+        document.getElementById("messagePopup")
+      ){
+
+        closePopup();
+      }
+    }
+  );
+
+document.getElementById("confirmPopup")
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target===
+        document.getElementById("confirmPopup")
+      ){
+
+        closeConfirmPopup();
+      }
+    }
+  );
+
+/* NAVIGATION */
+
+function goHome(){
+  window.location.href="home.html";
+}
+
+function goLearn(){
+  window.location.href="learn.html";
+}
+
+function goRank(){
+  window.location.href="leaderboard.html";
+}
+
+function goProfile(){
+  window.location.href="profile.html";
+}
 </script>
-
 </body>
-  </html>
+</html>
