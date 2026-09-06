@@ -1,427 +1,975 @@
+
+
 <!DOCTYPE html>
 <html lang="mr">
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport"
       content="width=device-width, initial-scale=1.0">
 
 <title>GyanSetu - Live Classes</title>
 
+<!-- PeerJS -->
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
 <style>
 
+/* =========================
+   RESET
+========================= */
+
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
   font-family:Arial, sans-serif;
 }
 
 body{
-  background:#eef6ff;
+  background:#f4f8ff;
   color:#123;
+  min-height:100vh;
 }
+
+button,
+input{
+  font-family:inherit;
+}
+
+/* =========================
+   APP
+========================= */
 
 .app{
   width:100%;
   min-height:100vh;
-  background:#eef6ff;
+  background:#f4f8ff;
 }
 
-/* ================= HEADER ================= */
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  height:65px;
-  background:linear-gradient(135deg,#087df5,#0058c9);
+  height:64px;
+  background:#0d6efd;
   color:white;
+
   display:flex;
   align-items:center;
-  padding:0 16px;
-  gap:14px;
-  box-shadow:0 4px 15px rgba(0,0,0,.15);
+
+  padding:0 15px;
+
+  box-shadow:
+    0 3px 12px rgba(0,0,0,.12);
+
+  position:sticky;
+  top:0;
+  z-index:100;
 }
 
 .back-btn{
-  border:none;
-  background:rgba(255,255,255,.18);
-  color:white;
   width:42px;
   height:42px;
+
+  border:none;
   border-radius:50%;
-  font-size:22px;
+
+  background:rgba(255,255,255,.18);
+  color:white;
+
+  font-size:25px;
+
   cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
 .header-title{
-  font-size:21px;
+  font-size:19px;
   font-weight:bold;
+  margin-left:12px;
 }
 
-/* ================= MAIN ================= */
+/* =========================
+   MAIN
+========================= */
 
 .main{
-  padding:22px 16px 40px;
+  width:100%;
   max-width:700px;
+
   margin:auto;
+
+  padding:22px 16px 40px;
 }
+
+/* =========================
+   HERO
+========================= */
 
 .hero{
   background:white;
-  border-radius:24px;
-  padding:25px 20px;
-  box-shadow:0 8px 25px rgba(0,80,180,.10);
+
+  border-radius:20px;
+
+  padding:24px 18px;
+
   text-align:center;
+
+  box-shadow:
+    0 5px 20px rgba(13,110,253,.08);
+
   margin-bottom:20px;
 }
 
 .hero-icon{
-  width:75px;
-  height:75px;
-  margin:auto;
-  border-radius:22px;
-  background:#e5f1ff;
+  width:70px;
+  height:70px;
+
+  margin:0 auto 12px;
+
+  border-radius:20px;
+
+  background:#e8f1ff;
+
   display:flex;
-  justify-content:center;
   align-items:center;
-  font-size:38px;
-  margin-bottom:15px;
+  justify-content:center;
+
+  font-size:36px;
 }
 
 .hero h2{
-  color:#075fc9;
+  color:#0d6efd;
+  font-size:24px;
   margin-bottom:8px;
 }
 
 .hero p{
-  color:#687789;
-  line-height:1.5;
+  color:#667;
   font-size:14px;
+  line-height:1.6;
 }
 
-/* ================= LIVE BUTTON ================= */
+/* =========================
+   LIVE BUTTON
+========================= */
 
 .live-button{
   width:100%;
+
   border:none;
-  padding:18px;
-  border-radius:17px;
-  background:linear-gradient(135deg,#087df5,#0055c7);
+  border-radius:16px;
+
+  background:#0d6efd;
   color:white;
+
+  padding:17px;
+
   font-size:18px;
   font-weight:bold;
-  box-shadow:0 8px 18px rgba(0,92,210,.25);
+
   cursor:pointer;
+
+  box-shadow:
+    0 7px 18px rgba(13,110,253,.25);
+
+  transition:.2s;
 }
 
 .live-button:active{
   transform:scale(.98);
 }
 
-/* ================= RECORDINGS ================= */
+/* =========================
+   SECTION TITLE
+========================= */
 
 .section-title{
-  margin:25px 0 12px;
-  color:#075fc9;
+  margin:28px 3px 14px;
+
+  color:#174a8b;
+
   font-size:18px;
+}
+
+/* =========================
+   RECORDINGS
+========================= */
+
+#recordingsList{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.recording-empty{
+  background:white;
+
+  border-radius:16px;
+
+  padding:20px;
+
+  text-align:center;
+
+  color:#777;
+
+  font-size:14px;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.05);
 }
 
 .recording-card{
   background:white;
-  padding:14px;
-  border-radius:17px;
+
+  border-radius:16px;
+
+  padding:15px;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.06);
+}
+
+.recording-card h4{
+  color:#174a8b;
+  margin-bottom:7px;
+}
+
+.recording-card p{
+  font-size:12px;
+  color:#777;
   margin-bottom:12px;
-  box-shadow:0 5px 15px rgba(0,70,160,.08);
 }
 
-.recording-card video{
-  width:100%;
-  border-radius:13px;
-  background:#000;
+.recording-actions{
+  display:flex;
+  gap:8px;
 }
 
-.recording-name{
-  margin-top:9px;
+.recording-btn{
+  flex:1;
+
+  border:none;
+  border-radius:10px;
+
+  padding:10px;
+
+  cursor:pointer;
+
   font-weight:bold;
-  color:#173c66;
 }
 
-/* ================= POPUP ================= */
+.download-btn{
+  background:#0d6efd;
+  color:white;
+}
+
+.delete-btn{
+  background:#ffecec;
+  color:#d33;
+}
+
+/* =========================
+   OVERLAY
+========================= */
 
 .overlay{
   position:fixed;
+
   inset:0;
-  background:rgba(0,35,80,.58);
+
+  background:rgba(0,0,0,.55);
+
   display:none;
+
   align-items:flex-end;
+
   justify-content:center;
-  z-index:999;
+
+  z-index:1000;
+
+  padding:0;
 }
 
 .overlay.show{
   display:flex;
 }
 
+/* =========================
+   POPUP
+========================= */
+
 .popup{
   width:100%;
   max-width:600px;
+
   background:white;
-  border-radius:27px 27px 0 0;
-  padding:23px 18px 30px;
+
+  border-radius:24px 24px 0 0;
+
+  padding:22px 18px 25px;
+
+  max-height:92vh;
+
+  overflow-y:auto;
+
   animation:popupUp .25s ease;
-  max-height:90vh;
-  overflow:auto;
 }
 
 @keyframes popupUp{
   from{
     transform:translateY(100%);
   }
+
   to{
     transform:translateY(0);
   }
 }
 
-.popup-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+.popup-handle{
+  width:45px;
+  height:5px;
+
+  background:#d5d5d5;
+
+  border-radius:10px;
+
+  margin:0 auto 18px;
 }
 
-.popup-head h3{
-  color:#075fc9;
+.popup-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:18px;
+}
+
+.popup-header h3{
+  color:#174a8b;
+  font-size:20px;
 }
 
 .close-btn{
-  width:38px;
-  height:38px;
+  width:36px;
+  height:36px;
+
   border:none;
   border-radius:50%;
-  background:#edf5ff;
-  color:#075fc9;
+
+  background:#f1f4f8;
+
+  color:#555;
+
   font-size:21px;
+
+  cursor:pointer;
 }
 
-/* ================= OPTION ================= */
+/* =========================
+   ROLE OPTIONS
+========================= */
 
-.option{
+.role-option{
   width:100%;
-  border:1px solid #dcecff;
-  background:#f8fbff;
-  padding:18px;
-  border-radius:18px;
-  margin-bottom:12px;
+
+  border:2px solid #e4edfb;
+
+  background:white;
+
+  border-radius:17px;
+
+  padding:17px;
+
   display:flex;
   align-items:center;
-  gap:15px;
+
+  margin-bottom:12px;
+
   cursor:pointer;
+
   text-align:left;
+
+  transition:.2s;
 }
 
-.option-icon{
-  width:55px;
-  height:55px;
-  border-radius:16px;
+.role-option:active{
+  transform:scale(.98);
+}
+
+.role-icon{
+  width:50px;
+  height:50px;
+
+  border-radius:14px;
+
+  background:#eaf3ff;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   font-size:27px;
-  background:#e5f1ff;
+
+  margin-right:13px;
 }
 
-.option strong{
-  display:block;
-  color:#075fc9;
+.role-info{
+  flex:1;
+}
+
+.role-info h4{
+  color:#174a8b;
   font-size:17px;
   margin-bottom:4px;
 }
 
-.option span{
-  color:#718096;
-  font-size:13px;
-}
-
-/* ================= INPUT ================= */
-
-.input{
-  width:100%;
-  padding:15px;
-  border:1px solid #cfe2f7;
-  border-radius:13px;
-  outline:none;
-  font-size:16px;
-  margin:7px 0 12px;
-}
-
-.input:focus{
-  border-color:#087df5;
-  box-shadow:0 0 0 3px #e3f0ff;
-}
-
-.primary-btn{
-  width:100%;
-  border:none;
-  padding:15px;
-  border-radius:14px;
-  background:#087df5;
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:6px;
-}
-
-.secondary-btn{
-  width:100%;
-  border:1px solid #cce0f7;
-  padding:14px;
-  border-radius:14px;
-  background:white;
-  color:#075fc9;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:9px;
-}
-
-/* ================= CHANNEL ================= */
-
-.channel-box{
-  background:#edf6ff;
-  border:1px solid #cfe5ff;
-  padding:15px;
-  border-radius:16px;
-  margin:10px 0 15px;
-  text-align:center;
-}
-
-.channel-label{
-  color:#687789;
+.role-info p{
+  color:#777;
   font-size:12px;
 }
 
-.channel-id{
-  color:#075fc9;
-  font-size:20px;
-  font-weight:bold;
-  letter-spacing:1px;
-  word-break:break-all;
-  margin-top:6px;
+.role-arrow{
+  color:#0d6efd;
+  font-size:22px;
 }
 
-/* ================= STATUS ================= */
+/* =========================
+   FORM
+========================= */
 
-.status{
+.form-group{
+  margin-bottom:14px;
+}
+
+.form-group label{
+  display:block;
+
+  color:#174a8b;
+
+  font-size:13px;
+  font-weight:bold;
+
+  margin-bottom:7px;
+}
+
+.form-input{
+  width:100%;
+
+  border:2px solid #e1eaf7;
+
+  border-radius:12px;
+
   padding:13px;
+
+  outline:none;
+
+  font-size:15px;
+
+  background:#fbfdff;
+}
+
+.form-input:focus{
+  border-color:#0d6efd;
+  background:white;
+}
+
+/* =========================
+   PRIMARY BUTTON
+========================= */
+
+.primary-btn{
+  width:100%;
+
+  border:none;
+
   border-radius:13px;
-  background:#eef7ff;
-  color:#145b9e;
-  font-size:14px;
-  margin:10px 0;
+
+  background:#0d6efd;
+  color:white;
+
+  padding:14px;
+
+  font-size:16px;
+  font-weight:bold;
+
+  cursor:pointer;
+
+  margin-top:5px;
+}
+
+.primary-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status-box{
+  display:none;
+
+  margin-top:13px;
+
+  padding:12px;
+
+  border-radius:11px;
+
+  background:#edf5ff;
+
+  color:#1455a0;
+
+  font-size:13px;
+
   text-align:center;
 }
 
-/* ================= VIDEO ================= */
+.status-box.show{
+  display:block;
+}
+
+/* =========================
+   SIR CHANNEL BOX
+========================= */
+
+.channel-box{
+  background:#edf5ff;
+
+  border:1px solid #cfe1ff;
+
+  border-radius:15px;
+
+  padding:14px;
+
+  margin-bottom:14px;
+}
+
+.channel-label{
+  color:#667;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.channel-row{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.channel-id{
+  flex:1;
+
+  background:white;
+
+  border-radius:10px;
+
+  padding:11px;
+
+  font-size:15px;
+  font-weight:bold;
+
+  color:#174a8b;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.copy-btn{
+  border:none;
+
+  border-radius:10px;
+
+  background:#0d6efd;
+  color:white;
+
+  padding:11px 13px;
+
+  cursor:pointer;
+
+  font-weight:bold;
+}
+
+/* =========================
+   VIDEO AREA
+========================= */
 
 .video-box{
   width:100%;
-  background:#071321;
-  border-radius:18px;
+
+  background:#101820;
+
+  border-radius:17px;
+
   overflow:hidden;
-  margin-top:12px;
+
   position:relative;
+
+  margin-top:15px;
+
+  min-height:210px;
 }
 
 .video-box video{
-  display:block;
   width:100%;
-  min-height:220px;
+
+  height:280px;
+
+  display:block;
+
   object-fit:cover;
-  background:#000;
+
+  background:#101820;
 }
 
 .live-badge{
   position:absolute;
-  top:12px;
-  left:12px;
-  background:#e60000;
+
+  top:10px;
+  left:10px;
+
+  background:#e53935;
   color:white;
-  padding:6px 10px;
+
   border-radius:20px;
-  font-size:12px;
+
+  padding:6px 10px;
+
+  font-size:11px;
   font-weight:bold;
+
   z-index:2;
 }
 
-.end-btn{
-  width:100%;
-  background:#d90000;
-  color:white;
-  border:none;
-  padding:15px;
-  border-radius:14px;
-  margin-top:12px;
-  font-size:16px;
-  font-weight:bold;
-}
+/* =========================
+   STUDENT COUNT
+========================= */
 
-.copy-btn{
-  width:100%;
-  background:#fff;
-  color:#075fc9;
-  border:1px solid #cce0f7;
-  padding:13px;
+.student-count-box{
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  margin-top:15px;
+
+  padding:13px 15px;
+
+  background:#f5f9ff;
+
   border-radius:13px;
-  margin-top:9px;
+}
+
+.student-count-title{
+  color:#174a8b;
+  font-weight:bold;
+  font-size:14px;
+}
+
+.student-count-badge{
+  min-width:32px;
+  height:32px;
+
+  padding:0 9px;
+
+  border-radius:20px;
+
+  background:#0d6efd;
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   font-weight:bold;
 }
 
-/* ================= STUDENT VIDEO GRID ================= */
+/* =========================
+   STUDENT LIST
+========================= */
 
-.student-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:10px;
+.student-list{
   margin-top:12px;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:8px;
 }
 
-.student-tile{
-  background:#091522;
-  border-radius:14px;
-  overflow:hidden;
-  position:relative;
+.student-item{
+  background:white;
+
+  border:1px solid #e2ebf7;
+
+  border-radius:11px;
+
+  padding:10px 12px;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
 }
 
-.student-tile video{
-  width:100%;
-  aspect-ratio:16/10;
-  object-fit:cover;
-  display:block;
+.student-avatar{
+  width:34px;
+  height:34px;
+
+  border-radius:50%;
+
+  background:#e7f0ff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:#0d6efd;
+
+  font-weight:bold;
 }
 
 .student-name{
+  color:#333;
+  font-size:14px;
+  font-weight:bold;
+}
+
+/* =========================
+   STUDENT GRID
+========================= */
+
+.student-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
+
+  margin-top:12px;
+}
+
+.student-video-card{
+  background:#101820;
+
+  border-radius:13px;
+
+  overflow:hidden;
+
+  min-height:120px;
+
+  position:relative;
+}
+
+.student-video-card video{
+  width:100%;
+  height:140px;
+
+  object-fit:cover;
+}
+
+.student-video-name{
   position:absolute;
-  left:8px;
-  bottom:8px;
-  background:rgba(0,0,0,.55);
+
+  left:7px;
+  bottom:7px;
+
+  background:rgba(0,0,0,.65);
+
   color:white;
+
   padding:5px 8px;
+
   border-radius:8px;
+
   font-size:11px;
 }
 
-/* ================= HIDDEN ================= */
+/* =========================
+   END BUTTON
+========================= */
+
+.end-btn{
+  width:100%;
+
+  margin-top:16px;
+
+  border:none;
+
+  border-radius:13px;
+
+  background:#e53935;
+
+  color:white;
+
+  padding:14px;
+
+  font-size:16px;
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+/* =========================
+   STUDENT LIVE STATUS
+========================= */
+
+.student-live-status{
+  margin-top:12px;
+
+  background:#edf5ff;
+
+  color:#1455a0;
+
+  border-radius:11px;
+
+  padding:11px;
+
+  text-align:center;
+
+  font-size:13px;
+}
+
+/* =========================
+   MESSAGE POPUP
+========================= */
+
+.message-overlay{
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,.55);
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  padding:20px;
+
+  z-index:3000;
+}
+
+.message-overlay.show{
+  display:flex;
+}
+
+.message-box{
+  width:100%;
+  max-width:360px;
+
+  background:white;
+
+  border-radius:20px;
+
+  padding:25px 20px;
+
+  text-align:center;
+
+  animation:messagePop .2s ease;
+}
+
+@keyframes messagePop{
+  from{
+    transform:scale(.9);
+    opacity:0;
+  }
+
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.message-icon{
+  width:60px;
+  height:60px;
+
+  border-radius:50%;
+
+  background:#edf5ff;
+
+  margin:0 auto 13px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:29px;
+}
+
+.message-box h3{
+  color:#174a8b;
+
+  margin-bottom:8px;
+}
+
+.message-box p{
+  color:#666;
+
+  font-size:14px;
+
+  line-height:1.5;
+
+  margin-bottom:17px;
+}
+
+.message-ok{
+  width:100%;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:#0d6efd;
+  color:white;
+
+  padding:12px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:420px){
+
+  .main{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .header-title{
+    font-size:17px;
+  }
+
+  .video-box video{
+    height:230px;
+  }
+
+  .student-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =========================
+   HIDDEN
+========================= */
 
 .hidden{
   display:none !important;
-}
-
-.small-text{
-  font-size:12px;
-  color:#708090;
-  line-height:1.5;
-  margin-top:10px;
 }
 
 </style>
@@ -431,11 +979,17 @@ body{
 
 <div class="app">
 
-  <!-- ================= HEADER ================= -->
+  <!-- =========================
+       HEADER
+  ========================= -->
 
   <div class="header">
 
-    <button class="back-btn" onclick="goHome()">←</button>
+    <button
+      class="back-btn"
+      onclick="goHome()">
+      ←
+    </button>
 
     <div class="header-title">
       🎥 GyanSetu Live Classes
@@ -444,7 +998,9 @@ body{
   </div>
 
 
-  <!-- ================= MAIN ================= -->
+  <!-- =========================
+       MAIN
+  ========================= -->
 
   <div class="main">
 
@@ -454,17 +1010,20 @@ body{
         🎥
       </div>
 
-      <h2>Live Classes</h2>
+      <h2>
+        Live Classes
+      </h2>
 
       <p>
-        Sir ची live class join करा आणि
-        real-time मध्ये शिकता येईल.
+        Sir live class सुरू करू शकतात
+        आणि students Channel ID वापरून
+        live class join करू शकतात.
       </p>
 
     </div>
 
 
-    <!-- ONLY LIVE CLASS BUTTON -->
+    <!-- LIVE CLASS BUTTON -->
 
     <button
       class="live-button"
@@ -475,65 +1034,101 @@ body{
     </button>
 
 
-    <!-- ================= RECORDINGS ================= -->
+    <!-- RECORDINGS -->
 
     <h3 class="section-title">
       📚 Saved Recordings
     </h3>
 
-    <div id="recordingsList"></div>
+    <div id="recordingsList">
+
+      <div class="recording-empty">
+        अजून कोणतीही recording saved नाही.
+      </div>
+
+    </div>
 
   </div>
 
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      ROLE POPUP
-===================================================== -->
+================================================= -->
 
-<div id="roleOverlay" class="overlay">
+<div
+  class="overlay"
+  id="roleOverlay">
 
   <div class="popup">
 
-    <div class="popup-head">
-      <h3>Live Class</h3>
+    <div class="popup-handle"></div>
+
+    <div class="popup-header">
+
+      <h3>
+        🎥 Live Class
+      </h3>
 
       <button
         class="close-btn"
-        onclick="closePopup('roleOverlay')">
+        onclick="closeRolePopup()">
         ×
       </button>
+
     </div>
 
 
     <button
-      class="option"
+      class="role-option"
       onclick="openSirPopup()">
 
-      <div class="option-icon">
+      <div class="role-icon">
         👨‍🏫
       </div>
 
-      <div>
-        <strong>Sir</strong>
-        <span>Live class सुरू करा</span>
+      <div class="role-info">
+
+        <h4>
+          Sir
+        </h4>
+
+        <p>
+          नवीन Live Class सुरू करा
+        </p>
+
+      </div>
+
+      <div class="role-arrow">
+        ›
       </div>
 
     </button>
 
 
     <button
-      class="option"
+      class="role-option"
       onclick="openStudentPopup()">
 
-      <div class="option-icon">
+      <div class="role-icon">
         👨‍🎓
       </div>
 
-      <div>
-        <strong>Student</strong>
-        <span>Sir च्या live class मध्ये join व्हा</span>
+      <div class="role-info">
+
+        <h4>
+          Student
+        </h4>
+
+        <p>
+          Channel ID वापरून class join करा
+        </p>
+
+      </div>
+
+      <div class="role-arrow">
+        ›
       </div>
 
     </button>
@@ -543,86 +1138,112 @@ body{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      SIR POPUP
-===================================================== -->
+================================================= -->
 
-<div id="sirOverlay" class="overlay">
+<div
+  class="overlay"
+  id="sirOverlay">
 
   <div class="popup">
 
-    <div class="popup-head">
+    <div class="popup-handle"></div>
 
-      <h3>👨‍🏫 Sir Live Class</h3>
+    <div class="popup-header">
+
+      <h3>
+        👨‍🏫 Sir Live Class
+      </h3>
 
       <button
         class="close-btn"
-        onclick="closePopup('sirOverlay')">
+        onclick="closeSirPopup()">
         ×
       </button>
 
     </div>
 
 
+    <!-- SIR SETUP -->
+
     <div id="sirSetup">
+
+      <p
+        style="
+          color:#666;
+          font-size:14px;
+          line-height:1.5;
+          margin-bottom:15px;
+        ">
+
+        Channel तयार करा आणि
+        students ना Channel ID द्या.
+
+      </p>
 
       <button
         class="primary-btn"
-        onclick="createChannel()">
+        id="createChannelBtn"
+        onclick="createSirChannel()">
 
         ➕ Create Channel
 
       </button>
 
-      <div class="small-text">
-        आधी channel तयार करा.
-        त्यानंतर camera आणि microphone सुरू करून
-        students ला Channel ID द्या.
-      </div>
-
     </div>
 
 
-    <div id="sirLiveArea" class="hidden">
+    <!-- SIR LIVE AREA -->
+
+    <div
+      id="sirLiveArea"
+      class="hidden">
 
       <div class="channel-box">
 
         <div class="channel-label">
-          STUDENTS ने हा Channel ID टाकायचा
+          🔑 Channel ID
         </div>
 
-        <div
-          id="sirChannelId"
-          class="channel-id">
-          -
+        <div class="channel-row">
+
+          <div
+            class="channel-id"
+            id="sirChannelId">
+            —
+          </div>
+
+          <button
+            class="copy-btn"
+            id="copyChannelId"
+            onclick="copyChannelId()">
+
+            📋 Copy
+
+          </button>
+
         </div>
-
-        <button
-          class="copy-btn"
-          onclick="copyChannelId()">
-
-          📋 Copy Channel ID
-
-        </button>
 
       </div>
 
 
       <div
-        id="sirStatus"
-        class="status">
+        class="status-box show"
+        id="sirStatus">
 
-        Camera सुरू करण्यासाठी तयार.
+        Channel तयार आहे.
+        Camera सुरू करा.
 
       </div>
 
 
       <button
-        id="startCameraBtn"
         class="primary-btn"
+        id="startCameraBtn"
         onclick="startSirCamera()">
 
-        📹 Start Live Camera
+        📹 Start Camera & Mic
 
       </button>
 
@@ -630,8 +1251,8 @@ body{
       <div class="video-box">
 
         <span
-          id="sirLiveBadge"
-          class="live-badge hidden">
+          class="live-badge hidden"
+          id="sirLiveBadge">
 
           🔴 LIVE
 
@@ -647,24 +1268,43 @@ body{
       </div>
 
 
-      <h3
-        id="studentCount"
-        style="margin-top:15px;color:#075fc9;">
-        👨‍🎓 Students: 0
-      </h3>
+      <div class="student-count-box">
+
+        <div class="student-count-title">
+          👨‍🎓 Joined Students
+        </div>
+
+        <div
+          class="student-count-badge"
+          id="studentCountBadge">
+
+          0
+
+        </div>
+
+      </div>
 
 
       <div
-        id="studentGrid"
-        class="student-grid">
+        class="student-list"
+        id="studentList">
+
+      </div>
+
+
+      <div
+        class="student-grid"
+        id="studentGrid">
+
       </div>
 
 
       <button
         class="end-btn"
+        id="endSirClass"
         onclick="endSirClass()">
 
-        ⛔ End Class
+        ⛔ End Live Class
 
       </button>
 
@@ -675,68 +1315,98 @@ body{
 </div>
 
 
-<!-- =====================================================
+<!-- =================================================
      STUDENT POPUP
-===================================================== -->
+================================================= -->
 
-<div id="studentOverlay" class="overlay">
+<div
+  class="overlay"
+  id="studentOverlay">
 
   <div class="popup">
 
-    <div class="popup-head">
+    <div class="popup-handle"></div>
 
-      <h3>👨‍🎓 Join Live Class</h3>
+    <div class="popup-header">
+
+      <h3>
+        👨‍🎓 Join Live Class
+      </h3>
 
       <button
         class="close-btn"
-        onclick="closePopup('studentOverlay')">
+        onclick="closeStudentPopup()">
         ×
       </button>
 
     </div>
 
 
+    <!-- STUDENT JOIN AREA -->
+
     <div id="studentJoinArea">
 
-      <label>
-        Sir चा Channel ID
-      </label>
+      <div class="form-group">
 
-      <input
-        id="channelInput"
-        class="input"
-        placeholder="उदा. 8f72ab..."
-        autocomplete="off">
+        <label>
+          👤 Username
+        </label>
+
+        <input
+          type="text"
+          id="studentNameInput"
+          class="form-input"
+          maxlength="30"
+          placeholder="तुमचे username टाका">
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          🔑 Sir Channel ID
+        </label>
+
+        <input
+          type="text"
+          id="channelInput"
+          class="form-input"
+          placeholder="Channel ID टाका">
+
+      </div>
 
 
       <button
         class="primary-btn"
+        id="joinStudentBtn"
         onclick="joinStudentClass()">
 
         🚀 Join Live Class
 
       </button>
 
-      <div
-        id="studentStatus"
-        class="status">
 
-        Channel ID टाका आणि Join करा.
+      <div
+        class="status-box"
+        id="studentStatus">
 
       </div>
 
     </div>
 
 
+    <!-- STUDENT LIVE AREA -->
+
     <div
       id="studentLiveArea"
       class="hidden">
 
       <div
-        id="studentLiveStatus"
-        class="status">
+        class="student-live-status"
+        id="studentLiveStatus">
 
-        Sir च्या class ला connect होत आहे...
+        🔴 Live Class सुरू आहे
 
       </div>
 
@@ -744,8 +1414,8 @@ body{
       <div class="video-box">
 
         <span
-          id="studentLiveBadge"
-          class="live-badge hidden">
+          class="live-badge"
+          id="studentLiveBadge">
 
           🔴 LIVE
 
@@ -766,103 +1436,261 @@ body{
 </div>
 
 
+<!-- =================================================
+     MESSAGE POPUP
+================================================= -->
+
+<div
+  class="message-overlay"
+  id="messageOverlay">
+
+  <div class="message-box">
+
+    <div
+      class="message-icon"
+      id="messageIcon">
+
+      ℹ️
+
+    </div>
+
+    <h3
+      id="messageTitle">
+
+      Message
+
+    </h3>
+
+    <p
+      id="messageText">
+
+    </p>
+
+    <button
+      class="message-ok"
+      onclick="closeMessage()">
+
+      OK
+
+    </button>
+
+  </div>
+
+</div>
+
+
 <script>
 
-/* =====================================================
+/* =================================================
    GLOBAL VARIABLES
-===================================================== */
+================================================= */
 
 let peer = null;
 
 let sirStream = null;
-
 let sirRecorder = null;
-
 let sirRecordingChunks = [];
 
 let sirPeerId = null;
-
 let isSirLive = false;
 
 let sirCalls = [];
-
 let studentConnections = [];
 
 let studentCall = null;
-
 let studentRemoteStream = null;
-
 let studentRecorder = null;
-
 let studentRecordingChunks = [];
 
 let studentHostId = null;
+let studentUsername = "";
 
 let classStartedAt = null;
 
+const students = new Map();
 
-/* =====================================================
-   BASIC POPUP FUNCTIONS
-===================================================== */
+let dummyStudentStream = null;
 
-function openRolePopup(){
 
-  document
-    .getElementById("roleOverlay")
-    .classList.add("show");
+/* =================================================
+   DOM HELPERS
+================================================= */
 
-}
-
-function openSirPopup(){
-
-  closePopup("roleOverlay");
-
-  document
-    .getElementById("sirOverlay")
-    .classList.add("show");
-
-}
-
-function openStudentPopup(){
-
-  closePopup("roleOverlay");
-
-  document
-    .getElementById("studentOverlay")
-    .classList.add("show");
-
-}
-
-function closePopup(id){
-
-  document
-    .getElementById(id)
-    .classList.remove("show");
-
+function $(id){
+  return document.getElementById(id);
 }
 
 
-/* =====================================================
-   HOME
-===================================================== */
+/* =================================================
+   GO HOME
+================================================= */
 
 function goHome(){
 
-  // तुझ्या actual app मध्ये इथे तुझं home function लाव.
+  if(isSirLive){
+
+    showMessage(
+      "Live Class चालू आहे",
+      "Home वर जाण्यापूर्वी Live Class End करा.",
+      "⚠️"
+    );
+
+    return;
+  }
+
+  if(studentCall){
+
+    showMessage(
+      "Live Class चालू आहे",
+      "पहिले Live Class मधून बाहेर पडा.",
+      "⚠️"
+    );
+
+    return;
+  }
+
   window.history.back();
+}
+
+
+/* =================================================
+   ROLE POPUP
+================================================= */
+
+function openRolePopup(){
+
+  $("roleOverlay").classList.add("show");
 
 }
 
 
-/* =====================================================
-   CREATE CHANNEL
-===================================================== */
+function closeRolePopup(){
 
-function createChannel(){
+  $("roleOverlay").classList.remove("show");
 
-  setSirStatus(
-    "Channel तयार होत आहे..."
-  );
+}
+
+
+/* =================================================
+   SIR POPUP
+================================================= */
+
+function openSirPopup(){
+
+  closeRolePopup();
+
+  $("sirOverlay").classList.add("show");
+
+}
+
+
+function closeSirPopup(){
+
+  if(isSirLive){
+
+    showMessage(
+      "Live Class चालू आहे",
+      "Class चालू असताना popup बंद करू नका. आधी End Live Class करा.",
+      "⚠️"
+    );
+
+    return;
+  }
+
+  $("sirOverlay").classList.remove("show");
+
+}
+
+
+/* =================================================
+   STUDENT POPUP
+================================================= */
+
+function openStudentPopup(){
+
+  closeRolePopup();
+
+  $("studentOverlay").classList.add("show");
+
+}
+
+
+function closeStudentPopup(){
+
+  if(studentCall){
+
+    showMessage(
+      "Live Class चालू आहे",
+      "Class चालू असताना popup बंद करू नका.",
+      "⚠️"
+    );
+
+    return;
+  }
+
+  $("studentOverlay").classList.remove("show");
+
+}
+
+
+/* =================================================
+   MESSAGE POPUP
+================================================= */
+
+function showMessage(
+  title,
+  message,
+  icon = "ℹ️"
+){
+
+  $("messageTitle").textContent = title;
+  $("messageText").textContent = message;
+  $("messageIcon").textContent = icon;
+
+  $("messageOverlay").classList.add("show");
+
+}
+
+
+function closeMessage(){
+
+  $("messageOverlay").classList.remove("show");
+
+}
+
+
+/* =================================================
+   RANDOM CHANNEL ID
+================================================= */
+
+function generateChannelId(){
+
+  const chars =
+    "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+  let result = "";
+
+  for(let i = 0; i < 8; i++){
+
+    result +=
+      chars.charAt(
+        Math.floor(
+          Math.random() * chars.length
+        )
+      );
+
+  }
+
+  return "GS-" + result;
+
+}
+
+
+/* =================================================
+   CREATE SIR CHANNEL
+================================================= */
+
+function createSirChannel(){
 
   if(peer){
 
@@ -870,153 +1698,519 @@ function createChannel(){
       peer.destroy();
     }catch(e){}
 
+    peer = null;
+
+  }
+
+  $("createChannelBtn").disabled = true;
+
+  $("createChannelBtn").textContent =
+    "⏳ Creating Channel...";
+
+
+  const channelId =
+    generateChannelId();
+
+
+  peer = new Peer(
+    channelId,
+    {
+      debug: 1
+    }
+  );
+
+
+  peer.on(
+    "open",
+    function(id){
+
+      sirPeerId = id;
+
+      $("sirChannelId").textContent = id;
+
+      $("sirSetup").classList.add("hidden");
+
+      $("sirLiveArea").classList.remove("hidden");
+
+      $("sirStatus").textContent =
+        "Channel तयार आहे. Camera आणि Mic सुरू करा.";
+
+      $("sirStatus").classList.add("show");
+
+      $("createChannelBtn").disabled = false;
+
+      $("createChannelBtn").textContent =
+        "➕ Create Channel";
+
+
+      setupSirPeerEvents();
+
+    }
+  );
+
+
+  peer.on(
+    "error",
+    function(error){
+
+      console.error(
+        "Sir Peer Error:",
+        error
+      );
+
+      $("createChannelBtn").disabled = false;
+
+      $("createChannelBtn").textContent =
+        "➕ Create Channel";
+
+
+      let msg =
+        "Channel तयार करताना समस्या आली.";
+
+      if(
+        error &&
+        error.type === "unavailable-id"
+      ){
+
+        msg =
+          "हा Channel ID आधीपासून वापरात आहे. पुन्हा प्रयत्न करा.";
+
+      }
+
+      showMessage(
+        "Channel Error",
+        msg,
+        "❌"
+      );
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   SETUP SIR PEER EVENTS
+================================================= */
+
+function setupSirPeerEvents(){
+
+  if(!peer) return;
+
+
+  /* ==============================================
+     STUDENT DATA CONNECTION
+  ============================================== */
+
+  peer.on(
+    "connection",
+    function(conn){
+
+      studentConnections.push(conn);
+
+      conn.on(
+        "open",
+        function(){
+
+          console.log(
+            "Student connected:",
+            conn.peer
+          );
+
+
+          if(isSirLive){
+
+            try{
+
+              conn.send({
+                type:"CLASS_STATUS",
+                live:true
+              });
+
+            }catch(e){}
+
+          }
+
+        }
+      );
+
+
+      conn.on(
+        "data",
+        function(data){
+
+          handleSirData(
+            conn,
+            data
+          );
+
+        }
+      );
+
+
+      conn.on(
+        "close",
+        function(){
+
+          removeStudent(
+            conn.peer
+          );
+
+          studentConnections =
+            studentConnections.filter(
+              function(item){
+                return item !== conn;
+              }
+            );
+
+        }
+      );
+
+
+      conn.on(
+        "error",
+        function(error){
+
+          console.error(
+            "Student connection error:",
+            error
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+  /* ==============================================
+     STUDENT VIDEO CALL
+  ============================================== */
+
+  peer.on(
+    "call",
+    function(call){
+
+      console.log(
+        "Incoming student call:",
+        call.peer
+      );
+
+
+      if(
+        !sirStream ||
+        !isSirLive
+      ){
+
+        try{
+
+          call.close();
+
+        }catch(e){}
+
+        return;
+
+      }
+
+
+      call.answer(
+        sirStream
+      );
+
+
+      sirCalls.push(call);
+
+
+      call.on(
+        "close",
+        function(){
+
+          sirCalls =
+            sirCalls.filter(
+              function(item){
+                return item !== call;
+              }
+            );
+
+          const student =
+            students.get(call.peer);
+
+          if(student){
+
+            student.call = null;
+
+          }
+
+          updateStudentUI();
+
+        }
+      );
+
+
+      call.on(
+        "error",
+        function(error){
+
+          console.error(
+            "Sir call error:",
+            error
+          );
+
+        }
+      );
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   HANDLE DATA RECEIVED BY SIR
+================================================= */
+
+function handleSirData(
+  conn,
+  data
+){
+
+  if(!data || !data.type){
+    return;
   }
 
 
-  /*
-    PeerJS स्वतः एक unique Peer ID तयार करतो.
-    हाच ID आपल्या Live Class चा Channel ID आहे.
-  */
+  /* ==============================================
+     STUDENT JOINED
+  ============================================== */
 
-  peer = new Peer();
+  if(
+    data.type ===
+    "STUDENT_JOINED"
+  ){
 
-
-  peer.on("open", function(id){
-
-    sirPeerId = id;
-
-    document
-      .getElementById("sirChannelId")
-      .textContent = id;
-
-    document
-      .getElementById("sirLiveArea")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("sirSetup")
-      .classList.add("hidden");
-
-    setSirStatus(
-      "Channel तयार आहे. आता Start Live Camera करा."
-    );
-
-  });
+    let username =
+      String(
+        data.username || "Student"
+      ).trim();
 
 
-  /* =================================================
-     STUDENT VIDEO CALL RECEIVE
-  ================================================= */
+    if(!username){
 
-  peer.on("call", function(call){
+      username = "Student";
 
-    /*
-      जर Sir ने camera सुरू केला असेल
-      तर student ला लगेच stream देतो.
-    */
-
-    if(!sirStream){
-
-      call.close();
-
-      setSirStatus(
-        "Student connected झाला आहे, पण Sir camera अजून सुरू नाही."
-      );
-
-      return;
     }
 
 
-    call.answer(sirStream);
+    username =
+      username.substring(
+        0,
+        30
+      );
 
 
-    sirCalls.push(call);
-
-
-    call.on("close", function(){
-
-      sirCalls =
-        sirCalls.filter(
-          c => c !== call
-        );
-
-      updateStudentCount();
-
-    });
-
-
-    call.on("error", function(){
-
-      sirCalls =
-        sirCalls.filter(
-          c => c !== call
-        );
-
-      updateStudentCount();
-
-    });
-
-
-    addStudentTile(
-      call.peer
+    students.set(
+      conn.peer,
+      {
+        username: username,
+        conn: conn,
+        call: null
+      }
     );
 
-    updateStudentCount();
 
-  });
+    updateStudentUI();
 
 
-  /* =================================================
-     DATA CONNECTION
-  ================================================= */
-
-  peer.on("connection", function(conn){
-
-    studentConnections.push(conn);
-
-    conn.on("open", function(){
+    try{
 
       conn.send({
         type:"CLASS_STATUS",
         live:isSirLive
       });
 
-    });
+    }catch(e){}
 
 
-    conn.on("close", function(){
+    return;
 
-      studentConnections =
-        studentConnections.filter(
-          c => c !== conn
-        );
-
-    });
-
-  });
+  }
 
 
-  peer.on("error", function(error){
+  /* ==============================================
+     STUDENT LEFT
+  ============================================== */
 
-    setSirStatus(
-      "Connection मध्ये समस्या आली. पुन्हा channel create करा."
+  if(
+    data.type ===
+    "STUDENT_LEFT"
+  ){
+
+    removeStudent(
+      conn.peer
     );
 
-  });
+    return;
+
+  }
 
 }
 
 
-/* =====================================================
-   SIR CAMERA
-===================================================== */
+/* =================================================
+   REMOVE STUDENT
+================================================= */
 
-async function startSirCamera(){
+function removeStudent(
+  peerId
+){
 
-  if(!peer || !sirPeerId){
+  const student =
+    students.get(peerId);
 
-    setSirStatus(
-      "आधी Create Channel करा."
+
+  if(student){
+
+    if(student.call){
+
+      try{
+
+        student.call.close();
+
+      }catch(e){}
+
+    }
+
+
+    if(student.conn){
+
+      try{
+
+        student.conn.close();
+
+      }catch(e){}
+
+    }
+
+  }
+
+
+  students.delete(
+    peerId
+  );
+
+
+  updateStudentUI();
+
+}
+
+
+/* =================================================
+   UPDATE STUDENT UI
+================================================= */
+
+function updateStudentUI(){
+
+  $("studentCountBadge").textContent =
+    students.size;
+
+
+  const list =
+    $("studentList");
+
+
+  list.innerHTML = "";
+
+
+  if(students.size === 0){
+
+    const empty =
+      document.createElement("div");
+
+    empty.style.cssText =
+      "padding:12px;text-align:center;color:#777;font-size:13px;";
+
+    empty.textContent =
+      "अजून कोणताही student join झालेला नाही.";
+
+    list.appendChild(
+      empty
+    );
+
+  }
+
+
+  students.forEach(
+    function(student){
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "student-item";
+
+
+      const avatar =
+        document.createElement("div");
+
+      avatar.className =
+        "student-avatar";
+
+
+      avatar.textContent =
+        student.username
+          .charAt(0)
+          .toUpperCase();
+
+
+      const name =
+        document.createElement("div");
+
+      name.className =
+        "student-name";
+
+
+      name.textContent =
+        student.username;
+
+
+      item.appendChild(
+        avatar
+      );
+
+      item.appendChild(
+        name
+      );
+
+
+      list.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   COPY CHANNEL ID
+================================================= */
+
+async function copyChannelId(){
+
+  const id =
+    $("sirChannelId").textContent;
+
+
+  if(
+    !id ||
+    id === "—"
+  ){
+
+    showMessage(
+      "Channel ID नाही",
+      "आधी Channel तयार करा.",
+      "⚠️"
     );
 
     return;
@@ -1026,22 +2220,84 @@ async function startSirCamera(){
 
   try{
 
-    setSirStatus(
-      "Camera आणि microphone permission मागत आहे..."
+    await navigator.clipboard.writeText(
+      id
     );
 
+
+    showMessage(
+      "Copied!",
+      "Channel ID clipboard मध्ये copy झाला.",
+      "📋"
+    );
+
+  }catch(error){
+
+    showMessage(
+      "Copy Failed",
+      "Channel ID manually copy करा.",
+      "❌"
+    );
+
+  }
+
+}
+
+<script>
+
+
+
+/* =================================================
+   START SIR CAMERA
+================================================= */
+
+async function startSirCamera(){
+
+  if(!peer){
+
+    showMessage(
+      "Channel नाही",
+      "आधी Channel तयार करा.",
+      "⚠️"
+    );
+
+    return;
+
+  }
+
+
+  if(isSirLive){
+
+    showMessage(
+      "Already Live",
+      "Live Class आधीच सुरू आहे.",
+      "🔴"
+    );
+
+    return;
+
+  }
+
+
+  $("startCameraBtn").disabled = true;
+
+  $("startCameraBtn").textContent =
+    "⏳ Camera सुरू होत आहे...";
+
+
+  try{
 
     sirStream =
       await navigator.mediaDevices.getUserMedia({
 
         video:{
-          facingMode:"user",
           width:{
             ideal:1280
           },
           height:{
             ideal:720
-          }
+          },
+          facingMode:"user"
         },
 
         audio:true
@@ -1049,14 +2305,12 @@ async function startSirCamera(){
       });
 
 
-    const video =
-      document.getElementById("sirVideo");
-
-    video.srcObject =
+    $("sirVideo").srcObject =
       sirStream;
 
 
-    await video.play();
+    await $("sirVideo").play()
+      .catch(function(){});
 
 
     isSirLive = true;
@@ -1065,41 +2319,90 @@ async function startSirCamera(){
       new Date();
 
 
-    document
-      .getElementById("sirLiveBadge")
-      .classList.remove("hidden");
+    $("sirLiveBadge")
+      .classList
+      .remove("hidden");
 
 
-    document
-      .getElementById("startCameraBtn")
-      .classList.add("hidden");
+    $("sirStatus").textContent =
+      "🔴 Live Class सुरू आहे. Students आता join करू शकतात.";
 
 
-    setSirStatus(
-      "🔴 Live Class सुरू आहे. Students Channel ID वापरून Join करू शकतात."
-    );
+    $("startCameraBtn").textContent =
+      "🔴 Live Class चालू आहे";
 
 
-    /*
-      Sir ची स्वतःची recording सुरू
-    */
+    $("startCameraBtn").disabled = true;
+
 
     startSirRecording();
 
 
-    /*
-      आधी connect झालेले students असतील
-      तर त्यांना नवीन stream call करतो.
-    */
-
-    notifyStudentsLive();
+    broadcastClassStatus();
 
 
-  }
-  catch(error){
+    showMessage(
+      "Live Class Started",
+      "तुमची Live Class सुरू झाली आहे.",
+      "🔴"
+    );
 
-    setSirStatus(
-      "Camera/Microphone सुरू झाले नाही. Permission तपासा."
+
+  }catch(error){
+
+    console.error(
+      "Camera Error:",
+      error
+    );
+
+
+    $("startCameraBtn").disabled = false;
+
+    $("startCameraBtn").textContent =
+      "📹 Start Camera & Mic";
+
+
+    let message =
+      "Camera आणि Microphone access मिळाला नाही.";
+
+
+    if(
+      error &&
+      error.name === "NotAllowedError"
+    ){
+
+      message =
+        "Camera आणि Microphone permission Allow करा.";
+
+    }
+
+
+    if(
+      error &&
+      error.name === "NotFoundError"
+    ){
+
+      message =
+        "Camera किंवा Microphone device सापडला नाही.";
+
+    }
+
+
+    if(
+      error &&
+      error.name === "NotReadableError"
+    ){
+
+      message =
+        "Camera दुसऱ्या app मध्ये वापरला जात आहे.";
+
+    }
+
+
+    showMessage(
+      "Camera Error",
+      message,
+      "❌"
     );
 
   }
@@ -1107,128 +2410,414 @@ async function startSirCamera(){
 }
 
 
-/* =====================================================
-   SIR RECORDING
-===================================================== */
+/* =================================================
+   GET MEDIA RECORDER TYPE
+================================================= */
+
+function getRecorderMimeType(){
+
+  const types = [
+
+    "video/webm;codecs=vp9,opus",
+
+    "video/webm;codecs=vp8,opus",
+
+    "video/webm"
+
+  ];
+
+
+  for(
+    let i = 0;
+    i < types.length;
+    i++
+  ){
+
+    if(
+      MediaRecorder.isTypeSupported(
+        types[i]
+      )
+    ){
+
+      return types[i];
+
+    }
+
+  }
+
+
+  return "";
+
+}
+
+
+/* =================================================
+   START SIR RECORDING
+================================================= */
 
 function startSirRecording(){
 
-  if(!sirStream)
+  if(!sirStream){
+
     return;
+
+  }
 
 
   sirRecordingChunks = [];
 
 
-  let options = {};
-
-  if(
-    MediaRecorder.isTypeSupported(
-      "video/webm;codecs=vp9,opus"
-    )
-  ){
-
-    options.mimeType =
-      "video/webm;codecs=vp9,opus";
-
-  }
-  else if(
-    MediaRecorder.isTypeSupported(
-      "video/webm;codecs=vp8,opus"
-    )
-  ){
-
-    options.mimeType =
-      "video/webm;codecs=vp8,opus";
-
-  }
+  const mimeType =
+    getRecorderMimeType();
 
 
-  sirRecorder =
-    new MediaRecorder(
-      sirStream,
-      options
-    );
+  try{
 
+    if(mimeType){
 
-  sirRecorder.ondataavailable =
-    function(event){
-
-      if(event.data.size > 0){
-
-        sirRecordingChunks.push(
-          event.data
-        );
-
-      }
-
-    };
-
-
-  sirRecorder.onstop =
-    async function(){
-
-      const blob =
-        new Blob(
-          sirRecordingChunks,
+      sirRecorder =
+        new MediaRecorder(
+          sirStream,
           {
-            type:
-              sirRecorder.mimeType ||
-              "video/webm"
+            mimeType:mimeType
           }
         );
 
+    }else{
 
-      const title =
-        "GyanSetu_Sir_Class_" +
-        Date.now();
+      sirRecorder =
+        new MediaRecorder(
+          sirStream
+        );
 
-
-      /*
-        IndexedDB मध्ये save
-      */
-
-      await saveRecording(
-        title,
-        blob,
-        "Sir Recording"
-      );
+    }
 
 
-      /*
-        Device download
-      */
+    sirRecorder.ondataavailable =
+      function(event){
 
-      downloadBlob(
-        blob,
-        title + ".webm"
-      );
+        if(
+          event.data &&
+          event.data.size > 0
+        ){
 
-    };
+          sirRecordingChunks.push(
+            event.data
+          );
+
+        }
+
+      };
 
 
-  sirRecorder.start(1000);
+    sirRecorder.onstop =
+      async function(){
+
+        if(
+          sirRecordingChunks.length === 0
+        ){
+
+          return;
+
+        }
+
+
+        const blob =
+          new Blob(
+            sirRecordingChunks,
+            {
+              type:
+                sirRecorder.mimeType ||
+                "video/webm"
+            }
+          );
+
+
+        const title =
+          "Sir Live Class";
+
+
+        await saveRecording(
+          title,
+          blob,
+          "sir"
+        );
+
+
+        sirRecordingChunks = [];
+
+      };
+
+
+    sirRecorder.onerror =
+      function(event){
+
+        console.error(
+          "Sir Recorder Error:",
+          event
+        );
+
+      };
+
+
+    sirRecorder.start(
+      1000
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Recording Start Error:",
+      error
+    );
+
+
+    sirRecorder = null;
+
+
+    showMessage(
+      "Recording Error",
+      "Live Class सुरू आहे, पण recording सुरू होऊ शकली नाही.",
+      "⚠️"
+    );
+
+  }
 
 }
 
 
-/* =====================================================
-   STUDENT JOIN
-===================================================== */
+/* =================================================
+   BROADCAST CLASS STATUS
+================================================= */
 
-async function joinStudentClass(){
+function broadcastClassStatus(){
 
-  const hostId =
-    document
-      .getElementById("channelInput")
-      .value
-      .trim();
+  studentConnections.forEach(
+    function(conn){
+
+      if(
+        !conn ||
+        !conn.open
+      ){
+
+        return;
+
+      }
 
 
-  if(!hostId){
+      try{
 
-    setStudentStatus(
-      "Sir चा Channel ID टाका."
+        conn.send({
+          type:"CLASS_STATUS",
+          live:isSirLive
+        });
+
+      }catch(error){
+
+        console.error(
+          "Status send error:",
+          error
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   SEND CURRENT CLASS STATUS
+================================================= */
+
+function sendClassStatus(
+  conn
+){
+
+  if(
+    !conn ||
+    !conn.open
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    conn.send({
+
+      type:"CLASS_STATUS",
+
+      live:isSirLive,
+
+      startedAt:
+        classStartedAt
+          ? classStartedAt.getTime()
+          : null
+
+    });
+
+  }catch(error){
+
+    console.error(
+      "Class status error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =================================================
+   CLOSE SIR CALL
+================================================= */
+
+function closeSirCall(
+  call
+){
+
+  if(!call){
+
+    return;
+
+  }
+
+
+  try{
+
+    call.close();
+
+  }catch(error){
+
+    console.error(
+      "Call close error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =================================================
+   CLOSE STUDENT CONNECTION
+================================================= */
+
+function closeStudentConnection(
+  conn
+){
+
+  if(!conn){
+
+    return;
+
+  }
+
+
+  try{
+
+    conn.close();
+
+  }catch(error){
+
+    console.error(
+      "Connection close error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =================================================
+   STOP SIR MEDIA
+================================================= */
+
+function stopSirMedia(){
+
+  if(
+    sirStream
+  ){
+
+    sirStream
+      .getTracks()
+      .forEach(
+        function(track){
+
+          try{
+
+            track.stop();
+
+          }catch(error){}
+
+        }
+      );
+
+  }
+
+
+  sirStream = null;
+
+
+  if(
+    $("sirVideo")
+  ){
+
+    $("sirVideo").srcObject =
+      null;
+
+  }
+
+}
+
+
+/* =================================================
+   STOP SIR RECORDING
+================================================= */
+
+function stopSirRecording(){
+
+  if(
+    sirRecorder &&
+    sirRecorder.state !== "inactive"
+  ){
+
+    try{
+
+      sirRecorder.stop();
+
+    }catch(error){
+
+      console.error(
+        "Sir recorder stop error:",
+        error
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =================================================
+   END SIR CLASS
+================================================= */
+
+async function endSirClass(){
+
+  if(!isSirLive){
+
+    showMessage(
+      "Live Class नाही",
+      "सध्या कोणतीही Live Class सुरू नाही.",
+      "ℹ️"
     );
 
     return;
@@ -1236,141 +2825,620 @@ async function joinStudentClass(){
   }
 
 
-  studentHostId = hostId;
+  const confirmed =
+    confirmEndClass();
 
 
-  setStudentStatus(
-    "Sir च्या channel ला connect होत आहे..."
+  if(!confirmed){
+
+    return;
+
+  }
+
+
+  isSirLive = false;
+
+
+  /* ==============================================
+     INFORM ALL STUDENTS
+  ============================================== */
+
+  studentConnections.forEach(
+    function(conn){
+
+      if(
+        !conn ||
+        !conn.open
+      ){
+
+        return;
+
+      }
+
+
+      try{
+
+        conn.send({
+
+          type:"CLASS_ENDED",
+
+          message:
+            "Sir ने Live Class समाप्त केली."
+
+        });
+
+      }catch(error){
+
+        console.error(
+          "Class ended send error:",
+          error
+        );
+
+      }
+
+    }
   );
 
 
+  /* ==============================================
+     STOP RECORDING
+  ============================================== */
+
+  stopSirRecording();
+
+
+  /* ==============================================
+     STOP CAMERA + MIC
+  ============================================== */
+
+  stopSirMedia();
+
+
+  /* ==============================================
+     CLOSE CALLS
+  ============================================== */
+
+  sirCalls.forEach(
+    function(call){
+
+      closeSirCall(
+        call
+      );
+
+    }
+  );
+
+
+  sirCalls = [];
+
+
+  /* ==============================================
+     CLOSE CONNECTIONS
+  ============================================== */
+
+  studentConnections.forEach(
+    function(conn){
+
+      closeStudentConnection(
+        conn
+      );
+
+    }
+  );
+
+
+  studentConnections = [];
+
+
+  /* ==============================================
+     CLEAR STUDENTS
+  ============================================== */
+
+  students.clear();
+
+  updateStudentUI();
+
+
+  /* ==============================================
+     RESET UI
+  ============================================== */
+
+  $("sirLiveBadge")
+    .classList
+    .add("hidden");
+
+
+  $("sirStatus").textContent =
+    "Live Class समाप्त झाली.";
+
+
+  $("startCameraBtn").textContent =
+    "📹 Start Camera & Mic";
+
+
+  $("studentCountBadge").textContent =
+    "0";
+
+
+  /* ==============================================
+     DESTROY PEER
+  ============================================== */
+
+  if(peer){
+
+    try{
+
+      peer.destroy();
+
+    }catch(error){
+
+      console.error(
+        "Peer destroy error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  peer = null;
+
+  sirPeerId = null;
+
+  classStartedAt = null;
+
+
+  setTimeout(
+    function(){
+
+      $("sirLiveArea")
+        .classList
+        .add("hidden");
+
+
+      $("sirSetup")
+        .classList
+        .remove("hidden");
+
+
+      $("sirChannelId").textContent =
+        "—";
+
+
+      $("startCameraBtn").disabled =
+        false;
+
+
+    },
+    1000
+  );
+
+
+  await loadRecordings();
+
+
+  showMessage(
+    "Class Ended",
+    "Live Class successfully समाप्त झाली आणि recording save करण्याचा प्रयत्न केला आहे.",
+    "✅"
+  );
+
+}
+
+
+/* =================================================
+   CUSTOM END CONFIRMATION
+================================================= */
+
+function confirmEndClass(){
+
+  return window.confirm(
+    "Live Class बंद करायची आहे का?"
+  );
+
+}
+
+
+/* =================================================
+   SIR PEER ERROR HANDLER
+================================================= */
+
+function handleSirPeerError(
+  error
+){
+
+  console.error(
+    "Peer error:",
+    error
+  );
+
+
+  if(
+    !error
+  ){
+
+    return;
+
+  }
+
+
+  let message =
+    "Peer connection मध्ये समस्या आली.";
+
+
+  switch(
+    error.type
+  ){
+
+    case "network":
+      message =
+        "Network connection मध्ये समस्या आहे.";
+      break;
+
+
+    case "server-error":
+      message =
+        "PeerJS server कडून समस्या आली.";
+      break;
+
+
+    case "socket-error":
+      message =
+        "Internet connection तपासा.";
+      break;
+
+
+    case "disconnected":
+      message =
+        "Peer server पासून connection तुटले.";
+      break;
+
+  }
+
+
+  if(
+    isSirLive
+  ){
+
+    $("sirStatus").textContent =
+      "⚠️ " + message;
+
+  }
+
+}
+
+
+/* =================================================
+   PEER CONNECTION STATUS
+================================================= */
+
+function reconnectSirPeer(){
+
+  if(
+    !peer ||
+    peer.destroyed
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    peer.disconnected
+  ){
+
+    try{
+
+      peer.reconnect();
+
+    }catch(error){
+
+      console.error(
+        "Peer reconnect error:",
+        error
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =================================================
+   PERIODIC PEER CHECK
+================================================= */
+
+setInterval(
+  function(){
+
+    if(
+      isSirLive &&
+      peer
+    ){
+
+      reconnectSirPeer();
+
+    }
+
+  },
+  5000
+);
+
+
+/* =================================================
+   PAGE VISIBILITY
+================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  function(){
+
+    if(
+      document.visibilityState ===
+      "visible"
+    ){
+
+      if(
+        isSirLive
+      ){
+
+        reconnectSirPeer();
+
+      }
+
+    }
+
+  }
+);
+
+</script>
+
+<script>
+
+
+
+/* =================================================
+   JOIN STUDENT CLASS
+================================================= */
+
+async function joinStudentClass(){
+
+  const usernameInput =
+    $("studentNameInput");
+
+  const channelInput =
+    $("channelInput");
+
+  const joinButton =
+    $("joinStudentBtn");
+
+  let username =
+    String(
+      usernameInput.value || ""
+    ).trim();
+
+  let channelId =
+    String(
+      channelInput.value || ""
+    ).trim();
+
+
+  if(!username){
+
+    showMessage(
+      "Username Required",
+      "कृपया तुमचे username टाका.",
+      "👤"
+    );
+
+    usernameInput.focus();
+
+    return;
+
+  }
+
+
+  if(!channelId){
+
+    showMessage(
+      "Channel ID Required",
+      "कृपया Sir चा Channel ID टाका.",
+      "🔑"
+    );
+
+    channelInput.focus();
+
+    return;
+
+  }
+
+
+  username =
+    username.substring(
+      0,
+      30
+    );
+
+
+  channelId =
+    channelId.toUpperCase();
+
+
+  studentUsername =
+    username;
+
+
+  studentHostId =
+    channelId;
+
+
+  joinButton.disabled =
+    true;
+
+  joinButton.textContent =
+    "⏳ Joining...";
+
+
+  $("studentStatus").textContent =
+    "Sir च्या Live Class शी connect होत आहे...";
+
+  $("studentStatus")
+    .classList
+    .add("show");
+
+
   try{
-
-    /*
-      Student ला camera ची गरज नाही.
-      फक्त microphone/camera stream receive होणार.
-    */
-
 
     if(peer){
 
       try{
+
         peer.destroy();
-      }catch(e){}
+
+      }catch(error){}
+
+      peer = null;
 
     }
 
 
-    peer = new Peer();
-
-
-    peer.on("open", function(){
-
-      /*
-        Sir कडे data connection
-      */
-
-      const conn =
-        peer.connect(
-          studentHostId
-        );
-
-
-      conn.on("open", function(){
-
-        conn.send({
-          type:"STUDENT_JOINED"
-        });
-
+    peer =
+      new Peer({
+        debug:1
       });
 
 
-      conn.on("data", function(data){
+    peer.on(
+      "open",
+      async function(){
 
-        handleStudentData(
-          data
+        try{
+
+          await connectStudentToSir();
+
+        }catch(error){
+
+          console.error(
+            "Student connection error:",
+            error
+          );
+
+          resetStudentJoinButton();
+
+          showMessage(
+            "Join Failed",
+            "Sir च्या Channel शी connect होता आले नाही.",
+            "❌"
+          );
+
+        }
+
+      }
+    );
+
+
+    peer.on(
+      "error",
+      function(error){
+
+        console.error(
+          "Student Peer Error:",
+          error
         );
 
-      });
+
+        resetStudentJoinButton();
 
 
-      /*
-        Sir च्या Peer ID ला call
-      */
-
-      /*
-        Empty stream ऐवजी browser मध्ये
-        MediaStream तयार करतो.
-      */
-
-      const emptyStream =
-        new MediaStream();
+        let message =
+          "Live Class join करताना समस्या आली.";
 
 
-      studentCall =
-        peer.call(
-          studentHostId,
-          emptyStream
+        if(
+          error &&
+          error.type === "peer-unavailable"
+        ){
+
+          message =
+            "हा Channel ID सध्या उपलब्ध नाही. Sir ने Channel तयार केला आहे का ते तपासा.";
+
+        }
+
+
+        if(
+          error &&
+          error.type === "network"
+        ){
+
+          message =
+            "Internet connection तपासा.";
+
+        }
+
+
+        if(
+          error &&
+          error.type === "server-error"
+        ){
+
+          message =
+            "Peer server कडून समस्या आली.";
+
+        }
+
+
+        showMessage(
+          "Connection Error",
+          message,
+          "❌"
         );
 
-
-      studentCall.on(
-        "stream",
-        function(remoteStream){
-
-          studentRemoteStream =
-            remoteStream;
-
-          showStudentLive(
-            remoteStream
-          );
-
-          startStudentRecording(
-            remoteStream
-          );
-
-        }
-      );
+      }
+    );
 
 
-      studentCall.on(
-        "close",
-        function(){
+    peer.on(
+      "disconnected",
+      function(){
 
-          stopStudentClass(
-            "Sir ने class बंद केली."
-          );
+        console.log(
+          "Student peer disconnected"
+        );
 
-        }
-      );
-
-      studentCall.on(
-        "error",
-        function(){
-
-          setStudentStatus(
-            "Live connection मध्ये समस्या आली."
-          );
-
-        }
-      );
-
-    });
+      }
+    );
 
 
-    peer.on("error", function(){
+    peer.on(
+      "close",
+      function(){
 
-      setStudentStatus(
-        "Channel सापडला नाही किंवा Sir offline आहे."
-      );
+        console.log(
+          "Student peer closed"
+        );
 
-    });
+      }
+    );
 
-  }
-  catch(error){
 
-    setStudentStatus(
-      "Join करता आले नाही."
+  }catch(error){
+
+    console.error(
+      "Student Peer creation error:",
+      error
+    );
+
+
+    resetStudentJoinButton();
+
+
+    showMessage(
+      "Error",
+      "Live Class सुरू करता आली नाही.",
+      "❌"
     );
 
   }
@@ -1378,106 +3446,729 @@ async function joinStudentClass(){
 }
 
 
-/* =====================================================
-   STUDENT LIVE VIDEO
-===================================================== */
+/* =================================================
+   CONNECT STUDENT TO SIR
+================================================= */
 
-function showStudentLive(stream){
-
-  closePopup(
-    "studentOverlay"
-  );
-
-  document
-    .getElementById("studentOverlay")
-    .classList.add("show");
-
-
-  document
-    .getElementById("studentJoinArea")
-    .classList.add("hidden");
-
-
-  document
-    .getElementById("studentLiveArea")
-    .classList.remove("hidden");
-
-
-  const video =
-    document.getElementById(
-      "studentVideo"
-    );
-
-
-  video.srcObject =
-    stream;
-
-
-  video.play().catch(
-    function(){}
-  );
-
-
-  document
-    .getElementById("studentLiveBadge")
-    .classList.remove("hidden");
-
-
-  document
-    .getElementById("studentLiveStatus")
-    .textContent =
-      "🔴 LIVE — Sir शिकवत आहेत.";
-
-}
-
-
-/* =====================================================
-   STUDENT RECORDING
-===================================================== */
-
-function startStudentRecording(stream){
-
-  studentRecordingChunks = [];
-
-
-  let options = {};
-
+async function connectStudentToSir(){
 
   if(
-    MediaRecorder.isTypeSupported(
-      "video/webm;codecs=vp9,opus"
-    )
+    !peer ||
+    peer.destroyed
   ){
 
-    options.mimeType =
-      "video/webm;codecs=vp9,opus";
+    throw new Error(
+      "Student peer is not ready."
+    );
 
   }
-  else if(
-    MediaRecorder.isTypeSupported(
-      "video/webm;codecs=vp8,opus"
-    )
+
+
+  const conn =
+    peer.connect(
+      studentHostId,
+      {
+        reliable:true,
+        serialization:"json"
+      }
+    );
+
+
+  if(!conn){
+
+    throw new Error(
+      "Could not create connection."
+    );
+
+  }
+
+
+  studentConnections = [
+    conn
+  ];
+
+
+  conn.on(
+    "open",
+    function(){
+
+      console.log(
+        "Connected to Sir:",
+        studentHostId
+      );
+
+
+      try{
+
+        conn.send({
+
+          type:
+            "STUDENT_JOINED",
+
+          username:
+            studentUsername
+
+        });
+
+      }catch(error){
+
+        console.error(
+          "Username send error:",
+          error
+        );
+
+      }
+
+
+      $("studentStatus").textContent =
+        "✅ Sir शी connected. Live video येण्याची वाट पाहत आहे...";
+
+
+      startStudentCall();
+
+    }
+  );
+
+
+  conn.on(
+    "data",
+    function(data){
+
+      handleStudentData(
+        conn,
+        data
+      );
+
+    }
+  );
+
+
+  conn.on(
+    "close",
+    function(){
+
+      console.log(
+        "Connection with Sir closed"
+      );
+
+
+      if(
+        studentCall
+      ){
+
+        try{
+
+          studentCall.close();
+
+        }catch(error){}
+
+      }
+
+
+      if(
+        $("studentLiveArea")
+          .classList
+          .contains("hidden") === false
+      ){
+
+        stopStudentClass(
+          "Sir शी connection बंद झाले."
+        );
+
+      }
+
+    }
+  );
+
+
+  conn.on(
+    "error",
+    function(error){
+
+      console.error(
+        "Student data connection error:",
+        error
+      );
+
+    }
+  );
+
+}
+
+
+/* =================================================
+   HANDLE STUDENT DATA
+================================================= */
+
+function handleStudentData(
+  conn,
+  data
+){
+
+  if(
+    !data ||
+    !data.type
   ){
 
-    options.mimeType =
-      "video/webm;codecs=vp8,opus";
+    return;
 
   }
+
+
+  /* ==============================================
+     CLASS STATUS
+  ============================================== */
+
+  if(
+    data.type ===
+    "CLASS_STATUS"
+  ){
+
+    if(
+      data.live === true
+    ){
+
+      $("studentStatus").textContent =
+        "🔴 Live Class सुरू आहे...";
+
+    }else{
+
+      $("studentStatus").textContent =
+        "⏳ Sir अजून Live झालेले नाहीत.";
+
+    }
+
+
+    return;
+
+  }
+
+
+  /* ==============================================
+     CLASS ENDED
+  ============================================== */
+
+  if(
+    data.type ===
+    "CLASS_ENDED"
+  ){
+
+    stopStudentClass(
+      data.message ||
+      "Sir ने Live Class समाप्त केली."
+    );
+
+
+    return;
+
+  }
+
+}
+
+
+/* =================================================
+   CREATE RECEIVE-ONLY STREAM
+================================================= */
+
+function createStudentReceiveOnlyStream(){
+
+  try{
+
+    if(
+      dummyStudentStream
+    ){
+
+      dummyStudentStream
+        .getTracks()
+        .forEach(
+          function(track){
+
+            try{
+
+              track.stop();
+
+            }catch(error){}
+
+          }
+        );
+
+    }
+
+  }catch(error){}
+
+
+  const canvas =
+    document.createElement(
+      "canvas"
+    );
+
+
+  canvas.width = 2;
+  canvas.height = 2;
+
+
+  const ctx =
+    canvas.getContext(
+      "2d"
+    );
+
+
+  if(ctx){
+
+    ctx.fillRect(
+      0,
+      0,
+      2,
+      2
+    );
+
+  }
+
+
+  const canvasStream =
+    canvas.captureStream(
+      1
+    );
+
+
+  const videoTrack =
+    canvasStream
+      .getVideoTracks()[0];
+
+
+  let audioTrack = null;
 
 
   try{
 
-    studentRecorder =
-      new MediaRecorder(
-        stream,
-        options
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+
+    if(AudioContext){
+
+      const audioContext =
+        new AudioContext();
+
+
+      const oscillator =
+        audioContext.createOscillator();
+
+
+      const gain =
+        audioContext.createGain();
+
+
+      gain.gain.value = 0;
+
+
+      const destination =
+        audioContext
+          .createMediaStreamDestination();
+
+
+      oscillator.connect(
+        gain
       );
 
+
+      gain.connect(
+        destination
+      );
+
+
+      oscillator.start();
+
+
+      audioTrack =
+        destination.stream
+          .getAudioTracks()[0];
+
+
+      if(audioTrack){
+
+        audioTrack.__audioContext =
+          audioContext;
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.warn(
+      "Silent audio track unavailable:",
+      error
+    );
+
+  }
+
+
+  dummyStudentStream =
+    new MediaStream();
+
+
+  if(videoTrack){
+
+    dummyStudentStream.addTrack(
+      videoTrack
+    );
+
+  }
+
+
+  if(audioTrack){
+
+    dummyStudentStream.addTrack(
+      audioTrack
+    );
+
+  }
+
+
+  return dummyStudentStream;
+
+}
+
+
+/* =================================================
+   START STUDENT CALL
+================================================= */
+
+function startStudentCall(){
+
+  if(
+    !peer ||
+    peer.destroyed
+  ){
+
+    showMessage(
+      "Connection Error",
+      "Student Peer तयार नाही.",
+      "❌"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !studentHostId
+  ){
+
+    showMessage(
+      "Channel Error",
+      "Sir चा Channel ID उपलब्ध नाही.",
+      "❌"
+    );
+
+    return;
+
+  }
+
+
+  if(studentCall){
+
+    try{
+
+      studentCall.close();
+
+    }catch(error){}
+
+    studentCall = null;
+
+  }
+
+
+  const receiveStream =
+    createStudentReceiveOnlyStream();
+
+
+  try{
+
+    studentCall =
+      peer.call(
+        studentHostId,
+        receiveStream
+      );
+
+
+    if(!studentCall){
+
+      throw new Error(
+        "Call could not be created."
+      );
+
+    }
+
+
+    studentCall.on(
+      "stream",
+      function(remoteStream){
+
+        console.log(
+          "Sir remote stream received"
+        );
+
+
+        studentRemoteStream =
+          remoteStream;
+
+
+        $("studentVideo").srcObject =
+          remoteStream;
+
+
+        $("studentVideo")
+          .play()
+          .catch(
+            function(error){
+
+              console.warn(
+                "Student video play:",
+                error
+              );
+
+            }
+          );
+
+
+        $("studentJoinArea")
+          .classList
+          .add("hidden");
+
+
+        $("studentLiveArea")
+          .classList
+          .remove("hidden");
+
+
+        $("studentLiveStatus").textContent =
+          "🔴 Live Class सुरू आहे";
+
+
+        startStudentRecording(
+          remoteStream
+        );
+
+      }
+    );
+
+
+    studentCall.on(
+      "close",
+      function(){
+
+        console.log(
+          "Student video call closed"
+        );
+
+
+        if(
+          $("studentLiveArea")
+            .classList
+            .contains("hidden") === false
+        ){
+
+          stopStudentClass(
+            "Sir ची Live Class connection बंद झाली."
+          );
+
+        }
+
+      }
+    );
+
+
+    studentCall.on(
+      "error",
+      function(error){
+
+        console.error(
+          "Student call error:",
+          error
+        );
+
+
+        showMessage(
+          "Live Video Error",
+          "Sir चा live video मिळवताना समस्या आली.",
+          "❌"
+        );
+
+      }
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Student call creation error:",
+      error
+    );
+
+
+    resetStudentJoinButton();
+
+
+    showMessage(
+      "Call Error",
+      "Sir ला Live Video Call करता आला नाही.",
+      "❌"
+    );
+
+  }
+
+}
+
+
+/* =================================================
+   RESET STUDENT JOIN BUTTON
+================================================= */
+
+function resetStudentJoinButton(){
+
+  $("joinStudentBtn").disabled =
+    false;
+
+  $("joinStudentBtn").textContent =
+    "🚀 Join Live Class";
+
+}
+
+
+/* =================================================
+   STUDENT PEER RECONNECT
+================================================= */
+
+function reconnectStudentPeer(){
+
+  if(
+    !peer ||
+    peer.destroyed
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    peer.disconnected
+  ){
+
+    try{
+
+      peer.reconnect();
+
+    }catch(error){
+
+      console.error(
+        "Student reconnect error:",
+        error
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =================================================
+   STUDENT CONNECTION CHECK
+================================================= */
+
+setInterval(
+  function(){
+
+    if(
+      studentCall ||
+      studentRemoteStream
+    ){
+
+      reconnectStudentPeer();
+
+    }
+
+  },
+  5000
+);
+
+
+/* =================================================
+   STUDENT PAGE VISIBILITY
+================================================= */
+
+document.addEventListener(
+  "visibilitychange",
+  function(){
+
+    if(
+      document.visibilityState ===
+      "visible"
+    ){
+
+      if(
+        studentCall
+      ){
+
+        reconnectStudentPeer();
+
+      }
+
+    }
+
+  }
+);
+
+      </script>
+      <script>
+
+/* =================================================
+   STUDENT RECORDING
+================================================= */
+
+function startStudentRecording(remoteStream){
+
+  if(!remoteStream){
+    return;
+  }
+
+  studentRecordingChunks = [];
+
+  const mimeType = getRecorderMimeType();
+
+  try{
+
+    if(mimeType){
+
+      studentRecorder =
+        new MediaRecorder(
+          remoteStream,
+          {
+            mimeType:mimeType
+          }
+        );
+
+    }else{
+
+      studentRecorder =
+        new MediaRecorder(
+          remoteStream
+        );
+
+    }
 
     studentRecorder.ondataavailable =
       function(event){
 
-        if(event.data.size > 0){
+        if(
+          event.data &&
+          event.data.size > 0
+        ){
 
           studentRecordingChunks.push(
             event.data
@@ -1491,6 +4182,15 @@ function startStudentRecording(stream){
     studentRecorder.onstop =
       async function(){
 
+        if(
+          studentRecordingChunks.length === 0
+        ){
+
+          return;
+
+        }
+
+
         const blob =
           new Blob(
             studentRecordingChunks,
@@ -1502,359 +4202,235 @@ function startStudentRecording(stream){
           );
 
 
-        const title =
-          "GyanSetu_Student_Class_" +
-          Date.now();
-
-
-        /*
-          Student mobile/browser मध्ये save
-        */
-
         await saveRecording(
-          title,
+          "Student Live Class",
           blob,
-          "Student Recording"
+          "student"
         );
 
 
-        /*
-          Download
-        */
+        studentRecordingChunks = [];
 
-        downloadBlob(
-          blob,
-          title + ".webm"
+      };
+
+
+    studentRecorder.onerror =
+      function(event){
+
+        console.error(
+          "Student recorder error:",
+          event
         );
 
       };
 
 
-    /*
-      1 second chunks
-    */
-
     studentRecorder.start(1000);
 
-  }
-  catch(error){
 
-    document
-      .getElementById(
-        "studentLiveStatus"
-      )
-      .textContent =
-        "Live सुरू आहे. Recording या browser मध्ये उपलब्ध नाही.";
+  }catch(error){
 
-  }
-
-}
-
-
-/* =====================================================
-   STUDENT DATA EVENTS
-===================================================== */
-
-function handleStudentData(data){
-
-  if(!data)
-    return;
-
-
-  if(
-    data.type ===
-    "CLASS_STATUS"
-  ){
-
-    if(data.live){
-
-      document
-        .getElementById(
-          "studentLiveStatus"
-        )
-        .textContent =
-          "🔴 LIVE — Sir शिकवत आहेत.";
-
-    }
-
-  }
-
-
-  if(
-    data.type ===
-    "CLASS_ENDED"
-  ){
-
-    stopStudentClass(
-      "Sir ने class बंद केली."
+    console.error(
+      "Student recording error:",
+      error
     );
 
+    studentRecorder = null;
+
   }
 
 }
 
 
-/* =====================================================
-   STOP STUDENT
-===================================================== */
+/* =================================================
+   STOP STUDENT RECORDING
+================================================= */
 
-function stopStudentClass(message){
-
-  /*
-    Student recording stop
-  */
+function stopStudentRecording(){
 
   if(
     studentRecorder &&
     studentRecorder.state !== "inactive"
   ){
 
-    studentRecorder.stop();
+    try{
+
+      studentRecorder.stop();
+
+    }catch(error){
+
+      console.error(
+        "Student recorder stop error:",
+        error
+      );
+
+    }
 
   }
 
-
-  /*
-    Video बंद
-  */
-
-  const video =
-    document.getElementById(
-      "studentVideo"
-    );
+}
 
 
-  if(video){
+/* =================================================
+   STOP STUDENT CLASS
+================================================= */
 
-    video.pause();
+function stopStudentClass(
+  message
+){
 
-    video.srcObject = null;
-
-  }
+  stopStudentRecording();
 
 
   if(studentCall){
 
     try{
+
       studentCall.close();
-    }
-    catch(e){}
+
+    }catch(error){}
 
   }
+
+  studentCall = null;
+
+
+  if(studentRemoteStream){
+
+    studentRemoteStream
+      .getTracks()
+      .forEach(
+        function(track){
+
+          try{
+
+            track.stop();
+
+          }catch(error){}
+
+        }
+      );
+
+  }
+
+  studentRemoteStream = null;
+
+
+  if(dummyStudentStream){
+
+    dummyStudentStream
+      .getTracks()
+      .forEach(
+        function(track){
+
+          try{
+
+            track.stop();
+
+          }catch(error){}
+
+        }
+      );
+
+  }
+
+  dummyStudentStream = null;
+
+
+  if($("studentVideo")){
+
+    $("studentVideo").srcObject =
+      null;
+
+  }
+
+
+  if(studentConnections){
+
+    studentConnections.forEach(
+      function(conn){
+
+        try{
+
+          conn.close();
+
+        }catch(error){}
+
+      }
+    );
+
+  }
+
+  studentConnections = [];
 
 
   if(peer){
 
     try{
+
       peer.destroy();
-    }
-    catch(e){}
 
-    peer = null;
+    }catch(error){}
 
   }
 
-
-  document
-    .getElementById(
-      "studentLiveBadge"
-    )
-    .classList.add("hidden");
+  peer = null;
 
 
-  document
-    .getElementById(
-      "studentLiveStatus"
-    )
-    .textContent =
-      "⛔ " + message +
-      " Recording save होत आहे...";
-
-}
+  studentHostId = null;
 
 
-/* =====================================================
-   END SIR CLASS
-===================================================== */
-
-async function endSirClass(){
-
-  if(!isSirLive){
-
-    closePopup(
-      "sirOverlay"
-    );
-
-    return;
-
-  }
+  $("studentLiveStatus").textContent =
+    "⛔ Live Class समाप्त झाली.";
 
 
-  isSirLive = false;
+  $("studentLiveArea")
+    .classList
+    .add("hidden");
 
 
-  /*
-    सर्व connected students ला END message
-  */
+  $("studentJoinArea")
+    .classList
+    .remove("hidden");
 
-  studentConnections.forEach(
-    function(conn){
 
-      try{
+  resetStudentJoinButton();
 
-        if(conn.open){
 
-          conn.send({
-            type:"CLASS_ENDED"
-          });
+  $("studentStatus").textContent =
+    message ||
+    "Live Class समाप्त झाली.";
 
-        }
 
-      }
-      catch(e){}
+  $("studentStatus")
+    .classList
+    .add("show");
 
-    }
+
+  showMessage(
+    "Class Ended",
+    message ||
+      "Sir ने Live Class समाप्त केली.",
+    "⛔"
   );
 
-
-  /*
-    Sir recording stop
-  */
-
-  if(
-    sirRecorder &&
-    sirRecorder.state !== "inactive"
-  ){
-
-    sirRecorder.stop();
-
-  }
-
-
-  /*
-    Sir camera/mic stop
-  */
-
-  if(sirStream){
-
-    sirStream
-      .getTracks()
-      .forEach(
-        track => track.stop()
-      );
-
-    sirStream = null;
-
-  }
-
-
-  /*
-    सर्व calls close
-  */
-
-  sirCalls.forEach(
-    function(call){
-
-      try{
-        call.close();
-      }
-      catch(e){}
-
-    }
-  );
-
-
-  sirCalls = [];
-
-
-  /*
-    Connection close
-  */
-
-  studentConnections.forEach(
-    function(conn){
-
-      try{
-        conn.close();
-      }
-      catch(e){}
-
-    }
-  );
-
-
-  studentConnections = [];
-
-
-  /*
-    UI
-  */
-
-  document
-    .getElementById(
-      "sirVideo"
-    )
-    .srcObject = null;
-
-
-  document
-    .getElementById(
-      "sirLiveBadge"
-    )
-    .classList.add("hidden");
-
-
-  document
-    .getElementById(
-      "startCameraBtn"
-    )
-    .classList.remove("hidden");
-
-
-  setSirStatus(
-    "Class End झाली. Recording save होत आहे."
-  );
-
-
-  updateStudentCount();
-
-
-  /*
-    थोड्या वेळाने setup वर
-  */
 
   setTimeout(
     function(){
 
-      if(peer){
+      $("studentStatus")
+        .classList
+        .remove("show");
 
-        try{
-          peer.destroy();
-        }
-        catch(e){}
-
-        peer = null;
-
-      }
+    },
+    3000
+  );
 
 
-      document
-        .getElementById(
-          "sirLiveArea"
-        )
-        .classList.add("hidden");
+  setTimeout(
+    function(){
 
-
-      document
-        .getElementById(
-          "sirSetup"
-        )
-        .classList.remove("hidden");
-
-
-      setSirStatus(
-        "नवीन class साठी Create Channel करा."
-      );
+      loadRecordings();
 
     },
     1200
@@ -1863,28 +4439,60 @@ async function endSirClass(){
 }
 
 
-/* =====================================================
-   NOTIFY STUDENTS
-===================================================== */
+/* =================================================
+   LEAVE STUDENT CLASS
+================================================= */
 
-function notifyStudentsLive(){
+function leaveStudentClass(){
+
+  if(
+    !studentCall &&
+    !studentRemoteStream
+  ){
+
+    closeStudentPopup();
+
+    return;
+
+  }
+
+
+  stopStudentClass(
+    "तुम्ही Live Class मधून बाहेर पडलात."
+  );
+
+
+  closeStudentPopup();
+
+}
+
+
+/* =================================================
+   STUDENT SEND LEFT MESSAGE
+================================================= */
+
+function notifyStudentLeft(){
 
   studentConnections.forEach(
     function(conn){
 
-      try{
+      if(
+        conn &&
+        conn.open
+      ){
 
-        if(conn.open){
+        try{
 
           conn.send({
-            type:"CLASS_STATUS",
-            live:true
+
+            type:
+              "STUDENT_LEFT"
+
           });
 
-        }
+        }catch(error){}
 
       }
-      catch(e){}
 
     }
   );
@@ -1892,231 +4500,418 @@ function notifyStudentsLive(){
 }
 
 
-/* =====================================================
-   STUDENT TILE
-===================================================== */
+/* =================================================
+   STUDENT POPUP CLOSE PROTECTION
+================================================= */
 
-function addStudentTile(peerId){
+$("studentOverlay").addEventListener(
+  "click",
+  function(event){
 
-  const grid =
-    document.getElementById(
-      "studentGrid"
-    );
+    if(
+      event.target ===
+      $("studentOverlay")
+    ){
 
+      if(
+        studentCall
+      ){
 
-  if(
-    document.getElementById(
-      "student-" + peerId
-    )
-  )
-    return;
+        showMessage(
+          "Live Class चालू आहे",
+          "Live Class चालू असताना popup बंद करता येणार नाही.",
+          "⚠️"
+        );
 
+      }else{
 
-  const tile =
-    document.createElement(
-      "div"
-    );
+        closeStudentPopup();
 
+      }
 
-  tile.className =
-    "student-tile";
+    }
 
-
-  tile.id =
-    "student-" + peerId;
-
-
-  tile.innerHTML = `
-
-    <div style="
-      height:100%;
-      min-height:80px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:white;
-      font-size:25px;
-    ">
-      👨‍🎓
-    </div>
-
-    <div class="student-name">
-      Student connected
-    </div>
-
-  `;
+  }
+);
 
 
-  grid.appendChild(
-    tile
+/* =================================================
+   SIR POPUP CLOSE PROTECTION
+================================================= */
+
+$("sirOverlay").addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target ===
+      $("sirOverlay")
+    ){
+
+      if(
+        isSirLive
+      ){
+
+        showMessage(
+          "Live Class चालू आहे",
+          "पहिले Live Class End करा.",
+          "⚠️"
+        );
+
+      }else{
+
+        closeSirPopup();
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   ROLE POPUP OUTSIDE CLICK
+================================================= */
+
+$("roleOverlay").addEventListener(
+  "click",
+  function(event){
+
+    if(
+      event.target ===
+      $("roleOverlay")
+    ){
+
+      closeRolePopup();
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   ENTER KEY - STUDENT JOIN
+================================================= */
+
+$("studentNameInput").addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Enter"
+    ){
+
+      $("channelInput").focus();
+
+    }
+
+  }
+);
+
+
+$("channelInput").addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key === "Enter"
+    ){
+
+      joinStudentClass();
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   CLEAN USERNAME
+================================================= */
+
+$("studentNameInput").addEventListener(
+  "input",
+  function(){
+
+    let value =
+      String(
+        this.value || ""
+      );
+
+    value =
+      value.replace(
+        /\s+/g,
+        " "
+      );
+
+    if(
+      value.length > 30
+    ){
+
+      value =
+        value.substring(
+          0,
+          30
+        );
+
+    }
+
+    this.value =
+      value;
+
+  }
+);
+
+
+/* =================================================
+   CLEAN CHANNEL ID
+================================================= */
+
+$("channelInput").addEventListener(
+  "input",
+  function(){
+
+    this.value =
+      String(
+        this.value || ""
+      )
+      .trim()
+      .toUpperCase();
+
+  }
+);
+
+
+/* =================================================
+   PAGE BEFORE UNLOAD
+================================================= */
+
+window.addEventListener(
+  "beforeunload",
+  function(){
+
+    if(
+      isSirLive
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      studentCall
+    ){
+
+      notifyStudentLeft();
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   BACK BUTTON / POPSTATE
+================================================= */
+
+window.addEventListener(
+  "popstate",
+  function(){
+
+    if(
+      isSirLive
+    ){
+
+      history.pushState(
+        null,
+        "",
+        location.href
+      );
+
+      showMessage(
+        "Live Class चालू आहे",
+        "Class End केल्याशिवाय बाहेर पडता येणार नाही.",
+        "⚠️"
+      );
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   INITIAL PAGE STATE
+================================================= */
+
+function initializeLivePage(){
+
+  $("sirSetup")
+    .classList
+    .remove("hidden");
+
+
+  $("sirLiveArea")
+    .classList
+    .add("hidden");
+
+
+  $("studentJoinArea")
+    .classList
+    .remove("hidden");
+
+
+  $("studentLiveArea")
+    .classList
+    .add("hidden");
+
+
+  $("sirLiveBadge")
+    .classList
+    .add("hidden");
+
+
+  $("studentLiveBadge")
+    .classList
+    .remove("hidden");
+
+
+  $("studentCountBadge")
+    .textContent = "0";
+
+
+  loadRecordings();
+
+}
+
+
+/* =================================================
+   START
+================================================= */
+
+if(
+  document.readyState ===
+  "loading"
+){
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    initializeLivePage
+  );
+
+}else{
+
+  initializeLivePage();
+
+}
+
+      </script>
+      <script>
+
+/* =================================================
+   INDEXEDDB
+================================================= */
+
+let db = null;
+
+const DB_NAME =
+  "GyanSetuLiveDB";
+
+const DB_VERSION = 1;
+
+const STORE_NAME =
+  "recordings";
+
+
+/* =================================================
+   OPEN DATABASE
+================================================= */
+
+function openDatabase(){
+
+  return new Promise(
+    function(resolve, reject){
+
+      const request =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
+
+
+      request.onupgradeneeded =
+        function(event){
+
+          const database =
+            event.target.result;
+
+
+          if(
+            !database.objectStoreNames.contains(
+              STORE_NAME
+            )
+          ){
+
+            const store =
+              database.createObjectStore(
+                STORE_NAME,
+                {
+                  keyPath:"id",
+                  autoIncrement:true
+                }
+              );
+
+
+            store.createIndex(
+              "createdAt",
+              "createdAt",
+              {
+                unique:false
+              }
+            );
+
+          }
+
+        };
+
+
+      request.onsuccess =
+        function(event){
+
+          db =
+            event.target.result;
+
+          resolve(db);
+
+        };
+
+
+      request.onerror =
+        function(event){
+
+          console.error(
+            "IndexedDB error:",
+            event.target.error
+          );
+
+          reject(
+            event.target.error
+          );
+
+        };
+
+    }
   );
 
 }
 
 
-/* =====================================================
-   STUDENT COUNT
-===================================================== */
-
-function updateStudentCount(){
-
-  document
-    .getElementById(
-      "studentCount"
-    )
-    .textContent =
-      "👨‍🎓 Students: " +
-      sirCalls.length;
-
-}
-
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-function setSirStatus(message){
-
-  const el =
-    document.getElementById(
-      "sirStatus"
-    );
-
-  if(el)
-    el.textContent =
-      message;
-
-}
-
-
-function setStudentStatus(message){
-
-  const el =
-    document.getElementById(
-      "studentStatus"
-    );
-
-  if(el)
-    el.textContent =
-      message;
-
-}
-
-
-/* =====================================================
-   COPY CHANNEL ID
-===================================================== */
-
-async function copyChannelId(){
-
-  if(!sirPeerId)
-    return;
-
-
-  try{
-
-    await navigator.clipboard.writeText(
-      sirPeerId
-    );
-
-
-    setSirStatus(
-      "Channel ID copied आहे. Students ला पाठवा."
-    );
-
-  }
-  catch(error){
-
-    setSirStatus(
-      "Channel ID manually copy करा: " +
-      sirPeerId
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   INDEXED DB
-===================================================== */
-
-let dbPromise = null;
-
-
-function openDatabase(){
-
-  if(dbPromise)
-    return dbPromise;
-
-
-  dbPromise =
-    new Promise(
-      function(resolve,reject){
-
-        const request =
-          indexedDB.open(
-            "GyanSetuRecordings",
-            1
-          );
-
-
-        request.onupgradeneeded =
-          function(event){
-
-            const db =
-              event.target.result;
-
-
-            if(
-              !db.objectStoreNames.contains(
-                "recordings"
-              )
-            ){
-
-              db.createObjectStore(
-                "recordings",
-                {
-                  keyPath:"id"
-                }
-              );
-
-            }
-
-          };
-
-
-        request.onsuccess =
-          function(){
-
-            resolve(
-              request.result
-            );
-
-          };
-
-
-        request.onerror =
-          function(){
-
-            reject(
-              request.error
-            );
-
-          };
-
-      }
-    );
-
-
-  return dbPromise;
-
-}
-
-
-/* =====================================================
+/* =================================================
    SAVE RECORDING
-===================================================== */
+================================================= */
 
 async function saveRecording(
   title,
@@ -2124,71 +4919,84 @@ async function saveRecording(
   type
 ){
 
-  try{
+  if(
+    !blob ||
+    blob.size === 0
+  ){
 
-    const db =
-      await openDatabase();
-
-
-    await new Promise(
-      function(resolve,reject){
-
-        const tx =
-          db.transaction(
-            "recordings",
-            "readwrite"
-          );
-
-
-        const store =
-          tx.objectStore(
-            "recordings"
-          );
-
-
-        store.put({
-
-          id:
-            Date.now() +
-            "_" +
-            Math.random(),
-
-          title:title,
-
-          type:type,
-
-          createdAt:
-            new Date().toISOString(),
-
-          blob:blob
-
-        });
-
-
-        tx.oncomplete =
-          resolve;
-
-
-        tx.onerror =
-          function(){
-
-            reject(
-              tx.error
-            );
-
-          };
-
-      }
-    );
-
-
-    loadRecordings();
+    return;
 
   }
-  catch(error){
 
-    console.log(
-      "Recording save error:",
+
+  try{
+
+    if(!db){
+
+      await openDatabase();
+
+    }
+
+
+    const transaction =
+      db.transaction(
+        [STORE_NAME],
+        "readwrite"
+      );
+
+
+    const store =
+      transaction.objectStore(
+        STORE_NAME
+      );
+
+
+    store.add({
+
+      title:
+        title || "Live Class",
+
+      type:
+        type || "recording",
+
+      blob:
+        blob,
+
+      size:
+        blob.size,
+
+      createdAt:
+        Date.now(),
+
+      mimeType:
+        blob.type ||
+        "video/webm"
+
+    });
+
+
+    transaction.oncomplete =
+      function(){
+
+        loadRecordings();
+
+      };
+
+
+    transaction.onerror =
+      function(event){
+
+        console.error(
+          "Save recording error:",
+          event.target.error
+        );
+
+      };
+
+  }catch(error){
+
+    console.error(
+      "IndexedDB save error:",
       error
     );
 
@@ -2197,131 +5005,78 @@ async function saveRecording(
 }
 
 
-/* =====================================================
+/* =================================================
    LOAD RECORDINGS
-===================================================== */
+================================================= */
 
 async function loadRecordings(){
 
   try{
 
-    const db =
+    if(!db){
+
       await openDatabase();
 
-
-    const recordings =
-      await new Promise(
-        function(resolve,reject){
-
-          const tx =
-            db.transaction(
-              "recordings",
-              "readonly"
-            );
+    }
 
 
-          const store =
-            tx.objectStore(
-              "recordings"
-            );
-
-
-          const request =
-            store.getAll();
-
-
-          request.onsuccess =
-            function(){
-
-              resolve(
-                request.result
-              );
-
-            };
-
-
-          request.onerror =
-            function(){
-
-              reject(
-                request.error
-              );
-
-            };
-
-        }
+    const transaction =
+      db.transaction(
+        [STORE_NAME],
+        "readonly"
       );
 
 
-    const list =
-      document.getElementById(
-        "recordingsList"
+    const store =
+      transaction.objectStore(
+        STORE_NAME
       );
 
 
-    list.innerHTML = "";
+    const request =
+      store.getAll();
 
 
-    recordings
-      .sort(
-        (a,b) =>
-          new Date(b.createdAt) -
-          new Date(a.createdAt)
-      )
-      .forEach(
-        function(item){
+    request.onsuccess =
+      function(){
 
-          const url =
-            URL.createObjectURL(
-              item.blob
+        const recordings =
+          request.result || [];
+
+
+        recordings.sort(
+          function(a,b){
+
+            return (
+              b.createdAt -
+              a.createdAt
             );
 
-
-          const card =
-            document.createElement(
-              "div"
-            );
+          }
+        );
 
 
-          card.className =
-            "recording-card";
+        renderRecordings(
+          recordings
+        );
+
+      };
 
 
-          card.innerHTML = `
+    request.onerror =
+      function(event){
 
-            <video
-              controls
-              playsinline
-              src="${url}">
-            </video>
+        console.error(
+          "Load recordings error:",
+          event.target.error
+        );
 
-            <div class="recording-name">
-              🎬 ${item.title}
-            </div>
+      };
 
-            <div style="
-              color:#718096;
-              font-size:12px;
-              margin-top:4px;">
-              ${item.type}
-            </div>
+  }catch(error){
 
-          `;
-
-
-          list.appendChild(
-            card
-          );
-
-        }
-      );
-
-
-  }
-  catch(error){
-
-    console.log(
-      "Load recordings error:",
+    console.error(
+      "Load recording error:",
       error
     );
 
@@ -2330,57 +5085,728 @@ async function loadRecordings(){
 }
 
 
-/* =====================================================
-   DOWNLOAD RECORDING
-===================================================== */
+/* =================================================
+   RENDER RECORDINGS
+================================================= */
 
-function downloadBlob(
-  blob,
-  filename
+function renderRecordings(
+  recordings
 ){
 
-  const url =
-    URL.createObjectURL(
-      blob
-    );
+  const container =
+    $("recordingsList");
 
 
-  const a =
-    document.createElement(
-      "a"
-    );
+  if(!container){
+
+    return;
+
+  }
 
 
-  a.href = url;
-
-  a.download =
-    filename;
+  container.innerHTML = "";
 
 
-  document.body.appendChild(a);
+  if(
+    !recordings ||
+    recordings.length === 0
+  ){
 
-  a.click();
-
-  a.remove();
-
-
-  setTimeout(
-    function(){
-
-      URL.revokeObjectURL(
-        url
+    const empty =
+      document.createElement(
+        "div"
       );
 
-    },
-    5000
+
+    empty.className =
+      "recording-empty";
+
+
+    empty.textContent =
+      "अजून कोणतीही recording saved नाही.";
+
+
+    container.appendChild(
+      empty
+    );
+
+
+    return;
+
+  }
+
+
+  recordings.forEach(
+    function(recording){
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "recording-card";
+
+
+      const title =
+        document.createElement(
+          "h4"
+        );
+
+
+      title.textContent =
+        recording.title ||
+        "Live Class";
+
+
+      const info =
+        document.createElement(
+          "p"
+        );
+
+
+      const date =
+        new Date(
+          recording.createdAt
+        );
+
+
+      info.textContent =
+        formatDateForDisplay(
+          date
+        ) +
+        " • " +
+        formatFileSize(
+          recording.size
+        );
+
+
+      const actions =
+        document.createElement(
+          "div"
+        );
+
+
+      actions.className =
+        "recording-actions";
+
+
+      const download =
+        document.createElement(
+          "button"
+        );
+
+
+      download.className =
+        "recording-btn download-btn";
+
+
+      download.textContent =
+        "⬇️ Download";
+
+
+      download.onclick =
+        function(){
+
+          downloadRecording(
+            recording
+          );
+
+        };
+
+
+      const deleteButton =
+        document.createElement(
+          "button"
+        );
+
+
+      deleteButton.className =
+        "recording-btn delete-btn";
+
+
+      deleteButton.textContent =
+        "🗑️ Delete";
+
+
+      deleteButton.onclick =
+        function(){
+
+          deleteRecording(
+            recording.id
+          );
+
+        };
+
+
+      actions.appendChild(
+        download
+      );
+
+
+      actions.appendChild(
+        deleteButton
+      );
+
+
+      card.appendChild(
+        title
+      );
+
+
+      card.appendChild(
+        info
+      );
+
+
+      card.appendChild(
+        actions
+      );
+
+
+      container.appendChild(
+        card
+      );
+
+    }
   );
 
 }
 
 
-/* =====================================================
-   PAGE LOAD
-===================================================== */
+/* =================================================
+   FORMAT DATE
+================================================= */
+
+function formatDateForDisplay(
+  date
+){
+
+  if(!date){
+
+    return "";
+
+  }
+
+
+  return date.toLocaleString(
+    "en-IN",
+    {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+
+}
+
+
+/* =================================================
+   FORMAT FILE SIZE
+================================================= */
+
+function formatFileSize(
+  bytes
+){
+
+  if(
+    !bytes ||
+    bytes <= 0
+  ){
+
+    return "0 KB";
+
+  }
+
+
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+
+  let index = 0;
+
+  let size =
+    bytes;
+
+
+  while(
+    size >= 1024 &&
+    index < units.length - 1
+  ){
+
+    size =
+      size / 1024;
+
+    index++;
+
+  }
+
+
+  return (
+    size.toFixed(
+      index === 0 ? 0 : 2
+    ) +
+    " " +
+    units[index]
+  );
+
+}
+
+
+/* =================================================
+   SAFE FILE NAME
+================================================= */
+
+function safeFileName(
+  value
+){
+
+  return String(
+    value || "GyanSetu-Live-Class"
+  )
+  .replace(
+    /[\\/:*?"<>|]/g,
+    "_"
+  )
+  .replace(
+    /\s+/g,
+    "_"
+  )
+  .substring(
+    0,
+    80
+  );
+
+}
+
+
+/* =================================================
+   FORMAT FILE DATE
+================================================= */
+
+function formatDateForFile(
+  date
+){
+
+  const d =
+    date || new Date();
+
+
+  const year =
+    d.getFullYear();
+
+
+  const month =
+    String(
+      d.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const day =
+    String(
+      d.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const hour =
+    String(
+      d.getHours()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  const minute =
+    String(
+      d.getMinutes()
+    ).padStart(
+      2,
+      "0"
+    );
+
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    day +
+    "_" +
+    hour +
+    "-" +
+    minute
+  );
+
+}
+
+
+/* =================================================
+   DOWNLOAD RECORDING
+================================================= */
+
+function downloadRecording(
+  recording
+){
+
+  if(
+    !recording ||
+    !recording.blob
+  ){
+
+    showMessage(
+      "Recording Error",
+      "Recording data उपलब्ध नाही.",
+      "❌"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const url =
+      URL.createObjectURL(
+        recording.blob
+      );
+
+
+    const extension =
+      recording.blob.type &&
+      recording.blob.type.includes(
+        "mp4"
+      )
+        ? "mp4"
+        : "webm";
+
+
+    const filename =
+      safeFileName(
+        recording.title
+      ) +
+      "_" +
+      formatDateForFile(
+        new Date(
+          recording.createdAt
+        )
+      ) +
+      "." +
+      extension;
+
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.href =
+      url;
+
+
+    link.download =
+      filename;
+
+
+    link.style.display =
+      "none";
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+      link
+    );
+
+
+    setTimeout(
+      function(){
+
+        URL.revokeObjectURL(
+          url
+        );
+
+      },
+      2000
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Download error:",
+      error
+    );
+
+
+    showMessage(
+      "Download Failed",
+      "Recording download करता आली नाही.",
+      "❌"
+    );
+
+  }
+
+}
+
+
+/* =================================================
+   DELETE RECORDING
+================================================= */
+
+function deleteRecording(
+  id
+){
+
+  if(
+    !id
+  ){
+
+    return;
+
+  }
+
+
+  const transaction =
+    db.transaction(
+      [STORE_NAME],
+      "readwrite"
+    );
+
+
+  const store =
+    transaction.objectStore(
+      STORE_NAME
+    );
+
+
+  store.delete(
+    id
+  );
+
+
+  transaction.oncomplete =
+    function(){
+
+      loadRecordings();
+
+
+      showMessage(
+        "Deleted",
+        "Recording delete झाली.",
+        "🗑️"
+      );
+
+    };
+
+
+  transaction.onerror =
+    function(event){
+
+      console.error(
+        "Delete error:",
+        event.target.error
+      );
+
+
+      showMessage(
+        "Delete Failed",
+        "Recording delete करता आली नाही.",
+        "❌"
+      );
+
+    };
+
+}
+
+
+/* =================================================
+   INITIAL DATABASE LOAD
+================================================= */
+
+openDatabase()
+  .then(
+    function(){
+
+      loadRecordings();
+
+    }
+  )
+  .catch(
+    function(error){
+
+      console.error(
+        "Database initialization failed:",
+        error
+      );
+
+    }
+  );
+
+
+/* =================================================
+   CLEANUP WHEN PAGE CLOSES
+================================================= */
+
+window.addEventListener(
+  "pagehide",
+  function(){
+
+    if(
+      isSirLive
+    ){
+
+      try{
+
+        if(
+          sirRecorder &&
+          sirRecorder.state !== "inactive"
+        ){
+
+          sirRecorder.stop();
+
+        }
+
+      }catch(error){}
+
+
+      if(sirStream){
+
+        sirStream
+          .getTracks()
+          .forEach(
+            function(track){
+
+              try{
+
+                track.stop();
+
+              }catch(error){}
+
+            }
+          );
+
+      }
+
+    }
+
+
+    if(
+      studentCall
+    ){
+
+      notifyStudentLeft();
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   ESC KEY
+================================================= */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key !== "Escape"
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      $("messageOverlay")
+        .classList
+        .contains("show")
+    ){
+
+      closeMessage();
+
+      return;
+
+    }
+
+
+    if(
+      isSirLive ||
+      studentCall
+    ){
+
+      return;
+
+    }
+
+
+    if(
+      $("sirOverlay")
+        .classList
+        .contains("show")
+    ){
+
+      closeSirPopup();
+
+      return;
+
+    }
+
+
+    if(
+      $("studentOverlay")
+        .classList
+        .contains("show")
+    ){
+
+      closeStudentPopup();
+
+      return;
+
+    }
+
+
+    if(
+      $("roleOverlay")
+        .classList
+        .contains("show")
+    ){
+
+      closeRolePopup();
+
+    }
+
+  }
+);
+
+
+/* =================================================
+   FINAL INITIALIZATION
+================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -2394,5 +5820,4 @@ document.addEventListener(
 </script>
 
 </body>
-</html>
-  
+      </html>
