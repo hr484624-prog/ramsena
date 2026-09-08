@@ -1,164 +1,1496 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>GyanSetu - 11th Chemistry</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-    }
+<title>GyanSetu - 11th Chemistry</title>
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-    }
+<style>
 
-    .header {
-      background: white;
-      padding: 18px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    .top {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+body{
+  font-family:Arial,sans-serif;
+  background:#f7f8fc;
+  color:#18264d;
+}
 
-    .back {
-      font-size: 30px;
-      cursor: pointer;
-    }
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+}
 
-    .title {
-      font-size: 22px;
-      font-weight: 800;
-    }
+.header{
+  background:white;
+  padding:14px 16px;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
 
-    .intro {
-      margin: 18px 16px;
-      padding: 25px 18px;
-      background: linear-gradient(135deg, #fff0dc, #fffaf4);
-      border: 1px solid #ffe0bd;
-      border-radius: 22px;
-      text-align: center;
-    }
+.top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
-    .chemistry-icon {
-      font-size: 55px;
-    }
+.back{
+  font-size:30px;
+  cursor:pointer;
+}
 
-    .intro h1 {
-      margin-top: 10px;
-      font-size: 24px;
-    }
+.title{
+  font-size:21px;
+  font-weight:800;
+  flex:1;
+}
 
-    .intro p {
-      margin-top: 7px;
-      color: #777;
-      font-size: 13px;
-    }
+.test-top-btn{
+  border:0;
+  background:#fff0dc;
+  color:#9a5a00;
+  padding:8px 10px;
+  border-radius:12px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
 
-    .content {
-      margin: 20px 16px;
-      background: white;
-      min-height: 500px;
-      border-radius: 22px;
-      border: 2px dashed #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+.intro{
+  margin:18px 16px;
+  padding:25px 18px;
+  background:linear-gradient(135deg,#fff0dc,#fffaf4);
+  border:1px solid #ffe0bd;
+  border-radius:22px;
+  text-align:center;
+}
 
-    .placeholder {
-      padding: 25px;
-      color: #999;
-    }
+.chemistry-icon{
+  font-size:55px;
+}
 
-    .placeholder-icon {
-      font-size: 45px;
-      margin-bottom: 12px;
-    }
+.intro h1{
+  margin-top:10px;
+  font-size:24px;
+}
 
-    .placeholder h3 {
-      color: #18264d;
-      font-size: 18px;
-    }
+.intro p{
+  margin-top:7px;
+  color:#777;
+  font-size:13px;
+}
 
-    .placeholder p {
-      margin-top: 7px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-  </style>
+.chapter-section{
+  margin:20px 16px;
+}
+
+.chapter-heading{
+  font-size:19px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.chapter-btn{
+  width:100%;
+  border:0;
+  background:white;
+  margin-bottom:10px;
+  padding:14px;
+  border-radius:17px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-align:left;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+  cursor:pointer;
+}
+
+.chapter-number{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  background:#fff0dc;
+  color:#9a5a00;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  flex-shrink:0;
+}
+
+.chapter-info{
+  flex:1;
+}
+
+.chapter-info h3{
+  font-size:14px;
+  color:#18264d;
+}
+
+.chapter-info p{
+  margin-top:4px;
+  font-size:11px;
+  color:#888;
+}
+
+.chapter-arrow{
+  font-size:26px;
+  color:#aaa;
+}
+
+
+/* =========================
+   POPUP
+========================= */
+
+.popup-bg,
+.test-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:1000;
+}
+
+.popup,
+.test-box{
+  width:100%;
+  max-width:410px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:24px;
+  padding:20px;
+}
+
+.popup-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.topic-icon{
+  font-size:40px;
+}
+
+.popup-title{
+  flex:1;
+  font-size:19px;
+  font-weight:800;
+}
+
+.close{
+  font-size:27px;
+  cursor:pointer;
+  color:#777;
+}
+
+.topic-intro{
+  margin-top:15px;
+  padding:13px;
+  background:#fff8ee;
+  border-radius:14px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.explanation{
+  margin-top:15px;
+}
+
+.explanation-line{
+  padding:11px 5px;
+  border-bottom:1px solid #eee;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.remember{
+  margin-top:15px;
+  padding:14px;
+  background:#eaf7ee;
+  border-radius:15px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+
+/* =========================
+   TEST
+========================= */
+
+.test-box{
+  padding:18px;
+}
+
+.test-header{
+  display:flex;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.test-title{
+  flex:1;
+  font-size:19px;
+  font-weight:800;
+}
+
+.progress{
+  font-size:12px;
+  color:#888;
+  margin-bottom:12px;
+}
+
+.question{
+  background:#fff8ee;
+  padding:17px;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:700;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.option{
+  width:100%;
+  border:1px solid #ddd;
+  background:white;
+  border-radius:13px;
+  padding:12px;
+  text-align:left;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.option:hover{
+  background:#fafafa;
+}
+
+.next-btn{
+  width:100%;
+  margin-top:15px;
+  padding:13px;
+  border:0;
+  border-radius:13px;
+  background:#18264d;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  display:none;
+}
+
+.result{
+  text-align:center;
+  padding:20px 5px;
+}
+
+.result h2{
+  margin-top:10px;
+  font-size:20px;
+}
+
+.result-score{
+  font-size:40px;
+  font-weight:800;
+  margin:15px 0;
+  color:#18264d;
+}
+
+.restart-btn{
+  border:0;
+  background:#fff0dc;
+  color:#9a5a00;
+  padding:12px 18px;
+  border-radius:13px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-  <div class="header">
-    <div class="top">
 
-      <div class="back" onclick="goBack()">‹</div>
+<!-- =========================
+     HEADER
+========================= -->
 
-      <div class="title">
-        11th Chemistry
+<div class="header">
+
+  <div class="top">
+
+    <div class="back"
+         onclick="goBack()">
+      ‹
+    </div>
+
+    <div class="title">
+      11th Chemistry
+    </div>
+
+    <button class="test-top-btn"
+            onclick="openTest()">
+      📝 Test
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     INTRO
+========================= -->
+
+<div class="intro">
+
+  <div class="chemistry-icon">
+    🧪
+  </div>
+
+  <h1>Chemistry</h1>
+
+  <p>
+    Class 11th • Chemistry
+  </p>
+
+</div>
+
+
+<!-- =========================
+     CHAPTERS
+========================= -->
+
+<div class="chapter-section">
+
+  <div class="chapter-heading">
+    📚 Chemistry Chapters
+  </div>
+
+  <div id="chapterList"></div>
+
+</div>
+
+
+<!-- =========================
+     CHAPTER POPUP
+========================= -->
+
+<div class="popup-bg"
+     id="popupBg"
+     onclick="closeOutside(event)">
+
+  <div class="popup">
+
+    <div class="popup-top">
+
+      <div class="topic-icon"
+           id="popupIcon">
+        🧪
+      </div>
+
+      <div class="popup-title"
+           id="popupTitle">
+      </div>
+
+      <div class="close"
+           onclick="closePopup()">
+        ×
       </div>
 
     </div>
-  </div>
 
-  <div class="intro">
+    <div class="topic-intro"
+         id="popupIntro">
+    </div>
 
-    <div class="chemistry-icon">🧪</div>
+    <div class="explanation"
+         id="popupExplanation">
+    </div>
 
-    <h1>Chemistry</h1>
-
-    <p>
-      Class 11th • Chemistry
-    </p>
-
-  </div>
-
-  <div class="content">
-
-    <div class="placeholder">
-
-      <div class="placeholder-icon">📚</div>
-
-      <h3>Study Material</h3>
-
-      <p>
-        इथे नंतर Chemistry चे
-        chapters आणि PDF जोडू.
-      </p>
-
+    <div class="remember"
+         id="popupRemember">
     </div>
 
   </div>
 
 </div>
 
+
+<!-- =========================
+     TEST POPUP
+========================= -->
+
+<div class="test-bg"
+     id="testBg">
+
+  <div class="test-box">
+
+    <div class="test-header">
+
+      <div class="test-title">
+        📝 Chemistry Test
+      </div>
+
+      <div class="close"
+           onclick="closeTest()">
+        ×
+      </div>
+
+    </div>
+
+    <div class="progress"
+         id="progress">
+    </div>
+
+    <div id="testArea">
+    </div>
+
+  </div>
+
+</div>
+
+
+</div>
+
+
 <script>
 
-function goBack() {
-  window.location.href = "college-11.html";
+
+/* =========================
+   CHAPTER DATA
+========================= */
+
+const chapters = [
+
+{
+number:1,
+title:"Some Basic Concepts of Chemistry",
+icon:"⚗️",
+intro:"Chemistry मधील basic quantities, units आणि calculations समजून घेण्यासाठी हा chapter महत्त्वाचा आहे.",
+lines:[
+"Matter म्हणजे mass असलेली आणि space व्यापणारी कोणतीही वस्तू.",
+"Chemistry मध्ये पदार्थांचे composition, properties आणि changes यांचा अभ्यास केला जातो.",
+"SI system मध्ये mass चे unit kilogram आहे.",
+"Amount of substance चे SI unit mole आहे.",
+"Mole हा particles ची संख्या मोजण्यासाठी वापरला जाणारा महत्त्वाचा concept आहे.",
+"Avogadro number साधारण 6.022 × 10²³ particles प्रति mole आहे.",
+"Molar mass म्हणजे एका mole पदार्थाचे mass.",
+"Chemical equations वापरून chemical reactions represent केल्या जातात.",
+"Percentage composition मुळे compound मध्ये प्रत्येक element चे प्रमाण समजते.",
+"Stoichiometry chemical reaction मधील quantities चे calculation करण्यासाठी उपयोगी आहे."
+],
+remember:"लक्षात ठेवा: Mole concept हा Chemistry मधील अनेक numerical problems साठी foundation आहे."
+},
+
+{
+number:2,
+title:"Introduction to Analytical Chemistry",
+icon:"🔬",
+intro:"Analytical Chemistry मध्ये पदार्थामध्ये कोणते components आहेत आणि त्यांचे प्रमाण किती आहे हे समजते.",
+lines:[
+"Analytical Chemistry पदार्थांचे analysis करण्याशी संबंधित आहे.",
+"Qualitative analysis मध्ये कोणते पदार्थ उपस्थित आहेत हे शोधले जाते.",
+"Quantitative analysis मध्ये पदार्थाचे प्रमाण शोधले जाते.",
+"Measurement मध्ये accuracy आणि precision महत्त्वाची असतात.",
+"Laboratory मध्ये योग्य instruments वापरून observations घेतले जातात.",
+"Errors मुळे experimental result मध्ये फरक पडू शकतो.",
+"Significant figures measurements योग्य प्रकारे व्यक्त करण्यासाठी उपयोगी असतात.",
+"Units प्रत्येक measurement सोबत योग्य असणे आवश्यक आहे.",
+"Experimental data व्यवस्थित record करणे महत्त्वाचे आहे.",
+"Analytical methods science आणि industry मध्ये मोठ्या प्रमाणावर वापरल्या जातात."
+],
+remember:"लक्षात ठेवा: Qualitative = काय आहे, Quantitative = किती आहे."
+},
+
+{
+number:3,
+title:"Structure of Atom",
+icon:"⚛️",
+intro:"Atom ची रचना, subatomic particles आणि electronic arrangement या chapter मध्ये शिकतो.",
+lines:[
+"Atom हा element चा chemical properties टिकवून ठेवणारा smallest unit आहे.",
+"Atom मध्ये nucleus आणि electrons असतात.",
+"Nucleus मध्ये protons आणि neutrons असतात.",
+"Proton वर positive charge असतो.",
+"Electron वर negative charge असतो.",
+"Neutron वर electric charge नसतो.",
+"Atomic number म्हणजे nucleus मधील protons ची संख्या.",
+"Mass number म्हणजे protons आणि neutrons ची एकूण संख्या.",
+"Electrons वेगवेगळ्या energy levels मध्ये असतात.",
+"Electronic configuration मुळे element च्या chemical behaviour बद्दल माहिती मिळते."
+],
+remember:"लक्षात ठेवा: Atomic number = number of protons."
+},
+
+{
+number:4,
+title:"Periodic Table",
+icon:"🧩",
+intro:"Elements ची periodic arrangement आणि periodic properties या chapter मध्ये समजतात.",
+lines:[
+"Periodic table मध्ये elements त्यांच्या atomic number नुसार arrange केले जातात.",
+"Vertical columns ना groups म्हणतात.",
+"Horizontal rows ना periods म्हणतात.",
+"एकाच group मधील elements मध्ये काही similar properties दिसतात.",
+"Periodic table मध्ये metals, non-metals आणि metalloids आढळतात.",
+"Atomic radius periodic table मध्ये बदलतो.",
+"Ionization energy ही electron काढण्यासाठी लागणाऱ्या energy शी संबंधित आहे.",
+"Electronegativity म्हणजे bonded electron pair आकर्षित करण्याची tendency.",
+"Valence electrons chemical bonding मध्ये महत्त्वाची भूमिका बजावतात.",
+"Periodic table मुळे elements चे properties predict करणे सोपे होते."
+],
+remember:"लक्षात ठेवा: Group = vertical column, Period = horizontal row."
+},
+
+{
+number:5,
+title:"Chemical Bonding",
+icon:"🔗",
+intro:"Atoms एकमेकांशी bonds का आणि कसे तयार करतात हे या chapter मध्ये शिकतो.",
+lines:[
+"Chemical bond atoms किंवा ions यांना एकत्र ठेवतो.",
+"Ionic bond मध्ये electron transfer होतो.",
+"Covalent bond मध्ये electrons share केले जातात.",
+"Metallic bonding metals मधील atoms शी संबंधित आहे.",
+"Valency bond formation मध्ये महत्त्वाची असते.",
+"Octet rule नुसार atoms stable electronic configuration मिळवण्याचा प्रयत्न करतात.",
+"Lewis structures bonding आणि valence electrons दाखवण्यासाठी वापरतात.",
+"Molecules ची shape त्यांच्या bonding आणि electron pairs वर अवलंबून असते.",
+"Electronegativity difference bond च्या nature वर परिणाम करते.",
+"Chemical bonding मुळे compounds ची properties निश्चित होतात."
+],
+remember:"लक्षात ठेवा: Ionic = transfer, Covalent = sharing."
+},
+
+{
+number:6,
+title:"Redox Reactions",
+icon:"🔄",
+intro:"Oxidation आणि reduction या एकत्र घडणाऱ्या reactions ना redox reactions म्हणतात.",
+lines:[
+"Oxidation आणि reduction या दोन processes redox reaction मध्ये संबंधित असतात.",
+"Oxidation म्हणजे electrons गमावणे असे समजता येते.",
+"Reduction म्हणजे electrons मिळवणे असे समजता येते.",
+"Oxidation number chemical changes समजण्यासाठी उपयोगी आहे.",
+"Oxidizing agent दुसऱ्या substance चे oxidation घडवतो.",
+"Reducing agent दुसऱ्या substance चे reduction घडवतो.",
+"Redox reactions मध्ये oxidation आणि reduction एकत्र होतात.",
+"Electron transfer हा redox chemistry मधील मुख्य concept आहे.",
+"Corrosion ही oxidation शी संबंधित सामान्य process आहे.",
+"Redox reactions batteries आणि biological processes मध्येही आढळतात."
+],
+remember:"लक्षात ठेवा: OIL RIG — Oxidation Is Loss, Reduction Is Gain of electrons."
+},
+
+{
+number:7,
+title:"Modern Periodic Table",
+icon:"📊",
+intro:"Modern periodic law आणि elements च्या periodic trends या chapter मध्ये अधिक सविस्तर अभ्यास केला जातो.",
+lines:[
+"Modern periodic law atomic number वर आधारित आहे.",
+"Elements ची properties त्यांच्या atomic number ची periodic function आहेत.",
+"Periodic table मध्ये s, p, d आणि f blocks असतात.",
+"Valence shell electronic configuration properties वर परिणाम करते.",
+"Atomic size period मध्ये साधारण कमी होतो.",
+"Atomic size group मध्ये खाली जाताना साधारण वाढतो.",
+"Ionization energy period मध्ये साधारण वाढते.",
+"Metallic character group मध्ये खाली वाढण्याची tendency असते.",
+"Non-metallic character period मध्ये वाढण्याची tendency असते.",
+"Periodic trends मुळे elements च्या behaviour चा अंदाज लावता येतो."
+],
+remember:"लक्षात ठेवा: Modern periodic table = atomic number based arrangement."
+},
+
+{
+number:8,
+title:"Elements of Group 1 and 2",
+icon:"🧂",
+intro:"Group 1 आणि Group 2 मधील elements च्या properties आणि reactions या chapter मध्ये शिकतो.",
+lines:[
+"Group 1 elements ना alkali metals म्हणतात.",
+"Group 2 elements ना alkaline earth metals म्हणतात.",
+"Group 1 मध्ये valence electron साधारण एक असतो.",
+"Group 2 मध्ये valence electrons साधारण दोन असतात.",
+"Alkali metals reactive असतात.",
+"Group 1 metals पाण्यासोबत reactions देऊ शकतात.",
+"Group 2 elements ची reactivity देखील group मध्ये खाली वाढण्याची tendency असते.",
+"Calcium आणि magnesium हे Group 2 मधील महत्त्वाचे elements आहेत.",
+"Group 1 आणि 2 elements त्यांच्या compounds मुळे industry मध्ये उपयोगी आहेत.",
+"Electronic configuration त्यांच्या chemical properties समजण्यास मदत करते."
+],
+remember:"लक्षात ठेवा: Group 1 = Alkali metals, Group 2 = Alkaline earth metals."
+},
+
+{
+number:9,
+title:"Elements of Groups 13, 14 and 15",
+icon:"🧪",
+intro:"Groups 13, 14 आणि 15 मधील elements आणि त्यांच्या important compounds चा अभ्यास येथे होतो.",
+lines:[
+"Group 13 elements च्या outer shell मध्ये साधारण तीन valence electrons असतात.",
+"Group 14 elements च्या outer shell मध्ये चार valence electrons असतात.",
+"Group 15 elements च्या outer shell मध्ये पाच valence electrons असतात.",
+"Carbon हा Group 14 मधील अत्यंत महत्त्वाचा element आहे.",
+"Silicon चा उपयोग electronics मध्ये मोठ्या प्रमाणावर होतो.",
+"Nitrogen हा Group 15 मधील महत्त्वाचा element आहे.",
+"Phosphorus देखील Group 15 मध्ये येतो.",
+"Carbon अनेक compounds तयार करण्याची क्षमता ठेवतो.",
+"Elements ची properties त्यांच्या electronic configuration शी संबंधित असतात.",
+"या groups मधील elements चे compounds industry आणि daily life मध्ये उपयोगी आहेत."
+],
+remember:"लक्षात ठेवा: Carbon = Group 14, Nitrogen = Group 15."
+},
+
+{
+number:10,
+title:"States of Matter",
+icon:"💧",
+intro:"Solid, liquid आणि gas या states of matter च्या properties आणि gas laws या chapter मध्ये शिकतो.",
+lines:[
+"Matter सामान्यतः solid, liquid आणि gas अशा states मध्ये आढळते.",
+"Solid ला definite shape आणि definite volume असतो.",
+"Liquid ला definite volume पण definite shape नसतो.",
+"Gas ला definite shape आणि volume नसतो.",
+"Particles मधील attraction states of matter वर परिणाम करते.",
+"Temperature वाढल्याने particles ची kinetic energy वाढते.",
+"Pressure, volume आणि temperature gases च्या behaviour वर परिणाम करतात.",
+"Boyle's law pressure आणि volume मधील relation सांगतो.",
+"Charles's law volume आणि temperature मधील relation सांगतो.",
+"Gas laws ideal gas behaviour समजण्यासाठी उपयोगी आहेत."
+],
+remember:"लक्षात ठेवा: Solid = fixed shape + fixed volume."
+},
+
+{
+number:11,
+title:"Adsorption and Colloids",
+icon:"🫧",
+intro:"Surface phenomena, adsorption आणि colloidal systems या chapter मध्ये अभ्यासले जातात.",
+lines:[
+"Adsorption म्हणजे पदार्थाच्या surface वर particles जमा होण्याची process.",
+"Adsorption आणि absorption या वेगळ्या processes आहेत.",
+"Adsorbent हा surface provide करणारा पदार्थ असतो.",
+"Adsorbate हा surface वर जमा होणारा पदार्थ असतो.",
+"Activated charcoal हा adsorption साठी वापरला जाणारा पदार्थ आहे.",
+"Colloid मध्ये dispersed particles आणि dispersion medium असतात.",
+"Colloidal particles साध्या solution पेक्षा मोठे असतात.",
+"Tyndall effect मुळे colloidal particles मुळे light scattering दिसू शकते.",
+"Colloids रोजच्या जीवनात अनेक ठिकाणी आढळतात.",
+"Adsorption चा उपयोग purification आणि separation मध्ये केला जातो."
+],
+remember:"लक्षात ठेवा: Adsorption = surface phenomenon."
+},
+
+{
+number:12,
+title:"Hydrogen",
+icon:"💨",
+intro:"Hydrogen ची properties, isotopes, preparation आणि uses या chapter मध्ये शिकतो.",
+lines:[
+"Hydrogen हा periodic table मधील सर्वात हलका element आहे.",
+"Hydrogen चे atomic number 1 आहे.",
+"Hydrogen चे isotopes protium, deuterium आणि tritium आहेत.",
+"Hydrogen molecule सामान्यतः H₂ form मध्ये आढळतो.",
+"Hydrogen अनेक compounds तयार करतो.",
+"Water मध्ये hydrogen उपस्थित असतो.",
+"Hydrogen काही reactions मध्ये reducing agent म्हणून कार्य करू शकतो.",
+"Hydrogen energy source म्हणूनही अभ्यासला जातो.",
+"Hydrogen compounds chemistry मध्ये महत्त्वाचे आहेत.",
+"Hydrogen च्या isotopes चे properties काही प्रमाणात वेगवेगळे असतात."
+],
+remember:"लक्षात ठेवा: Hydrogen चे तीन common isotopes = Protium, Deuterium, Tritium."
+},
+
+{
+number:13,
+title:"s-Block Elements",
+icon:"⚡",
+intro:"s-block elements ची electronic configuration, properties आणि compounds या chapter मध्ये शिकतो.",
+lines:[
+"s-block elements मध्ये outermost electron s-orbital मध्ये असतो.",
+"Group 1 आणि Group 2 elements s-block मध्ये येतात.",
+"Group 1 elements ची सामान्य valency +1 असते.",
+"Group 2 elements ची सामान्य valency +2 असते.",
+"Alkali metals highly reactive असतात.",
+"Alkaline earth metals मध्ये magnesium आणि calcium सारखे elements आहेत.",
+"सोडियम आणि potassium हे Group 1 मधील महत्त्वाचे elements आहेत.",
+"Magnesium आणि calcium चे compounds अनेक उपयोगांसाठी महत्त्वाचे आहेत.",
+"s-block elements चे compounds ionic nature चे असू शकतात.",
+"Electronic configuration मुळे त्यांच्या reactivity ची माहिती मिळते."
+],
+remember:"लक्षात ठेवा: s-block = Groups 1 आणि 2."
+},
+
+{
+number:14,
+title:"Basic Principles of Organic Chemistry",
+icon:"🌿",
+intro:"Organic compounds ची basic concepts, classification आणि functional groups या chapter मध्ये शिकतो.",
+lines:[
+"Organic Chemistry मध्ये carbon compounds चा अभ्यास केला जातो.",
+"Carbon ची valency साधारण चार असते.",
+"Carbon-carbon bonds मुळे मोठ्या chains आणि structures तयार होऊ शकतात.",
+"Hydrocarbons मध्ये carbon आणि hydrogen असतात.",
+"Alkanes मध्ये single bonds असतात.",
+"Alkenes मध्ये carbon-carbon double bond असतो.",
+"Alkynes मध्ये carbon-carbon triple bond असतो.",
+"Functional group compound च्या chemical properties वर परिणाम करतो.",
+"Organic compounds चे अनेक प्रकार structure नुसार classify केले जातात.",
+"Organic Chemistry medicines, fuels आणि अनेक materials मध्ये महत्त्वाची आहे."
+],
+remember:"लक्षात ठेवा: Carbon ची valency = 4."
 }
+
+];
+
+
+/* =========================
+   TEST QUESTIONS
+========================= */
+
+const questions = [
+
+{
+q:"Matter म्हणजे काय?",
+o:["Mass आणि space घेणारा पदार्थ","फक्त gas","फक्त liquid","फक्त solid"],
+a:0
+},
+
+{
+q:"Amount of substance चे SI unit कोणते?",
+o:["Kilogram","Mole","Metre","Second"],
+a:1
+},
+
+{
+q:"Avogadro number साधारण किती आहे?",
+o:["6.022 × 10²³","3.14","9.8","1.6 × 10⁻¹⁹"],
+a:0
+},
+
+{
+q:"Atomic number कशाइतका असतो?",
+o:["Neutrons","Protons","Protons + Neutrons","Electrons + Neutrons"],
+a:1
+},
+
+{
+q:"Electron वर कोणता charge असतो?",
+o:["Positive","Negative","Neutral","No mass"],
+a:1
+},
+
+{
+q:"Proton वर कोणता charge असतो?",
+o:["Positive","Negative","Neutral","Variable"],
+a:0
+},
+
+{
+q:"Neutron चा charge किती असतो?",
+o:["Positive","Negative","Neutral","Double"],
+a:2
+},
+
+{
+q:"Mass number म्हणजे काय?",
+o:["Protons + Neutrons","Only electrons","Only protons","Only neutrons"],
+a:0
+},
+
+{
+q:"Periodic table मध्ये groups कसे असतात?",
+o:["Horizontal","Vertical","Diagonal","Circular"],
+a:1
+},
+
+{
+q:"Periodic table मध्ये periods कसे असतात?",
+o:["Vertical","Horizontal","Circular","None"],
+a:1
+},
+
+{
+q:"Group 1 elements ना काय म्हणतात?",
+o:["Halogens","Alkali metals","Noble gases","Transition metals"],
+a:1
+},
+
+{
+q:"Group 2 elements ना काय म्हणतात?",
+o:["Alkaline earth metals","Halogens","Noble gases","Metalloids"],
+a:0
+},
+
+{
+q:"Chemical bond चा उपयोग काय?",
+o:["Atoms जोडण्यासाठी","Mass कमी करण्यासाठी","Temperature वाढवण्यासाठी","Light तयार करण्यासाठी"],
+a:0
+},
+
+{
+q:"Ionic bond मध्ये काय होते?",
+o:["Electron transfer","Electron sharing only","No electrons","Only proton transfer"],
+a:0
+},
+
+{
+q:"Covalent bond मध्ये काय होते?",
+o:["Electrons sharing","Protons sharing","Neutrons transfer","Mass transfer"],
+a:0
+},
+
+{
+q:"Oxidation म्हणजे काय?",
+o:["Electron loss","Electron gain","Proton gain","Neutron loss"],
+a:0
+},
+
+{
+q:"Reduction म्हणजे काय?",
+o:["Electron loss","Electron gain","Mass loss","Heat gain"],
+a:1
+},
+
+{
+q:"Redox reaction मध्ये काय होते?",
+o:["फक्त oxidation","फक्त reduction","Oxidation आणि reduction","None"],
+a:2
+},
+
+{
+q:"Modern periodic law कशावर आधारित आहे?",
+o:["Atomic mass only","Atomic number","Density","Volume"],
+a:1
+},
+
+{
+q:"Valence electrons कुठे असतात?",
+o:["Nucleus मध्ये","Outer shell मध्ये","Neutron मध्ये","Proton मध्ये"],
+a:1
+},
+
+{
+q:"Atomic radius period मध्ये साधारण कसा बदलतो?",
+o:["Decrease","Always increase","No change","Zero"],
+a:0
+},
+
+{
+q:"Ionization energy म्हणजे काय?",
+o:["Electron remove करण्यासाठी लागणारी energy","Heat energy","Sound energy","Mass"],
+a:0
+},
+
+{
+q:"Group 1 मध्ये valence electron साधारण किती असतो?",
+o:["1","2","3","4"],
+a:0
+},
+
+{
+q:"Group 2 मध्ये valence electrons साधारण किती असतात?",
+o:["1","2","5","8"],
+a:1
+},
+
+{
+q:"Hydrogen चे atomic number किती आहे?",
+o:["1","2","8","0"],
+a:0
+},
+
+{
+q:"Hydrogen molecule चे formula काय आहे?",
+o:["H","H₂","H₃","He"],
+a:1
+},
+
+{
+q:"Hydrogen चे isotope कोणते आहे?",
+o:["Protium","Sodium","Carbon","Oxygen"],
+a:0
+},
+
+{
+q:"Solid ला काय असते?",
+o:["Definite shape आणि volume","Only shape","Only volume","Neither"],
+a:0
+},
+
+{
+q:"Liquid ला काय असते?",
+o:["Definite shape only","Definite volume","Neither","Fixed gas"],
+a:1
+},
+
+{
+q:"Gas ला definite shape असतो का?",
+o:["हो","नाही","फक्त cold मध्ये","फक्त water मध्ये"],
+a:1
+},
+
+{
+q:"Temperature वाढल्यावर particles ची kinetic energy काय होते?",
+o:["वाढते","कमी होते","Zero होते","Same always"],
+a:0
+},
+
+{
+q:"Boyle's law कशाशी संबंधित आहे?",
+o:["Pressure आणि volume","Mass आणि density","Colour आणि light","Heat आणि sound"],
+a:0
+},
+
+{
+q:"Adsorption म्हणजे काय?",
+o:["Surface वर particles जमा होणे","पूर्ण पदार्थात मिसळणे","Boiling","Freezing"],
+a:0
+},
+
+{
+q:"Activated charcoal कशासाठी उपयोगी आहे?",
+o:["Adsorption","Melting","Freezing","Sound production"],
+a:0
+},
+
+{
+q:"Tyndall effect कशाशी संबंधित आहे?",
+o:["Light scattering","Heat transfer","Mass transfer","Freezing"],
+a:0
+},
+
+{
+q:"s-block मध्ये कोणते groups येतात?",
+o:["1 आणि 2","13 आणि 14","15 आणि 16","17 आणि 18"],
+a:0
+},
+
+{
+q:"Carbon ची सामान्य valency किती आहे?",
+o:["1","2","3","4"],
+a:3
+},
+
+{
+q:"Organic Chemistry मध्ये मुख्यतः कशाचा अभ्यास होतो?",
+o:["Carbon compounds","Only metals","Only gases","Only salts"],
+a:0
+},
+
+{
+q:"Hydrocarbon मध्ये कोणते elements असतात?",
+o:["Carbon आणि Hydrogen","Carbon आणि Oxygen","Hydrogen आणि Oxygen","Nitrogen आणि Oxygen"],
+a:0
+},
+
+{
+q:"Alkane मध्ये कोणता bond असतो?",
+o:["Single bond","Double bond","Triple bond","Ionic only"],
+a:0
+},
+
+{
+q:"Alkene मध्ये कोणता bond असतो?",
+o:["Single","Double","Triple","No bond"],
+a:1
+},
+
+{
+q:"Alkyne मध्ये कोणता bond असतो?",
+o:["Single","Double","Triple","Ionic"],
+a:2
+},
+
+{
+q:"Functional group कशावर परिणाम करतो?",
+o:["Chemical properties","Mass only","Colour only","Shape only"],
+a:0
+},
+
+{
+q:"Molar mass म्हणजे काय?",
+o:["एका mole पदार्थाचे mass","एका atom चे charge","Only volume","Only density"],
+a:0
+},
+
+{
+q:"Qualitative analysis काय सांगते?",
+o:["काय उपस्थित आहे","किती आहे","Temperature","Pressure"],
+a:0
+},
+
+{
+q:"Quantitative analysis काय सांगते?",
+o:["काय आहे","किती आहे","Colour","Shape"],
+a:1
+},
+
+{
+q:"Accuracy म्हणजे काय?",
+o:["True value जवळ measurement","Repeated value only","Large number","Small number"],
+a:0
+},
+
+{
+q:"Precision कशाशी संबंधित आहे?",
+o:["Measurements ची consistency","Only mass","Only temperature","Only colour"],
+a:0
+},
+
+{
+q:"Oxidizing agent काय घडवतो?",
+o:["Oxidation","Reduction only","Freezing","Boiling"],
+a:0
+},
+
+{
+q:"Reducing agent काय घडवतो?",
+o:["Reduction","Only oxidation","Melting","Condensation"],
+a:0
+},
+
+{
+q:"Chemistry मध्ये chemical equation कशासाठी वापरतात?",
+o:["Chemical reaction represent करण्यासाठी","Temperature मोजण्यासाठी","Mass मोजण्यासाठी","Time मोजण्यासाठी"],
+a:0
+}
+
+];
+
+
+/* =========================
+   TEST VARIABLES
+========================= */
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+
+/* =========================
+   RENDER CHAPTERS
+========================= */
+
+function renderChapters(){
+
+  const list =
+    document.getElementById("chapterList");
+
+  list.innerHTML = "";
+
+  chapters.forEach(function(chapter){
+
+    const button =
+      document.createElement("button");
+
+    button.type = "button";
+
+    button.className = "chapter-btn";
+
+    button.innerHTML = `
+
+      <div class="chapter-number">
+        ${chapter.number}
+      </div>
+
+      <div class="chapter-info">
+
+        <h3>
+          Chapter ${chapter.number}: ${chapter.title}
+        </h3>
+
+        <p>
+          Explanation पाहण्यासाठी येथे tap करा
+        </p>
+
+      </div>
+
+      <div class="chapter-arrow">
+        ›
+      </div>
+
+    `;
+
+    button.onclick = function(){
+
+      openChapter(chapter);
+
+    };
+
+    list.appendChild(button);
+
+  });
+
+}
+
+
+/* =========================
+   OPEN CHAPTER
+========================= */
+
+function openChapter(chapter){
+
+  document.getElementById("popupTitle").textContent =
+    "Chapter " + chapter.number + ": " + chapter.title;
+
+  document.getElementById("popupIcon").textContent =
+    chapter.icon;
+
+  document.getElementById("popupIntro").textContent =
+    chapter.intro;
+
+  const explanation =
+    document.getElementById("popupExplanation");
+
+  explanation.innerHTML = "";
+
+  chapter.lines.forEach(function(line,index){
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "explanation-line";
+
+    div.innerHTML =
+      "<b>" + (index + 1) + ".</b> " + line;
+
+    explanation.appendChild(div);
+
+  });
+
+  document.getElementById("popupRemember").textContent =
+    chapter.remember;
+
+  document.getElementById("popupBg").style.display =
+    "flex";
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/* =========================
+   CLOSE CHAPTER POPUP
+========================= */
+
+function closePopup(){
+
+  document.getElementById("popupBg").style.display =
+    "none";
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+/* =========================
+   OUTSIDE CLICK
+========================= */
+
+function closeOutside(event){
+
+  if(event.target.id === "popupBg"){
+
+    closePopup();
+
+  }
+
+}
+
+
+/* =========================
+   OPEN TEST
+========================= */
+
+function openTest(){
+
+  currentQuestion = 0;
+  score = 0;
+  answered = false;
+
+  document.getElementById("testBg").style.display =
+    "flex";
+
+  document.body.style.overflow =
+    "hidden";
+
+  showQuestion();
+
+}
+
+
+/* =========================
+   SHOW QUESTION
+========================= */
+
+function showQuestion(){
+
+  const area =
+    document.getElementById("testArea");
+
+  const q =
+    questions[currentQuestion];
+
+  document.getElementById("progress").textContent =
+    "Question " +
+    (currentQuestion + 1) +
+    " / " +
+    questions.length;
+
+  area.innerHTML = `
+
+    <div class="question">
+      ${q.q}
+    </div>
+
+    <div class="options">
+
+      ${q.o.map(function(option,index){
+
+        return `
+
+          <button
+            class="option"
+            onclick="selectAnswer(${index})">
+
+            ${String.fromCharCode(65 + index)}.
+            ${option}
+
+          </button>
+
+        `;
+
+      }).join("")}
+
+    </div>
+
+    <button
+      class="next-btn"
+      id="nextBtn"
+      onclick="nextQuestion()">
+
+      ${currentQuestion === questions.length - 1
+        ? "🏁 Test Complete"
+        : "Next Question →"}
+
+    </button>
+
+  `;
+
+}
+
+
+/* =========================
+   SELECT ANSWER
+========================= */
+
+function selectAnswer(index){
+
+  if(answered) return;
+
+  answered = true;
+
+  const q =
+    questions[currentQuestion];
+
+  const options =
+    document.querySelectorAll(".option");
+
+  if(index === q.a){
+
+    score++;
+
+    options[index].style.background =
+      "#dff7e5";
+
+    options[index].style.borderColor =
+      "#45a35a";
+
+  }else{
+
+    options[index].style.background =
+      "#ffe2e2";
+
+    options[index].style.borderColor =
+      "#d9534f";
+
+    options[q.a].style.background =
+      "#dff7e5";
+
+    options[q.a].style.borderColor =
+      "#45a35a";
+
+  }
+
+  document.getElementById("nextBtn").style.display =
+    "block";
+
+}
+
+
+/* =========================
+   NEXT QUESTION
+========================= */
+
+function nextQuestion(){
+
+  if(currentQuestion <
+     questions.length - 1){
+
+    currentQuestion++;
+
+    answered = false;
+
+    showQuestion();
+
+  }else{
+
+    showResult();
+
+  }
+
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+function showResult(){
+
+  const percentage =
+    Math.round(
+      (score / questions.length) * 100
+    );
+
+  document.getElementById("progress").textContent =
+    "Test Completed ✅";
+
+  document.getElementById("testArea").innerHTML = `
+
+    <div class="result">
+
+      <div style="font-size:55px;">
+        🎉
+      </div>
+
+      <h2>
+        Chemistry Test Complete!
+      </h2>
+
+      <div class="result-score">
+        ${score} / ${questions.length}
+      </div>
+
+      <p>
+        Percentage: <b>${percentage}%</b>
+      </p>
+
+      <p style="margin-top:8px;">
+        Correct Answers:
+        <b>${score}</b>
+      </p>
+
+      <p style="margin-top:5px;">
+        Wrong Answers:
+        <b>${questions.length - score}</b>
+      </p>
+
+      <button
+        class="restart-btn"
+        onclick="openTest()"
+        style="margin-top:20px;">
+
+        🔄 Restart Test
+
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   CLOSE TEST
+========================= */
+
+function closeTest(){
+
+  document.getElementById("testBg").style.display =
+    "none";
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Escape"){
+
+      closePopup();
+      closeTest();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack(){
+
+  window.location.href =
+    "college-11.html";
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+renderChapters();
 
 </script>
 
