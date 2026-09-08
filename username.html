@@ -2,6 +2,7 @@
 <html lang="mr">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta name="viewport"
@@ -114,9 +115,11 @@
       text-align: center;
       font-size: 13px;
       color: #666;
+      word-break: break-word;
     }
 
   </style>
+
 </head>
 
 
@@ -178,9 +181,11 @@
 
     <div id="errorMessage"></div>
 
+
     <div id="successMessage">
       ✅ Account तयार झाले!
     </div>
+
 
     <div id="testMessage">
       Appwrite connection तपासत आहे...
@@ -189,7 +194,9 @@
   </div>
 
 
-  <!-- Appwrite SDK -->
+  <!-- =====================================
+       APPWRITE SDK
+  ====================================== -->
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
 
@@ -210,22 +217,48 @@
         "6aa0017e0033d661d951"
       );
 
+
     const account =
       new Appwrite.Account(client);
 
 
     /* =====================================
-       CONNECTION TEST
+       APPWRITE CONNECTION TEST
     ====================================== */
 
     async function testConnection() {
 
       const test =
-        document.getElementById("testMessage");
+        document.getElementById(
+          "testMessage"
+        );
 
       try {
 
-        await account.get();
+        const response =
+          await fetch(
+            "https://fra.cloud.appwrite.io/v1/locale"
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            "HTTP " + response.status
+          );
+
+        }
+
+
+        const data =
+          await response.json();
+
+
+        console.log(
+          "APPWRITE CONNECTION:",
+          data
+        );
+
 
         test.innerText =
           "Appwrite Connected ✅";
@@ -237,46 +270,28 @@
 
       catch (err) {
 
-        /*
-          Account नसल्यामुळे 401 येणे normal आहे.
-          याचा अर्थ Appwrite पर्यंत request पोहोचली.
-        */
+        console.error(
+          "APPWRITE CONNECTION ERROR:",
+          err
+        );
 
-        if (
-          err &&
+
+        test.innerText =
+          "Appwrite Connection Failed ❌\n" +
           (
-            err.code === 401 ||
-            err.code === 404
-          )
-        ) {
-
-          test.innerText =
-            "Appwrite Connected ✅";
-
-          test.style.color =
-            "#2e7d32";
-
-        }
-
-        else {
-
-          console.error(
-            "CONNECTION ERROR:",
-            err
+            err.message ||
+            "Unknown error"
           );
 
-          test.innerText =
-            "Appwrite Connection Failed ❌";
-
-          test.style.color =
-            "#c62828";
-
-        }
+        test.style.color =
+          "#c62828";
 
       }
 
     }
 
+
+    /* Run connection test */
 
     testConnection();
 
@@ -293,11 +308,13 @@
           .value
           .trim();
 
+
       const email =
         document
           .getElementById("emailInput")
           .value
           .trim();
+
 
       const password =
         document
@@ -307,6 +324,8 @@
 
       hideMessages();
 
+
+      /* Username */
 
       if (username.length < 2) {
 
@@ -319,6 +338,8 @@
       }
 
 
+      /* Email */
+
       if (!email) {
 
         showError(
@@ -329,6 +350,8 @@
 
       }
 
+
+      /* Password */
 
       if (password.length < 8) {
 
@@ -346,6 +369,7 @@
           "createButton"
         );
 
+
       button.disabled = true;
 
       button.innerText =
@@ -354,42 +378,68 @@
 
       try {
 
-        /* Create account */
+        /* =================================
+           CREATE APPWRITE ACCOUNT
+        ================================== */
 
         const user =
-          await account.create(
-            Appwrite.ID.unique(),
-            email,
-            password,
-            username
-          );
+          await account.create({
+
+            userId:
+              Appwrite.ID.unique(),
+
+            email:
+              email,
+
+            password:
+              password,
+
+            name:
+              username
+
+          });
 
 
-        /* Login */
+        /* =================================
+           CREATE LOGIN SESSION
+        ================================== */
 
         await account.createEmailPasswordSession({
-          email: email,
-          password: password
+
+          email:
+            email,
+
+          password:
+            password
+
         });
 
 
-        /* Save data */
+        /* =================================
+           SAVE LOCAL DATA
+        ================================== */
 
         localStorage.setItem(
           "gyansetu_username",
           username
         );
 
+
         localStorage.setItem(
           "gyansetu_email",
           email
         );
+
 
         localStorage.setItem(
           "gyansetu_user_id",
           user.$id
         );
 
+
+        /* =================================
+           SUCCESS
+        ================================== */
 
         document
           .getElementById(
@@ -402,6 +452,10 @@
           "Account तयार झाले ✓";
 
 
+        /* =================================
+           GO HOME
+        ================================== */
+
         setTimeout(function() {
 
           window.location.href =
@@ -409,8 +463,8 @@
 
         }, 800);
 
-
       }
+
 
       catch (err) {
 
@@ -424,11 +478,16 @@
           "Account तयार करता आले नाही.";
 
 
-        if (err && err.message) {
+        if (
+          err &&
+          err.message
+        ) {
 
           const errorText =
             err.message.toLowerCase();
 
+
+          /* Already exists */
 
           if (
             errorText.includes(
@@ -444,6 +503,9 @@
 
           }
 
+
+          /* Invalid email */
+
           else if (
             errorText.includes(
               "invalid email"
@@ -455,6 +517,9 @@
 
           }
 
+
+          /* Password */
+
           else if (
             errorText.includes(
               "password"
@@ -465,6 +530,9 @@
               "Password किमान 8 characters असावा.";
 
           }
+
+
+          /* Other Appwrite error */
 
           else {
 
@@ -500,8 +568,10 @@
           "errorMessage"
         );
 
+
       error.innerText =
         "❌ " + message;
+
 
       error.style.display =
         "block";
@@ -521,6 +591,7 @@
         )
         .style.display = "none";
 
+
       document
         .getElementById(
           "successMessage"
@@ -535,12 +606,16 @@
     ====================================== */
 
     document
-      .getElementById("passwordInput")
+      .getElementById(
+        "passwordInput"
+      )
       .addEventListener(
         "keydown",
         function(event) {
 
-          if (event.key === "Enter") {
+          if (
+            event.key === "Enter"
+          ) {
 
             createAccount();
 
@@ -550,6 +625,7 @@
       );
 
   </script>
+
 
 </body>
 
