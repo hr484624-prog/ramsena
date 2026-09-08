@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="mr">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ज्ञानसेतू - Basic Mathematics Test</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f3f6fb;
+    color:#222;
+}
+
+.page{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    margin:auto;
+    background:#fff;
+}
+
+/* HEADER */
+
+.header{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:20px 16px;
+    text-align:center;
+}
+
+.header h1{
+    font-size:24px;
+    margin-bottom:5px;
+}
+
+.header p{
+    font-size:13px;
+}
+
+/* TEST AREA */
+
+.test-area{
+    padding:18px 15px 30px;
+}
+
+.progress-box{
+    background:#f5f3ff;
+    padding:13px;
+    border-radius:13px;
+    margin-bottom:15px;
+}
+
+.progress-top{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    color:#555;
+    margin-bottom:8px;
+}
+
+.progress-bar{
+    width:100%;
+    height:8px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-fill{
+    height:100%;
+    width:1%;
+    background:#4f46e5;
+    transition:.3s;
+}
+
+/* QUESTION */
+
+.question-card{
+    background:white;
+    border-radius:18px;
+    box-shadow:0 5px 18px rgba(0,0,0,.09);
+    border:1px solid #eee;
+    padding:20px 16px;
+}
+
+.question-number{
+    font-size:13px;
+    color:#6366f1;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.difficulty{
+    display:inline-block;
+    background:#f1f5f9;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:11px;
+    color:#64748b;
+    margin-bottom:13px;
+}
+
+.question{
+    font-size:20px;
+    line-height:1.5;
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+/* OPTIONS */
+
+.option{
+    width:100%;
+    padding:14px;
+    margin-bottom:10px;
+    border:2px solid #e5e7eb;
+    background:#fff;
+    border-radius:12px;
+    text-align:left;
+    font-size:15px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:active{
+    transform:scale(.98);
+}
+
+.option.selected{
+    border-color:#6366f1;
+    background:#f5f3ff;
+}
+
+.option.correct{
+    border-color:#16a34a;
+    background:#dcfce7;
+}
+
+.option.wrong{
+    border-color:#dc2626;
+    background:#fee2e2;
+}
+
+/* NEXT */
+
+.next-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:13px;
+    background:#4f46e5;
+    color:white;
+    font-size:16px;
+    margin-top:8px;
+    cursor:pointer;
+}
+
+.next-btn:disabled{
+    opacity:.5;
+}
+
+/* RESULT */
+
+.result{
+    display:none;
+    text-align:center;
+    padding:30px 18px;
+}
+
+.result-icon{
+    font-size:60px;
+    margin-bottom:12px;
+}
+
+.result h2{
+    font-size:25px;
+    margin-bottom:10px;
+}
+
+.score{
+    font-size:42px;
+    font-weight:bold;
+    color:#4f46e5;
+    margin:15px 0;
+}
+
+.result p{
+    color:#666;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.restart-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:13px;
+    background:#4f46e5;
+    color:white;
+    font-size:16px;
+    margin-top:20px;
+    cursor:pointer;
+}
+
+.home-btn{
+    width:100%;
+    padding:13px;
+    border:2px solid #4f46e5;
+    border-radius:13px;
+    background:white;
+    color:#4f46e5;
+    font-size:15px;
+    margin-top:10px;
+    cursor:pointer;
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="page">
+
+    <div class="header">
+        <h1>🧮 Basic Mathematics Test</h1>
+        <p>सोप्यापासून हळूहळू कठीण प्रश्नांकडे</p>
+    </div>
+
+
+    <!-- TEST -->
+
+    <div class="test-area" id="testArea">
+
+        <div class="progress-box">
+
+            <div class="progress-top">
+                <span id="questionCount">
+                    प्रश्न 1 / 100
+                </span>
+
+                <span id="scoreText">
+                    गुण: 0
+                </span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill"
+                     id="progressFill">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="question-card">
+
+            <div class="question-number"
+                 id="questionNumber">
+                प्रश्न 1
+            </div>
+
+            <div class="difficulty"
+                 id="difficulty">
+                सोपे
+            </div>
+
+            <div class="question"
+                 id="question">
+            </div>
+
+            <div id="options">
+            </div>
+
+            <button class="next-btn"
+                    id="nextBtn"
+                    disabled
+                    onclick="nextQuestion()">
+                पुढील प्रश्न →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+
+    <div class="result"
+         id="result">
+
+        <div class="result-icon">
+            🏆
+        </div>
+
+        <h2>Test पूर्ण झाला!</h2>
+
+        <div class="score"
+             id="finalScore">
+            0 / 100
+        </div>
+
+        <p id="resultMessage">
+        </p>
+
+        <button class="restart-btn"
+                onclick="restartTest()">
+            🔄 Test पुन्हा सोडवा
+        </button>
+
+        <button class="home-btn"
+                onclick="goHome()">
+            🏠 Basic Mathematics वर जा
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   100 BASIC MATHEMATICS QUESTIONS
+   सोपे → मध्यम → कठीण
+===================================================== */
+
+const questions = [
+
+/* =========================
+   1 - 20 : अगदी सोपे
+========================= */
+
+{
+q:"1 + 1 = ?",
+o:["1","2","3","4"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"2 + 3 = ?",
+o:["4","5","6","7"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"5 - 2 = ?",
+o:["2","3","4","5"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"4 + 4 = ?",
+o:["6","7","8","9"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"10 - 5 = ?",
+o:["3","4","5","6"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"3 + 6 = ?",
+o:["7","8","9","10"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"9 - 4 = ?",
+o:["4","5","6","7"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"7 + 2 = ?",
+o:["8","9","10","11"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"8 - 3 = ?",
+o:["4","5","6","7"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"6 + 3 = ?",
+o:["7","8","9","10"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"12 - 2 = ?",
+o:["8","9","10","11"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"5 + 5 = ?",
+o:["8","9","10","11"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"10 + 4 = ?",
+o:["12","13","14","15"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"15 - 5 = ?",
+o:["8","9","10","11"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"7 + 7 = ?",
+o:["12","13","14","15"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"20 - 10 = ?",
+o:["5","10","15","20"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"11 + 2 = ?",
+o:["12","13","14","15"],
+a:1,
+d:"अगदी सोपे"
+},
+
+{
+q:"14 - 4 = ?",
+o:["8","9","10","11"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"9 + 5 = ?",
+o:["12","13","14","15"],
+a:2,
+d:"अगदी सोपे"
+},
+
+{
+q:"18 - 8 = ?",
+o:["8","9","10","11"],
+a:2,
+d:"अगदी सोपे"
+},
+
+
+/* =========================
+   21 - 40 : सोपे
+========================= */
+
+{
+q:"25 + 10 = ?",
+o:["30","35","40","45"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"30 - 12 = ?",
+o:["16","18","20","22"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"16 + 9 = ?",
+o:["23","24","25","26"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"40 - 15 = ?",
+o:["20","25","30","35"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"12 + 18 = ?",
+o:["28","29","30","31"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"50 - 25 = ?",
+o:["20","25","30","35"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"23 + 7 = ?",
+o:["28","30","32","34"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"35 - 9 = ?",
+o:["24","25","26","27"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"6 × 2 = ?",
+o:["10","12","14","16"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"5 × 3 = ?",
+o:["10","12","15","18"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"20 ÷ 5 = ?",
+o:["2","3","4","5"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"18 ÷ 3 = ?",
+o:["4","5","6","7"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"7 × 4 = ?",
+o:["21","24","28","32"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"24 ÷ 6 = ?",
+o:["2","3","4","5"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"9 × 3 = ?",
+o:["18","21","27","30"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"32 ÷ 4 = ?",
+o:["6","7","8","9"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"45 + 15 = ?",
+o:["50","55","60","65"],
+a:2,
+d:"सोपे"
+},
+
+{
+q:"60 - 25 = ?",
+o:["30","35","40","45"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"8 × 5 = ?",
+o:["35","40","45","50"],
+a:1,
+d:"सोपे"
+},
+
+{
+q:"36 ÷ 6 = ?",
+o:["4","5","6","7"],
+a:2,
+d:"सोपे"
+},
+
+
+/* =========================
+   41 - 60 : मध्यम
+========================= */
+
+{
+q:"125 + 75 = ?",
+o:["180","190","200","210"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"250 - 125 = ?",
+o:["100","125","150","175"],
+a:1,
+d:"मध्यम"
+},
+
+{
+q:"24 × 3 = ?",
+o:["62","72","82","92"],
+a:1,
+d:"मध्यम"
+},
+
+{
+q:"96 ÷ 8 = ?",
+o:["10","11","12","13"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"45 + 38 = ?",
+o:["73","83","93","103"],
+a:1,
+d:"मध्यम"
+},
+
+{
+q:"100 - 47 = ?",
+o:["43","53","63","73"],
+a:1,
+d:"मध्यम"
+},
+
+{
+q:"15 × 4 = ?",
+o:["50","55","60","65"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"144 ÷ 12 = ?",
+o:["10","11","12","13"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"2/4 चे साधे रूप कोणते?",
+o:["1/2","1/3","2/3","3/4"],
+a:0,
+d:"मध्यम"
+},
+
+{
+q:"1/2 म्हणजे किती टक्के?",
+o:["25%","40%","50%","75%"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"0.5 म्हणजे कोणता अपूर्णांक?",
+o:["1/2","1/3","1/4","2/3"],
+a:0,
+d:"मध्यम"
+},
+
+{
+q:"25% of 100 = ?",
+o:["20","25","30","50"],
+a:1,
+d:"मध्यम"
+},
+
+{
+q:"एका आठवड्यात किती दिवस असतात?",
+o:["5","6","7","8"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"1 तासात किती मिनिटे?",
+o:["30","45","60","90"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"2 मीटर = किती सेंटीमीटर?",
+o:["20","100","200","1000"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"₹50 मधून ₹20 खर्च केले. किती उरले?",
+o:["₹20","₹25","₹30","₹35"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"5, 10, 15, 20, ?",
+o:["22","25","30","35"],
+a:1,
+d:"मध्यम"
+},
+
+{
+q:"2, 4, 8, 16, ?",
+o:["20","24","32","36"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"एका चौकोनाची बाजू 5 cm आहे. परिमिती किती?",
+o:["10 cm","15 cm","20 cm","25 cm"],
+a:2,
+d:"मध्यम"
+},
+
+{
+q:"आयताची लांबी 8 cm आणि रुंदी 3 cm आहे. क्षेत्रफळ किती?",
+o:["11 cm²","22 cm²","24 cm²","28 cm²"],
+a:2,
+d:"मध्यम"
+},
+
+
+/* =========================
+   61 - 80 : मध्यम ते कठीण
+========================= */
+
+{
+q:"345 मध्ये 4 चे स्थानमूल्य किती?",
+o:["4","40","400","4000"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"572 मध्ये 5 चे स्थानमूल्य किती?",
+o:["5","50","500","5000"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"3 × 12 + 4 = ?",
+o:["36","40","44","48"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"50 - 6 × 5 = ?",
+o:["20","30","40","44"],
+a:0,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"(10 + 5) × 2 = ?",
+o:["20","25","30","35"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"100 ÷ 4 + 10 = ?",
+o:["25","30","35","40"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"एका वर्गाची बाजू 9 cm आहे. क्षेत्रफळ किती?",
+o:["18 cm²","36 cm²","72 cm²","81 cm²"],
+a:3,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"एका आयताची लांबी 10 cm आणि रुंदी 5 cm आहे. परिमिती किती?",
+o:["15 cm","25 cm","30 cm","50 cm"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"10, 20, 30 यांची सरासरी किती?",
+o:["10","20","30","60"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"5, 10, 15, 20 यांची सरासरी किती?",
+o:["10","12.5","15","20"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"2² = ?",
+o:["2","4","6","8"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"5² = ?",
+o:["10","20","25","30"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"एका वस्तूची किंमत ₹200 आहे. 10% सवलत किती?",
+o:["₹10","₹20","₹30","₹40"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"₹500 च्या वस्तूवर ₹50 सवलत मिळाली. अंतिम किंमत किती?",
+o:["₹400","₹450","₹500","₹550"],
+a:1,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"एका संख्येत 25 जोडल्यावर 70 मिळते. ती संख्या कोणती?",
+o:["35","40","45","50"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"एका संख्येतून 18 वजा केल्यावर 32 मिळते. ती संख्या कोणती?",
+o:["40","45","50","55"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"x + 7 = 15. x = ?",
+o:["6","7","8","9"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"x - 9 = 21. x = ?",
+o:["28","29","30","31"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"3x = 18. x = ?",
+o:["3","5","6","9"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+{
+q:"x ÷ 5 = 7. x = ?",
+o:["25","30","35","40"],
+a:2,
+d:"मध्यम-कठीण"
+},
+
+
+/* =========================
+   81 - 100 : कठीण
+========================= */
+
+{
+q:"125 + 248 = ?",
+o:["363","373","383","393"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"500 - 278 = ?",
+o:["212","222","232","242"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"24 × 15 = ?",
+o:["300","340","360","380"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"360 ÷ 12 = ?",
+o:["20","25","30","35"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"25 × 16 = ?",
+o:["300","350","400","450"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"625 ÷ 25 = ?",
+o:["20","25","30","35"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"(20 + 10) ÷ 5 = ?",
+o:["4","5","6","7"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"8 × (5 + 2) = ?",
+o:["40","48","56","64"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"100 - (20 + 30) = ?",
+o:["40","50","60","70"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"5 × 6 + 10 ÷ 2 = ?",
+o:["30","35","40","45"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"एका संख्येचा 1/4 भाग 12 आहे. पूर्ण संख्या किती?",
+o:["24","36","48","60"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"200 च्या 25% किती?",
+o:["25","40","50","75"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"80 च्या 75% किती?",
+o:["40","50","60","70"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"0.75 हा कोणत्या अपूर्णांकासमान आहे?",
+o:["1/2","1/4","3/4","4/5"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"3/5 = किती टक्के?",
+o:["40%","50%","60%","75%"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"4, 9, 14, 19, ?",
+o:["22","23","24","25"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"3, 6, 12, 24, ?",
+o:["36","42","48","54"],
+a:2,
+d:"कठीण"
+},
+
+{
+q:"एका आयताची लांबी 12 cm आणि रुंदी 7 cm आहे. क्षेत्रफळ किती?",
+o:["72 cm²","84 cm²","96 cm²","108 cm²"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"एका आयताची लांबी 15 cm आणि रुंदी 8 cm आहे. परिमिती किती?",
+o:["38 cm","46 cm","48 cm","56 cm"],
+a:1,
+d:"कठीण"
+},
+
+{
+q:"10, 15, 20, 25, 30 यांची सरासरी किती?",
+o:["15","20","25","30"],
+a:1,
+d:"कठीण"
+}
+
+];
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentQuestion = 0;
+let score = 0;
+let selectedAnswer = null;
+let answered = false;
+
+
+/* =====================================================
+   LOAD QUESTION
+===================================================== */
+
+function loadQuestion(){
+
+    selectedAnswer = null;
+    answered = false;
+
+    const data =
+        questions[currentQuestion];
+
+    document.getElementById("questionCount")
+        .innerText =
+        "प्रश्न " +
+        (currentQuestion + 1) +
+        " / " +
+        questions.length;
+
+    document.getElementById("questionNumber")
+        .innerText =
+        "प्रश्न " +
+        (currentQuestion + 1);
+
+    document.getElementById("difficulty")
+        .innerText = data.d;
+
+    document.getElementById("question")
+        .innerText = data.q;
+
+    document.getElementById("scoreText")
+        .innerText =
+        "गुण: " + score;
+
+    const progress =
+        ((currentQuestion + 1) /
+        questions.length) * 100;
+
+    document.getElementById("progressFill")
+        .style.width =
+        progress + "%";
+
+    const options =
+        document.getElementById("options");
+
+    options.innerHTML = "";
+
+    data.o.forEach((option,index)=>{
+
+        const button =
+            document.createElement("button");
+
+        button.className = "option";
+
+        button.innerText =
+            String.fromCharCode(65 + index) +
+            ") " +
+            option;
+
+        button.onclick = function(){
+
+            chooseAnswer(index,button);
+
+        };
+
+        options.appendChild(button);
+
+    });
+
+    document.getElementById("nextBtn")
+        .disabled = true;
+
+    document.getElementById("nextBtn")
+        .innerText =
+        currentQuestion === questions.length - 1
+        ? "Test पूर्ण करा ✓"
+        : "पुढील प्रश्न →";
+}
+
+
+/* =====================================================
+   CHOOSE ANSWER
+===================================================== */
+
+function chooseAnswer(index,button){
+
+    if(answered){
+        return;
+    }
+
+    selectedAnswer = index;
+
+    const data =
+        questions[currentQuestion];
+
+    const allOptions =
+        document.querySelectorAll(".option");
+
+    allOptions.forEach((btn,i)=>{
+
+        btn.disabled = true;
+
+        if(i === data.a){
+            btn.classList.add("correct");
+        }
+
+    });
+
+    if(index === data.a){
+
+        score++;
+
+        document.getElementById("scoreText")
+            .innerText =
+            "गुण: " + score;
+
+    }else{
+
+        button.classList.add("wrong");
+
+    }
+
+    answered = true;
+
+    document.getElementById("nextBtn")
+        .disabled = false;
+}
+
+
+/* =====================================================
+   NEXT QUESTION
+===================================================== */
+
+function nextQuestion(){
+
+    if(!answered){
+        return;
+    }
+
+    if(currentQuestion <
+       questions.length - 1){
+
+        currentQuestion++;
+
+        loadQuestion();
+
+        window.scrollTo({
+            top:0,
+            behavior:"smooth"
+        });
+
+    }else{
+
+        showResult();
+
+    }
+}
+
+
+/* =====================================================
+   SHOW RESULT
+===================================================== */
+
+function showResult(){
+
+    document.getElementById("testArea")
+        .style.display = "none";
+
+    document.getElementById("result")
+        .style.display = "block";
+
+    document.getElementById("finalScore")
+        .innerText =
+        score + " / " + questions.length;
+
+    let message = "";
+
+    const percentage =
+        (score / questions.length) * 100;
+
+    if(percentage >= 90){
+
+        message =
+        "🌟 अप्रतिम! Basic Mathematics वर तुमची खूप चांगली पकड आहे.";
+
+    }else if(percentage >= 75){
+
+        message =
+        "👏 खूप छान! तुमचा गणिताचा पाया मजबूत आहे.";
+
+    }else if(percentage >= 50){
+
+        message =
+        "👍 चांगला प्रयत्न! अजून थोडा सराव केल्यास तुम्ही आणखी चांगले करू शकता.";
+
+    }else{
+
+        message =
+        "💪 छान प्रयत्न! Basic Mathematics चे Topics पुन्हा अभ्यासा आणि Test पुन्हा सोडवा.";
+
+    }
+
+    document.getElementById("resultMessage")
+        .innerText = message;
+}
+
+
+/* =====================================================
+   RESTART
+===================================================== */
+
+function restartTest(){
+
+    currentQuestion = 0;
+    score = 0;
+    selectedAnswer = null;
+    answered = false;
+
+    document.getElementById("result")
+        .style.display = "none";
+
+    document.getElementById("testArea")
+        .style.display = "block";
+
+    loadQuestion();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+function goHome(){
+
+    window.history.back();
+
+}
+
+
+/* =====================================================
+   START TEST
+===================================================== */
+
+loadQuestion();
+
+</script>
+
+</body>
+  </html>
