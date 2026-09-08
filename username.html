@@ -225,48 +225,41 @@
     /* =====================================
        APPWRITE CONNECTION TEST
     ====================================== */
+async function testConnection() {
 
-    async function testConnection() {
+  const test = document.getElementById("testMessage");
 
-      const test =
-        document.getElementById(
-          "testMessage"
-        );
+  try {
 
-      try {
-
-        const response =
-          await fetch(
-            "https://fra.cloud.appwrite.io/v1/locale"
-          );
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            "HTTP " + response.status
-          );
-
+    const response = await fetch(
+      "https://fra.cloud.appwrite.io/v1/locale",
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "X-Appwrite-Project": "6aa0017e0033d661d951"
         }
-
-
-        const data =
-          await response.json();
-
-
-        console.log(
-          "APPWRITE CONNECTION:",
-          data
-        );
-
-
-        test.innerText =
-          "Appwrite Connected ✅";
-
-        test.style.color =
-          "#2e7d32";
-
       }
+    );
+
+    const data = await response.json();
+
+    console.log("Appwrite:", data);
+
+    test.innerText = "Appwrite Connected ✅";
+    test.style.color = "#2e7d32";
+
+  } catch (err) {
+
+    console.error("Appwrite Error:", err);
+
+    test.innerText =
+      "Appwrite Connection Failed ❌\n" +
+      err.message;
+
+    test.style.color = "#c62828";
+  }
+    }
 
       catch (err) {
 
