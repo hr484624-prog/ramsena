@@ -1,194 +1,899 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>GyanSetu - 11th Biology</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-    }
+<title>GyanSetu - 11th Biology</title>
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-    }
+<style>
 
-    .header {
-      background: white;
-      padding: 18px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
 
-    .top {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+body{
+  background:#f7f8fc;
+  color:#18264d;
+}
 
-    .back {
-      font-size: 30px;
-      cursor: pointer;
-    }
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:30px;
+}
 
-    .title {
-      font-size: 22px;
-      font-weight: 800;
-    }
+/* HEADER */
 
-    .intro {
-      margin: 18px 16px;
-      padding: 25px 18px;
-      background: linear-gradient(135deg, #fff0dc, #fffaf4);
-      border: 1px solid #ffe0bd;
-      border-radius: 22px;
-      text-align: center;
-    }
+.header{
+  background:white;
+  padding:18px;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
 
-    .biology-icon {
-      font-size: 55px;
-    }
+.top{
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
 
-    .intro h1 {
-      margin-top: 10px;
-      font-size: 24px;
-    }
+.back{
+  font-size:30px;
+  cursor:pointer;
+  width:40px;
+}
 
-    .intro p {
-      margin-top: 7px;
-      color: #777;
-      font-size: 13px;
-    }
+.title{
+  font-size:22px;
+  font-weight:800;
+}
 
-    .content {
-      margin: 20px 16px;
-      background: white;
-      min-height: 500px;
-      border-radius: 22px;
-      border: 2px dashed #ddd;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
+/* INTRO */
 
-    .placeholder {
-      padding: 25px;
-      color: #999;
-    }
+.intro{
+  margin:18px 16px;
+  padding:25px 18px;
+  background:linear-gradient(135deg,#fff0dc,#fffaf4);
+  border:1px solid #ffe0bd;
+  border-radius:22px;
+  text-align:center;
+}
 
-    .placeholder-icon {
-      font-size: 45px;
-      margin-bottom: 12px;
-    }
+.biology-icon{
+  font-size:55px;
+}
 
-    .placeholder h3 {
-      color: #18264d;
-      font-size: 18px;
-    }
+.intro h1{
+  margin-top:10px;
+  font-size:24px;
+}
 
-    .placeholder p {
-      margin-top: 7px;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-  </style>
+.intro p{
+  margin-top:7px;
+  color:#777;
+  font-size:13px;
+}
+
+/* CHAPTER SECTION */
+
+.chapter-section{
+  margin:20px 16px;
+}
+
+.chapter-heading{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:15px;
+}
+
+/* CHAPTER BUTTON */
+
+.chapter-btn{
+  width:100%;
+  border:none;
+  background:white;
+  border-radius:17px;
+  padding:17px;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-align:left;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.06);
+  color:#18264d;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.chapter-btn:active{
+  transform:scale(.98);
+}
+
+.chapter-number{
+  min-width:45px;
+  height:45px;
+  border-radius:13px;
+  background:#f1edff;
+  color:#6c63ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:15px;
+}
+
+.chapter-info{
+  flex:1;
+}
+
+.chapter-info h3{
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.chapter-info p{
+  color:#888;
+  font-size:12px;
+  line-height:1.4;
+}
+
+.chapter-arrow{
+  font-size:22px;
+  color:#999;
+}
+
+/* POPUP */
+
+.popup-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.58);
+  z-index:100;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.popup{
+  width:100%;
+  max-width:430px;
+  max-height:88vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:25px 25px 0 0;
+  padding:22px 18px 30px;
+  animation:popupUp .25s ease;
+}
+
+@keyframes popupUp{
+
+  from{
+    transform:translateY(100%);
+  }
+
+  to{
+    transform:translateY(0);
+  }
+
+}
+
+.popup-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.popup-title{
+  font-size:20px;
+  font-weight:800;
+  line-height:1.3;
+  padding-right:10px;
+}
+
+.close{
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:50%;
+  background:#f1f3f8;
+  font-size:20px;
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+.topic-icon{
+  text-align:center;
+  font-size:55px;
+  margin:5px 0 12px;
+}
+
+.topic-intro{
+  background:#f5f4ff;
+  padding:14px;
+  border-radius:14px;
+  color:#555;
+  font-size:14px;
+  line-height:1.6;
+  margin-bottom:15px;
+}
+
+/* EXPLANATION */
+
+.explanation{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.explanation-line{
+  background:#f8f9fc;
+  border-radius:13px;
+  padding:13px;
+  font-size:14px;
+  line-height:1.6;
+  color:#333;
+  border-left:4px solid #6c63ff;
+}
+
+.remember{
+  margin-top:16px;
+  padding:15px;
+  background:#fff7df;
+  border-radius:14px;
+  border:1px solid #ffe4a3;
+  font-size:14px;
+  line-height:1.6;
+  color:#5d4a18;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-  <div class="header">
-    <div class="top">
 
-      <div class="back" onclick="goBack()">‹</div>
+<!-- HEADER -->
 
-      <div class="title">
-        11th Biology
-      </div>
+<div class="header">
 
+  <div class="top">
+
+    <div class="back"
+         onclick="goBack()">
+      ‹
     </div>
-  </div>
 
-  <div class="intro">
-
-    <div class="biology-icon">🧬</div>
-
-    <h1>Biology</h1>
-
-    <p>
-      Class 11th • Biology
-    </p>
+    <div class="title">
+      11th Biology
+    </div>
 
   </div>
 
-  <div class="content">
-
-    <div class="placeholder">
-
-      <div class="placeholder-icon">📚</div>
-
-      <h3>Study Material</h3>
-
-<div style="margin-top:15px; width:100%; height:450px; border-radius:15px; overflow:hidden;">
-  <iframe
-    src="DocScanner 30 Aug 2026 2-52 pm.pdf"
-    width="100%"
-    height="100%"
-    style="border:0;">
-  </iframe>
 </div>
 
-<div style="margin-top:25px; padding:18px; background:white; border-radius:18px;">
 
-  <h3>📖 Chapter 1</h3>
+<!-- INTRO -->
 
-  <p style="margin-top:6px; color:#666;">
-    11th Biology
+<div class="intro">
+
+  <div class="biology-icon">
+    🧬
+  </div>
+
+  <h1>
+    Biology
+  </h1>
+
+  <p>
+    Class 11th • Biology
   </p>
 
-  <div style="margin-top:15px; width:100%; height:450px; border-radius:15px; overflow:hidden;">
-    <iframe
-      src="chapter-1. bio.pdf"
-      width="100%"
-      height="100%"
-      style="border:0;">
-    </iframe>
+</div>
+
+
+<!-- CHAPTERS -->
+
+<div class="chapter-section">
+
+  <div class="chapter-heading">
+    📚 Biology Chapters
   </div>
 
-</div>
-<div style="margin-top:20px; padding:18px; background:white; border-radius:18px; box-shadow:0 5px 18px rgba(0,0,0,.06);">
-
-  
+  <div id="chapterList"></div>
 
 </div>
-</div>
-  
 
+
+</div>
+
+
+<!-- =========================
+     EXPLANATION POPUP
+========================= -->
+
+<div class="popup-bg"
+     id="popupBg"
+     onclick="closeOutside(event)">
+
+  <div class="popup">
+
+    <div class="popup-top">
+
+      <div class="popup-title"
+           id="popupTitle">
+      </div>
+
+      <button
+        class="close"
+        type="button"
+        onclick="closePopup()">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="topic-icon"
+         id="popupIcon">
+    </div>
+
+    <div class="topic-intro"
+         id="popupIntro">
+    </div>
+
+    <div class="explanation"
+         id="popupExplanation">
+    </div>
+
+    <div class="remember"
+         id="popupRemember">
     </div>
 
   </div>
 
 </div>
+
 
 <script>
 
-function goBack() {
-  window.location.href = "college-11.html";
+/* =========================
+   CHAPTER DATA
+========================= */
+
+const chapters = [
+
+{
+number:1,
+title:"Living World",
+icon:"🌱",
+intro:"सजीवांचे जग, सजीवांची वैशिष्ट्ये आणि सजीवांचा अभ्यास करण्याच्या पद्धती या chapter मध्ये समजतात.",
+lines:[
+"सजीव म्हणजे जीवनाची वैशिष्ट्ये दाखवणारी कोणतीही जीवित रचना.",
+"सजीवांमध्ये cellular organisation म्हणजे पेशींवर आधारित शरीररचना असते.",
+"सजीवांमध्ये metabolism म्हणजे शरीरात होणाऱ्या सर्व रासायनिक क्रियांचा समूह असतो.",
+"Growth म्हणजे सजीवाच्या शरीरात होणारी वाढ.",
+"Reproduction म्हणजे नवीन संतती निर्माण करण्याची प्रक्रिया.",
+"सजीव त्यांच्या वातावरणातील बदलांना प्रतिसाद देतात.",
+"वनस्पती आणि प्राणी हे सजीवांचे प्रमुख गट आहेत.",
+"Herbarium मध्ये वाळवून जतन केलेल्या वनस्पतींचे specimens ठेवले जातात.",
+"Botanical garden मध्ये जिवंत वनस्पतींचे संवर्धन आणि अभ्यास केला जातो.",
+"Zoological park मध्ये प्राण्यांचे संरक्षण, निरीक्षण आणि अभ्यास केला जातो.",
+"Museum मध्ये विविध biological specimens जतन केले जातात.",
+"Key चा उपयोग विविध organisms ची ओळख करण्यासाठी केला जातो.",
+"जैवविविधता म्हणजे सजीवांमध्ये आढळणारी विविधता.",
+"सजीवांचे संरक्षण biodiversity टिकवण्यासाठी अत्यंत महत्त्वाचे आहे."
+],
+remember:"लक्षात ठेवा: Metabolism, cellular organisation आणि responsiveness ही सजीवांच्या अभ्यासातील महत्त्वाची वैशिष्ट्ये आहेत."
+},
+
+{
+number:2,
+title:"Systematics of Living Organisms",
+icon:"🔬",
+intro:"सजीवांची ओळख, नामकरण, वर्गीकरण आणि त्यांच्यातील evolutionary relationships समजून घेण्यासाठी systematics वापरली जाते.",
+lines:[
+"Systematics म्हणजे सजीवांची विविधता आणि त्यांचे परस्पर संबंध यांचा शास्त्रीय अभ्यास.",
+"Taxonomy मध्ये सजीवांची identification, nomenclature आणि classification केली जाते.",
+"Identification म्हणजे एखाद्या organism ची योग्य ओळख करणे.",
+"Nomenclature म्हणजे organism ला शास्त्रीय नाव देणे.",
+"Classification म्हणजे समान वैशिष्ट्यांनुसार organisms चे गट तयार करणे.",
+"Binomial nomenclature मध्ये प्रत्येक organism ला दोन शब्दांचे scientific name दिले जाते.",
+"पहिला शब्द Genus आणि दुसरा शब्द species दर्शवतो.",
+"Scientific names आंतरराष्ट्रीय पातळीवर organisms ओळखण्यासाठी उपयोगी असतात.",
+"Taxonomic hierarchy मध्ये Kingdom, Phylum, Class, Order, Family, Genus आणि Species यांचा समावेश होतो.",
+"Species ही classification मधील मूलभूत taxonomic unit मानली जाते.",
+"समान वैशिष्ट्ये असलेल्या organisms ना जवळच्या groups मध्ये ठेवले जाते.",
+"Classification मुळे मोठ्या संख्येने असलेल्या organisms चा अभ्यास सोपा होतो."
+],
+remember:"लक्षात ठेवा: Binomial nomenclature = Genus + Species."
+},
+
+{
+number:3,
+title:"Kingdom Plantae",
+icon:"🌿",
+intro:"Kingdom Plantae मध्ये येणाऱ्या वनस्पतींची वैशिष्ट्ये आणि त्यांचे प्रमुख groups या chapter मध्ये शिकतो.",
+lines:[
+"Plantae मध्ये प्रामुख्याने photosynthetic multicellular organisms येतात.",
+"बहुतेक वनस्पतींच्या पेशींमध्ये cell wall असते.",
+"वनस्पतींमध्ये chlorophyll असल्यामुळे त्या photosynthesis करू शकतात.",
+"Algae हे साधे photosynthetic organisms आहेत.",
+"Bryophytes मध्ये vascular tissues विकसित नसतात.",
+"Pteridophytes मध्ये vascular tissues आढळतात.",
+"Gymnosperms मध्ये seeds असतात पण seeds फळामध्ये बंद नसतात.",
+"Angiosperms ही flowering plants ची group आहे.",
+"Angiosperms मध्ये seeds फळामध्ये enclosed असतात.",
+"Monocots मध्ये एक cotyledon असतो.",
+"Dicots मध्ये दोन cotyledons असतात.",
+"वनस्पतींचे classification त्यांच्या structural आणि reproductive features वर आधारित असते."
+],
+remember:"लक्षात ठेवा: Angiosperms = flowering plants आणि त्यांचे seeds फळामध्ये enclosed असतात."
+},
+
+{
+number:4,
+title:"Kingdom Animalia",
+icon:"🦁",
+intro:"Animalia kingdom मधील प्राण्यांचे classification आणि त्यांची प्रमुख वैशिष्ट्ये या chapter मध्ये समजतात.",
+lines:[
+"Animalia मध्ये multicellular आणि heterotrophic organisms येतात.",
+"प्राण्यांच्या पेशींना सामान्यतः cell wall नसते.",
+"प्राणी स्वतःचे अन्न तयार करू शकत नाहीत.",
+"Porifera मध्ये शरीरावर अनेक pores आढळतात.",
+"Cnidaria मध्ये specialised stinging cells आढळतात.",
+"Platyhelminthes मध्ये शरीर चपटे असते.",
+"Aschelminthes किंवा Nematoda मध्ये शरीर साधारण cylindrical असते.",
+"Annelida मध्ये शरीर segmented असते.",
+"Arthropoda हा प्राण्यांमधील अतिशय मोठा phylum आहे.",
+"Mollusca मध्ये soft body आणि अनेकदा shell आढळते.",
+"Echinodermata मध्ये adult प्राण्यांमध्ये radial symmetry आढळते.",
+"Chordata मध्ये notochord सारखी महत्त्वाची वैशिष्ट्ये आढळतात."
+],
+remember:"लक्षात ठेवा: Animal classification करताना body symmetry, segmentation आणि अन्य structural features महत्त्वाचे असतात."
+},
+
+{
+number:5,
+title:"Cell Structure and Organization",
+icon:"🧫",
+intro:"Cell ही सजीवांची मूलभूत structural आणि functional unit आहे.",
+lines:[
+"Cell ही सजीवांची मूलभूत structural आणि functional unit आहे.",
+"Cell theory नुसार सर्व सजीव cells पासून बनलेले असतात.",
+"एका cell मध्ये plasma membrane बाहेरील सीमा तयार करते.",
+"Cytoplasm मध्ये विविध cellular components असतात.",
+"Nucleus मध्ये genetic material असते.",
+"Mitochondria cellular respiration मध्ये महत्त्वाची भूमिका बजावतात.",
+"Ribosomes protein synthesis साठी आवश्यक असतात.",
+"Endoplasmic reticulum substances च्या synthesis आणि transport मध्ये मदत करते.",
+"Golgi apparatus proteins आणि इतर substances चे modification आणि packaging करते.",
+"Lysosomes मध्ये digestive enzymes असतात.",
+"Plant cells मध्ये cell wall, chloroplast आणि मोठी vacuole यांसारखी वैशिष्ट्ये असतात.",
+"Prokaryotic cells मध्ये true nucleus नसतो, तर eukaryotic cells मध्ये membrane-bound nucleus असतो."
+],
+remember:"लक्षात ठेवा: Cell = life ची basic structural आणि functional unit."
+},
+
+{
+number:6,
+title:"Biomolecules",
+icon:"🧪",
+intro:"सजीवांच्या शरीरात आढळणारे carbohydrates, proteins, lipids आणि nucleic acids यांचा अभ्यास biomolecules मध्ये केला जातो.",
+lines:[
+"Biomolecules म्हणजे सजीवांमध्ये आढळणारी महत्त्वाची organic molecules.",
+"Carbohydrates हे शरीरासाठी महत्त्वाचे energy source आहेत.",
+"Glucose हा एक साधा carbohydrate आहे.",
+"Starch हा वनस्पतींमध्ये अन्नसाठ्याचा एक प्रकार आहे.",
+"Proteins हे amino acids पासून बनलेले असतात.",
+"Proteins शरीरातील growth आणि repair मध्ये महत्त्वाचे आहेत.",
+"Lipids मध्ये fats आणि oils यांचा समावेश होतो.",
+"Lipids energy storage आणि cell membranes मध्ये महत्त्वाची भूमिका बजावतात.",
+"Nucleic acids मध्ये DNA आणि RNA यांचा समावेश होतो.",
+"DNA genetic information साठवते.",
+"RNA protein synthesis मध्ये महत्त्वाची भूमिका बजावते.",
+"Enzymes हे बहुतेक proteins असून biochemical reactions चा वेग वाढवतात."
+],
+remember:"लक्षात ठेवा: Carbohydrates, proteins, lipids आणि nucleic acids ही प्रमुख biomolecules आहेत."
+},
+
+{
+number:7,
+title:"Cell Division",
+icon:"🔄",
+intro:"नवीन cells तयार होण्यासाठी cell division आवश्यक असते. Growth आणि reproduction मध्ये त्याचे महत्त्व आहे.",
+lines:[
+"Cell division म्हणजे एका cell पासून नवीन cells तयार होण्याची प्रक्रिया.",
+"Cell division मुळे organisms मध्ये growth आणि development होते.",
+"Mitosis मध्ये साधारणपणे दोन daughter cells तयार होतात.",
+"Mitosis मध्ये chromosome number साधारणपणे कायम राहतो.",
+"Meiosis ही reproductive cells तयार करण्याशी संबंधित division आहे.",
+"Meiosis मध्ये chromosome number अर्धा होतो.",
+"Meiosis मध्ये genetic variation निर्माण होण्यास मदत होते.",
+"Cell cycle मध्ये cell growth आणि division यांचा समावेश होतो.",
+"Chromosomes मध्ये genetic material असते.",
+"DNA replication division आधी genetic material ची प्रत तयार करते.",
+"Cell division योग्य प्रकारे होणे organisms साठी आवश्यक आहे."
+],
+remember:"लक्षात ठेवा: Mitosis → growth आणि repair; Meiosis → gamete formation आणि variation."
+},
+
+{
+number:8,
+title:"Plant Tissues and Anatomy",
+icon:"🌱",
+intro:"वनस्पतींच्या tissues आणि त्यांच्या internal structure चा अभ्यास plant anatomy मध्ये केला जातो.",
+lines:[
+"Tissue म्हणजे समान कार्य करणाऱ्या cells चा समूह.",
+"Meristematic tissues मध्ये सतत cell division होऊ शकते.",
+"Apical meristem मुळे plant ची लांबी वाढण्यास मदत होते.",
+"Permanent tissues मधील cells सामान्यतः division करण्याची क्षमता गमावतात.",
+"Parenchyma हे साधारणपणे storage आणि इतर कार्यांसाठी उपयोगी असते.",
+"Collenchyma plant ला mechanical support देते.",
+"Sclerenchyma plant ला strength देते.",
+"Xylem पाणी आणि minerals वाहून नेतो.",
+"Phloem food पदार्थांचे transport करते.",
+"Root, stem आणि leaf यांच्या internal structures मध्ये फरक असतो.",
+"Plant anatomy मुळे वनस्पतींच्या शरीरातील tissues ची मांडणी समजते."
+],
+remember:"लक्षात ठेवा: Xylem → water आणि minerals; Phloem → food transport."
+},
+
+{
+number:9,
+title:"Morphology of Flowering Plants",
+icon:"🌸",
+intro:"Flowering plants च्या root, stem, leaf, flower, fruit आणि seed यांसारख्या बाह्य रचनांचा अभ्यास morphology मध्ये केला जातो.",
+lines:[
+"Morphology म्हणजे organism च्या बाह्य रचनेचा अभ्यास.",
+"Root plant ला soil मध्ये anchor करण्यास मदत करते.",
+"Root water आणि minerals शोषून घेते.",
+"Stem leaves आणि flowers यांना support देते.",
+"Stem मध्ये water आणि food transport करणारे tissues असतात.",
+"Leaf हे photosynthesis चे प्रमुख organ आहे.",
+"Flower हे angiosperms मधील reproductive structure आहे.",
+"Flower मध्ये sepals, petals, stamens आणि carpels यांसारखे parts असू शकतात.",
+"Fruit सामान्यतः fertilized ovary पासून विकसित होते.",
+"Seed मध्ये नवीन plant तयार होण्यासाठी आवश्यक embryo असतो.",
+"वनस्पतींच्या विविध species मध्ये root, stem आणि leaf ची रचना बदलू शकते."
+],
+remember:"लक्षात ठेवा: Root → absorption; Stem → support/transport; Leaf → photosynthesis."
+},
+
+{
+number:10,
+title:"Animal Tissue",
+icon:"🧬",
+intro:"प्राण्यांच्या शरीरात विविध प्रकारचे tissues असतात आणि प्रत्येक tissue विशिष्ट कार्य करते.",
+lines:[
+"Animal tissue म्हणजे समान कार्य करणाऱ्या cells चा group.",
+"Epithelial tissue शरीराच्या बाहेरील किंवा आतील surfaces वर आढळते.",
+"Epithelial tissue protection, absorption आणि secretion यांसारखी कार्ये करते.",
+"Connective tissue शरीरातील विविध parts जोडते आणि support देते.",
+"Blood हे एक connective tissue आहे.",
+"Muscular tissue शरीराच्या हालचालींसाठी जबाबदार असते.",
+"Nervous tissue impulses transmit करण्याचे कार्य करते.",
+"Muscle tissue चे विविध प्रकार असतात.",
+"Skeletal muscles शरीराच्या हालचालींमध्ये मदत करतात.",
+"Cardiac muscle हृदयामध्ये आढळते.",
+"Nervous tissue मध्ये neurons महत्त्वाच्या पेशी आहेत."
+],
+remember:"लक्षात ठेवा: चार प्रमुख animal tissues — epithelial, connective, muscular आणि nervous."
+},
+
+{
+number:11,
+title:"Study of Animal Type: Cockroach",
+icon:"🪳",
+intro:"Cockroach हा Arthropoda phylum मधील organism आहे. त्याची external आणि internal structure अभ्यासली जाते.",
+lines:[
+"Cockroach हा Arthropoda phylum आणि Insecta class मधील प्राणी आहे.",
+"त्याचे शरीर head, thorax आणि abdomen अशा भागांमध्ये विभागलेले असते.",
+"त्याच्या शरीरावर कठीण exoskeleton असते.",
+"Thorax वर तीन pairs of legs असतात.",
+"बहुतेक adult cockroaches मध्ये दोन pairs of wings असतात.",
+"Antennae sensory functions साठी उपयोगी असतात.",
+"Cockroach मध्ये open circulatory system आढळते.",
+"Respiration tracheal system द्वारे होते.",
+"Tracheae आणि tracheoles oxygen शरीरातील tissues पर्यंत पोहोचवतात.",
+"Cockroach मध्ये digestive system असते.",
+"त्याचे शरीर segmentation आणि specialised appendages दाखवते."
+],
+remember:"लक्षात ठेवा: Cockroach → Arthropoda → Insecta."
+},
+
+{
+number:12,
+title:"Photosynthesis",
+icon:"☀️",
+intro:"Green plants प्रकाशाच्या ऊर्जेचा उपयोग करून carbon dioxide आणि water पासून food तयार करतात. या प्रक्रियेला photosynthesis म्हणतात.",
+lines:[
+"Photosynthesis म्हणजे plants मध्ये food तयार होण्याची प्रक्रिया.",
+"या प्रक्रियेसाठी sunlight, carbon dioxide आणि water आवश्यक असतात.",
+"Chlorophyll प्रकाशाची energy capture करण्यास मदत करते.",
+"Photosynthesis मुख्यतः leaves मध्ये होते.",
+"Carbon dioxide वातावरणातून leaves मध्ये प्रवेश करते.",
+"Water roots द्वारे शोषले जाते.",
+"Photosynthesis मध्ये glucose सारखे organic food पदार्थ तयार होतात.",
+"या प्रक्रियेत oxygen वातावरणात सोडला जातो.",
+"Light reactions मध्ये प्रकाशाची energy chemical energy मध्ये रूपांतरित होते.",
+"Carbon fixation मध्ये carbon dioxide चा उपयोग organic molecules तयार करण्यासाठी केला जातो.",
+"Photosynthesis पृथ्वीवरील food chains साठी अत्यंत महत्त्वाची आहे."
+],
+remember:"लक्षात ठेवा: Photosynthesis साठी मुख्य inputs — sunlight + CO₂ + water."
+},
+
+{
+number:13,
+title:"Respiration and Energy Transfer",
+icon:"⚡",
+intro:"Respiration मध्ये food molecules मधील energy cells साठी उपयोगी स्वरूपात उपलब्ध होते.",
+lines:[
+"Cellular respiration ही cells मध्ये energy मिळवण्याची प्रक्रिया आहे.",
+"Glucose सारख्या molecules चे breakdown होऊन energy मिळते.",
+"Aerobic respiration मध्ये oxygen चा उपयोग होतो.",
+"Aerobic respiration मध्ये carbon dioxide आणि water तयार होतात.",
+"ATP हे cell साठी महत्त्वाचे energy currency molecule आहे.",
+"Glycolysis मध्ये glucose चे breakdown सुरू होते.",
+"Cellular respiration च्या पुढील stages मध्ये mitochondria महत्त्वाची भूमिका बजावतात.",
+"Anaerobic respiration मध्ये oxygen चा उपयोग होत नाही.",
+"वेगवेगळ्या organisms मध्ये respiration च्या पद्धती वेगळ्या असू शकतात.",
+"शरीरातील विविध cellular activities साठी ATP energy पुरवते.",
+"Respiration ही photosynthesis पेक्षा वेगळी प्रक्रिया आहे."
+],
+remember:"लक्षात ठेवा: ATP = cell मध्ये energy transfer साठी महत्त्वाचे molecule."
+},
+
+{
+number:14,
+title:"Human Nutrition",
+icon:"🍎",
+intro:"मानवाला growth, repair आणि energy साठी अन्नातील nutrients आवश्यक असतात.",
+lines:[
+"Nutrition म्हणजे organisms कडून nutrients मिळवण्याची प्रक्रिया.",
+"मानव heterotrophic nutrition करतो.",
+"आपल्या अन्नात carbohydrates, proteins, fats, vitamins, minerals आणि water असतात.",
+"Carbohydrates शरीराला energy देतात.",
+"Proteins growth आणि tissue repair साठी महत्त्वाचे आहेत.",
+"Fats energy storage मध्ये महत्त्वाचे असतात.",
+"Vitamins आणि minerals शरीराच्या विविध functions साठी आवश्यक आहेत.",
+"मानवी digestive system मध्ये mouth, oesophagus, stomach, intestine आणि इतर organs असतात.",
+"Digestion मध्ये complex food molecules simpler molecules मध्ये बदलतात.",
+"Small intestine मध्ये digestion आणि absorption मोठ्या प्रमाणात होते.",
+"Undigested पदार्थ पुढील भागातून शरीरातून बाहेर टाकले जातात."
+],
+remember:"लक्षात ठेवा: Small intestine हे digestion आणि nutrient absorption साठी अत्यंत महत्त्वाचे आहे."
+},
+
+{
+number:15,
+title:"Excretion and Osmoregulation",
+icon:"💧",
+intro:"शरीरातील metabolic waste बाहेर काढणे म्हणजे excretion. शरीरातील water आणि salt balance राखणे म्हणजे osmoregulation.",
+lines:[
+"Excretion म्हणजे शरीरातील metabolic wastes बाहेर काढण्याची प्रक्रिया.",
+"मानवामध्ये kidneys हे excretion चे प्रमुख organs आहेत.",
+"Kidneys blood filter करून urine तयार करण्यात मदत करतात.",
+"Urine मध्ये शरीरातील काही nitrogenous wastes बाहेर जातात.",
+"Nephron ही kidney ची structural आणि functional unit आहे.",
+"Nephron मध्ये filtration आणि reabsorption यांसारख्या प्रक्रिया होतात.",
+"Osmoregulation म्हणजे शरीरातील water आणि dissolved salts चे balance राखणे.",
+"Body fluids चे योग्य concentration राखणे आवश्यक असते.",
+"Kidneys water balance मध्ये महत्त्वाची भूमिका बजावतात.",
+"Excretion मुळे शरीरातील unwanted substances जमा होण्यापासून मदत होते.",
+"Homeostasis टिकवण्यासाठी excretion आणि osmoregulation महत्त्वाचे आहेत."
+],
+remember:"लक्षात ठेवा: Nephron = kidney ची structural आणि functional unit."
+},
+
+{
+number:16,
+title:"Skeleton and Movement",
+icon:"🦴",
+intro:"मानवी शरीराला support, protection आणि movement देण्यासाठी skeleton आणि muscles महत्त्वाचे आहेत.",
+lines:[
+"Human skeleton शरीराला आधार आणि आकार देते.",
+"Skeleton अनेक bones पासून बनलेले असते.",
+"Bones शरीरातील महत्त्वाच्या organs चे protection करतात.",
+"Skull मेंदूचे संरक्षण करते.",
+"Rib cage हृदय आणि lungs चे संरक्षण करण्यास मदत करते.",
+"Vertebral column शरीराला support देते.",
+"Joints दोन किंवा अधिक bones मधील संबंध तयार करतात.",
+"Muscles contraction आणि relaxation द्वारे movement घडवतात.",
+"Skeletal muscles bones शी जोडलेल्या असतात.",
+"Movement साठी bones, joints आणि muscles एकत्रितपणे कार्य करतात.",
+"शरीराची हालचाल nervous system च्या नियंत्रणाशीही संबंधित असते."
+],
+remember:"लक्षात ठेवा: Movement साठी skeleton + joints + muscles यांचे coordination आवश्यक आहे."
 }
+
+];
+
+
+/* =========================
+   RENDER CHAPTERS
+========================= */
+
+function renderChapters(){
+
+  const list =
+    document.getElementById("chapterList");
+
+  list.innerHTML = "";
+
+  chapters.forEach(function(chapter){
+
+    const button =
+      document.createElement("button");
+
+    button.type = "button";
+
+    button.className = "chapter-btn";
+
+    button.innerHTML = `
+
+      <div class="chapter-number">
+        ${chapter.number}
+      </div>
+
+      <div class="chapter-info">
+
+        <h3>
+          Chapter ${chapter.number}: ${chapter.title}
+        </h3>
+
+        <p>
+          Explanation पाहण्यासाठी येथे tap करा
+        </p>
+
+      </div>
+
+      <div class="chapter-arrow">
+        ›
+      </div>
+
+    `;
+
+    button.onclick = function(){
+
+      openChapter(chapter);
+
+    };
+
+    list.appendChild(button);
+
+  });
+
+}
+
+
+/* =========================
+   OPEN CHAPTER
+========================= */
+
+function openChapter(chapter){
+
+  document.getElementById("popupTitle").textContent =
+    "Chapter " + chapter.number + ": " + chapter.title;
+
+  document.getElementById("popupIcon").textContent =
+    chapter.icon;
+
+  document.getElementById("popupIntro").textContent =
+    chapter.intro;
+
+  const explanation =
+    document.getElementById("popupExplanation");
+
+  explanation.innerHTML = "";
+
+  chapter.lines.forEach(function(line,index){
+
+    const div =
+      document.createElement("div");
+
+    div.className = "explanation-line";
+
+    div.innerHTML =
+      "<b>" + (index + 1) + ".</b> " + line;
+
+    explanation.appendChild(div);
+
+  });
+
+  document.getElementById("popupRemember").textContent =
+    chapter.remember;
+
+  document.getElementById("popupBg").style.display =
+    "flex";
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+/* =========================
+   CLOSE POPUP
+========================= */
+
+function closePopup(){
+
+  document.getElementById("popupBg").style.display =
+    "none";
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+/* =========================
+   OUTSIDE CLICK
+========================= */
+
+function closeOutside(event){
+
+  if(event.target.id === "popupBg"){
+
+    closePopup();
+
+  }
+
+}
+
+
+/* =========================
+   ESC KEY
+========================= */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Escape"){
+
+      closePopup();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack(){
+
+  window.location.href =
+    "college-11.html";
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+renderChapters();
 
 </script>
 
