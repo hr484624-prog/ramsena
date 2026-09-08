@@ -2,7 +2,6 @@
 <html lang="mr">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta name="viewport"
@@ -11,7 +10,6 @@
   <title>GyanSetu - Create Account</title>
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -86,7 +84,6 @@
 
     button:disabled {
       background: #999;
-      cursor: not-allowed;
     }
 
     #errorMessage {
@@ -117,11 +114,8 @@
       color: #666;
       word-break: break-word;
     }
-
   </style>
-
 </head>
-
 
 <body>
 
@@ -135,7 +129,6 @@
       तुमचे Account तयार करा
     </div>
 
-
     <label for="usernameInput">
       Username
     </label>
@@ -146,7 +139,6 @@
       placeholder="तुमचे नाव टाका"
       autocomplete="username"
     >
-
 
     <label for="emailInput">
       Email
@@ -159,7 +151,6 @@
       autocomplete="email"
     >
 
-
     <label for="passwordInput">
       Password
     </label>
@@ -171,21 +162,17 @@
       autocomplete="new-password"
     >
 
-
     <button
       id="createButton"
       onclick="createAccount()">
       Create Account
     </button>
 
-
     <div id="errorMessage"></div>
-
 
     <div id="successMessage">
       ✅ Account तयार झाले!
     </div>
-
 
     <div id="testMessage">
       Appwrite connection तपासत आहे...
@@ -194,104 +181,85 @@
   </div>
 
 
-  <!-- =====================================
-       APPWRITE SDK
-  ====================================== -->
+  <!-- Appwrite SDK -->
 
   <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
 
-
   <script>
 
-    /* =====================================
+    /* ================================
        APPWRITE SETUP
-    ====================================== */
+    ================================= */
 
     const client = new Appwrite.Client();
 
     client
-      .setEndpoint(
-        "https://fra.cloud.appwrite.io/v1"
-      )
-      .setProject(
-        "6aa0017e0033d661d951"
-      );
+      .setEndpoint("https://fra.cloud.appwrite.io/v1")
+      .setProject("6aa0017e0033d661d951");
+
+    const account = new Appwrite.Account(client);
 
 
-    const account =
-      new Appwrite.Account(client);
+    /* ================================
+       CONNECTION TEST
+    ================================= */
 
+    async function testConnection() {
 
-    /* =====================================
-       APPWRITE CONNECTION TEST
-    ====================================== */
-async function testConnection() {
+      const test =
+        document.getElementById("testMessage");
 
-  const test = document.getElementById("testMessage");
+      try {
 
-  try {
+        const response = await fetch(
+          "https://fra.cloud.appwrite.io/v1/locale",
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "X-Appwrite-Project":
+                "6aa0017e0033d661d951"
+            }
+          }
+        );
 
-    const response = await fetch(
-      "https://fra.cloud.appwrite.io/v1/locale",
-      {
-        method: "GET",
-        mode: "cors",
-        headers: {
-          "X-Appwrite-Project": "6aa0017e0033d661d951"
+        if (!response.ok) {
+          throw new Error(
+            "HTTP " + response.status
+          );
         }
-      }
-    );
 
-    const data = await response.json();
+        await response.json();
 
-    console.log("Appwrite:", data);
+        test.innerText =
+          "Appwrite Connected ✅";
 
-    test.innerText = "Appwrite Connected ✅";
-    test.style.color = "#2e7d32";
+        test.style.color =
+          "#2e7d32";
 
-  } catch (err) {
-
-    console.error("Appwrite Error:", err);
-
-    test.innerText =
-      "Appwrite Connection Failed ❌\n" +
-      err.message;
-
-    test.style.color = "#c62828";
-  }
-    }
-
-      catch (err) {
+      } catch (err) {
 
         console.error(
-          "APPWRITE CONNECTION ERROR:",
+          "Appwrite Error:",
           err
         );
 
-
         test.innerText =
           "Appwrite Connection Failed ❌\n" +
-          (
-            err.message ||
-            "Unknown error"
-          );
+          (err.message || "Unknown error");
 
         test.style.color =
           "#c62828";
-
       }
-
     }
 
-
-    /* Run connection test */
 
     testConnection();
 
 
-    /* =====================================
+    /* ================================
        CREATE ACCOUNT
-    ====================================== */
+    ================================= */
 
     async function createAccount() {
 
@@ -301,24 +269,19 @@ async function testConnection() {
           .value
           .trim();
 
-
       const email =
         document
           .getElementById("emailInput")
           .value
           .trim();
 
-
       const password =
         document
           .getElementById("passwordInput")
           .value;
 
-
       hideMessages();
 
-
-      /* Username */
 
       if (username.length < 2) {
 
@@ -327,11 +290,8 @@ async function testConnection() {
         );
 
         return;
-
       }
 
-
-      /* Email */
 
       if (!email) {
 
@@ -340,11 +300,8 @@ async function testConnection() {
         );
 
         return;
-
       }
 
-
-      /* Password */
 
       if (password.length < 8) {
 
@@ -353,7 +310,6 @@ async function testConnection() {
         );
 
         return;
-
       }
 
 
@@ -361,7 +317,6 @@ async function testConnection() {
         document.getElementById(
           "createButton"
         );
-
 
       button.disabled = true;
 
@@ -371,13 +326,10 @@ async function testConnection() {
 
       try {
 
-        /* =================================
-           CREATE APPWRITE ACCOUNT
-        ================================== */
+        /* CREATE ACCOUNT */
 
         const user =
           await account.create({
-
             userId:
               Appwrite.ID.unique(),
 
@@ -389,40 +341,31 @@ async function testConnection() {
 
             name:
               username
-
           });
 
 
-        /* =================================
-           CREATE LOGIN SESSION
-        ================================== */
+        /* LOGIN */
 
         await account.createEmailPasswordSession({
-
           email:
             email,
 
           password:
             password
-
         });
 
 
-        /* =================================
-           SAVE LOCAL DATA
-        ================================== */
+        /* SAVE DATA */
 
         localStorage.setItem(
           "gyansetu_username",
           username
         );
 
-
         localStorage.setItem(
           "gyansetu_email",
           email
         );
-
 
         localStorage.setItem(
           "gyansetu_user_id",
@@ -430,9 +373,7 @@ async function testConnection() {
         );
 
 
-        /* =================================
-           SUCCESS
-        ================================== */
+        /* SUCCESS */
 
         document
           .getElementById(
@@ -445,9 +386,7 @@ async function testConnection() {
           "Account तयार झाले ✓";
 
 
-        /* =================================
-           GO HOME
-        ================================== */
+        /* HOME */
 
         setTimeout(function() {
 
@@ -456,31 +395,22 @@ async function testConnection() {
 
         }, 800);
 
-      }
 
-
-      catch (err) {
+      } catch (err) {
 
         console.error(
           "APPWRITE ERROR:",
           err
         );
 
-
         let message =
           "Account तयार करता आले नाही.";
 
-
-        if (
-          err &&
-          err.message
-        ) {
+        if (err && err.message) {
 
           const errorText =
             err.message.toLowerCase();
 
-
-          /* Already exists */
 
           if (
             errorText.includes(
@@ -496,9 +426,6 @@ async function testConnection() {
 
           }
 
-
-          /* Invalid email */
-
           else if (
             errorText.includes(
               "invalid email"
@@ -509,9 +436,6 @@ async function testConnection() {
               "कृपया योग्य email address टाका.";
 
           }
-
-
-          /* Password */
 
           else if (
             errorText.includes(
@@ -524,35 +448,27 @@ async function testConnection() {
 
           }
 
-
-          /* Other Appwrite error */
-
           else {
 
             message =
               err.message;
-
           }
-
         }
 
 
         showError(message);
 
-
         button.disabled = false;
 
         button.innerText =
           "Create Account";
-
       }
-
     }
 
 
-    /* =====================================
+    /* ================================
        SHOW ERROR
-    ====================================== */
+    ================================= */
 
     function showError(message) {
 
@@ -561,20 +477,17 @@ async function testConnection() {
           "errorMessage"
         );
 
-
       error.innerText =
         "❌ " + message;
 
-
       error.style.display =
         "block";
-
     }
 
 
-    /* =====================================
+    /* ================================
        HIDE MESSAGES
-    ====================================== */
+    ================================= */
 
     function hideMessages() {
 
@@ -584,19 +497,17 @@ async function testConnection() {
         )
         .style.display = "none";
 
-
       document
         .getElementById(
           "successMessage"
         )
         .style.display = "none";
-
     }
 
 
-    /* =====================================
+    /* ================================
        ENTER KEY
-    ====================================== */
+    ================================= */
 
     document
       .getElementById(
@@ -606,19 +517,14 @@ async function testConnection() {
         "keydown",
         function(event) {
 
-          if (
-            event.key === "Enter"
-          ) {
-
+          if (event.key === "Enter") {
             createAccount();
-
           }
 
         }
       );
 
   </script>
-
 
 </body>
 
