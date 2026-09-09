@@ -19,22 +19,20 @@
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 20px;
 
       font-family: Arial, sans-serif;
 
-      background:
-        linear-gradient(
-          145deg,
-          #ffffff 0%,
-          #eef6ff 50%,
-          #d9ecff 100%
-        );
+      background: linear-gradient(
+        145deg,
+        #ffffff,
+        #eef6ff,
+        #d9ecff
+      );
 
       display: flex;
       justify-content: center;
       align-items: center;
-
-      padding: 20px;
     }
 
     .box {
@@ -43,16 +41,15 @@
 
       background: white;
 
+      padding: 28px 24px 30px;
+
       border-radius: 26px;
 
-      padding: 28px 24px 30px;
+      border: 1px solid #e3efff;
 
       box-shadow:
         0 15px 40px
         rgba(21, 101, 192, 0.18);
-
-      border:
-        1px solid #e3efff;
     }
 
     .flag {
@@ -65,7 +62,6 @@
       text-align: center;
 
       font-size: 32px;
-
       font-weight: 800;
 
       color: #1565c0;
@@ -80,26 +76,24 @@
 
       font-size: 16px;
 
-      margin-bottom: 25px;
+      margin-bottom: 22px;
     }
 
     .line {
-      height: 4px;
-
       width: 70px;
+      height: 4px;
 
       margin: 0 auto 22px;
 
       border-radius: 10px;
 
-      background:
-        linear-gradient(
-          to right,
-          #ff9933 33%,
-          white 33%,
-          white 66%,
-          #138808 66%
-        );
+      background: linear-gradient(
+        to right,
+        #ff9933 33%,
+        white 33%,
+        white 66%,
+        #138808 66%
+      );
 
       border: 1px solid #eee;
     }
@@ -111,7 +105,6 @@
       margin-bottom: 7px;
 
       font-size: 15px;
-
       font-weight: bold;
 
       color: #17324d;
@@ -128,13 +121,9 @@
 
       font-size: 16px;
 
-      color: #222;
-
-      background: #fbfdff;
-
       outline: none;
 
-      transition: 0.2s;
+      background: #fbfdff;
     }
 
     input:focus {
@@ -147,7 +136,7 @@
         rgba(25, 118, 210, 0.10);
     }
 
-    .create-btn {
+    button {
       width: 100%;
 
       margin-top: 24px;
@@ -158,12 +147,11 @@
 
       border-radius: 13px;
 
-      background:
-        linear-gradient(
-          135deg,
-          #1976d2,
-          #0d47a1
-        );
+      background: linear-gradient(
+        135deg,
+        #1976d2,
+        #0d47a1
+      );
 
       color: white;
 
@@ -178,16 +166,10 @@
         rgba(21, 101, 192, 0.25);
     }
 
-    .create-btn:active {
-      transform: scale(0.98);
-    }
-
-    .create-btn:disabled {
+    button:disabled {
       background: #9e9e9e;
-
-      box-shadow: none;
-
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     #message {
@@ -199,13 +181,11 @@
 
       border-radius: 12px;
 
+      text-align: center;
+
       font-size: 14px;
 
       line-height: 1.5;
-
-      text-align: center;
-
-      word-break: break-word;
     }
 
     .footer {
@@ -247,45 +227,44 @@
     <div class="line"></div>
 
 
-    <label for="usernameInput">
+    <label for="username">
       Username
     </label>
 
     <input
       type="text"
-      id="usernameInput"
+      id="username"
       placeholder="तुमचे नाव टाका"
-      autocomplete="username"
       maxlength="128"
+      autocomplete="username"
     >
 
 
-    <label for="emailInput">
+    <label for="email">
       Email
     </label>
 
     <input
       type="email"
-      id="emailInput"
+      id="email"
       placeholder="example@gmail.com"
       autocomplete="email"
     >
 
 
-    <label for="passwordInput">
+    <label for="password">
       Password
     </label>
 
     <input
       type="password"
-      id="passwordInput"
+      id="password"
       placeholder="किमान 8 characters"
       autocomplete="new-password"
     >
 
 
     <button
-      class="create-btn"
       id="createButton"
       onclick="createAccount()"
     >
@@ -297,129 +276,102 @@
 
 
     <div class="footer">
-      🇮🇳 <span class="india">GyanSetu</span>
+      🇮🇳
+      <span class="india">GyanSetu</span>
       • शिक्षणासाठी तुमचा डिजिटल साथी
     </div>
 
   </div>
 
 
-  <!-- SUPABASE SDK -->
+  <!-- SUPABASE -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
   <script>
 
-    /* =================================
-       SUPABASE CONFIG
-    ================================= */
+    /* =========================
+       SUPABASE
+    ========================= */
 
-    const SUPABASE_URL =
-      "https://eqglttfffhvoyvrclzse.supabase.co";
+    const supabaseClient = supabase.createClient(
 
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+      "https://eqglttfffhvoyvrclzse.supabase.co",
 
+      "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb"
 
-    const { createClient } = supabase;
-
-
-    const supabaseClient =
-      createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
-      );
+    );
 
 
-    /* =================================
+    /* =========================
        CREATE ACCOUNT
-    ================================= */
+    ========================= */
 
     async function createAccount() {
 
       const username =
         document
-          .getElementById("usernameInput")
+          .getElementById("username")
           .value
           .trim();
 
 
       const email =
         document
-          .getElementById("emailInput")
+          .getElementById("email")
           .value
           .trim();
 
 
       const password =
         document
-          .getElementById("passwordInput")
+          .getElementById("password")
           .value;
 
 
       const button =
-        document
-          .getElementById("createButton");
+        document.getElementById(
+          "createButton"
+        );
 
 
-      messageBox(
-        "",
-        false,
-        false
-      );
-
-
-      /* USERNAME CHECK */
+      /* CHECK USERNAME */
 
       if (username.length < 2) {
 
-        messageBox(
+        showMessage(
           "कृपया Username टाका.",
-          false,
-          true
+          false
         );
 
         return;
       }
 
 
-      /* EMAIL CHECK */
+      /* CHECK EMAIL */
 
-      if (!email) {
+      if (
+        !email ||
+        !email.includes("@")
+      ) {
 
-        messageBox(
-          "कृपया Email टाका.",
-          false,
-          true
-        );
-
-        return;
-      }
-
-
-      /* EMAIL FORMAT CHECK */
-
-      if (!email.includes("@")) {
-
-        messageBox(
+        showMessage(
           "कृपया योग्य Email टाका.",
-          false,
-          true
+          false
         );
 
         return;
       }
 
 
-      /* PASSWORD CHECK */
+      /* CHECK PASSWORD */
 
       if (password.length < 8) {
 
-        messageBox(
+        showMessage(
           "Password किमान 8 characters असावा.",
-          false,
-          true
+          false
         );
 
         return;
@@ -436,11 +388,12 @@
 
       try {
 
-        /* =================================
-           SUPABASE SIGN UP
-        ================================= */
+        /* CREATE SUPABASE ACCOUNT */
 
-        const { data, error } =
+        const {
+          data,
+          error
+        } =
           await supabaseClient.auth.signUp({
 
             email: email,
@@ -469,22 +422,18 @@
         }
 
 
-        /* =================================
-           USER CHECK
-        ================================= */
+        /* USER NOT CREATED */
 
         if (!data.user) {
 
           throw new Error(
-            "Account तयार करता आले नाही."
+            "Account तयार झाले नाही."
           );
 
         }
 
 
-        /* =================================
-           SAVE USER DATA
-        ================================= */
+        /* SAVE USER INFORMATION */
 
         localStorage.setItem(
           "gyansetu_username",
@@ -504,15 +453,14 @@
         );
 
 
-        /* =================================
-           IF SESSION IS ALREADY CREATED
-        ================================= */
+        /* =========================
+           SESSION EXISTS
+        ========================= */
 
         if (data.session) {
 
-          messageBox(
+          showMessage(
             "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
-            true,
             true
           );
 
@@ -526,49 +474,23 @@
 
 
           return;
-
         }
 
 
-        /* =================================
-           TRY LOGIN AUTOMATICALLY
-           (If email confirmation is OFF)
-        ================================= */
+        /* =========================
+           NO SESSION
+        ========================= */
 
-        const { data: loginData, error: loginError } =
-          await supabaseClient.auth.signInWithPassword({
-
-            email: email,
-
-            password: password
-
-          });
+        showMessage(
+          "❌ Email Confirmation अजून ON आहे. Supabase मध्ये Confirm Email OFF करा.",
+          false
+        );
 
 
-        if (loginError) {
+        button.disabled = false;
 
-          throw loginError;
-
-        }
-
-
-        if (loginData.session) {
-
-          messageBox(
-            "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
-            true,
-            true
-          );
-
-
-          setTimeout(function() {
-
-            window.location.href =
-              "home.html";
-
-          }, 700);
-
-        }
+        button.innerText =
+          "Create Account";
 
 
       }
@@ -581,76 +503,49 @@
         );
 
 
-        let errorText =
+        let text =
           error.message ||
           "Account तयार करता आले नाही.";
 
 
         const lower =
-          errorText.toLowerCase();
+          text.toLowerCase();
 
-
-        /* EMAIL ALREADY USED */
 
         if (
-          lower.includes("already registered") ||
-          lower.includes("already exists") ||
-          lower.includes("user already") ||
-          lower.includes("already been registered")
+          lower.includes(
+            "already registered"
+          ) ||
+          lower.includes(
+            "already exists"
+          )
         ) {
 
-          errorText =
+          text =
             "हा Email आधीच वापरला आहे.";
 
         }
 
 
-        /* INVALID EMAIL */
-
         else if (
-          lower.includes("invalid email")
+          lower.includes(
+            "invalid email"
+          )
         ) {
 
-          errorText =
+          text =
             "कृपया योग्य Email टाका.";
 
         }
 
 
-        /* PASSWORD */
-
-        else if (
-          lower.includes("password")
-        ) {
-
-          errorText =
-            "Password किमान 8 characters असावा.";
-
-        }
-
-
-        /* EMAIL CONFIRMATION */
-
-        else if (
-          lower.includes("email not confirmed")
-        ) {
-
-          errorText =
-            "Supabase मध्ये Email Confirmation बंद करा.";
-
-        }
-
-
-        messageBox(
-          "❌ " + errorText,
-          false,
-          true
+        showMessage(
+          "❌ " + text,
+          false
         );
 
 
-        button.disabled =
-          false;
-
+        button.disabled = false;
 
         button.innerText =
           "Create Account";
@@ -660,33 +555,23 @@
     }
 
 
-    /* =================================
-       MESSAGE BOX
-    ================================= */
+    /* =========================
+       MESSAGE
+    ========================= */
 
-    function messageBox(
+    function showMessage(
       text,
-      success,
-      show
+      success
     ) {
 
       const message =
-        document
-          .getElementById("message");
+        document.getElementById(
+          "message"
+        );
 
 
       message.innerText =
         text;
-
-
-      if (!show) {
-
-        message.style.display =
-          "none";
-
-        return;
-
-      }
 
 
       message.style.display =
@@ -722,12 +607,12 @@
     }
 
 
-    /* =================================
+    /* =========================
        ENTER KEY
-    ================================= */
+    ========================= */
 
     document
-      .getElementById("passwordInput")
+      .getElementById("password")
       .addEventListener(
         "keydown",
         function(event) {
@@ -747,4 +632,4 @@
 
 </body>
 
-      </html>
+  </html>
