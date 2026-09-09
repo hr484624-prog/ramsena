@@ -2048,103 +2048,74 @@ function openUsers(){
   openModal("usersModal");
 
 }
-
-
-function searchUsers(){
+async function searchUsers(){
 
   const query =
-    document.getElementById(
-      "userSearch"
-    ).value
-    .trim()
-    .toLowerCase();
-
-
-  const current =
-    localStorage.getItem(
-      "gyansetu_username"
-    ) || "student";
-
-
-  let users = [];
-
-
-  try{
-
-    users =
-      JSON.parse(
-        localStorage.getItem(
-          "gyansetu_local_users"
-        )
-      ) || [];
-
-  }catch(error){
-
-    users = [];
-
-  }
-
-
-  if(
-    !users.includes(current)
-  ){
-
-    users.push(current);
-
-    localStorage.setItem(
-      "gyansetu_local_users",
-      JSON.stringify(users)
-    );
-
-  }
-
-
-  const results =
-    users.filter(
-      function(user){
-
-        return user
-          .toLowerCase()
-          .includes(query);
-
-      }
-    );
-
+    document.getElementById("userSearch")
+      .value
+      .trim();
 
   const resultBox =
-    document.getElementById(
-      "userResults"
-    );
+    document.getElementById("userResults");
 
-
-  if(!results.length){
+  if(!query){
 
     resultBox.innerHTML = `
-      <div class="empty"
-           style="margin-top:12px;">
-        😕 User सापडला नाही.
+      <div class="empty" style="margin-top:12px;">
+        🔎 Username search करा.
       </div>
     `;
 
     return;
-
   }
 
+  resultBox.innerHTML = `
+    <div class="empty" style="margin-top:12px;">
+      🔄 Users शोधत आहे...
+    </div>
+  `;
 
-  resultBox.innerHTML = "";
+  try{
 
+    const { data, error } =
+      await supabaseClient
+        .from("Profiles")
+        .select("id, username, created_at")
+        .ilike("username", `%${query}%`)
+        .limit(20);
 
-  results.forEach(
-    function(user){
+    if(error){
+
+      console.error(error);
+
+      resultBox.innerHTML = `
+        <div class="empty" style="margin-top:12px;">
+          ❌ Users load झाले नाहीत.
+        </div>
+      `;
+
+      return;
+    }
+
+    if(!data || data.length === 0){
+
+      resultBox.innerHTML = `
+        <div class="empty" style="margin-top:12px;">
+          😕 User सापडला नाही.
+        </div>
+      `;
+
+      return;
+    }
+
+    resultBox.innerHTML = "";
+
+    data.forEach(function(user){
 
       const div =
-        document.createElement(
-          "div"
-        );
+        document.createElement("div");
 
-      div.className =
-        "search-result";
-
+      div.className = "search-result";
 
       div.innerHTML = `
 
@@ -2157,31 +2128,42 @@ function searchUsers(){
           👤
         </div>
 
-        <div>
+        <div style="flex:1;">
 
           <strong>
-            @${escapeHTML(user)}
+            @${escapeHTML(user.username || "student")}
           </strong>
 
           <div
             style="
             font-size:11px;
-            color:#7a879b;">
-            GyanSetu User
+            color:#7a879b;
+            margin-top:4px;
+            word-break:break-all;">
+            ID: ${escapeHTML(user.id)}
           </div>
 
         </div>
 
       `;
 
-
       resultBox.appendChild(div);
 
-    }
-  );
+    });
 
-}
+  }catch(error){
 
+    console.error(error);
+
+    resultBox.innerHTML = `
+      <div class="empty" style="margin-top:12px;">
+        ❌ Something went wrong.
+      </div>
+    `;
+
+  }
+
+   }
 
 /* =========================
    CREATE POST
