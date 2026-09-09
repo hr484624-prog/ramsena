@@ -59,9 +59,7 @@
 
     .flag {
       text-align: center;
-
       font-size: 30px;
-
       margin-bottom: 5px;
     }
 
@@ -114,7 +112,6 @@
       display: block;
 
       margin-top: 15px;
-
       margin-bottom: 7px;
 
       font-size: 15px;
@@ -228,7 +225,6 @@
 
     .india {
       color: #1565c0;
-
       font-weight: bold;
     }
 
@@ -313,29 +309,37 @@
   </div>
 
 
-  <!-- APPWRITE SDK -->
+  <!-- SUPABASE -->
 
-  <script src="https://cdn.jsdelivr.net/npm/appwrite@17.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
   <script>
 
-    const client =
-      new Appwrite.Client();
+    /* ================================
+       SUPABASE CONFIG
+    ================================= */
+
+    const SUPABASE_URL =
+      "https://eqglttfffhvoyvrclzse.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
 
 
-    client
-      .setEndpoint(
-        "https://fra.cloud.appwrite.io/v1"
-      )
-      .setProject(
-        "6aa0017e0033d661d951"
+    const { createClient } = supabase;
+
+
+    const supabaseClient =
+      createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
       );
 
 
-    const account =
-      new Appwrite.Account(client);
-
+    /* ================================
+       CREATE ACCOUNT
+    ================================= */
 
     async function createAccount() {
 
@@ -371,7 +375,7 @@
       );
 
 
-      /* USERNAME CHECK */
+      /* USERNAME */
 
       if (username.length < 2) {
 
@@ -385,7 +389,7 @@
       }
 
 
-      /* EMAIL CHECK */
+      /* EMAIL */
 
       if (!email) {
 
@@ -399,7 +403,7 @@
       }
 
 
-      /* PASSWORD CHECK */
+      /* PASSWORD */
 
       if (password.length < 8) {
 
@@ -413,6 +417,8 @@
       }
 
 
+      /* BUTTON LOADING */
+
       button.disabled = true;
 
       button.innerText =
@@ -421,49 +427,50 @@
 
       try {
 
-       
-         
-   
-console.log("EMAIL SENT TO APPWRITE:", email);
-console.log("USERNAME SENT:", username);
-console.log("PASSWORD LENGTH:", password.length);
-        const user =
-          await account.create({
+        /* SUPABASE SIGN UP */
 
-            userId:
-              Appwrite.ID.unique(),
+        const { data, error } =
+          await supabaseClient.auth.signUp({
 
-            email:
-              email,
+            email: email,
 
-            password:
-              password,
+            password: password,
 
-            name:
-              username
+            options: {
+
+              data: {
+
+                username: username
+
+              }
+
+            }
 
           });
 
 
-        /*
-          CREATE LOGIN SESSION
-        */
+        /* ERROR */
 
-        await account
-          .createEmailPasswordSession({
+        if (error) {
 
-            email:
-              email,
+          throw error;
 
-            password:
-              password
-
-          });
+        }
 
 
-        /*
-          SAVE USER DATA
-        */
+        /* USER ID SAVE */
+
+        if (data.user) {
+
+          localStorage.setItem(
+            "gyansetu_user_id",
+            data.user.id
+          );
+
+        }
+
+
+        /* USER DATA SAVE */
 
         localStorage.setItem(
           "gyansetu_username",
@@ -477,28 +484,50 @@ console.log("PASSWORD LENGTH:", password.length);
         );
 
 
-        localStorage.setItem(
-          "gyansetu_user_id",
-          user.$id
-        );
+        /* ================================
+           SESSION AVAILABLE
+        ================================= */
+
+        if (data.session) {
+
+          messageBox(
+            "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
+            true,
+            true
+          );
 
 
-        messageBox(
-          "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
-          true,
-          true
-        );
+          setTimeout(
+            function() {
+
+              window.location.href =
+                "home.html";
+
+            },
+            1000
+          );
+
+        }
+
+        /* ================================
+           EMAIL VERIFICATION REQUIRED
+        ================================= */
+
+        else {
+
+          messageBox(
+            "✅ Account तयार झाले! तुमच्या Email वर verification link आला असेल. Email verify केल्यानंतर Login करा.",
+            true,
+            true
+          );
 
 
-        setTimeout(
-          function() {
+          button.disabled = false;
 
-            window.location.href =
-              "home.html";
+          button.innerText =
+            "Create Account";
 
-          },
-          1000
-        );
+        }
 
 
       }
@@ -506,7 +535,7 @@ console.log("PASSWORD LENGTH:", password.length);
       catch (error) {
 
         console.error(
-          "APPWRITE ERROR:",
+          "SUPABASE ERROR:",
           error
         );
 
@@ -516,14 +545,14 @@ console.log("PASSWORD LENGTH:", password.length);
           "Account तयार करता आले नाही.";
 
 
-        /*
-          COMMON APPWRITE ERRORS
-        */
+        const lower =
+          errorText.toLowerCase();
+
 
         if (
-          errorText
-            .toLowerCase()
-            .includes("already exists")
+          lower.includes("already registered") ||
+          lower.includes("already exists") ||
+          lower.includes("user already")
         ) {
 
           errorText =
@@ -532,14 +561,22 @@ console.log("PASSWORD LENGTH:", password.length);
         }
 
 
-        if (
-          errorText
-            .toLowerCase()
-            .includes("invalid")
+        else if (
+          lower.includes("invalid email")
         ) {
 
           errorText =
-            "Email किंवा माहिती चुकीची आहे.";
+            "कृपया योग्य Email टाका.";
+
+        }
+
+
+        else if (
+          lower.includes("password")
+        ) {
+
+          errorText =
+            "Password किमान 8 characters असावा.";
 
         }
 
@@ -563,6 +600,10 @@ console.log("PASSWORD LENGTH:", password.length);
     }
 
 
+    /* ================================
+       MESSAGE BOX
+    ================================= */
+
     function messageBox(
       text,
       success,
@@ -584,6 +625,7 @@ console.log("PASSWORD LENGTH:", password.length);
           "none";
 
         return;
+
       }
 
 
@@ -620,9 +662,9 @@ console.log("PASSWORD LENGTH:", password.length);
     }
 
 
-    /*
-      ENTER KEY
-    */
+    /* ================================
+       ENTER KEY
+    ================================= */
 
     document
       .getElementById("passwordInput")
