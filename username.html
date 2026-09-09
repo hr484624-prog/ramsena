@@ -20,9 +20,7 @@
       margin: 0;
       min-height: 100vh;
 
-      font-family:
-        Arial,
-        sans-serif;
+      font-family: Arial, sans-serif;
 
       background:
         linear-gradient(
@@ -90,8 +88,7 @@
 
       width: 70px;
 
-      margin:
-        0 auto 22px;
+      margin: 0 auto 22px;
 
       border-radius: 10px;
 
@@ -104,8 +101,7 @@
           #138808 66%
         );
 
-      border:
-        1px solid #eee;
+      border: 1px solid #eee;
     }
 
     label {
@@ -126,8 +122,7 @@
 
       padding: 14px 15px;
 
-      border:
-        2px solid #d9e7f5;
+      border: 2px solid #d9e7f5;
 
       border-radius: 12px;
 
@@ -309,14 +304,14 @@
   </div>
 
 
-  <!-- SUPABASE -->
+  <!-- SUPABASE SDK -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 
   <script>
 
-    /* ================================
+    /* =================================
        SUPABASE CONFIG
     ================================= */
 
@@ -337,7 +332,7 @@
       );
 
 
-    /* ================================
+    /* =================================
        CREATE ACCOUNT
     ================================= */
 
@@ -375,7 +370,7 @@
       );
 
 
-      /* USERNAME */
+      /* USERNAME CHECK */
 
       if (username.length < 2) {
 
@@ -389,7 +384,7 @@
       }
 
 
-      /* EMAIL */
+      /* EMAIL CHECK */
 
       if (!email) {
 
@@ -403,7 +398,21 @@
       }
 
 
-      /* PASSWORD */
+      /* EMAIL FORMAT CHECK */
+
+      if (!email.includes("@")) {
+
+        messageBox(
+          "कृपया योग्य Email टाका.",
+          false,
+          true
+        );
+
+        return;
+      }
+
+
+      /* PASSWORD CHECK */
 
       if (password.length < 8) {
 
@@ -417,7 +426,7 @@
       }
 
 
-      /* BUTTON LOADING */
+      /* LOADING */
 
       button.disabled = true;
 
@@ -427,7 +436,9 @@
 
       try {
 
-        /* SUPABASE SIGN UP */
+        /* =================================
+           SUPABASE SIGN UP
+        ================================= */
 
         const { data, error } =
           await supabaseClient.auth.signUp({
@@ -458,19 +469,22 @@
         }
 
 
-        /* USER ID SAVE */
+        /* =================================
+           USER CHECK
+        ================================= */
 
-        if (data.user) {
+        if (!data.user) {
 
-          localStorage.setItem(
-            "gyansetu_user_id",
-            data.user.id
+          throw new Error(
+            "Account तयार करता आले नाही."
           );
 
         }
 
 
-        /* USER DATA SAVE */
+        /* =================================
+           SAVE USER DATA
+        ================================= */
 
         localStorage.setItem(
           "gyansetu_username",
@@ -484,8 +498,14 @@
         );
 
 
-        /* ================================
-           SESSION AVAILABLE
+        localStorage.setItem(
+          "gyansetu_user_id",
+          data.user.id
+        );
+
+
+        /* =================================
+           IF SESSION IS ALREADY CREATED
         ================================= */
 
         if (data.session) {
@@ -497,35 +517,56 @@
           );
 
 
-          setTimeout(
-            function() {
+          setTimeout(function() {
 
-              window.location.href =
-                "home.html";
+            window.location.href =
+              "home.html";
 
-            },
-            1000
-          );
+          }, 700);
+
+
+          return;
 
         }
 
-        /* ================================
-           EMAIL VERIFICATION REQUIRED
+
+        /* =================================
+           TRY LOGIN AUTOMATICALLY
+           (If email confirmation is OFF)
         ================================= */
 
-        else {
+        const { data: loginData, error: loginError } =
+          await supabaseClient.auth.signInWithPassword({
+
+            email: email,
+
+            password: password
+
+          });
+
+
+        if (loginError) {
+
+          throw loginError;
+
+        }
+
+
+        if (loginData.session) {
 
           messageBox(
-            "✅ Account तयार झाले! तुमच्या Email वर verification link आला असेल. Email verify केल्यानंतर Login करा.",
+            "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
             true,
             true
           );
 
 
-          button.disabled = false;
+          setTimeout(function() {
 
-          button.innerText =
-            "Create Account";
+            window.location.href =
+              "home.html";
+
+          }, 700);
 
         }
 
@@ -549,10 +590,13 @@
           errorText.toLowerCase();
 
 
+        /* EMAIL ALREADY USED */
+
         if (
           lower.includes("already registered") ||
           lower.includes("already exists") ||
-          lower.includes("user already")
+          lower.includes("user already") ||
+          lower.includes("already been registered")
         ) {
 
           errorText =
@@ -560,6 +604,8 @@
 
         }
 
+
+        /* INVALID EMAIL */
 
         else if (
           lower.includes("invalid email")
@@ -571,12 +617,26 @@
         }
 
 
+        /* PASSWORD */
+
         else if (
           lower.includes("password")
         ) {
 
           errorText =
             "Password किमान 8 characters असावा.";
+
+        }
+
+
+        /* EMAIL CONFIRMATION */
+
+        else if (
+          lower.includes("email not confirmed")
+        ) {
+
+          errorText =
+            "Supabase मध्ये Email Confirmation बंद करा.";
 
         }
 
@@ -600,7 +660,7 @@
     }
 
 
-    /* ================================
+    /* =================================
        MESSAGE BOX
     ================================= */
 
@@ -662,7 +722,7 @@
     }
 
 
-    /* ================================
+    /* =================================
        ENTER KEY
     ================================= */
 
@@ -687,4 +747,4 @@
 
 </body>
 
-</html>
+      </html>
