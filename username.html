@@ -388,7 +388,9 @@
 
       try {
 
-        /* CREATE SUPABASE ACCOUNT */
+        /* =========================
+           CREATE SUPABASE ACCOUNT
+        ========================= */
 
         const {
           data,
@@ -433,7 +435,56 @@
         }
 
 
-        /* SAVE USER INFORMATION */
+        /* =========================
+           CHECK SESSION
+        ========================= */
+
+        if (!data.session) {
+
+          throw new Error(
+            "Account तयार झाला, पण Login Session मिळाली नाही. Supabase मध्ये Confirm Email OFF आहे का ते तपासा."
+          );
+
+        }
+
+
+        /* =========================
+           SAVE PROFILE
+        ========================= */
+
+        const {
+          error: profileError
+        } =
+          await supabaseClient
+            .from("Profiles")
+            .insert({
+
+              id: data.user.id,
+
+              username: username
+
+            });
+
+
+        /* PROFILE ERROR */
+
+        if (profileError) {
+
+          console.error(
+            "PROFILE ERROR:",
+            profileError
+          );
+
+          throw new Error(
+            "Account तयार झाला पण Username database मध्ये save करता आला नाही."
+          );
+
+        }
+
+
+        /* =========================
+           SAVE LOCAL INFORMATION
+        ========================= */
 
         localStorage.setItem(
           "gyansetu_username",
@@ -454,43 +505,21 @@
 
 
         /* =========================
-           SESSION EXISTS
-        ========================= */
-
-        if (data.session) {
-
-          showMessage(
-            "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
-            true
-          );
-
-
-          setTimeout(function() {
-
-            window.location.href =
-              "home.html";
-
-          }, 700);
-
-
-          return;
-        }
-
-
-        /* =========================
-           NO SESSION
+           SUCCESS
         ========================= */
 
         showMessage(
-          "❌ Email Confirmation अजून ON आहे. Supabase मध्ये Confirm Email OFF करा.",
-          false
+          "✅ Account तयार झाले! GyanSetu मध्ये स्वागत आहे.",
+          true
         );
 
 
-        button.disabled = false;
+        setTimeout(function() {
 
-        button.innerText =
-          "Create Account";
+          window.location.href =
+            "home.html";
+
+        }, 700);
 
 
       }
@@ -512,12 +541,17 @@
           text.toLowerCase();
 
 
+        /* ALREADY REGISTERED */
+
         if (
           lower.includes(
             "already registered"
           ) ||
           lower.includes(
             "already exists"
+          ) ||
+          lower.includes(
+            "user already registered"
           )
         ) {
 
@@ -527,6 +561,8 @@
         }
 
 
+        /* INVALID EMAIL */
+
         else if (
           lower.includes(
             "invalid email"
@@ -535,6 +571,37 @@
 
           text =
             "कृपया योग्य Email टाका.";
+
+        }
+
+
+        /* RATE LIMIT */
+
+        else if (
+          lower.includes(
+            "rate limit"
+          ) ||
+          lower.includes(
+            "too many requests"
+          )
+        ) {
+
+          text =
+            "खूप वेळा प्रयत्न झाले आहेत. थोड्या वेळाने पुन्हा प्रयत्न करा.";
+
+        }
+
+
+        /* DUPLICATE PROFILE */
+
+        else if (
+          lower.includes(
+            "duplicate"
+          )
+        ) {
+
+          text =
+            "हा Profile आधीच तयार आहे.";
 
         }
 
@@ -632,4 +699,4 @@
 
 </body>
 
-  </html>
+      </html>
