@@ -1,465 +1,1719 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>GyanSetu - Home</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f8fc;
-      color: #18264d;
-    }
+<title>GyanSetu - Home</title>
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      margin: auto;
-      min-height: 100vh;
-      padding-bottom: 85px;
-    }
 
-    /* HEADER */
-    .header {
-      background: white;
-      padding: 18px 18px 14px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
+<style>
 
-    .header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+/* =========================
+   RESET
+========================= */
 
-    .logo-name {
-      font-size: 25px;
-      font-weight: 800;
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    .logo-name span {
-      color: #ff7900;
-    }
 
-    .profile-mini {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: #ff7900;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      cursor: pointer;
-    }
+body{
 
-    .welcome {
-      margin-top: 15px;
-    }
+  font-family:
+  Arial,
+  sans-serif;
 
-    .welcome small {
-      color: #777;
-      font-size: 13px;
-    }
+  background:
+  linear-gradient(
+    180deg,
+    #eef6ff 0%,
+    #f8fbff 45%,
+    #ffffff 100%
+  );
 
-    .welcome h2 {
-      margin-top: 4px;
-      font-size: 21px;
-    }
+  color:#102a56;
 
-    /* SEARCH */
-    .search {
-      margin: 15px 16px;
-      background: white;
-      border-radius: 15px;
-      padding: 13px 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
+  min-height:100vh;
+}
 
-    .search input {
-      width: 100%;
-      border: none;
-      outline: none;
-      font-size: 15px;
-    }
 
-    /* QUICK FEATURES */
-    .section {
-      padding: 5px 16px;
-    }
+/* =========================
+   APP
+========================= */
 
-    .section-title {
-      font-size: 19px;
-      font-weight: 750;
-      margin: 10px 0 13px;
-    }
+.app{
 
-    .features {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
+  width:100%;
 
-    .feature {
-      background: white;
-      border-radius: 18px;
-      padding: 17px;
-      min-height: 105px;
-      box-shadow: 0 5px 18px rgba(0,0,0,0.06);
-      cursor: pointer;
-    }
+  max-width:430px;
 
-    .feature-icon {
-      font-size: 27px;
-      margin-bottom: 8px;
-    }
+  margin:auto;
 
-    .feature h3 {
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
+  min-height:100vh;
 
-    .feature p {
-      font-size: 11px;
-      color: #777;
-    }
+  padding-bottom:95px;
+}
 
-    /* DAILY GOAL */
-    .goal {
-      margin: 20px 16px;
-      padding: 18px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #fff1dd, #fff9f0);
-      border: 1px solid #ffe0bd;
-    }
 
-    .goal-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/* =========================
+   HEADER
+========================= */
 
-    .goal h3 {
-      font-size: 17px;
-    }
+.header{
 
-    .points {
-      font-weight: bold;
-      color: #ff7900;
-    }
+  background:
+  rgba(255,255,255,0.96);
 
-    .progress {
-      height: 9px;
-      background: #eee;
-      border-radius: 20px;
-      margin-top: 15px;
-      overflow: hidden;
-    }
+  padding:
+  18px
+  18px
+  17px;
 
-    .progress-bar {
-      width: 45%;
-      height: 100%;
-      background: #ff7900;
-      border-radius: 20px;
-    }
+  position:sticky;
 
-    /* POST */
-    .post {
-      background: white;
-      border-radius: 20px;
-      margin: 0 16px 16px;
-      padding: 17px;
-      box-shadow: 0 5px 18px rgba(0,0,0,0.06);
-    }
+  top:0;
 
-    .post-user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+  z-index:50;
 
-    .avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #18264d;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
+  border-bottom:
+  1px solid #dcecff;
 
-    .post-user strong {
-      font-size: 14px;
-    }
+  box-shadow:
+  0 5px 25px
+  rgba(23,105,224,0.08);
 
-    .post-user small {
-      display: block;
-      color: #888;
-      margin-top: 3px;
-    }
+  backdrop-filter:
+  blur(12px);
+}
 
-    .post-text {
-      margin-top: 15px;
-      line-height: 1.5;
-      font-size: 14px;
-    }
 
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      height: 68px;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 1px solid #eee;
-      z-index: 20;
-    }
+.header-row{
 
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #777;
-      cursor: pointer;
-    }
+  display:flex;
 
-    .nav-item .icon {
-      font-size: 22px;
-      display: block;
-      margin-bottom: 3px;
-    }
+  align-items:center;
 
-    .nav-item.active {
-      color: #ff7900;
-      font-weight: bold;
-    }
-  </style>
+  justify-content:space-between;
+}
+
+
+.logo-name{
+
+  font-size:27px;
+
+  font-weight:900;
+
+  letter-spacing:-0.5px;
+
+  color:#123a78;
+}
+
+
+.logo-name span{
+
+  color:#1769e0;
+}
+
+
+/* PROFILE MINI */
+
+.profile-mini{
+
+  width:44px;
+
+  height:44px;
+
+  border-radius:50%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #1769e0,
+    #54a7ff
+  );
+
+  color:white;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:21px;
+
+  cursor:pointer;
+
+  box-shadow:
+  0 5px 15px
+  rgba(23,105,224,0.25);
+
+  border:
+  3px solid #e7f2ff;
+}
+
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome{
+
+  margin-top:17px;
+}
+
+
+.welcome-top{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+
+.welcome small{
+
+  color:#7183a2;
+
+  font-size:13px;
+
+  font-weight:600;
+}
+
+
+.welcome h2{
+
+  margin-top:5px;
+
+  font-size:23px;
+
+  color:#102a56;
+}
+
+
+/* MOTIVATIONAL LINE */
+
+.motivation{
+
+  margin-top:10px;
+
+  padding:10px 13px;
+
+  border-radius:13px;
+
+  background:#edf6ff;
+
+  border-left:
+  4px solid #1769e0;
+
+  color:#24528c;
+
+  font-size:12px;
+
+  line-height:1.4;
+
+  font-weight:600;
+}
+
+
+/* CRICKET BUTTON */
+
+.cricket-btn{
+
+  border:none;
+
+  background:
+  linear-gradient(
+    135deg,
+    #1769e0,
+    #38a4ff
+  );
+
+  color:white;
+
+  padding:
+  9px
+  13px;
+
+  border-radius:12px;
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  box-shadow:
+  0 4px 12px
+  rgba(23,105,224,0.25);
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search{
+
+  margin:
+  17px
+  16px;
+
+  background:white;
+
+  border:
+  1px solid #dceaff;
+
+  border-radius:17px;
+
+  padding:
+  13px
+  15px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  box-shadow:
+  0 5px 18px
+  rgba(23,105,224,0.07);
+
+  transition:0.2s;
+}
+
+
+.search:focus-within{
+
+  border-color:#5ca7ff;
+
+  box-shadow:
+  0 6px 22px
+  rgba(23,105,224,0.14);
+}
+
+
+.search-icon{
+
+  font-size:19px;
+}
+
+
+.search input{
+
+  width:100%;
+
+  border:none;
+
+  outline:none;
+
+  background:transparent;
+
+  font-size:15px;
+
+  color:#18345f;
+}
+
+
+.search input::placeholder{
+
+  color:#91a1b8;
+}
+
+
+/* SEARCH MESSAGE */
+
+.no-results{
+
+  display:none;
+
+  margin:
+  10px 16px;
+
+  padding:18px;
+
+  background:white;
+
+  border-radius:16px;
+
+  text-align:center;
+
+  color:#73839d;
+
+  border:1px solid #e0ecfb;
+}
+
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+
+  padding:
+  4px
+  16px;
+}
+
+
+.section-title{
+
+  font-size:19px;
+
+  font-weight:800;
+
+  margin:
+  12px
+  0
+  13px;
+
+  color:#102f60;
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.features{
+
+  display:grid;
+
+  grid-template-columns:
+  repeat(2,1fr);
+
+  gap:12px;
+}
+
+
+.feature{
+
+  position:relative;
+
+  background:white;
+
+  border:
+  1px solid #e0ecfb;
+
+  border-radius:20px;
+
+  padding:17px;
+
+  min-height:118px;
+
+  box-shadow:
+  0 6px 20px
+  rgba(23,105,224,0.07);
+
+  cursor:pointer;
+
+  transition:
+  transform 0.18s,
+  box-shadow 0.18s;
+}
+
+
+.feature:active{
+
+  transform:scale(0.97);
+}
+
+
+.feature::after{
+
+  content:"";
+
+  position:absolute;
+
+  right:12px;
+
+  top:12px;
+
+  width:8px;
+
+  height:8px;
+
+  border-radius:50%;
+
+  background:#51a4ff;
+}
+
+
+.feature-icon{
+
+  font-size:29px;
+
+  margin-bottom:9px;
+}
+
+
+.feature h3{
+
+  font-size:15px;
+
+  margin-bottom:5px;
+
+  color:#173d76;
+}
+
+
+.feature p{
+
+  font-size:11px;
+
+  color:#7486a2;
+
+  line-height:1.4;
+}
+
+
+/* =========================
+   DAILY GOAL
+========================= */
+
+.goal{
+
+  margin:
+  21px
+  16px;
+
+  padding:19px;
+
+  border-radius:22px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #eaf5ff,
+    #f8fcff
+  );
+
+  border:
+  1px solid #cfe5ff;
+
+  box-shadow:
+  0 7px 22px
+  rgba(23,105,224,0.08);
+}
+
+
+.goal-top{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+
+.goal h3{
+
+  font-size:17px;
+
+  color:#153a70;
+}
+
+
+.points{
+
+  font-size:13px;
+
+  font-weight:bold;
+
+  color:#1769e0;
+
+  white-space:nowrap;
+}
+
+
+.progress{
+
+  height:10px;
+
+  background:#dcecff;
+
+  border-radius:20px;
+
+  margin-top:15px;
+
+  overflow:hidden;
+}
+
+
+.progress-bar{
+
+  width:45%;
+
+  height:100%;
+
+  background:
+  linear-gradient(
+    90deg,
+    #1769e0,
+    #52aaff
+  );
+
+  border-radius:20px;
+
+  transition:width 0.4s;
+}
+
+
+.goal-text{
+
+  margin-top:9px;
+
+  font-size:11px;
+
+  color:#7186a5;
+}
+
+
+/* =========================
+   XP CARD
+========================= */
+
+.xp-card{
+
+  margin:
+  0
+  16px
+  22px;
+
+  padding:20px;
+
+  border-radius:23px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #0f4ea8,
+    #1769e0,
+    #3d9cff
+  );
+
+  color:white;
+
+  box-shadow:
+  0 10px 28px
+  rgba(23,105,224,0.25);
+
+  cursor:pointer;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+
+.xp-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:120px;
+
+  height:120px;
+
+  border-radius:50%;
+
+  background:
+  rgba(255,255,255,0.09);
+
+  right:-35px;
+
+  top:-45px;
+}
+
+
+.xp-card::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:80px;
+
+  height:80px;
+
+  border-radius:50%;
+
+  background:
+  rgba(255,255,255,0.07);
+
+  right:45px;
+
+  bottom:-45px;
+}
+
+
+.xp-title{
+
+  font-size:14px;
+
+  font-weight:bold;
+
+  opacity:0.95;
+}
+
+
+.xp-number{
+
+  font-size:31px;
+
+  font-weight:900;
+
+  margin-top:5px;
+}
+
+
+.xp-sub{
+
+  margin-top:5px;
+
+  font-size:11px;
+
+  opacity:0.85;
+}
+
+
+.xp-link{
+
+  margin-top:13px;
+
+  display:inline-block;
+
+  background:
+  rgba(255,255,255,0.18);
+
+  padding:
+  8px
+  12px;
+
+  border-radius:10px;
+
+  font-size:11px;
+
+  font-weight:bold;
+}
+
+
+/* =========================
+   FEED
+========================= */
+
+.feed-title{
+
+  padding:
+  0
+  16px;
+
+  font-size:19px;
+
+  font-weight:800;
+
+  color:#102f60;
+
+  margin-bottom:13px;
+}
+
+
+.post{
+
+  background:white;
+
+  border:
+  1px solid #e0ecfb;
+
+  border-radius:20px;
+
+  margin:
+  0
+  16px
+  16px;
+
+  padding:17px;
+
+  box-shadow:
+  0 6px 20px
+  rgba(23,105,224,0.07);
+}
+
+
+.post-user{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+
+.avatar{
+
+  width:42px;
+
+  height:42px;
+
+  border-radius:50%;
+
+  background:
+  linear-gradient(
+    135deg,
+    #1769e0,
+    #56aaff
+  );
+
+  color:white;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-weight:bold;
+
+  font-size:17px;
+}
+
+
+.post-user strong{
+
+  font-size:14px;
+
+  color:#173d76;
+}
+
+
+.post-user small{
+
+  display:block;
+
+  color:#8a9ab2;
+
+  margin-top:3px;
+
+  font-size:11px;
+}
+
+
+.post-text{
+
+  margin-top:15px;
+
+  line-height:1.55;
+
+  font-size:14px;
+
+  color:#30496f;
+}
+
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+
+  position:fixed;
+
+  bottom:0;
+
+  left:50%;
+
+  transform:
+  translateX(-50%);
+
+  width:100%;
+
+  max-width:430px;
+
+  height:72px;
+
+  background:
+  rgba(255,255,255,0.97);
+
+  display:flex;
+
+  justify-content:space-around;
+
+  align-items:center;
+
+  border-top:
+  1px solid #dceaff;
+
+  box-shadow:
+  0 -5px 20px
+  rgba(23,105,224,0.08);
+
+  z-index:100;
+
+  backdrop-filter:
+  blur(12px);
+}
+
+
+.nav-item{
+
+  text-align:center;
+
+  font-size:10px;
+
+  color:#8291a8;
+
+  cursor:pointer;
+
+  min-width:55px;
+
+  transition:0.2s;
+}
+
+
+.nav-item .icon{
+
+  font-size:22px;
+
+  display:block;
+
+  margin-bottom:3px;
+}
+
+
+.nav-item.active{
+
+  color:#1769e0;
+
+  font-weight:bold;
+}
+
+
+.nav-item.active .icon{
+
+  transform:
+  translateY(-1px);
+}
+
+
+/* =========================
+   HIDDEN
+========================= */
+
+.hidden-search{
+
+  display:none !important;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:360px){
+
+  .logo-name{
+
+    font-size:24px;
+  }
+
+  .feature{
+
+    padding:14px;
+  }
+
+  .goal h3{
+
+    font-size:15px;
+  }
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
-  <!-- HEADER -->
-  <div class="header">
 
-    <div class="header-row">
+<!-- =========================
+     HEADER
+========================= -->
 
-      <div class="logo-name">
-        Gyan<span>Setu</span>
-      </div>
+<div class="header">
 
-      <div class="profile-mini" onclick="goProfile()">
-        👤
-      </div>
+  <div class="header-row">
+
+    <div class="logo-name">
+      Gyan<span>Setu</span>
+    </div>
+
+
+    <div
+      class="profile-mini"
+      onclick="goProfile()"
+    >
+      👤
+    </div>
+
+  </div>
+
+
+  <div class="welcome">
+
+    <div class="welcome-top">
+
+      <small>
+        Welcome back 👋
+      </small>
+
+
+      <button
+        class="cricket-btn"
+        onclick="
+        window.location.href='cricket-drills.html'
+        "
+      >
+        🏏 Cricket
+      </button>
 
     </div>
 
-    <div class="welcome">
 
-  <div style="
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  ">
+    <h2 id="username">
+      Student
+    </h2>
 
-    <small>
-      Welcome back 👋
-    </small>
 
-    <button
-      onclick="window.location.href='cricket-drills.html'"
-      style="
-        border: none;
-        background: linear-gradient(135deg, #005bea, #00c6ff);
-        color: white;
-        padding: 8px 12px;
-        border-radius: 11px;
-        font-size: 12px;
-        font-weight: bold;
-        cursor: pointer;
-        box-shadow: 0 3px 10px rgba(0,120,255,0.25);
-        white-space: nowrap;
+    <!-- MOTIVATIONAL LINE -->
+
+    <div class="motivation">
+
+      🚀 रोज थोडं शिका, रोज एक पाऊल पुढे जा —
+      <b>तुमचं भविष्य तुमच्या हातात आहे!</b>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     SEARCH
+========================= -->
+
+<div class="search">
+
+  <span class="search-icon">
+    🔎
+  </span>
+
+  <input
+    type="text"
+    id="homeSearch"
+    placeholder="आज काय शिकायचं?"
+    autocomplete="off"
+  >
+
+</div>
+
+
+
+<div
+  class="no-results"
+  id="noResults"
+>
+  😕 काहीही सापडलं नाही.
+  दुसरं काही search करून बघा.
+</div>
+
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<div class="section">
+
+  <div class="section-title">
+    Explore GyanSetu 🚀
+  </div>
+
+
+  <div class="features">
+
+
+    <div
+      class="feature searchable"
+      data-search="
+      education
+      शिक्षण
+      अभ्यास
+      knowledge
+      ज्ञान
+      "
+      onclick="
+      window.location.href='learn.html'
       "
     >
-      🏏 Cricket
-    </button>
 
-  </div>
+      <div class="feature-icon">
+        📚
+      </div>
 
-  <h2 id="username">
-    Student
-  </h2>
+      <h3>
+        Education
+      </h3>
+
+      <p>
+        शिका आणि ज्ञान वाढवा
+      </p>
 
     </div>
 
-  </div>
 
 
-  <!-- SEARCH -->
-  <div class="search">
-    🔎
-    <input
-      type="text"
-      placeholder="आज काय शिकायचं?"
+    <div
+      class="feature searchable"
+      data-search="
+      live
+      classes
+      live classes
+      वर्ग
+      शिकणे
+      "
+      onclick="
+      window.location.href='live-classes.html'
+      "
     >
-  </div>
 
-
-  <!-- FEATURES -->
-  <div class="section">
-
-    <div class="section-title">
-      Explore GyanSetu 🚀
-    </div>
-
-    <div class="features">
-
-    <div class="feature" onclick="window.location.href='learn.html'">
-  <div class="feature-icon">📚</div>
-  <h3>Education</h3>
-  <p>शिका आणि ज्ञान वाढवा</p>
-    </div>
-
-      <div class="feature" onclick="window.location.href='live-classes.html'">
-  <div class="feature-icon">🎥</div>
-  <h3>Live Classes</h3>
-  <p>Live class मध्ये सहभागी व्हा</p>
+      <div class="feature-icon">
+        🎥
       </div>
 
-  <div class="feature" onclick="window.location.href='ai-study.html'">
-  <div class="feature-icon">🤖</div>
-  <h3>AI Study</h3>
-  <p>AI कडून अभ्यासात मदत घ्या</p>
-  </div>
+      <h3>
+        Live Classes
+      </h3>
 
-    <div class="feature" onclick="window.location.href='leaderboard.html'">
-  <div class="feature-icon">🏆</div>
-  <h3>Leaderboard</h3>
-  <p>तुमचे Gyan Points पहा</p>
-    </div>
+      <p>
+        Live class मध्ये सहभागी व्हा
+      </p>
 
     </div>
 
-  </div>
 
 
-  <!-- DAILY GOAL -->
-  <div class="goal">
+    <div
+      class="feature searchable"
+      data-search="
+      ai
+      study
+      artificial intelligence
+      अभ्यास
+      ai study
+      "
+      onclick="
+      window.location.href='ai-study.html'
+      "
+    >
 
-    <div class="goal-top">
-
-      <h3>🎯 Today's Learning</h3>
-
-      <div class="points">
-        45 / 100 XP
+      <div class="feature-icon">
+        🤖
       </div>
 
+      <h3>
+        AI Study
+      </h3>
+
+      <p>
+        AI कडून अभ्यासात मदत घ्या
+      </p>
+
     </div>
 
-    <div class="progress">
-      <div class="progress-bar"></div>
-    </div>
-
-  </div>
 
 
-  <!-- FEED -->
-  <div class="section-title" style="padding: 0 16px;">
-    📖 Learning Feed
-  </div>
+    <div
+      class="feature searchable"
+      data-search="
+      leaderboard
+      rank
+      ranking
+      points
+      xp
+      gyansetu points
+      "
+      onclick="
+      window.location.href='leaderboard.html'
+      "
+    >
 
-  <div class="post">
-
-    <div class="post-user">
-
-      <div class="avatar">G</div>
-
-      <div>
-        <strong>GyanSetu Education</strong>
-        <small>आज</small>
+      <div class="feature-icon">
+        🏆
       </div>
 
+      <h3>
+        Leaderboard
+      </h3>
+
+      <p>
+        तुमचे Gyan Points पहा
+      </p>
+
     </div>
 
-    <div class="post-text">
-      💡 आजचा प्रश्न: भारताची राजधानी कोणती आहे?
-      <br><br>
-      उत्तर शोधा आणि तुमचे ज्ञान वाढवा! 🇮🇳
-    </div>
-
-  </div>
-
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav">
-
-    <div class="nav-item active">
-      <span class="icon">🏠</span>
-      Home
-    </div>
-
-    <div class="nav-item" onclick="window.location.href='learn.html'">
-  <span class="icon">📚</span>
-  Learn
-    </div>
-
-<div class="nav-item" onclick="window.location.href='create.html'">
-  <span class="icon">➕</span>
-  Create
-</div>
-
-    <div class="nav-item" onclick="window.location.href='leaderboard.html'">
-  <span class="icon">🏆</span>
-  Rank
-    </div>
-
-    <div class="nav-item" onclick="goProfile()">
-      <span class="icon">👤</span>
-      Profile
-    </div>
 
   </div>
 
 </div>
+
+
+
+<!-- =========================
+     DAILY GOAL
+========================= -->
+
+<div class="goal searchable"
+
+     data-search="
+     daily
+     goal
+     today's learning
+     learning
+     xp
+     points
+     अभ्यास
+     ध्येय
+     "
+>
+
+  <div class="goal-top">
+
+    <h3>
+      🎯 Today's Learning
+    </h3>
+
+
+    <div
+      class="points"
+      id="dailyPoints"
+    >
+      0 / 100 XP
+    </div>
+
+  </div>
+
+
+  <div class="progress">
+
+    <div
+      class="progress-bar"
+      id="progressBar"
+    ></div>
+
+  </div>
+
+
+  <div
+    class="goal-text"
+    id="goalText"
+  >
+    आजचा अभ्यास सुरू करा आणि XP मिळवा! 💪
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     XP CARD
+========================= -->
+
+<div
+  class="xp-card searchable"
+
+  data-search="
+  xp
+  points
+  gyansetu points
+  leaderboard
+  rank
+  ranking
+  "
+
+  onclick="
+  window.location.href='leaderboard.html'
+  "
+>
+
+  <div class="xp-title">
+
+    🏆 My Gyan Points
+
+  </div>
+
+
+  <div
+    class="xp-number"
+    id="xpNumber"
+  >
+    0 XP
+  </div>
+
+
+  <div class="xp-sub">
+
+    अभ्यास करा, XP मिळवा आणि Leaderboard वर पुढे जा 🚀
+
+  </div>
+
+
+  <div class="xp-link">
+
+    🏆 Leaderboard पहा →
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     FEED
+========================= -->
+
+<div class="feed-title">
+
+  📖 Learning Feed
+
+</div>
+
+
+
+<div
+  class="post searchable"
+
+  data-search="
+  question
+  india
+  capital
+  भारत
+  राजधानी
+  प्रश्न
+  learning
+  knowledge
+  "
+>
+
+  <div class="post-user">
+
+
+    <div class="avatar">
+      G
+    </div>
+
+
+    <div>
+
+      <strong>
+        GyanSetu Education
+      </strong>
+
+      <small>
+        आज
+      </small>
+
+    </div>
+
+  </div>
+
+
+  <div class="post-text">
+
+    💡 आजचा प्रश्न:
+    भारताची राजधानी कोणती आहे?
+
+    <br><br>
+
+    उत्तर शोधा आणि तुमचे ज्ञान वाढवा! 🇮🇳
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<div class="bottom-nav">
+
+
+  <div class="nav-item active">
+
+    <span class="icon">
+      🏠
+    </span>
+
+    Home
+
+  </div>
+
+
+
+  <div
+    class="nav-item"
+    onclick="
+    window.location.href='learn.html'
+    "
+  >
+
+    <span class="icon">
+      📚
+    </span>
+
+    Learn
+
+  </div>
+
+
+
+  <div
+    class="nav-item"
+    onclick="
+    window.location.href='create.html'
+    "
+  >
+
+    <span class="icon">
+      ➕
+    </span>
+
+    Create
+
+  </div>
+
+
+
+  <div
+    class="nav-item"
+    onclick="
+    window.location.href='leaderboard.html'
+    "
+  >
+
+    <span class="icon">
+      🏆
+    </span>
+
+    Rank
+
+  </div>
+
+
+
+  <div
+    class="nav-item"
+    onclick="goProfile()"
+  >
+
+    <span class="icon">
+      👤
+    </span>
+
+    Profile
+
+  </div>
+
+
+</div>
+
+
+</div>
+
 
 
 <script>
 
-  // Username Page वर save केलेला username घेणे
-  const savedUsername =
-    localStorage.getItem("gyansetu_username");
 
-  if (savedUsername) {
-  document.getElementById("username").textContent =
+/* =========================
+   USERNAME
+========================= */
+
+const savedUsername =
+  localStorage.getItem(
+    "gyansetu_username"
+  );
+
+
+if(savedUsername){
+
+  document
+    .getElementById("username")
+    .textContent =
     savedUsername + " 👋";
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+function goProfile(){
+
+  window.location.href =
+    "profile.html";
+
+}
+
+
+/* =========================
+   XP SYSTEM
+========================= */
+
+/*
+  Leaderboard / Quiz मधून
+  gyansetu_xp मध्ये XP save
+  झाल्यास Home वर automatic
+  update होईल.
+*/
+
+function loadXP(){
+
+  let xp =
+    parseInt(
+      localStorage.getItem(
+        "gyansetu_xp"
+      )
+    ) || 0;
+
+
+  document
+    .getElementById("xpNumber")
+    .textContent =
+    xp + " XP";
+
+
+  const dailyXP =
+    Math.min(
+      xp,
+      100
+    );
+
+
+  document
+    .getElementById("dailyPoints")
+    .textContent =
+    dailyXP +
+    " / 100 XP";
+
+
+  const percentage =
+    Math.min(
+      dailyXP,
+      100
+    );
+
+
+  document
+    .getElementById("progressBar")
+    .style.width =
+    percentage + "%";
+
+
+  const goalText =
+    document.getElementById(
+      "goalText"
+    );
+
+
+  if(xp >= 100){
+
+    goalText.textContent =
+      "🎉 आजचं 100 XP लक्ष्य पूर्ण झालं!";
+
   }
 
-  function goProfile() {
-    window.location.href = "profile.html";
+  else if(xp > 0){
+
+    goalText.textContent =
+      "🔥 छान! अजून थोडा अभ्यास करा आणि 100 XP पूर्ण करा.";
+
   }
+
+  else{
+
+    goalText.textContent =
+      "आजचा अभ्यास सुरू करा आणि XP मिळवा! 💪";
+
+  }
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+const searchInput =
+  document.getElementById(
+    "homeSearch"
+  );
+
+
+const searchableItems =
+  document.querySelectorAll(
+    ".searchable"
+  );
+
+
+const noResults =
+  document.getElementById(
+    "noResults"
+  );
+
+
+searchInput.addEventListener(
+  "input",
+  function(){
+
+    const query =
+      this.value
+        .trim()
+        .toLowerCase();
+
+
+    if(query === ""){
+
+      searchableItems.forEach(
+        function(item){
+
+          item.classList.remove(
+            "hidden-search"
+          );
+
+        }
+      );
+
+
+      noResults.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    let found = false;
+
+
+    searchableItems.forEach(
+      function(item){
+
+        const text =
+          (
+            item.innerText +
+            " " +
+            (
+              item.dataset.search ||
+              ""
+            )
+          )
+          .toLowerCase();
+
+
+        if(
+          text.includes(query)
+        ){
+
+          item.classList.remove(
+            "hidden-search"
+          );
+
+          found = true;
+
+        }
+
+        else{
+
+          item.classList.add(
+            "hidden-search"
+          );
+
+        }
+
+      }
+    );
+
+
+    if(found){
+
+      noResults.style.display =
+        "none";
+
+    }
+
+    else{
+
+      noResults.style.display =
+        "block";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   LOAD XP
+========================= */
+
+loadXP();
+
+
+/*
+  दुसऱ्या page वरून परत
+  Home वर आल्यावर XP update
+  करण्यासाठी.
+*/
+
+window.addEventListener(
+  "pageshow",
+  function(){
+
+    loadXP();
+
+  }
+);
+
 
 </script>
 
+
 </body>
-  </html>
+
+</html>
