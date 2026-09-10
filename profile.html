@@ -23,7 +23,7 @@ body{
   font-family:Arial,sans-serif;
   background:#f4f8ff;
   color:#172b4d;
-  transition:.3s;
+  transition:.3s; 
 }
 
 button,input,textarea{
@@ -1300,158 +1300,45 @@ body.dark .cancel{
 </div>
 
 
-async function searchUsers(){
 
-  const query =
-    document.getElementById("userSearch")
-      .value
-      .trim();
+<!-- =========================
+     USERS
+========================= -->
 
-  const resultBox =
-    document.getElementById("userResults");
+<div class="modal" id="usersModal">
 
+  <div class="box">
 
-  /* LOADING */
-
-  resultBox.innerHTML = `
-    <div class="empty" style="margin-top:12px;">
-      🔄 Users शोधत आहे...
+    <div class="box-title">
+      👥 Users
     </div>
-  `;
 
+    <div class="box-subtitle">
+      GyanSetu वर registered असलेले users शोधा.
+    </div>
 
-  try{
+    <input
+      class="input"
+      id="userSearch"
+      placeholder="🔎 Search username..."
+      oninput="searchUsers()"
+    >
 
-    let request =
-      supabaseClient
-        .from("Profiles")
-        .select("id, username, created_at")
-        .order("created_at", {
-          ascending: false
-        })
-        .limit(50);
+    <div id="userResults"></div>
 
+    <div class="buttons">
 
-    /* SEARCH */
+      <button
+        class="btn cancel"
+        onclick="closeModal('usersModal')">
+        Close
+      </button>
 
-    if(query){
+    </div>
 
-      request =
-        request.ilike(
-          "username",
-          `%${query}%`
-        );
+  </div>
 
-    }
-
-
-    const {
-      data,
-      error
-    } = await request;
-
-
-    /* ERROR */
-
-    if(error){
-
-      console.error(
-        "USERS ERROR:",
-        error
-      );
-
-      resultBox.innerHTML = `
-        <div class="empty" style="margin-top:12px;">
-          ❌ Users load झाले नाहीत.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    /* NO USERS */
-
-    if(!data || data.length === 0){
-
-      resultBox.innerHTML = `
-        <div class="empty" style="margin-top:12px;">
-          😕 कोणताही User सापडला नाही.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    /* SHOW USERS */
-
-    resultBox.innerHTML = "";
-
-
-    data.forEach(function(user){
-
-      const div =
-        document.createElement("div");
-
-
-      div.className =
-        "search-result";
-
-
-      div.innerHTML = `
-
-        <div
-          class="search-avatar"
-          style="
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background:#eaf3ff;
-            font-size:22px;
-          "
-        >
-          👤
-        </div>
-
-
-        <div style="flex:1;">
-
-          <strong>
-            @${escapeHTML(
-              user.username || "student"
-            )}
-          </strong>
-
-        </div>
-
-      `;
-
-
-      resultBox.appendChild(div);
-
-    });
-
-
-  }catch(error){
-
-    console.error(
-      "SEARCH ERROR:",
-      error
-    );
-
-
-    resultBox.innerHTML = `
-      <div class="empty" style="margin-top:12px;">
-        ❌ Something went wrong.
-      </div>
-    `;
-
-  }
-
-}
+</div>
 
 <!-- =========================
      POST
@@ -2735,7 +2622,149 @@ window.addEventListener(
 
   }
 );
+   /* =========================
+   OPEN USERS
+========================= */
 
+function openUsers(){
+
+  document.getElementById("userSearch").value = "";
+
+  openModal("usersModal");
+
+  searchUsers();
+
+   }
+/* =========================
+   SEARCH USERS
+========================= */
+
+async function searchUsers(){
+
+  const query =
+    document.getElementById("userSearch")
+      .value
+      .trim();
+
+  const resultBox =
+    document.getElementById("userResults");
+
+  resultBox.innerHTML = `
+    <div class="empty" style="margin-top:12px;">
+      🔄 Users शोधत आहे...
+    </div>
+  `;
+
+  try{
+
+    let request =
+      supabaseClient
+        .from("Profiles")
+        .select("id, username, created_at")
+        .order("created_at", {
+          ascending: false
+        })
+        .limit(50);
+
+    if(query){
+
+      request =
+        request.ilike(
+          "username",
+          `%${query}%`
+        );
+
+    }
+
+    const {
+      data,
+      error
+    } = await request;
+
+    if(error){
+
+      console.error(
+        "USERS ERROR:",
+        error
+      );
+
+      resultBox.innerHTML = `
+        <div class="empty" style="margin-top:12px;">
+          ❌ Users load झाले नाहीत.
+        </div>
+      `;
+
+      return;
+    }
+
+    if(!data || data.length === 0){
+
+      resultBox.innerHTML = `
+        <div class="empty" style="margin-top:12px;">
+          😕 कोणताही User सापडला नाही.
+        </div>
+      `;
+
+      return;
+    }
+
+    resultBox.innerHTML = "";
+
+    data.forEach(function(user){
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "search-result";
+
+      div.innerHTML = `
+
+        <div
+          class="search-avatar"
+          style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#eaf3ff;
+            font-size:22px;
+          "
+        >
+          👤
+        </div>
+
+        <div style="flex:1;">
+
+          <strong>
+            @${escapeHTML(
+              user.username || "student"
+            )}
+          </strong>
+
+        </div>
+
+      `;
+
+      resultBox.appendChild(div);
+
+    });
+
+  }catch(error){
+
+    console.error(
+      "SEARCH ERROR:",
+      error
+    );
+
+    resultBox.innerHTML = `
+      <div class="empty" style="margin-top:12px;">
+        ❌ Something went wrong.
+      </div>
+    `;
+
+  }
+
+}
 </script>
 
 </body>
