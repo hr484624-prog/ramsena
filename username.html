@@ -302,7 +302,41 @@
       "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb"
 
     );
+/* =========================
+   CHECK ALREADY LOGGED IN
+========================= */
 
+async function checkAlreadyLoggedIn(){
+
+  try{
+
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(session){
+
+      window.location.replace(
+        "home.html"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "SESSION CHECK ERROR:",
+      error
+    );
+
+  }
+
+}
+
+checkAlreadyLoggedIn();
 
     /* =========================
        CREATE ACCOUNT
