@@ -18,7 +18,7 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:Arial,sans-serif;
+  font-family:Arial,sans-serifu;
 }
 
 body{
@@ -2682,72 +2682,20 @@ async function openUserProfile(userId){
 
 }
 
-
 /* FOLLOW */
 
 async function toggleFollow(targetId){
 
-  const current=
-    await getCurrentUser();
+  try{
+
+    const current =
+      await getCurrentUser();
 
 
-  if(!current){
-
-    showSocialToast(
-      "Login करा."
-    );
-
-    return;
-
-  }
-
-
-  if(current.id===targetId)
-    return;
-
-
-  const blockedIds=
-    await getBlockedUserIds(
-      current.id
-    );
-
-
-  if(blockedIds.has(targetId)){
-
-    showSocialToast(
-      "हा user उपलब्ध नाही."
-    );
-
-    return;
-
-  }
-
-
-  const following=
-    await isFollowing(
-      current.id,
-      targetId
-    );
-
-
-  if(following){
-
-    const {
-      error
-    }=
-    await supabaseClient
-      .from("Follows")
-      .delete()
-      .eq("follower_id",current.id)
-      .eq("following_id",targetId);
-
-
-    if(error){
-
-      console.error(error);
+    if(!current){
 
       showSocialToast(
-        "Unfollow करता आले नाही."
+        "Login करा."
       );
 
       return;
@@ -2755,31 +2703,10 @@ async function toggleFollow(targetId){
     }
 
 
-    showSocialToast(
-      "Unfollow केले."
-    );
-
-  }else{
-
-    const {
-      error
-    }=
-    await supabaseClient
-      .from("Follows")
-      .insert({
-
-        follower_id:current.id,
-        following_id:targetId
-
-      });
-
-
-    if(error){
-
-      console.error(error);
+    if(current.id === targetId){
 
       showSocialToast(
-        "Follow करता आले नाही."
+        "स्वतःलाच Follow करता येणार नाही."
       );
 
       return;
@@ -2787,45 +2714,162 @@ async function toggleFollow(targetId){
     }
 
 
+    const blockedIds =
+      await getBlockedUserIds(
+        current.id
+      );
+
+
+    if(blockedIds.has(targetId)){
+
+      showSocialToast(
+        "हा user उपलब्ध नाही."
+      );
+
+      return;
+
+    }
+
+
+    const following =
+      await isFollowing(
+        current.id,
+        targetId
+      );
+
+
+    if(following){
+
+      const {
+        error
+      } =
+      await supabaseClient
+        .from("Follows")
+        .delete()
+        .eq(
+          "follower_id",
+          current.id
+        )
+        .eq(
+          "following_id",
+          targetId
+        );
+
+
+      if(error){
+
+        console.error(
+          "UNFOLLOW ERROR:",
+          error
+        );
+
+        showSocialToast(
+          "Unfollow error: " +
+          error.message
+        );
+
+        return;
+
+      }
+
+
+      showSocialToast(
+        "Unfollow केले."
+      );
+
+    }else{
+
+      const {
+        data,
+        error
+      } =
+      await supabaseClient
+        .from("Follows")
+        .insert({
+
+          follower_id:
+            current.id,
+
+          following_id:
+            targetId
+
+        })
+        .select();
+
+
+      if(error){
+
+        console.error(
+          "FOLLOW ERROR:",
+          error
+        );
+
+        showSocialToast(
+          "Follow error: " +
+          error.message
+        );
+
+        return;
+
+      }
+
+
+      console.log(
+        "FOLLOW SUCCESS:",
+        data
+      );
+
+
+      showSocialToast(
+        "Following ✓"
+      );
+
+    }
+
+
+    await loadSocialCounts();
+
+
+    if(
+      document
+        .getElementById("usersModal")
+        .classList
+        .contains("show")
+    ){
+
+      await searchUsers();
+
+    }
+
+
+    if(
+      document
+        .getElementById("userProfileModal")
+        .classList
+        .contains("show")
+    ){
+
+      await openUserProfile(
+        targetId
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "FOLLOW SYSTEM ERROR:",
+      error
+    );
+
     showSocialToast(
-      "Following ✓"
+      "Follow करता आले नाही: " +
+      (error.message || "Unknown error")
     );
 
   }
 
-
-  await loadSocialCounts();
-
-  await searchUsers();
-
-
-  if(
-    document
-      .getElementById(
-        "userProfileModal"
-      )
-      .classList.contains("show")
-  ){
-
-    await openUserProfile(
-      targetId
-    );
-
-  }
-
-}
-
-
-function toggleFollowFromProfile(){
-
-  if(!selectedUserId)
-    return;
-
-  toggleFollow(
-    selectedUserId
-  );
-
-}
+      }
 
 
 /* BLOCK */
