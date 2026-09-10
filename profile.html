@@ -3,9 +3,13 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>GyanSetu - Profile</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -13,150 +17,132 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
+  font-family:Arial,sans-serif;
 }
 
 body{
-  font-family:Arial,sans-serif;
-  background:#f4f8ff;
-  color:#172b4d;
-  transition:.3s;
-}
-
-button,input,textarea{
-  font-family:inherit;
-}
-
-button{
-  cursor:pointer;
+  background:#eef5ff;
+  color:#172554;
+  min-height:100vh;
 }
 
 .app{
   width:100%;
   max-width:430px;
-  min-height:100vh;
   margin:auto;
-  padding-bottom:90px;
+  min-height:100vh;
+  background:#eef5ff;
+  padding-bottom:80px;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  height:65px;
-  padding:0 15px;
-
+  height:58px;
+  background:#fff;
   display:flex;
   align-items:center;
   justify-content:space-between;
-
-  background:rgba(255,255,255,.94);
-  border-bottom:1px solid #e5ecf7;
-  box-shadow:0 4px 18px rgba(20,70,130,.08);
-}
-
-.header-btn{
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:50%;
-  background:#eef5ff;
-  color:#1264d6;
-  font-size:24px;
-}
-
-.header-btn:active{
-  transform:scale(.92);
+  padding:0 14px;
+  border-bottom:1px solid #dbe7f5;
+  position:sticky;
+  top:0;
+  z-index:50;
 }
 
 .header-title{
-  font-size:21px;
-  font-weight:900;
+  font-size:20px;
+  font-weight:800;
 }
 
-/* PROFILE */
+.header-btn{
+  border:none;
+  background:#eef5ff;
+  color:#1769e0;
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* =========================
+   PROFILE
+========================= */
 
 .profile{
-  text-align:center;
-  padding:28px 18px 22px;
-  background:white;
+  background:#fff;
+  padding:22px 16px 18px;
 }
 
-.photo-wrap{
-  position:relative;
-  width:105px;
-  height:105px;
-  margin:auto;
+.profile-top{
+  display:flex;
+  align-items:center;
+  gap:18px;
 }
 
-.profile-photo{
-  width:105px;
-  height:105px;
+.avatar{
+  width:86px;
+  height:86px;
   border-radius:50%;
-  object-fit:cover;
-  background:#eaf3ff;
-  border:5px solid white;
-  box-shadow:0 8px 25px rgba(18,100,214,.18);
-}
-
-.photo-edit{
-  position:absolute;
-  right:0;
-  bottom:0;
-  width:32px;
-  height:32px;
-  border:3px solid white;
-  border-radius:50%;
-  background:#1264d6;
+  background:#1769e0;
   color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  border:4px solid #dcecff;
+  overflow:hidden;
+}
+
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-info{
+  flex:1;
 }
 
 .username{
-  margin-top:14px;
-  font-size:25px;
-  font-weight:900;
+  font-size:21px;
+  font-weight:800;
 }
 
 .bio{
   margin-top:6px;
-  color:#71809a;
   font-size:13px;
-}
-
-.profile-actions{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  margin-top:16px;
-}
-
-.action-btn{
-  border:0;
-  padding:11px 22px;
-  border-radius:12px;
-  font-weight:bold;
+  color:#64748b;
+  line-height:1.4;
 }
 
 .edit-btn{
-  background:#1264d6;
-  color:white;
+  margin-top:13px;
+  width:100%;
+  height:38px;
+  border:none;
+  border-radius:10px;
+  background:#eef5ff;
+  color:#1769e0;
+  font-weight:800;
+  cursor:pointer;
 }
 
-.users-btn{
-  background:#eaf3ff;
-  color:#1264d6;
-}
-
-/* STATS */
+/* =========================
+   STATS
+========================= */
 
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  background:white;
-  border-top:1px solid #edf1f7;
-  border-bottom:1px solid #edf1f7;
-  padding:17px 5px;
+  background:#fff;
+  margin-top:1px;
+  padding:16px 5px;
+  border-top:1px solid #eef2f7;
+  border-bottom:1px solid #dbe7f5;
 }
 
 .stat{
@@ -166,209 +152,132 @@ button{
 
 .stat strong{
   display:block;
-  font-size:20px;
+  font-size:18px;
 }
 
 .stat span{
   display:block;
   margin-top:4px;
   font-size:11px;
-  color:#7a879b;
+  color:#64748b;
 }
 
-/* XP */
+/* =========================
+   XP
+========================= */
 
 .xp-card{
-  margin:17px;
-  padding:20px;
-  border-radius:20px;
-  background:linear-gradient(135deg,#1264d6,#4c91ed);
+  margin:14px;
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
   color:white;
-  box-shadow:0 10px 25px rgba(18,100,214,.20);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 8px 25px rgba(23,105,224,.18);
 }
 
-.xp-label{
+.xp-title{
   font-size:14px;
-  opacity:.9;
+  font-weight:bold;
 }
 
 .xp{
-  margin-top:5px;
-  font-size:36px;
+  font-size:29px;
   font-weight:900;
+  margin-top:5px;
 }
 
-.rank{
-  margin-top:5px;
+.xp-text{
   font-size:12px;
+  margin-top:5px;
   opacity:.9;
 }
 
-/* SECTION */
+/* =========================
+   BADGES
+========================= */
 
-.section{
-  padding:0 16px;
+.badges{
+  margin:14px;
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
 }
 
 .section-title{
-  margin:23px 0 13px;
-  font-size:19px;
-  font-weight:900;
+  font-size:16px;
+  font-weight:800;
+  margin-bottom:12px;
 }
 
-/* BADGES */
-
-.badges{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-
-.badges::-webkit-scrollbar{
-  display:none;
+.badge-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
 }
 
 .badge{
-  min-width:88px;
-  height:90px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  background:white;
-  border:1px solid #e6edf8;
-  border-radius:17px;
-  box-shadow:0 5px 15px rgba(30,70,120,.06);
+  text-align:center;
+  padding:10px 4px;
+  background:#f7faff;
+  border-radius:12px;
+  font-size:11px;
 }
 
 .badge-icon{
-  font-size:29px;
+  font-size:25px;
+  margin-bottom:5px;
 }
 
-.badge span{
-  margin-top:5px;
-  font-size:10px;
-  color:#71809a;
-}
-
-/* POSTS */
-
-.create-post{
-  width:100%;
-  border:0;
-  padding:14px;
-  border-radius:15px;
-  background:#1264d6;
-  color:white;
-  font-weight:bold;
-}
-
-.post{
-  margin-top:13px;
-  padding:15px;
-  background:white;
-  border-radius:17px;
-  border:1px solid #e6edf8;
-  box-shadow:0 5px 15px rgba(30,70,120,.05);
-}
-
-.post-top{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.post-avatar{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  object-fit:cover;
-  background:#eaf3ff;
-}
-
-.post-name{
-  font-weight:bold;
-  font-size:14px;
-}
-
-.post-date{
-  font-size:10px;
-  color:#8995a8;
-  margin-top:2px;
-}
-
-.post-text{
-  margin-top:12px;
-  line-height:1.5;
-  font-size:14px;
-  word-break:break-word;
-}
-
-.post-image{
-  width:100%;
-  margin-top:10px;
-  border-radius:13px;
-  max-height:300px;
-  object-fit:cover;
-}
-
-.empty{
-  padding:25px;
-  text-align:center;
-  color:#7b8799;
-  background:white;
-  border-radius:17px;
-}
-
-/* BOTTOM NAV */
+/* =========================
+   BOTTOM NAV
+========================= */
 
 .bottom-nav{
   position:fixed;
-  bottom:0;
   left:50%;
   transform:translateX(-50%);
+  bottom:0;
   width:100%;
   max-width:430px;
-  height:70px;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  background:rgba(255,255,255,.96);
-  border-top:1px solid #e1e8f3;
-  z-index:50;
+  height:65px;
+  background:#fff;
+  border-top:1px solid #dbe7f5;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  z-index:100;
 }
 
 .nav-item{
-  text-align:center;
-  font-size:10px;
-  color:#7a879b;
+  border:none;
+  background:transparent;
+  color:#64748b;
+  font-size:11px;
   cursor:pointer;
 }
 
-.nav-icon{
+.nav-item span{
   display:block;
-  font-size:22px;
-  margin-bottom:3px;
+  font-size:21px;
+  margin-bottom:2px;
 }
 
 .nav-item.active{
-  color:#1264d6;
+  color:#1769e0;
   font-weight:bold;
 }
 
-/* MODAL */
+/* =========================
+   MODAL
+========================= */
 
 .modal{
-  display:none;
   position:fixed;
   inset:0;
-  z-index:100;
-  padding:18px;
-  align-items:center;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:flex-end;
   justify-content:center;
-  background:rgba(10,25,50,.45);
-  backdrop-filter:blur(7px);
+  z-index:200;
 }
 
 .modal.show{
@@ -377,572 +286,642 @@ button{
 
 .box{
   width:100%;
-  max-width:380px;
+  max-width:430px;
   max-height:88vh;
   overflow-y:auto;
-  padding:22px;
-  border-radius:23px;
-  background:white;
-  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  background:#fff;
+  border-radius:22px 22px 0 0;
+  padding:20px;
+  animation:up .2s ease;
+}
+
+@keyframes up{
+  from{
+    transform:translateY(100px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
 }
 
 .box-title{
-  font-size:21px;
+  font-size:19px;
   font-weight:900;
+  margin-bottom:6px;
 }
 
 .box-subtitle{
-  margin-top:6px;
-  color:#71809a;
-  font-size:13px;
+  color:#64748b;
+  font-size:12px;
   line-height:1.5;
-}
-
-.input,
-.textarea{
-  width:100%;
-  margin-top:14px;
-  padding:13px;
-  border:2px solid #e4eaf3;
-  border-radius:12px;
-  outline:none;
-  background:#f8fbff;
-}
-
-.textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.input:focus,
-.textarea:focus{
-  border-color:#1264d6;
+  margin-bottom:15px;
 }
 
 .buttons{
   display:flex;
-  gap:10px;
-  margin-top:16px;
+  gap:8px;
+  margin-top:14px;
 }
 
 .btn{
   flex:1;
-  min-height:45px;
-  border:0;
-  border-radius:12px;
-  font-weight:bold;
+  min-height:42px;
+  border:none;
+  border-radius:10px;
+  font-weight:800;
+  cursor:pointer;
 }
 
 .primary{
-  background:#1264d6;
+  background:#1769e0;
   color:white;
 }
 
 .cancel{
-  background:#edf1f6;
-  color:#555;
+  background:#eef5ff;
+  color:#1769e0;
 }
 
 .danger{
-  background:#ffe9e9;
-  color:#d93025;
+  background:#ef4444;
+  color:white;
 }
 
-/* MENU */
+/* =========================
+   INPUT
+========================= */
 
-.menu-list{
-  margin-top:17px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+.input{
+  width:100%;
+  height:43px;
+  border:1px solid #d6e2f0;
+  border-radius:10px;
+  padding:0 12px;
+  outline:none;
+  background:#f9fbff;
+  color:#172554;
+  margin-bottom:10px;
 }
+
+.input:focus{
+  border-color:#1769e0;
+}
+
+/* =========================
+   MENU
+========================= */
 
 .menu-item{
   width:100%;
-  min-height:50px;
-  border:0;
-  border-radius:13px;
-  background:#f4f7fb;
-  color:#172b4d;
+  min-height:48px;
+  border:none;
+  background:white;
   text-align:left;
-  padding:0 15px;
-  font-size:14px;
-  font-weight:bold;
+  padding:12px 4px;
+  font-size:15px;
+  color:#172554;
+  border-bottom:1px solid #edf2f7;
+  cursor:pointer;
 }
 
-.menu-item:active{
-  transform:scale(.98);
+.menu-item:last-child{
+  border-bottom:none;
 }
 
-.menu-item.danger-item{
-  color:#d93025;
-  background:#fff0f0;
-}
-
-/* SEARCH */
+/* =========================
+   SEARCH USERS
+========================= */
 
 .search-result{
-  margin-top:10px;
-  padding:12px;
   display:flex;
   align-items:center;
   gap:10px;
-  background:#f5f8fd;
-  border-radius:13px;
+  padding:12px 5px;
+  border-bottom:1px solid #edf2f7;
+  cursor:pointer;
 }
 
 .search-avatar{
-  width:45px;
-  height:45px;
+  width:43px;
+  height:43px;
   border-radius:50%;
+  background:#1769e0;
+  color:white;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#eaf3ff;
-  font-size:22px;
+  font-size:21px;
   flex-shrink:0;
 }
 
+.search-info{
+  flex:1;
+}
+
+.search-name{
+  font-weight:800;
+  font-size:14px;
+}
+
+.search-sub{
+  font-size:11px;
+  color:#64748b;
+  margin-top:3px;
+}
+
 .user-action{
-  margin-top:7px;
   display:flex;
-  gap:6px;
+  gap:5px;
 }
 
 .small-btn{
-  border:0;
-  border-radius:9px;
-  padding:7px 10px;
+  border:none;
+  border-radius:8px;
+  padding:7px 9px;
   font-size:11px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .follow-btn{
-  background:#1264d6;
+  background:#1769e0;
   color:white;
 }
 
 .following-btn{
-  background:#eaf3ff;
-  color:#1264d6;
+  background:#e9f2ff;
+  color:#1769e0;
 }
 
 .block-btn{
-  background:#ffe9e9;
-  color:#d93025;
+  background:#fee2e2;
+  color:#dc2626;
 }
 
-/* USER PROFILE */
+/* =========================
+   USER PROFILE
+========================= */
 
 .user-profile-top{
-  text-align:center;
-  padding:5px 0 15px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
 }
 
 .user-big-avatar{
-  width:85px;
-  height:85px;
-  margin:auto;
+  width:70px;
+  height:70px;
   border-radius:50%;
-  background:#eaf3ff;
+  background:#1769e0;
+  color:white;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:42px;
+  font-size:32px;
 }
 
 .user-big-name{
-  margin-top:10px;
-  font-size:21px;
+  font-size:19px;
   font-weight:900;
 }
 
 .user-stats{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:15px;
+  gap:10px;
 }
 
 .user-stat-box{
-  background:#f4f7fb;
-  padding:13px;
-  border-radius:13px;
+  background:#f7faff;
+  padding:15px;
+  border-radius:12px;
   text-align:center;
 }
 
 .user-stat-box strong{
   display:block;
-  font-size:18px;
+  font-size:20px;
 }
 
 .user-stat-box span{
+  color:#64748b;
   font-size:11px;
-  color:#7a879b;
 }
 
-/* SETTINGS */
+/* =========================
+   SOCIAL TOAST
+========================= */
 
-.setting{
-  margin-top:12px;
-  padding:14px;
-  background:#f4f7fb;
-  border-radius:14px;
-}
-
-.setting-title{
+.social-toast{
+  position:fixed;
+  left:50%;
+  bottom:82px;
+  transform:translateX(-50%) translateY(20px);
+  background:#172b4d;
+  color:#fff;
+  padding:11px 16px;
+  border-radius:999px;
+  font-size:13px;
   font-weight:bold;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:400;
+  max-width:90%;
+  text-align:center;
 }
 
-.setting-info{
-  margin-top:4px;
-  font-size:11px;
-  color:#77859a;
+.social-toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
 
-/* DARK */
+/* =========================
+   POSTS
+========================= */
+
+.post{
+  background:#fff;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:10px;
+}
+
+.post-top{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.post-avatar{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:#1769e0;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.post-text{
+  margin-top:10px;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.post-date{
+  font-size:10px;
+  color:#94a3b8;
+  margin-top:8px;
+}
+
+/* =========================
+   DARK MODE
+========================= */
 
 body.dark{
-  background:#0e1420;
-  color:#f4f7ff;
+  background:#0f172a;
+  color:#e5edff;
+}
+
+body.dark .app{
+  background:#0f172a;
 }
 
 body.dark .header,
 body.dark .profile,
 body.dark .stats,
-body.dark .bottom-nav{
-  background:#171e2d;
-  border-color:#293449;
+body.dark .badges,
+body.dark .bottom-nav,
+body.dark .box,
+body.dark .post{
+  background:#172033;
+  color:#e5edff;
 }
 
-body.dark .header-title,
-body.dark .username,
-body.dark .section-title{
-  color:white;
-}
-
-body.dark .header-btn{
-  background:#26334a;
-  color:#65a5ff;
+body.dark .header{
+  border-color:#26344c;
 }
 
 body.dark .bio,
-body.dark .stat span{
-  color:#aeb8c9;
+body.dark .box-subtitle,
+body.dark .search-sub,
+body.dark .stat span,
+body.dark .user-stat-box span{
+  color:#94a3b8;
+}
+
+body.dark .edit-btn,
+body.dark .cancel,
+body.dark .following-btn{
+  background:#22324e;
+  color:#7eb2ff;
 }
 
 body.dark .badge,
-body.dark .empty,
-body.dark .post{
-  background:#171e2d;
-  border-color:#293449;
-}
-
-body.dark .badge span,
-body.dark .post-date{
-  color:#aeb8c9;
-}
-
-body.dark .box{
-  background:#171e2d;
-}
-
-body.dark .box-title{
-  color:white;
-}
-
-body.dark .box-subtitle,
-body.dark .setting-info{
-  color:#aeb8c9;
-}
-
-body.dark .menu-item,
-body.dark .setting,
-body.dark .search-result,
 body.dark .user-stat-box{
-  background:#242e40;
-  color:white;
+  background:#1e2a40;
 }
 
-body.dark .input,
-body.dark .textarea{
-  background:#202a3b;
-  border-color:#354158;
-  color:white;
+body.dark .menu-item{
+  background:#172033;
+  color:#e5edff;
+  border-color:#26344c;
 }
 
-body.dark .cancel{
-  background:#303a4d;
-  color:white;
+body.dark .input{
+  background:#111827;
+  border-color:#334155;
+  color:#e5edff;
 }
 
-body.dark .following-btn{
-  background:#26334a;
-  color:#65a5ff;
+body.dark .search-result{
+  border-color:#26344c;
 }
 
-body.dark .user-stats span{
-  color:#aeb8c9;
+body.dark .social-toast{
+  background:#fff;
+  color:#172b4d;
 }
 
-#photoInput{
-  display:none;
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+  text-align:center;
+  color:#64748b;
+  padding:25px 10px;
+  font-size:13px;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
+<!-- =========================
+     HEADER
+========================= -->
+
 <header class="header">
 
-  <button class="header-btn" onclick="goHome()">←</button>
+  <button class="header-btn"
+          onclick="goHome()">
+    ←
+  </button>
 
-  <div class="header-title">Profile</div>
+  <div class="header-title">
+    Profile
+  </div>
 
-  <button class="header-btn" onclick="openMenu()">☰</button>
+  <button class="header-btn"
+          onclick="openMenu()">
+    ⋯
+  </button>
 
 </header>
 
 
+<!-- =========================
+     PROFILE
+========================= -->
+
 <section class="profile">
 
-  <div class="photo-wrap">
+  <div class="profile-top">
 
-    <img
-      id="profilePhoto"
-      class="profile-photo"
-      alt="Profile Photo"
-    >
+    <div class="avatar"
+         id="mainAvatar">
+      👤
+    </div>
 
-    <button
-      class="photo-edit"
-      onclick="choosePhoto()">
-      +
-    </button>
+    <div class="profile-info">
 
-  </div>
+      <div class="username"
+           id="profileUsername">
+        @student
+      </div>
 
-  <div
-    class="username"
-    id="username">
-    @student
-  </div>
+      <div class="bio">
+        📚 Learning • Growing • Achieving 🇮🇳
+      </div>
 
-  <div class="bio">
-    📚 Learning • Growing • Achieving
-  </div>
-
-  <div class="profile-actions">
-
-    <button
-      class="action-btn edit-btn"
-      onclick="openEdit()">
-      ✏️ Edit
-    </button>
-
-    <button
-      class="action-btn users-btn"
-      onclick="openUsers()">
-      👥 Users
-    </button>
+    </div>
 
   </div>
+
+  <button class="edit-btn"
+          onclick="openEditProfile()">
+    ✏️ Edit Profile
+  </button>
 
 </section>
 
+
+<!-- =========================
+     STATS
+========================= -->
 
 <section class="stats">
 
   <div class="stat"
        onclick="openMyPosts()">
+
     <strong id="postCount">0</strong>
     <span>Posts</span>
+
   </div>
 
   <div class="stat"
-       onclick="openFollowers()">
+       onclick="openSocialList('followers')">
+
     <strong id="followers">0</strong>
     <span>Followers</span>
+
   </div>
 
   <div class="stat"
-       onclick="openFollowing()">
+       onclick="openSocialList('following')">
+
     <strong id="following">0</strong>
     <span>Following</span>
+
   </div>
 
   <div class="stat">
+
     <strong>0</strong>
     <span>Badges</span>
+
   </div>
 
 </section>
 
 
-<section class="xp-card">
+<!-- =========================
+     XP
+========================= -->
 
-  <div class="xp-label">
+<div class="xp-card">
+
+  <div class="xp-title">
     🏆 My Gyan Points
   </div>
 
-  <div
-    class="xp"
-    id="profileXP">
+  <div class="xp">
     0 XP
   </div>
 
-  <div
-    class="rank"
-    id="profileRank">
-    Keep learning 🚀
+  <div class="xp-text">
+    Keep learning to climb the leaderboard 🚀
   </div>
 
-</section>
+</div>
 
 
-<section class="section">
+<!-- =========================
+     BADGES
+========================= -->
+
+<div class="badges">
 
   <div class="section-title">
-    🏅 Achievements
+    🏅 My Badges
   </div>
 
-  <div class="badges">
+  <div class="badge-grid">
 
     <div class="badge">
       <div class="badge-icon">🌱</div>
-      <span>Starter</span>
+      Starter
     </div>
 
     <div class="badge">
       <div class="badge-icon">📚</div>
-      <span>Learner</span>
+      Learner
     </div>
 
     <div class="badge">
       <div class="badge-icon">🔥</div>
-      <span>Streak</span>
+      Streak
     </div>
 
     <div class="badge">
       <div class="badge-icon">🏆</div>
-      <span>Topper</span>
+      Topper
     </div>
 
   </div>
 
+</div>
 
-  <div class="section-title">
-    📝 My Posts
-  </div>
-
-  <button
-    class="create-post"
-    onclick="openPost()">
-    ➕ Create New Post
-  </button>
-
-  <div id="posts"></div>
-
-</section>
-
-
-<nav class="bottom-nav">
-
-  <div class="nav-item" onclick="goHome()">
-    <span class="nav-icon">🏠</span>
-    Home
-  </div>
-
-  <div class="nav-item" onclick="goLearn()">
-    <span class="nav-icon">📚</span>
-    Learn
-  </div>
-
-  <div class="nav-item" onclick="goCreate()">
-    <span class="nav-icon">➕</span>
-    Create
-  </div>
-
-  <div class="nav-item" onclick="goRank()">
-    <span class="nav-icon">🏆</span>
-    Rank
-  </div>
-
-  <div class="nav-item active">
-    <span class="nav-icon">👤</span>
-    Profile
-  </div>
-
-</nav>
 
 </div>
 
 
-<input
-  type="file"
-  id="photoInput"
-  accept="image/*"
-  onchange="savePhoto(event)"
->
+<!-- =========================
+     BOTTOM NAV
+========================= -->
+
+<nav class="bottom-nav">
+
+  <button class="nav-item"
+          onclick="goHome()">
+    <span>🏠</span>
+    Home
+  </button>
+
+  <button class="nav-item"
+          onclick="goLearn()">
+    <span>📚</span>
+    Learn
+  </button>
+
+  <button class="nav-item"
+          onclick="goCreate()">
+    <span>➕</span>
+    Create
+  </button>
+
+  <button class="nav-item"
+          onclick="goRank()">
+    <span>🏆</span>
+    Rank
+  </button>
+
+  <button class="nav-item active">
+    <span>👤</span>
+    Profile
+  </button>
+
+</nav>
 
 
-<!-- MENU -->
+<!-- =========================
+     MENU MODAL
+========================= -->
 
-<div class="modal" id="menuModal">
+<div class="modal"
+     id="menuModal">
 
   <div class="box">
 
     <div class="box-title">
-      ☰ GyanSetu Menu
+      ⚙️ Menu
     </div>
 
-    <div class="box-subtitle">
-      Profile आणि app settings
-    </div>
-
-    <div class="menu-list">
+    <div style="margin-top:12px">
 
       <button class="menu-item"
-        onclick="openAccount()">
+              onclick="openAccountSettings()">
         👤 Account Settings
       </button>
 
       <button class="menu-item"
-        onclick="openNotification()">
+              onclick="openNotifications()">
         🔔 Notifications
       </button>
 
       <button class="menu-item"
-        onclick="toggleDark()">
+              onclick="toggleDarkMode()">
         🌙 Dark Mode
       </button>
 
       <button class="menu-item"
-        onclick="openPrivacy()">
-        🔒 Privacy
+              onclick="openPrivacy()">
+        🔐 Privacy
       </button>
 
       <button class="menu-item"
-        onclick="openAbout()">
+              onclick="openAbout()">
         ℹ️ About GyanSetu
       </button>
 
       <button class="menu-item"
-        onclick="openHelp()">
+              onclick="openHelp()">
         💬 Help & Feedback
       </button>
 
-      <button class="menu-item danger-item"
-        onclick="openReset()">
-        🔄 Reset App Data
+      <button class="menu-item"
+              onclick="openReset()">
+        ⚠️ Reset App Data
       </button>
 
-      <button class="menu-item"
-        onclick="closeMenu()">
-        ❌ Close Menu
+    </div>
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('menuModal')">
+        Close
       </button>
 
     </div>
@@ -952,9 +931,12 @@ body.dark .user-stats span{
 </div>
 
 
-<!-- EDIT -->
+<!-- =========================
+     EDIT PROFILE
+========================= -->
 
-<div class="modal" id="editModal">
+<div class="modal"
+     id="editProfileModal">
 
   <div class="box">
 
@@ -963,34 +945,22 @@ body.dark .user-stats span{
     </div>
 
     <div class="box-subtitle">
-      Profile photo आणि username बदला.
+      तुमचे username बदला.
     </div>
 
-    <button
-      class="btn primary"
-      style="width:100%;margin-top:16px;"
-      onclick="choosePhoto()">
-      📷 Change Profile Photo
-    </button>
-
-    <input
-      class="input"
-      id="usernameInput"
-      maxlength="20"
-      placeholder="Username"
-    >
+    <input class="input"
+           id="usernameInput"
+           placeholder="Username">
 
     <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('editModal')">
+      <button class="btn cancel"
+              onclick="closeModal('editProfileModal')">
         Cancel
       </button>
 
-      <button
-        class="btn primary"
-        onclick="saveProfile()">
+      <button class="btn primary"
+              onclick="saveProfile()">
         Save
       </button>
 
@@ -1001,291 +971,12 @@ body.dark .user-stats span{
 </div>
 
 
-<!-- ACCOUNT -->
-
-<div class="modal" id="accountModal">
-
-  <div class="box">
-
-    <div class="box-title">
-      👤 Account Settings
-    </div>
-
-    <div class="setting">
-
-      <div class="setting-title">
-        Username
-      </div>
-
-      <div
-        class="setting-info"
-        id="accountUsername">
-        @student
-      </div>
-
-    </div>
-
-    <div class="setting">
-
-      <div class="setting-title">
-        ➕ Add Account
-      </div>
-
-      <div class="setting-info">
-        Multiple account support नंतर online system सोबत जोडता येईल.
-      </div>
-
-    </div>
-
-    <div class="buttons">
-
-      <button
-        class="btn cancel"
-        onclick="closeModal('accountModal')">
-        Close
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- NOTIFICATION -->
-
-<div class="modal" id="notificationModal">
-
-  <div class="box">
-
-    <div class="box-title">
-      🔔 Study Reminder
-    </div>
-
-    <div class="box-subtitle">
-      अभ्यासासाठी reminder ची वेळ निवडा.
-    </div>
-
-    <input
-      type="time"
-      class="input"
-      id="reminderTime"
-    >
-
-    <div class="setting">
-
-      <div
-        class="setting-title"
-        id="reminderStatus">
-        Reminder OFF
-      </div>
-
-      <div class="setting-info">
-        Reminder वेळ browser मध्ये save होईल.
-      </div>
-
-    </div>
-
-    <div class="buttons">
-
-      <button
-        class="btn cancel"
-        onclick="closeModal('notificationModal')">
-        Close
-      </button>
-
-      <button
-        class="btn primary"
-        onclick="saveReminder()">
-        Set Reminder
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- PRIVACY -->
-
-<div class="modal" id="privacyModal">
-
-  <div class="box">
-
-    <div class="box-title">
-      🔒 Privacy
-    </div>
-
-    <div class="box-subtitle">
-      Private Notes उघडण्यासाठी तुमचा PIN टाका.
-    </div>
-
-    <input
-      class="input"
-      id="privacyPin"
-      type="password"
-      maxlength="10"
-      placeholder="Enter PIN"
-    >
-
-    <div class="buttons">
-
-      <button
-        class="btn cancel"
-        onclick="closeModal('privacyModal')">
-        Cancel
-      </button>
-
-      <button
-        class="btn primary"
-        onclick="checkPrivacy()">
-        Unlock
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- NOTES -->
-
-<div class="modal" id="notesModal">
-
-  <div class="box">
-
-    <div class="box-title">
-      🔐 Private Notes
-    </div>
-
-    <div class="box-subtitle">
-      ही note या device च्या local storage मध्ये save होईल.
-    </div>
-
-    <textarea
-      class="textarea"
-      id="privateNote"
-      placeholder="तुमची private note लिहा..."
-    ></textarea>
-
-    <div class="buttons">
-
-      <button
-        class="btn cancel"
-        onclick="closeModal('notesModal')">
-        Close
-      </button>
-
-      <button
-        class="btn primary"
-        onclick="saveNote()">
-        Save Note
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ABOUT -->
-
-<div class="modal" id="aboutModal">
-
-  <div class="box">
-
-    <div class="box-title">
-      🇮🇳 About GyanSetu
-    </div>
-
-    <div class="box-subtitle">
-
-      GyanSetu हा विद्यार्थ्यांसाठी तयार केलेला learning app आहे.<br><br>
-
-      1️⃣ मुलांना अभ्यासासाठी योग्य दिशा मिळावी.<br><br>
-
-      2️⃣ कठीण विषय सोप्या पद्धतीने शिकता यावेत.<br><br>
-
-      3️⃣ रोज थोडेसे नवीन ज्ञान मिळावे.<br><br>
-
-      4️⃣ विद्यार्थ्यांचा आत्मविश्वास वाढावा.<br><br>
-
-      5️⃣ अभ्यासामध्ये technology चा योग्य उपयोग व्हावा.<br><br>
-
-      6️⃣ प्रत्येक विद्यार्थ्याला स्वतःची प्रगती पाहता यावी.<br><br>
-
-      7️⃣ Learning अधिक interesting आणि interactive व्हावे.<br><br>
-
-      8️⃣ विद्यार्थ्यांना त्यांच्या ध्येयाकडे जाण्यास प्रेरणा मिळावी.<br><br>
-
-      9️⃣ आजचे ज्ञान उद्याचे मजबूत भविष्य तयार करावे.<br><br>
-
-      🔟 मुलांच्या उज्ज्वल भविष्यासाठी GyanSetu तयार केले आहे. ❤️
-
-    </div>
-
-    <div class="buttons">
-
-      <button
-        class="btn primary"
-        onclick="closeModal('aboutModal')">
-        Continue 🚀
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- HELP -->
-
-<div class="modal" id="helpModal">
-
-  <div class="box">
-
-    <div class="box-title">
-      💬 Help & Feedback
-    </div>
-
-    <div class="box-subtitle">
-      तुमचा feedback किंवा problem लिहा.
-    </div>
-
-    <textarea
-      class="textarea"
-      id="feedback"
-      placeholder="तुमचा feedback..."
-    ></textarea>
-
-    <div class="buttons">
-
-      <button
-        class="btn cancel"
-        onclick="closeModal('helpModal')">
-        Close
-      </button>
-
-      <button
-        class="btn primary"
-        onclick="goAI()">
-        Open AI 🤖
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- USERS -->
-
-<div class="modal" id="usersModal">
+<!-- =========================
+     USERS MODAL
+========================= -->
+
+<div class="modal"
+     id="usersModal">
 
   <div class="box">
 
@@ -1297,20 +988,17 @@ body.dark .user-stats span{
       GyanSetu वर registered users शोधा.
     </div>
 
-    <input
-      class="input"
-      id="userSearch"
-      placeholder="🔎 Search username..."
-      oninput="searchUsers()"
-    >
+    <input class="input"
+           id="userSearch"
+           placeholder="🔎 Search username..."
+           oninput="searchUsers()">
 
     <div id="userResults"></div>
 
     <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('usersModal')">
+      <button class="btn cancel"
+              onclick="closeModal('usersModal')">
         Close
       </button>
 
@@ -1321,9 +1009,12 @@ body.dark .user-stats span{
 </div>
 
 
-<!-- USER PROFILE -->
+<!-- =========================
+     USER PROFILE MODAL
+========================= -->
 
-<div class="modal" id="userProfileModal">
+<div class="modal"
+     id="userProfileModal">
 
   <div class="box">
 
@@ -1333,9 +1024,8 @@ body.dark .user-stats span{
         👤
       </div>
 
-      <div
-        class="user-big-name"
-        id="viewUsername">
+      <div class="user-big-name"
+           id="viewUsername">
         @student
       </div>
 
@@ -1344,29 +1034,41 @@ body.dark .user-stats span{
     <div class="user-stats">
 
       <div class="user-stat-box">
-        <strong id="viewFollowers">0</strong>
-        <span>Followers</span>
+
+        <strong id="viewFollowers">
+          0
+        </strong>
+
+        <span>
+          Followers
+        </span>
+
       </div>
 
       <div class="user-stat-box">
-        <strong id="viewFollowing">0</strong>
-        <span>Following</span>
+
+        <strong id="viewFollowing">
+          0
+        </strong>
+
+        <span>
+          Following
+        </span>
+
       </div>
 
     </div>
 
     <div class="buttons">
 
-      <button
-        class="btn primary"
-        id="viewFollowBtn"
-        onclick="toggleFollowFromProfile()">
+      <button class="btn primary"
+              id="viewFollowBtn"
+              onclick="toggleFollowFromProfile()">
         Follow
       </button>
 
-      <button
-        class="btn danger"
-        onclick="blockCurrentUser()">
+      <button class="btn danger"
+              onclick="blockCurrentUser()">
         🚫 Block
       </button>
 
@@ -1374,9 +1076,8 @@ body.dark .user-stats span{
 
     <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('userProfileModal')">
+      <button class="btn cancel"
+              onclick="closeModal('userProfileModal')">
         Close
       </button>
 
@@ -1387,15 +1088,17 @@ body.dark .user-stats span{
 </div>
 
 
-<!-- FOLLOWERS / FOLLOWING -->
+<!-- =========================
+     SOCIAL LIST
+========================= -->
 
-<div class="modal" id="socialListModal">
+<div class="modal"
+     id="socialListModal">
 
   <div class="box">
 
-    <div
-      class="box-title"
-      id="socialListTitle">
+    <div class="box-title"
+         id="socialListTitle">
       👥 Users
     </div>
 
@@ -1407,9 +1110,8 @@ body.dark .user-stats span{
 
     <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('socialListModal')">
+      <button class="btn cancel"
+              onclick="closeModal('socialListModal')">
         Close
       </button>
 
@@ -1420,45 +1122,44 @@ body.dark .user-stats span{
 </div>
 
 
-<!-- POST -->
+<!-- =========================
+     BLOCK CONFIRM
+========================= -->
 
-<div class="modal" id="postModal">
+<div class="modal"
+     id="blockConfirmModal">
 
   <div class="box">
 
     <div class="box-title">
-      📝 Create Post
+      🚫 Block User?
     </div>
 
     <div class="box-subtitle">
-      तुमचा learning moment share करा.
+
+      <strong id="blockConfirmName">
+        @student
+      </strong>
+
+      ला block करायचे आहे का?
+
+      <br><br>
+
+      Block केल्यावर follow connection हटेल आणि हा user Users,
+      Followers आणि Following मध्ये दिसणार नाही.
+
     </div>
-
-    <textarea
-      class="textarea"
-      id="postText"
-      placeholder="तुमच्या पोस्टमध्ये काय सांगायचे आहे?"
-    ></textarea>
-
-    <input
-      type="file"
-      class="input"
-      id="postImage"
-      accept="image/*"
-    >
 
     <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('postModal')">
+      <button class="btn cancel"
+              onclick="closeModal('blockConfirmModal')">
         Cancel
       </button>
 
-      <button
-        class="btn primary"
-        onclick="savePost()">
-        Post
+      <button class="btn danger"
+              onclick="confirmBlockUser()">
+        Block
       </button>
 
     </div>
@@ -1468,9 +1169,279 @@ body.dark .user-stats span{
 </div>
 
 
-<!-- RESET -->
+<!-- =========================
+     ACCOUNT SETTINGS
+========================= -->
 
-<div class="modal" id="resetModal">
+<div class="modal"
+     id="accountModal">
+
+  <div class="box">
+
+    <div class="box-title">
+      👤 Account Settings
+    </div>
+
+    <div class="box-subtitle">
+      तुमच्या GyanSetu account ची माहिती.
+    </div>
+
+    <input class="input"
+           id="accountName"
+           placeholder="Username">
+
+    <button class="menu-item"
+            onclick="addAccount()">
+      ➕ Add Account
+    </button>
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('accountModal')">
+        Close
+      </button>
+
+      <button class="btn primary"
+              onclick="saveAccountSettings()">
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     NOTIFICATIONS
+========================= -->
+
+<div class="modal"
+     id="notificationModal">
+
+  <div class="box">
+
+    <div class="box-title">
+      🔔 Learning Reminder
+    </div>
+
+    <div class="box-subtitle">
+      रोज अभ्यासाची आठवण ठेवण्यासाठी reminder set करा.
+    </div>
+
+    <label style="font-size:13px;font-weight:bold;">
+      ⏰ Reminder Time
+    </label>
+
+    <input class="input"
+           id="reminderTime"
+           type="time"
+           style="margin-top:7px">
+
+    <button class="btn primary"
+            onclick="saveReminder()">
+      Save Reminder
+    </button>
+
+    <div id="reminderStatus"
+         style="margin-top:12px;font-size:12px;color:#64748b;">
+    </div>
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('notificationModal')">
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     PRIVACY
+========================= -->
+
+<div class="modal"
+     id="privacyCodeModal">
+
+  <div class="box">
+
+    <div class="box-title">
+      🔐 Privacy
+    </div>
+
+    <div class="box-subtitle">
+      Private Notes उघडण्यासाठी code टाका.
+    </div>
+
+    <input class="input"
+           id="privacyCode"
+           type="password"
+           placeholder="Enter privacy code">
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('privacyCodeModal')">
+        Cancel
+      </button>
+
+      <button class="btn primary"
+              onclick="checkPrivacyCode()">
+        Continue
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     PRIVATE NOTES
+========================= -->
+
+<div class="modal"
+     id="notesModal">
+
+  <div class="box">
+
+    <div class="box-title">
+      🔒 Private Notes
+    </div>
+
+    <div class="box-subtitle">
+      ही notes फक्त तुमच्या device वर save होतील.
+    </div>
+
+    <textarea class="input"
+              id="privateNotes"
+              style="height:180px;padding-top:12px;resize:none;"
+              placeholder="तुमच्या private notes येथे लिहा..."></textarea>
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('notesModal')">
+        Close
+      </button>
+
+      <button class="btn primary"
+              onclick="savePrivateNotes()">
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<div class="modal"
+     id="aboutModal">
+
+  <div class="box">
+
+    <div class="box-title">
+      📚 About GyanSetu
+    </div>
+
+    <div class="box-subtitle"
+         style="font-size:14px;line-height:1.7;">
+
+      आम्ही हा app मुलांच्या भविष्य साठी तयार केला आहे.
+
+      <br><br>
+
+      GyanSetu चा उद्देश विद्यार्थ्यांना शिक्षण,
+      अभ्यास, प्रश्नमंजुषा आणि learning activities
+      एका सोप्या platform वर उपलब्ध करून देणे हा आहे.
+
+      <br><br>
+
+      📚 शिका  
+      <br>
+      🧠 समजा  
+      <br>
+      📝 सराव करा  
+      <br>
+      🏆 पुढे चला
+
+    </div>
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('aboutModal')">
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     HELP
+========================= -->
+
+<div class="modal"
+     id="helpModal">
+
+  <div class="box">
+
+    <div class="box-title">
+      💬 Help & Feedback
+    </div>
+
+    <div class="box-subtitle">
+      GyanSetu बद्दल तुमचा feedback लिहा.
+    </div>
+
+    <textarea class="input"
+              id="feedbackText"
+              style="height:140px;padding-top:12px;resize:none;"
+              placeholder="तुमचा feedback..."></textarea>
+
+    <div class="buttons">
+
+      <button class="btn cancel"
+              onclick="closeModal('helpModal')">
+        Close
+      </button>
+
+      <button class="btn primary"
+              onclick="sendFeedback()">
+        Send
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     RESET
+========================= -->
+
+<div class="modal"
+     id="resetModal">
 
   <div class="box">
 
@@ -1480,27 +1451,24 @@ body.dark .user-stats span{
 
     <div class="box-subtitle">
 
-      Username, profile photo, XP,
-      posts, notes, reminder आणि dark mode
-      यांसारखा local data delete होईल.
+      Local profile data, posts, notes आणि settings
+      या device मधून delete होतील.
 
       <br><br>
 
-      ही action पूर्ववत करता येणार नाही.
+      Supabase मधील account/follow data delete होणार नाही.
 
     </div>
 
     <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('resetModal')">
+      <button class="btn cancel"
+              onclick="closeModal('resetModal')">
         Cancel
       </button>
 
-      <button
-        class="btn danger"
-        onclick="confirmReset()">
+      <button class="btn danger"
+              onclick="resetAppData()">
         Reset
       </button>
 
@@ -1511,9 +1479,20 @@ body.dark .user-stats span{
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- =========================
+     TOAST
+========================= -->
+
+<div id="socialToast"
+     class="social-toast">
+</div>
+
 
 <script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const supabaseClient = supabase.createClient(
   "https://eqglttfffhvoyvrclzse.supabase.co",
@@ -1521,592 +1500,102 @@ const supabaseClient = supabase.createClient(
 );
 
 
-/* =========================
-   NAVIGATION
-========================= */
+/* =========================================================
+   STATE
+========================================================= */
+
+let selectedUserId = null;
+let selectedUserName = "";
+
+let pendingBlockUserId = null;
+let pendingBlockUserName = "";
+
+let currentSocialListType = "followers";
+
+
+/* =========================================================
+   BASIC NAVIGATION
+========================================================= */
 
 function goHome(){
-  window.location.href = "home.html";
+  window.location.href="home.html";
 }
 
 function goLearn(){
-  window.location.href = "learn.html";
+  window.location.href="learn.html";
 }
 
 function goCreate(){
-  window.location.href = "create.html";
+  window.location.href="create.html";
 }
 
 function goRank(){
-  window.location.href = "leaderboard.html";
-}
-
-function goAI(){
-  window.location.href = "ai.html";
+  window.location.href="rank.html";
 }
 
 
-/* =========================
-   MODALS
-========================= */
+/* =========================================================
+   MODAL
+========================================================= */
 
 function openModal(id){
-  const el = document.getElementById(id);
+
+  const el=document.getElementById(id);
 
   if(el){
     el.classList.add("show");
   }
+
 }
 
 function closeModal(id){
-  const el = document.getElementById(id);
+
+  const el=document.getElementById(id);
 
   if(el){
     el.classList.remove("show");
   }
-}
-
-
-/* =========================
-   MENU
-========================= */
-
-function openMenu(){
-  openModal("menuModal");
-}
-
-function closeMenu(){
-  closeModal("menuModal");
-}
-
-
-/* =========================
-   USERNAME
-========================= */
-
-function loadUsername(){
-
-  const name =
-    localStorage.getItem("gyansetu_username")
-    || "student";
-
-  document.getElementById("username")
-    .textContent = "@" + name;
-
-  document.getElementById("accountUsername")
-    .textContent = "@" + name;
-}
-
-
-/* =========================
-   PHOTO
-========================= */
-
-function loadPhoto(){
-
-  const saved =
-    localStorage.getItem(
-      "gyansetu_profile_photo"
-    );
-
-  const img =
-    document.getElementById("profilePhoto");
-
-  if(saved){
-
-    img.src = saved;
-
-  }else{
-
-    img.src =
-      "data:image/svg+xml;charset=UTF-8," +
-      encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg"
-        width="200"
-        height="200">
-
-          <rect
-            width="100%"
-            height="100%"
-            fill="#eaf3ff"/>
-
-          <text
-            x="50%"
-            y="58%"
-            text-anchor="middle"
-            font-size="80">
-            👤
-          </text>
-
-        </svg>
-      `);
-
-  }
-}
-
-
-function choosePhoto(){
-
-  document.getElementById(
-    "photoInput"
-  ).click();
 
 }
 
 
-function savePhoto(event){
+/* =========================================================
+   TOAST
+========================================================= */
 
-  const file =
-    event.target.files[0];
+function showSocialToast(message){
 
-  if(!file) return;
+  const toast=document.getElementById("socialToast");
 
-  const reader =
-    new FileReader();
+  if(!toast) return;
 
-  reader.onload = function(){
+  toast.textContent=message;
 
-    localStorage.setItem(
-      "gyansetu_profile_photo",
-      reader.result
-    );
+  toast.classList.add("show");
 
-    loadPhoto();
+  clearTimeout(window.__socialToastTimer);
 
-  };
+  window.__socialToastTimer=setTimeout(()=>{
 
-  reader.readAsDataURL(file);
-}
+    toast.classList.remove("show");
 
-
-/* =========================
-   EDIT PROFILE
-========================= */
-
-function openEdit(){
-
-  document.getElementById(
-    "usernameInput"
-  ).value =
-    localStorage.getItem(
-      "gyansetu_username"
-    ) || "student";
-
-  openModal("editModal");
-}
-
-
-function saveProfile(){
-
-  const name =
-    document.getElementById(
-      "usernameInput"
-    ).value.trim();
-
-  if(!name){
-
-    alert("कृपया username टाका.");
-
-    return;
-
-  }
-
-  localStorage.setItem(
-    "gyansetu_username",
-    name
-  );
-
-  loadUsername();
-
-  loadPosts();
-
-  closeModal("editModal");
+  },2200);
 
 }
 
 
-/* =========================
-   XP
-========================= */
-
-function loadXP(){
-
-  const xp =
-    Number(
-      localStorage.getItem(
-        "gyansetu_xp"
-      )
-    ) || 0;
-
-  document.getElementById(
-    "profileXP"
-  ).textContent =
-    xp + " XP";
-
-  loadRank(xp);
-}
-
-
-function loadRank(xp){
-
-  let users = [];
-
-  try{
-
-    users =
-      JSON.parse(
-        localStorage.getItem(
-          "gyansetu_leaderboard"
-        )
-      ) || [];
-
-  }catch(error){
-
-    users = [];
-
-  }
-
-  const username =
-    localStorage.getItem(
-      "gyansetu_username"
-    ) || "student";
-
-  let found = false;
-
-  users =
-    users.map(function(user){
-
-      if(user.username === username){
-
-        found = true;
-
-        return {
-          username:username,
-          xp:xp
-        };
-
-      }
-
-      return user;
-
-    });
-
-
-  if(!found){
-
-    users.push({
-      username:username,
-      xp:xp
-    });
-
-  }
-
-
-  users.sort(function(a,b){
-
-    return Number(b.xp) -
-           Number(a.xp);
-
-  });
-
-
-  const rank =
-    users.findIndex(function(user){
-
-      return user.username === username;
-
-    }) + 1;
-
-
-  document.getElementById(
-    "profileRank"
-  ).textContent =
-    "🏆 Current Rank #" +
-    rank +
-    " • Keep learning 🚀";
-
-}
-
-
-/* =========================
-   ACCOUNT
-========================= */
-
-function openAccount(){
-
-  closeMenu();
-
-  loadUsername();
-
-  openModal("accountModal");
-
-}
-
-
-/* =========================
-   NOTIFICATIONS
-========================= */
-
-function openNotification(){
-
-  closeMenu();
-
-  const saved =
-    localStorage.getItem(
-      "gyansetu_reminder_time"
-    );
-
-  const timeInput =
-    document.getElementById(
-      "reminderTime"
-    );
-
-  const status =
-    document.getElementById(
-      "reminderStatus"
-    );
-
-  if(saved){
-
-    timeInput.value = saved;
-
-    status.textContent =
-      "🔔 Reminder: " + saved;
-
-  }else{
-
-    timeInput.value = "";
-
-    status.textContent =
-      "Reminder OFF";
-
-  }
-
-  openModal("notificationModal");
-
-}
-
-
-function saveReminder(){
-
-  const time =
-    document.getElementById(
-      "reminderTime"
-    ).value;
-
-  if(!time){
-
-    alert(
-      "कृपया reminder ची वेळ निवडा."
-    );
-
-    return;
-
-  }
-
-  localStorage.setItem(
-    "gyansetu_reminder_time",
-    time
-  );
-
-  document.getElementById(
-    "reminderStatus"
-  ).textContent =
-    "🔔 Reminder: " + time;
-
-  alert(
-    "⏰ Reminder " +
-    time +
-    " साठी save झाला."
-  );
-
-}
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-function loadDarkMode(){
-
-  const mode =
-    localStorage.getItem(
-      "gyansetu_dark_mode"
-    );
-
-  if(mode === "on"){
-
-    document.body.classList.add("dark");
-
-  }
-
-}
-
-
-function toggleDark(){
-
-  const isDark =
-    document.body.classList.toggle("dark");
-
-  localStorage.setItem(
-    "gyansetu_dark_mode",
-    isDark ? "on" : "off"
-  );
-
-  closeMenu();
-
-}
-
-
-/* =========================
-   PRIVACY
-========================= */
-
-function openPrivacy(){
-
-  closeMenu();
-
-  document.getElementById(
-    "privacyPin"
-  ).value = "";
-
-  openModal("privacyModal");
-
-}
-
-
-function checkPrivacy(){
-
-  const entered =
-    document.getElementById(
-      "privacyPin"
-    ).value.trim();
-
-  if(!entered){
-
-    alert("कृपया PIN टाका.");
-
-    return;
-
-  }
-
-  let saved =
-    localStorage.getItem(
-      "gyansetu_privacy_pin"
-    );
-
-
-  if(!saved){
-
-    localStorage.setItem(
-      "gyansetu_privacy_pin",
-      entered
-    );
-
-    saved = entered;
-
-    alert(
-      "🔐 Privacy PIN तयार झाला."
-    );
-
-  }
-
-
-  if(entered !== saved){
-
-    alert("❌ चुकीचा PIN.");
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "privateNote"
-  ).value =
-    localStorage.getItem(
-      "gyansetu_private_note"
-    ) || "";
-
-  closeModal("privacyModal");
-
-  openModal("notesModal");
-
-}
-
-
-function saveNote(){
-
-  const note =
-    document.getElementById(
-      "privateNote"
-    ).value;
-
-  localStorage.setItem(
-    "gyansetu_private_note",
-    note
-  );
-
-  alert(
-    "🔐 Private note save झाली."
-  );
-
-  closeModal("notesModal");
-
-}
-
-
-/* =========================
-   ABOUT
-========================= */
-
-function openAbout(){
-
-  closeMenu();
-
-  openModal("aboutModal");
-
-}
-
-
-/* =========================
-   HELP
-========================= */
-
-function openHelp(){
-
-  closeMenu();
-
-  openModal("helpModal");
-
-}
-
-
-/* ==================================================
-   SUPABASE USER / SOCIAL FUNCTIONS
-================================================== */
+/* =========================================================
+   CURRENT USER
+========================================================= */
 
 async function getCurrentUser(){
 
-  try{
+  const {
+    data,
+    error
+  }=await supabaseClient.auth.getUser();
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth.getUser();
-
-    if(error){
-
-      console.error(error);
-
-      return null;
-
-    }
-
-    return data.user || null;
-
-  }catch(error){
+  if(error){
 
     console.error(error);
 
@@ -2114,33 +1603,29 @@ async function getCurrentUser(){
 
   }
 
+  return data?.user || null;
+
 }
 
 
-/* =========================
-   FIND CURRENT PROFILE
-========================= */
+/* =========================================================
+   CURRENT PROFILE
+========================================================= */
 
 async function getCurrentProfile(){
 
-  const authUser =
-    await getCurrentUser();
+  const user=await getCurrentUser();
 
-  if(!authUser){
-
-    return null;
-
-  }
+  if(!user) return null;
 
   const {
     data,
     error
-  } =
-    await supabaseClient
-      .from("Profiles")
-      .select("id, username, created_at")
-      .eq("id", authUser.id)
-      .maybeSingle();
+  }=await supabaseClient
+    .from("Profiles")
+    .select("*")
+    .eq("id",user.id)
+    .maybeSingle();
 
   if(error){
 
@@ -2155,79 +1640,364 @@ async function getCurrentProfile(){
 }
 
 
-/* =========================
-   FOLLOW COUNTS
-========================= */
+/* =========================================================
+   LOAD PROFILE
+========================================================= */
+
+async function loadProfile(){
+
+  const profile=await getCurrentProfile();
+
+  const localName=
+    localStorage.getItem("gyansetu_username") ||
+    "student";
+
+  const name=
+    profile?.username ||
+    localName ||
+    "student";
+
+  document.getElementById("profileUsername")
+    .textContent="@"+name;
+
+  document.getElementById("usernameInput")
+    .value=name;
+
+  document.getElementById("accountName")
+    .value=name;
+
+}
+
+
+/* =========================================================
+   SOCIAL COUNTS
+========================================================= */
 
 async function loadSocialCounts(){
 
-  const profile =
-    await getCurrentProfile();
+  const profile=await getCurrentProfile();
 
   if(!profile){
 
-    document.getElementById(
-      "followers"
-    ).textContent = "0";
+    document.getElementById("followers")
+      .textContent="0";
 
-    document.getElementById(
-      "following"
-    ).textContent = "0";
+    document.getElementById("following")
+      .textContent="0";
+
+    return;
+
+  }
+
+  const blockedIds=
+    await getBlockedUserIds(profile.id);
+
+
+  const followerResult=
+    await supabaseClient
+      .from("Follows")
+      .select("follower_id")
+      .eq("following_id",profile.id);
+
+
+  const followingResult=
+    await supabaseClient
+      .from("Follows")
+      .select("following_id")
+      .eq("follower_id",profile.id);
+
+
+  const followersList=
+    (followerResult.data || [])
+      .filter(row=>!blockedIds.has(row.follower_id));
+
+
+  const followingList=
+    (followingResult.data || [])
+      .filter(row=>!blockedIds.has(row.following_id));
+
+
+  document.getElementById("followers")
+    .textContent=followersList.length;
+
+  document.getElementById("following")
+    .textContent=followingList.length;
+
+}
+
+
+/* =========================================================
+   BLOCKED IDS
+========================================================= */
+
+async function getBlockedUserIds(uid){
+
+  const [
+    mine,
+    theirs
+  ]=await Promise.all([
+
+    supabaseClient
+      .from("Blocks")
+      .select("blocked_id")
+      .eq("blocker_id",uid),
+
+    supabaseClient
+      .from("Blocks")
+      .select("blocker_id")
+      .eq("blocked_id",uid)
+
+  ]);
+
+
+  if(mine.error)
+    console.error(mine.error);
+
+  if(theirs.error)
+    console.error(theirs.error);
+
+
+  const set=new Set();
+
+
+  (mine.data || []).forEach(row=>{
+    set.add(row.blocked_id);
+  });
+
+
+  (theirs.data || []).forEach(row=>{
+    set.add(row.blocker_id);
+  });
+
+
+  return set;
+
+}
+
+
+/* =========================================================
+   CHECK FOLLOWING
+========================================================= */
+
+async function isFollowing(followerId,followingId){
+
+  const {
+    data,
+    error
+  }=await supabaseClient
+    .from("Follows")
+    .select("follower_id")
+    .eq("follower_id",followerId)
+    .eq("following_id",followingId)
+    .maybeSingle();
+
+  if(error){
+
+    console.error(error);
+
+    return false;
+
+  }
+
+  return !!data;
+
+}
+
+
+/* =========================================================
+   SEARCH USERS
+========================================================= */
+
+async function searchUsers(){
+
+  const box=
+    document.getElementById("userResults");
+
+  const query=
+    document.getElementById("userSearch")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  const current=
+    await getCurrentUser();
+
+
+  if(!current){
+
+    box.innerHTML=
+      `<div class="empty">Login required.</div>`;
 
     return;
 
   }
 
 
-  const followerResult =
-    await supabaseClient
-      .from("Follows")
-      .select("*", {
-        count:"exact",
-        head:true
-      })
-      .eq(
-        "following_id",
-        profile.id
+  const blockedIds=
+    await getBlockedUserIds(current.id);
+
+
+  let request=
+    supabaseClient
+      .from("Profiles")
+      .select("id,username")
+      .limit(50);
+
+
+  if(query){
+
+    request=request.ilike(
+      "username",
+      "%"+query+"%"
+    );
+
+  }
+
+
+  const {
+    data,
+    error
+  }=await request;
+
+
+  if(error){
+
+    console.error(error);
+
+    box.innerHTML=
+      `<div class="empty">
+        Users load होत नाहीत.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const users=(data || []).filter(user=>{
+
+    if(user.id===current.id)
+      return false;
+
+    if(blockedIds.has(user.id))
+      return false;
+
+    return true;
+
+  });
+
+
+  if(!users.length){
+
+    box.innerHTML=
+      `<div class="empty">
+        User सापडला नाही.
+      </div>`;
+
+    return;
+
+  }
+
+
+  box.innerHTML="";
+
+
+  for(const user of users){
+
+    const following=
+      await isFollowing(
+        current.id,
+        user.id
       );
 
 
-  const followingResult =
-    await supabaseClient
-      .from("Follows")
-      .select("*", {
-        count:"exact",
-        head:true
-      })
-      .eq(
-        "follower_id",
-        profile.id
-      );
+    const row=
+      document.createElement("div");
+
+    row.className="search-result";
 
 
-  document.getElementById(
-    "followers"
-  ).textContent =
-    followerResult.count || 0;
+    row.onclick=()=>{
+
+      openUserProfile(user.id);
+
+    };
 
 
-  document.getElementById(
-    "following"
-  ).textContent =
-    followingResult.count || 0;
+    row.innerHTML=`
+
+      <div class="search-avatar">
+        👤
+      </div>
+
+      <div class="search-info">
+
+        <div class="search-name">
+          @${escapeHtml(user.username || "student")}
+        </div>
+
+        <div class="search-sub">
+          GyanSetu Student
+        </div>
+
+      </div>
+
+      <div class="user-action">
+
+        <button
+          class="small-btn ${
+            following
+            ? "following-btn"
+            : "follow-btn"
+          }"
+          onclick="
+            event.stopPropagation();
+            toggleFollow('${user.id}');
+          ">
+
+          ${
+            following
+            ? "✓ Following"
+            : "Follow"
+          }
+
+        </button>
+
+        <button
+          class="small-btn block-btn"
+          onclick="
+            event.stopPropagation();
+            openBlockConfirm(
+              '${user.id}',
+              '${escapeJs(user.username || "student")}'
+            );
+          ">
+
+          Block
+
+        </button>
+
+      </div>
+
+    `;
+
+
+    box.appendChild(row);
+
+  }
 
 }
 
 
-/* =========================
-   USERS
-========================= */
+/* =========================================================
+   OPEN USERS
+========================================================= */
 
 function openUsers(){
 
-  document.getElementById(
-    "userSearch"
-  ).value = "";
+  document.getElementById("userSearch")
+    .value="";
 
   openModal("usersModal");
 
@@ -2236,355 +2006,171 @@ function openUsers(){
 }
 
 
-async function searchUsers(){
+/* =========================================================
+   USER PROFILE
+========================================================= */
 
-  const query =
-    document.getElementById(
-      "userSearch"
-    ).value
-    .trim();
+async function openUserProfile(userId){
 
+  const current=
+    await getCurrentUser();
 
-  const resultBox =
-    document.getElementById(
-      "userResults"
-    );
+  if(!current){
 
+    showSocialToast("Login करा.");
 
-  resultBox.innerHTML = `
-    <div class="empty"
-         style="margin-top:12px;">
-      🔄 Users शोधत आहे...
-    </div>
-  `;
-
-
-  try{
-
-    const current =
-      await getCurrentProfile();
-
-
-    let request =
-      supabaseClient
-        .from("Profiles")
-        .select(
-          "id, username, created_at"
-        )
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        )
-        .limit(50);
-
-
-    if(query){
-
-      request =
-        request.ilike(
-          "username",
-          `%${query}%`
-        );
-
-    }
-
-
-    const {
-      data,
-      error
-    } =
-      await request;
-
-
-    if(error){
-
-      console.error(
-        "USERS ERROR:",
-        error
-      );
-
-      resultBox.innerHTML = `
-        <div class="empty"
-             style="margin-top:12px;">
-          ❌ Users load झाले नाहीत.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    let users =
-      data || [];
-
-
-    if(current){
-
-      users =
-        users.filter(function(user){
-
-          return user.id !== current.id;
-
-        });
-
-    }
-
-
-    if(!users.length){
-
-      resultBox.innerHTML = `
-        <div class="empty"
-             style="margin-top:12px;">
-          😕 कोणताही User सापडला नाही.
-        </div>
-      `;
-
-      return;
-
-    }
-
-
-    resultBox.innerHTML = "";
-
-
-    for(
-      const user of users
-    ){
-
-      const blocked =
-        current
-        ? await isBlocked(
-            current.id,
-            user.id
-          )
-        : false;
-
-
-      if(blocked){
-
-        continue;
-
-      }
-
-
-      const following =
-        current
-        ? await isFollowing(
-            current.id,
-            user.id
-          )
-        : false;
-
-
-      const div =
-        document.createElement("div");
-
-      div.className =
-        "search-result";
-
-
-      div.innerHTML = `
-
-        <div class="search-avatar">
-          👤
-        </div>
-
-        <div style="flex:1;">
-
-          <strong>
-            @${escapeHTML(
-              user.username || "student"
-            )}
-          </strong>
-
-          <div class="user-action">
-
-            <button
-              class="small-btn ${
-                following
-                ? "following-btn"
-                : "follow-btn"
-              }"
-              onclick="toggleFollow('${user.id}')">
-
-              ${
-                following
-                ? "Following"
-                : "Follow"
-              }
-
-            </button>
-
-            <button
-              class="small-btn block-btn"
-              onclick="blockUser('${user.id}')">
-
-              🚫 Block
-
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      div.addEventListener(
-        "click",
-        function(event){
-
-          if(
-            event.target.tagName === "BUTTON"
-          ){
-
-            return;
-
-          }
-
-          openUserProfile(user.id);
-
-        }
-      );
-
-
-      resultBox.appendChild(div);
-
-    }
-
-
-    if(!resultBox.children.length){
-
-      resultBox.innerHTML = `
-        <div class="empty"
-             style="margin-top:12px;">
-          😕 कोणताही User सापडला नाही.
-        </div>
-      `;
-
-    }
-
-
-  }catch(error){
-
-    console.error(
-      "SEARCH ERROR:",
-      error
-    );
-
-    resultBox.innerHTML = `
-      <div class="empty"
-           style="margin-top:12px;">
-        ❌ Something went wrong.
-      </div>
-    `;
+    return;
 
   }
 
-}
+
+  const blockedIds=
+    await getBlockedUserIds(current.id);
 
 
-/* =========================
-   FOLLOW CHECK
-========================= */
+  if(blockedIds.has(userId)){
 
-async function isFollowing(
-  followerId,
-  followingId
-){
+    showSocialToast(
+      "हा user उपलब्ध नाही."
+    );
+
+    return;
+
+  }
+
 
   const {
-    data,
+    data:user,
     error
-  } =
-    await supabaseClient
+  }=await supabaseClient
+    .from("Profiles")
+    .select("id,username")
+    .eq("id",userId)
+    .maybeSingle();
+
+
+  if(error || !user){
+
+    console.error(error);
+
+    showSocialToast(
+      "User profile load झाला नाही."
+    );
+
+    return;
+
+  }
+
+
+  selectedUserId=user.id;
+
+  selectedUserName=user.username || "student";
+
+
+  document.getElementById("viewUsername")
+    .textContent="@"+selectedUserName;
+
+
+  const [
+    followersResult,
+    followingResult
+  ]=await Promise.all([
+
+    supabaseClient
       .from("Follows")
       .select("follower_id")
-      .eq(
-        "follower_id",
-        followerId
-      )
-      .eq(
-        "following_id",
-        followingId
-      )
-      .maybeSingle();
+      .eq("following_id",userId),
+
+    supabaseClient
+      .from("Follows")
+      .select("following_id")
+      .eq("follower_id",userId)
+
+  ]);
 
 
-  if(error){
-
-    console.error(error);
-
-    return false;
-
-  }
+  const followerIds=
+    (followersResult.data || [])
+      .map(row=>row.follower_id)
+      .filter(id=>!blockedIds.has(id));
 
 
-  return !!data;
-
-}
-
-
-/* =========================
-   BLOCK CHECK
-========================= */
-
-async function isBlocked(
-  blockerId,
-  blockedId
-){
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient
-      .from("Blocks")
-      .select("blocker_id")
-      .eq(
-        "blocker_id",
-        blockerId
-      )
-      .eq(
-        "blocked_id",
-        blockedId
-      )
-      .maybeSingle();
+  const followingIds=
+    (followingResult.data || [])
+      .map(row=>row.following_id)
+      .filter(id=>!blockedIds.has(id));
 
 
-  if(error){
+  document.getElementById("viewFollowers")
+    .textContent=followerIds.length;
 
-    console.error(error);
-
-    return false;
-
-  }
+  document.getElementById("viewFollowing")
+    .textContent=followingIds.length;
 
 
-  return !!data;
+  const following=
+    await isFollowing(
+      current.id,
+      userId
+    );
+
+
+  const followBtn=
+    document.getElementById("viewFollowBtn");
+
+
+  followBtn.textContent=
+    following
+    ? "✓ Following"
+    : "➕ Follow";
+
+
+  followBtn.className=
+    "btn "+
+    (following
+      ? "cancel"
+      : "primary");
+
+
+  openModal("userProfileModal");
 
 }
 
 
-/* =========================
-   TOGGLE FOLLOW
-========================= */
+/* =========================================================
+   FOLLOW / UNFOLLOW
+========================================================= */
 
-async function toggleFollow(
-  targetId
-){
+async function toggleFollow(targetId){
 
-  const current =
-    await getCurrentProfile();
+  const current=
+    await getCurrentUser();
 
 
   if(!current){
 
-    alert(
-      "कृपया आधी login करा."
+    showSocialToast("Login करा.");
+
+    return;
+
+  }
+
+
+  if(current.id===targetId){
+
+    return;
+
+  }
+
+
+  const blockedIds=
+    await getBlockedUserIds(current.id);
+
+
+  if(blockedIds.has(targetId)){
+
+    showSocialToast(
+      "हा user उपलब्ध नाही."
     );
 
     return;
@@ -2592,14 +2178,7 @@ async function toggleFollow(
   }
 
 
-  if(current.id === targetId){
-
-    return;
-
-  }
-
-
-  const following =
+  const following=
     await isFollowing(
       current.id,
       targetId
@@ -2610,1205 +2189,1330 @@ async function toggleFollow(
 
     const {
       error
-    } =
-      await supabaseClient
-        .from("Follows")
-        .delete()
-        .eq(
-          "follower_id",
-          current.id
-        )
-        .eq(
-          "following_id",
-          targetId
-        );
+    }=await supabaseClient
+      .from("Follows")
+      .delete()
+      .eq("follower_id",current.id)
+      .eq("following_id",targetId);
 
 
     if(error){
 
       console.error(error);
 
-      alert(
-        "❌ Unfollow करता आले नाही."
+      showSocialToast(
+        "Unfollow करता आले नाही."
       );
 
       return;
 
     }
+
+
+    showSocialToast(
+      "Unfollow केले."
+    );
 
   }else{
 
-    const blocked =
-      await isBlocked(
-        targetId,
-        current.id
-      );
-
-
-    if(blocked){
-
-      alert(
-        "हा user तुम्हाला block केलेला आहे."
-      );
-
-      return;
-
-    }
-
-
     const {
       error
-    } =
-      await supabaseClient
-        .from("Follows")
-        .insert({
-          follower_id:current.id,
-          following_id:targetId
-        });
+    }=await supabaseClient
+      .from("Follows")
+      .insert({
+
+        follower_id:current.id,
+        following_id:targetId
+
+      });
 
 
     if(error){
 
       console.error(error);
 
-      alert(
-        "❌ Follow करता आले नाही."
+      showSocialToast(
+        "Follow करता आले नाही."
       );
 
       return;
 
     }
 
+
+    showSocialToast(
+      "Following ✓"
+    );
+
   }
 
 
   await loadSocialCounts();
 
-  await searchUsers();
-
-}
-
-
-/* =========================
-   USER PROFILE
-========================= */
-
-let selectedUserId = null;
-
-
-async function openUserProfile(
-  userId
-){
-
-  selectedUserId =
-    userId;
-
-
-  const {
-    data:user,
-    error
-  } =
-    await supabaseClient
-      .from("Profiles")
-      .select(
-        "id, username"
-      )
-      .eq(
-        "id",
-        userId
-      )
-      .maybeSingle();
-
-
-  if(error || !user){
-
-    alert(
-      "User profile load झाला नाही."
-    );
-
-    return;
-
-  }
-
-
-  const followerResult =
-    await supabaseClient
-      .from("Follows")
-      .select("*", {
-        count:"exact",
-        head:true
-      })
-      .eq(
-        "following_id",
-        userId
-      );
-
-
-  const followingResult =
-    await supabaseClient
-      .from("Follows")
-      .select("*", {
-        count:"exact",
-        head:true
-      })
-      .eq(
-        "follower_id",
-        userId
-      );
-
-
-  document.getElementById(
-    "viewUsername"
-  ).textContent =
-    "@" +
-    (user.username || "student");
-
-
-  document.getElementById(
-    "viewFollowers"
-  ).textContent =
-    followerResult.count || 0;
-
-
-  document.getElementById(
-    "viewFollowing"
-  ).textContent =
-    followingResult.count || 0;
-
-
-  const current =
-    await getCurrentProfile();
-
-
-  const button =
-    document.getElementById(
-      "viewFollowBtn"
-    );
-
-
-  if(current){
-
-    const following =
-      await isFollowing(
-        current.id,
-        userId
-      );
-
-
-    button.textContent =
-      following
-      ? "Following"
-      : "Follow";
-
-
-    button.className =
-      "btn " +
-      (
-        following
-        ? "following-btn"
-        : "primary"
-      );
-
-  }
-
-
-  openModal(
-    "userProfileModal"
-  );
-
-}
-
-
-/* =========================
-   FOLLOW FROM PROFILE
-========================= */
-
-async function toggleFollowFromProfile(){
-
-  if(!selectedUserId){
-
-    return;
-
-  }
-
-
-  await toggleFollow(
-    selectedUserId
-  );
-
-
-  await openUserProfile(
-    selectedUserId
-  );
-
-}
-
-
-/* =========================
-   BLOCK USER
-========================= */
-
-async function blockUser(
-  targetId
-){
-
-  const current =
-    await getCurrentProfile();
-
-
-  if(!current){
-
-    alert(
-      "कृपया आधी login करा."
-    );
-
-    return;
-
-  }
-
-
-  const confirmBlock =
-    confirm(
-      "हा user block करायचा आहे का?"
-    );
-
-
-  if(!confirmBlock){
-
-    return;
-
-  }
-
-
-  await performBlock(
-    current.id,
-    targetId
-  );
-
-
-  await searchUsers();
-
-  await loadSocialCounts();
-
-}
-
-
-async function performBlock(
-  currentId,
-  targetId
-){
-
-  /* REMOVE FOLLOW BOTH SIDES */
-
-  await supabaseClient
-    .from("Follows")
-    .delete()
-    .eq(
-      "follower_id",
-      currentId
-    )
-    .eq(
-      "following_id",
-      targetId
-    );
-
-
-  await supabaseClient
-    .from("Follows")
-    .delete()
-    .eq(
-      "follower_id",
-      targetId
-    )
-    .eq(
-      "following_id",
-      currentId
-    );
-
-
-  /* ADD BLOCK */
-
-  const {
-    error
-  } =
-    await supabaseClient
-      .from("Blocks")
-      .upsert({
-        blocker_id:currentId,
-        blocked_id:targetId
-      });
-
-
-  if(error){
-
-    console.error(error);
-
-    alert(
-      "❌ User block करता आला नाही."
-    );
-
-    return false;
-
-  }
+  searchUsers();
 
 
   if(
-    selectedUserId === targetId
+    document
+      .getElementById("userProfileModal")
+      .classList.contains("show")
   ){
 
-    selectedUserId = null;
-
-    closeModal(
-      "userProfileModal"
-    );
+    await openUserProfile(targetId);
 
   }
-
-
-  return true;
 
 }
 
 
-/* =========================
-   BLOCK FROM PROFILE
-========================= */
+/* =========================================================
+   FOLLOW FROM PROFILE
+========================================================= */
 
-async function blockCurrentUser(){
+async function toggleFollowFromProfile(){
 
-  if(!selectedUserId){
-
+  if(!selectedUserId)
     return;
 
-  }
-
-
-  const current =
-    await getCurrentProfile();
-
-
-  if(!current){
-
-    alert(
-      "कृपया आधी login करा."
-    );
-
-    return;
-
-  }
-
-
-  const confirmBlock =
-    confirm(
-      "हा user block करायचा आहे का?"
-    );
-
-
-  if(!confirmBlock){
-
-    return;
-
-  }
-
-
-  const success =
-    await performBlock(
-      current.id,
-      selectedUserId
-    );
-
-
-  if(success){
-
-    await loadSocialCounts();
-
-  }
+  await toggleFollow(selectedUserId);
 
 }
 
 
-/* =========================
-   SOCIAL LIST
-========================= */
+/* =========================================================
+   BLOCK CONFIRM
+========================================================= */
 
-async function openFollowers(){
-
-  await openSocialList(
-    "followers"
-  );
-
-}
-
-
-async function openFollowing(){
-
-  await openSocialList(
-    "following"
-  );
-
-}
-
-
-async function openSocialList(
-  type
+function openBlockConfirm(
+  userId,
+  userName
 ){
 
-  const current =
-    await getCurrentProfile();
+  pendingBlockUserId=userId;
 
-
-  if(!current){
-
-    alert(
-      "कृपया आधी login करा."
-    );
-
-    return;
-
-  }
-
-
-  const title =
-    type === "followers"
-    ? "👥 Followers"
-    : "👤 Following";
+  pendingBlockUserName=userName || "student";
 
 
   document.getElementById(
-    "socialListTitle"
-  ).textContent =
-    title;
+    "blockConfirmName"
+  ).textContent="@"+pendingBlockUserName;
 
 
-  const box =
+  openModal("blockConfirmModal");
+
+}
+
+
+/* =========================================================
+   BLOCK CURRENT USER
+========================================================= */
+
+function blockCurrentUser(){
+
+  if(!selectedUserId)
+    return;
+
+  openBlockConfirm(
+    selectedUserId,
+    selectedUserName
+  );
+
+}
+
+
+/* =========================================================
+   PERFORM BLOCK
+========================================================= */
+
+async function performBlock(
+  targetId,
+  targetName
+){
+
+  const current=
+    await getCurrentUser();
+
+
+  if(!current){
+
+    showSocialToast("Login करा.");
+
+    return;
+
+  }
+
+
+  if(current.id===targetId){
+
+    return;
+
+  }
+
+
+  const deleteOwn=
+    await supabaseClient
+      .from("Follows")
+      .delete()
+      .eq("follower_id",current.id)
+      .eq("following_id",targetId);
+
+
+  if(deleteOwn.error){
+
+    console.error(deleteOwn.error);
+
+  }
+
+
+  const deleteOther=
+    await supabaseClient
+      .from("Follows")
+      .delete()
+      .eq("follower_id",targetId)
+      .eq("following_id",current.id);
+
+
+  if(deleteOther.error){
+
+    console.error(deleteOther.error);
+
+  }
+
+
+  const {
+    error:blockError
+  }=await supabaseClient
+    .from("Blocks")
+    .upsert({
+
+      blocker_id:current.id,
+      blocked_id:targetId
+
+    },{
+      onConflict:"blocker_id,blocked_id"
+    });
+
+
+  if(blockError){
+
+    console.error(blockError);
+
+    showSocialToast(
+      "Block करता आले नाही."
+    );
+
+    return;
+
+  }
+
+
+  closeModal("blockConfirmModal");
+  closeModal("userProfileModal");
+  closeModal("usersModal");
+  closeModal("socialListModal");
+
+
+  selectedUserId=null;
+
+  pendingBlockUserId=null;
+
+
+  showSocialToast(
+    "@"+(targetName || "student")+" blocked."
+  );
+
+
+  await loadSocialCounts();
+
+}
+
+
+/* =========================================================
+   CONFIRM BLOCK
+========================================================= */
+
+async function confirmBlockUser(){
+
+  if(!pendingBlockUserId)
+    return;
+
+
+  await performBlock(
+    pendingBlockUserId,
+    pendingBlockUserName
+  );
+
+}
+
+
+/* =========================================================
+   SOCIAL LIST
+========================================================= */
+
+async function openSocialList(type){
+
+  const current=
+    await getCurrentUser();
+
+
+  if(!current){
+
+    showSocialToast("Login करा.");
+
+    return;
+
+  }
+
+
+  currentSocialListType=type;
+
+
+  const title=
+    document.getElementById(
+      "socialListTitle"
+    );
+
+
+  const list=
     document.getElementById(
       "socialList"
     );
 
 
-  box.innerHTML = `
-    <div class="empty"
-         style="margin-top:12px;">
-      🔄 Loading...
-    </div>
-  `;
+  title.textContent=
+    type==="followers"
+    ? "👥 Followers"
+    : "👤 Following";
 
 
-  openModal(
-    "socialListModal"
-  );
+  list.innerHTML=
+    `<div class="empty">
+      Loading...
+    </div>`;
 
 
-  let query;
+  openModal("socialListModal");
 
 
-  if(type === "followers"){
+  let result;
 
-    query =
-      supabaseClient
+
+  if(type==="followers"){
+
+    result=
+      await supabaseClient
         .from("Follows")
-        .select(`
-          follower_id,
-          Profiles!Follows_follower_id_fkey(
-            id,
-            username
-          )
-        `)
-        .eq(
-          "following_id",
-          current.id
-        );
+        .select("follower_id")
+        .eq("following_id",current.id);
 
   }else{
 
-    query =
-      supabaseClient
+    result=
+      await supabaseClient
         .from("Follows")
-        .select(`
-          following_id,
-          Profiles!Follows_following_id_fkey(
-            id,
-            username
-          )
-        `)
-        .eq(
-          "follower_id",
-          current.id
-        );
+        .select("following_id")
+        .eq("follower_id",current.id);
+
+  }
+
+
+  if(result.error){
+
+    console.error(result.error);
+
+    list.innerHTML=
+      `<div class="empty">
+        List load झाली नाही.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const ids=
+    (result.data || [])
+      .map(row=>
+        type==="followers"
+        ? row.follower_id
+        : row.following_id
+      );
+
+
+  const blockedIds=
+    await getBlockedUserIds(current.id);
+
+
+  const cleanIds=
+    ids.filter(id=>{
+
+      if(blockedIds.has(id))
+        return false;
+
+      if(id===current.id)
+        return false;
+
+      return true;
+
+    });
+
+
+  if(!cleanIds.length){
+
+    list.innerHTML=
+      `<div class="empty">
+        अजून कोणी नाही.
+      </div>`;
+
+    return;
 
   }
 
 
   const {
-    data,
-    error
-  } =
-    await query;
+    data:profiles,
+    error:profileError
+  }=await supabaseClient
+    .from("Profiles")
+    .select("id,username")
+    .in("id",cleanIds);
 
 
-  if(error){
+  if(profileError){
 
-    console.error(
-      "SOCIAL LIST ERROR:",
-      error
+    console.error(profileError);
+
+    list.innerHTML=
+      `<div class="empty">
+        Users load झाले नाहीत.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const map=new Map();
+
+  (profiles || []).forEach(profile=>{
+
+    map.set(
+      profile.id,
+      profile
     );
 
-
-    box.innerHTML = `
-      <div class="empty"
-           style="margin-top:12px;">
-        ❌ List load झाली नाही.
-      </div>
-    `;
-
-    return;
-
-  }
+  });
 
 
-  if(!data || !data.length){
-
-    box.innerHTML = `
-      <div class="empty"
-           style="margin-top:12px;">
-        अजून कोणताही user नाही.
-      </div>
-    `;
-
-    return;
-
-  }
+  list.innerHTML="";
 
 
-  box.innerHTML = "";
+  for(const id of cleanIds){
 
+    const user=map.get(id);
 
-  for(
-    const item of data
-  ){
-
-    const user =
-      item.Profiles;
-
-
-    if(!user){
-
+    if(!user)
       continue;
 
-    }
 
-
-    const blocked =
-      await isBlocked(
-        current.id,
-        user.id
-      );
-
-
-    const blockedBy =
-      await isBlocked(
-        user.id,
-        current.id
-      );
-
-
-    if(
-      blocked ||
-      blockedBy
-    ){
-
-      continue;
-
-    }
-
-
-    const following =
+    const following=
       await isFollowing(
         current.id,
-        user.id
+        id
       );
 
 
-    const div =
+    const row=
       document.createElement("div");
 
-
-    div.className =
-      "search-result";
+    row.className="search-result";
 
 
-    div.innerHTML = `
+    row.onclick=()=>{
+
+      openUserProfile(id);
+
+    };
+
+
+    row.innerHTML=`
 
       <div class="search-avatar">
         👤
       </div>
 
-      <div style="flex:1;">
+      <div class="search-info">
 
-        <strong>
-          @${escapeHTML(
-            user.username || "student"
-          )}
-        </strong>
+        <div class="search-name">
+          @${escapeHtml(user.username || "student")}
+        </div>
 
-        <div class="user-action">
-
-          ${
-            user.id !== current.id
-            ? `
-              <button
-                class="small-btn ${
-                  following
-                  ? "following-btn"
-                  : "follow-btn"
-                }"
-                onclick="toggleFollowFromList('${user.id}')">
-
-                ${
-                  following
-                  ? "Following"
-                  : "Follow"
-                }
-
-              </button>
-
-              <button
-                class="small-btn block-btn"
-                onclick="blockUserFromList('${user.id}')">
-
-                🚫 Block
-
-              </button>
-            `
-            : `
-              <span
-                style="
-                font-size:11px;
-                color:#7a879b;">
-                You
-              </span>
-            `
-          }
-
+        <div class="search-sub">
+          GyanSetu Student
         </div>
 
       </div>
 
-    `;
+      <div class="user-action">
 
+        <button
+          class="small-btn ${
+            following
+            ? "following-btn"
+            : "follow-btn"
+          }"
+          onclick="
+            event.stopPropagation();
+            toggleFollowFromList(
+              '${id}',
+              '${type}'
+            );
+          ">
 
-    div.addEventListener(
-      "click",
-      function(event){
+          ${
+            following
+            ? "✓ Following"
+            : "Follow"
+          }
 
-        if(
-          event.target.tagName ===
-          "BUTTON"
-        ){
+        </button>
 
-          return;
+        <button
+          class="small-btn block-btn"
+          onclick="
+            event.stopPropagation();
+            blockUserFromList(
+              '${id}',
+              '${escapeJs(user.username || "student")}',
+              '${type}'
+            );
+          ">
 
-        }
+          Block
 
-        openUserProfile(
-          user.id
-        );
+        </button>
 
-      }
-    );
-
-
-    box.appendChild(div);
-
-  }
-
-
-  if(!box.children.length){
-
-    box.innerHTML = `
-      <div class="empty"
-           style="margin-top:12px;">
-        कोणताही user उपलब्ध नाही.
       </div>
+
     `;
+
+
+    list.appendChild(row);
 
   }
 
 }
 
 
-/* =========================
+/* =========================================================
    FOLLOW FROM LIST
-========================= */
+========================================================= */
 
 async function toggleFollowFromList(
-  userId
+  userId,
+  type
 ){
 
-  await toggleFollow(
-    userId
-  );
+  await toggleFollow(userId);
 
   await openSocialList(
-    "following"
+    type || currentSocialListType
   );
 
 }
 
 
-/* =========================
+/* =========================================================
    BLOCK FROM LIST
-========================= */
+========================================================= */
 
-async function blockUserFromList(
-  userId
+function blockUserFromList(
+  userId,
+  userName,
+  type
 ){
 
-  const current =
-    await getCurrentProfile();
+  currentSocialListType=
+    type || currentSocialListType;
 
 
-  if(!current){
-
-    return;
-
-  }
-
-
-  const confirmBlock =
-    confirm(
-      "हा user block करायचा आहे का?"
-    );
-
-
-  if(!confirmBlock){
-
-    return;
-
-  }
-
-
-  await performBlock(
-    current.id,
-    userId
-  );
-
-
-  await loadSocialCounts();
-
-  await openSocialList(
-    "followers"
+  openBlockConfirm(
+    userId,
+    userName
   );
 
 }
 
 
-/* =========================
-   MY POSTS
-========================= */
-
-function openMyPosts(){
-
-  document
-    .getElementById("posts")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
-
-}
-
-
-/* =========================
+/* =========================================================
    POSTS
-========================= */
+========================================================= */
 
-function openPost(){
-
-  document.getElementById(
-    "postText"
-  ).value = "";
-
-  document.getElementById(
-    "postImage"
-  ).value = "";
-
-  openModal("postModal");
-
-}
-
-
-function savePost(){
-
-  const text =
-    document.getElementById(
-      "postText"
-    ).value.trim();
-
-
-  const file =
-    document.getElementById(
-      "postImage"
-    ).files[0];
-
-
-  if(!text && !file){
-
-    alert(
-      "Post मध्ये text किंवा photo टाका."
-    );
-
-    return;
-
-  }
-
-
-  if(file){
-
-    const reader =
-      new FileReader();
-
-
-    reader.onload = function(){
-
-      createPost(
-        text,
-        reader.result
-      );
-
-    };
-
-
-    reader.readAsDataURL(file);
-
-  }else{
-
-    createPost(
-      text,
-      ""
-    );
-
-  }
-
-}
-
-
-function createPost(
-  text,
-  image
-){
-
-  let posts = [];
-
+function getPosts(){
 
   try{
 
-    posts =
-      JSON.parse(
-        localStorage.getItem(
-          "gyansetu_posts"
-        )
-      ) || [];
+    return JSON.parse(
+      localStorage.getItem(
+        "gyansetu_posts"
+      )
+    ) || [];
 
   }catch(error){
 
-    posts = [];
+    return [];
+
+  }
+
+}
+
+
+function loadPostCount(){
+
+  const posts=getPosts();
+
+  document.getElementById("postCount")
+    .textContent=posts.length;
+
+}
+
+
+function openMyPosts(){
+
+  const posts=getPosts();
+
+  const box=document.createElement("div");
+
+  box.className="modal show";
+
+  box.id="temporaryPostsModal";
+
+
+  let html=`
+
+    <div class="box">
+
+      <div class="box-title">
+        📝 My Posts
+      </div>
+
+  `;
+
+
+  if(!posts.length){
+
+    html+=`
+
+      <div class="empty">
+        अजून कोणतीही post नाही.
+      </div>
+
+    `;
+
+  }else{
+
+    posts.forEach(post=>{
+
+      html+=`
+
+        <div class="post">
+
+          <div class="post-top">
+
+            <div class="post-avatar">
+              👤
+            </div>
+
+            <strong>
+              @${escapeHtml(
+                localStorage.getItem(
+                  "gyansetu_username"
+                ) || "student"
+              )}
+            </strong>
+
+          </div>
+
+          <div class="post-text">
+            ${escapeHtml(
+              post.text ||
+              post.content ||
+              ""
+            )}
+          </div>
+
+          <div class="post-date">
+            ${post.date || ""}
+          </div>
+
+        </div>
+
+      `;
+
+    });
 
   }
 
 
-  const username =
+  html+=`
+
+      <div class="buttons">
+
+        <button
+          class="btn cancel"
+          onclick="
+            document
+              .getElementById('temporaryPostsModal')
+              .remove();
+          ">
+
+          Close
+
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  box.innerHTML=html;
+
+  document.body.appendChild(box);
+
+}
+
+
+/* =========================================================
+   EDIT PROFILE
+========================================================= */
+
+function openEditProfile(){
+
+  const name=
     localStorage.getItem(
       "gyansetu_username"
     ) || "student";
 
 
-  posts.unshift({
-
-    username:username,
-
-    text:text,
-
-    image:image,
-
-    date:new Date().toLocaleString()
-
-  });
+  document.getElementById(
+    "usernameInput"
+  ).value=name;
 
 
-  localStorage.setItem(
-    "gyansetu_posts",
-    JSON.stringify(posts)
-  );
-
-
-  closeModal("postModal");
-
-  loadPosts();
+  openModal("editProfileModal");
 
 }
 
 
-function loadPosts(){
+async function saveProfile(){
 
-  let posts = [];
-
-
-  try{
-
-    posts =
-      JSON.parse(
-        localStorage.getItem(
-          "gyansetu_posts"
-        )
-      ) || [];
-
-  }catch(error){
-
-    posts = [];
-
-  }
-
-
-  const container =
+  const name=
     document.getElementById(
-      "posts"
+      "usernameInput"
+    ).value
+    .trim();
+
+
+  if(!name){
+
+    showSocialToast(
+      "Username टाका."
     );
-
-
-  document.getElementById(
-    "postCount"
-  ).textContent =
-    posts.length;
-
-
-  if(!posts.length){
-
-    container.innerHTML = `
-
-      <div
-        class="empty"
-        style="margin-top:12px;">
-
-        अजून कोणतीही पोस्ट नाही.<br>
-
-        तुमची पहिली learning
-        post तयार करा! 🚀
-
-      </div>
-
-    `;
 
     return;
 
   }
 
 
-  container.innerHTML = "";
+  const user=
+    await getCurrentUser();
 
 
-  posts.forEach(function(post){
+  if(user){
 
-    const div =
-      document.createElement("div");
+    const {
+      error
+    }=await supabaseClient
+      .from("Profiles")
+      .update({
+        username:name
+      })
+      .eq("id",user.id);
 
 
-    div.className =
-      "post";
+    if(error){
 
+      console.error(error);
 
-    let imageHTML = "";
+      showSocialToast(
+        "Profile update झाला नाही."
+      );
 
-
-    if(post.image){
-
-      imageHTML = `
-
-        <img
-          class="post-image"
-          src="${escapeHTML(post.image)}"
-          alt="Post">
-
-      `;
+      return;
 
     }
 
-
-    div.innerHTML = `
-
-      <div class="post-top">
-
-        <div
-          class="post-avatar"
-          style="
-          display:flex;
-          align-items:center;
-          justify-content:center;">
-
-          👤
-
-        </div>
+  }
 
 
-        <div>
-
-          <div class="post-name">
-            @${escapeHTML(
-              post.username || "student"
-            )}
-          </div>
-
-          <div class="post-date">
-            ${escapeHTML(
-              post.date || ""
-            )}
-          </div>
-
-        </div>
-
-      </div>
+  localStorage.setItem(
+    "gyansetu_username",
+    name
+  );
 
 
-      ${
-        post.text
-        ? `
-          <div class="post-text">
-            ${escapeHTML(
-              post.text
-            )}
-          </div>
-        `
-        : ""
-      }
+  document.getElementById(
+    "profileUsername"
+  ).textContent="@"+name;
 
 
-      ${imageHTML}
+  closeModal(
+    "editProfileModal"
+  );
 
-    `;
 
-
-    container.appendChild(div);
-
-  });
+  showSocialToast(
+    "Profile updated ✓"
+  );
 
 }
 
 
-/* =========================
+/* =========================================================
+   ACCOUNT SETTINGS
+========================================================= */
+
+function openAccountSettings(){
+
+  closeModal("menuModal");
+
+  const name=
+    localStorage.getItem(
+      "gyansetu_username"
+    ) || "student";
+
+
+  document.getElementById(
+    "accountName"
+  ).value=name;
+
+
+  openModal("accountModal");
+
+}
+
+
+async function saveAccountSettings(){
+
+  const name=
+    document.getElementById(
+      "accountName"
+    ).value
+    .trim();
+
+
+  if(!name){
+
+    showSocialToast(
+      "Username टाका."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "gyansetu_username",
+    name
+  );
+
+
+  const user=
+    await getCurrentUser();
+
+
+  if(user){
+
+    const {
+      error
+    }=await supabaseClient
+      .from("Profiles")
+      .update({
+        username:name
+      })
+      .eq("id",user.id);
+
+
+    if(error){
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  document.getElementById(
+    "profileUsername"
+  ).textContent="@"+name;
+
+
+  closeModal("accountModal");
+
+
+  showSocialToast(
+    "Account updated ✓"
+  );
+
+}
+
+
+function addAccount(){
+
+  showSocialToast(
+    "Add Account feature पुढच्या update मध्ये."
+  );
+
+}
+
+
+/* =========================================================
+   MENU
+========================================================= */
+
+function openMenu(){
+
+  openModal("menuModal");
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function loadDarkMode(){
+
+  const dark=
+    localStorage.getItem(
+      "gyansetu_dark_mode"
+    )==="true";
+
+
+  document.body.classList.toggle(
+    "dark",
+    dark
+  );
+
+}
+
+
+function toggleDarkMode(){
+
+  const enabled=
+    !document.body.classList.contains(
+      "dark"
+    );
+
+
+  document.body.classList.toggle(
+    "dark",
+    enabled
+  );
+
+
+  localStorage.setItem(
+    "gyansetu_dark_mode",
+    enabled
+  );
+
+
+  closeModal("menuModal");
+
+
+  showSocialToast(
+    enabled
+    ? "Dark Mode ON 🌙"
+    : "Dark Mode OFF ☀️"
+  );
+
+}
+
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+
+function openNotifications(){
+
+  closeModal("menuModal");
+
+  const time=
+    localStorage.getItem(
+      "gyansetu_reminder"
+    );
+
+
+  if(time){
+
+    document.getElementById(
+      "reminderTime"
+    ).value=time;
+
+
+    document.getElementById(
+      "reminderStatus"
+    ).textContent=
+      "Reminder set: "+time;
+
+  }else{
+
+    document.getElementById(
+      "reminderStatus"
+    ).textContent=
+      "अजून reminder set केलेले नाही.";
+
+  }
+
+
+  openModal("notificationModal");
+
+}
+
+
+function saveReminder(){
+
+  const time=
+    document.getElementById(
+      "reminderTime"
+    ).value;
+
+
+  if(!time){
+
+    showSocialToast(
+      "Time निवडा."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "gyansetu_reminder",
+    time
+  );
+
+
+  document.getElementById(
+    "reminderStatus"
+  ).textContent=
+    "Reminder saved: "+time;
+
+
+  showSocialToast(
+    "Reminder saved ⏰"
+  );
+
+}
+
+
+/* =========================================================
+   PRIVACY
+========================================================= */
+
+function openPrivacy(){
+
+  closeModal("menuModal");
+
+  document.getElementById(
+    "privacyCode"
+  ).value="";
+
+  openModal(
+    "privacyCodeModal"
+  );
+
+}
+
+
+function checkPrivacyCode(){
+
+  const code=
+    document.getElementById(
+      "privacyCode"
+    ).value;
+
+
+  let saved=
+    localStorage.getItem(
+      "gyansetu_privacy_code"
+    );
+
+
+  if(!saved){
+
+    saved="1234";
+
+    localStorage.setItem(
+      "gyansetu_privacy_code",
+      saved
+    );
+
+  }
+
+
+  if(code!==saved){
+
+    showSocialToast(
+      "Wrong privacy code."
+    );
+
+    return;
+
+  }
+
+
+  closeModal(
+    "privacyCodeModal"
+  );
+
+
+  document.getElementById(
+    "privateNotes"
+  ).value=
+    localStorage.getItem(
+      "gyansetu_private_notes"
+    ) || "";
+
+
+  openModal("notesModal");
+
+}
+
+
+function savePrivateNotes(){
+
+  const notes=
+    document.getElementById(
+      "privateNotes"
+    ).value;
+
+
+  localStorage.setItem(
+    "gyansetu_private_notes",
+    notes
+  );
+
+
+  closeModal("notesModal");
+
+
+  showSocialToast(
+    "Private notes saved 🔒"
+  );
+
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+function openAbout(){
+
+  closeModal("menuModal");
+
+  openModal("aboutModal");
+
+}
+
+
+/* =========================================================
+   HELP
+========================================================= */
+
+function openHelp(){
+
+  closeModal("menuModal");
+
+  document.getElementById(
+    "feedbackText"
+  ).value="";
+
+  openModal("helpModal");
+
+}
+
+
+function sendFeedback(){
+
+  const text=
+    document.getElementById(
+      "feedbackText"
+    ).value.trim();
+
+
+  if(!text){
+
+    showSocialToast(
+      "Feedback लिहा."
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "gyansetu_last_feedback",
+    text
+  );
+
+
+  closeModal("helpModal");
+
+
+  showSocialToast(
+    "Feedback saved ✓"
+  );
+
+}
+
+
+/* =========================================================
    RESET
-========================= */
+========================================================= */
 
 function openReset(){
 
-  closeMenu();
+  closeModal("menuModal");
 
   openModal("resetModal");
 
 }
 
 
-function confirmReset(){
+function resetAppData(){
 
-  const confirmDelete =
-    confirm(
-      "तुम्हाला खरंच App Data Reset करायचा आहे का?"
+  const keepKeys=[
+    "gyansetu_supabase_session"
+  ];
+
+
+  const allKeys=[];
+
+
+  for(let i=0;i<localStorage.length;i++){
+
+    allKeys.push(
+      localStorage.key(i)
     );
-
-
-  if(!confirmDelete){
-
-    return;
 
   }
 
 
-  localStorage.clear();
+  allKeys.forEach(key=>{
 
+    if(
+      !keepKeys.includes(key)
+    ){
 
-  document.body.classList.remove(
-    "dark"
-  );
+      localStorage.removeItem(key);
 
+    }
 
-  loadUsername();
-
-  loadPhoto();
-
-  loadXP();
-
-  loadPosts();
-
-
-  document.getElementById(
-    "followers"
-  ).textContent = "0";
-
-
-  document.getElementById(
-    "following"
-  ).textContent = "0";
+  });
 
 
   closeModal("resetModal");
 
 
-  alert(
-    "✅ GyanSetu App Data Reset झाला."
+  showSocialToast(
+    "App data reset झाले."
   );
 
+
+  setTimeout(()=>{
+
+    location.reload();
+
+  },700);
+
 }
 
 
-/* =========================
+/* =========================================================
    ESCAPE HTML
-========================= */
+========================================================= */
 
-function escapeHTML(value){
+function escapeHtml(value){
 
   return String(value)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 
 }
 
 
-/* =========================
-   OUTSIDE TAP
-========================= */
+function escapeJs(value){
 
-document
-  .querySelectorAll(".modal")
-  .forEach(function(modal){
+  return String(value)
+    .replaceAll("\\","\\\\")
+    .replaceAll("'","\\'")
+    .replaceAll("\n"," ");
+
+}
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+async function initProfile(){
+
+  loadDarkMode();
+
+  await loadProfile();
+
+  await loadSocialCounts();
+
+  loadPostCount();
+
+}
+
+
+initProfile();
+
+
+window.addEventListener(
+  "pageshow",
+  ()=>{
+    loadSocialCounts();
+    loadPostCount();
+  }
+);
+
+
+/* =========================================================
+   CLOSE MODAL WHEN BACKGROUND CLICKED
+========================================================= */
+
+document.querySelectorAll(".modal")
+  .forEach(modal=>{
 
     modal.addEventListener(
       "click",
       function(event){
 
-        if(
-          event.target === modal
-        ){
+        if(event.target===modal){
 
           modal.classList.remove(
             "show"
@@ -3820,45 +3524,6 @@ document
     );
 
   });
-
-
-/* =========================
-   INITIAL LOAD
-========================= */
-
-loadUsername();
-
-loadPhoto();
-
-loadXP();
-
-loadDarkMode();
-
-loadPosts();
-
-loadSocialCounts();
-
-
-/* =========================
-   PAGE SHOW
-========================= */
-
-window.addEventListener(
-  "pageshow",
-  function(){
-
-    loadUsername();
-
-    loadPhoto();
-
-    loadXP();
-
-    loadPosts();
-
-    loadSocialCounts();
-
-  }
-);
 
 </script>
 
