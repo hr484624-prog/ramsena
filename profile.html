@@ -1300,46 +1300,158 @@ body.dark .cancel{
 </div>
 
 
-<!-- =========================
-     USERS
-========================= -->
+async function searchUsers(){
 
-<div class="modal" id="usersModal">
+  const query =
+    document.getElementById("userSearch")
+      .value
+      .trim();
 
-  <div class="box">
+  const resultBox =
+    document.getElementById("userResults");
 
-    <div class="box-title">
-      👥 Users
+
+  /* LOADING */
+
+  resultBox.innerHTML = `
+    <div class="empty" style="margin-top:12px;">
+      🔄 Users शोधत आहे...
     </div>
+  `;
 
-    <div class="box-subtitle">
-      या device वर save झालेले users search करा.
-      Online सर्व users पाहण्यासाठी नंतर database जोडता येईल.
-    </div>
 
-    <input
-      class="input"
-      id="userSearch"
-      placeholder="🔎 Search username..."
-      oninput="searchUsers()"
-    >
+  try{
 
-    <div id="userResults"></div>
+    let request =
+      supabaseClient
+        .from("Profiles")
+        .select("id, username, created_at")
+        .order("created_at", {
+          ascending: false
+        })
+        .limit(50);
 
-    <div class="buttons">
 
-      <button
-        class="btn cancel"
-        onclick="closeModal('usersModal')">
-        Close
-      </button>
+    /* SEARCH */
 
-    </div>
+    if(query){
 
-  </div>
+      request =
+        request.ilike(
+          "username",
+          `%${query}%`
+        );
 
-</div>
+    }
 
+
+    const {
+      data,
+      error
+    } = await request;
+
+
+    /* ERROR */
+
+    if(error){
+
+      console.error(
+        "USERS ERROR:",
+        error
+      );
+
+      resultBox.innerHTML = `
+        <div class="empty" style="margin-top:12px;">
+          ❌ Users load झाले नाहीत.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    /* NO USERS */
+
+    if(!data || data.length === 0){
+
+      resultBox.innerHTML = `
+        <div class="empty" style="margin-top:12px;">
+          😕 कोणताही User सापडला नाही.
+        </div>
+      `;
+
+      return;
+
+    }
+
+
+    /* SHOW USERS */
+
+    resultBox.innerHTML = "";
+
+
+    data.forEach(function(user){
+
+      const div =
+        document.createElement("div");
+
+
+      div.className =
+        "search-result";
+
+
+      div.innerHTML = `
+
+        <div
+          class="search-avatar"
+          style="
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#eaf3ff;
+            font-size:22px;
+          "
+        >
+          👤
+        </div>
+
+
+        <div style="flex:1;">
+
+          <strong>
+            @${escapeHTML(
+              user.username || "student"
+            )}
+          </strong>
+
+        </div>
+
+      `;
+
+
+      resultBox.appendChild(div);
+
+    });
+
+
+  }catch(error){
+
+    console.error(
+      "SEARCH ERROR:",
+      error
+    );
+
+
+    resultBox.innerHTML = `
+      <div class="empty" style="margin-top:12px;">
+        ❌ Something went wrong.
+      </div>
+    `;
+
+  }
+
+}
 
 <!-- =========================
      POST
