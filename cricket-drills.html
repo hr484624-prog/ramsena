@@ -8,7 +8,6 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
 <title>Battle Arena</title>
 
 <style>
-
 *{
   margin:0;
   padding:0;
@@ -23,30 +22,58 @@ html,body{
   font-family:Arial,sans-serif;
 }
 
-.game{
+body{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.page{
   position:relative;
   width:100vw;
   height:100vh;
   overflow:hidden;
-  background:#05070b;
+  background:#080d16;
 }
 
 /* =========================
-   CONTINUOUS ROTATING WORLD
+   ROTATING BACKGROUND
 ========================= */
 
-.rotateWorld{
+.rotate-bg{
   position:absolute;
-  width:180vmax;
-  height:180vmax;
+  width:170vmax;
+  height:170vmax;
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
-  animation:worldRotate 18s linear infinite;
+  animation:rotateWorld 18s linear infinite;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      #07111e,
+      #17395c,
+      #08101b,
+      #304a62,
+      #090e17,
+      #1c4166,
+      #07111e
+    );
 }
 
-@keyframes worldRotate{
+.rotate-bg::before{
+  content:"";
+  position:absolute;
+  inset:12%;
+  border-radius:50%;
+  border:2px solid rgba(100,180,255,.18);
+  box-shadow:
+    0 0 80px rgba(30,130,255,.25),
+    inset 0 0 80px rgba(30,130,255,.18);
+}
 
+@keyframes rotateWorld{
   from{
     transform:
       translate(-50%,-50%)
@@ -58,145 +85,204 @@ html,body{
       translate(-50%,-50%)
       rotate(360deg);
   }
-
 }
 
 /* =========================
-   BACKGROUND
+   MOVING LIGHTS
 ========================= */
 
-.sky{
+.light{
   position:absolute;
-  inset:0;
-
-  background:
-    radial-gradient(
-      circle at center,
-      #304c72 0%,
-      #17283d 30%,
-      #0b111b 60%,
-      #030509 100%
-    );
-}
-
-/* glowing circles */
-
-.glow{
-  position:absolute;
+  width:180px;
+  height:180px;
   border-radius:50%;
-  filter:blur(50px);
+  filter:blur(45px);
   opacity:.35;
+  animation:
+    moveLight 5s ease-in-out infinite alternate;
 }
 
-.glow1{
-  width:320px;
-  height:320px;
-  background:#1769e0;
-  left:8%;
+.light1{
+  background:#1684ff;
+  left:-60px;
   top:10%;
 }
 
-.glow2{
-  width:280px;
-  height:280px;
-  background:#e36a25;
-  right:5%;
-  top:35%;
+.light2{
+  background:#ff681c;
+  right:-70px;
+  top:30%;
+  animation-delay:1s;
 }
 
-.glow3{
-  width:250px;
-  height:250px;
-  background:#1769e0;
-  left:35%;
-  bottom:5%;
+.light3{
+  background:#1675ff;
+  left:40%;
+  bottom:-90px;
+  animation-delay:2s;
 }
 
-/* =========================
-   ROTATING RINGS
-========================= */
+@keyframes moveLight{
+  from{
+    transform:translate(0,0);
+  }
 
-.ring{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  border-radius:50%;
-  border:2px solid rgba(80,170,255,.25);
-}
-
-.ring1{
-  width:500px;
-  height:500px;
-}
-
-.ring2{
-  width:850px;
-  height:850px;
-}
-
-.ring3{
-  width:1200px;
-  height:1200px;
+  to{
+    transform:translate(60px,-35px);
+  }
 }
 
 /* =========================
-   MOUNTAINS
+   DARK OVERLAY
 ========================= */
 
-.mountain{
+.overlay{
   position:absolute;
-  bottom:0;
-  width:100%;
-  height:48%;
-
+  inset:0;
   background:
     linear-gradient(
-      135deg,
-      transparent 0 15%,
-      #101925 15% 32%,
-      transparent 32% 42%,
-      #0b121d 42% 65%,
-      transparent 65%
+      180deg,
+      rgba(0,0,0,.35),
+      rgba(0,0,0,.15) 45%,
+      rgba(0,0,0,.8)
     );
 }
 
 /* =========================
-   STARS / PARTICLES
+   LOGO
 ========================= */
 
-.particle{
+.logo{
   position:absolute;
-  width:4px;
-  height:4px;
-  border-radius:50%;
-  background:white;
-  opacity:.6;
+  top:9%;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+  color:white;
+  z-index:5;
+}
+
+.logo h1{
+  font-size:36px;
+  font-weight:900;
+  letter-spacing:3px;
+  text-shadow:
+    0 4px 18px rgba(0,0,0,.9);
+}
+
+.logo p{
+  margin-top:6px;
+  font-size:10px;
+  letter-spacing:6px;
+  opacity:.75;
 }
 
 /* =========================
-   CHARACTER
+   CENTER CHARACTER
 ========================= */
 
 .character{
   position:absolute;
+  width:190px;
+  height:350px;
   left:50%;
   top:45%;
-
-  width:190px;
-  height:330px;
-
   transform:
     translate(-50%,-50%);
+  z-index:4;
 
   animation:
     characterFloat 2.5s ease-in-out infinite;
+}
 
+.head{
+  position:absolute;
+  width:70px;
+  height:78px;
+  left:60px;
+  top:15px;
+  border-radius:45%;
+  background:#bd7959;
+  z-index:3;
+}
+
+.hair{
+  position:absolute;
+  width:78px;
+  height:45px;
+  left:56px;
+  top:5px;
+  border-radius:50% 50% 20% 20%;
+  background:#111;
   z-index:4;
 }
 
-@keyframes characterFloat{
+.body{
+  position:absolute;
+  width:105px;
+  height:150px;
+  left:43px;
+  top:82px;
+  border-radius:30px 30px 15px 15px;
 
+  background:
+    linear-gradient(
+      90deg,
+      #101923,
+      #405469,
+      #17222e
+    );
+}
+
+.arm{
+  position:absolute;
+  width:32px;
+  height:125px;
+  top:95px;
+  border-radius:20px;
+  background:#253443;
+}
+
+.arm1{
+  left:20px;
+  transform:rotate(15deg);
+}
+
+.arm2{
+  right:20px;
+  transform:rotate(-15deg);
+}
+
+.gun{
+  position:absolute;
+  width:125px;
+  height:17px;
+  right:-55px;
+  top:170px;
+  border-radius:5px;
+  background:#11171d;
+  transform:rotate(-18deg);
+  box-shadow:0 3px 8px #000;
+}
+
+.leg{
+  position:absolute;
+  width:40px;
+  height:115px;
+  top:220px;
+  border-radius:10px;
+  background:#131c25;
+}
+
+.leg1{
+  left:52px;
+}
+
+.leg2{
+  right:52px;
+}
+
+@keyframes characterFloat{
   0%,100%{
     transform:
       translate(-50%,-50%)
@@ -206,218 +292,8 @@ html,body{
   50%{
     transform:
       translate(-50%,-50%)
-      translateY(-10px);
+      translateY(-9px);
   }
-
-}
-
-/* head */
-
-.head{
-  position:absolute;
-
-  width:72px;
-  height:80px;
-
-  left:59px;
-  top:22px;
-
-  border-radius:45%;
-
-  background:
-    linear-gradient(
-      90deg,
-      #b87555,
-      #d79570
-    );
-}
-
-/* hair */
-
-.hair{
-  position:absolute;
-
-  width:80px;
-  height:48px;
-
-  left:55px;
-  top:10px;
-
-  border-radius:
-    50% 50% 20% 20%;
-
-  background:#15171b;
-
-  z-index:2;
-}
-
-/* body */
-
-.body{
-  position:absolute;
-
-  width:108px;
-  height:150px;
-
-  left:41px;
-  top:91px;
-
-  border-radius:
-    30px 30px 18px 18px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #151f2c,
-      #40556b,
-      #151f2c
-    );
-}
-
-/* shoulders */
-
-.shoulder{
-  position:absolute;
-
-  width:150px;
-  height:35px;
-
-  left:20px;
-  top:95px;
-
-  border-radius:30px;
-
-  background:#273747;
-}
-
-/* arms */
-
-.arm{
-  position:absolute;
-
-  width:34px;
-  height:130px;
-
-  top:105px;
-
-  border-radius:20px;
-
-  background:#253544;
-}
-
-.arm1{
-  left:18px;
-  transform:rotate(13deg);
-}
-
-.arm2{
-  right:18px;
-  transform:rotate(-13deg);
-}
-
-/* gun */
-
-.gun{
-  position:absolute;
-
-  width:120px;
-  height:18px;
-
-  right:-50px;
-  top:170px;
-
-  border-radius:5px;
-
-  background:#101419;
-
-  transform:rotate(-17deg);
-}
-
-.gun2{
-  position:absolute;
-
-  width:35px;
-  height:8px;
-
-  right:35px;
-  top:183px;
-
-  background:#252b31;
-
-  transform:rotate(-17deg);
-}
-
-/* legs */
-
-.leg{
-  position:absolute;
-
-  width:42px;
-  height:115px;
-
-  top:225px;
-
-  border-radius:12px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #111821,
-      #293846
-    );
-}
-
-.leg1{
-  left:48px;
-}
-
-.leg2{
-  right:48px;
-}
-
-/* =========================
-   LOGO
-========================= */
-
-.logo{
-  position:absolute;
-
-  top:7%;
-  left:50%;
-
-  transform:
-    translateX(-50%);
-
-  z-index:10;
-
-  text-align:center;
-
-  color:white;
-
-  white-space:nowrap;
-}
-
-.logo h1{
-
-  font-size:34px;
-
-  font-weight:900;
-
-  letter-spacing:3px;
-
-  text-shadow:
-    0 4px 18px #000;
-}
-
-.logo p{
-
-  margin-top:5px;
-
-  font-size:10px;
-
-  letter-spacing:6px;
-
-  opacity:.75;
 }
 
 /* =========================
@@ -425,78 +301,54 @@ html,body{
 ========================= */
 
 .loading{
-
   position:absolute;
-
-  width:min(82%,430px);
-
   left:50%;
-  bottom:11%;
-
-  transform:
-    translateX(-50%);
-
-  z-index:20;
-
+  bottom:13%;
+  transform:translateX(-50%);
+  width:min(82%,430px);
   color:white;
-
-  text-align:center;
+  z-index:8;
 }
 
 .loadingTop{
-
   display:flex;
-
   justify-content:space-between;
-
-  font-size:13px;
-
   margin-bottom:8px;
+  font-size:12px;
 }
 
 .bar{
-
   width:100%;
-
   height:7px;
-
   border-radius:20px;
-
+  background:rgba(255,255,255,.2);
   overflow:hidden;
-
-  background:
-    rgba(255,255,255,.18);
 }
 
 .progress{
-
   width:0%;
-
   height:100%;
-
   border-radius:20px;
 
   background:
     linear-gradient(
       90deg,
       #1769e0,
-      #5cb7ff
+      #65b8ff
     );
 
   box-shadow:
-    0 0 14px #1769e0;
+    0 0 15px #1769e0;
 
   transition:
-    width .15s linear;
+    width .1s linear;
 }
 
 .tip{
-
-  margin-top:12px;
-
-  font-size:11px;
-
-  color:#c9d5e2;
+  text-align:center;
+  margin-top:10px;
+  font-size:10px;
+  opacity:.65;
 }
 
 /* =========================
@@ -504,44 +356,36 @@ html,body{
 ========================= */
 
 .start{
-
   display:none;
 
   position:absolute;
-
   left:50%;
-  bottom:7%;
-
-  transform:
-    translateX(-50%);
+  bottom:8%;
+  transform:translateX(-50%);
 
   width:220px;
   height:52px;
 
   border:0;
-
   border-radius:10px;
 
   color:white;
-
   font-size:18px;
-
-  font-weight:bold;
-
+  font-weight:900;
   letter-spacing:2px;
 
   background:
     linear-gradient(
       90deg,
       #1769e0,
-      #4b9cff
+      #4b9dff
     );
 
   box-shadow:
     0 5px 25px
-    rgba(23,105,224,.5);
+    rgba(23,105,224,.55);
 
-  z-index:20;
+  z-index:10;
 }
 
 .start:active{
@@ -555,22 +399,13 @@ html,body{
 ========================= */
 
 .version{
-
   position:absolute;
-
   bottom:2%;
-
   left:50%;
-
-  transform:
-    translateX(-50%);
-
-  color:
-    rgba(255,255,255,.4);
-
+  transform:translateX(-50%);
+  color:rgba(255,255,255,.35);
   font-size:9px;
-
-  z-index:20;
+  z-index:5;
 }
 
 </style>
@@ -578,70 +413,17 @@ html,body{
 
 <body>
 
-<div class="game">
+<div class="page">
 
-  <!-- Continuously rotating background -->
+  <div class="rotate-bg"></div>
 
-  <div class="rotateWorld">
+  <div class="light light1"></div>
+  <div class="light light2"></div>
+  <div class="light light3"></div>
 
-    <div class="sky"></div>
+  <div class="overlay"></div>
 
-    <div class="glow glow1"></div>
-    <div class="glow glow2"></div>
-    <div class="glow glow3"></div>
-
-    <div class="ring ring1"></div>
-    <div class="ring ring2"></div>
-    <div class="ring ring3"></div>
-
-    <div class="mountain"></div>
-
-    <div class="particle"
-         style="left:20%;top:18%"></div>
-
-    <div class="particle"
-         style="left:70%;top:15%"></div>
-
-    <div class="particle"
-         style="left:85%;top:50%"></div>
-
-    <div class="particle"
-         style="left:35%;top:70%"></div>
-
-    <div class="particle"
-         style="left:60%;top:80%"></div>
-
-  </div>
-
-
-  <!-- Character -->
-
-  <div class="character">
-
-    <div class="hair"></div>
-
-    <div class="head"></div>
-
-    <div class="shoulder"></div>
-
-    <div class="body"></div>
-
-    <div class="arm arm1"></div>
-
-    <div class="arm arm2"></div>
-
-    <div class="gun"></div>
-
-    <div class="gun2"></div>
-
-    <div class="leg leg1"></div>
-
-    <div class="leg leg2"></div>
-
-  </div>
-
-
-  <!-- Logo -->
+  <!-- LOGO -->
 
   <div class="logo">
 
@@ -654,7 +436,30 @@ html,body{
   </div>
 
 
-  <!-- Loading -->
+  <!-- CHARACTER -->
+
+  <div class="character">
+
+    <div class="hair"></div>
+
+    <div class="head"></div>
+
+    <div class="body"></div>
+
+    <div class="arm arm1"></div>
+
+    <div class="arm arm2"></div>
+
+    <div class="gun"></div>
+
+    <div class="leg leg1"></div>
+
+    <div class="leg leg2"></div>
+
+  </div>
+
+
+  <!-- LOADING -->
 
   <div
     class="loading"
@@ -688,14 +493,15 @@ html,body{
   </div>
 
 
-  <!-- Start -->
+  <!-- START -->
 
- <button
-  class="start"
-  id="start"
-  onclick="window.location.href="start.html">
-  START GAME
-</button>
+  <button
+    class="start"
+    id="start">
+
+    START
+
+  </button>
 
 
   <div class="version">
@@ -735,7 +541,7 @@ document.getElementById(
 );
 
 
-const texts=[
+const loadingMessages=[
 
   "Loading resources...",
 
@@ -745,26 +551,22 @@ const texts=[
 
   "Loading weapons...",
 
-  "Generating world...",
-
-  "Connecting server...",
+  "Preparing world...",
 
   "Almost ready..."
 
 ];
 
 
-let textIndex=0;
+let messageIndex=0;
 
 
-const loadingTimer=
-setInterval(()=>{
+const loader=setInterval(()=>{
 
   progress +=
     Math.floor(
       Math.random()*3
     )+1;
-
 
   if(progress>100)
     progress=100;
@@ -773,36 +575,38 @@ setInterval(()=>{
   progressBar.style.width=
     progress+"%";
 
-
   percent.textContent=
     progress+"%";
 
 
   if(
     progress>=
-    (textIndex+1)*14
-    &&
-    textIndex<
-    texts.length-1
+    (messageIndex+1)*16
   ){
 
-    textIndex++;
+    if(
+      messageIndex<
+      loadingMessages.length-1
+    ){
 
-    status.textContent=
-      texts[textIndex];
+      messageIndex++;
+
+      status.textContent=
+        loadingMessages[
+          messageIndex
+        ];
+
+    }
 
   }
 
 
   if(progress>=100){
 
-    clearInterval(
-      loadingTimer
-    );
+    clearInterval(loader);
 
     status.textContent=
-      "Ready to battle!";
-
+      "Ready!";
 
     setTimeout(()=>{
 
@@ -812,23 +616,26 @@ setInterval(()=>{
       start.style.display=
         "block";
 
-    },700);
+    },600);
 
   }
 
-},120);
+},100);
 
 
-/* Start button */
+/* =========================
+   OPEN start.html
+========================= */
 
-start.onclick=()=>{
+start.addEventListener(
+  "click",
+  function(){
 
-  start.textContent=
-    "STARTING...";
+    window.location.href=
+      "start.html";
 
-  start.disabled=true;
-
-};
+  }
+);
 
 </script>
 
