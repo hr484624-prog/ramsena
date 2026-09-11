@@ -8,6 +8,7 @@ content="width=device-width,initial-scale=1.0,user-scalable=no">
 <title>Battle Arena</title>
 
 <style>
+
 *{
   margin:0;
   padding:0;
@@ -18,186 +19,184 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
+  background:#05070b;
   font-family:Arial,sans-serif;
-  background:#080b12;
 }
 
-body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.screen{
+.game{
   position:relative;
   width:100vw;
   height:100vh;
   overflow:hidden;
+  background:#05070b;
+}
+
+/* =========================
+   CONTINUOUS ROTATING WORLD
+========================= */
+
+.rotateWorld{
+  position:absolute;
+  width:180vmax;
+  height:180vmax;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  animation:worldRotate 18s linear infinite;
+}
+
+@keyframes worldRotate{
+
+  from{
+    transform:
+      translate(-50%,-50%)
+      rotate(0deg);
+  }
+
+  to{
+    transform:
+      translate(-50%,-50%)
+      rotate(360deg);
+  }
+
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.sky{
+  position:absolute;
+  inset:0;
+
   background:
     radial-gradient(
-      circle at 50% 35%,
-      #304c70 0%,
-      #111c2c 42%,
-      #05070c 100%
+      circle at center,
+      #304c72 0%,
+      #17283d 30%,
+      #0b111b 60%,
+      #030509 100%
     );
 }
 
-/* Background lights */
+/* glowing circles */
 
-.light{
+.glow{
   position:absolute;
   border-radius:50%;
-  filter:blur(35px);
+  filter:blur(50px);
   opacity:.35;
 }
 
-.light.one{
-  width:180px;
-  height:180px;
+.glow1{
+  width:320px;
+  height:320px;
   background:#1769e0;
-  top:12%;
-  left:-40px;
+  left:8%;
+  top:10%;
 }
 
-.light.two{
-  width:220px;
-  height:220px;
-  background:#e05a17;
-  right:-80px;
-  top:28%;
+.glow2{
+  width:280px;
+  height:280px;
+  background:#e36a25;
+  right:5%;
+  top:35%;
 }
 
-.light.three{
-  width:170px;
-  height:170px;
+.glow3{
+  width:250px;
+  height:250px;
   background:#1769e0;
+  left:35%;
   bottom:5%;
-  left:30%;
 }
 
-/* Fake mountain background */
+/* =========================
+   ROTATING RINGS
+========================= */
 
-.mountains{
+.ring{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:2px solid rgba(80,170,255,.25);
+}
+
+.ring1{
+  width:500px;
+  height:500px;
+}
+
+.ring2{
+  width:850px;
+  height:850px;
+}
+
+.ring3{
+  width:1200px;
+  height:1200px;
+}
+
+/* =========================
+   MOUNTAINS
+========================= */
+
+.mountain{
   position:absolute;
   bottom:0;
-  left:0;
   width:100%;
   height:48%;
+
   background:
     linear-gradient(
       135deg,
-      transparent 0 20%,
-      #111925 20% 35%,
-      transparent 35% 45%,
-      #0c131d 45% 65%,
+      transparent 0 15%,
+      #101925 15% 32%,
+      transparent 32% 42%,
+      #0b121d 42% 65%,
       transparent 65%
     );
-  opacity:.9;
 }
 
-/* Character */
+/* =========================
+   STARS / PARTICLES
+========================= */
+
+.particle{
+  position:absolute;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:white;
+  opacity:.6;
+}
+
+/* =========================
+   CHARACTER
+========================= */
 
 .character{
   position:absolute;
   left:50%;
-  top:43%;
+  top:45%;
+
+  width:190px;
+  height:330px;
+
   transform:
     translate(-50%,-50%);
-  width:170px;
-  height:300px;
+
   animation:
-    float 2.8s ease-in-out infinite;
+    characterFloat 2.5s ease-in-out infinite;
+
+  z-index:4;
 }
 
-.head{
-  position:absolute;
-  width:72px;
-  height:78px;
-  border-radius:45%;
-  background:#c88662;
-  top:25px;
-  left:49px;
-  box-shadow:
-    inset -8px -4px 0 rgba(0,0,0,.12);
-}
+@keyframes characterFloat{
 
-.hair{
-  position:absolute;
-  width:78px;
-  height:42px;
-  border-radius:50% 50% 20% 20%;
-  background:#171717;
-  top:15px;
-  left:46px;
-  z-index:2;
-}
-
-.body{
-  position:absolute;
-  width:100px;
-  height:145px;
-  border-radius:30px 30px 15px 15px;
-  background:
-    linear-gradient(
-      90deg,
-      #182331,
-      #39495a,
-      #182331
-    );
-  top:92px;
-  left:35px;
-}
-
-.arm{
-  position:absolute;
-  width:30px;
-  height:125px;
-  border-radius:20px;
-  background:#263545;
-  top:105px;
-}
-
-.arm.left{
-  left:15px;
-  transform:rotate(15deg);
-}
-
-.arm.right{
-  right:15px;
-  transform:rotate(-15deg);
-}
-
-.gun{
-  position:absolute;
-  width:110px;
-  height:18px;
-  background:#15191e;
-  right:-45px;
-  top:175px;
-  transform:rotate(-18deg);
-  border-radius:5px;
-}
-
-.leg{
-  position:absolute;
-  width:38px;
-  height:110px;
-  background:#18212b;
-  top:220px;
-  border-radius:10px;
-}
-
-.leg.left{
-  left:47px;
-  transform:rotate(3deg);
-}
-
-.leg.right{
-  right:47px;
-  transform:rotate(-3deg);
-}
-
-@keyframes float{
   0%,100%{
     transform:
       translate(-50%,-50%)
@@ -207,108 +206,342 @@ body{
   50%{
     transform:
       translate(-50%,-50%)
-      translateY(-8px);
+      translateY(-10px);
   }
+
 }
 
-/* Logo */
+/* head */
+
+.head{
+  position:absolute;
+
+  width:72px;
+  height:80px;
+
+  left:59px;
+  top:22px;
+
+  border-radius:45%;
+
+  background:
+    linear-gradient(
+      90deg,
+      #b87555,
+      #d79570
+    );
+}
+
+/* hair */
+
+.hair{
+  position:absolute;
+
+  width:80px;
+  height:48px;
+
+  left:55px;
+  top:10px;
+
+  border-radius:
+    50% 50% 20% 20%;
+
+  background:#15171b;
+
+  z-index:2;
+}
+
+/* body */
+
+.body{
+  position:absolute;
+
+  width:108px;
+  height:150px;
+
+  left:41px;
+  top:91px;
+
+  border-radius:
+    30px 30px 18px 18px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #151f2c,
+      #40556b,
+      #151f2c
+    );
+}
+
+/* shoulders */
+
+.shoulder{
+  position:absolute;
+
+  width:150px;
+  height:35px;
+
+  left:20px;
+  top:95px;
+
+  border-radius:30px;
+
+  background:#273747;
+}
+
+/* arms */
+
+.arm{
+  position:absolute;
+
+  width:34px;
+  height:130px;
+
+  top:105px;
+
+  border-radius:20px;
+
+  background:#253544;
+}
+
+.arm1{
+  left:18px;
+  transform:rotate(13deg);
+}
+
+.arm2{
+  right:18px;
+  transform:rotate(-13deg);
+}
+
+/* gun */
+
+.gun{
+  position:absolute;
+
+  width:120px;
+  height:18px;
+
+  right:-50px;
+  top:170px;
+
+  border-radius:5px;
+
+  background:#101419;
+
+  transform:rotate(-17deg);
+}
+
+.gun2{
+  position:absolute;
+
+  width:35px;
+  height:8px;
+
+  right:35px;
+  top:183px;
+
+  background:#252b31;
+
+  transform:rotate(-17deg);
+}
+
+/* legs */
+
+.leg{
+  position:absolute;
+
+  width:42px;
+  height:115px;
+
+  top:225px;
+
+  border-radius:12px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #111821,
+      #293846
+    );
+}
+
+.leg1{
+  left:48px;
+}
+
+.leg2{
+  right:48px;
+}
+
+/* =========================
+   LOGO
+========================= */
 
 .logo{
   position:absolute;
-  top:8%;
+
+  top:7%;
   left:50%;
-  transform:translateX(-50%);
+
+  transform:
+    translateX(-50%);
+
+  z-index:10;
+
   text-align:center;
+
   color:white;
-  letter-spacing:2px;
+
+  white-space:nowrap;
 }
 
 .logo h1{
+
   font-size:34px;
+
   font-weight:900;
+
+  letter-spacing:3px;
+
   text-shadow:
-    0 4px 15px rgba(0,0,0,.8);
+    0 4px 18px #000;
 }
 
 .logo p{
+
   margin-top:5px;
-  font-size:11px;
-  letter-spacing:5px;
-  opacity:.7;
+
+  font-size:10px;
+
+  letter-spacing:6px;
+
+  opacity:.75;
 }
 
-/* Loading */
+/* =========================
+   LOADING
+========================= */
 
 .loading{
+
   position:absolute;
-  left:50%;
-  bottom:13%;
-  transform:translateX(-50%);
+
   width:min(82%,430px);
-  text-align:center;
+
+  left:50%;
+  bottom:11%;
+
+  transform:
+    translateX(-50%);
+
+  z-index:20;
+
   color:white;
+
+  text-align:center;
 }
 
-.loadingText{
+.loadingTop{
+
   display:flex;
+
   justify-content:space-between;
+
   font-size:13px;
-  margin-bottom:9px;
-  opacity:.9;
+
+  margin-bottom:8px;
 }
 
 .bar{
+
   width:100%;
+
   height:7px;
-  background:rgba(255,255,255,.2);
+
   border-radius:20px;
+
   overflow:hidden;
+
+  background:
+    rgba(255,255,255,.18);
 }
 
 .progress{
+
   width:0%;
+
   height:100%;
+
+  border-radius:20px;
+
   background:
     linear-gradient(
       90deg,
       #1769e0,
-      #65b5ff
+      #5cb7ff
     );
-  border-radius:20px;
+
   box-shadow:
-    0 0 12px #1769e0;
+    0 0 14px #1769e0;
+
+  transition:
+    width .15s linear;
 }
 
 .tip{
-  margin-top:13px;
+
+  margin-top:12px;
+
   font-size:11px;
-  color:#c9d3df;
+
+  color:#c9d5e2;
 }
 
-/* Start */
+/* =========================
+   START BUTTON
+========================= */
 
 .start{
+
   display:none;
+
   position:absolute;
+
   left:50%;
-  bottom:8%;
-  transform:translateX(-50%);
-  width:210px;
-  height:50px;
+  bottom:7%;
+
+  transform:
+    translateX(-50%);
+
+  width:220px;
+  height:52px;
+
   border:0;
+
   border-radius:10px;
+
   color:white;
+
   font-size:18px;
+
   font-weight:bold;
+
   letter-spacing:2px;
+
   background:
     linear-gradient(
       90deg,
       #1769e0,
-      #398cff
+      #4b9cff
     );
+
   box-shadow:
-    0 5px 25px rgba(23,105,224,.45);
+    0 5px 25px
+    rgba(23,105,224,.5);
+
+  z-index:20;
 }
 
 .start:active{
@@ -317,15 +550,27 @@ body{
     scale(.96);
 }
 
-/* Version */
+/* =========================
+   VERSION
+========================= */
 
 .version{
+
   position:absolute;
+
   bottom:2%;
+
   left:50%;
-  transform:translateX(-50%);
-  color:rgba(255,255,255,.4);
-  font-size:10px;
+
+  transform:
+    translateX(-50%);
+
+  color:
+    rgba(255,255,255,.4);
+
+  font-size:9px;
+
+  z-index:20;
 }
 
 </style>
@@ -333,43 +578,90 @@ body{
 
 <body>
 
-<div class="screen">
+<div class="game">
 
-  <div class="light one"></div>
-  <div class="light two"></div>
-  <div class="light three"></div>
+  <!-- Continuously rotating background -->
 
-  <div class="mountains"></div>
+  <div class="rotateWorld">
 
-  <div class="logo">
-    <h1>BATTLE ARENA</h1>
-    <p>BATTLE • SURVIVE • WIN</p>
+    <div class="sky"></div>
+
+    <div class="glow glow1"></div>
+    <div class="glow glow2"></div>
+    <div class="glow glow3"></div>
+
+    <div class="ring ring1"></div>
+    <div class="ring ring2"></div>
+    <div class="ring ring3"></div>
+
+    <div class="mountain"></div>
+
+    <div class="particle"
+         style="left:20%;top:18%"></div>
+
+    <div class="particle"
+         style="left:70%;top:15%"></div>
+
+    <div class="particle"
+         style="left:85%;top:50%"></div>
+
+    <div class="particle"
+         style="left:35%;top:70%"></div>
+
+    <div class="particle"
+         style="left:60%;top:80%"></div>
+
   </div>
 
-  <!-- Original character -->
+
+  <!-- Character -->
 
   <div class="character">
 
     <div class="hair"></div>
+
     <div class="head"></div>
+
+    <div class="shoulder"></div>
 
     <div class="body"></div>
 
-    <div class="arm left"></div>
-    <div class="arm right"></div>
+    <div class="arm arm1"></div>
+
+    <div class="arm arm2"></div>
 
     <div class="gun"></div>
 
-    <div class="leg left"></div>
-    <div class="leg right"></div>
+    <div class="gun2"></div>
+
+    <div class="leg leg1"></div>
+
+    <div class="leg leg2"></div>
 
   </div>
 
+
+  <!-- Logo -->
+
+  <div class="logo">
+
+    <h1>BATTLE ARENA</h1>
+
+    <p>
+      BATTLE • SURVIVE • WIN
+    </p>
+
+  </div>
+
+
   <!-- Loading -->
 
-  <div class="loading" id="loading">
+  <div
+    class="loading"
+    id="loading">
 
-    <div class="loadingText">
+    <div class="loadingTop">
+
       <span id="status">
         Loading resources...
       </span>
@@ -377,13 +669,16 @@ body{
       <span id="percent">
         0%
       </span>
+
     </div>
 
     <div class="bar">
+
       <div
         class="progress"
         id="progress">
       </div>
+
     </div>
 
     <div class="tip">
@@ -392,11 +687,17 @@ body{
 
   </div>
 
+
+  <!-- Start -->
+
   <button
     class="start"
     id="start">
+
     START GAME
+
   </button>
+
 
   <div class="version">
     VERSION 1.0
@@ -404,37 +705,38 @@ body{
 
 </div>
 
+
 <script>
 
-let progress = 0;
+let progress=0;
 
-const bar =
+const progressBar=
 document.getElementById(
   "progress"
 );
 
-const percent =
+const percent=
 document.getElementById(
   "percent"
 );
 
-const status =
+const status=
 document.getElementById(
   "status"
 );
 
-const loading =
+const loading=
 document.getElementById(
   "loading"
 );
 
-const start =
+const start=
 document.getElementById(
   "start"
 );
 
 
-const messages = [
+const texts=[
 
   "Loading resources...",
 
@@ -442,100 +744,92 @@ const messages = [
 
   "Loading characters...",
 
-  "Preparing weapons...",
+  "Loading weapons...",
 
   "Generating world...",
+
+  "Connecting server...",
 
   "Almost ready..."
 
 ];
 
 
-let messageIndex=0;
+let textIndex=0;
 
 
-const timer =
+const loadingTimer=
 setInterval(()=>{
 
   progress +=
-  Math.floor(
-    Math.random()*4
-  ) + 1;
+    Math.floor(
+      Math.random()*3
+    )+1;
 
 
   if(progress>100)
     progress=100;
 
 
-  bar.style.width=
-  progress+"%";
+  progressBar.style.width=
+    progress+"%";
+
 
   percent.textContent=
-  progress+"%";
+    progress+"%";
 
 
   if(
-    progress>
-    (messageIndex+1)*15 &&
-    messageIndex<
-    messages.length-1
+    progress>=
+    (textIndex+1)*14
+    &&
+    textIndex<
+    texts.length-1
   ){
 
-    messageIndex++;
+    textIndex++;
 
     status.textContent=
-    messages[messageIndex];
+      texts[textIndex];
 
   }
 
 
   if(progress>=100){
 
-    clearInterval(timer);
+    clearInterval(
+      loadingTimer
+    );
 
     status.textContent=
-    "Ready to battle!";
+      "Ready to battle!";
+
 
     setTimeout(()=>{
 
       loading.style.display=
-      "none";
+        "none";
 
       start.style.display=
-      "block";
+        "block";
 
-    },500);
+    },700);
 
   }
 
-},100);
+},120);
 
 
 /* Start button */
 
-start.addEventListener(
-  "click",
-  ()=>{
+start.onclick=()=>{
 
-    start.textContent=
+  start.textContent=
     "STARTING...";
 
-    start.disabled=true;
+  start.disabled=true;
 
-    /*
-      Yahan baad mein actual
-      3D game start kar sakte ho.
-    */
-
-    setTimeout(()=>{
-
-      start.textContent=
-      "GAME READY";
-
-    },1000);
-
-  }
-);
+};
 
 </script>
 
