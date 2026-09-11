@@ -1,683 +1,1516 @@
 <!DOCTYPE html>
-<html lang="hi">
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,
+      maximum-scale=1.0,user-scalable=no">
 
-  <title>GyanSetu - क्रिकेट ड्रिल्स</title>
+<title>Battle Arena</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  user-select:none;
+  -webkit-user-select:none;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #03152e;
-      color: white;
-    }
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#111;
+  font-family:Arial,sans-serif;
+}
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      margin: auto;
-      min-height: 100vh;
-      padding-bottom: 30px;
-    }
+#game{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  touch-action:none;
+}
 
-    /* HEADER */
-    .header {
-      background: linear-gradient(135deg, #003b91, #006eff);
-      padding: 18px 16px 22px;
-      border-bottom-left-radius: 28px;
-      border-bottom-right-radius: 28px;
-      box-shadow: 0 5px 25px rgba(0, 110, 255, 0.35);
-    }
+canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
 
-    .top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+#hud{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:12px;
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+  z-index:5;
+}
 
-    .back-btn {
-      border: none;
-      background: rgba(255,255,255,0.15);
-      color: white;
-      padding: 9px 13px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.box{
+  color:white;
+  background:rgba(0,0,0,.55);
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:bold;
+}
 
-    .title {
-      font-size: 20px;
-      font-weight: 800;
-    }
+#healthOuter{
+  width:130px;
+  height:10px;
+  background:#333;
+  border-radius:20px;
+  overflow:hidden;
+  margin-top:5px;
+}
 
-    /* EMBLEM */
-    .emblem {
-      width: 90px;
-      height: 90px;
-      margin: 20px auto 10px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, #ffffff, #dcecff);
-      border: 5px solid #00b7ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 25px rgba(0, 195, 255, 0.6);
-      font-size: 43px;
-    }
+#health{
+  width:100%;
+  height:100%;
+  background:#22d46b;
+}
 
-    .hero-title {
-      text-align: center;
-      font-size: 25px;
-      font-weight: 900;
-    }
+#joystick{
+  position:absolute;
+  left:22px;
+  bottom:28px;
+  width:145px;
+  height:145px;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  border:2px solid rgba(255,255,255,.18);
+  z-index:10;
+}
 
-    .hero-subtitle {
-      text-align: center;
-      margin-top: 6px;
-      color: #d8ebff;
-      font-size: 13px;
-    }
+#stick{
+  position:absolute;
+  width:62px;
+  height:62px;
+  left:41px;
+  top:41px;
+  border-radius:50%;
+  background:rgba(255,255,255,.35);
+}
 
-    /* SECTION */
-    .section {
-      padding: 18px 16px 0;
-    }
+#actions{
+  position:absolute;
+  right:20px;
+  bottom:28px;
+  display:flex;
+  gap:14px;
+  align-items:center;
+  z-index:10;
+}
 
-    .section-title {
-      font-size: 19px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
+.action{
+  border:0;
+  color:white;
+  border-radius:50%;
+  font-weight:bold;
+  background:rgba(0,0,0,.6);
+}
 
-    /* DRILL CARD */
-    .drills {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
+#fire{
+  width:82px;
+  height:82px;
+  background:rgba(210,45,45,.8);
+}
 
-    .drill {
-      background: linear-gradient(145deg, #092a54, #061d3b);
-      border: 1px solid rgba(0, 174, 255, 0.25);
-      border-radius: 18px;
-      padding: 15px;
-      min-height: 115px;
-      cursor: pointer;
-      box-shadow: 0 5px 18px rgba(0,0,0,0.25);
-      transition: 0.2s;
-    }
+#reload{
+  width:58px;
+  height:58px;
+  font-size:10px;
+}
 
-    .drill:active {
-      transform: scale(0.96);
-    }
+#auto{
+  position:absolute;
+  top:65px;
+  right:12px;
+  border:0;
+  color:white;
+  background:rgba(0,0,0,.55);
+  padding:9px 12px;
+  border-radius:12px;
+  font-size:12px;
+  z-index:10;
+}
 
-    .drill-icon {
-      font-size: 28px;
-      margin-bottom: 8px;
-    }
+#message{
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:30;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  color:white;
+  background:rgba(0,0,0,.55);
+  font-size:32px;
+  font-weight:bold;
+}
 
-    .drill h3 {
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .drill p {
-      color: #a9c9ee;
-      font-size: 11px;
-      line-height: 1.4;
-    }
-
-    /* TIPS */
-    .tips {
-      margin: 20px 16px;
-      padding: 18px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #062c5e, #041d3b);
-      border: 1px solid rgba(0, 180, 255, 0.25);
-    }
-
-    .tips h2 {
-      font-size: 18px;
-      margin-bottom: 12px;
-    }
-
-    .tip {
-      display: flex;
-      gap: 9px;
-      margin: 9px 0;
-      color: #c8ddf5;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    /* POPUP */
-    .popup {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.72);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .popup-box {
-      width: 100%;
-      max-width: 390px;
-      background: #06234a;
-      border: 1px solid #008cff;
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow: 0 0 35px rgba(0, 145, 255, 0.4);
-    }
-
-    .popup-box h2 {
-      font-size: 21px;
-      margin-bottom: 12px;
-    }
-
-    .popup-box p {
-      color: #c7dcf5;
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 12px;
-    }
-
-    .info {
-      background: #0a315f;
-      padding: 11px;
-      border-radius: 12px;
-      margin-top: 8px;
-      font-size: 13px;
-    }
-
-    .close-btn {
-      width: 100%;
-      border: none;
-      background: linear-gradient(135deg, #006eff, #00c6ff);
-      color: white;
-      padding: 12px;
-      border-radius: 13px;
-      font-weight: bold;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-
-    /* FOOTER */
-    .footer {
-      text-align: center;
-      color: #7195be;
-      font-size: 11px;
-      padding: 10px 20px 25px;
-    }
-  </style>
+#restart{
+  margin-top:20px;
+  padding:13px 25px;
+  border:0;
+  border-radius:12px;
+  background:#1769e0;
+  color:white;
+  font-weight:bold;
+}
+</style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="game">
 
-  <!-- HEADER -->
-  <div class="header">
+<canvas id="canvas"></canvas>
 
-    <div class="top-row">
+<div id="hud">
 
-      <button class="back-btn" onclick="goHome()">
-        ← वापस
-      </button>
-
-      <div class="title">
-        🏏 क्रिकेट
-      </div>
-
-      <div style="width:60px;"></div>
-
+  <div class="box">
+    ❤️ HP
+    <div id="healthOuter">
+      <div id="health"></div>
     </div>
-
-    <div class="emblem">
-      🏏
-    </div>
-
-    <div class="hero-title">
-      क्रिकेट ड्रिल्स
-    </div>
-
-    <div class="hero-subtitle">
-      अपने क्रिकेट कौशल को बेहतर बनाएं 🇮🇳
-    </div>
-
   </div>
 
-
-  <!-- BATTING -->
-  <div class="section">
-
-    <div class="section-title">
-      🏏 बल्लेबाजी अभ्यास
-    </div>
-
-    <div class="drills">
-
-      <div class="drill" onclick="openDrill(
-        'फ्रंट फुट ड्राइव',
-        'गेंद की लाइन में आगे बढ़कर संतुलित तरीके से बल्ला चलाने का अभ्यास करें।',
-        '10 मिनट',
-        '20 बार',
-        'सिर स्थिर रखें और गेंद पर नजर बनाए रखें।'
-      )">
-        <div class="drill-icon">🏏</div>
-        <h3>फ्रंट फुट ड्राइव</h3>
-        <p>आगे बढ़कर शानदार ड्राइव खेलें</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'बैक फुट शॉट',
-        'छोटी लंबाई की गेंदों पर पीछे हटकर सही समय पर शॉट खेलने का अभ्यास करें।',
-        '10 मिनट',
-        '20 बार',
-        'गेंद की उछाल को ध्यान से पढ़ें।'
-      )">
-        <div class="drill-icon">🔥</div>
-        <h3>बैक फुट शॉट</h3>
-        <p>बैक फुट पर मजबूत शॉट खेलें</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'स्ट्रेट ड्राइव',
-        'गेंद को सीधे मैदान में खेलने के लिए बल्ले का सही फेस इस्तेमाल करें।',
-        '8 मिनट',
-        '20 बार',
-        'बल्ले का फेस गेंद की दिशा में रखें।'
-      )">
-        <div class="drill-icon">🎯</div>
-        <h3>स्ट्रेट ड्राइव</h3>
-        <p>सीधा और शानदार ड्राइव</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'कवर ड्राइव',
-        'ऑफ साइड की गेंदों को कवर क्षेत्र में खेलने का अभ्यास करें।',
-        '10 मिनट',
-        '20 बार',
-        'फ्रंट शोल्डर को गेंद की दिशा में रखें।'
-      )">
-        <div class="drill-icon">⚡</div>
-        <h3>कवर ड्राइव</h3>
-        <p>कवर क्षेत्र में सटीक शॉट</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'पुल शॉट',
-        'छोटी गेंदों पर पीछे हटकर गेंद को स्क्वायर लेग की ओर खेलने का अभ्यास करें।',
-        '10 मिनट',
-        '15 बार',
-        'शॉट खेलते समय शरीर का संतुलन बनाए रखें।'
-      )">
-        <div class="drill-icon">💥</div>
-        <h3>पुल शॉट</h3>
-        <p>छोटी गेंद पर आक्रामक शॉट</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'रनिंग बिटवीन विकेट्स',
-        'विकेटों के बीच तेजी से दौड़ने और सही समय पर रन लेने का अभ्यास करें।',
-        '8 मिनट',
-        '10 रन',
-        'अपने साथी के साथ लगातार संवाद करें।'
-      )">
-        <div class="drill-icon">🏃</div>
-        <h3>विकेटों के बीच दौड़</h3>
-        <p>तेज रन लेने का अभ्यास</p>
-      </div>
-
-    </div>
-
+  <div class="box">
+    👥 <span id="players">25</span>
   </div>
 
-
-  <!-- BOWLING -->
-  <div class="section">
-
-    <div class="section-title">
-      🎯 गेंदबाजी अभ्यास
-    </div>
-
-    <div class="drills">
-
-      <div class="drill" onclick="openDrill(
-        'लाइन और लेंथ',
-        'एक ही अच्छी लाइन और लेंथ पर लगातार गेंद डालने का अभ्यास करें।',
-        '12 मिनट',
-        '30 गेंद',
-        'ऑफ स्टंप के आसपास लगातार गेंद डालें।'
-      )">
-        <div class="drill-icon">🎯</div>
-        <h3>लाइन और लेंथ</h3>
-        <p>सटीक गेंदबाजी का अभ्यास</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'यॉर्कर अभ्यास',
-        'बल्लेबाज के पैरों के पास सटीक यॉर्कर डालने का अभ्यास करें।',
-        '10 मिनट',
-        '20 गेंद',
-        'रिलीज पॉइंट पर पूरा ध्यान दें।'
-      )">
-        <div class="drill-icon">🔥</div>
-        <h3>यॉर्कर अभ्यास</h3>
-        <p>सटीक यॉर्कर डालें</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'स्विंग गेंदबाजी',
-        'गेंद को हवा में स्विंग कराने के लिए सीम और कलाई की स्थिति पर काम करें।',
-        '12 मिनट',
-        '24 गेंद',
-        'सीम को सही दिशा में रखें।'
-      )">
-        <div class="drill-icon">🌪️</div>
-        <h3>स्विंग गेंदबाजी</h3>
-        <p>गेंद को हवा में स्विंग कराएं</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'स्पिन गेंदबाजी',
-        'उंगलियों और कलाई की मदद से गेंद को अधिक स्पिन कराने का अभ्यास करें।',
-        '12 मिनट',
-        '24 गेंद',
-        'गेंद पर उंगलियों की पकड़ मजबूत रखें।'
-      )">
-        <div class="drill-icon">🌀</div>
-        <h3>स्पिन गेंदबाजी</h3>
-        <p>बेहतर स्पिन और नियंत्रण</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'बॉलिंग रन-अप',
-        'अपनी रन-अप की गति और लय को नियंत्रित करने का अभ्यास करें।',
-        '8 मिनट',
-        '10 बार',
-        'रन-अप में एक समान लय रखें।'
-      )">
-        <div class="drill-icon">🏃</div>
-        <h3>बॉलिंग रन-अप</h3>
-        <p>रन-अप को बेहतर बनाएं</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'बाउंसर नियंत्रण',
-        'सही तकनीक के साथ नियंत्रित बाउंसर डालने का अभ्यास करें।',
-        '10 मिनट',
-        '15 गेंद',
-        'सिर और शरीर का संतुलन बनाए रखें।'
-      )">
-        <div class="drill-icon">💨</div>
-        <h3>बाउंसर नियंत्रण</h3>
-        <p>नियंत्रित बाउंसर डालें</p>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- FIELDING -->
-  <div class="section">
-
-    <div class="section-title">
-      🧤 क्षेत्ररक्षण अभ्यास
-    </div>
-
-    <div class="drills">
-
-      <div class="drill" onclick="openDrill(
-        'कैचिंग',
-        'अलग-अलग ऊंचाई और गति की गेंदों को सुरक्षित तरीके से पकड़ने का अभ्यास करें।',
-        '10 मिनट',
-        '25 कैच',
-        'कैच लेते समय अपनी नजर गेंद पर रखें।'
-      )">
-        <div class="drill-icon">🧤</div>
-        <h3>कैचिंग</h3>
-        <p>कैच पकड़ने का अभ्यास</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'ग्राउंड फील्डिंग',
-        'जमीन पर आने वाली गेंदों को तेजी से रोकने और उठाने का अभ्यास करें।',
-        '10 मिनट',
-        '20 गेंद',
-        'घुटनों को मोड़कर गेंद के सामने रहें।'
-      )">
-        <div class="drill-icon">⚡</div>
-        <h3>ग्राउंड फील्डिंग</h3>
-        <p>जमीन पर तेज फील्डिंग</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'थ्रो की सटीकता',
-        'स्टंप्स या लक्ष्य पर सटीक थ्रो करने का अभ्यास करें।',
-        '8 मिनट',
-        '20 थ्रो',
-        'थ्रो से पहले लक्ष्य को अच्छी तरह देखें।'
-      )">
-        <div class="drill-icon">🎯</div>
-        <h3>थ्रो की सटीकता</h3>
-        <p>सटीक थ्रो का अभ्यास</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'डायरेक्ट हिट',
-        'गेंद को सीधे स्टंप्स पर मारने की सटीकता बढ़ाएं।',
-        '8 मिनट',
-        '15 थ्रो',
-        'जल्दी निर्णय लें और सही निशाना लगाएं।'
-      )">
-        <div class="drill-icon">🎯</div>
-        <h3>डायरेक्ट हिट</h3>
-        <p>स्टंप्स पर सीधा निशाना</p>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- WICKET KEEPING -->
-  <div class="section">
-
-    <div class="section-title">
-      🧤 विकेटकीपिंग अभ्यास
-    </div>
-
-    <div class="drills">
-
-      <div class="drill" onclick="openDrill(
-        'बेसिक स्टांस',
-        'विकेट के पीछे सही स्थिति और संतुलित स्टांस का अभ्यास करें।',
-        '8 मिनट',
-        '15 बार',
-        'घुटनों को हल्का मोड़कर तैयार रहें।'
-      )">
-        <div class="drill-icon">🧤</div>
-        <h3>बेसिक स्टांस</h3>
-        <p>सही विकेटकीपिंग स्टांस</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'कीपर कैचिंग',
-        'तेज गेंदों और एज वाली गेंदों को सुरक्षित पकड़ने का अभ्यास करें।',
-        '10 मिनट',
-        '20 कैच',
-        'गेंद के आने तक हाथों को तैयार रखें।'
-      )">
-        <div class="drill-icon">🧤</div>
-        <h3>कीपर कैचिंग</h3>
-        <p>तेज कैच पकड़ने का अभ्यास</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'स्टंपिंग',
-        'स्पिन गेंदबाज के साथ तेज स्टंपिंग करने का अभ्यास करें।',
-        '10 मिनट',
-        '15 बार',
-        'गेंद को पकड़ते ही ग्लव्स को स्टंप्स की ओर लाएं।'
-      )">
-        <div class="drill-icon">⚡</div>
-        <h3>स्टंपिंग</h3>
-        <p>तेज स्टंपिंग का अभ्यास</p>
-      </div>
-
-
-      <div class="drill" onclick="openDrill(
-        'फुटवर्क',
-        'गेंद की दिशा के अनुसार तेजी से दाएं और बाएं मूव करने का अभ्यास करें।',
-        '8 मिनट',
-        '20 मूवमेंट',
-        'पैरों को हल्का और सक्रिय रखें।'
-      )">
-        <div class="drill-icon">🏃</div>
-        <h3>फुटवर्क</h3>
-        <p>तेज और सही फुटवर्क</p>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- PRO TIPS -->
-  <div class="tips">
-
-    <h2>💡 प्रो टिप्स</h2>
-
-    <div class="tip">
-      🏏 <span>हर अभ्यास से पहले अच्छी तरह वार्म-अप करें।</span>
-    </div>
-
-    <div class="tip">
-      🎯 <span>तकनीक पर ध्यान दें, केवल ताकत पर नहीं।</span>
-    </div>
-
-    <div class="tip">
-      💪 <span>नियमित अभ्यास से आपका खेल बेहतर होगा।</span>
-    </div>
-
-    <div class="tip">
-      🧠 <span>हर गेंद को ध्यान और आत्मविश्वास के साथ खेलें।</span>
-    </div>
-
-  </div>
-
-
-  <div class="footer">
-    GyanSetu Cricket Academy 🏏🇮🇳
+  <div class="box">
+    🔫 <span id="ammo">30</span>
   </div>
 
 </div>
 
+<button id="auto">
+  🔄 AUTO ROTATE: ON
+</button>
 
-<!-- POPUP -->
-<div class="popup" id="popup" onclick="closePopupOutside(event)">
+<div id="joystick">
+  <div id="stick"></div>
+</div>
 
-  <div class="popup-box">
+<div id="actions">
 
-    <h2 id="popupTitle">
-      ड्रिल
-    </h2>
+  <button
+    class="action"
+    id="reload">
+    RELOAD
+  </button>
 
-    <p id="popupDescription">
-      अभ्यास विवरण
-    </p>
-
-    <div class="info">
-      ⏱️ अवधि: <strong id="popupTime"></strong>
-    </div>
-
-    <div class="info">
-      🔁 अभ्यास: <strong id="popupReps"></strong>
-    </div>
-
-    <div class="info">
-      💡 प्रो टिप: <strong id="popupTip"></strong>
-    </div>
-
-    <button class="close-btn" onclick="closePopup()">
-      समझ गया 👍
-    </button>
-
-  </div>
+  <button
+    class="action"
+    id="fire">
+    FIRE
+  </button>
 
 </div>
 
+<div id="message">
+  <div id="messageText"></div>
+  <button id="restart">
+    PLAY AGAIN
+  </button>
+</div>
+
+</div>
 
 <script>
 
-  function goHome() {
-    window.location.href = "home.html";
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+let W=innerWidth;
+let H=innerHeight;
+
+function resize(){
+
+  W=innerWidth;
+  H=innerHeight;
+
+  canvas.width=
+  W*devicePixelRatio;
+
+  canvas.height=
+  H*devicePixelRatio;
+
+  canvas.style.width=
+  W+"px";
+
+  canvas.style.height=
+  H+"px";
+
+  ctx.setTransform(
+    devicePixelRatio,
+    0,
+    0,
+    devicePixelRatio,
+    0,
+    0
+  );
+}
+
+resize();
+
+window.addEventListener(
+  "resize",
+  resize
+);
+
+
+/* =====================
+   GAME
+===================== */
+
+let gameOver=false;
+
+let health=100;
+
+let ammo=30;
+
+let players=25;
+
+let autoRotate=true;
+
+let world=2600;
+
+let cameraX=0;
+let cameraY=0;
+
+let bullets=[];
+
+let enemies=[];
+
+let trees=[];
+
+let rocks=[];
+
+
+/* =====================
+   PLAYER
+===================== */
+
+const player={
+
+  x:world/2,
+
+  y:world/2,
+
+  radius:18,
+
+  speed:4,
+
+  angle:0
+
+};
+
+
+/* =====================
+   JOYSTICK
+===================== */
+
+const joystick=
+document.getElementById(
+  "joystick"
+);
+
+const stick=
+document.getElementById(
+  "stick"
+);
+
+let joyActive=false;
+
+let joyX=0;
+
+let joyY=0;
+
+let joyPointer=null;
+
+
+function joystickMove(e){
+
+  const rect=
+  joystick.getBoundingClientRect();
+
+  let x=
+  e.clientX-
+  (rect.left+
+   rect.width/2);
+
+  let y=
+  e.clientY-
+  (rect.top+
+   rect.height/2);
+
+  const max=55;
+
+  const distance=
+  Math.hypot(x,y);
+
+  if(distance>max){
+
+    x=
+    x/distance*max;
+
+    y=
+    y/distance*max;
+
   }
 
+  joyX=x/max;
 
-  function openDrill(title, description, time, reps, tip) {
+  joyY=y/max;
 
-    document.getElementById("popupTitle").textContent = title;
+  stick.style.transform=
+  `translate(${x}px,${y}px)`;
 
-    document.getElementById("popupDescription").textContent =
-      description;
+}
 
-    document.getElementById("popupTime").textContent =
-      time;
 
-    document.getElementById("popupReps").textContent =
-      reps;
+joystick.addEventListener(
+  "pointerdown",
+  e=>{
 
-    document.getElementById("popupTip").textContent =
-      tip;
+    joyActive=true;
 
-    document.getElementById("popup").style.display =
-      "flex";
+    joyPointer=e.pointerId;
+
+    joystick.setPointerCapture(
+      e.pointerId
+    );
+
+    joystickMove(e);
+
+  }
+);
+
+
+joystick.addEventListener(
+  "pointermove",
+  e=>{
+
+    if(
+      joyActive &&
+      e.pointerId===joyPointer
+    ){
+
+      joystickMove(e);
+
+    }
+
+  }
+);
+
+
+function joystickEnd(){
+
+  joyActive=false;
+
+  joyX=0;
+
+  joyY=0;
+
+  stick.style.transform=
+  "translate(0,0)";
+
+}
+
+
+joystick.addEventListener(
+  "pointerup",
+  joystickEnd
+);
+
+joystick.addEventListener(
+  "pointercancel",
+  joystickEnd
+);
+
+
+/* =====================
+   ENEMIES
+===================== */
+
+function createEnemies(){
+
+  enemies=[];
+
+  for(let i=0;i<24;i++){
+
+    let x;
+    let y;
+
+    do{
+
+      x=
+      Math.random()*world;
+
+      y=
+      Math.random()*world;
+
+    }
+    while(
+      Math.hypot(
+        x-player.x,
+        y-player.y
+      )<350
+    );
+
+    enemies.push({
+
+      x:x,
+
+      y:y,
+
+      radius:16,
+
+      hp:100,
+
+      speed:
+      .45+
+      Math.random()*.7,
+
+      angle:
+      Math.random()*Math.PI*2,
+
+      timer:
+      Math.random()*100
+
+    });
+
   }
 
+}
 
-  function closePopup() {
-    document.getElementById("popup").style.display =
-      "none";
+
+/* =====================
+   MAP
+===================== */
+
+function createMap(){
+
+  trees=[];
+
+  rocks=[];
+
+  for(let i=0;i<100;i++){
+
+    trees.push({
+
+      x:Math.random()*world,
+
+      y:Math.random()*world,
+
+      size:
+      18+
+      Math.random()*22
+
+    });
+
   }
 
+  for(let i=0;i<55;i++){
 
-  function closePopupOutside(event) {
+    rocks.push({
 
-    if (event.target.id === "popup") {
-      closePopup();
+      x:Math.random()*world,
+
+      y:Math.random()*world,
+
+      size:
+      8+
+      Math.random()*14
+
+    });
+
+  }
+
+}
+
+
+createMap();
+
+createEnemies();
+
+
+/* =====================
+   SAFE ZONE
+===================== */
+
+const zone={
+
+  x:world/2,
+
+  y:world/2,
+
+  radius:1100
+
+};
+
+
+/* =====================
+   AUTO ROTATION
+===================== */
+
+function autoRotateCamera(){
+
+  if(!autoRotate)
+    return;
+
+  /*
+    Camera smoothly follows player.
+    The player automatically turns
+    toward the nearest enemy.
+  */
+
+  let nearest=null;
+
+  let best=Infinity;
+
+  for(
+    const enemy of enemies
+  ){
+
+    const d=
+    Math.hypot(
+      enemy.x-player.x,
+      enemy.y-player.y
+    );
+
+    if(
+      d<best &&
+      d<650
+    ){
+
+      best=d;
+
+      nearest=enemy;
+
     }
 
   }
 
+
+  if(nearest){
+
+    const targetAngle=
+    Math.atan2(
+      nearest.y-player.y,
+      nearest.x-player.x
+    );
+
+
+    let difference=
+    targetAngle-
+    player.angle;
+
+
+    while(
+      difference>Math.PI
+    )
+      difference-=Math.PI*2;
+
+    while(
+      difference<-Math.PI
+    )
+      difference+=Math.PI*2;
+
+
+    player.angle +=
+    difference*.08;
+
+  }
+
+}
+
+
+/* =====================
+   PLAYER
+===================== */
+
+function updatePlayer(){
+
+  if(
+    Math.abs(joyX)>.05 ||
+    Math.abs(joyY)>.05
+  ){
+
+    player.x +=
+    joyX*player.speed;
+
+    player.y +=
+    joyY*player.speed;
+
+
+    /*
+      Auto rotate direction
+      according to movement.
+    */
+
+    if(!autoRotate){
+
+      player.angle=
+      Math.atan2(
+        joyY,
+        joyX
+      );
+
+    }
+
+  }
+
+
+  player.x=
+  Math.max(
+    20,
+    Math.min(
+      world-20,
+      player.x
+    )
+  );
+
+  player.y=
+  Math.max(
+    20,
+    Math.min(
+      world-20,
+      player.y
+    )
+  );
+
+}
+
+
+/* =====================
+   ENEMIES
+===================== */
+
+function updateEnemies(){
+
+  for(
+    const enemy of enemies
+  ){
+
+    enemy.timer--;
+
+    if(enemy.timer<=0){
+
+      enemy.angle=
+      Math.random()*
+      Math.PI*2;
+
+      enemy.timer=
+      40+
+      Math.random()*120;
+
+    }
+
+
+    const distance=
+    Math.hypot(
+      player.x-enemy.x,
+      player.y-enemy.y
+    );
+
+
+    if(distance<400){
+
+      enemy.angle=
+      Math.atan2(
+        player.y-enemy.y,
+        player.x-enemy.x
+      );
+
+    }
+
+
+    enemy.x +=
+    Math.cos(enemy.angle)*
+    enemy.speed;
+
+    enemy.y +=
+    Math.sin(enemy.angle)*
+    enemy.speed;
+
+
+    if(distance<38){
+
+      health-=.12;
+
+      if(health<=0){
+
+        health=0;
+
+        finish(false);
+
+      }
+
+    }
+
+  }
+
+}
+
+
+/* =====================
+   SHOOT
+===================== */
+
+function shoot(){
+
+  if(gameOver)
+    return;
+
+  if(ammo<=0)
+    return;
+
+  ammo--;
+
+  let angle=
+  player.angle;
+
+
+  /*
+    Auto-aim toward nearest enemy.
+  */
+
+  if(autoRotate){
+
+    let nearest=null;
+
+    let best=Infinity;
+
+    for(
+      const enemy of enemies
+    ){
+
+      const d=
+      Math.hypot(
+        enemy.x-player.x,
+        enemy.y-player.y
+      );
+
+      if(
+        d<best &&
+        d<650
+      ){
+
+        best=d;
+
+        nearest=enemy;
+
+      }
+
+    }
+
+
+    if(nearest){
+
+      angle=
+      Math.atan2(
+        nearest.y-player.y,
+        nearest.x-player.x
+      );
+
+      player.angle=angle;
+
+    }
+
+  }
+
+
+  bullets.push({
+
+    x:player.x,
+
+    y:player.y,
+
+    vx:Math.cos(angle)*13,
+
+    vy:Math.sin(angle)*13,
+
+    life:70
+
+  });
+
+  updateHUD();
+
+}
+
+
+document
+.getElementById("fire")
+.addEventListener(
+  "pointerdown",
+  e=>{
+    e.preventDefault();
+    shoot();
+  }
+);
+
+
+/* =====================
+   RELOAD
+===================== */
+
+document
+.getElementById("reload")
+.addEventListener(
+  "click",
+  ()=>{
+
+    ammo=30;
+
+    updateHUD();
+
+  }
+);
+
+
+/* =====================
+   BULLETS
+===================== */
+
+function updateBullets(){
+
+  for(
+    let i=bullets.length-1;
+    i>=0;
+    i--
+  ){
+
+    const b=bullets[i];
+
+    b.x+=b.vx;
+
+    b.y+=b.vy;
+
+    b.life--;
+
+
+    let remove=false;
+
+
+    for(
+      let j=enemies.length-1;
+      j>=0;
+      j--
+    ){
+
+      const enemy=
+      enemies[j];
+
+
+      const distance=
+      Math.hypot(
+        b.x-enemy.x,
+        b.y-enemy.y
+      );
+
+
+      if(
+        distance<
+        enemy.radius+5
+      ){
+
+        enemy.hp-=50;
+
+        remove=true;
+
+
+        if(enemy.hp<=0){
+
+          enemies.splice(j,1);
+
+          players--;
+
+        }
+
+        break;
+
+      }
+
+    }
+
+
+    if(
+      remove ||
+      b.life<=0 ||
+      b.x<0 ||
+      b.y<0 ||
+      b.x>world ||
+      b.y>world
+    ){
+
+      bullets.splice(i,1);
+
+    }
+
+  }
+
+}
+
+
+/* =====================
+   ZONE
+===================== */
+
+function updateZone(){
+
+  zone.radius-=.012;
+
+  if(zone.radius<180)
+    zone.radius=180;
+
+
+  const distance=
+  Math.hypot(
+    player.x-zone.x,
+    player.y-zone.y
+  );
+
+
+  if(
+    distance>zone.radius
+  ){
+
+    health-=.035;
+
+    if(health<=0){
+
+      health=0;
+
+      finish(false);
+
+    }
+
+  }
+
+}
+
+
+/* =====================
+   CAMERA
+===================== */
+
+function updateCamera(){
+
+  /*
+    Smooth camera follow.
+    This creates the automatic
+    rotating-follow feeling.
+  */
+
+  const targetX=
+  player.x-W/2;
+
+  const targetY=
+  player.y-H/2;
+
+
+  cameraX +=
+  (targetX-cameraX)*.12;
+
+  cameraY +=
+  (targetY-cameraY)*.12;
+
+
+  cameraX=
+  Math.max(
+    0,
+    Math.min(
+      world-W,
+      cameraX
+    )
+  );
+
+  cameraY=
+  Math.max(
+    0,
+    Math.min(
+      world-H,
+      cameraY
+    )
+  );
+
+}
+
+
+/* =====================
+   DRAW
+===================== */
+
+function draw(){
+
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+
+  ctx.save();
+
+  ctx.translate(
+    -cameraX,
+    -cameraY
+  );
+
+
+  /* Ground */
+
+  ctx.fillStyle="#31572d";
+
+  ctx.fillRect(
+    0,
+    0,
+    world,
+    world
+  );
+
+
+  /* Ground grid */
+
+  ctx.strokeStyle=
+  "rgba(255,255,255,.035)";
+
+  for(
+    let x=0;
+    x<world;
+    x+=80
+  ){
+
+    ctx.beginPath();
+
+    ctx.moveTo(x,0);
+
+    ctx.lineTo(x,world);
+
+    ctx.stroke();
+
+  }
+
+
+  for(
+    let y=0;
+    y<world;
+    y+=80
+  ){
+
+    ctx.beginPath();
+
+    ctx.moveTo(0,y);
+
+    ctx.lineTo(world,y);
+
+    ctx.stroke();
+
+  }
+
+
+  /* Rocks */
+
+  for(
+    const rock of rocks
+  ){
+
+    ctx.fillStyle="#707468";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      rock.x,
+      rock.y,
+      rock.size,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+
+  /* Trees */
+
+  for(
+    const tree of trees
+  ){
+
+    ctx.fillStyle="#563a21";
+
+    ctx.fillRect(
+      tree.x-4,
+      tree.y,
+      8,
+      tree.size
+    );
+
+
+    ctx.fillStyle="#175027";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      tree.x,
+      tree.y,
+      tree.size,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+
+  /* Safe zone */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    zone.x,
+    zone.y,
+    zone.radius,
+    0,
+    Math.PI*2
+  );
+
+  ctx.strokeStyle=
+  "rgba(60,180,255,.9)";
+
+  ctx.lineWidth=5;
+
+  ctx.stroke();
+
+
+  /* Bullets */
+
+  for(
+    const b of bullets
+  ){
+
+    ctx.fillStyle="#ffe45c";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      b.x,
+      b.y,
+      5,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+
+  /* Enemies */
+
+  for(
+    const enemy of enemies
+  ){
+
+    ctx.fillStyle="#dc3939";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      enemy.x,
+      enemy.y,
+      enemy.radius,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.fillStyle="#222";
+
+    ctx.fillRect(
+      enemy.x-17,
+      enemy.y-25,
+      34,
+      5
+    );
+
+
+    ctx.fillStyle="#30df6b";
+
+    ctx.fillRect(
+      enemy.x-17,
+      enemy.y-25,
+      34*
+      Math.max(
+        0,
+        enemy.hp/100
+      ),
+      5
+    );
+
+  }
+
+
+  /* PLAYER */
+
+  ctx.save();
+
+  ctx.translate(
+    player.x,
+    player.y
+  );
+
+  ctx.rotate(
+    player.angle
+  );
+
+
+  ctx.fillStyle="#1769e0";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    0,
+    player.radius,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* Direction */
+
+  ctx.fillStyle="#222";
+
+  ctx.fillRect(
+    7,
+    -5,
+    34,
+    10
+  );
+
+
+  ctx.fillStyle="#7fc5ff";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    0,
+    0,
+    8,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.restore();
+
+  ctx.restore();
+
+}
+
+
+/* =====================
+   HUD
+===================== */
+
+function updateHUD(){
+
+  document.getElementById(
+    "health"
+  ).style.width=
+  health+"%";
+
+
+  document.getElementById(
+    "ammo"
+  ).textContent=
+  ammo;
+
+
+  document.getElementById(
+    "players"
+  ).textContent=
+  Math.max(
+    1,
+    players
+  );
+
+}
+
+
+/* =====================
+   AUTO BUTTON
+===================== */
+
+document
+.getElementById("auto")
+.addEventListener(
+  "click",
+  ()=>{
+
+    autoRotate=
+    !autoRotate;
+
+    document
+    .getElementById("auto")
+    .textContent=
+    autoRotate
+    ? "🔄 AUTO ROTATE: ON"
+    : "🔄 AUTO ROTATE: OFF";
+
+  }
+);
+
+
+/* =====================
+   FINISH
+===================== */
+
+function finish(win){
+
+  if(gameOver)
+    return;
+
+  gameOver=true;
+
+  const message=
+  document.getElementById(
+    "message"
+  );
+
+  message.style.display="flex";
+
+  document.getElementById(
+    "messageText"
+  ).textContent=
+  win
+  ? "🏆 YOU WIN!"
+  : "GAME OVER";
+
+}
+
+
+/* =====================
+   WIN
+===================== */
+
+function checkWin(){
+
+  if(
+    enemies.length===0
+  ){
+
+    players=1;
+
+    updateHUD();
+
+    finish(true);
+
+  }
+
+}
+
+
+/* =====================
+   RESTART
+===================== */
+
+document
+.getElementById("restart")
+.addEventListener(
+  "click",
+  ()=>{
+
+    health=100;
+
+    ammo=30;
+
+    players=25;
+
+    bullets=[];
+
+    player.x=world/2;
+
+    player.y=world/2;
+
+    player.angle=0;
+
+    zone.radius=1100;
+
+    gameOver=false;
+
+    createEnemies();
+
+    document
+    .getElementById("message")
+    .style.display="none";
+
+    updateHUD();
+
+  }
+);
+
+
+/* =====================
+   LOOP
+===================== */
+
+function loop(){
+
+  if(!gameOver){
+
+    updatePlayer();
+
+    autoRotateCamera();
+
+    updateEnemies();
+
+    updateBullets();
+
+    updateZone();
+
+    updateCamera();
+
+    checkWin();
+
+    updateHUD();
+
+  }
+
+  draw();
+
+  requestAnimationFrame(loop);
+
+}
+
+
+updateHUD();
+
+loop();
+
 </script>
 
 </body>
-  </html>
+</html>
