@@ -5,7 +5,7 @@
 <meta name="viewport"
       content="width=device-width,initial-scale=1.0,user-scalable=no">
 
-<title>Battle Arena</title>
+<title>CRICKET X</title>
 
 <style>
 *{
@@ -21,716 +21,982 @@ html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#101820;
+  background:#06120c;
   font-family:Arial,sans-serif;
 }
+
+body{
+  color:white;
+}
+
+/* =====================================================
+   GAME
+===================================================== */
 
 #game{
   position:fixed;
   inset:0;
   overflow:hidden;
-  background:#78bde8;
-}
-
-/* =========================
-   WORLD
-========================= */
-
-#world{
-  position:absolute;
-  width:6000px;
-  height:6000px;
-  left:50%;
-  top:50%;
-
-  background:
-    repeating-linear-gradient(
-      0deg,
-      #557f3d 0px,
-      #557f3d 100px,
-      #4d7537 101px,
-      #4d7537 200px
-    );
-
-  transform-origin:center center;
-  transition:transform .03s linear;
-}
-
-/* =========================
-   ROADS
-========================= */
-
-.road{
-  position:absolute;
-  background:#3c4145;
-}
-
-.roadA{
-  width:6000px;
-  height:180px;
-  left:0;
-  top:2910px;
-}
-
-.roadB{
-  width:180px;
-  height:6000px;
-  left:2910px;
-  top:0;
-}
-
-.roadC{
-  width:4000px;
-  height:140px;
-  left:600px;
-  top:1500px;
-  transform:rotate(30deg);
-}
-
-.roadD{
-  width:3800px;
-  height:130px;
-  left:800px;
-  top:4400px;
-  transform:rotate(-28deg);
-}
-
-.roadLine{
-  position:absolute;
-  background:#e5d76d;
-}
-
-.r1{
-  width:6000px;
-  height:5px;
-  top:2997px;
-}
-
-.r2{
-  width:5px;
-  height:6000px;
-  left:2997px;
-}
-
-/* =========================
-   WATER
-========================= */
-
-.water{
-  position:absolute;
-  width:1250px;
-  height:850px;
-  left:2350px;
-  top:350px;
-  border-radius:50%;
-
-  background:
-    repeating-linear-gradient(
-      15deg,
-      #248db7 0px,
-      #248db7 18px,
-      #45aecd 19px,
-      #45aecd 35px
-    );
-
-  box-shadow:
-    inset 0 0 80px rgba(0,0,0,.25);
-}
-
-/* =========================
-   BUILDINGS
-========================= */
-
-.building{
-  position:absolute;
-  width:260px;
-  height:190px;
-
   background:
     linear-gradient(
-      135deg,
-      #d3d7db,
-      #777e85
+      #5faee2 0%,
+      #9dd8f1 37%,
+      #6f9d4a 38%,
+      #284d27 100%
     );
-
-  border:8px solid #50565b;
-
-  box-shadow:
-    25px 25px 0 #30363a,
-    0 20px 35px rgba(0,0,0,.35);
 }
 
-.building:after{
-  content:"";
+/* =====================================================
+   STADIUM
+===================================================== */
+
+#stadium{
   position:absolute;
-  inset:20px;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+/* SKY */
+
+.sun{
+  position:absolute;
+  width:110px;
+  height:110px;
+  border-radius:50%;
+  right:12%;
+  top:8%;
+
+  background:#fff1a1;
+
+  box-shadow:
+    0 0 70px #fff4b2;
+}
+
+/* =====================================================
+   CROWD
+===================================================== */
+
+#crowd{
+  position:absolute;
+  left:0;
+  right:0;
+  top:26%;
+  height:19%;
 
   background:
     repeating-linear-gradient(
       90deg,
-      #244052 0px,
-      #244052 35px,
-      #9fc9d9 36px,
-      #9fc9d9 58px
+      #202a34 0px,
+      #202a34 8px,
+      #33414c 9px,
+      #33414c 18px
     );
 
-  border:5px solid #41474b;
+  border-top:
+    8px solid #151d25;
+
+  border-bottom:
+    10px solid #151d25;
+
+  box-shadow:
+    0 15px 30px rgba(0,0,0,.35);
 }
 
-.b1{left:600px;top:650px}
-.b2{left:1000px;top:760px}
-.b3{left:1450px;top:600px}
+/* CROWD DOTS */
 
-.b4{left:3850px;top:700px}
-.b5{left:4250px;top:850px}
-.b6{left:4550px;top:620px}
-
-.b7{
-  left:600px;
-  top:3500px;
-  width:350px;
-  height:230px;
-}
-
-.b8{
-  left:3900px;
-  top:3600px;
-  width:380px;
-  height:250px;
-}
-
-.b9{
-  left:1850px;
-  top:4400px;
-}
-
-.b10{
-  left:4500px;
-  top:4550px;
-}
-
-/* =========================
-   TREES
-========================= */
-
-.tree{
-  position:absolute;
-  width:80px;
-  height:140px;
-}
-
-.tree:before{
+#crowd:after{
   content:"";
   position:absolute;
-  width:25px;
-  height:70px;
-  left:28px;
-  bottom:0;
-  background:#5a3d27;
+  inset:10px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.7) 0 2px,
+      transparent 3px
+    );
+
+  background-size:
+    15px 13px;
+
+  opacity:.5;
+
+  animation:
+    crowdMove 1s infinite alternate;
 }
 
-.tree:after{
-  content:"";
+@keyframes crowdMove{
+  from{
+    transform:translateY(0);
+  }
+  to{
+    transform:translateY(3px);
+  }
+}
+
+/* =====================================================
+   STADIUM LIGHTS
+===================================================== */
+
+.lightPole{
   position:absolute;
-  width:90px;
-  height:90px;
-  left:-5px;
-  top:0;
+  width:12px;
+  height:260px;
+
+  bottom:48%;
+  background:#333b41;
+
+  z-index:5;
+}
+
+.lightPole:before{
+  content:"";
+
+  position:absolute;
+  width:130px;
+  height:45px;
+
+  left:-59px;
+  top:-25px;
+
+  border-radius:15px;
+
+  background:#d9e5ea;
+
+  box-shadow:
+    0 0 30px
+    rgba(255,255,255,.8);
+}
+
+.lp1{
+  left:8%;
+}
+
+.lp2{
+  right:8%;
+}
+
+/* =====================================================
+   FIELD
+===================================================== */
+
+#field{
+  position:absolute;
+
+  width:1150px;
+  height:650px;
+
+  left:50%;
+  top:60%;
+
+  transform:
+    translate(-50%,-50%)
+    perspective(700px)
+    rotateX(55deg);
+
   border-radius:50%;
 
   background:
     radial-gradient(
-      circle at 30% 25%,
-      #79a951,
-      #315b30 70%
+      ellipse,
+      #75aa48 0%,
+      #548536 48%,
+      #3b682d 75%,
+      #284d27 100%
     );
 
   box-shadow:
-    0 18px 0 #244824;
+    0 0 80px rgba(0,0,0,.4);
+
+  transition:
+    transform .35s ease;
 }
 
-.t1{left:300px;top:400px}
-.t2{left:480px;top:1250px}
-.t3{left:1550px;top:1100px}
-.t4{left:1950px;top:500px}
-.t5{left:3200px;top:500px}
-.t6{left:4800px;top:400px}
-.t7{left:5000px;top:1500px}
-.t8{left:4300px;top:2200px}
-.t9{left:350px;top:4000px}
-.t10{left:1250px;top:4500px}
-.t11{left:3000px;top:4700px}
-.t12{left:5100px;top:4100px}
-.t13{left:3500px;top:3000px}
-.t14{left:800px;top:2700px}
-.t15{left:1700px;top:3400px}
-.t16{left:4700px;top:3000px}
-.t17{left:2500px;top:5200px}
-.t18{left:900px;top:5200px}
+/* =====================================================
+   INNER CIRCLE
+===================================================== */
 
-/* =========================
-   HILLS
-========================= */
-
-.hill{
+.innerCircle{
   position:absolute;
-  width:700px;
-  height:350px;
+
+  width:720px;
+  height:400px;
+
+  left:50%;
+  top:50%;
+
+  transform:
+    translate(-50%,-50%);
+
+  border:
+    5px solid
+    rgba(255,255,255,.55);
+
   border-radius:50%;
+}
+
+/* =====================================================
+   PITCH
+===================================================== */
+
+#pitch{
+  position:absolute;
+
+  width:170px;
+  height:700px;
+
+  left:50%;
+  top:50%;
+
+  transform:
+    translate(-50%,-50%);
 
   background:
     linear-gradient(
-      #5c8547,
-      #304d2c
+      90deg,
+      #b8945c,
+      #d0ad72,
+      #a98450
     );
 
   box-shadow:
-    0 30px 50px rgba(0,0,0,.3);
+    inset 0 0 30px rgba(0,0,0,.25);
 }
 
-.h1{
-  left:50px;
-  top:1700px;
+/* PITCH LINES */
+
+.crease{
+  position:absolute;
+
+  width:170px;
+  height:5px;
+
+  background:#fff;
 }
 
-.h2{
-  left:4200px;
-  top:1700px;
+.c1{
+  top:100px;
 }
 
-.h3{
-  left:2200px;
-  top:5000px;
+.c2{
+  bottom:100px;
 }
 
-/* =========================
-   PLAYER
-========================= */
+/* =====================================================
+   BOWLER
+===================================================== */
 
-#player{
-  position:fixed;
-  width:70px;
-  height:110px;
+#bowler{
+  position:absolute;
 
   left:50%;
-  top:54%;
+  top:20%;
+
+  width:60px;
+  height:150px;
+
+  transform:
+    translateX(-50%)
+    scale(.85);
+
+  z-index:30;
+}
+
+.bowlerHead{
+  position:absolute;
+
+  width:38px;
+  height:38px;
+
+  left:11px;
+
+  border-radius:50%;
+
+  background:#9f6749;
+
+  border:
+    3px solid #242424;
+}
+
+.bowlerBody{
+  position:absolute;
+
+  width:50px;
+  height:75px;
+
+  left:5px;
+  top:34px;
+
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      #174a8a,
+      #0b274d
+    );
+}
+
+.bowlerLeg1,
+.bowlerLeg2{
+  position:absolute;
+
+  width:15px;
+  height:55px;
+
+  top:100px;
+
+  background:#20242a;
+}
+
+.bowlerLeg1{
+  left:8px;
+}
+
+.bowlerLeg2{
+  right:8px;
+}
+
+/* =====================================================
+   BATSMAN
+===================================================== */
+
+#batsman{
+  position:absolute;
+
+  left:50%;
+  top:67%;
+
+  width:90px;
+  height:180px;
 
   transform:
     translate(-50%,-50%);
 
   z-index:100;
-  pointer-events:none;
 }
 
-.head{
+.batHead{
   position:absolute;
-  width:34px;
-  height:34px;
 
-  left:18px;
-  top:0;
+  width:44px;
+  height:44px;
 
-  border-radius:50%;
-  background:#d79a70;
-  border:3px solid #333;
-}
-
-.body{
-  position:absolute;
-  width:52px;
-  height:58px;
-
-  left:9px;
-  top:31px;
-
-  border-radius:13px;
-
-  background:
-    linear-gradient(
-      #1976d2,
-      #0b438c
-    );
-}
-
-.leg{
-  position:absolute;
-  width:16px;
-  height:35px;
-
-  top:78px;
-  background:#20252a;
-}
-
-.leg1{
-  left:14px;
-}
-
-.leg2{
-  right:14px;
-}
-
-.gun{
-  position:absolute;
-  width:65px;
-  height:9px;
-
-  right:-48px;
-  top:47px;
-
-  background:#171717;
-  border-radius:8px;
-
-  transform:rotate(-10deg);
-}
-
-/* =========================
-   HUD
-========================= */
-
-#hud{
-  position:fixed;
-  top:12px;
-  left:10px;
-  right:10px;
-
-  display:flex;
-  justify-content:space-between;
-
-  z-index:300;
-}
-
-.hudBox{
-  padding:9px 12px;
-
-  background:rgba(0,0,0,.58);
-  color:white;
-
-  border-radius:12px;
-  font-size:13px;
-
-  border:1px solid rgba(255,255,255,.2);
-}
-
-.hp{
-  color:#68ff7c;
-}
-
-.ammo{
-  color:#ffe05a;
-}
-
-/* =========================
-   MAP INFO
-========================= */
-
-#mapName{
-  position:fixed;
-  left:50%;
-  top:70px;
-
-  transform:translateX(-50%);
-
-  padding:7px 15px;
-
-  color:white;
-  background:rgba(0,0,0,.4);
-
-  border-radius:20px;
-  font-size:12px;
-
-  z-index:300;
-}
-
-/* =========================
-   LEFT JOYSTICK
-========================= */
-
-#joystick{
-  position:fixed;
-
-  width:145px;
-  height:145px;
-
-  left:25px;
-  bottom:28px;
+  left:23px;
 
   border-radius:50%;
 
-  background:rgba(255,255,255,.12);
+  background:#a96e50;
 
   border:
-    2px solid
-    rgba(255,255,255,.35);
-
-  z-index:400;
+    3px solid #242424;
 }
 
-#stick{
+.helmet{
+  position:absolute;
+
+  width:50px;
+  height:20px;
+
+  left:20px;
+  top:0;
+
+  border-radius:
+    20px 20px 5px 5px;
+
+  background:#172b43;
+}
+
+.batBody{
   position:absolute;
 
   width:62px;
+  height:78px;
+
+  left:14px;
+  top:39px;
+
+  border-radius:
+    15px 15px 10px 10px;
+
+  background:
+    linear-gradient(
+      #e5e9ef,
+      #9ba8b5
+    );
+
+  border:
+    3px solid #39424b;
+}
+
+.batLeg{
+  position:absolute;
+
+  width:19px;
   height:62px;
 
-  left:39px;
-  top:39px;
+  top:112px;
+
+  background:#18222b;
+
+  border-radius:5px;
+}
+
+.bl1{
+  left:18px;
+}
+
+.bl2{
+  right:18px;
+}
+
+/* BAT */
+
+#bat{
+  position:absolute;
+
+  width:17px;
+  height:105px;
+
+  right:-17px;
+  top:73px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #9b6a3e,
+      #e0bb76,
+      #916036
+    );
+
+  border-radius:
+    5px 5px 10px 10px;
+
+  transform:
+    rotate(25deg);
+
+  transform-origin:
+    50% 10%;
+}
+
+/* =====================================================
+   BALL
+===================================================== */
+
+#ball{
+  position:absolute;
+
+  width:18px;
+  height:18px;
 
   border-radius:50%;
 
   background:
-    rgba(255,255,255,.45);
+    radial-gradient(
+      circle at 30% 25%,
+      #ff6a6a,
+      #b80000 70%
+    );
 
   box-shadow:
-    0 0 20px rgba(255,255,255,.15);
+    0 3px 8px rgba(0,0,0,.5);
+
+  z-index:90;
+
+  left:50%;
+  top:25%;
+
+  transform:
+    translate(-50%,-50%);
+
+  display:none;
 }
 
-/* =========================
-   RIGHT CAMERA AREA
-========================= */
+/* =====================================================
+   BALL TRAIL
+===================================================== */
 
-#cameraArea{
-  position:fixed;
+#trail{
+  position:absolute;
 
-  right:0;
-  top:100px;
+  width:70px;
+  height:5px;
 
-  width:55%;
-  height:calc(100% - 220px);
-
-  z-index:350;
+  border-radius:50%;
 
   background:
     linear-gradient(
       90deg,
       transparent,
-      rgba(255,255,255,.015)
+      rgba(255,255,255,.7)
     );
+
+  transform-origin:right center;
+
+  display:none;
+
+  z-index:80;
 }
 
-/* =========================
-   ACTION BUTTONS
-========================= */
+/* =====================================================
+   SHADOW
+===================================================== */
 
-.actions{
+#ballShadow{
+  position:absolute;
+
+  width:25px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:
+    rgba(0,0,0,.3);
+
+  filter:blur(4px);
+
+  display:none;
+
+  z-index:20;
+}
+
+/* =====================================================
+   SCORE HUD
+===================================================== */
+
+#scoreBoard{
   position:fixed;
 
-  right:20px;
-  bottom:28px;
+  top:10px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  width:min(450px,92%);
+
+  padding:10px 15px;
+
+  border-radius:16px;
+
+  background:
+    rgba(4,15,25,.82);
+
+  border:
+    1px solid
+    rgba(255,255,255,.25);
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.3);
+
+  z-index:500;
 
   display:flex;
-  gap:12px;
-
-  z-index:450;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.action{
-  width:65px;
-  height:65px;
+.team{
+  font-size:12px;
+  color:#a9c9df;
+}
+
+.score{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.over{
+  font-size:12px;
+  color:#c8d9e5;
+}
+
+/* =====================================================
+   COMMENTARY
+===================================================== */
+
+#commentary{
+  position:fixed;
+
+  left:50%;
+  top:21%;
+
+  transform:
+    translateX(-50%)
+    scale(.9);
+
+  padding:12px 20px;
+
+  border-radius:30px;
+
+  background:
+    rgba(0,0,0,.65);
+
+  color:#fff;
+
+  font-size:14px;
+  font-weight:bold;
+
+  opacity:0;
+
+  transition:
+    .25s;
+
+  z-index:600;
+}
+
+#commentary.show{
+  opacity:1;
+  transform:
+    translateX(-50%)
+    scale(1);
+}
+
+/* =====================================================
+   SHOT BUTTONS
+===================================================== */
+
+#controls{
+  position:fixed;
+
+  left:50%;
+  bottom:18px;
+
+  transform:translateX(-50%);
+
+  width:min(500px,95%);
+
+  display:flex;
+
+  justify-content:
+    space-between;
+
+  align-items:center;
+
+  z-index:600;
+}
+
+.shot{
+  width:68px;
+  height:68px;
 
   border-radius:50%;
 
   border:
     2px solid
-    rgba(255,255,255,.35);
+    rgba(255,255,255,.4);
 
   background:
-    rgba(0,0,0,.55);
+    rgba(0,0,0,.58);
 
   color:white;
 
   font-size:11px;
   font-weight:bold;
+
+  box-shadow:
+    0 5px 20px rgba(0,0,0,.3);
 }
 
-.fire{
-  width:82px;
-  height:82px;
-
-  background:
-    rgba(215,45,45,.7);
-
-  font-size:13px;
+.shot:active{
+  transform:scale(.9);
 }
 
-/* =========================
-   CROSSHAIR
-========================= */
-
-#crosshair{
-  position:fixed;
-
-  left:50%;
-  top:50%;
-
-  width:28px;
-  height:28px;
-
-  transform:translate(-50%,-50%);
-
-  z-index:250;
-
-  pointer-events:none;
-}
-
-#crosshair:before,
-#crosshair:after{
-  content:"";
-  position:absolute;
-
-  background:white;
-  opacity:.85;
-}
-
-#crosshair:before{
-  width:28px;
-  height:2px;
-  top:13px;
-}
-
-#crosshair:after{
-  width:2px;
-  height:28px;
-  left:13px;
-}
-
-/* =========================
-   START POPUP
-========================= */
-
-#popup{
-  position:fixed;
-  inset:0;
-
-  background:
-    rgba(0,0,0,.75);
-
-  backdrop-filter:blur(9px);
-
-  z-index:1000;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.menu{
-  width:min(390px,90%);
-
-  padding:25px;
-
-  border-radius:24px;
+.shot.big{
+  width:84px;
+  height:84px;
 
   background:
     linear-gradient(
       145deg,
-      #10263d,
-      #07131f
+      #e53935,
+      #8b1111
+    );
+
+  font-size:13px;
+}
+
+/* =====================================================
+   CAMERA
+===================================================== */
+
+#cameraTouch{
+  position:fixed;
+
+  right:0;
+  top:80px;
+
+  width:52%;
+  height:55%;
+
+  z-index:450;
+}
+
+#cameraHint{
+  position:fixed;
+
+  right:12px;
+  top:90px;
+
+  font-size:10px;
+
+  color:
+    rgba(255,255,255,.6);
+
+  z-index:460;
+}
+
+/* =====================================================
+   MENU BUTTON
+===================================================== */
+
+#menuBtn{
+  position:fixed;
+
+  right:12px;
+  top:12px;
+
+  width:42px;
+  height:42px;
+
+  border:0;
+  border-radius:12px;
+
+  background:
+    rgba(0,0,0,.6);
+
+  color:white;
+
+  font-size:20px;
+
+  z-index:700;
+}
+
+/* =====================================================
+   POPUP
+===================================================== */
+
+#popup{
+  position:fixed;
+
+  inset:0;
+
+  background:
+    rgba(0,0,0,.78);
+
+  backdrop-filter:
+    blur(10px);
+
+  z-index:1000;
+
+  display:flex;
+
+  justify-content:center;
+  align-items:center;
+}
+
+.popupBox{
+  width:min(400px,92%);
+
+  padding:25px;
+
+  border-radius:25px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #122b41,
+      #07131d
     );
 
   border:
     1px solid
-    #4da6ff;
+    #43a9ff;
 
   box-shadow:
     0 0 60px
-    rgba(40,150,255,.3);
+    rgba(30,150,255,.35);
 
-  color:white;
   text-align:center;
 
-  animation:popup .4s ease;
+  animation:
+    popupIn .4s ease;
 }
 
-@keyframes popup{
+@keyframes popupIn{
 
   from{
     opacity:0;
     transform:
-      scale(.75)
-      rotateX(25deg);
+      scale(.7)
+      translateY(30px);
   }
 
   to{
     opacity:1;
     transform:
       scale(1)
-      rotateX(0);
+      translateY(0);
   }
 }
 
-.menu h1{
-  font-size:28px;
-  margin-bottom:8px;
+.logo{
+  font-size:34px;
+  font-weight:900;
+
+  letter-spacing:2px;
+
+  margin-bottom:5px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #58b9ff
+    );
+
+  -webkit-background-clip:text;
+  color:transparent;
 }
 
-.menu p{
-  color:#a9c4dc;
-  margin-bottom:20px;
+.subtitle{
+  color:#9eb8cb;
+  font-size:12px;
+  margin-bottom:22px;
 }
 
-.mode{
+.menuItem{
   width:100%;
 
   padding:15px;
 
-  margin:7px 0;
+  margin:8px 0;
 
   border:0;
+
   border-radius:14px;
 
   color:white;
 
-  font-size:16px;
+  font-size:15px;
+
   font-weight:bold;
 
   background:
     linear-gradient(
       90deg,
-      #1769e0,
-      #36a3ff
+      #1671d9,
+      #39a9ff
     );
 }
 
-.custom{
+.menuItem.orange{
   background:
     linear-gradient(
       90deg,
-      #7040d9,
-      #a85cff
+      #e36b18,
+      #ff9d35
     );
 }
 
-.practice{
+.menuItem.green{
   background:
     linear-gradient(
       90deg,
-      #268b57,
-      #42c779
+      #17824d,
+      #39bf78
     );
 }
 
-#message{
-  margin-top:13px;
+/* =====================================================
+   RESULT POPUP
+===================================================== */
 
-  color:#8eacc4;
-
-  font-size:12px;
-}
-
-/* =========================
-   CAMERA ROTATION INDICATOR
-========================= */
-
-#cameraText{
+#resultPopup{
   position:fixed;
 
-  right:15px;
-  top:105px;
+  inset:0;
 
-  color:rgba(255,255,255,.55);
+  background:
+    rgba(0,0,0,.72);
 
-  font-size:11px;
+  backdrop-filter:
+    blur(8px);
 
-  z-index:400;
+  z-index:1200;
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+}
+
+.resultBox{
+  width:min(380px,90%);
+
+  padding:30px;
+
+  border-radius:25px;
+
+  text-align:center;
+
+  background:
+    linear-gradient(
+      145deg,
+      #152d3d,
+      #07121a
+    );
+
+  border:
+    1px solid
+    #54b5ff;
+}
+
+.resultBox h2{
+  font-size:28px;
+  margin-bottom:15px;
+}
+
+.finalScore{
+  font-size:42px;
+  font-weight:900;
+
+  margin:15px;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+  #field{
+    width:950px;
+    height:570px;
+  }
+
+  #pitch{
+    width:145px;
+    height:600px;
+  }
+
+  #batsman{
+    top:68%;
+  }
+
+  #bowler{
+    top:18%;
+  }
+
+  .shot{
+    width:58px;
+    height:58px;
+  }
+
+  .shot.big{
+    width:74px;
+    height:74px;
+  }
+
 }
 </style>
 </head>
@@ -739,163 +1005,246 @@ html,body{
 
 <div id="game">
 
-  <div id="world">
+  <!-- ============================================
+       STADIUM
+  ============================================= -->
 
-    <div class="water"></div>
+  <div id="stadium">
 
-    <div class="road roadA"></div>
-    <div class="road roadB"></div>
-    <div class="road roadC"></div>
-    <div class="road roadD"></div>
+    <div class="sun"></div>
 
-    <div class="roadLine r1"></div>
-    <div class="roadLine r2"></div>
+    <div id="crowd"></div>
 
-    <div class="hill h1"></div>
-    <div class="hill h2"></div>
-    <div class="hill h3"></div>
+    <div class="lightPole lp1"></div>
+    <div class="lightPole lp2"></div>
 
-    <div class="building b1"></div>
-    <div class="building b2"></div>
-    <div class="building b3"></div>
-    <div class="building b4"></div>
-    <div class="building b5"></div>
-    <div class="building b6"></div>
-    <div class="building b7"></div>
-    <div class="building b8"></div>
-    <div class="building b9"></div>
-    <div class="building b10"></div>
+    <div id="field">
 
-    <div class="tree t1"></div>
-    <div class="tree t2"></div>
-    <div class="tree t3"></div>
-    <div class="tree t4"></div>
-    <div class="tree t5"></div>
-    <div class="tree t6"></div>
-    <div class="tree t7"></div>
-    <div class="tree t8"></div>
-    <div class="tree t9"></div>
-    <div class="tree t10"></div>
-    <div class="tree t11"></div>
-    <div class="tree t12"></div>
-    <div class="tree t13"></div>
-    <div class="tree t14"></div>
-    <div class="tree t15"></div>
-    <div class="tree t16"></div>
-    <div class="tree t17"></div>
-    <div class="tree t18"></div>
+      <div class="innerCircle"></div>
+
+      <div id="pitch">
+
+        <div class="crease c1"></div>
+        <div class="crease c2"></div>
+
+      </div>
+
+    </div>
+
+    <!-- BOWLER -->
+
+    <div id="bowler">
+
+      <div class="bowlerHead"></div>
+
+      <div class="bowlerBody"></div>
+
+      <div class="bowlerLeg1"></div>
+      <div class="bowlerLeg2"></div>
+
+    </div>
+
+
+    <!-- BATSMAN -->
+
+    <div id="batsman">
+
+      <div class="helmet"></div>
+
+      <div class="batHead"></div>
+
+      <div class="batBody"></div>
+
+      <div class="batLeg bl1"></div>
+      <div class="batLeg bl2"></div>
+
+      <div id="bat"></div>
+
+    </div>
+
+
+    <!-- BALL -->
+
+    <div id="ball"></div>
+
+    <div id="trail"></div>
+
+    <div id="ballShadow"></div>
 
   </div>
 
-  <div id="player">
 
-    <div class="head"></div>
-    <div class="body"></div>
+  <!-- ============================================
+       SCORE
+  ============================================= -->
 
-    <div class="leg leg1"></div>
-    <div class="leg leg2"></div>
+  <div id="scoreBoard">
 
-    <div class="gun"></div>
+    <div>
+
+      <div class="team">
+        INDIA XI
+      </div>
+
+      <div class="score">
+        <span id="runs">0</span>/<span id="wickets">0</span>
+      </div>
+
+    </div>
+
+    <div class="over">
+      OVER
+      <b id="over">0.0</b>
+    </div>
+
+    <div class="team">
+      TARGET
+      <b id="target">51</b>
+    </div>
 
   </div>
 
-</div>
 
+  <!-- COMMENTARY -->
 
-<!-- HUD -->
-
-<div id="hud">
-
-  <div class="hudBox">
-    ❤️ <span class="hp">100</span>
-    &nbsp; 🛡️ 50
+  <div id="commentary">
+    Welcome to CRICKET X
   </div>
 
-  <div class="hudBox">
-    👥 <span id="players">50</span>
-  </div>
 
-  <div class="hudBox">
-    🔫 <span class="ammo">30/120</span>
-  </div>
+  <!-- MENU -->
 
-</div>
-
-
-<div id="mapName">
-  BATTLE ISLAND
-</div>
-
-
-<div id="crosshair"></div>
-
-
-<div id="cameraText">
-  DRAG TO ROTATE CAMERA
-</div>
-
-
-<!-- JOYSTICK -->
-
-<div id="joystick">
-  <div id="stick"></div>
-</div>
-
-
-<!-- CAMERA TOUCH AREA -->
-
-<div id="cameraArea"></div>
-
-
-<!-- ACTIONS -->
-
-<div class="actions">
-
-  <button class="action"
-          onclick="jump()">
-    JUMP
+  <button id="menuBtn"
+          onclick="openMenu()">
+    ☰
   </button>
 
-  <button class="action"
-          onclick="reload()">
-    RELOAD
-  </button>
 
-  <button class="action fire"
-          onclick="fire()">
-    FIRE
-  </button>
+  <!-- CAMERA -->
 
-</div>
+  <div id="cameraTouch"></div>
+
+  <div id="cameraHint">
+    DRAG TO MOVE CAMERA
+  </div>
 
 
-<!-- POPUP -->
+  <!-- ============================================
+       CONTROLS
+  ============================================= -->
 
-<div id="popup">
+  <div id="controls">
 
-  <div class="menu">
-
-    <h1>⚡ BATTLE ARENA</h1>
-
-    <p>Select Battle Mode</p>
-
-    <button class="mode"
-            onclick="startMode('MULTIPLAYER')">
-      👥 MULTIPLAYER
+    <button class="shot"
+            onclick="playShot('DEFENCE')">
+      🛡️<br>
+      DEFENCE
     </button>
 
-    <button class="mode custom"
-            onclick="startMode('CUSTOM MATCH')">
-      🏠 CUSTOM MATCH
+    <button class="shot"
+            onclick="playShot('DRIVE')">
+      ↗️<br>
+      DRIVE
     </button>
 
-    <button class="mode practice"
-            onclick="startMode('SOLO / PRACTICE')">
-      🎯 SOLO / PRACTICE
+    <button class="shot big"
+            onclick="playShot('POWER')">
+      🏏<br>
+      POWER
     </button>
 
-    <div id="message">
-      Large Battle Island
+    <button class="shot"
+            onclick="playShot('CUT')">
+      ↘️<br>
+      CUT
+    </button>
+
+    <button class="shot"
+            onclick="playShot('LOFT')">
+      🚀<br>
+      LOFT
+    </button>
+
+  </div>
+
+
+  <!-- ============================================
+       START POPUP
+  ============================================= -->
+
+  <div id="popup">
+
+    <div class="popupBox">
+
+      <div class="logo">
+        CRICKET X
+      </div>
+
+      <div class="subtitle">
+        ULTIMATE CRICKET ARENA
+      </div>
+
+      <button class="menuItem"
+              onclick="startMatch()">
+        🏏 QUICK MATCH
+      </button>
+
+      <button class="menuItem orange"
+              onclick="showMessage('🏆 Tournament mode coming next')">
+        🏆 TOURNAMENT
+      </button>
+
+      <button class="menuItem green"
+              onclick="showMessage('🎯 Practice Arena selected')">
+        🎯 PRACTICE
+      </button>
+
+      <div id="menuMessage"
+           style="
+           margin-top:15px;
+           color:#91b5cc;
+           font-size:12px;">
+        Select a mode to begin
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ============================================
+       RESULT
+  ============================================= -->
+
+  <div id="resultPopup">
+
+    <div class="resultBox">
+
+      <h2 id="resultTitle">
+        INNINGS COMPLETE
+      </h2>
+
+      <div class="finalScore">
+
+        <span id="finalRuns">0</span> /
+        <span id="finalWickets">0</span>
+
+      </div>
+
+      <p id="resultText">
+        Great innings!
+      </p>
+
+      <button class="menuItem"
+              onclick="restartGame()">
+        🔄 PLAY AGAIN
+      </button>
+
+      <button class="menuItem green"
+              onclick="closeResult()">
+        🏠 LOBBY
+      </button>
+
     </div>
 
   </div>
@@ -905,279 +1254,617 @@ html,body{
 
 <script>
 
-/* =========================
-   WORLD CAMERA
-========================= */
+/* =====================================================
+   GAME DATA
+===================================================== */
 
-const world =
-  document.getElementById("world");
+let runs = 0;
+let wickets = 0;
 
-let cameraX = 0;
-let cameraY = 0;
+let balls = 0;
 
-let cameraAngle = 0;
+let target = 51;
 
-function updateCamera(){
+let matchStarted = false;
 
-  world.style.transform =
-    "translate("+
-    cameraX+
-    "px,"+
-    cameraY+
-    "px) rotate("+
-    cameraAngle+
-    "deg)";
+let ballMoving = false;
+
+let cameraRotation = 0;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const ball =
+  document.getElementById("ball");
+
+const bat =
+  document.getElementById("bat");
+
+const bowler =
+  document.getElementById("bowler");
+
+const commentary =
+  document.getElementById("commentary");
+
+const runsEl =
+  document.getElementById("runs");
+
+const wicketsEl =
+  document.getElementById("wickets");
+
+const overEl =
+  document.getElementById("over");
+
+const targetEl =
+  document.getElementById("target");
+
+
+/* =====================================================
+   MENU
+===================================================== */
+
+function openMenu(){
+
+  document.getElementById(
+    "popup"
+  ).style.display="flex";
 
 }
 
 
-/* =========================
-   RIGHT SIDE CAMERA DRAG
-========================= */
+function showMessage(text){
 
-const cameraArea =
-  document.getElementById("cameraArea");
+  document.getElementById(
+    "menuMessage"
+  ).innerText=text;
 
-let cameraDragging = false;
-
-let lastCameraX = 0;
-
-cameraArea.addEventListener(
-  "pointerdown",
-  function(e){
-
-    cameraDragging = true;
-
-    lastCameraX = e.clientX;
-
-    cameraArea.setPointerCapture(
-      e.pointerId
-    );
-
-  }
-);
+}
 
 
-cameraArea.addEventListener(
-  "pointermove",
-  function(e){
+/* =====================================================
+   START
+===================================================== */
 
-    if(!cameraDragging) return;
+function startMatch(){
 
-    let dx =
-      e.clientX-lastCameraX;
+  document.getElementById(
+    "popup"
+  ).style.display="none";
 
-    lastCameraX =
-      e.clientX;
+  matchStarted=true;
 
-    cameraAngle += dx * 0.35;
+  showCommentary(
+    "🏏 Match starting..."
+  );
 
-    updateCamera();
+  setTimeout(
+    bowlBall,
+    1200
+  );
 
-  }
-);
-
-
-cameraArea.addEventListener(
-  "pointerup",
-  function(){
-
-    cameraDragging=false;
-
-  }
-);
+}
 
 
-cameraArea.addEventListener(
-  "pointercancel",
-  function(){
+/* =====================================================
+   COMMENTARY
+===================================================== */
 
-    cameraDragging=false;
+function showCommentary(text){
 
-  }
-);
+  commentary.innerText=text;
 
-
-/* =========================
-   JOYSTICK
-========================= */
-
-const joystick =
-  document.getElementById("joystick");
-
-const stick =
-  document.getElementById("stick");
-
-let joystickActive=false;
-
-let joystickStartX=0;
-let joystickStartY=0;
-
-joystick.addEventListener(
-  "pointerdown",
-  function(e){
-
-    joystickActive=true;
-
-    joystickStartX=e.clientX;
-    joystickStartY=e.clientY;
-
-    joystick.setPointerCapture(
-      e.pointerId
-    );
-
-  }
-);
-
-
-joystick.addEventListener(
-  "pointermove",
-  function(e){
-
-    if(!joystickActive) return;
-
-    let dx =
-      e.clientX-joystickStartX;
-
-    let dy =
-      e.clientY-joystickStartY;
-
-    let max=40;
-
-    let distance =
-      Math.sqrt(
-        dx*dx+
-        dy*dy
-      );
-
-    if(distance>max){
-
-      dx =
-        dx/distance*max;
-
-      dy =
-        dy/distance*max;
-
-    }
-
-    stick.style.transform =
-      "translate("+
-      dx+
-      "px,"+
-      dy+
-      "px)";
-
-    /* Movement */
-
-    cameraX -= dx*0.25;
-    cameraY -= dy*0.25;
-
-    updateCamera();
-
-  }
-);
-
-
-joystick.addEventListener(
-  "pointerup",
-  function(){
-
-    joystickActive=false;
-
-    stick.style.transform=
-      "translate(0,0)";
-
-  }
-);
-
-
-/* =========================
-   GAME MODE
-========================= */
-
-function startMode(mode){
-
-  const message =
-    document.getElementById("message");
-
-  message.innerText =
-    mode+" loading...";
+  commentary.classList.add(
+    "show"
+  );
 
   setTimeout(function(){
 
-    document.getElementById(
-      "popup"
-    ).style.display="none";
+    commentary.classList.remove(
+      "show"
+    );
 
-  },700);
+  },1600);
 
 }
 
 
-/* =========================
-   FIRE
-========================= */
+/* =====================================================
+   BOWLING
+===================================================== */
 
-function fire(){
+function bowlBall(){
 
-  const ammo =
-    document.querySelector(".ammo");
+  if(!matchStarted) return;
 
-  let parts =
-    ammo.innerText.split("/");
+  if(
+    wickets>=5 ||
+    runs>=target
+  ){
 
-  let current =
-    parseInt(parts[0]);
+    finishMatch();
 
-  if(current>0){
-
-    current--;
-
-    ammo.innerText =
-      current+"/"+parts[1];
+    return;
 
   }
 
+  ballMoving=true;
+
+  ball.style.display="block";
+
+  ball.style.left="50%";
+  ball.style.top="25%";
+
+  bowler.animate(
+    [
+      {
+        transform:
+        "translateX(-50%) rotate(0deg)"
+      },
+      {
+        transform:
+        "translateX(-50%) rotate(-8deg)"
+      },
+      {
+        transform:
+        "translateX(-50%) rotate(8deg)"
+      },
+      {
+        transform:
+        "translateX(-50%) rotate(0deg)"
+      }
+    ],
+    {
+      duration:700
+    }
+  );
+
+
+  const startTime =
+    performance.now();
+
+  const duration=1500;
+
+
+  function animateBall(time){
+
+    if(!ballMoving)
+      return;
+
+    let p=
+      (time-startTime)/duration;
+
+    if(p>1)
+      p=1;
+
+
+    /* curved flight */
+
+    let x=50;
+
+    let y=
+      25+
+      p*42;
+
+    let scale=
+      .65+
+      p*.8;
+
+    ball.style.left=
+      x+"%";
+
+    ball.style.top=
+      y+"%";
+
+    ball.style.transform=
+      "translate(-50%,-50%) scale("+
+      scale+
+      ")";
+
+
+    if(p<1){
+
+      requestAnimationFrame(
+        animateBall
+      );
+
+    }else{
+
+      ballMoving=false;
+
+      missBall();
+
+    }
+
+  }
+
+  requestAnimationFrame(
+    animateBall
+  );
+
 }
 
 
-/* =========================
-   RELOAD
-========================= */
+/* =====================================================
+   MISS / DOT BALL
+===================================================== */
 
-function reload(){
+function missBall(){
 
-  document.querySelector(
-    ".ammo"
-  ).innerText="30/120";
+  balls++;
+
+  updateOver();
+  showCommentary(
+    "• DOT BALL"
+  );
+
+  ball.style.display="none";
+
+  setTimeout(
+    bowlBall,
+    1100
+  );
 
 }
 
 
-/* =========================
-   JUMP
-========================= */
+/* =====================================================
+   SHOTS
+===================================================== */
 
-function jump(){
+function playShot(type){
+
+  if(
+    !matchStarted ||
+    !ballMoving
+  ){
+    return;
+  }
+
+  ballMoving=false;
+
+  let result=0;
+
+
+  if(type==="DEFENCE"){
+
+    result =
+      Math.random()<0.75
+      ? 0
+      : 1;
+
+  }
+
+
+  if(type==="DRIVE"){
+
+    let r=Math.random();
+
+    if(r<0.55){
+      result=4;
+    }
+    else if(r<0.75){
+      result=2;
+    }
+    else{
+      result=1;
+    }
+
+  }
+
+
+  if(type==="CUT"){
+
+    let r=Math.random();
+
+    if(r<0.60){
+      result=4;
+    }
+    else{
+      result=2;
+    }
+
+  }
+
+
+  if(type==="LOFT"){
+
+    let r=Math.random();
+
+    if(r<0.45){
+      result=6;
+    }
+    else if(r<0.75){
+      result=4;
+    }
+    else{
+      result=1;
+    }
+
+  }
+
+
+  if(type==="POWER"){
+
+    let r=Math.random();
+
+    if(r<0.55){
+      result=6;
+    }
+    else if(r<0.80){
+      result=4;
+    }
+    else{
+      result=2;
+    }
+
+  }
+
+
+  /* =========================
+     WICKET CHANCE
+  ========================= */
+
+  if(
+    Math.random()<0.08 &&
+    type!=="DEFENCE"
+  ){
+
+    wicket();
+
+    return;
+
+  }
+
+
+  scoreRuns(
+    result,
+    type
+  );
+
+}
+
+
+/* =====================================================
+   SCORE RUNS
+===================================================== */
+
+function scoreRuns(
+  amount,
+  shot
+){
+
+  runs += amount;
+
+  balls++;
+
+  updateScore();
+
+  animateBat();
+
+
+  /* =========================
+     BALL DISAPPEAR
+  ========================= */
+
+  ball.style.display="block";
+
+
+  setTimeout(
+    function(){
+
+      ball.style.display="none";
+
+    },
+    450
+  );
+
+
+  /* =========================
+     COMMENTARY
+  ========================= */
+
+  if(amount===6){
+
+    showCommentary(
+      "🔥 SIX! WHAT A HIT!"
+    );
+
+  }
+
+  else if(amount===4){
+
+    showCommentary(
+      "🏏 FOUR! BEAUTIFUL SHOT!"
+    );
+
+  }
+
+  else if(amount===0){
+
+    showCommentary(
+      "🛡️ SOLID DEFENCE"
+    );
+
+  }
+
+  else if(amount===1){
+
+    showCommentary(
+      "🏃 QUICK SINGLE"
+    );
+
+  }
+
+  else if(amount===2){
+
+    showCommentary(
+      "🏃🏃 TWO RUNS!"
+    );
+
+  }
+
+  else{
+
+    showCommentary(
+      "RUNS: "+amount
+    );
+
+  }
+
+
+  /* =========================
+     UPDATE OVER
+  ========================= */
+
+  updateOver();
+
+
+  /* =========================
+     TARGET CHECK
+  ========================= */
+
+  if(
+    runs>=target
+  ){
+
+    setTimeout(
+      finishMatch,
+      900
+    );
+
+    return;
+
+  }
+
+
+  /* =========================
+     NEXT BALL
+  ========================= */
+
+  setTimeout(
+    bowlBall,
+    1100
+  );
+
+}
+
+
+/* =====================================================
+   WICKET
+===================================================== */
+
+function wicket(){
+
+  wickets++;
+
+  balls++;
+
+  updateScore();
+
+  updateOver();
+
+  animateWicket();
+
+
+  showCommentary(
+    "❌ WICKET!"
+  );
+
+
+  ball.style.display="none";
+
+
+  /* =========================
+     ALL WICKETS
+  ========================= */
+
+  if(
+    wickets>=5
+  ){
+
+    setTimeout(
+      finishMatch,
+      1000
+    );
+
+    return;
+
+  }
+
+
+  /* =========================
+     NEXT BALL
+  ========================= */
+
+  setTimeout(
+    bowlBall,
+    1300
+  );
+
+}
+
+
+/* =====================================================
+   BAT ANIMATION
+===================================================== */
+
+function animateBat(){
+
+  bat.animate(
+    [
+      {
+        transform:
+        "rotate(25deg)"
+      },
+
+      {
+        transform:
+        "rotate(-65deg)"
+      },
+
+      {
+        transform:
+        "rotate(20deg)"
+      }
+    ],
+    {
+      duration:420,
+      easing:"ease-out"
+    }
+  );
+
+}
+
+
+/* =====================================================
+   WICKET ANIMATION
+===================================================== */
+
+function animateWicket(){
 
   const player =
-    document.getElementById("player");
+    document.getElementById(
+      "batsman"
+    );
+
 
   player.animate(
     [
       {
         transform:
-        "translate(-50%,-50%)"
+        "translate(-50%,-50%) rotate(0deg)"
       },
 
       {
         transform:
-        "translate(-50%,-80%)"
+        "translate(-50%,-50%) rotate(-12deg)"
       },
 
       {
         transform:
-        "translate(-50%,-50%)"
+        "translate(-50%,-50%) rotate(0deg)"
       }
     ],
     {
@@ -1189,34 +1876,419 @@ function jump(){
 }
 
 
+/* =====================================================
+   SCORE UPDATE
+===================================================== */
+
+function updateScore(){
+
+  runsEl.innerText =
+    runs;
+
+  wicketsEl.innerText =
+    wickets;
+
+  targetEl.innerText =
+    Math.max(
+      0,
+      target-runs
+    );
+
+}
+
+
+/* =====================================================
+   OVER UPDATE
+===================================================== */
+
+function updateOver(){
+
+  let completeOvers =
+    Math.floor(
+      balls/6
+    );
+
+  let currentBalls =
+    balls%6;
+
+
+  overEl.innerText =
+    completeOvers+
+    "."+
+    currentBalls;
+
+}
+
+
+/* =====================================================
+   CAMERA ROTATION
+===================================================== */
+
+const cameraTouch =
+  document.getElementById(
+    "cameraTouch"
+  );
+
+
+let cameraDown=false;
+
+let lastX=0;
+
+let lastY=0;
+
+
 /* =========================
-   PLAYER COUNT
+   CAMERA START
 ========================= */
 
-setInterval(function(){
+cameraTouch.addEventListener(
+  "pointerdown",
+  function(e){
 
-  const p =
-    document.getElementById("players");
+    cameraDown=true;
 
-  let n =
-    parseInt(p.innerText);
+    lastX=e.clientX;
+    lastY=e.clientY;
 
-  if(n>1){
+    cameraTouch.setPointerCapture(
+      e.pointerId
+    );
 
-    p.innerText=n-1;
+  }
+);
+
+
+/* =========================
+   CAMERA MOVE
+========================= */
+
+cameraTouch.addEventListener(
+  "pointermove",
+  function(e){
+
+    if(!cameraDown)
+      return;
+
+
+    let dx =
+      e.clientX-lastX;
+
+    let dy =
+      e.clientY-lastY;
+
+
+    lastX=e.clientX;
+    lastY=e.clientY;
+
+
+    cameraRotation +=
+      dx*0.25;
+
+
+    /* =========================
+       CAMERA VERTICAL EFFECT
+    ========================= */
+
+    let vertical =
+      dy*0.12;
+
+
+    let field =
+      document.getElementById(
+        "field"
+      );
+
+
+    field.style.transform =
+      "translate(-50%,-50%) "+
+      "perspective(700px) "+
+      "rotateX("+
+      (55-vertical)+
+      "deg) "+
+      "rotateZ("+
+      cameraRotation+
+      "deg)";
+
+  }
+);
+
+
+/* =========================
+   CAMERA END
+========================= */
+
+cameraTouch.addEventListener(
+  "pointerup",
+  function(){
+
+    cameraDown=false;
+
+  }
+);
+
+
+cameraTouch.addEventListener(
+  "pointercancel",
+  function(){
+
+    cameraDown=false;
+
+  }
+);
+
+
+/* =====================================================
+   RESULT SCREEN
+===================================================== */
+
+function finishMatch(){
+
+  matchStarted=false;
+
+
+  document.getElementById(
+    "finalRuns"
+  ).innerText =
+    runs;
+
+
+  document.getElementById(
+    "finalWickets"
+  ).innerText =
+    wickets;
+
+
+  if(
+    runs>=target
+  ){
+
+    document.getElementById(
+      "resultTitle"
+    ).innerText =
+      "🏆 YOU WIN!";
+
+
+    document.getElementById(
+      "resultText"
+    ).innerText =
+      "Target chased successfully!";
 
   }
 
-},5000);
+  else{
+
+    document.getElementById(
+      "resultTitle"
+    ).innerText =
+      "INNINGS COMPLETE";
 
 
-/* =========================
+    document.getElementById(
+      "resultText"
+    ).innerText =
+      "Great innings!";
+
+  }
+
+
+  document.getElementById(
+    "resultPopup"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* =====================================================
+   RESTART GAME
+===================================================== */
+
+function restartGame(){
+
+  runs=0;
+
+  wickets=0;
+
+  balls=0;
+
+  matchStarted=false;
+
+
+  updateScore();
+
+  updateOver();
+
+
+  document.getElementById(
+    "resultPopup"
+  ).style.display =
+    "none";
+
+
+  setTimeout(
+    function(){
+
+      matchStarted=true;
+
+      showCommentary(
+        "🏏 NEW INNINGS!"
+      );
+
+      setTimeout(
+        bowlBall,
+        800
+      );
+
+    },
+    300
+  );
+
+}
+
+
+/* =====================================================
+   CLOSE RESULT
+===================================================== */
+
+function closeResult(){
+
+  document.getElementById(
+    "resultPopup"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "popup"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* =====================================================
+   KEYBOARD TEST
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(e.key==="1"){
+
+      playShot(
+        "DEFENCE"
+      );
+
+    }
+
+
+    if(e.key==="2"){
+
+      playShot(
+        "DRIVE"
+      );
+
+    }
+
+
+    if(e.key==="3"){
+
+      playShot(
+        "POWER"
+      );
+
+    }
+
+
+    if(e.key==="4"){
+
+      playShot(
+        "CUT"
+      );
+
+    }
+
+
+    if(e.key==="5"){
+
+      playShot(
+        "LOFT"
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   INITIAL GAME SETUP
+===================================================== */
+
+updateScore();
+
+updateOver();
+
+
+/* =====================================================
+   PREVENT PAGE SCROLL
+===================================================== */
+
+document.addEventListener(
+  "touchmove",
+  function(e){
+
+    e.preventDefault();
+
+  },
+  {
+    passive:false
+  }
+);
+
+
+/* =====================================================
+   PREVENT CONTEXT MENU
+===================================================== */
+
+document.addEventListener(
+  "contextmenu",
+  function(e){
+
+    e.preventDefault();
+
+  }
+);
+
+
+/* =====================================================
    INITIAL CAMERA
-========================= */
+===================================================== */
 
-updateCamera();
+const initialField =
+  document.getElementById(
+    "field"
+  );
+
+
+initialField.style.transform =
+  "translate(-50%,-50%) "+
+  "perspective(700px) "+
+  "rotateX(55deg) "+
+  "rotateZ(0deg)";
+
+
+/* =====================================================
+   READY
+===================================================== */
+
+showCommentary(
+  "🏟️ WELCOME TO CRICKET X"
+);
 
 </script>
 
 </body>
 </html>
+ 
