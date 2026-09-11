@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<title>Battle Arena - Multiplayer</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,sans-serif;
+  background:#07111f;
+  color:white;
+}
+
+body{
+  display:flex;
+  justify-content:center;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 20%,#17385b 0%,#07111f 55%,#02060c 100%);
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.bg{
+  position:absolute;
+  inset:-30%;
+  width:160%;
+  height:160%;
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(38,130,255,.18),
+      transparent 25%),
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(255,255,255,.025) 0deg 8deg,
+      transparent 8deg 16deg
+    );
+  animation:rotateBg 25s linear infinite;
+}
+
+@keyframes rotateBg{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  background:linear-gradient(
+    to bottom,
+    rgba(0,0,0,.75),
+    transparent
+  );
+  z-index:10;
+}
+
+.logo{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.online{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:11px;
+  color:#71ff9b;
+}
+
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#42ff7b;
+  box-shadow:0 0 12px #42ff7b;
+}
+
+/* =========================
+   LOBBY
+========================= */
+
+.lobby{
+  position:absolute;
+  left:15px;
+  right:15px;
+  top:80px;
+  bottom:15px;
+  z-index:5;
+  display:flex;
+  flex-direction:column;
+}
+
+.title{
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:2px;
+  margin:8px 0 3px;
+  text-shadow:0 0 20px rgba(40,150,255,.7);
+}
+
+.subtitle{
+  text-align:center;
+  color:#8da7c2;
+  font-size:12px;
+  margin-bottom:15px;
+}
+
+/* =========================
+   PLAYER CARD
+========================= */
+
+.player{
+  position:relative;
+  min-height:70px;
+  margin-bottom:9px;
+  padding:10px 12px;
+  border-radius:15px;
+  border:1px solid rgba(75,160,255,.35);
+  background:linear-gradient(
+    135deg,
+    rgba(21,53,83,.92),
+    rgba(6,17,30,.94)
+  );
+  box-shadow:
+    inset 0 0 20px rgba(0,120,255,.07),
+    0 8px 25px rgba(0,0,0,.25);
+}
+
+.player.me{
+  border-color:#2996ff;
+  box-shadow:
+    0 0 18px rgba(41,150,255,.18),
+    inset 0 0 25px rgba(41,150,255,.08);
+}
+
+.avatar{
+  position:absolute;
+  left:11px;
+  top:11px;
+  width:48px;
+  height:48px;
+  border-radius:13px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:25px;
+  background:linear-gradient(145deg,#236bb0,#102b49);
+  border:1px solid rgba(255,255,255,.15);
+}
+
+.info{
+  margin-left:62px;
+}
+
+.player-name{
+  font-size:15px;
+  font-weight:800;
+}
+
+.player-id{
+  font-size:10px;
+  color:#7992ac;
+  margin-top:3px;
+}
+
+.status{
+  display:inline-block;
+  margin-top:5px;
+  font-size:9px;
+  padding:3px 7px;
+  border-radius:20px;
+  background:rgba(52,255,125,.1);
+  color:#63ff98;
+}
+
+.edit{
+  position:absolute;
+  right:10px;
+  top:12px;
+  border:0;
+  color:#8fc8ff;
+  background:rgba(31,112,190,.18);
+  padding:7px 9px;
+  border-radius:9px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+/* =========================
+   ADD PLAYER
+========================= */
+
+.add{
+  width:100%;
+  min-height:57px;
+  border-radius:14px;
+  border:1px dashed rgba(80,160,255,.55);
+  background:rgba(17,48,78,.45);
+  color:#8fc8ff;
+  font-size:14px;
+  font-weight:bold;
+  margin-top:2px;
+}
+
+/* =========================
+   BOTTOM BUTTONS
+========================= */
+
+.bottom{
+  margin-top:auto;
+}
+
+.custom{
+  width:100%;
+  height:48px;
+  border:1px solid rgba(255,196,74,.45);
+  border-radius:13px;
+  background:linear-gradient(
+    135deg,
+    rgba(91,62,14,.8),
+    rgba(35,26,8,.9)
+  );
+  color:#ffd66e;
+  font-weight:900;
+  letter-spacing:1px;
+  margin-bottom:9px;
+}
+
+.play{
+  width:100%;
+  height:58px;
+  border:0;
+  border-radius:15px;
+  background:linear-gradient(
+    135deg,
+    #1684ff,
+    #34b7ff
+  );
+  color:white;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:2px;
+  box-shadow:
+    0 8px 30px rgba(15,137,255,.35);
+}
+
+.play:active,
+.custom:active,
+.add:active,
+.edit:active{
+  transform:scale(.98);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:absolute;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.box{
+  width:100%;
+  border-radius:20px;
+  padding:20px;
+  background:linear-gradient(
+    145deg,
+    #122c48,
+    #071321
+  );
+  border:1px solid rgba(72,160,255,.45);
+  box-shadow:0 20px 70px rgba(0,0,0,.65);
+}
+
+.box h2{
+  font-size:21px;
+  margin-bottom:7px;
+}
+
+.box p{
+  font-size:11px;
+  color:#8da7c2;
+  margin-bottom:15px;
+}
+
+.input{
+  width:100%;
+  height:48px;
+  border-radius:11px;
+  border:1px solid #315777;
+  outline:none;
+  padding:0 13px;
+  color:white;
+  background:#071522;
+  font-size:14px;
+  margin-bottom:11px;
+}
+
+.modal-btn{
+  width:100%;
+  height:46px;
+  border:0;
+  border-radius:11px;
+  font-weight:bold;
+  color:white;
+  background:#167ff0;
+  margin-top:4px;
+}
+
+.cancel{
+  background:#17293a;
+  color:#9bb2c7;
+}
+
+/* =========================
+   CUSTOM MATCH
+========================= */
+
+.custom-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.custom-user{
+  padding:12px;
+  border-radius:11px;
+  background:#0a1b2d;
+  border:1px solid #234662;
+  display:flex;
+  justify-content:space-between;
+}
+
+.custom-user small{
+  color:#7891a7;
+}
+
+.selected{
+  border-color:#29a0ff;
+  background:#0b2945;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+  position:absolute;
+  inset:0;
+  z-index:100;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  background:
+    radial-gradient(circle,#123a61,#02070d 70%);
+}
+
+.loading.show{
+  display:flex;
+}
+
+.loader-ring{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.1);
+  border-top-color:#35aaff;
+  animation:spin 1s linear infinite;
+  margin-bottom:20px;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+.loading-title{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.loading-text{
+  margin-top:7px;
+  font-size:11px;
+  color:#7792ac;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="bg"></div>
+
+  <div class="header">
+    <div class="logo">BATTLE ARENA</div>
+
+    <div class="online">
+      <span class="dot"></span>
+      ONLINE
+    </div>
+  </div>
+
+  <div class="lobby">
+
+    <div class="title">
+      MULTIPLAYER
+    </div>
+
+    <div class="subtitle">
+      Create your squad • Maximum 4 players
+    </div>
+
+    <!-- PLAYER 1 -->
+    <div class="player me">
+      <div class="avatar">👑</div>
+
+      <div class="info">
+        <div class="player-name" id="myName">
+          Player
+        </div>
+
+        <div class="player-id" id="myId">
+          ID: PLAYER-001
+        </div>
+
+        <span class="status">
+          YOU • READY
+        </span>
+      </div>
+
+      <button class="edit" onclick="openEdit()">
+        ✏ EDIT
+      </button>
+    </div>
+
+    <!-- PLAYER 2 -->
+    <div class="player" id="slot2">
+      <div class="avatar">👤</div>
+
+      <div class="info">
+        <div class="player-name">
+          Empty Slot
+        </div>
+
+        <div class="player-id">
+          Waiting for player
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYER 3 -->
+    <div class="player" id="slot3">
+      <div class="avatar">👤</div>
+
+      <div class="info">
+        <div class="player-name">
+          Empty Slot
+        </div>
+
+        <div class="player-id">
+          Waiting for player
+        </div>
+      </div>
+    </div>
+
+    <!-- PLAYER 4 -->
+    <div class="player" id="slot4">
+      <div class="avatar">👤</div>
+
+      <div class="info">
+        <div class="player-name">
+          Empty Slot
+        </div>
+
+        <div class="player-id">
+          Waiting for player
+        </div>
+      </div>
+    </div>
+
+    <button class="add" onclick="addPlayer()">
+      ＋ ADD MULTIPLAYER
+    </button>
+
+    <div class="bottom">
+
+      <button class="custom" onclick="openCustom()">
+        ⚔ CUSTOM MATCH
+      </button>
+
+      <button class="play" onclick="startGame()">
+        PLAY
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =====================
+       EDIT ID
+  ====================== -->
+
+  <div class="modal" id="editModal">
+
+    <div class="box">
+
+      <h2>✏ Edit Player ID</h2>
+
+      <p>
+        Create your own player name and ID.
+      </p>
+
+      <input
+        class="input"
+        id="nameInput"
+        maxlength="16"
+        placeholder="Player Name">
+
+      <input
+        class="input"
+        id="idInput"
+        maxlength="16"
+        placeholder="Player ID">
+
+      <button
+        class="modal-btn"
+        onclick="saveProfile()">
+        SAVE
+      </button>
+
+      <button
+        class="modal-btn cancel"
+        onclick="closeEdit()">
+        CANCEL
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =====================
+       CUSTOM MATCH
+  ====================== -->
+
+  <div class="modal" id="customModal">
+
+    <div class="box">
+
+      <h2>⚔ Custom Match</h2>
+
+      <p>
+        Select the players you want to play against.
+      </p>
+
+      <div class="custom-list">
+
+        <div
+          class="custom-user selected"
+          onclick="selectCustom(this)">
+          <span>Player</span>
+          <small>YOU</small>
+        </div>
+
+        <div
+          class="custom-user"
+          onclick="selectCustom(this)">
+          <span>Opponent 1</span>
+          <small>READY</small>
+        </div>
+
+        <div
+          class="custom-user"
+          onclick="selectCustom(this)">
+          <span>Opponent 2</span>
+          <small>READY</small>
+        </div>
+
+        <div
+          class="custom-user"
+          onclick="selectCustom(this)">
+          <span>Opponent 3</span>
+          <small>READY</small>
+        </div>
+
+      </div>
+
+      <button
+        class="modal-btn"
+        onclick="saveCustom()">
+        USE THIS MATCH
+      </button>
+
+      <button
+        class="modal-btn cancel"
+        onclick="closeCustom()">
+        CANCEL
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =====================
+       LOADING
+  ====================== -->
+
+  <div class="loading" id="loading">
+
+    <div class="loader-ring"></div>
+
+    <div class="loading-title">
+      ENTERING BATTLE
+    </div>
+
+    <div class="loading-text" id="loadingText">
+      Preparing battlefield...
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================
+   PROFILE
+========================= */
+
+let profile = JSON.parse(
+  localStorage.getItem("battle_profile") || "null"
+);
+
+if(!profile){
+
+  profile = {
+    name:"Player",
+    id:"PLAYER-001"
+  };
+
+  localStorage.setItem(
+    "battle_profile",
+    JSON.stringify(profile)
+  );
+}
+
+function displayProfile(){
+
+  document.getElementById("myName")
+    .textContent = profile.name;
+
+  document.getElementById("myId")
+    .textContent = "ID: " + profile.id;
+}
+
+displayProfile();
+
+
+/* =========================
+   EDIT
+========================= */
+
+function openEdit(){
+
+  document.getElementById("nameInput").value =
+    profile.name;
+
+  document.getElementById("idInput").value =
+    profile.id;
+
+  document
+    .getElementById("editModal")
+    .classList.add("show");
+}
+
+function closeEdit(){
+
+  document
+    .getElementById("editModal")
+    .classList.remove("show");
+}
+
+function saveProfile(){
+
+  let name =
+    document.getElementById("nameInput")
+    .value.trim();
+
+  let id =
+    document.getElementById("idInput")
+    .value.trim();
+
+  if(!name){
+    name="Player";
+  }
+
+  if(!id){
+    id="PLAYER-" +
+      Math.floor(100 + Math.random()*900);
+  }
+
+  profile={
+    name:name,
+    id:id
+  };
+
+  localStorage.setItem(
+    "battle_profile",
+    JSON.stringify(profile)
+  );
+
+  displayProfile();
+
+  closeEdit();
+}
+
+
+/* =========================
+   ADD PLAYER
+========================= */
+
+let playersAdded=1;
+
+function addPlayer(){
+
+  if(playersAdded>=4){
+
+    alert("Maximum 4 players allowed.");
+
+    return;
+  }
+
+  playersAdded++;
+
+  let slot =
+    document.getElementById(
+      "slot"+playersAdded
+    );
+
+  let number =
+    playersAdded;
+
+  slot.querySelector(
+    ".player-name"
+  ).textContent =
+    "Player "+number;
+
+  slot.querySelector(
+    ".player-id"
+  ).textContent =
+    "ID: PLAYER-00"+number;
+
+  slot.querySelector(
+    ".avatar"
+  ).textContent="🎮";
+
+  slot.innerHTML +=
+    '<span class="status">ONLINE</span>';
+
+}
+
+
+/* =========================
+   CUSTOM
+========================= */
+
+function openCustom(){
+
+  document
+    .getElementById("customModal")
+    .classList.add("show");
+}
+
+function closeCustom(){
+
+  document
+    .getElementById("customModal")
+    .classList.remove("show");
+}
+
+function selectCustom(el){
+
+  el.classList.toggle("selected");
+}
+
+function saveCustom(){
+
+  localStorage.setItem(
+    "custom_match",
+    "true"
+  );
+
+  closeCustom();
+}
+
+
+/* =========================
+   START GAME
+========================= */
+
+function startGame(){
+
+  const loading =
+    document.getElementById("loading");
+
+  const text =
+    document.getElementById("loadingText");
+
+  loading.classList.add("show");
+
+  let messages=[
+    "Preparing battlefield...",
+    "Loading island...",
+    "Connecting players...",
+    "Preparing weapons...",
+    "Spawning players...",
+    "Battlefield ready..."
+  ];
+
+  let i=0;
+
+  let timer=setInterval(()=>{
+
+    text.textContent =
+      messages[i];
+
+    i++;
+
+    if(i>=messages.length){
+
+      clearInterval(timer);
+
+      setTimeout(()=>{
+
+        /*
+          GAME PAGE
+          Next file:
+          game.html
+        */
+
+        window.location.href =
+          "game.html";
+
+      },700);
+    }
+
+  },500);
+}
+
+</script>
+
+</body>
+</html>
