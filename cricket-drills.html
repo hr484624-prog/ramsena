@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
+
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>GyanSetu - Interview</title>
+<title>GyanSetu - AI Interview</title>
 
 <style>
 
@@ -15,46 +13,45 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:Arial, sans-serif;
 }
 
 body{
+  font-family:Arial,sans-serif;
   background:#eef5ff;
   color:#172554;
 }
 
-.page{
+.app{
   width:100%;
   max-width:430px;
   min-height:100vh;
   margin:auto;
-  background:#f7faff;
+  background:#fff;
 }
 
-/* HEADER */
-
-.header{
-  height:65px;
+header{
   background:linear-gradient(135deg,#1769e0,#4d9cff);
   color:white;
-  display:flex;
-  align-items:center;
-  padding:0 16px;
-  gap:14px;
+  padding:18px;
   position:sticky;
   top:0;
   z-index:10;
 }
 
-.back-btn{
-  width:40px;
-  height:40px;
-  border:none;
+.header-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border:0;
   border-radius:50%;
   background:rgba(255,255,255,.2);
   color:white;
-  font-size:22px;
-  cursor:pointer;
+  font-size:24px;
 }
 
 .header-title{
@@ -62,310 +59,273 @@ body{
   font-weight:bold;
 }
 
-/* MAIN */
-
-.main{
-  padding:20px;
+.header-sub{
+  font-size:12px;
+  opacity:.9;
+  margin-top:3px;
 }
 
-.hero{
-  background:linear-gradient(135deg,#1769e0,#4d9cff);
-  color:white;
-  padding:24px;
-  border-radius:20px;
-  margin-bottom:20px;
-  box-shadow:0 8px 25px rgba(23,105,224,.18);
-}
-
-.hero h2{
-  font-size:24px;
-  margin-bottom:8px;
-}
-
-.hero p{
-  font-size:14px;
-  opacity:.95;
-}
-
-/* OVERLAY */
-
-.overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.62);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.content{
   padding:18px;
-  z-index:100;
+}
+
+.card{
+  background:#f7faff;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:0 4px 15px rgba(23,105,224,.08);
+}
+
+.label{
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:7px;
+}
+
+select,
+textarea,
+input{
+  width:100%;
+  border:1px solid #d7e3f5;
+  border-radius:12px;
+  padding:13px;
+  font-size:15px;
+  outline:none;
+  background:white;
+}
+
+textarea{
+  min-height:110px;
+  resize:none;
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
+}
+
+.primary{
+  width:100%;
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:14px;
+  border-radius:13px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.primary:disabled{
+  opacity:.5;
+}
+
+.question{
+  font-size:19px;
+  line-height:1.5;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.ai{
+  background:#eaf3ff;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:15px;
+  line-height:1.5;
+}
+
+.user{
+  background:#1769e0;
+  color:white;
+  border-radius:14px;
+  padding:14px;
+  margin-bottom:15px;
+  line-height:1.5;
+}
+
+.small{
+  font-size:12px;
+  color:#64748b;
+  text-align:center;
+  margin-top:12px;
+}
+
+.loading{
+  display:none;
+  text-align:center;
+  padding:12px;
+  color:#1769e0;
+  font-weight:bold;
 }
 
 /* POPUP */
 
-.popup{
-  width:100%;
-  max-width:410px;
-  max-height:90vh;
-  overflow-y:auto;
-  background:white;
-  border-radius:24px;
-  padding:22px;
-  box-shadow:0 20px 60px rgba(0,0,0,.3);
-  animation:popupIn .25s ease;
-}
-
-@keyframes popupIn{
-  from{
-    transform:scale(.9);
-    opacity:0;
-  }
-  to{
-    transform:scale(1);
-    opacity:1;
-  }
-}
-
-.popup h2{
-  text-align:center;
-  color:#1769e0;
-  margin-bottom:7px;
-}
-
-.popup-subtitle{
-  text-align:center;
-  color:#64748b;
-  font-size:13px;
-  margin-bottom:20px;
-}
-
-/* TYPE GRID */
-
-.type-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-
-.type-card{
-  border:2px solid #e2e8f0;
-  background:#f8fbff;
-  border-radius:16px;
-  padding:17px 10px;
-  text-align:center;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.type-card:hover{
-  border-color:#4d9cff;
-}
-
-.type-card.selected{
-  border-color:#1769e0;
-  background:#eaf3ff;
-  box-shadow:0 4px 12px rgba(23,105,224,.12);
-}
-
-.type-icon{
-  font-size:30px;
-  margin-bottom:8px;
-}
-
-.type-name{
-  font-size:14px;
-  font-weight:bold;
-}
-
-/* BUTTON */
-
-.primary-btn{
-  width:100%;
-  margin-top:20px;
-  padding:15px;
-  border:none;
-  border-radius:14px;
-  background:#1769e0;
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.primary-btn:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-
-/* LANGUAGE */
-
-.language-search{
-  width:100%;
-  padding:14px;
-  border:2px solid #e2e8f0;
-  border-radius:13px;
-  outline:none;
-  margin-bottom:14px;
-  font-size:15px;
-}
-
-.language-search:focus{
-  border-color:#1769e0;
-}
-
-.language-list{
-  display:flex;
-  flex-direction:column;
-  gap:9px;
-  max-height:430px;
-  overflow-y:auto;
-}
-
-.language-item{
-  padding:13px 15px;
-  border:2px solid #e5e7eb;
-  border-radius:13px;
-  background:#f8fbff;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:15px;
-}
-
-.language-item.selected{
-  border-color:#1769e0;
-  background:#eaf3ff;
-  color:#1769e0;
-  font-weight:bold;
-}
-
-.check{
-  display:none;
-}
-
-.language-item.selected .check{
-  display:block;
-}
-
-/* INTERVIEW SCREEN */
-
-.interview-screen{
-  display:none;
-}
-
-.ai-card{
-  background:white;
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 5px 20px rgba(23,105,224,.1);
-  margin-top:20px;
-}
-
-.ai-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  color:#1769e0;
-  font-weight:bold;
-  margin-bottom:18px;
-}
-
-.ai-avatar{
-  width:45px;
-  height:45px;
-  border-radius:50%;
-  background:#eaf3ff;
+.popup-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:24px;
+  padding:20px;
+  z-index:100;
 }
 
-.question{
-  background:#f1f6ff;
-  border-radius:15px;
-  padding:17px;
-  line-height:1.5;
-  font-size:16px;
-  margin-bottom:16px;
-}
-
-.answer{
+.popup{
   width:100%;
-  min-height:120px;
-  resize:none;
-  padding:15px;
-  border:2px solid #dbe4f0;
-  border-radius:14px;
-  outline:none;
-  font-size:15px;
+  max-width:400px;
+  max-height:90vh;
+  overflow:auto;
+  background:white;
+  border-radius:22px;
+  padding:20px;
 }
 
-.answer:focus{
+.popup h2{
+  margin-bottom:6px;
+  color:#172554;
+}
+
+.popup p{
+  color:#64748b;
+  font-size:13px;
+  margin-bottom:15px;
+}
+
+.option{
+  width:100%;
+  border:1px solid #d9e5f5;
+  background:#f8fbff;
+  padding:14px;
+  border-radius:13px;
+  margin-bottom:9px;
+  text-align:left;
+  font-size:15px;
+  color:#172554;
+}
+
+.option:hover{
+  background:#eaf3ff;
   border-color:#1769e0;
 }
 
-.info{
-  margin-top:15px;
-  text-align:center;
-  font-size:13px;
-  color:#64748b;
+.search{
+  margin-bottom:12px;
 }
 
 .hidden{
   display:none !important;
 }
 
-</style>
+.language-list{
+  max-height:420px;
+  overflow:auto;
+}
 
+.status{
+  font-size:12px;
+  color:#64748b;
+  margin-top:10px;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="page">
+<div class="app">
 
-  <div class="header">
-    <button class="back-btn" onclick="goBack()">‹</button>
-    <div class="header-title">AI Interview</div>
-  </div>
+<header>
 
-  <div class="main">
+  <div class="header-row">
 
-    <div class="hero">
-      <h2>🎤 AI Interview</h2>
-      <p>Practice your interview and improve your confidence.</p>
+    <button class="back" onclick="goBack()">‹</button>
+
+    <div>
+      <div class="header-title">🤖 AI Interview</div>
+      <div class="header-sub">
+        GyanSetu • Smart Learning
+      </div>
     </div>
 
-    <div id="interviewScreen" class="interview-screen">
+  </div>
 
-      <div class="ai-card">
+</header>
 
-        <div class="ai-title">
-          <div class="ai-avatar">🤖</div>
-          <div>
-            <div>GyanSetu AI Interviewer</div>
-            <small id="selectedInfo"></small>
-          </div>
-        </div>
 
-        <div id="questionBox" class="question">
-          नमस्कार! तुमच्या interview ला सुरुवात करूया.
+<div class="content">
+
+  <div class="card">
+
+    <div class="label">Interview Type</div>
+
+    <input
+      id="typeDisplay"
+      value="Select interview type"
+      readonly
+    >
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="label">Language</div>
+
+    <input
+      id="languageDisplay"
+      value="Select language"
+      readonly
+    >
+
+  </div>
+
+
+  <div id="startCard" class="card">
+
+    <button
+      class="primary"
+      onclick="startInterview()"
+    >
+      🎤 Start AI Interview
+    </button>
+
+  </div>
+
+
+  <div id="interviewArea" class="hidden">
+
+    <div id="chatBox"></div>
+
+    <div id="answerBox">
+
+      <div class="card">
+
+        <div class="label">
+          Your Answer
         </div>
 
         <textarea
-          id="answerBox"
-          class="answer"
+          id="answer"
           placeholder="तुमचे उत्तर येथे लिहा..."
         ></textarea>
 
+        <br><br>
+
         <button
-          class="primary-btn"
-          onclick="nextQuestion()">
-          Submit Answer →
+          id="sendBtn"
+          class="primary"
+          onclick="sendAnswer()"
+        >
+          Send Answer
         </button>
 
-        <div class="info" id="questionNumber">
-          Question 1
+        <div
+          id="loading"
+          class="loading"
+        >
+          🤖 Gemini विचार करत आहे...
         </div>
 
       </div>
@@ -374,81 +334,60 @@ body{
 
   </div>
 
+  <div class="small">
+    Powered by GyanSetu AI
+  </div>
+
+</div>
+
 </div>
 
 
-<!-- =========================
-     TYPE POPUP
-========================= -->
+<!-- INTERVIEW TYPE POPUP -->
 
-<div class="overlay" id="typeOverlay">
+<div
+  id="typePopup"
+  class="popup-bg"
+>
 
   <div class="popup">
 
-    <h2>🎤 Interview सुरू करूया</h2>
+    <h2>🎯 Interview Type</h2>
 
-    <div class="popup-subtitle">
-      तुम्हाला कोणत्या प्रकारची interview practice करायची आहे?
-    </div>
+    <p>
+      कोणत्या प्रकारची interview द्यायची आहे?
+    </p>
 
-    <div class="type-grid">
+    <button class="option" onclick="chooseType('Business')">
+      💼 Business Interview
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'Business')">
-        <div class="type-icon">💼</div>
-        <div class="type-name">Business</div>
-      </div>
+    <button class="option" onclick="chooseType('Job')">
+      🧑‍💼 Job Interview
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'Job')">
-        <div class="type-icon">👔</div>
-        <div class="type-name">Job</div>
-      </div>
+    <button class="option" onclick="chooseType('School Admission')">
+      🏫 School Admission
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'School Admission')">
-        <div class="type-icon">🏫</div>
-        <div class="type-name">School Admission</div>
-      </div>
+    <button class="option" onclick="chooseType('College Admission')">
+      🎓 College Admission
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'College Admission')">
-        <div class="type-icon">🎓</div>
-        <div class="type-name">College Admission</div>
-      </div>
+    <button class="option" onclick="chooseType('Scholarship')">
+      🏆 Scholarship Interview
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'Scholarship')">
-        <div class="type-icon">🏆</div>
-        <div class="type-name">Scholarship</div>
-      </div>
+    <button class="option" onclick="chooseType('Viva')">
+      📚 Viva
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'Viva')">
-        <div class="type-icon">📚</div>
-        <div class="type-name">Viva</div>
-      </div>
+    <button class="option" onclick="chooseType('Career')">
+      🚀 Career Interview
+    </button>
 
-      <div class="type-card"
-           onclick="selectType(this,'General')">
-        <div class="type-icon">🎤</div>
-        <div class="type-name">General</div>
-      </div>
-
-      <div class="type-card"
-           onclick="selectType(this,'Career')">
-        <div class="type-icon">🚀</div>
-        <div class="type-name">Career</div>
-      </div>
-
-    </div>
-
-    <button
-      id="typeNextBtn"
-      class="primary-btn"
-      disabled
-      onclick="openLanguages()">
-      Continue →
+    <button class="option" onclick="chooseType('General')">
+      💬 General Interview
     </button>
 
   </div>
@@ -456,39 +395,32 @@ body{
 </div>
 
 
-<!-- =========================
-     LANGUAGE POPUP
-========================= -->
+<!-- LANGUAGE POPUP -->
 
-<div class="overlay hidden" id="languageOverlay">
+<div
+  id="languagePopup"
+  class="popup-bg hidden"
+>
 
   <div class="popup">
 
-    <h2>🌐 Language निवडा</h2>
+    <h2>🌐 Language</h2>
 
-    <div class="popup-subtitle">
-      Interview कोणत्या भाषेत द्यायची?
-    </div>
+    <p>
+      Interview कोणत्या भाषेत हवी?
+    </p>
 
     <input
-      type="text"
       id="languageSearch"
-      class="language-search"
-      placeholder="🔍 Search language..."
-      oninput="searchLanguage()"
+      class="search"
+      placeholder="भाषा शोधा..."
+      oninput="searchLanguages()"
     >
 
-    <div id="languageList" class="language-list">
-
-    </div>
-
-    <button
-      id="startBtn"
-      class="primary-btn"
-      disabled
-      onclick="startInterview()">
-      🚀 Start Interview
-    </button>
+    <div
+      id="languageList"
+      class="language-list"
+    ></div>
 
   </div>
 
@@ -498,446 +430,467 @@ body{
 <script>
 
 /* =========================
-   VARIABLES
-========================= */
-
-let selectedType = "";
-
-let selectedLanguage = "";
-
-let currentQuestion = 0;
-
-
-/* =========================
-   INDIAN LANGUAGES
+   DATA
 ========================= */
 
 const languages = [
 
-  "Assamese — অসমীয়া",
-
-  "Bengali — বাংলা",
-
-  "Bodo — बड़ो",
-
-  "Dogri — डोगरी",
-
-  "Gujarati — ગુજરાતી",
-
-  "Hindi — हिन्दी",
-
-  "Kannada — ಕನ್ನಡ",
-
-  "Kashmiri — कश्मीरी",
-
-  "Konkani — कोंकणी",
-
-  "Maithili — मैथिली",
-
-  "Malayalam — മലയാളം",
-
-  "Manipuri — মৈতৈলোন",
-
-  "Marathi — मराठी",
-
-  "Nepali — नेपाली",
-
-  "Odia — ଓଡ଼ିଆ",
-
-  "Punjabi — ਪੰਜਾਬੀ",
-
-  "Sanskrit — संस्कृतम्",
-
-  "Santali — ᱥᱟᱱᱛᱟᱲᱤ",
-
-  "Sindhi — سنڌي",
-
-  "Tamil — தமிழ்",
-
-  "Telugu — తెలుగు",
-
-  "Urdu — اردو"
+  ["Assamese","অসমীয়া"],
+  ["Bengali","বাংলা"],
+  ["Bodo","बड़ो"],
+  ["Dogri","डोगरी"],
+  ["Gujarati","ગુજરાતી"],
+  ["Hindi","हिन्दी"],
+  ["Kannada","ಕನ್ನಡ"],
+  ["Kashmiri","कश्मीरी"],
+  ["Konkani","कोंकणी"],
+  ["Maithili","मैथिली"],
+  ["Malayalam","മലയാളം"],
+  ["Manipuri","মণিপুরী"],
+  ["Marathi","मराठी"],
+  ["Nepali","नेपाली"],
+  ["Odia","ଓଡ଼ିଆ"],
+  ["Punjabi","ਪੰਜਾਬੀ"],
+  ["Sanskrit","संस्कृत"],
+  ["Santali","संताली"],
+  ["Sindhi","सिन्धी"],
+  ["Tamil","தமிழ்"],
+  ["Telugu","తెలుగు"],
+  ["Urdu","اردو"]
 
 ];
 
 
-/* =========================
-   QUESTIONS
-========================= */
+let selectedType = "";
+let selectedLanguage = "";
 
-const questionData = {
+let currentQuestion = "";
 
-  "Business":[
-
-    "Tell me about yourself and your business idea.",
-
-    "What problem does your business solve?",
-
-    "Who are your target customers?",
-
-    "How will you grow your business?",
-
-    "Why should someone invest in your business?"
-
-  ],
-
-  "Job":[
-
-    "Tell me about yourself.",
-
-    "Why do you want this job?",
-
-    "What are your strengths?",
-
-    "What is one skill you want to improve?",
-
-    "Why should we select you?"
-
-  ],
-
-  "School Admission":[
-
-    "Please introduce yourself.",
-
-    "Why do you want to join this school?",
-
-    "What is your favourite subject and why?",
-
-    "What activities do you enjoy?",
-
-    "What do you want to become in the future?"
-
-  ],
-
-  "College Admission":[
-
-    "Please introduce yourself.",
-
-    "Why did you choose this course?",
-
-    "Why do you want to join this college?",
-
-    "What are your academic interests?",
-
-    "What are your future goals?"
-
-  ],
-
-  "Scholarship":[
-
-    "Please introduce yourself.",
-
-    "Why are you applying for this scholarship?",
-
-    "Tell us about your academic goals.",
-
-    "What are your achievements?",
-
-    "How will this scholarship help you?"
-
-  ],
-
-  "Viva":[
-
-    "Please introduce yourself.",
-
-    "What is the main topic of your study?",
-
-    "Explain the most important concept you learned.",
-
-    "What did you find difficult?",
-
-    "What did you learn from this subject?"
-
-  ],
-
-  "General":[
-
-    "Please introduce yourself.",
-
-    "What are your interests?",
-
-    "What are your strengths?",
-
-    "What are your goals?",
-
-    "What motivates you?"
-
-  ],
-
-  "Career":[
-
-    "Please introduce yourself.",
-
-    "What career would you like to pursue?",
-
-    "Why did you choose this career?",
-
-    "What skills are important for your career?",
-
-    "Where do you see yourself in the future?"
-
-  ]
-
-};
+let interviewStarted = false;
 
 
 /* =========================
-   SELECT TYPE
+   TYPE
 ========================= */
 
-function selectType(element,type){
-
-  document
-    .querySelectorAll(".type-card")
-    .forEach(card=>{
-      card.classList.remove("selected");
-    });
-
-  element.classList.add("selected");
+function chooseType(type){
 
   selectedType = type;
 
-  document
-    .getElementById("typeNextBtn")
-    .disabled = false;
-}
-
-
-/* =========================
-   OPEN LANGUAGE
-========================= */
-
-function openLanguages(){
+  document.getElementById("typeDisplay").value = type;
 
   document
-    .getElementById("typeOverlay")
+    .getElementById("typePopup")
     .classList.add("hidden");
 
   document
-    .getElementById("languageOverlay")
+    .getElementById("languagePopup")
     .classList.remove("hidden");
 
-  showLanguages(languages);
+  showLanguages();
+
 }
 
 
 /* =========================
-   SHOW LANGUAGES
+   LANGUAGES
 ========================= */
 
-function showLanguages(list){
+function showLanguages(){
 
   const box =
     document.getElementById("languageList");
 
   box.innerHTML = "";
 
-  list.forEach(language=>{
+  languages.forEach(item => {
 
-    const item =
-      document.createElement("div");
+    const button =
+      document.createElement("button");
 
-    item.className = "language-item";
+    button.className = "option";
 
-    item.innerHTML = `
-      <span>${language}</span>
-      <span class="check">✓</span>
-    `;
+    button.innerHTML =
+      item[1] + " <small>(" + item[0] + ")</small>";
 
-    item.onclick = function(){
+    button.onclick = function(){
 
-      document
-        .querySelectorAll(".language-item")
-        .forEach(x=>{
-          x.classList.remove("selected");
-        });
-
-      item.classList.add("selected");
-
-      selectedLanguage = language;
-
-      document
-        .getElementById("startBtn")
-        .disabled = false;
+      chooseLanguage(
+        item[0],
+        item[1]
+      );
 
     };
 
-    box.appendChild(item);
+    box.appendChild(button);
 
   });
 
 }
 
 
-/* =========================
-   SEARCH LANGUAGE
-========================= */
+function searchLanguages(){
 
-function searchLanguage(){
-
-  const value =
+  const search =
     document
       .getElementById("languageSearch")
       .value
-      .toLowerCase()
-      .trim();
+      .toLowerCase();
 
-  const filtered =
-    languages.filter(language =>
-      language.toLowerCase().includes(value)
-    );
+  const box =
+    document.getElementById("languageList");
 
-  showLanguages(filtered);
+  box.innerHTML = "";
+
+  languages
+    .filter(item =>
+      item[0].toLowerCase().includes(search) ||
+      item[1].toLowerCase().includes(search)
+    )
+    .forEach(item => {
+
+      const button =
+        document.createElement("button");
+
+      button.className = "option";
+
+      button.innerHTML =
+        item[1] +
+        " <small>(" +
+        item[0] +
+        ")</small>";
+
+      button.onclick = function(){
+
+        chooseLanguage(
+          item[0],
+          item[1]
+        );
+
+      };
+
+      box.appendChild(button);
+
+    });
+
+}
+
+
+function chooseLanguage(
+  englishName,
+  nativeName
+){
+
+  selectedLanguage = nativeName;
+
+  document
+    .getElementById("languageDisplay")
+    .value =
+      nativeName +
+      " (" +
+      englishName +
+      ")";
+
+  document
+    .getElementById("languagePopup")
+    .classList.add("hidden");
 
 }
 
 
 /* =========================
-   START INTERVIEW
+   START
 ========================= */
 
-function startInterview(){
+async function startInterview(){
 
-  if(!selectedLanguage) return;
+  if(!selectedType){
+
+    alert("Interview type निवडा.");
+
+    return;
+  }
+
+  if(!selectedLanguage){
+
+    alert("Language निवडा.");
+
+    return;
+  }
+
+  interviewStarted = true;
 
   document
-    .getElementById("languageOverlay")
+    .getElementById("startCard")
     .classList.add("hidden");
 
   document
-    .getElementById("interviewScreen")
-    .style.display = "block";
+    .getElementById("interviewArea")
+    .classList.remove("hidden");
 
-  currentQuestion = 0;
+  addAIMessage(
+    "नमस्कार! 👋 तुमची " +
+    selectedType +
+    " interview सुरू करूया."
+  );
 
-  document
-    .getElementById("selectedInfo")
-    .textContent =
-      selectedType + " • " + selectedLanguage;
-
-  showQuestion();
-
-}
-
-
-/* =========================
-   SHOW QUESTION
-========================= */
-
-function showQuestion(){
-
-  const questions =
-    questionData[selectedType];
-
-  const question =
-    questions[currentQuestion];
-
-  document
-    .getElementById("questionBox")
-    .textContent = question;
-
-  document
-    .getElementById("answerBox")
-    .value = "";
-
-  document
-    .getElementById("questionNumber")
-    .textContent =
-      "Question " +
-      (currentQuestion + 1) +
-      " / " +
-      questions.length;
+  await getFirstQuestion();
 
 }
 
 
 /* =========================
-   NEXT QUESTION
+   FIRST QUESTION
 ========================= */
 
-function nextQuestion(){
+async function getFirstQuestion(){
 
-  const answer =
-    document
-      .getElementById("answerBox")
-      .value
-      .trim();
+  setLoading(true);
 
-  if(answer === ""){
+  try{
 
-    document
-      .getElementById("answerBox")
-      .focus();
+    const response =
+      await fetch("/api/interview", {
 
-    return;
+        method:"POST",
 
-  }
+        headers:{
+          "Content-Type":"application/json"
+        },
 
-  const questions =
-    questionData[selectedType];
+        body:JSON.stringify({
 
-  currentQuestion++;
+          interviewType:selectedType,
 
-  if(currentQuestion >= questions.length){
+          language:selectedLanguage,
 
-    finishInterview();
+          userAnswer:
+            "Start the interview and ask the first question.",
 
-    return;
+          previousQuestion:""
 
-  }
+        })
 
-  showQuestion();
-
-}
+      });
 
 
-/* =========================
-   FINISH
-========================= */
+    const data =
+      await response.json();
 
-function finishInterview(){
 
-  document
-    .getElementById("questionBox")
-    .textContent =
-      "🎉 Interview completed! Great job!";
+    if(!response.ok){
 
-  document
-    .getElementById("answerBox")
-    .value = "";
+      throw new Error(
+        data.error ||
+        "API error"
+      );
 
-  document
-    .getElementById("answerBox")
-    .style.display = "none";
+    }
 
-  const btn =
-    document.querySelector(
-      ".ai-card .primary-btn"
+
+    currentQuestion =
+      data.reply || "";
+
+
+    addAIMessage(currentQuestion);
+
+
+  }catch(error){
+
+    addAIMessage(
+      "❌ Interview सुरू करताना समस्या आली. पुन्हा प्रयत्न करा."
     );
 
-  btn.textContent = "🔄 Start Again";
+    console.error(error);
 
-  btn.onclick = function(){
+  }finally{
 
-    currentQuestion = 0;
+    setLoading(false);
 
-    document
-      .getElementById("answerBox")
-      .style.display = "block";
+  }
 
-    btn.textContent = "Submit Answer →";
+}
 
-    btn.onclick = nextQuestion;
 
-    showQuestion();
+/* =========================
+   SEND ANSWER
+========================= */
 
-  };
+async function sendAnswer(){
+
+  const answerBox =
+    document.getElementById("answer");
+
+  const answer =
+    answerBox.value.trim();
+
+
+  if(!answer){
+
+    return;
+
+  }
+
+
+  addUserMessage(answer);
+
+  answerBox.value = "";
+
+  setLoading(true);
+
+
+  try{
+
+    const response =
+      await fetch("/api/interview", {
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          interviewType:selectedType,
+
+          language:selectedLanguage,
+
+          userAnswer:answer,
+
+          previousQuestion:currentQuestion
+
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "API error"
+      );
+
+    }
+
+
+    currentQuestion =
+      data.reply || "";
+
+
+    addAIMessage(currentQuestion);
+
+
+  }catch(error){
+
+    addAIMessage(
+      "❌ उत्तर तपासताना समस्या आली. पुन्हा प्रयत्न करा."
+    );
+
+    console.error(error);
+
+  }finally{
+
+    setLoading(false);
+
+  }
+
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+function addAIMessage(text){
+
+  const chat =
+    document.getElementById("chatBox");
+
+  const div =
+    document.createElement("div");
+
+  div.className = "ai";
+
+  div.innerHTML =
+    "<b>🤖 GyanSetu AI</b><br><br>" +
+    escapeHTML(text)
+      .replace(/\n/g,"<br>");
+
+  chat.appendChild(div);
+
+  scrollBottom();
+
+}
+
+
+function addUserMessage(text){
+
+  const chat =
+    document.getElementById("chatBox");
+
+  const div =
+    document.createElement("div");
+
+  div.className = "user";
+
+  div.innerHTML =
+    "<b>👤 You</b><br><br>" +
+    escapeHTML(text)
+      .replace(/\n/g,"<br>");
+
+  chat.appendChild(div);
+
+  scrollBottom();
+
+}
+
+
+function scrollBottom(){
+
+  window.scrollTo({
+    top:document.body.scrollHeight,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+function setLoading(show){
 
   document
-    .getElementById("questionNumber")
-    .textContent =
-      "Interview Completed";
+    .getElementById("loading")
+    .style.display =
+      show ? "block" : "none";
+
+  document
+    .getElementById("sendBtn")
+    .disabled = show;
+
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -954,16 +907,10 @@ function goBack(){
 
 
 /* =========================
-   PAGE LOAD
+   INITIAL
 ========================= */
 
-window.onload = function(){
-
-  document
-    .getElementById("typeOverlay")
-    .classList.remove("hidden");
-
-};
+showLanguages();
 
 </script>
 
