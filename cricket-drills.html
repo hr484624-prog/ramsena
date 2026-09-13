@@ -83,9 +83,8 @@ header{
   margin-bottom:7px;
 }
 
-select,
-textarea,
-input{
+input,
+textarea{
   width:100%;
   border:1px solid #d7e3f5;
   border-radius:12px;
@@ -120,13 +119,6 @@ button{
   opacity:.5;
 }
 
-.question{
-  font-size:19px;
-  line-height:1.5;
-  font-weight:bold;
-  margin-bottom:15px;
-}
-
 .ai{
   background:#eaf3ff;
   border-radius:14px;
@@ -156,6 +148,96 @@ button{
   text-align:center;
   padding:12px;
   color:#1769e0;
+  font-weight:bold;
+}
+
+/* AUDIO MODE */
+
+.audio-card{
+  background:linear-gradient(
+    135deg,
+    #eaf3ff,
+    #f7faff
+  );
+  border:1px solid #d6e7ff;
+}
+
+.audio-toggle{
+  width:100%;
+  border:0;
+  background:#fff;
+  color:#1769e0;
+  border:2px solid #1769e0;
+  padding:13px;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.audio-toggle.active{
+  background:#1769e0;
+  color:white;
+}
+
+.mic-area{
+  text-align:center;
+  padding:12px 0 4px;
+}
+
+.mic-button{
+  width:82px;
+  height:82px;
+  border:0;
+  border-radius:50%;
+  background:#1769e0;
+  color:white;
+  font-size:35px;
+  box-shadow:0 7px 20px rgba(23,105,224,.25);
+}
+
+.mic-button.listening{
+  background:#dc2626;
+  transform:scale(1.08);
+  animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+  0%{
+    box-shadow:0 0 0 0 rgba(220,38,38,.35);
+  }
+  70%{
+    box-shadow:0 0 0 18px rgba(220,38,38,0);
+  }
+  100%{
+    box-shadow:0 0 0 0 rgba(220,38,38,0);
+  }
+}
+
+.mic-status{
+  margin-top:10px;
+  font-size:14px;
+  color:#64748b;
+}
+
+.audio-answer{
+  margin-top:14px;
+  background:white;
+  border:1px solid #d7e3f5;
+  border-radius:13px;
+  padding:13px;
+  min-height:55px;
+  line-height:1.5;
+}
+
+.speak-button{
+  width:100%;
+  border:1px solid #1769e0;
+  background:white;
+  color:#1769e0;
+  padding:11px;
+  border-radius:12px;
+  margin-top:10px;
+  font-size:14px;
   font-weight:bold;
 }
 
@@ -223,12 +305,6 @@ button{
   overflow:auto;
 }
 
-.status{
-  font-size:12px;
-  color:#64748b;
-  margin-top:10px;
-}
-
 </style>
 </head>
 
@@ -244,6 +320,7 @@ button{
 
     <div>
       <div class="header-title">🤖 AI Interview</div>
+
       <div class="header-sub">
         GyanSetu • Smart Learning
       </div>
@@ -258,7 +335,9 @@ button{
 
   <div class="card">
 
-    <div class="label">Interview Type</div>
+    <div class="label">
+      Interview Type
+    </div>
 
     <input
       id="typeDisplay"
@@ -271,13 +350,69 @@ button{
 
   <div class="card">
 
-    <div class="label">Language</div>
+    <div class="label">
+      Language
+    </div>
 
     <input
       id="languageDisplay"
       value="Select language"
       readonly
     >
+
+  </div>
+
+
+  <!-- AUDIO MODE -->
+
+  <div
+    id="audioCard"
+    class="card audio-card hidden"
+  >
+
+    <button
+      id="audioToggle"
+      class="audio-toggle"
+      onclick="toggleAudioMode()"
+    >
+      🎙️ Audio Mode OFF
+    </button>
+
+    <div
+      id="micArea"
+      class="mic-area hidden"
+    >
+
+      <button
+        id="micButton"
+        class="mic-button"
+        onclick="toggleListening()"
+      >
+        🎤
+      </button>
+
+      <div
+        id="micStatus"
+        class="mic-status"
+      >
+        बोलण्यासाठी Mic वर tap करा
+      </div>
+
+      <div
+        id="audioAnswer"
+        class="audio-answer"
+      >
+        तुमचं बोललेलं उत्तर येथे दिसेल...
+      </div>
+
+      <button
+        class="speak-button"
+        onclick="speakCurrentQuestion()"
+      >
+        🔊 प्रश्न पुन्हा ऐका
+      </button>
+
+    </div>
 
   </div>
 
@@ -297,6 +432,7 @@ button{
   <div id="interviewArea" class="hidden">
 
     <div id="chatBox"></div>
+
 
     <div id="answerBox">
 
@@ -333,6 +469,7 @@ button{
     </div>
 
   </div>
+
 
   <div class="small">
     Powered by GyanSetu AI
@@ -430,43 +567,52 @@ button{
 <script>
 
 /* =========================
-   DATA
+   LANGUAGES
 ========================= */
 
 const languages = [
 
-  ["Assamese","অসমীয়া"],
-  ["Bengali","বাংলা"],
-  ["Bodo","बड़ो"],
-  ["Dogri","डोगरी"],
-  ["Gujarati","ગુજરાતી"],
-  ["Hindi","हिन्दी"],
-  ["Kannada","ಕನ್ನಡ"],
-  ["Kashmiri","कश्मीरी"],
-  ["Konkani","कोंकणी"],
-  ["Maithili","मैथिली"],
-  ["Malayalam","മലയാളം"],
-  ["Manipuri","মণিপুরী"],
-  ["Marathi","मराठी"],
-  ["Nepali","नेपाली"],
-  ["Odia","ଓଡ଼ିଆ"],
-  ["Punjabi","ਪੰਜਾਬੀ"],
-  ["Sanskrit","संस्कृत"],
-  ["Santali","संताली"],
-  ["Sindhi","सिन्धी"],
-  ["Tamil","தமிழ்"],
-  ["Telugu","తెలుగు"],
-  ["Urdu","اردو"]
+  ["Assamese","অসমীয়া","as-IN"],
+  ["Bengali","বাংলা","bn-IN"],
+  ["Bodo","बड़ो","hi-IN"],
+  ["Dogri","डोगरी","hi-IN"],
+  ["Gujarati","ગુજરાતી","gu-IN"],
+  ["Hindi","हिन्दी","hi-IN"],
+  ["Kannada","ಕನ್ನಡ","kn-IN"],
+  ["Kashmiri","कश्मीरी","hi-IN"],
+  ["Konkani","कोंकणी","kok-IN"],
+  ["Maithili","मैथिली","hi-IN"],
+  ["Malayalam","മലയാളം","ml-IN"],
+  ["Manipuri","মণিপুরী","mni-IN"],
+  ["Marathi","मराठी","mr-IN"],
+  ["Nepali","नेपाली","ne-IN"],
+  ["Odia","ଓଡ଼ିଆ","or-IN"],
+  ["Punjabi","ਪੰਜਾਬੀ","pa-IN"],
+  ["Sanskrit","संस्कृत","sa-IN"],
+  ["Santali","संताली","sat-IN"],
+  ["Sindhi","सिन्धी","sd-IN"],
+  ["Tamil","தமிழ்","ta-IN"],
+  ["Telugu","తెలుగు","te-IN"],
+  ["Urdu","اردو","ur-IN"]
 
 ];
 
 
 let selectedType = "";
+
 let selectedLanguage = "";
+
+let selectedLanguageCode = "mr-IN";
 
 let currentQuestion = "";
 
 let interviewStarted = false;
+
+let audioMode = false;
+
+let recognition = null;
+
+let isListening = false;
 
 
 /* =========================
@@ -477,7 +623,9 @@ function chooseType(type){
 
   selectedType = type;
 
-  document.getElementById("typeDisplay").value = type;
+  document
+    .getElementById("typeDisplay")
+    .value = type;
 
   document
     .getElementById("typePopup")
@@ -511,13 +659,17 @@ function showLanguages(){
     button.className = "option";
 
     button.innerHTML =
-      item[1] + " <small>(" + item[0] + ")</small>";
+      item[1] +
+      " <small>(" +
+      item[0] +
+      ")</small>";
 
     button.onclick = function(){
 
       chooseLanguage(
         item[0],
-        item[1]
+        item[1],
+        item[2]
       );
 
     };
@@ -544,8 +696,13 @@ function searchLanguages(){
 
   languages
     .filter(item =>
-      item[0].toLowerCase().includes(search) ||
-      item[1].toLowerCase().includes(search)
+      item[0]
+        .toLowerCase()
+        .includes(search) ||
+
+      item[1]
+        .toLowerCase()
+        .includes(search)
     )
     .forEach(item => {
 
@@ -564,7 +721,8 @@ function searchLanguages(){
 
         chooseLanguage(
           item[0],
-          item[1]
+          item[1],
+          item[2]
         );
 
       };
@@ -578,10 +736,13 @@ function searchLanguages(){
 
 function chooseLanguage(
   englishName,
-  nativeName
+  nativeName,
+  languageCode
 ){
 
   selectedLanguage = nativeName;
+
+  selectedLanguageCode = languageCode;
 
   document
     .getElementById("languageDisplay")
@@ -606,16 +767,22 @@ async function startInterview(){
 
   if(!selectedType){
 
-    alert("Interview type निवडा.");
+    document
+      .getElementById("typePopup")
+      .classList.remove("hidden");
 
     return;
+
   }
 
   if(!selectedLanguage){
 
-    alert("Language निवडा.");
+    document
+      .getElementById("languagePopup")
+      .classList.remove("hidden");
 
     return;
+
   }
 
   interviewStarted = true;
@@ -626,6 +793,10 @@ async function startInterview(){
 
   document
     .getElementById("interviewArea")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("audioCard")
     .classList.remove("hidden");
 
   addAIMessage(
@@ -650,28 +821,31 @@ async function getFirstQuestion(){
   try{
 
     const response =
-      await fetch("/api/interview", {
+      await fetch(
+        "/api/interview",
+        {
 
-        method:"POST",
+          method:"POST",
 
-        headers:{
-          "Content-Type":"application/json"
-        },
+          headers:{
+            "Content-Type":"application/json"
+          },
 
-        body:JSON.stringify({
+          body:JSON.stringify({
 
-          interviewType:selectedType,
+            interviewType:selectedType,
 
-          language:selectedLanguage,
+            language:selectedLanguage,
 
-          userAnswer:
-            "Start the interview and ask the first question.",
+            userAnswer:
+              "Start the interview and ask the first question.",
 
-          previousQuestion:""
+            previousQuestion:""
 
-        })
+          })
 
-      });
+        }
+      );
 
 
     const data =
@@ -692,7 +866,16 @@ async function getFirstQuestion(){
       data.reply || "";
 
 
-    addAIMessage(currentQuestion);
+    addAIMessage(
+      currentQuestion
+    );
+
+
+    if(audioMode){
+
+      speakText(currentQuestion);
+
+    }
 
 
   }catch(error){
@@ -736,33 +919,41 @@ async function sendAnswer(){
 
   answerBox.value = "";
 
+  document
+    .getElementById("audioAnswer")
+    .textContent =
+      answer;
+
   setLoading(true);
 
 
   try{
 
     const response =
-      await fetch("/api/interview", {
+      await fetch(
+        "/api/interview",
+        {
 
-        method:"POST",
+          method:"POST",
 
-        headers:{
-          "Content-Type":"application/json"
-        },
+          headers:{
+            "Content-Type":"application/json"
+          },
 
-        body:JSON.stringify({
+          body:JSON.stringify({
 
-          interviewType:selectedType,
+            interviewType:selectedType,
 
-          language:selectedLanguage,
+            language:selectedLanguage,
 
-          userAnswer:answer,
+            userAnswer:answer,
 
-          previousQuestion:currentQuestion
+            previousQuestion:currentQuestion
 
-        })
+          })
 
-      });
+        }
+      );
 
 
     const data =
@@ -783,7 +974,16 @@ async function sendAnswer(){
       data.reply || "";
 
 
-    addAIMessage(currentQuestion);
+    addAIMessage(
+      currentQuestion
+    );
+
+
+    if(audioMode){
+
+      speakText(currentQuestion);
+
+    }
 
 
   }catch(error){
@@ -804,13 +1004,393 @@ async function sendAnswer(){
 
 
 /* =========================
+   AUDIO MODE
+========================= */
+
+function toggleAudioMode(){
+
+  audioMode = !audioMode;
+
+  const toggle =
+    document.getElementById("audioToggle");
+
+  const micArea =
+    document.getElementById("micArea");
+
+
+  if(audioMode){
+
+    toggle.innerHTML =
+      "🎙️ Audio Mode ON";
+
+    toggle.classList.add("active");
+
+    micArea.classList.remove("hidden");
+
+    if(currentQuestion){
+
+      speakText(currentQuestion);
+
+    }
+
+  }else{
+
+    toggle.innerHTML =
+      "🎙️ Audio Mode OFF";
+
+    toggle.classList.remove("active");
+
+    micArea.classList.add("hidden");
+
+    stopListening();
+
+    window.speechSynthesis.cancel();
+
+  }
+
+}
+
+
+/* =========================
+   SPEECH RECOGNITION
+========================= */
+
+function createRecognition(){
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(!SpeechRecognition){
+
+    return null;
+
+  }
+
+
+  const rec =
+    new SpeechRecognition();
+
+  rec.lang =
+    selectedLanguageCode;
+
+  rec.continuous = false;
+
+  rec.interimResults = true;
+
+  rec.maxAlternatives = 1;
+
+
+  rec.onstart = function(){
+
+    isListening = true;
+
+    document
+      .getElementById("micButton")
+      .classList.add("listening");
+
+    document
+      .getElementById("micStatus")
+      .textContent =
+        "🔴 ऐकत आहे... बोला";
+
+
+  };
+
+
+  rec.onresult = function(event){
+
+    let finalText = "";
+
+    let interimText = "";
+
+
+    for(
+      let i = event.resultIndex;
+      i < event.results.length;
+      i++
+    ){
+
+      const text =
+        event.results[i][0].transcript;
+
+      if(
+        event.results[i].isFinal
+      ){
+
+        finalText += text;
+
+      }else{
+
+        interimText += text;
+
+      }
+
+    }
+
+
+    const answerText =
+      finalText ||
+      interimText;
+
+
+    document
+      .getElementById("answer")
+      .value =
+        answerText;
+
+    document
+      .getElementById("audioAnswer")
+      .textContent =
+        answerText ||
+        "ऐकत आहे...";
+
+  };
+
+
+  rec.onerror = function(event){
+
+    console.error(
+      "Speech error:",
+      event.error
+    );
+
+    isListening = false;
+
+    document
+      .getElementById("micButton")
+      .classList.remove("listening");
+
+    document
+      .getElementById("micStatus")
+      .textContent =
+        "Mic मध्ये समस्या आली. पुन्हा tap करा.";
+
+  };
+
+
+  rec.onend = function(){
+
+    isListening = false;
+
+    document
+      .getElementById("micButton")
+      .classList.remove("listening");
+
+    document
+      .getElementById("micStatus")
+      .textContent =
+        "उत्तर पूर्ण झाले असल्यास Send Answer दाबा.";
+
+  };
+
+
+  return rec;
+
+}
+
+
+/* =========================
+   START / STOP MIC
+========================= */
+
+function toggleListening(){
+
+  if(!audioMode){
+
+    return;
+
+  }
+
+
+  if(isListening){
+
+    stopListening();
+
+  }else{
+
+    startListening();
+
+  }
+
+}
+
+
+function startListening(){
+
+  if(
+    !(
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition
+    )
+  ){
+
+    document
+      .getElementById("micStatus")
+      .textContent =
+        "या browser मध्ये voice input उपलब्ध नाही.";
+
+    return;
+
+  }
+
+
+  recognition =
+    createRecognition();
+
+
+  if(!recognition){
+
+    return;
+
+  }
+
+
+  try{
+
+    recognition.start();
+
+  }catch(error){
+
+    console.error(error);
+
+  }
+
+}
+
+
+function stopListening(){
+
+  if(recognition){
+
+    try{
+
+      recognition.stop();
+
+    }catch(error){
+
+      console.error(error);
+
+    }
+
+  }
+
+  isListening = false;
+
+  const button =
+    document.getElementById("micButton");
+
+  if(button){
+
+    button.classList.remove(
+      "listening"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   TEXT TO SPEECH
+========================= */
+
+function speakText(text){
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    return;
+
+  }
+
+
+  if(!text){
+
+    return;
+
+  }
+
+
+  window.speechSynthesis.cancel();
+
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  speech.lang =
+    selectedLanguageCode;
+
+  speech.rate = 0.95;
+
+  speech.pitch = 1;
+
+  speech.volume = 1;
+
+
+  speech.onstart = function(){
+
+    document
+      .getElementById("micStatus")
+      .textContent =
+        "🔊 प्रश्न ऐका...";
+
+  };
+
+
+  speech.onend = function(){
+
+    if(audioMode){
+
+      document
+        .getElementById("micStatus")
+        .textContent =
+          "🎤 उत्तर देण्यासाठी Mic वर tap करा";
+
+    }
+
+  };
+
+
+  window.speechSynthesis.speak(
+    speech
+  );
+
+}
+
+
+/* =========================
+   REPEAT QUESTION
+========================= */
+
+function speakCurrentQuestion(){
+
+  if(currentQuestion){
+
+    speakText(
+      currentQuestion
+    );
+
+  }
+
+}
+
+
+/* =========================
    CHAT
 ========================= */
 
 function addAIMessage(text){
 
   const chat =
-    document.getElementById("chatBox");
+    document.getElementById(
+      "chatBox"
+    );
 
   const div =
     document.createElement("div");
@@ -832,7 +1412,9 @@ function addAIMessage(text){
 function addUserMessage(text){
 
   const chat =
-    document.getElementById("chatBox");
+    document.getElementById(
+      "chatBox"
+    );
 
   const div =
     document.createElement("div");
@@ -854,8 +1436,12 @@ function addUserMessage(text){
 function scrollBottom(){
 
   window.scrollTo({
-    top:document.body.scrollHeight,
+
+    top:
+      document.body.scrollHeight,
+
     behavior:"smooth"
+
   });
 
 }
@@ -870,11 +1456,15 @@ function setLoading(show){
   document
     .getElementById("loading")
     .style.display =
-      show ? "block" : "none";
+      show
+        ? "block"
+        : "none";
+
 
   document
     .getElementById("sendBtn")
-    .disabled = show;
+    .disabled =
+      show;
 
 }
 
@@ -886,11 +1476,31 @@ function setLoading(show){
 function escapeHTML(text){
 
   return String(text)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
