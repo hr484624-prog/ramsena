@@ -1643,904 +1643,1886 @@ const languages = [
   ["Nepali","नेपाली","ne-IN"],
 
   ["Odia","ଓଡ଼ିଆ","or-IN"],
-    ["Punjabi","ਪੰਜਾਬੀ","pa-IN"],
-    ["Sanskrit","संस्कृत","sa-IN"],
-    ["Santali","ᱥᱟᱱᱛᱟᱲᱤ","sat-IN"],
-    ["Sindhi","सिन्धी","sd-IN"],
-    ["Tamil","தமிழ்","ta-IN"],
-    ["Telugu","తెలుగు","te-IN"],
-    ["Urdu","اردو","ur-IN"]
-  ];
 
-  const typeNames = {
-    "Job":"नोकरी मुलाखत",
-    "Business":"व्यवसाय मुलाखत",
-    "School Admission":"शाळा प्रवेश मुलाखत",
-    "College Admission":"कॉलेज प्रवेश मुलाखत",
-    "Scholarship":"शिष्यवृत्ती मुलाखत",
-    "Viva":"Viva / तोंडी परीक्षा",
-    "Career":"करिअर मार्गदर्शन",
-    "General":"सामान्य मुलाखत",
-    "Practice":"मुलाखत सराव"
-  };
+  ["Punjabi","ਪੰਜਾਬੀ","pa-IN"],
 
-  let selectedType = "";
-  let selectedLanguage = "";
-  let selectedLangCode = "mr-IN";
-  let selectedPhoto = null;
+  ["Sanskrit","संस्कृत","sa-IN"],
 
-  let recognition = null;
-  let listening = false;
-  let faceMode = false;
-  let silenceTimer = null;
-  let sending = false;
+  ["Santali","संताली","sat-IN"],
 
-  let cameraStream = null;
+  ["Sindhi","सिन्धी","sd-IN"],
 
-  let currentQuestion = "";
-  let currentTranscript = "";
+  ["Tamil","தமிழ்","ta-IN"],
 
-  const typePopup = document.getElementById("typePopup");
-  const languagePopup = document.getElementById("languagePopup");
-  const interviewScreen = document.getElementById("interviewScreen");
+  ["Telugu","తెలుగు","te-IN"],
 
-  const chatBox = document.getElementById("chatBox");
-  const answerInput = document.getElementById("answerInput");
-  const sendBtn = document.getElementById("sendBtn");
+  ["Urdu","اردو","ur-IN"]
 
-  const faceModeBox = document.getElementById("faceModeBox");
-  const video = document.getElementById("camera");
-  const liveText = document.getElementById("liveText");
-
-  /* =========================
-     INTERVIEW TYPE
-  ========================= */
-
-  function chooseType(type){
-
-    selectedType = type;
-
-    typePopup.classList.remove("show");
-
-    setTimeout(() => {
-      languagePopup.classList.add("show");
-      renderLanguages();
-    },200);
-
-  }
+];
 
 
-  /* =========================
-     LANGUAGE LIST
-  ========================= */
+/* =====================================================
+   VARIABLES
+===================================================== */
 
-  function renderLanguages(){
+let selectedType = "";
 
-    const box = document.getElementById("languageList");
+let selectedLanguage = "";
 
-    box.innerHTML = "";
+let selectedLanguageCode = "";
 
-    languages.forEach(lang => {
+let userDescription = "";
 
-      const button = document.createElement("button");
+let currentQuestion = "";
 
-      button.className = "language-item";
-
-      button.innerHTML = `
-        <span>${lang[1]}</span>
-        <small>${lang[0]}</small>
-      `;
-
-      button.onclick = () => chooseLanguage(
-        lang[0],
-        lang[1],
-        lang[2]
-      );
-
-      box.appendChild(button);
-
-    });
-
-  }
+let interviewStarted = false;
 
 
-  function searchLanguages(){
+/* =====================================================
+   VOICE VARIABLES
+===================================================== */
 
-    const value =
-      document
-      .getElementById("languageSearch")
-      .value
-      .toLowerCase();
+let recognition = null;
 
-    document
-      .querySelectorAll(".language-item")
-      .forEach(button => {
+let isListening = false;
 
-        const text =
-          button.innerText.toLowerCase();
+let shouldKeepListening = false;
 
-        button.style.display =
-          text.includes(value)
-          ? "flex"
-          : "none";
+let speechText = "";
 
-      });
+let silenceTimer = null;
 
-  }
+let isSending = false;
 
 
-  function chooseLanguage(name,displayName,code){
+/* =====================================================
+   CAMERA
+===================================================== */
 
-    selectedLanguage = displayName;
-    selectedLangCode = code;
-
-    languagePopup.classList.remove("show");
-
-    document.getElementById("selectedLanguage").innerText =
-      displayName;
-
-    document.getElementById("selectedType").innerText =
-      typeNames[selectedType] || selectedType;
-
-    interviewScreen.classList.add("active");
-
-  }
+let cameraStream = null;
 
 
-  /* =========================
-     PHOTO UPLOAD
-  ========================= */
+/* =====================================================
+   PHOTO
+===================================================== */
 
-  function handlePhoto(event){
-
-    const file = event.target.files[0];
-
-    if(!file) return;
-
-    selectedPhoto = file;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e){
-
-      const preview =
-        document.getElementById("photoPreview");
-
-      preview.src = e.target.result;
-
-      preview.style.display = "block";
-
-    };
-
-    reader.readAsDataURL(file);
-
-  }
+let uploadedPhotoData = "";
 
 
-  /* =========================
-     START INTERVIEW
-  ========================= */
+/* =====================================================
+   TYPE SELECT
+===================================================== */
 
-  async function startInterview(){
+function chooseType(type){
 
-    document
-      .getElementById("setupBox")
-      .style.display = "none";
+  selectedType = type;
 
-    document
-      .getElementById("chatSection")
-      .style.display = "block";
 
-    addAIMessage(
-      "नमस्कार! 👋 मी GyanSetu AI Interviewer आहे. तुमची मुलाखत सुरू करूया."
+  document
+    .getElementById("typeDisplay")
+    .textContent = type;
+
+
+  document
+    .getElementById("typePopup")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("languagePopup")
+    .classList.remove("hidden");
+
+
+  showLanguages();
+
+}
+
+
+/* =====================================================
+   SHOW LANGUAGES
+===================================================== */
+
+function showLanguages(){
+
+  const box =
+    document.getElementById(
+      "languageList"
     );
 
-    await getFirstQuestion();
 
-  }
+  box.innerHTML = "";
 
 
-  /* =========================
-     FIRST QUESTION
-  ========================= */
+  languages.forEach(
+    item => {
 
-  async function getFirstQuestion(){
-
-    addTyping();
-
-    try{
-
-      const response = await fetch(
-        "/api/interview",
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":"application/json"
-          },
-
-          body:JSON.stringify({
-
-            interviewType:selectedType,
-
-            language:selectedLanguage,
-
-            userAnswer:
-              document
-                .getElementById("description")
-                .value
-                .trim() ||
-              "Interview सुरू करा.",
-
-            previousQuestion:"None"
-
-          })
-
-        }
+      createLanguageButton(
+        item,
+        box
       );
-
-      const data = await response.json();
-
-      removeTyping();
-
-      if(data.reply){
-
-        addAIMessage(data.reply);
-
-        currentQuestion = data.reply;
-
-        speakAI(data.reply);
-
-      }else{
-
-        addAIMessage(
-          "चला, तुमची ओळख करून देऊया. स्वतःबद्दल थोडक्यात सांगा."
-        );
-
-      }
-
-    }catch(error){
-
-      removeTyping();
-
-      addAIMessage(
-        "सध्या AI शी कनेक्शन होत नाही. कृपया थोड्या वेळाने पुन्हा प्रयत्न करा."
-      );
-
-    }
-
-  }
-
-
-  /* =========================
-     SEND ANSWER
-  ========================= */
-
-  async function sendAnswer(){
-
-    if(sending) return;
-
-    const answer =
-      answerInput.value.trim();
-
-    if(!answer) return;
-
-    sending = true;
-
-    stopFiveSecondTimer();
-
-    addUserMessage(answer);
-
-    answerInput.value = "";
-
-    addTyping();
-
-    try{
-
-      const response = await fetch(
-        "/api/interview",
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":"application/json"
-          },
-
-          body:JSON.stringify({
-
-            interviewType:selectedType,
-
-            language:selectedLanguage,
-
-            userAnswer:answer,
-
-            previousQuestion:currentQuestion
-
-          })
-
-        }
-      );
-
-      const data = await response.json();
-
-      removeTyping();
-
-      if(data.reply){
-
-        currentQuestion = data.reply;
-
-        addAIMessage(data.reply);
-
-        speakAI(data.reply);
-
-      }else{
-
-        addAIMessage(
-          "पुढील प्रश्न तयार आहे."
-        );
-
-      }
-
-    }catch(error){
-
-      removeTyping();
-
-      addAIMessage(
-        "AI कनेक्शनमध्ये समस्या आली."
-      );
-
-    }
-
-    sending = false;
-
-    if(faceMode){
-
-      setTimeout(() => {
-
-        startListening();
-
-      },1200);
-
-    }
-
-  }
-
-
-  /* =========================
-     ENTER TO SEND
-  ========================= */
-
-  answerInput.addEventListener(
-    "keydown",
-    function(e){
-
-      if(e.key === "Enter"){
-
-        e.preventDefault();
-
-        sendAnswer();
-
-      }
 
     }
   );
 
-
-  sendBtn.onclick = sendAnswer;
-
-
-  /* =========================
-     CHAT MESSAGE
-  ========================= */
-
-  function addAIMessage(text){
-
-    const div =
-      document.createElement("div");
-
-    div.className =
-      "message ai";
-
-    div.innerHTML = `
-      <div class="avatar">🤖</div>
-      <div class="bubble">${escapeHTML(text)}</div>
-    `;
-
-    chatBox.appendChild(div);
-
-    chatBox.scrollTop =
-      chatBox.scrollHeight;
-
-  }
+}
 
 
-  function addUserMessage(text){
+/* =====================================================
+   LANGUAGE BUTTON
+===================================================== */
 
-    const div =
-      document.createElement("div");
+function createLanguageButton(
+  item,
+  box
+){
 
-    div.className =
-      "message user";
-
-    div.innerHTML = `
-      <div class="bubble">${escapeHTML(text)}</div>
-    `;
-
-    chatBox.appendChild(div);
-
-    chatBox.scrollTop =
-      chatBox.scrollHeight;
-
-  }
+  const button =
+    document.createElement(
+      "button"
+    );
 
 
-  function escapeHTML(text){
-
-    const div =
-      document.createElement("div");
-
-    div.textContent = text;
-
-    return div.innerHTML;
-
-  }
+  button.className =
+    "option";
 
 
-  /* =========================
-     TYPING
-  ========================= */
+  button.innerHTML =
 
-  function addTyping(){
+    '<span class="language-native">' +
+      item[1] +
+    '</span>' +
 
-    removeTyping();
+    '<br>' +
 
-    const div =
-      document.createElement("div");
-
-    div.id = "typing";
-
-    div.className =
-      "message ai";
-
-    div.innerHTML = `
-      <div class="avatar">🤖</div>
-      <div class="bubble typing">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    `;
-
-    chatBox.appendChild(div);
-
-    chatBox.scrollTop =
-      chatBox.scrollHeight;
-
-  }
+    '<span class="language-english">' +
+      item[0] +
+    '</span>';
 
 
-  function removeTyping(){
+  button.onclick =
+    function(){
 
-    const typing =
-      document.getElementById("typing");
-
-    if(typing){
-
-      typing.remove();
-
-    }
-
-  }
-
-
-  /* =========================
-     AI VOICE
-  ========================= */
-
-  function speakAI(text){
-
-    if(!("speechSynthesis" in window))
-      return;
-
-    speechSynthesis.cancel();
-
-    stopListening();
-
-    const utterance =
-      new SpeechSynthesisUtterance(text);
-
-    utterance.lang =
-      selectedLangCode;
-
-    utterance.rate = 0.95;
-
-    utterance.pitch = 1;
-
-    utterance.onend = () => {
-
-      if(faceMode){
-
-        setTimeout(() => {
-
-          startListening();
-
-        },500);
-
-      }
+      chooseLanguage(
+        item[0],
+        item[1],
+        item[2]
+      );
 
     };
 
-    speechSynthesis.speak(
-      utterance
+
+  box.appendChild(
+    button
+  );
+
+}
+
+
+/* =====================================================
+   SEARCH LANGUAGE
+===================================================== */
+
+function searchLanguages(){
+
+  const search =
+    document
+      .getElementById(
+        "languageSearch"
+      )
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const box =
+    document.getElementById(
+      "languageList"
     );
 
-  }
+
+  box.innerHTML = "";
 
 
-  /* =========================
-     FACE TO FACE MODE
-  ========================= */
+  languages
 
-  async function startFaceMode(){
+    .filter(
+      item =>
 
-    faceMode = true;
+        item[0]
+          .toLowerCase()
+          .includes(search)
 
-    faceModeBox.classList.add("active");
+        ||
 
-    document
-      .getElementById("faceBtn")
-      .innerText = "⏹ Face Mode बंद करा";
+        item[1]
+          .toLowerCase()
+          .includes(search)
+    )
 
-    await startCamera();
+    .forEach(
+      item => {
 
-    createRecognition();
+        createLanguageButton(
+          item,
+          box
+        );
 
-    startListening();
-
-  }
-
-
-  function stopFaceMode(){
-
-    faceMode = false;
-
-    stopListening();
-
-    stopFiveSecondTimer();
-
-    speechSynthesis.cancel();
-
-    if(cameraStream){
-
-      cameraStream
-        .getTracks()
-        .forEach(track => track.stop());
-
-      cameraStream = null;
-
-    }
-
-    video.srcObject = null;
-
-    faceModeBox.classList.remove(
-      "active"
+      }
     );
 
-    document
-      .getElementById("faceBtn")
-      .innerText =
-      "🎤 Face to Face Mode";
+}
 
-    liveText.innerText =
-      "Mic बंद आहे";
 
-  }
+/* =====================================================
+   LANGUAGE SELECT
+===================================================== */
+
+function chooseLanguage(
+  englishName,
+  nativeName,
+  code
+){
+
+  selectedLanguage =
+    nativeName +
+    " (" +
+    englishName +
+    ")";
+
+
+  selectedLanguageCode =
+    code;
 
 
   document
-    .getElementById("faceBtn")
-    .onclick = function(){
+    .getElementById(
+      "languageDisplay"
+    )
+    .textContent =
+      selectedLanguage;
 
-      if(faceMode){
 
-        stopFaceMode();
+  document
+    .getElementById(
+      "languagePopup"
+    )
+    .classList.add(
+      "hidden"
+    );
 
-      }else{
+}
 
-        startFaceMode();
 
-      }
+/* =====================================================
+   PHOTO UPLOAD
+===================================================== */
+
+function handlePhoto(event){
+
+  const file =
+    event.target.files[0];
+
+
+  if(!file){
+
+    return;
+
+  }
+
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const reader =
+    new FileReader();
+
+
+  reader.onload =
+    function(e){
+
+      uploadedPhotoData =
+        e.target.result;
+
+
+      const image =
+        document.getElementById(
+          "uploadedPhoto"
+        );
+
+
+      image.src =
+        uploadedPhotoData;
+
+
+      image.classList.remove(
+        "hidden"
+      );
+
+
+      document
+        .getElementById(
+          "photoPlaceholder"
+        )
+        .classList.add(
+          "hidden"
+        );
+
+
+      const facePhoto =
+        document.getElementById(
+          "facePhoto"
+        );
+
+
+      facePhoto.src =
+        uploadedPhotoData;
+
+
+      facePhoto.style.display =
+        "block";
 
     };
 
 
-  /* =========================
-     CAMERA
-  ========================= */
+  reader.readAsDataURL(
+    file
+  );
 
-  async function startCamera(){
+}
 
-    try{
 
-      cameraStream =
-        await navigator.mediaDevices
+/* =====================================================
+   START INTERVIEW
+===================================================== */
+
+async function startInterview(){
+
+  if(
+    !selectedType ||
+    !selectedLanguage
+  ){
+
+    return;
+
+  }
+
+
+  userDescription =
+    document
+      .getElementById(
+        "description"
+      )
+      .value
+      .trim();
+
+
+  interviewStarted =
+    true;
+
+
+  document
+    .getElementById(
+      "setupArea"
+    )
+    .classList.add(
+      "hidden"
+    );
+
+
+  document
+    .getElementById(
+      "answerArea"
+    )
+    .classList.remove(
+      "hidden"
+    );
+
+
+  addAIMessage(
+    "नमस्कार! 👋"
+  );
+
+
+  addAIMessage(
+
+    "तुमची " +
+    selectedType +
+    " सुरू करूया. मी तुम्हाला एकेक प्रश्न विचारेन."
+
+  );
+
+
+  await getFirstQuestion();
+
+}
+
+
+/* =====================================================
+   FIRST QUESTION
+===================================================== */
+
+async function getFirstQuestion(){
+
+  setLoading(true);
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/interview",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+
+            interviewType:
+              selectedType,
+
+            language:
+              selectedLanguage,
+
+            userAnswer:
+              "Start the interview and ask the first question.",
+
+            previousQuestion:"",
+
+            description:
+              userDescription
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "API error"
+      );
+
+    }
+
+
+    currentQuestion =
+      data.reply || "";
+
+
+    addAIMessage(
+      currentQuestion
+    );
+
+
+    speakAI(
+      currentQuestion
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    addAIMessage(
+      "सध्या AI शी संपर्क होत नाही. कृपया पुन्हा प्रयत्न करा."
+    );
+
+  }
+  finally{
+
+    setLoading(false);
+
+  }
+
+}
+
+
+/* =====================================================
+   SEND ANSWER
+===================================================== */
+
+async function sendAnswer(){
+
+  if(isSending){
+
+    return;
+
+  }
+
+
+  const answerElement =
+    document.getElementById(
+      "answer"
+    );
+
+
+  const answer =
+    answerElement.value.trim();
+
+
+  if(!answer){
+
+    return;
+
+  }
+
+
+  isSending =
+    true;
+
+
+  stopListening();
+
+
+  addUserMessage(
+    answer
+  );
+
+
+  answerElement.value =
+    "";
+
+
+  setLoading(true);
+
+
+  try{
+
+    const response =
+      await fetch(
+        "/api/interview",
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+
+            interviewType:
+              selectedType,
+
+            language:
+              selectedLanguage,
+
+            userAnswer:
+              answer,
+
+            previousQuestion:
+              currentQuestion,
+
+            description:
+              userDescription
+
+          })
+
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "API error"
+      );
+
+    }
+
+
+    currentQuestion =
+      data.reply || "";
+
+
+    addAIMessage(
+      currentQuestion
+    );
+
+
+    speakAI(
+      currentQuestion
+    );
+
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    addAIMessage(
+      "उत्तर पाठवताना समस्या आली. पुन्हा प्रयत्न करा."
+    );
+
+  }
+  finally{
+
+    setLoading(false);
+
+    isSending =
+      false;
+
+
+    /*
+      Face-to-Face चालू असेल तर
+      AI ने बोलून झाल्यावर पुन्हा mic सुरू.
+    */
+
+    if(
+      document
+        .getElementById(
+          "faceCard"
+        )
+        .style.display ===
+      "block"
+    ){
+
+      waitForAIThenListen();
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   AI MESSAGE
+===================================================== */
+
+function addAIMessage(
+  text
+){
+
+  const chat =
+    document.getElementById(
+      "chatBox"
+    );
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+
+  row.className =
+    "chat-row ai";
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+
+  avatar.className =
+    "avatar";
+
+
+  avatar.textContent =
+    "🤖";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+  bubble.className =
+    "bubble";
+
+
+  bubble.innerHTML =
+
+    '<div class="sender">' +
+      'GyanSetu AI' +
+    '</div>' +
+
+    escapeHTML(text)
+      .replace(
+        /\n/g,
+        "<br>"
+      );
+
+
+  row.appendChild(
+    avatar
+  );
+
+
+  row.appendChild(
+    bubble
+  );
+
+
+  chat.appendChild(
+    row
+  );
+
+
+  scrollBottom();
+
+}
+
+
+/* =====================================================
+   USER MESSAGE
+===================================================== */
+
+function addUserMessage(
+  text
+){
+
+  const chat =
+    document.getElementById(
+      "chatBox"
+    );
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+
+  row.className =
+    "chat-row user";
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+
+  avatar.className =
+    "avatar";
+
+
+  avatar.textContent =
+    "👤";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+  bubble.className =
+    "bubble";
+
+
+  bubble.innerHTML =
+
+    '<div class="sender">' +
+      'You' +
+    '</div>' +
+
+    escapeHTML(text)
+      .replace(
+        /\n/g,
+        "<br>"
+      );
+
+
+  row.appendChild(
+    bubble
+  );
+
+
+  row.appendChild(
+    avatar
+  );
+
+
+  chat.appendChild(
+    row
+  );
+
+
+  scrollBottom();
+
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+function setLoading(
+  show
+){
+
+  const loading =
+    document.getElementById(
+      "loading"
+    );
+
+
+  const button =
+    document.getElementById(
+      "sendBtn"
+    );
+
+
+  loading.style.display =
+    show
+      ? "block"
+      : "none";
+
+
+  button.disabled =
+    show;
+
+}
+
+
+/* =====================================================
+   SPEAK AI
+===================================================== */
+
+function speakAI(
+  text
+){
+
+  if(
+    !window.speechSynthesis
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    window.speechSynthesis.cancel();
+
+
+    const utterance =
+      new SpeechSynthesisUtterance(
+        text
+      );
+
+
+    utterance.lang =
+      selectedLanguageCode ||
+      "en-IN";
+
+
+    utterance.rate =
+      0.95;
+
+
+    utterance.pitch =
+      1;
+
+
+    utterance.volume =
+      1;
+
+
+    const voices =
+      window.speechSynthesis
+        .getVoices();
+
+
+    const languagePrefix =
+      (
+        selectedLanguageCode ||
+        "en-IN"
+      )
+        .split("-")[0]
+        .toLowerCase();
+
+
+    const voice =
+      voices.find(
+        v =>
+          v.lang
+            .toLowerCase()
+            .startsWith(
+              languagePrefix
+            )
+      );
+
+
+    if(voice){
+
+      utterance.voice =
+        voice;
+
+    }
+
+
+    utterance.onstart =
+      function(){
+
+        updateFaceStatus(
+          "🤖 AI बोलत आहे..."
+        );
+
+      };
+
+
+    utterance.onend =
+      function(){
+
+        if(
+          document
+            .getElementById(
+              "faceCard"
+            )
+            .style.display ===
+          "block"
+        ){
+
+          waitForAIThenListen();
+
+        }
+
+      };
+
+
+    window.speechSynthesis
+      .speak(
+        utterance
+      );
+
+  }
+  catch(error){
+
+    console.log(
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   FACE MODE START
+===================================================== */
+
+async function startFaceMode(){
+
+  if(
+    !interviewStarted
+  ){
+
+    return;
+
+  }
+
+
+  const faceCard =
+    document.getElementById(
+      "faceCard"
+    );
+
+
+  faceCard.style.display =
+    "block";
+
+
+  const facePhoto =
+    document.getElementById(
+      "facePhoto"
+    );
+
+
+  if(uploadedPhotoData){
+
+    facePhoto.src =
+      uploadedPhotoData;
+
+    facePhoto.style.display =
+      "block";
+
+  }
+
+
+  faceCard.scrollIntoView({
+    behavior:"smooth"
+  });
+
+
+  await startCamera();
+
+
+  /*
+    Face mode सुरू होताच
+    mic तयार ठेवतो.
+  */
+
+  shouldKeepListening =
+    true;
+
+
+  waitForAIThenListen();
+
+}
+
+
+/* =====================================================
+   CAMERA
+===================================================== */
+
+async function startCamera(){
+
+  const camera =
+    document.getElementById(
+      "camera"
+    );
+
+
+  const placeholder =
+    document.getElementById(
+      "cameraPlaceholder"
+    );
+
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    updateFaceStatus(
+      "Camera unavailable"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    cameraStream =
+      await navigator
+        .mediaDevices
         .getUserMedia({
 
           video:{
-            facingMode:"user"
+            facingMode:
+              "user"
           },
 
           audio:false
 
         });
 
-      video.srcObject =
-        cameraStream;
 
-    }catch(error){
+    camera.srcObject =
+      cameraStream;
 
-      liveText.innerText =
-        "Camera permission आवश्यक आहे.";
 
-    }
+    camera.style.display =
+      "block";
+
+
+    placeholder.style.display =
+      "none";
+
+
+    updateFaceStatus(
+      "🎤 Mic तयार आहे"
+    );
+
+  }
+  catch(error){
+
+    console.log(
+      "Camera:",
+      error
+    );
+
+
+    updateFaceStatus(
+      "🎤 Mic mode"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   STOP FACE MODE
+===================================================== */
+
+function stopFaceMode(){
+
+  shouldKeepListening =
+    false;
+
+
+  stopListening();
+
+
+  if(
+    window.speechSynthesis
+  ){
+
+    window.speechSynthesis.cancel();
 
   }
 
 
-  /* =========================
-     SPEECH RECOGNITION
-  ========================= */
-
-  function createRecognition(){
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if(!SpeechRecognition){
-
-      liveText.innerText =
-        "या browser मध्ये Voice Recognition उपलब्ध नाही.";
-
-      return;
-
-    }
-
-    recognition =
-      new SpeechRecognition();
-
-    recognition.lang =
-      selectedLangCode;
-
-    recognition.continuous = true;
-
-    recognition.interimResults = true;
-
-    recognition.maxAlternatives = 1;
+  const faceCard =
+    document.getElementById(
+      "faceCard"
+    );
 
 
-    recognition.onstart = function(){
+  faceCard.style.display =
+    "none";
 
-      listening = true;
 
-      liveText.innerText =
-        "🎙️ ऐकत आहे...";
+  if(cameraStream){
+
+    cameraStream
+      .getTracks()
+      .forEach(
+        track =>
+          track.stop()
+      );
+
+
+    cameraStream =
+      null;
+
+  }
+
+
+  const camera =
+    document.getElementById(
+      "camera"
+    );
+
+
+  camera.srcObject =
+    null;
+
+
+  camera.style.display =
+    "none";
+
+
+  document
+    .getElementById(
+      "cameraPlaceholder"
+    )
+    .style.display =
+      "flex";
+
+
+  updateFaceStatus(
+    "Ready"
+  );
+
+}
+
+
+/* =====================================================
+   WAIT FOR AI
+===================================================== */
+
+function waitForAIThenListen(){
+
+  if(
+    !shouldKeepListening
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    AI speech पूर्ण होईपर्यंत
+    microphone सुरू करू नये.
+  */
+
+  if(
+    window.speechSynthesis &&
+    window.speechSynthesis.speaking
+  ){
+
+    setTimeout(
+      waitForAIThenListen,
+      300
+    );
+
+    return;
+
+  }
+
+
+  setTimeout(
+    function(){
+
+      if(
+        shouldKeepListening &&
+        !isSending &&
+        !isListening
+      ){
+
+        startListening();
+
+      }
+
+    },
+    400
+  );
+
+}
+
+
+/* =====================================================
+   CREATE SPEECH RECOGNITION
+===================================================== */
+
+function createRecognition(){
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  if(!SpeechRecognition){
+
+    return null;
+
+  }
+
+
+  const rec =
+    new SpeechRecognition();
+
+
+  rec.lang =
+    selectedLanguageCode ||
+    "mr-IN";
+
+
+  rec.continuous =
+    true;
+
+
+  rec.interimResults =
+    true;
+
+
+  rec.maxAlternatives =
+    1;
+
+
+  rec.onstart =
+    function(){
+
+      isListening =
+        true;
+
+
+      speechText =
+        "";
+
+
+      updateMicUI(
+        true
+      );
 
     };
 
 
-    recognition.onresult =
-      function(event){
+  rec.onresult =
+    function(event){
 
-        let finalText = "";
-        let interimText = "";
+      let finalText =
+        "";
 
-        for(
-          let i = event.resultIndex;
-          i < event.results.length;
-          i++
+      let interimText =
+        "";
+
+
+      for(
+        let i =
+          event.resultIndex;
+
+        i <
+          event.results.length;
+
+        i++
+      ){
+
+        const result =
+          event.results[i];
+
+
+        const text =
+          result[0]
+            .transcript;
+
+
+        if(
+          result.isFinal
         ){
 
-          const transcript =
-            event.results[i][0].transcript;
+          finalText +=
+            text;
 
-          if(
-            event.results[i].isFinal
-          ){
+        }
+        else{
 
-            finalText +=
-              transcript + " ";
-
-          }else{
-
-            interimText +=
-              transcript;
-
-          }
+          interimText +=
+            text;
 
         }
 
-        if(finalText){
-
-          currentTranscript +=
-            " " + finalText;
-
-        }
-
-        const display =
-          currentTranscript +
-          " " +
-          interimText;
-
-        liveText.innerText =
-          display.trim() ||
-          "🎙️ ऐकत आहे...";
+      }
 
 
-        resetFiveSecondTimer();
+      if(finalText){
 
-      };
+        speechText +=
+          finalText;
 
-
-    recognition.onerror =
-      function(){
-
-        listening = false;
-
-        if(faceMode){
-
-          setTimeout(() => {
-
-            startListening();
-
-          },800);
-
-        }
-
-      };
+      }
 
 
-    recognition.onend =
-      function(){
+      const combined =
+        (
+          speechText +
+          interimText
+        ).trim();
 
-        listening = false;
 
-        if(faceMode && !sending){
+      document
+        .getElementById(
+          "liveText"
+        )
+        .textContent =
+          combined ||
+          "बोलणे सुरू करा...";
 
-          setTimeout(() => {
 
-            startListening();
+      document
+        .getElementById(
+          "answer"
+        )
+        .value =
+          combined;
 
-          },500);
 
-        }
+      /*
+        प्रत्येक नवीन शब्दांनंतर
+        5 seconds timer reset.
+      */
 
-      };
+      resetFiveSecondTimer();
+
+    };
+
+
+  rec.onerror =
+    function(event){
+
+      console.log(
+        "Speech error:",
+        event.error
+      );
+
+
+      if(
+        event.error ===
+        "not-allowed"
+      ){
+
+        updateFaceStatus(
+          "Microphone permission needed"
+        );
+
+        shouldKeepListening =
+          false;
+
+      }
+
+    };
+
+
+  rec.onend =
+    function(){
+
+      isListening =
+        false;
+
+
+      updateMicUI(
+        false
+      );
+
+
+      /*
+        Browser recognition
+        स्वतः बंद झाली तरी
+        Face mode चालू असेल तर
+        पुन्हा सुरू करतो.
+      */
+
+      if(
+        shouldKeepListening &&
+        !isSending
+      ){
+
+        setTimeout(
+          function(){
+
+            if(
+              shouldKeepListening &&
+              !isListening
+            ){
+
+              startListening();
+
+            }
+
+          },
+          300
+        );
+
+      }
+
+    };
+
+
+  return rec;
+
+}
+
+
+/* =====================================================
+   START LISTENING
+===================================================== */
+
+function startListening(){
+
+  if(
+    !shouldKeepListening
+  ){
+
+    return;
 
   }
 
 
-  function startListening(){
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
 
-    if(!faceMode) return;
 
-    if(!recognition){
+  if(!SpeechRecognition){
 
+    updateFaceStatus(
+      "Speech not supported"
+    );
+
+    return;
+
+  }
+
+
+  if(!recognition){
+
+    recognition =
       createRecognition();
 
-    }
+  }
 
-    if(!recognition) return;
 
-    if(listening) return;
+  if(!recognition){
 
-    try{
-
-      recognition.start();
-
-    }catch(error){
-
-      listening = false;
-
-    }
+    return;
 
   }
 
 
-  function stopListening(){
+  if(
+    isListening ||
+    isSending
+  ){
 
-    if(!recognition) return;
+    return;
+
+  }
+
+
+  speechText =
+    "";
+
+
+  document
+    .getElementById(
+      "liveText"
+    )
+    .textContent =
+      "ऐकत आहे...";
+
+
+  try{
+
+    recognition.start();
+
+  }
+  catch(error){
+
+    console.log(
+      "Recognition start:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   STOP LISTENING
+===================================================== */
+
+function stopListening(){
+
+  clearTimeout(
+    silenceTimer
+  );
+
+
+  if(
+    recognition &&
+    isListening
+  ){
 
     try{
 
       recognition.stop();
 
-    }catch(error){}
+    }
+    catch(error){
 
-    listening = false;
-
-  }
-
-
-  /* =========================
-     5 SECOND SILENCE
-  ========================= */
-
-  function resetFiveSecondTimer(){
-
-    clearTimeout(
-      silenceTimer
-    );
-
-    silenceTimer =
-      setTimeout(() => {
-
-        autoSendVoiceAnswer();
-
-      },5000);
-
-  }
-
-
-  function stopFiveSecondTimer(){
-
-    clearTimeout(
-      silenceTimer
-    );
-
-    silenceTimer = null;
-
-  }
-
-
-  function autoSendVoiceAnswer(){
-
-    if(!faceMode) return;
-
-    const answer =
-      currentTranscript.trim();
-
-    if(!answer){
-
-      return;
+      console.log(
+        error
+      );
 
     }
 
-    stopListening();
+  }
 
-    stopFiveSecondTimer();
 
-    answerInput.value =
-      answer;
+  isListening =
+    false;
 
-    currentTranscript = "";
 
-    liveText.innerText =
-      "उत्तर पाठवत आहे...";
+  updateMicUI(
+    false
+  );
 
-    sendAnswer();
+}
+
+
+/* =====================================================
+   5 SECOND SILENCE TIMER
+===================================================== */
+
+function resetFiveSecondTimer(){
+
+  clearTimeout(
+    silenceTimer
+  );
+
+
+  silenceTimer =
+    setTimeout(
+      function(){
+
+        const answer =
+          document
+            .getElementById(
+              "answer"
+            )
+            .value
+            .trim();
+
+
+        /*
+          पूर्ण 5 seconds शांतता
+          झाल्यावर automatic send.
+        */
+
+        if(
+          isListening &&
+          answer &&
+          !isSending
+        ){
+
+          stopListening();
+
+
+          autoSendVoiceAnswer();
+
+        }
+
+      },
+      5000
+    );
+
+}
+
+
+/* =====================================================
+   AUTO SEND VOICE ANSWER
+===================================================== */
+
+function autoSendVoiceAnswer(){
+
+  const answer =
+    document
+      .getElementById(
+        "answer"
+      )
+      .value
+      .trim();
+
+
+  if(!answer){
+
+    return;
 
   }
 
 
-  /* =========================
-     BACK BUTTON
-  ========================= */
+  sendAnswer();
 
-  function goBack(){
+}
 
-    if(faceMode){
 
-      stopFaceMode();
+/* =====================================================
+   MIC UI
+===================================================== */
+
+function updateMicUI(
+  listening
+){
+
+  const button =
+    document.getElementById(
+      "faceStatusButton"
+    );
+
+
+  const status =
+    document.getElementById(
+      "faceStatus"
+    );
+
+
+  if(listening){
+
+    button.innerHTML =
+      "🔴 Mic Listening...";
+
+
+    status.textContent =
+      "🎤 Listening...";
+
+  }
+  else{
+
+    button.innerHTML =
+      "🎤 Mic Ready";
+
+
+    if(
+      !isSending
+    ){
+
+      status.textContent =
+        "Ready";
 
     }
 
-    window.location.href =
-      "home.html";
+  }
+
+}
+
+
+/* =====================================================
+   FACE STATUS
+===================================================== */
+
+function updateFaceStatus(
+  text
+){
+
+  document
+    .getElementById(
+      "faceStatus"
+    )
+    .textContent =
+      text;
+
+}
+
+
+/* =====================================================
+   SCROLL
+===================================================== */
+
+function scrollBottom(){
+
+  setTimeout(
+    function(){
+
+      window.scrollTo({
+
+        top:
+          document.body
+            .scrollHeight,
+
+        behavior:
+          "smooth"
+
+      });
+
+    },
+    100
+  );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(
+  text
+){
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+  shouldKeepListening =
+    false;
+
+
+  stopListening();
+
+
+  if(
+    window.speechSynthesis
+  ){
+
+    window.speechSynthesis.cancel();
 
   }
+
+
+  stopFaceMode();
+
+
+  window.history.back();
+
+}
+
+
+/* =====================================================
+   INITIAL LANGUAGE LIST
+===================================================== */
+
+showLanguages();
+
+
+/* =====================================================
+   SPEECH VOICES
+===================================================== */
+
+if(
+  window.speechSynthesis
+){
+
+  window.speechSynthesis
+    .getVoices();
+
+}
 
 </script>
 
 </body>
+
 </html>
