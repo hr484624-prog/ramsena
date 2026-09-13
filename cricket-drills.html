@@ -1536,161 +1536,171 @@ startMic();
 
 }
 
-
 /* =========================
-   AI VOICE
+   AI VOICE - GEMINI TTS
 ========================= */
 
-let voices=[];
+let currentAudio = null;
 
-function loadVoices(){
+async function speakAI(text){
 
-voices=
-window.speechSynthesis
-.getVoices();
+  return new Promise(async resolve => {
 
-}
+    const toggle =
+      document.getElementById("voiceToggle");
 
-loadVoices();
+    if(!toggle || !toggle.checked){
 
-if("speechSynthesis" in window){
+      resolve();
+      return;
 
-speechSynthesis.onvoiceschanged=
-loadVoices;
+    }
 
-}
+    if(!text){
 
+      resolve();
+      return;
 
-function getBestVoice(){
+    }
 
-loadVoices();
+    try{
 
-if(!voices.length)return null;
+      setStatus("🔊 AI बोलत आहे...");
 
+      /*
+      Stop previous audio
+      */
 
-/*
-Indian language voice first
-*/
+      if(currentAudio){
 
-let indian=
-voices.find(v=>
-/mr-IN|hi-IN|gu-IN|ta-IN|te-IN|kn-IN|ml-IN|bn-IN|pa-IN/i
-.test(v.lang)
-);
+        try{
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+        }catch(e){}
 
-if(indian)return indian;
+        currentAudio = null;
 
-
-/*
-Try names that commonly indicate male
-*/
-
-let male=
-voices.find(v=>
-/male|man|google.*male|ravi|hemant|aditya|madhur/i
-.test(v.name)
-);
-
-if(male)return male;
-
-return voices[0];
-
-}
+      }
 
 
-function speakAI(text){
+      /*
+      Gemini TTS request
+      */
 
-return new Promise(resolve=>{
+      const response =
+        await fetch("/api/voice",{
 
-if(
-!document
-.getElementById("voiceToggle")
-.checked
-){
+          method:"POST",
 
-resolve();
+          headers:{
+            "Content-Type":"application/json"
+          },
 
-return;
+          body:JSON.stringify({
 
-}
+            text:text,
 
-if(
-!("speechSynthesis" in window)
-){
+            languageCode:selectedLangCode
 
-resolve();
+          })
 
-return;
-
-}
-
-if(!text){
-
-resolve();
-
-return;
-
-}
-
-speechSynthesis.cancel();
-
-const utterance=
-new SpeechSynthesisUtterance(text);
-
-utterance.lang=
-selectedLangCode;
-
-const voice=
-getBestVoice();
-
-if(voice){
-
-utterance.voice=voice;
-
-}
+        });
 
 
-/*
-Male-style fallback.
-This does NOT guarantee biological gender;
-actual voice depends on phone/browser TTS.
-*/
+      if(!response.ok){
 
-utterance.rate=0.95;
+        const errorText =
+          await response.text();
 
-utterance.pitch=0.85;
+        console.error(
+          "Voice API Error:",
+          errorText
+        );
 
-utterance.volume=1;
+        setStatus("⚠️ AI Voice error");
 
-utterance.onstart=()=>{
+        resolve();
 
-setStatus("🔊 AI बोलत आहे...");
+        return;
 
-};
+      }
 
-utterance.onend=()=>{
 
-setStatus(
-listening
-?"🎤 ऐकत आहे..."
-:"Ready"
-);
+      /*
+      Receive WAV audio
+      */
 
-resolve();
+      const blob =
+        await response.blob();
 
-};
 
-utterance.onerror=()=>{
+      if(!blob.size){
 
-resolve();
+        setStatus("⚠️ Audio मिळाले नाही.");
 
-};
+        resolve();
 
-speechSynthesis.speak(
-utterance
-);
+        return;
 
-});
+      }
+
+
+      const audioURL =
+        URL.createObjectURL(blob);
+
+
+      currentAudio =
+        new Audio(audioURL);
+
+      currentAudio.volume = 1;
+
+
+      currentAudio.onended = ()=>{
+
+        URL.revokeObjectURL(audioURL);
+
+        currentAudio = null;
+
+        setStatus(
+          listening
+          ? "🎤 ऐकत आहे..."
+          : "Ready"
+        );
+
+        resolve();
+
+      };
+
+
+      currentAudio.onerror = ()=>{
+
+        URL.revokeObjectURL(audioURL);
+
+        currentAudio = null;
+
+        setStatus("⚠️ Audio play झाला नाही.");
+
+        resolve();
+
+      };
+
+
+      await currentAudio.play();
+
+    }catch(error){
+
+      console.error(
+        "Gemini Voice Error:",
+        error
+      );
+
+      setStatus("⚠️ AI Voice सुरू झाली नाही.");
+
+      resolve();
+
+    }
+
+  });
 
 }
 
