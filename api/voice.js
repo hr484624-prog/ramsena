@@ -42,15 +42,16 @@ export default async function handler(req, res) {
           model: "gemini-3.1-flash-tts-preview",
 
           input:
-            `Speak naturally and clearly as a friendly professional AI interviewer.
-             Use a warm conversational tone.
-             Language: ${languageCode}.
-             
-             Text to speak:
-             ${text}`,
+            `Speak naturally as a friendly professional AI interviewer.
+Use a warm conversational tone.
+Speak in ${languageCode}.
+
+Text:
+${text}`,
 
           response_format: {
-            type: "audio"
+            type: "audio",
+            mime_type: "audio/wav"
           },
 
           generation_config: {
@@ -69,20 +70,41 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
 
-      console.error(
-        "Gemini TTS Error:",
-        data
-      );
+      console.error("Gemini TTS Error:", data);
 
       return res.status(500).json({
-        error: "Gemini voice generation failed"
+        error: "Gemini voice generation failed",
+        details: data
       });
     }
 
-    return res.status(200).json({
-      success: true,
-      audio: data
-    });
+    const audio = data.output_audio;
+
+    if (!audio || !audio.data) {
+
+      console.error("No audio returned:", data);
+
+      return res.status(500).json({
+        error: "No audio returned by Gemini"
+      });
+    }
+
+    const audioBuffer = Buffer.from(
+      audio.data,
+      "base64"
+    );
+
+    res.setHeader(
+      "Content-Type",
+      audio.mime_type || "audio/wav"
+    );
+
+    res.setHeader(
+      "Content-Length",
+      audioBuffer.length
+    );
+
+    return res.status(200).send(audioBuffer);
 
   } catch (error) {
 
@@ -95,4 +117,4 @@ export default async function handler(req, res) {
       error: "Internal server error"
     });
   }
-} 
+}
