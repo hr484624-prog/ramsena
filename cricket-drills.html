@@ -1,511 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0,user-scalable=no">
 
-<title>Battle Arena</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Interview</title>
 
 <style>
+
 *{
+  box-sizing:border-box;
   margin:0;
   padding:0;
-  box-sizing:border-box;
-}
-
-html,body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#05070b;
-  font-family:Arial,sans-serif;
+  font-family:Arial, sans-serif;
 }
 
 body{
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  background:#eef5ff;
+  color:#172554;
 }
 
 .page{
-  position:relative;
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
-  background:#080d16;
-}
-
-/* =========================
-   ROTATING BACKGROUND
-========================= */
-
-.rotate-bg{
-  position:absolute;
-  width:170vmax;
-  height:170vmax;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  animation:rotateWorld 18s linear infinite;
-
-  background:
-    conic-gradient(
-      from 0deg,
-      #07111e,
-      #17395c,
-      #08101b,
-      #304a62,
-      #090e17,
-      #1c4166,
-      #07111e
-    );
-}
-
-.rotate-bg::before{
-  content:"";
-  position:absolute;
-  inset:12%;
-  border-radius:50%;
-  border:2px solid rgba(100,180,255,.18);
-  box-shadow:
-    0 0 80px rgba(30,130,255,.25),
-    inset 0 0 80px rgba(30,130,255,.18);
-}
-
-@keyframes rotateWorld{
-  from{
-    transform:
-      translate(-50%,-50%)
-      rotate(0deg);
-  }
-
-  to{
-    transform:
-      translate(-50%,-50%)
-      rotate(360deg);
-  }
-}
-
-/* =========================
-   MOVING LIGHTS
-========================= */
-
-.light{
-  position:absolute;
-  width:180px;
-  height:180px;
-  border-radius:50%;
-  filter:blur(45px);
-  opacity:.35;
-  animation:
-    moveLight 5s ease-in-out infinite alternate;
-}
-
-.light1{
-  background:#1684ff;
-  left:-60px;
-  top:10%;
-}
-
-.light2{
-  background:#ff681c;
-  right:-70px;
-  top:30%;
-  animation-delay:1s;
-}
-
-.light3{
-  background:#1675ff;
-  left:40%;
-  bottom:-90px;
-  animation-delay:2s;
-}
-
-@keyframes moveLight{
-  from{
-    transform:translate(0,0);
-  }
-
-  to{
-    transform:translate(60px,-35px);
-  }
-}
-
-/* =========================
-   DARK OVERLAY
-========================= */
-
-.overlay{
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(0,0,0,.35),
-      rgba(0,0,0,.15) 45%,
-      rgba(0,0,0,.8)
-    );
-}
-
-/* =========================
-   LOGO
-========================= */
-
-.logo{
-  position:absolute;
-  top:9%;
-  left:50%;
-  transform:translateX(-50%);
-  text-align:center;
-  color:white;
-  z-index:5;
-}
-
-.logo h1{
-  font-size:36px;
-  font-weight:900;
-  letter-spacing:3px;
-  text-shadow:
-    0 4px 18px rgba(0,0,0,.9);
-}
-
-.logo p{
-  margin-top:6px;
-  font-size:10px;
-  letter-spacing:6px;
-  opacity:.75;
-}
-
-/* =========================
-   CENTER CHARACTER
-========================= */
-
-.character{
-  position:absolute;
-  width:190px;
-  height:350px;
-  left:50%;
-  top:45%;
-  transform:
-    translate(-50%,-50%);
-  z-index:4;
-
-  animation:
-    characterFloat 2.5s ease-in-out infinite;
-}
-
-.head{
-  position:absolute;
-  width:70px;
-  height:78px;
-  left:60px;
-  top:15px;
-  border-radius:45%;
-  background:#bd7959;
-  z-index:3;
-}
-
-.hair{
-  position:absolute;
-  width:78px;
-  height:45px;
-  left:56px;
-  top:5px;
-  border-radius:50% 50% 20% 20%;
-  background:#111;
-  z-index:4;
-}
-
-.body{
-  position:absolute;
-  width:105px;
-  height:150px;
-  left:43px;
-  top:82px;
-  border-radius:30px 30px 15px 15px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #101923,
-      #405469,
-      #17222e
-    );
-}
-
-.arm{
-  position:absolute;
-  width:32px;
-  height:125px;
-  top:95px;
-  border-radius:20px;
-  background:#253443;
-}
-
-.arm1{
-  left:20px;
-  transform:rotate(15deg);
-}
-
-.arm2{
-  right:20px;
-  transform:rotate(-15deg);
-}
-
-.gun{
-  position:absolute;
-  width:125px;
-  height:17px;
-  right:-55px;
-  top:170px;
-  border-radius:5px;
-  background:#11171d;
-  transform:rotate(-18deg);
-  box-shadow:0 3px 8px #000;
-}
-
-.leg{
-  position:absolute;
-  width:40px;
-  height:115px;
-  top:220px;
-  border-radius:10px;
-  background:#131c25;
-}
-
-.leg1{
-  left:52px;
-}
-
-.leg2{
-  right:52px;
-}
-
-@keyframes characterFloat{
-  0%,100%{
-    transform:
-      translate(-50%,-50%)
-      translateY(0);
-  }
-
-  50%{
-    transform:
-      translate(-50%,-50%)
-      translateY(-9px);
-  }
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-  position:absolute;
-  left:50%;
-  bottom:13%;
-  transform:translateX(-50%);
-  width:min(82%,430px);
-  color:white;
-  z-index:8;
-}
-
-.loadingTop{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
-  font-size:12px;
-}
-
-.bar{
   width:100%;
-  height:7px;
-  border-radius:20px;
-  background:rgba(255,255,255,.2);
-  overflow:hidden;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#f7faff;
 }
 
-.progress{
-  width:0%;
-  height:100%;
-  border-radius:20px;
+/* HEADER */
 
-  background:
-    linear-gradient(
-      90deg,
-      #1769e0,
-      #65b8ff
-    );
-
-  box-shadow:
-    0 0 15px #1769e0;
-
-  transition:
-    width .1s linear;
-}
-
-.tip{
-  text-align:center;
-  margin-top:10px;
-  font-size:10px;
-  opacity:.65;
-}
-
-/* =========================
-   START BUTTON
-========================= */
-
-.start{
-  display:none;
-
-  position:absolute;
-  left:50%;
-  bottom:8%;
-  transform:translateX(-50%);
-
-  width:220px;
-  height:52px;
-
-  border:0;
-  border-radius:10px;
-
+.header{
+  height:65px;
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
   color:white;
-  font-size:18px;
-  font-weight:900;
-  letter-spacing:2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #1769e0,
-      #4b9dff
-    );
-
-  box-shadow:
-    0 5px 25px
-    rgba(23,105,224,.55);
-
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  gap:14px;
+  position:sticky;
+  top:0;
   z-index:10;
 }
 
-.start:active{
-  transform:
-    translateX(-50%)
-    scale(.96);
+.back-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.2);
+  color:white;
+  font-size:22px;
+  cursor:pointer;
 }
 
-/* =========================
-   VERSION
-========================= */
+.header-title{
+  font-size:20px;
+  font-weight:bold;
+}
 
-.version{
-  position:absolute;
-  bottom:2%;
-  left:50%;
-  transform:translateX(-50%);
-  color:rgba(255,255,255,.35);
-  font-size:9px;
-  z-index:5;
+/* MAIN */
+
+.main{
+  padding:20px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
+  color:white;
+  padding:24px;
+  border-radius:20px;
+  margin-bottom:20px;
+  box-shadow:0 8px 25px rgba(23,105,224,.18);
+}
+
+.hero h2{
+  font-size:24px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  font-size:14px;
+  opacity:.95;
+}
+
+/* OVERLAY */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.62);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:100;
+}
+
+/* POPUP */
+
+.popup{
+  width:100%;
+  max-width:410px;
+  max-height:90vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:24px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);
+  animation:popupIn .25s ease;
+}
+
+@keyframes popupIn{
+  from{
+    transform:scale(.9);
+    opacity:0;
+  }
+  to{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.popup h2{
+  text-align:center;
+  color:#1769e0;
+  margin-bottom:7px;
+}
+
+.popup-subtitle{
+  text-align:center;
+  color:#64748b;
+  font-size:13px;
+  margin-bottom:20px;
+}
+
+/* TYPE GRID */
+
+.type-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.type-card{
+  border:2px solid #e2e8f0;
+  background:#f8fbff;
+  border-radius:16px;
+  padding:17px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.type-card:hover{
+  border-color:#4d9cff;
+}
+
+.type-card.selected{
+  border-color:#1769e0;
+  background:#eaf3ff;
+  box-shadow:0 4px 12px rgba(23,105,224,.12);
+}
+
+.type-icon{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.type-name{
+  font-size:14px;
+  font-weight:bold;
+}
+
+/* BUTTON */
+
+.primary-btn{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  border:none;
+  border-radius:14px;
+  background:#1769e0;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.primary-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+/* LANGUAGE */
+
+.language-search{
+  width:100%;
+  padding:14px;
+  border:2px solid #e2e8f0;
+  border-radius:13px;
+  outline:none;
+  margin-bottom:14px;
+  font-size:15px;
+}
+
+.language-search:focus{
+  border-color:#1769e0;
+}
+
+.language-list{
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  max-height:430px;
+  overflow-y:auto;
+}
+
+.language-item{
+  padding:13px 15px;
+  border:2px solid #e5e7eb;
+  border-radius:13px;
+  background:#f8fbff;
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:15px;
+}
+
+.language-item.selected{
+  border-color:#1769e0;
+  background:#eaf3ff;
+  color:#1769e0;
+  font-weight:bold;
+}
+
+.check{
+  display:none;
+}
+
+.language-item.selected .check{
+  display:block;
+}
+
+/* INTERVIEW SCREEN */
+
+.interview-screen{
+  display:none;
+}
+
+.ai-card{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 5px 20px rgba(23,105,224,.1);
+  margin-top:20px;
+}
+
+.ai-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#1769e0;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+
+.ai-avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:#eaf3ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+}
+
+.question{
+  background:#f1f6ff;
+  border-radius:15px;
+  padding:17px;
+  line-height:1.5;
+  font-size:16px;
+  margin-bottom:16px;
+}
+
+.answer{
+  width:100%;
+  min-height:120px;
+  resize:none;
+  padding:15px;
+  border:2px solid #dbe4f0;
+  border-radius:14px;
+  outline:none;
+  font-size:15px;
+}
+
+.answer:focus{
+  border-color:#1769e0;
+}
+
+.info{
+  margin-top:15px;
+  text-align:center;
+  font-size:13px;
+  color:#64748b;
+}
+
+.hidden{
+  display:none !important;
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="page">
 
-  <div class="rotate-bg"></div>
-
-  <div class="light light1"></div>
-  <div class="light light2"></div>
-  <div class="light light3"></div>
-
-  <div class="overlay"></div>
-
-  <!-- LOGO -->
-
-  <div class="logo">
-
-    <h1>BATTLE ARENA</h1>
-
-    <p>
-      BATTLE • SURVIVE • WIN
-    </p>
-
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <div class="header-title">AI Interview</div>
   </div>
 
+  <div class="main">
 
-  <!-- CHARACTER -->
-
-  <div class="character">
-
-    <div class="hair"></div>
-
-    <div class="head"></div>
-
-    <div class="body"></div>
-
-    <div class="arm arm1"></div>
-
-    <div class="arm arm2"></div>
-
-    <div class="gun"></div>
-
-    <div class="leg leg1"></div>
-
-    <div class="leg leg2"></div>
-
-  </div>
-
-
-  <!-- LOADING -->
-
-  <div
-    class="loading"
-    id="loading">
-
-    <div class="loadingTop">
-
-      <span id="status">
-        Loading resources...
-      </span>
-
-      <span id="percent">
-        0%
-      </span>
-
+    <div class="hero">
+      <h2>🎤 AI Interview</h2>
+      <p>Practice your interview and improve your confidence.</p>
     </div>
 
-    <div class="bar">
+    <div id="interviewScreen" class="interview-screen">
 
-      <div
-        class="progress"
-        id="progress">
+      <div class="ai-card">
+
+        <div class="ai-title">
+          <div class="ai-avatar">🤖</div>
+          <div>
+            <div>GyanSetu AI Interviewer</div>
+            <small id="selectedInfo"></small>
+          </div>
+        </div>
+
+        <div id="questionBox" class="question">
+          नमस्कार! तुमच्या interview ला सुरुवात करूया.
+        </div>
+
+        <textarea
+          id="answerBox"
+          class="answer"
+          placeholder="तुमचे उत्तर येथे लिहा..."
+        ></textarea>
+
+        <button
+          class="primary-btn"
+          onclick="nextQuestion()">
+          Submit Answer →
+        </button>
+
+        <div class="info" id="questionNumber">
+          Question 1
+        </div>
+
       </div>
 
     </div>
 
-    <div class="tip">
-      Preparing the battlefield...
+  </div>
+
+</div>
+
+
+<!-- =========================
+     TYPE POPUP
+========================= -->
+
+<div class="overlay" id="typeOverlay">
+
+  <div class="popup">
+
+    <h2>🎤 Interview सुरू करूया</h2>
+
+    <div class="popup-subtitle">
+      तुम्हाला कोणत्या प्रकारची interview practice करायची आहे?
     </div>
+
+    <div class="type-grid">
+
+      <div class="type-card"
+           onclick="selectType(this,'Business')">
+        <div class="type-icon">💼</div>
+        <div class="type-name">Business</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'Job')">
+        <div class="type-icon">👔</div>
+        <div class="type-name">Job</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'School Admission')">
+        <div class="type-icon">🏫</div>
+        <div class="type-name">School Admission</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'College Admission')">
+        <div class="type-icon">🎓</div>
+        <div class="type-name">College Admission</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'Scholarship')">
+        <div class="type-icon">🏆</div>
+        <div class="type-name">Scholarship</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'Viva')">
+        <div class="type-icon">📚</div>
+        <div class="type-name">Viva</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'General')">
+        <div class="type-icon">🎤</div>
+        <div class="type-name">General</div>
+      </div>
+
+      <div class="type-card"
+           onclick="selectType(this,'Career')">
+        <div class="type-icon">🚀</div>
+        <div class="type-name">Career</div>
+      </div>
+
+    </div>
+
+    <button
+      id="typeNextBtn"
+      class="primary-btn"
+      disabled
+      onclick="openLanguages()">
+      Continue →
+    </button>
 
   </div>
 
-
-  <!-- START -->
-
-  <button
-    class="start"
-    id="start">
-
-    START
-
-  </button>
+</div>
 
 
-  <div class="version">
-    VERSION 1.0
+<!-- =========================
+     LANGUAGE POPUP
+========================= -->
+
+<div class="overlay hidden" id="languageOverlay">
+
+  <div class="popup">
+
+    <h2>🌐 Language निवडा</h2>
+
+    <div class="popup-subtitle">
+      Interview कोणत्या भाषेत द्यायची?
+    </div>
+
+    <input
+      type="text"
+      id="languageSearch"
+      class="language-search"
+      placeholder="🔍 Search language..."
+      oninput="searchLanguage()"
+    >
+
+    <div id="languageList" class="language-list">
+
+    </div>
+
+    <button
+      id="startBtn"
+      class="primary-btn"
+      disabled
+      onclick="startInterview()">
+      🚀 Start Interview
+    </button>
+
   </div>
 
 </div>
@@ -513,129 +497,473 @@ body{
 
 <script>
 
-let progress=0;
+/* =========================
+   VARIABLES
+========================= */
 
-const progressBar=
-document.getElementById(
-  "progress"
-);
+let selectedType = "";
 
-const percent=
-document.getElementById(
-  "percent"
-);
+let selectedLanguage = "";
 
-const status=
-document.getElementById(
-  "status"
-);
-
-const loading=
-document.getElementById(
-  "loading"
-);
-
-const start=
-document.getElementById(
-  "start"
-);
+let currentQuestion = 0;
 
 
-const loadingMessages=[
+/* =========================
+   INDIAN LANGUAGES
+========================= */
 
-  "Loading resources...",
+const languages = [
 
-  "Preparing battlefield...",
+  "Assamese — অসমীয়া",
 
-  "Loading characters...",
+  "Bengali — বাংলা",
 
-  "Loading weapons...",
+  "Bodo — बड़ो",
 
-  "Preparing world...",
+  "Dogri — डोगरी",
 
-  "Almost ready..."
+  "Gujarati — ગુજરાતી",
+
+  "Hindi — हिन्दी",
+
+  "Kannada — ಕನ್ನಡ",
+
+  "Kashmiri — कश्मीरी",
+
+  "Konkani — कोंकणी",
+
+  "Maithili — मैथिली",
+
+  "Malayalam — മലയാളം",
+
+  "Manipuri — মৈতৈলোন",
+
+  "Marathi — मराठी",
+
+  "Nepali — नेपाली",
+
+  "Odia — ଓଡ଼ିଆ",
+
+  "Punjabi — ਪੰਜਾਬੀ",
+
+  "Sanskrit — संस्कृतम्",
+
+  "Santali — ᱥᱟᱱᱛᱟᱲᱤ",
+
+  "Sindhi — سنڌي",
+
+  "Tamil — தமிழ்",
+
+  "Telugu — తెలుగు",
+
+  "Urdu — اردو"
 
 ];
 
 
-let messageIndex=0;
+/* =========================
+   QUESTIONS
+========================= */
 
+const questionData = {
 
-const loader=setInterval(()=>{
+  "Business":[
 
-  progress +=
-    Math.floor(
-      Math.random()*3
-    )+1;
+    "Tell me about yourself and your business idea.",
 
-  if(progress>100)
-    progress=100;
+    "What problem does your business solve?",
 
+    "Who are your target customers?",
 
-  progressBar.style.width=
-    progress+"%";
+    "How will you grow your business?",
 
-  percent.textContent=
-    progress+"%";
+    "Why should someone invest in your business?"
 
+  ],
 
-  if(
-    progress>=
-    (messageIndex+1)*16
-  ){
+  "Job":[
 
-    if(
-      messageIndex<
-      loadingMessages.length-1
-    ){
+    "Tell me about yourself.",
 
-      messageIndex++;
+    "Why do you want this job?",
 
-      status.textContent=
-        loadingMessages[
-          messageIndex
-        ];
+    "What are your strengths?",
 
-    }
+    "What is one skill you want to improve?",
 
-  }
+    "Why should we select you?"
 
+  ],
 
-  if(progress>=100){
+  "School Admission":[
 
-    clearInterval(loader);
+    "Please introduce yourself.",
 
-    status.textContent=
-      "Ready!";
+    "Why do you want to join this school?",
 
-    setTimeout(()=>{
+    "What is your favourite subject and why?",
 
-      loading.style.display=
-        "none";
+    "What activities do you enjoy?",
 
-      start.style.display=
-        "block";
+    "What do you want to become in the future?"
 
-    },600);
+  ],
 
-  }
+  "College Admission":[
 
-},100);
+    "Please introduce yourself.",
+
+    "Why did you choose this course?",
+
+    "Why do you want to join this college?",
+
+    "What are your academic interests?",
+
+    "What are your future goals?"
+
+  ],
+
+  "Scholarship":[
+
+    "Please introduce yourself.",
+
+    "Why are you applying for this scholarship?",
+
+    "Tell us about your academic goals.",
+
+    "What are your achievements?",
+
+    "How will this scholarship help you?"
+
+  ],
+
+  "Viva":[
+
+    "Please introduce yourself.",
+
+    "What is the main topic of your study?",
+
+    "Explain the most important concept you learned.",
+
+    "What did you find difficult?",
+
+    "What did you learn from this subject?"
+
+  ],
+
+  "General":[
+
+    "Please introduce yourself.",
+
+    "What are your interests?",
+
+    "What are your strengths?",
+
+    "What are your goals?",
+
+    "What motivates you?"
+
+  ],
+
+  "Career":[
+
+    "Please introduce yourself.",
+
+    "What career would you like to pursue?",
+
+    "Why did you choose this career?",
+
+    "What skills are important for your career?",
+
+    "Where do you see yourself in the future?"
+
+  ]
+
+};
 
 
 /* =========================
-   OPEN start.html
+   SELECT TYPE
 ========================= */
 
-start.addEventListener(
-  "click",
-  function(){
+function selectType(element,type){
 
-    window.location.href=
-      "start.html";
+  document
+    .querySelectorAll(".type-card")
+    .forEach(card=>{
+      card.classList.remove("selected");
+    });
+
+  element.classList.add("selected");
+
+  selectedType = type;
+
+  document
+    .getElementById("typeNextBtn")
+    .disabled = false;
+}
+
+
+/* =========================
+   OPEN LANGUAGE
+========================= */
+
+function openLanguages(){
+
+  document
+    .getElementById("typeOverlay")
+    .classList.add("hidden");
+
+  document
+    .getElementById("languageOverlay")
+    .classList.remove("hidden");
+
+  showLanguages(languages);
+}
+
+
+/* =========================
+   SHOW LANGUAGES
+========================= */
+
+function showLanguages(list){
+
+  const box =
+    document.getElementById("languageList");
+
+  box.innerHTML = "";
+
+  list.forEach(language=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className = "language-item";
+
+    item.innerHTML = `
+      <span>${language}</span>
+      <span class="check">✓</span>
+    `;
+
+    item.onclick = function(){
+
+      document
+        .querySelectorAll(".language-item")
+        .forEach(x=>{
+          x.classList.remove("selected");
+        });
+
+      item.classList.add("selected");
+
+      selectedLanguage = language;
+
+      document
+        .getElementById("startBtn")
+        .disabled = false;
+
+    };
+
+    box.appendChild(item);
+
+  });
+
+}
+
+
+/* =========================
+   SEARCH LANGUAGE
+========================= */
+
+function searchLanguage(){
+
+  const value =
+    document
+      .getElementById("languageSearch")
+      .value
+      .toLowerCase()
+      .trim();
+
+  const filtered =
+    languages.filter(language =>
+      language.toLowerCase().includes(value)
+    );
+
+  showLanguages(filtered);
+
+}
+
+
+/* =========================
+   START INTERVIEW
+========================= */
+
+function startInterview(){
+
+  if(!selectedLanguage) return;
+
+  document
+    .getElementById("languageOverlay")
+    .classList.add("hidden");
+
+  document
+    .getElementById("interviewScreen")
+    .style.display = "block";
+
+  currentQuestion = 0;
+
+  document
+    .getElementById("selectedInfo")
+    .textContent =
+      selectedType + " • " + selectedLanguage;
+
+  showQuestion();
+
+}
+
+
+/* =========================
+   SHOW QUESTION
+========================= */
+
+function showQuestion(){
+
+  const questions =
+    questionData[selectedType];
+
+  const question =
+    questions[currentQuestion];
+
+  document
+    .getElementById("questionBox")
+    .textContent = question;
+
+  document
+    .getElementById("answerBox")
+    .value = "";
+
+  document
+    .getElementById("questionNumber")
+    .textContent =
+      "Question " +
+      (currentQuestion + 1) +
+      " / " +
+      questions.length;
+
+}
+
+
+/* =========================
+   NEXT QUESTION
+========================= */
+
+function nextQuestion(){
+
+  const answer =
+    document
+      .getElementById("answerBox")
+      .value
+      .trim();
+
+  if(answer === ""){
+
+    document
+      .getElementById("answerBox")
+      .focus();
+
+    return;
 
   }
-);
+
+  const questions =
+    questionData[selectedType];
+
+  currentQuestion++;
+
+  if(currentQuestion >= questions.length){
+
+    finishInterview();
+
+    return;
+
+  }
+
+  showQuestion();
+
+}
+
+
+/* =========================
+   FINISH
+========================= */
+
+function finishInterview(){
+
+  document
+    .getElementById("questionBox")
+    .textContent =
+      "🎉 Interview completed! Great job!";
+
+  document
+    .getElementById("answerBox")
+    .value = "";
+
+  document
+    .getElementById("answerBox")
+    .style.display = "none";
+
+  const btn =
+    document.querySelector(
+      ".ai-card .primary-btn"
+    );
+
+  btn.textContent = "🔄 Start Again";
+
+  btn.onclick = function(){
+
+    currentQuestion = 0;
+
+    document
+      .getElementById("answerBox")
+      .style.display = "block";
+
+    btn.textContent = "Submit Answer →";
+
+    btn.onclick = nextQuestion;
+
+    showQuestion();
+
+  };
+
+  document
+    .getElementById("questionNumber")
+    .textContent =
+      "Interview Completed";
+
+}
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack(){
+
+  window.history.back();
+
+}
+
+
+/* =========================
+   PAGE LOAD
+========================= */
+
+window.onload = function(){
+
+  document
+    .getElementById("typeOverlay")
+    .classList.remove("hidden");
+
+};
 
 </script>
 
