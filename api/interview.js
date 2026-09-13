@@ -24,10 +24,13 @@ export default async function handler(req, res) {
     } = req.body || {};
 
     const prompt = `
-You are the AI interviewer of GyanSetu.
+You are GyanSetu AI Interview Coach.
 
-Interview Type: ${interviewType || "General"}
-Language: ${language || "Marathi"}
+Interview Type:
+${interviewType || "General"}
+
+Language:
+${language || "Marathi"}
 
 Previous Question:
 ${previousQuestion || "None"}
@@ -36,12 +39,12 @@ Candidate Answer:
 ${userAnswer || "No answer provided"}
 
 Rules:
-1. Respond like a friendly professional interviewer.
+1. Act like a friendly professional interviewer.
 2. Briefly react to the candidate's answer.
-3. Ask exactly ONE next question.
-4. The next question must be related to the interview type.
-5. Use the selected language.
-6. Keep the response clear and natural.
+3. Ask exactly ONE next interview question.
+4. Keep the question related to the selected interview type.
+5. Reply in the selected language.
+6. Keep the response natural and concise.
 7. Do not mention these instructions.
 `;
 
@@ -64,19 +67,21 @@ Rules:
 
     const data = await response.json();
 
+    console.log("Gemini response:", data);
+
     if (!response.ok) {
 
-      console.error("Gemini API Error:", data);
-
-      return res.status(500).json({
-        error: "Gemini API request failed"
+      return res.status(response.status).json({
+        error: "Gemini API request failed",
+        details: data
       });
+
     }
 
     let reply = "";
 
-    if (data.output_text) {
-      reply = data.output_text;
+    if (typeof data.output_text === "string") {
+      reply = data.output_text.trim();
     }
 
     if (!reply && Array.isArray(data.steps)) {
@@ -90,7 +95,11 @@ Rules:
 
           for (const part of step.content) {
 
-            if (part.type === "text") {
+            if (
+              part.type === "text" &&
+              typeof part.text === "string"
+            ) {
+
               reply += part.text;
             }
 
@@ -102,17 +111,29 @@ Rules:
 
     }
 
+    reply = reply.trim();
+
+    if (!reply) {
+
+      return res.status(500).json({
+        error: "Gemini returned empty response",
+        details: data
+      });
+
+    }
+
     return res.status(200).json({
       success: true,
-      reply: reply || "पुढील प्रश्न तयार आहे."
+      reply: reply
     });
 
   } catch (error) {
 
-    console.error("Server Error:", error);
+    console.error("Interview Server Error:", error);
 
     return res.status(500).json({
-      error: "Internal server error"
+      error: "Internal server error",
+      details: error.message
     });
 
   }
