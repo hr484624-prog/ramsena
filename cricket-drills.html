@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport"
-      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+      content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no">
 
 <title>GyanSetu - AI Interview</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
+html,
 body{
   margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
   font-family:Arial,sans-serif;
   background:#eef5ff;
   color:#172554;
+}
+
+body{
+  overflow-x:hidden;
 }
 
 .app{
@@ -25,735 +40,1626 @@ body{
   max-width:430px;
   min-height:100vh;
   margin:auto;
-  background:white;
+  background:#fff;
   position:relative;
-  overflow:hidden;
 }
 
+/* =========================
+   HEADER
+========================= */
+
 header{
+
   height:62px;
-  background:linear-gradient(135deg,#1769e0,#4d9cff);
-  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1769e0,
+      #4d9cff
+    );
+
+  color:#fff;
+
   display:flex;
+
   align-items:center;
-  padding:0 15px;
-  font-weight:bold;
+
+  padding:0 14px;
+
   font-size:19px;
+
+  font-weight:bold;
+
+  position:relative;
+
+  z-index:5;
 }
 
 .back{
+
+  width:40px;
+  height:40px;
+
   border:0;
+
   background:transparent;
+
   color:white;
-  font-size:28px;
-  margin-right:10px;
-  cursor:pointer;
+
+  font-size:32px;
+
+  line-height:40px;
+
+  margin-right:7px;
+
 }
 
+
+/* =========================
+   SETUP SCREEN
+========================= */
+
 .screen{
-  padding:20px;
+  padding:18px;
 }
 
 .hero{
-  background:linear-gradient(135deg,#1769e0,#4d9cff);
+
+  background:
+    linear-gradient(
+      135deg,
+      #1769e0,
+      #4d9cff
+    );
+
   color:white;
+
   border-radius:22px;
-  padding:25px 20px;
+
+  padding:24px 20px;
+
   margin-bottom:18px;
-  box-shadow:0 8px 25px rgba(23,105,224,.20);
+
+  box-shadow:
+    0 8px 25px
+    rgba(23,105,224,.20);
 }
 
 .hero h1{
+
   margin:0 0 8px;
+
   font-size:25px;
+
 }
 
 .hero p{
+
   margin:0;
+
   line-height:1.5;
-  opacity:.95;
+
+  opacity:.96;
+
 }
 
 .option{
+
   background:#f7faff;
+
   border:2px solid #dbeafe;
+
   border-radius:17px;
-  padding:17px;
+
+  padding:16px;
+
   margin:12px 0;
+
   cursor:pointer;
+
 }
 
 .option:active{
+
   transform:scale(.98);
+
 }
 
 .option-title{
+
   font-weight:bold;
+
   font-size:16px;
-  margin-bottom:6px;
+
+  margin-bottom:7px;
+
 }
 
 .option-value{
+
   color:#64748b;
+
   font-size:14px;
-}
 
-button.primary{
-  width:100%;
-  border:0;
-  background:#1769e0;
-  color:white;
-  padding:16px;
-  border-radius:16px;
-  font-size:17px;
-  font-weight:bold;
-  margin-top:12px;
-}
+  line-height:1.4;
 
-textarea,input{
-  width:100%;
-  border:2px solid #dbeafe;
-  border-radius:15px;
-  padding:14px;
-  font-size:15px;
-  outline:none;
-  font-family:inherit;
-}
-
-textarea{
-  min-height:130px;
-  resize:none;
-}
-
-label{
   display:block;
+
+  max-height:42px;
+
+  overflow:hidden;
+
+}
+
+.primary{
+
+  width:100%;
+
+  border:0;
+
+  background:#1769e0;
+
+  color:#fff;
+
+  padding:16px;
+
+  border-radius:16px;
+
+  font-size:17px;
+
   font-weight:bold;
-  margin:14px 0 7px;
+
+  margin-top:12px;
+
 }
 
-select{
-  width:100%;
-  padding:14px;
-  border:2px solid #dbeafe;
-  border-radius:15px;
-  background:white;
-  font-size:15px;
+.primary:active{
+
+  transform:scale(.98);
+
 }
 
-.hidden{
-  display:none!important;
-}
 
-/* Interview */
-
-.chat{
-  height:calc(100vh - 205px);
-  min-height:450px;
-  overflow-y:auto;
-  padding:15px 15px 120px;
-  background:#f8fbff;
-}
-
-.message{
-  max-width:85%;
-  padding:13px 15px;
-  margin:10px 0;
-  border-radius:18px;
-  line-height:1.5;
-  white-space:pre-wrap;
-  word-wrap:break-word;
-}
-
-.ai{
-  background:white;
-  border:1px solid #dbeafe;
-  margin-right:auto;
-  border-bottom-left-radius:5px;
-}
-
-.user{
-  background:#1769e0;
-  color:white;
-  margin-left:auto;
-  border-bottom-right-radius:5px;
-}
-
-.typing{
-  color:#64748b;
-  font-style:italic;
-}
-
-.controls{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  max-width:430px;
-  background:white;
-  border-top:1px solid #dbeafe;
-  padding:10px;
-  z-index:10;
-}
-
-.input-row{
-  display:flex;
-  gap:7px;
-  align-items:flex-end;
-}
-
-.answer{
-  flex:1;
-  min-height:48px;
-  max-height:120px;
-  resize:none;
-  padding:13px;
-}
-
-.icon-btn{
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  border:0;
-  font-size:22px;
-  background:#eaf2ff;
-}
-
-.mic-on{
-  background:#1769e0;
-  color:white;
-}
-
-.send{
-  width:52px;
-  height:48px;
-  border:0;
-  border-radius:15px;
-  background:#1769e0;
-  color:white;
-  font-size:21px;
-}
-
-.voice-status{
-  text-align:center;
-  font-size:12px;
-  color:#64748b;
-  min-height:17px;
-  margin-top:4px;
-}
-
-.voice-box{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:8px;
-  padding:8px 10px;
-  background:#f7faff;
-  border-radius:12px;
-  font-size:13px;
-}
-
-.switch{
-  width:42px;
-  height:23px;
-  position:relative;
-  display:inline-block;
-}
-
-.switch input{
-  display:none;
-}
-
-.slider{
-  position:absolute;
-  inset:0;
-  background:#cbd5e1;
-  border-radius:30px;
-}
-
-.slider:before{
-  content:"";
-  position:absolute;
-  width:17px;
-  height:17px;
-  left:3px;
-  top:3px;
-  background:white;
-  border-radius:50%;
-  transition:.2s;
-}
-
-.switch input:checked + .slider{
-  background:#1769e0;
-}
-
-.switch input:checked + .slider:before{
-  transform:translateX(19px);
-}
-
-/* popup */
+/* =========================
+   POPUP
+========================= */
 
 .popup-bg{
+
   position:fixed;
+
   inset:0;
-  background:rgba(0,0,0,.5);
+
+  background:
+    rgba(0,0,0,.50);
+
   display:flex;
+
   align-items:flex-end;
+
   justify-content:center;
+
   z-index:100;
+
 }
 
 .popup{
+
   width:100%;
+
   max-width:430px;
-  background:white;
-  border-radius:25px 25px 0 0;
-  padding:20px;
-  max-height:80vh;
+
+  max-height:82vh;
+
   overflow-y:auto;
+
+  background:#fff;
+
+  border-radius:
+    25px 25px 0 0;
+
+  padding:20px;
+
 }
 
 .popup h2{
-  margin-top:0;
+
+  margin:0 0 12px;
+
+  font-size:22px;
+
 }
 
-.choice{
+.popup p{
+
+  color:#64748b;
+
+  line-height:1.5;
+
+}
+
+.hidden{
+
+  display:none !important;
+
+}
+
+
+/* =========================
+   INPUTS
+========================= */
+
+textarea,
+input{
+
+  width:100%;
+
+  border:2px solid #dbeafe;
+
+  border-radius:15px;
+
   padding:14px;
-  border:1px solid #dbeafe;
-  border-radius:13px;
+
+  font-size:15px;
+
+  outline:none;
+
+  font-family:Arial,sans-serif;
+
+  background:#fff;
+
+}
+
+textarea:focus,
+input:focus{
+
+  border-color:#1769e0;
+
+}
+
+.description-input{
+
+  min-height:145px;
+
+  resize:none;
+
+}
+
+.search-input{
+
+  margin-bottom:10px;
+
+}
+
+
+/* =========================
+   CHOICES
+========================= */
+
+.choice{
+
+  padding:14px;
+
+  border:
+    1px solid #dbeafe;
+
+  border-radius:14px;
+
   margin:8px 0;
+
   background:#f8fbff;
+
+  font-size:15px;
+
 }
 
 .choice:active{
+
   background:#eaf2ff;
+
 }
+
+
+/* =========================
+   INTERVIEW
+========================= */
+
+#interviewScreen{
+
+  min-height:
+    calc(100vh - 62px);
+
+  background:#f8fbff;
+
+}
+
+.chat{
+
+  height:
+    calc(100vh - 205px);
+
+  min-height:450px;
+
+  overflow-y:auto;
+
+  padding:
+    15px
+    15px
+    125px;
+
+  background:#f8fbff;
+
+}
+
+.message{
+
+  max-width:86%;
+
+  padding:13px 15px;
+
+  margin:10px 0;
+
+  border-radius:18px;
+
+  line-height:1.5;
+
+  white-space:pre-wrap;
+
+  word-wrap:break-word;
+
+  font-size:15px;
+
+}
+
+.message.ai{
+
+  background:#fff;
+
+  border:
+    1px solid #dbeafe;
+
+  margin-right:auto;
+
+  border-bottom-left-radius:5px;
+
+  color:#172554;
+
+}
+
+.message.user{
+
+  background:#1769e0;
+
+  color:#fff;
+
+  margin-left:auto;
+
+  border-bottom-right-radius:5px;
+
+}
+
+
+/* =========================
+   CONTROLS
+========================= */
+
+.controls{
+
+  position:fixed;
+
+  bottom:0;
+
+  width:100%;
+
+  max-width:430px;
+
+  background:#fff;
+
+  border-top:
+    1px solid #dbeafe;
+
+  padding:9px;
+
+  z-index:20;
+
+}
+
+.input-row{
+
+  display:flex;
+
+  gap:7px;
+
+  align-items:flex-end;
+
+}
+
+.answer{
+
+  flex:1;
+
+  min-height:48px;
+
+  max-height:115px;
+
+  resize:none;
+
+  padding:13px;
+
+  border-radius:15px;
+
+}
+
+.icon-btn{
+
+  width:48px;
+
+  height:48px;
+
+  min-width:48px;
+
+  border:0;
+
+  border-radius:50%;
+
+  background:#eaf2ff;
+
+  font-size:21px;
+
+}
+
+.icon-btn:active{
+
+  transform:scale(.94);
+
+}
+
+.mic-on{
+
+  background:#1769e0;
+
+  color:white;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(23,105,224,.15);
+
+}
+
+.send{
+
+  width:52px;
+
+  height:48px;
+
+  min-width:52px;
+
+  border:0;
+
+  border-radius:15px;
+
+  background:#1769e0;
+
+  color:#fff;
+
+  font-size:21px;
+
+}
+
+.send:active{
+
+  transform:scale(.94);
+
+}
+
+.voice-status{
+
+  text-align:center;
+
+  font-size:12px;
+
+  color:#64748b;
+
+  min-height:18px;
+
+  margin-top:4px;
+
+}
+
+.voice-box{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  margin-top:5px;
+
+  padding:7px 10px;
+
+  background:#f7faff;
+
+  border-radius:12px;
+
+  font-size:13px;
+
+}
+
+
+/* =========================
+   SWITCH
+========================= */
+
+.switch{
+
+  width:42px;
+
+  height:23px;
+
+  position:relative;
+
+  display:inline-block;
+
+}
+
+.switch input{
+
+  display:none;
+
+}
+
+.slider{
+
+  position:absolute;
+
+  inset:0;
+
+  background:#cbd5e1;
+
+  border-radius:30px;
+
+}
+
+.slider:before{
+
+  content:"";
+
+  position:absolute;
+
+  width:17px;
+
+  height:17px;
+
+  left:3px;
+
+  top:3px;
+
+  background:#fff;
+
+  border-radius:50%;
+
+  transition:.2s;
+
+}
+
+.switch input:checked + .slider{
+
+  background:#1769e0;
+
+}
+
+.switch input:checked + .slider:before{
+
+  transform:
+    translateX(19px);
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+
+  display:inline-block;
+
+  animation:pulse 1s infinite;
+
+}
+
+@keyframes pulse{
+
+  0%{
+    opacity:.45;
+  }
+
+  50%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:.45;
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="app">
 
+
+<!-- =========================
+     HEADER
+========================= -->
+
 <header>
-  <button class="back" onclick="location.href='home.html'">‹</button>
+
+  <button
+    class="back"
+    onclick="goBack()">
+    ‹
+  </button>
+
   GyanSetu • AI Interview
+
 </header>
 
-<!-- SETUP -->
 
-<div id="setupScreen" class="screen">
+
+<!-- =========================
+     SETUP SCREEN
+========================= -->
+
+<div
+  id="setupScreen"
+  class="screen">
+
 
   <div class="hero">
-    <h1>🎤 AI Interview</h1>
+
+    <h1>
+      🎤 AI Interview
+    </h1>
+
     <p>
-      तुमच्या माहितीप्रमाणे AI तुमची interview घेईल.
-      Mic वापरून hands-free answers देखील देता येतील.
+      तुमच्या माहितीप्रमाणे AI
+      तुमची natural interview घेईल.
+      Mic वापरून hands-free answer
+      देखील देता येईल.
     </p>
+
   </div>
 
-  <div class="option" onclick="openDescription()">
-    <div class="option-title">📝 Description</div>
-    <div id="descriptionValue" class="option-value">
+
+
+  <!-- DESCRIPTION -->
+
+  <div
+    class="option"
+    onclick="openDescription()">
+
+    <div class="option-title">
+      📝 Description
+    </div>
+
+    <div
+      id="descriptionValue"
+      class="option-value">
+
       Interview बद्दल माहिती द्या
+
     </div>
+
   </div>
 
-  <div class="option" onclick="openLanguage()">
-    <div class="option-title">🌐 Language</div>
-    <div id="languageValue" class="option-value">
+
+
+  <!-- LANGUAGE -->
+
+  <div
+    class="option"
+    onclick="openLanguage()">
+
+    <div class="option-title">
+      🌐 Languages
+    </div>
+
+    <div
+      id="languageValue"
+      class="option-value">
+
       Select language
+
     </div>
+
   </div>
 
-  <div class="option" onclick="openField()">
-    <div class="option-title">🎯 Field</div>
-    <div id="fieldValue" class="option-value">
+
+
+  <!-- FIELD -->
+
+  <div
+    class="option"
+    onclick="openField()">
+
+    <div class="option-title">
+      🎯 Field
+    </div>
+
+    <div
+      id="fieldValue"
+      class="option-value">
+
       Select interview field
+
     </div>
+
   </div>
 
-  <button class="primary" onclick="startInterview()">
+
+
+  <button
+    class="primary"
+    onclick="startInterview()">
+
     🚀 Start AI Interview
+
   </button>
+
 
 </div>
 
-<!-- INTERVIEW -->
 
-<div id="interviewScreen" class="hidden">
 
-  <div id="chat" class="chat"></div>
+<!-- =========================
+     INTERVIEW SCREEN
+========================= -->
+
+<div
+  id="interviewScreen"
+  class="hidden">
+
+
+  <div
+    id="chat"
+    class="chat">
+  </div>
+
+
 
   <div class="controls">
 
+
     <div class="input-row">
+
+
+      <!-- MIC -->
 
       <button
         id="micButton"
         class="icon-btn"
         onclick="toggleMic()">
+
         🎤
+
       </button>
+
+
+
+      <!-- TEXT -->
 
       <textarea
         id="answer"
         class="answer"
-        placeholder="Type your answer..."></textarea>
+        placeholder="Type your answer...">
+      </textarea>
+
+
+
+      <!-- SEND -->
 
       <button
         class="send"
         onclick="sendTextAnswer()">
+
         ➤
+
       </button>
 
+
     </div>
 
-    <div id="voiceStatus" class="voice-status"></div>
+
+
+    <div
+      id="voiceStatus"
+      class="voice-status">
+    </div>
+
+
 
     <div class="voice-box">
-      <span>🔊 AI Voice</span>
+
+      <span>
+        🔊 AI Voice
+      </span>
+
 
       <label class="switch">
-        <input id="aiVoice" type="checkbox" checked>
+
+        <input
+          id="aiVoice"
+          type="checkbox"
+          checked>
+
         <span class="slider"></span>
+
       </label>
+
     </div>
+
 
   </div>
 
 </div>
 
-<!-- DESCRIPTION POPUP -->
 
-<div id="descriptionPopup" class="popup-bg hidden">
+
+<!-- =========================
+     DESCRIPTION POPUP
+========================= -->
+
+<div
+  id="descriptionPopup"
+  class="popup-bg hidden">
+
 
   <div class="popup">
 
-    <h2>📝 Interview Description</h2>
+
+    <h2>
+      📝 Interview Description
+    </h2>
+
 
     <p>
-      Interview कशाबद्दल आहे ते AI ला सांगा.
+      Interview कशाबद्दल आहे,
+      candidate बद्दलची माहिती,
+      skills किंवा goal इथे लिहा.
+      ही माहिती AI interview मध्ये वापरेल.
     </p>
+
 
     <textarea
       id="descriptionInput"
-      placeholder="उदा. मला एका software company मध्ये frontend developer job साठी interview द्यायची आहे. माझ्याकडे HTML, CSS आणि JavaScript चे basic knowledge आहे."></textarea>
+      class="description-input"
+      placeholder="उदा. मला एका software company मध्ये frontend developer job साठी interview द्यायची आहे. मला HTML, CSS आणि JavaScript चे basic knowledge आहे. मला technical आणि HR दोन्ही प्रकारचे प्रश्न विचारावेत.">
+    </textarea>
 
-    <button class="primary" onclick="saveDescription()">
+
+    <button
+      class="primary"
+      onclick="saveDescription()">
+
       Save Description
+
     </button>
+
 
   </div>
 
 </div>
 
-<!-- LANGUAGE POPUP -->
 
-<div id="languagePopup" class="popup-bg hidden">
+
+<!-- =========================
+     LANGUAGE POPUP
+========================= -->
+
+<div
+  id="languagePopup"
+  class="popup-bg hidden">
+
 
   <div class="popup">
 
-    <h2>🌐 Select Language</h2>
+
+    <h2>
+      🌐 Select Language
+    </h2>
+
 
     <input
       id="languageSearch"
+      class="search-input"
       placeholder="Search language..."
       oninput="filterLanguages()">
 
-    <div id="languageList"></div>
+
+
+    <div
+      id="languageList">
+    </div>
+
 
   </div>
 
 </div>
 
-<!-- FIELD POPUP -->
 
-<div id="fieldPopup" class="popup-bg hidden">
+
+<!-- =========================
+     FIELD POPUP
+========================= -->
+
+<div
+  id="fieldPopup"
+  class="popup-bg hidden">
+
 
   <div class="popup">
 
-    <h2>🎯 Select Field</h2>
 
-    <div id="fieldList"></div>
+    <h2>
+      🎯 Select Field
+    </h2>
+
+
+    <div
+      id="fieldList">
+    </div>
+
 
   </div>
 
 </div>
 
+
 </div>
+
+
 
 <script>
 
+/* =====================================================
+   BASIC VARIABLES
+===================================================== */
+
 let description = "";
+
 let selectedLanguage = "";
+
 let selectedLanguageCode = "";
+
 let selectedField = "";
 
 let conversation = [];
 
+
+
+/* =====================================================
+   MIC VARIABLES
+===================================================== */
+
 let recognition = null;
+
 let listening = false;
+
+let finalSpeech = "";
+
 let silenceTimer = null;
 
+let recognitionRestartTimer = null;
+
+
+
+/* =====================================================
+   LANGUAGES
+===================================================== */
+
 const languages = [
+
   ["English","en-IN"],
+
   ["Hindi","hi-IN"],
+
   ["Marathi","mr-IN"],
+
   ["Bengali","bn-IN"],
-  ["Gujarati","gu-IN"],
-  ["Kannada","kn-IN"],
-  ["Malayalam","ml-IN"],
-  ["Tamil","ta-IN"],
-  ["Telugu","te-IN"],
-  ["Punjabi","pa-IN"],
-  ["Odia","or-IN"],
+
   ["Assamese","as-IN"],
-  ["Urdu","ur-IN"],
-  ["Nepali","ne-IN"],
+
+  ["Bodo","brx-IN"],
+
+  ["Dogri","doi-IN"],
+
+  ["Gujarati","gu-IN"],
+
+  ["Kannada","kn-IN"],
+
+  ["Kashmiri","ks-IN"],
+
   ["Konkani","kok-IN"],
-  ["Sanskrit","sa-IN"]
+
+  ["Maithili","mai-IN"],
+
+  ["Malayalam","ml-IN"],
+
+  ["Manipuri","mni-IN"],
+
+  ["Nepali","ne-IN"],
+
+  ["Odia","or-IN"],
+
+  ["Punjabi","pa-IN"],
+
+  ["Sanskrit","sa-IN"],
+
+  ["Santali","sat-IN"],
+
+  ["Sindhi","sd-IN"],
+
+  ["Tamil","ta-IN"],
+
+  ["Telugu","te-IN"],
+
+  ["Urdu","ur-IN"]
+
 ];
+
+
+
+/* =====================================================
+   FIELDS
+===================================================== */
 
 const fields = [
+
   "Business",
+
   "Job",
+
   "School Admission",
+
   "College Admission",
+
   "Scholarship",
+
   "Viva",
+
   "Career",
+
   "General"
+
 ];
 
-function openDescription(){
-  document.getElementById("descriptionPopup")
-    .classList.remove("hidden");
 
-  document.getElementById("descriptionInput").value =
-    description;
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+  if(listening){
+
+    stopMic();
+
+  }
+
+  if(
+    "speechSynthesis" in window
+  ){
+
+    speechSynthesis.cancel();
+
+  }
+
+  location.href =
+    "home.html";
+
 }
+
+
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
+
+function openDescription(){
+
+  document
+    .getElementById(
+      "descriptionPopup"
+    )
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById(
+      "descriptionInput"
+    )
+    .value =
+      description;
+
+}
+
+
 
 function saveDescription(){
 
-  description =
-    document.getElementById("descriptionInput")
-      .value.trim();
+  const value =
+    document
+      .getElementById(
+        "descriptionInput"
+      )
+      .value
+      .trim();
 
-  if(!description){
-    alert("Please enter interview description.");
+
+  if(!value){
+
     return;
+
   }
 
-  document.getElementById("descriptionValue")
-    .textContent = description;
+
+  description = value;
+
+
+  document
+    .getElementById(
+      "descriptionValue"
+    )
+    .textContent =
+      description;
+
 
   closePopups();
+
 }
+
+
+
+/* =====================================================
+   LANGUAGE
+===================================================== */
 
 function openLanguage(){
 
-  renderLanguages(languages);
+  document
+    .getElementById(
+      "languageSearch"
+    )
+    .value = "";
 
-  document.getElementById("languagePopup")
-    .classList.remove("hidden");
+
+  renderLanguages(
+    languages
+  );
+
+
+  document
+    .getElementById(
+      "languagePopup"
+    )
+    .classList
+    .remove("hidden");
+
 }
+
+
 
 function renderLanguages(list){
 
   const box =
-    document.getElementById("languageList");
+    document
+      .getElementById(
+        "languageList"
+      );
+
 
   box.innerHTML = "";
 
+
   list.forEach(item => {
 
-    const div = document.createElement("div");
 
-    div.className = "choice";
+    const div =
+      document.createElement(
+        "div"
+      );
 
-    div.textContent = item[0];
 
-    div.onclick = () => {
+    div.className =
+      "choice";
 
-      selectedLanguage = item[0];
-      selectedLanguageCode = item[1];
 
-      document.getElementById("languageValue")
-        .textContent = selectedLanguage;
+    div.textContent =
+      item[0];
+
+
+    div.onclick = function(){
+
+      selectedLanguage =
+        item[0];
+
+      selectedLanguageCode =
+        item[1];
+
+
+      document
+        .getElementById(
+          "languageValue"
+        )
+        .textContent =
+          selectedLanguage;
+
 
       closePopups();
+
     };
+
 
     box.appendChild(div);
 
   });
+
 }
+
+
 
 function filterLanguages(){
 
   const q =
-    document.getElementById("languageSearch")
-      .value.toLowerCase();
+    document
+      .getElementById(
+        "languageSearch"
+      )
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const result =
+    languages.filter(
+      item =>
+        item[0]
+          .toLowerCase()
+          .includes(q)
+    );
+
 
   renderLanguages(
-    languages.filter(x =>
-      x[0].toLowerCase().includes(q)
-    )
+    result
   );
+
 }
+
+
+
+/* =====================================================
+   FIELD
+===================================================== */
 
 function openField(){
 
   const box =
-    document.getElementById("fieldList");
+    document
+      .getElementById(
+        "fieldList"
+      );
+
 
   box.innerHTML = "";
 
+
   fields.forEach(field => {
 
-    const div = document.createElement("div");
 
-    div.className = "choice";
+    const div =
+      document.createElement(
+        "div"
+      );
 
-    div.textContent = field;
 
-    div.onclick = () => {
+    div.className =
+      "choice";
 
-      selectedField = field;
 
-      document.getElementById("fieldValue")
-        .textContent = field;
+    div.textContent =
+      field;
 
-      closePopups();
-    };
+
+    div.onclick =
+      function(){
+
+        selectedField =
+          field;
+
+
+        document
+          .getElementById(
+            "fieldValue"
+          )
+          .textContent =
+            field;
+
+
+        closePopups();
+
+      };
+
 
     box.appendChild(div);
 
   });
 
-  document.getElementById("fieldPopup")
-    .classList.remove("hidden");
+
+  document
+    .getElementById(
+      "fieldPopup"
+    )
+    .classList
+    .remove("hidden");
+
 }
+
+
+
+/* =====================================================
+   CLOSE POPUPS
+===================================================== */
 
 function closePopups(){
 
-  document.querySelectorAll(".popup-bg")
-    .forEach(x => x.classList.add("hidden"));
+  document
+    .querySelectorAll(
+      ".popup-bg"
+    )
+    .forEach(
+      popup =>
+        popup
+          .classList
+          .add("hidden")
+    );
 
 }
+
+
+
+/* =====================================================
+   START INTERVIEW
+===================================================== */
 
 async function startInterview(){
 
+
   if(!description){
+
     openDescription();
+
     return;
+
   }
+
 
   if(!selectedLanguage){
+
     openLanguage();
+
     return;
+
   }
+
 
   if(!selectedField){
+
     openField();
+
     return;
+
   }
 
-  document.getElementById("setupScreen")
-    .classList.add("hidden");
 
-  document.getElementById("interviewScreen")
-    .classList.remove("hidden");
+  document
+    .getElementById(
+      "setupScreen"
+    )
+    .classList
+    .add("hidden");
 
-  addMessage(
-    "ai",
-    "🤖 Interview सुरू करत आहे..."
-  );
+
+  document
+    .getElementById(
+      "interviewScreen"
+    )
+    .classList
+    .remove("hidden");
+
 
   conversation = [];
 
+
+  addMessage(
+    "ai",
+    "🤖 Interview तयार करत आहे..."
+  );
+
+
   await getAIResponse("");
+
 }
 
-function addMessage(role,text){
+
+
+/* =====================================================
+   ADD MESSAGE
+===================================================== */
+
+function addMessage(
+  role,
+  text
+){
 
   const chat =
-    document.getElementById("chat");
+    document
+      .getElementById(
+        "chat"
+      );
+
 
   const div =
-    document.createElement("div");
+    document.createElement(
+      "div"
+    );
+
 
   div.className =
     "message " + role;
 
-  div.textContent = text;
 
-  chat.appendChild(div);
+  div.textContent =
+    text;
 
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.appendChild(
+    div
+  );
+
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
 }
+
+
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 function setStatus(text){
 
-  document.getElementById("voiceStatus")
-    .textContent = text;
+  document
+    .getElementById(
+      "voiceStatus"
+    )
+    .textContent =
+      text;
+
 }
 
-async function getAIResponse(userAnswer){
+
+
+/* =====================================================
+   AI RESPONSE
+===================================================== */
+
+async function getAIResponse(
+  userAnswer
+){
 
   try{
 
+
     const response =
-      await fetch("/api/interview",{
+      await fetch(
+        "/api/interview",
+        {
 
-        method:"POST",
+          method:"POST",
 
-        headers:{
-          "Content-Type":"application/json"
-        },
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-        body:JSON.stringify({
+          body:JSON.stringify({
 
-          interviewType:selectedField,
+            interviewType:
+              selectedField,
 
-          field:selectedField,
+            field:
+              selectedField,
 
-          description:description,
+            description:
+              description,
 
-          language:selectedLanguage,
+            language:
+              selectedLanguage,
 
-          userAnswer:userAnswer,
+            userAnswer:
+              userAnswer,
 
-          conversation:conversation
+            conversation:
+              conversation
 
-        })
+          })
 
-      });
+        }
+      );
 
-    const data = await response.json();
 
-    if(!response.ok || !data.success){
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !data.success
+    ){
 
       throw new Error(
-        data.error || "AI response failed"
+        data.error ||
+        "AI response failed"
       );
 
     }
 
+
     const aiText =
       data.response;
 
-    addMessage("ai",aiText);
+
+    addMessage(
+      "ai",
+      aiText
+    );
+
 
     conversation.push({
+
       role:"assistant",
+
       content:aiText
+
     });
 
-    speakAI(aiText);
+
+    speakAI(
+      aiText
+    );
+
 
   }catch(error){
 
-    console.error(error);
+
+    console.error(
+      "Interview Error:",
+      error
+    );
+
 
     addMessage(
       "ai",
@@ -761,31 +1667,67 @@ async function getAIResponse(userAnswer){
       error.message
     );
 
+
   }
 
 }
 
+
+
+/* =====================================================
+   TEXT ANSWER
+===================================================== */
+
 async function sendTextAnswer(){
 
   const box =
-    document.getElementById("answer");
+    document
+      .getElementById(
+        "answer"
+      );
+
 
   const answer =
-    box.value.trim();
+    box.value
+      .trim();
 
-  if(!answer) return;
+
+  if(!answer){
+
+    return;
+
+  }
+
 
   box.value = "";
 
-  addMessage("user",answer);
+
+  addMessage(
+    "user",
+    answer
+  );
+
 
   conversation.push({
+
     role:"user",
+
     content:answer
+
   });
 
-  await getAIResponse(answer);
+
+  await getAIResponse(
+    answer
+  );
+
 }
+
+
+
+/* =====================================================
+   MIC BUTTON
+===================================================== */
 
 function toggleMic(){
 
@@ -801,129 +1743,397 @@ function toggleMic(){
 
 }
 
+
+
+/* =====================================================
+   START MIC
+===================================================== */
+
 function startMic(){
+
 
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+
   if(!SpeechRecognition){
 
     alert(
-      "तुमच्या browser मध्ये voice recognition support नाही."
+      "तुमच्या browser मध्ये Voice Recognition support नाही."
     );
 
     return;
+
   }
+
+
+  if(listening){
+
+    return;
+
+  }
+
+
+  listening = true;
+
+  finalSpeech = "";
+
+
+  document
+    .getElementById(
+      "micButton"
+    )
+    .classList
+    .add("mic-on");
+
+
+  setStatus(
+    "🎤 Mic ON • बोला..."
+  );
+
+
+  createRecognition();
+
+
+  startRecognition();
+
+}
+
+
+
+/* =====================================================
+   CREATE RECOGNITION
+===================================================== */
+
+function createRecognition(){
+
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
 
   recognition =
     new SpeechRecognition();
 
+
   recognition.lang =
-    selectedLanguageCode || "en-IN";
+    selectedLanguageCode ||
+    "en-IN";
 
-  recognition.continuous = true;
-  recognition.interimResults = true;
 
-  let finalText = "";
+  /*
+    Browser ला continuous
+    listening सांगतो.
+  */
 
-  recognition.onstart = () => {
+  recognition.continuous =
+    true;
 
-    listening = true;
 
-    document.getElementById("micButton")
-      .classList.add("mic-on");
+  recognition.interimResults =
+    true;
 
-    setStatus(
-      "🎤 ऐकत आहे... बोला"
-    );
 
-  };
+  recognition.maxAlternatives =
+    1;
 
-  recognition.onresult = event => {
 
-    let interim = "";
 
-    for(
-      let i = event.resultIndex;
-      i < event.results.length;
-      i++
-    ){
+  /* =========================
+     ON START
+  ========================= */
 
-      const text =
-        event.results[i][0].transcript;
+  recognition.onstart =
+    function(){
 
-      if(event.results[i].isFinal){
+      if(!listening){
 
-        finalText += text + " ";
-
-      }else{
-
-        interim += text;
+        return;
 
       }
 
-    }
 
-    document.getElementById("answer")
-      .value =
-      finalText + interim;
+      setStatus(
+        "🎤 Mic ON • ऐकत आहे..."
+      );
 
-    /*
-      प्रत्येक नवीन आवाजानंतर silence timer
-      reset होतो.
-    */
+    };
 
-    clearTimeout(silenceTimer);
 
-    silenceTimer =
-      setTimeout(() => {
 
-        const answer =
-          document.getElementById("answer")
-            .value.trim();
+  /* =========================
+     ON RESULT
+  ========================= */
 
-        if(answer){
+  recognition.onresult =
+    function(event){
 
-          stopMic();
 
-          sendTextAnswer();
+      if(!listening){
+
+        return;
+
+      }
+
+
+      let interimSpeech =
+        "";
+
+
+      for(
+        let i =
+          event.resultIndex;
+
+        i <
+          event.results.length;
+
+        i++
+      ){
+
+
+        const text =
+          event.results[i][0]
+            .transcript;
+
+
+        if(
+          event.results[i]
+            .isFinal
+        ){
+
+          finalSpeech +=
+            text + " ";
+
+        }else{
+
+          interimSpeech +=
+            text;
 
         }
 
-      },1500);
+      }
 
-  };
 
-  recognition.onerror = event => {
+      const completeText =
+        (
+          finalSpeech +
+          interimSpeech
+        ).trim();
 
-    console.log(
-      "Speech error:",
-      event.error
-    );
 
-    setStatus(
-      "⚠️ Mic error: " + event.error
-    );
+      document
+        .getElementById(
+          "answer"
+        )
+        .value =
+          completeText;
 
-  };
-
-  recognition.onend = () => {
-
-    if(listening){
 
       /*
-        काही mobile browsers recognition
-        स्वतः बंद करतात.
+        प्रत्येक speech नंतर
+        timer पुन्हा सुरू.
       */
 
-      try{
-        recognition.start();
-      }catch(e){}
+      clearTimeout(
+        silenceTimer
+      );
 
-    }
 
-  };
+      /*
+        1.5 sec silence =
+        automatic send.
+      */
+
+      silenceTimer =
+        setTimeout(
+          function(){
+
+            const answer =
+              document
+                .getElementById(
+                  "answer"
+                )
+                .value
+                .trim();
+
+
+            if(!answer){
+
+              return;
+
+            }
+
+
+            /*
+              IMPORTANT:
+
+              इथे stopMic()
+              नाही.
+
+              त्यामुळे Mic ON
+              राहतो.
+            */
+
+            sendVoiceAnswer(
+              answer
+            );
+
+          },
+          1500
+        );
+
+    };
+
+
+
+  /* =========================
+     ON END
+  ========================= */
+
+  recognition.onend =
+    function(){
+
+
+      /*
+        User ने Mic OFF केला
+        असेल तर restart नाही.
+      */
+
+      if(!listening){
+
+        return;
+
+      }
+
+
+      /*
+        Mobile browser ने
+        recognition स्वतः बंद केला
+        तर पुन्हा सुरू करा.
+      */
+
+      clearTimeout(
+        recognitionRestartTimer
+      );
+
+
+      recognitionRestartTimer =
+        setTimeout(
+          function(){
+
+            if(!listening){
+
+              return;
+
+            }
+
+
+            createRecognition();
+
+            startRecognition();
+
+
+          },
+          300
+        );
+
+    };
+
+
+
+  /* =========================
+     ERROR
+  ========================= */
+
+  recognition.onerror =
+    function(event){
+
+
+      console.log(
+        "Speech error:",
+        event.error
+      );
+
+
+      if(
+        event.error ===
+        "not-allowed"
+      ){
+
+        listening = false;
+
+
+        document
+          .getElementById(
+            "micButton"
+          )
+          .classList
+          .remove(
+            "mic-on"
+          );
+
+
+        setStatus(
+          "⚠️ Microphone permission द्या"
+        );
+
+
+        return;
+
+      }
+
+
+      if(
+        event.error ===
+        "service-not-allowed"
+      ){
+
+        setStatus(
+          "⚠️ Voice service उपलब्ध नाही"
+        );
+
+
+        return;
+
+      }
+
+
+      if(listening){
+
+        setStatus(
+          "🎤 Mic ON • पुन्हा ऐकत आहे..."
+        );
+
+      }
+
+    };
+
+}
+
+
+
+/* =====================================================
+   START RECOGNITION SAFELY
+===================================================== */
+
+function startRecognition(){
+
+
+  if(!listening){
+
+    return;
+
+  }
+
+
+  if(!recognition){
+
+    createRecognition();
+
+  }
+
 
   try{
 
@@ -931,73 +2141,315 @@ function startMic(){
 
   }catch(error){
 
-    console.log(error);
+    /*
+      Already running असल्यास
+      browser exception देऊ शकतो.
+    */
+
+    console.log(
+      "Recognition start:",
+      error.message
+    );
 
   }
 
 }
 
+
+
+/* =====================================================
+   SEND VOICE ANSWER
+===================================================== */
+
+async function sendVoiceAnswer(
+  answer
+){
+
+
+  /*
+    Timer थांबवा.
+  */
+
+  clearTimeout(
+    silenceTimer
+  );
+
+
+  /*
+    Text box clear.
+  */
+
+  document
+    .getElementById(
+      "answer"
+    )
+    .value = "";
+
+
+  /*
+    पुढच्या speech साठी
+    buffer clear.
+  */
+
+  finalSpeech = "";
+
+
+  /*
+    User message दाखवा.
+  */
+
+  addMessage(
+    "user",
+    answer
+  );
+
+
+  /*
+    Conversation मध्ये save.
+  */
+
+  conversation.push({
+
+    role:"user",
+
+    content:answer
+
+  });
+
+
+  /*
+    AI response घ्या.
+
+    IMPORTANT:
+    stopMic() नाही.
+  */
+
+  await getAIResponse(
+    answer
+  );
+
+
+  /*
+    AI response नंतरही
+    Mic चालू ठेव.
+  */
+
+  if(listening){
+
+    setStatus(
+      "🎤 Mic ON • पुन्हा बोला..."
+    );
+
+  }
+
+}
+
+
+
+/* =====================================================
+   STOP MIC
+   ONLY USER BUTTON
+===================================================== */
+
 function stopMic(){
+
+
+  /*
+    आता पूर्ण बंद.
+  */
 
   listening = false;
 
-  clearTimeout(silenceTimer);
+
+  clearTimeout(
+    silenceTimer
+  );
+
+
+  clearTimeout(
+    recognitionRestartTimer
+  );
+
+
+  finalSpeech = "";
+
 
   if(recognition){
 
     try{
+
+      recognition.onend =
+        null;
+
+      recognition.onerror =
+        null;
+
       recognition.stop();
-    }catch(e){}
 
-  }
+    }catch(error){
 
-  document.getElementById("micButton")
-    .classList.remove("mic-on");
-
-  setStatus("");
-}
-
-function speakAI(text){
-
-  if(
-    !document.getElementById("aiVoice").checked
-  ) return;
-
-  if(!("speechSynthesis" in window))
-    return;
-
-  speechSynthesis.cancel();
-
-  const utter =
-    new SpeechSynthesisUtterance(text);
-
-  utter.lang =
-    selectedLanguageCode || "en-IN";
-
-  utter.rate = 0.95;
-  utter.pitch = 1;
-
-  speechSynthesis.speak(utter);
-}
-
-document
-  .getElementById("answer")
-  .addEventListener("keydown",function(e){
-
-    if(
-      e.key === "Enter" &&
-      !e.shiftKey
-    ){
-
-      e.preventDefault();
-
-      sendTextAnswer();
+      console.log(
+        error
+      );
 
     }
 
-  });
+  }
+
+
+  recognition = null;
+
+
+  /*
+    Button normal.
+  */
+
+  document
+    .getElementById(
+      "micButton"
+    )
+    .classList
+    .remove(
+      "mic-on"
+    );
+
+
+  setStatus("");
+
+}
+
+
+
+/* =====================================================
+   AI VOICE
+===================================================== */
+
+function speakAI(
+  text
+){
+
+
+  const voiceSwitch =
+    document
+      .getElementById(
+        "aiVoice"
+      );
+
+
+  if(
+    !voiceSwitch.checked
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    जुना आवाज थांबवा.
+  */
+
+  speechSynthesis.cancel();
+
+
+  const utterance =
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  utterance.lang =
+    selectedLanguageCode ||
+    "en-IN";
+
+
+  utterance.rate =
+    0.95;
+
+
+  utterance.pitch =
+    1;
+
+
+  speechSynthesis.speak(
+    utterance
+  );
+
+}
+
+
+
+/* =====================================================
+   ENTER TO SEND
+===================================================== */
+
+document
+  .getElementById(
+    "answer"
+  )
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key ===
+        "Enter" &&
+        !event.shiftKey
+      ){
+
+        event.preventDefault();
+
+        sendTextAnswer();
+
+      }
+
+    }
+  );
+
+
+
+/* =====================================================
+   PREVENT POPUP BACKGROUND
+===================================================== */
+
+document
+  .querySelectorAll(
+    ".popup-bg"
+  )
+  .forEach(
+    popup => {
+
+      popup.addEventListener(
+        "click",
+        function(event){
+
+          if(
+            event.target ===
+            popup
+          ){
+
+            closePopups();
+
+          }
+
+        }
+      );
+
+    }
+  );
+
 
 </script>
 
 </body>
+
 </html>
