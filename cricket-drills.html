@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>GyanSetu - AI Interview</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
 }
 
 body{
@@ -29,7 +33,7 @@ body{
   overflow:hidden;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .header{
   height:65px;
@@ -51,7 +55,7 @@ body{
   font-weight:bold;
 }
 
-/* SETUP */
+/* ================= SETUP ================= */
 
 .setup{
   padding:20px 16px 30px;
@@ -76,7 +80,6 @@ body{
   margin-bottom:14px;
   background:#f8fbff;
   cursor:pointer;
-  transition:.2s;
 }
 
 .optionCard:active{
@@ -139,7 +142,7 @@ body{
   opacity:.45;
 }
 
-/* POPUP */
+/* ================= POPUPS ================= */
 
 .popupBg{
   position:fixed;
@@ -199,13 +202,36 @@ body{
   font-size:15px;
 }
 
-/* INTERVIEW */
+.descriptionBox{
+  width:100%;
+  min-height:130px;
+  resize:none;
+  border:1px solid #cbd5e1;
+  border-radius:13px;
+  padding:13px;
+  font-size:15px;
+  outline:none;
+  margin-bottom:12px;
+}
+
+.saveDescription{
+  width:100%;
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+/* ================= INTERVIEW ================= */
 
 .interview{
   display:none;
   min-height:calc(100vh - 65px);
   position:relative;
-  padding-bottom:85px;
+  padding-bottom:145px;
 }
 
 .infoBar{
@@ -254,7 +280,33 @@ body{
   border-bottom-right-radius:5px;
 }
 
-/* BOTTOM */
+.loading{
+  opacity:.65;
+}
+
+/* ================= FINISH BUTTON ================= */
+
+.finishWrap{
+  padding:5px 12px 15px;
+}
+
+.finishBtn{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:14px;
+  background:#172554;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.finishBtn:disabled{
+  opacity:.5;
+}
+
+/* ================= BOTTOM ================= */
 
 .bottom{
   position:fixed;
@@ -330,15 +382,107 @@ body{
   color:white;
 }
 
-.loading{
-  opacity:.65;
+/* ================= RESULT ================= */
+
+.result{
+  display:none;
+  padding:18px 14px 35px;
 }
 
-/* DESCRIPTION */
+.resultTitle{
+  font-size:25px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
 
-.descriptionBox{
+.resultSub{
+  color:#64748b;
+  font-size:13px;
+  margin-bottom:18px;
+}
+
+.scoreCard{
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
+  color:white;
+  border-radius:20px;
+  padding:22px;
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.scoreNumber{
+  font-size:50px;
+  font-weight:bold;
+}
+
+.scoreLabel{
+  font-size:14px;
+  opacity:.9;
+}
+
+.scoreGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.scoreItem{
+  background:#f8fbff;
+  border:1px solid #dbeafe;
+  border-radius:15px;
+  padding:15px;
+}
+
+.scoreItemTitle{
+  font-size:13px;
+  color:#64748b;
+}
+
+.scoreItemValue{
+  font-size:25px;
+  font-weight:bold;
+  color:#1769e0;
+  margin-top:4px;
+}
+
+.resultSection{
+  background:#f8fbff;
+  border:1px solid #dbeafe;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:12px;
+}
+
+.resultSection h3{
+  font-size:16px;
+  margin-bottom:8px;
+}
+
+.resultSection p{
+  font-size:14px;
+  line-height:1.55;
+  white-space:pre-wrap;
+}
+
+.doubtBtn{
   width:100%;
-  min-height:130px;
+  border:0;
+  border-radius:15px;
+  padding:16px;
+  background:#1769e0;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:5px;
+}
+
+/* ================= DOUBT ================= */
+
+.doubtInput{
+  width:100%;
+  min-height:120px;
   resize:none;
   border:1px solid #cbd5e1;
   border-radius:13px;
@@ -348,7 +492,7 @@ body{
   margin-bottom:12px;
 }
 
-.saveDescription{
+.askBtn{
   width:100%;
   border:0;
   background:#1769e0;
@@ -358,6 +502,24 @@ body{
   font-size:16px;
   font-weight:bold;
 }
+
+.doubtAnswer{
+  margin-top:15px;
+  padding:14px;
+  border-radius:14px;
+  background:#f1f5f9;
+  line-height:1.55;
+  font-size:14px;
+  white-space:pre-wrap;
+}
+
+/* ================= SPINNER ================= */
+
+.busy{
+  opacity:.6;
+  pointer-events:none;
+}
+
 </style>
 </head>
 
@@ -365,137 +527,343 @@ body{
 
 <div class="app">
 
-  <div class="header">
-    <div class="back" onclick="goBack()">‹</div>
-    <div class="headerTitle">🤖 AI Interview</div>
+<!-- ================= HEADER ================= -->
+
+<div class="header">
+
+  <div class="back"
+       onclick="goBack()">
+    ‹
   </div>
 
-  <!-- SETUP -->
+  <div class="headerTitle">
+    🤖 AI Interview
+  </div>
 
-  <div class="setup" id="setup">
+</div>
 
-    <div class="setupTitle">AI Interview</div>
 
-    <div class="setupSub">
-      Interview सुरू करण्यासाठी खालील 3 गोष्टी निवडा.
-    </div>
+<!-- ================= SETUP ================= -->
 
-    <!-- DESCRIPTION -->
+<div class="setup" id="setup">
 
-    <div class="optionCard" onclick="openDescription()">
+  <div class="setupTitle">
+    AI Interview
+  </div>
 
-      <div class="optionTop">
+  <div class="setupSub">
+    Interview सुरू करण्यासाठी खालील 3 गोष्टी निवडा.
+  </div>
 
-        <div class="optionLeft">
 
-          <div class="optionIcon">📝</div>
+  <!-- DESCRIPTION -->
 
-          <div>
-            <div class="optionName">Description</div>
-            <div class="optionValue" id="descriptionValue">
-              Interview बद्दल सांगा
-            </div>
+  <div class="optionCard"
+       onclick="openDescription()">
+
+    <div class="optionTop">
+
+      <div class="optionLeft">
+
+        <div class="optionIcon">
+          📝
+        </div>
+
+        <div>
+
+          <div class="optionName">
+            Description
+          </div>
+
+          <div class="optionValue"
+               id="descriptionValue">
+            Interview बद्दल सांगा
           </div>
 
         </div>
 
-        <div class="arrow">›</div>
+      </div>
 
+      <div class="arrow">
+        ›
       </div>
 
     </div>
 
-    <!-- LANGUAGE -->
+  </div>
 
-    <div class="optionCard" onclick="openLanguage()">
 
-      <div class="optionTop">
+  <!-- LANGUAGE -->
 
-        <div class="optionLeft">
+  <div class="optionCard"
+       onclick="openLanguage()">
 
-          <div class="optionIcon">🌐</div>
+    <div class="optionTop">
 
-          <div>
+      <div class="optionLeft">
 
-            <div class="optionName">Languages</div>
+        <div class="optionIcon">
+          🌐
+        </div>
 
-            <div class="optionValue" id="languageValue">
-              Select language
-            </div>
+        <div>
 
+          <div class="optionName">
+            Languages
+          </div>
+
+          <div class="optionValue"
+               id="languageValue">
+            Select language
           </div>
 
         </div>
 
-        <div class="arrow">›</div>
+      </div>
 
+      <div class="arrow">
+        ›
       </div>
 
     </div>
 
-    <!-- FIELD -->
+  </div>
 
-    <div class="optionCard" onclick="openField()">
 
-      <div class="optionTop">
+  <!-- FIELD -->
 
-        <div class="optionLeft">
+  <div class="optionCard"
+       onclick="openField()">
 
-          <div class="optionIcon">🎯</div>
+    <div class="optionTop">
 
-          <div>
+      <div class="optionLeft">
 
-            <div class="optionName">Field</div>
+        <div class="optionIcon">
+          🎯
+        </div>
 
-            <div class="optionValue" id="fieldValue">
-              Select field
-            </div>
+        <div>
 
+          <div class="optionName">
+            Field
+          </div>
+
+          <div class="optionValue"
+               id="fieldValue">
+            Select field
           </div>
 
         </div>
 
-        <div class="arrow">›</div>
+      </div>
 
+      <div class="arrow">
+        ›
       </div>
 
     </div>
+
+  </div>
+
+
+  <button
+    class="startBtn"
+    id="startButton"
+    onclick="startInterview()"
+    disabled>
+
+    🎤 Start AI Interview
+
+  </button>
+
+</div>
+
+
+<!-- ================= INTERVIEW ================= -->
+
+<div class="interview"
+     id="interview">
+
+  <div class="infoBar">
+    <span id="interviewInfo"></span>
+  </div>
+
+  <div class="chat"
+       id="chat">
+  </div>
+
+
+  <div class="finishWrap">
 
     <button
-      class="startBtn"
-      id="startButton"
-      onclick="startInterview()"
-      disabled>
-      🎤 Start AI Interview
+      class="finishBtn"
+      id="finishButton"
+      onclick="finishInterview()">
+
+      🏁 Finish Interview
+
     </button>
-
-  </div>
-
-
-  <!-- INTERVIEW -->
-
-  <div class="interview" id="interview">
-
-    <div class="infoBar">
-      <span id="interviewInfo"></span>
-    </div>
-
-    <div class="chat" id="chat"></div>
 
   </div>
 
 </div>
 
 
-<!-- DESCRIPTION POPUP -->
+<!-- ================= RESULT ================= -->
 
-<div class="popupBg" id="descriptionPopup">
+<div class="result"
+     id="result">
+
+  <div class="resultTitle">
+    🏆 Interview Result
+  </div>
+
+  <div class="resultSub">
+    AI ने तुझ्या पूर्ण interview answers चे analysis केले आहे.
+  </div>
+
+
+  <div class="scoreCard">
+
+    <div class="scoreNumber"
+         id="overallScore">
+      --
+    </div>
+
+    <div class="scoreLabel">
+      Overall Score / 100
+    </div>
+
+  </div>
+
+
+  <div class="scoreGrid">
+
+    <div class="scoreItem">
+
+      <div class="scoreItemTitle">
+        🗣️ Communication
+      </div>
+
+      <div class="scoreItemValue"
+           id="communicationScore">
+        --
+      </div>
+
+    </div>
+
+
+    <div class="scoreItem">
+
+      <div class="scoreItemTitle">
+        🧠 Knowledge
+      </div>
+
+      <div class="scoreItemValue"
+           id="knowledgeScore">
+        --
+      </div>
+
+    </div>
+
+
+    <div class="scoreItem">
+
+      <div class="scoreItemTitle">
+        💡 Answer Quality
+      </div>
+
+      <div class="scoreItemValue"
+           id="answerQualityScore">
+        --
+      </div>
+
+    </div>
+
+
+    <div class="scoreItem">
+
+      <div class="scoreItemTitle">
+        🎯 Confidence
+      </div>
+
+      <div class="scoreItemValue"
+           id="confidenceScore">
+        --
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="resultSection">
+
+    <h3>
+      ✅ Strengths
+    </h3>
+
+    <p id="strengths">
+      --
+    </p>
+
+  </div>
+
+
+  <div class="resultSection">
+
+    <h3>
+      📈 Improvements
+    </h3>
+
+    <p id="improvements">
+      --
+    </p>
+
+  </div>
+
+
+  <div class="resultSection">
+
+    <h3>
+      📝 AI Final Feedback
+    </h3>
+
+    <p id="finalFeedback">
+      --
+    </p>
+
+  </div>
+
+
+  <button
+    class="doubtBtn"
+    onclick="openDoubt()">
+
+    💬 Ask a Doubt
+
+  </button>
+
+</div>
+
+
+<!-- ================= DESCRIPTION POPUP ================= -->
+
+<div class="popupBg"
+     id="descriptionPopup">
 
   <div class="popup">
 
-    <button class="closePopup" onclick="closePopups()">×</button>
+    <button
+      class="closePopup"
+      onclick="closePopups()">
+      ×
+    </button>
 
-    <div class="popupTitle">📝 Interview Description</div>
+    <div class="popupTitle">
+      📝 Interview Description
+    </div>
 
     <textarea
       id="descriptionInput"
@@ -505,7 +873,9 @@ body{
     <button
       class="saveDescription"
       onclick="saveDescription()">
+
       Save Description
+
     </button>
 
   </div>
@@ -513,15 +883,22 @@ body{
 </div>
 
 
-<!-- LANGUAGE POPUP -->
+<!-- ================= LANGUAGE POPUP ================= -->
 
-<div class="popupBg" id="languagePopup">
+<div class="popupBg"
+     id="languagePopup">
 
   <div class="popup">
 
-    <button class="closePopup" onclick="closePopups()">×</button>
+    <button
+      class="closePopup"
+      onclick="closePopups()">
+      ×
+    </button>
 
-    <div class="popupTitle">🌐 Select Language</div>
+    <div class="popupTitle">
+      🌐 Select Language
+    </div>
 
     <input
       class="searchBox"
@@ -536,15 +913,22 @@ body{
 </div>
 
 
-<!-- FIELD POPUP -->
+<!-- ================= FIELD POPUP ================= -->
 
-<div class="popupBg" id="fieldPopup">
+<div class="popupBg"
+     id="fieldPopup">
 
   <div class="popup">
 
-    <button class="closePopup" onclick="closePopups()">×</button>
+    <button
+      class="closePopup"
+      onclick="closePopups()">
+      ×
+    </button>
 
-    <div class="popupTitle">🎯 Select Field</div>
+    <div class="popupTitle">
+      🎯 Select Field
+    </div>
 
     <div id="fieldList"></div>
 
@@ -553,27 +937,77 @@ body{
 </div>
 
 
-<!-- BOTTOM INTERVIEW CONTROLS -->
+<!-- ================= DOUBT POPUP ================= -->
 
-<div class="bottom" id="bottom" style="display:none">
+<div class="popupBg"
+     id="doubtPopup">
+
+  <div class="popup">
+
+    <button
+      class="closePopup"
+      onclick="closePopups()">
+      ×
+    </button>
+
+    <div class="popupTitle">
+      💬 Ask a Doubt
+    </div>
+
+    <textarea
+      id="doubtInput"
+      class="doubtInput"
+      placeholder="तुला interview बद्दल काय doubt आहे?"></textarea>
+
+    <button
+      class="askBtn"
+      id="askDoubtButton"
+      onclick="askDoubt()">
+
+      🤖 Ask AI
+
+    </button>
+
+    <div
+      class="doubtAnswer"
+      id="doubtAnswer"
+      style="display:none">
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ================= BOTTOM CONTROLS ================= -->
+
+<div class="bottom"
+     id="bottom"
+     style="display:none">
 
   <div class="voiceRow">
 
     <label class="voiceToggle">
+
       <input
         type="checkbox"
         id="aiVoice"
         checked>
+
       🔊 AI Voice
+
     </label>
 
     <div
       class="micStatus"
       id="micStatus">
+
       Mic OFF
+
     </div>
 
   </div>
+
 
   <div class="inputRow">
 
@@ -583,17 +1017,23 @@ body{
       placeholder="Type your answer..."
       autocomplete="off">
 
+
     <button
       id="micBtn"
       class="micBtn"
       onclick="toggleMic()">
+
       🎤
+
     </button>
+
 
     <button
       class="sendBtn"
       onclick="sendTextAnswer()">
+
       ➤
+
     </button>
 
   </div>
@@ -603,9 +1043,9 @@ body{
 
 <script>
 
-/* =========================
+/* =====================================================
    DATA
-========================= */
+===================================================== */
 
 const languages = [
 
@@ -650,9 +1090,9 @@ const fields = [
 ];
 
 
-/* =========================
+/* =====================================================
    STATE
-========================= */
+===================================================== */
 
 let description = "";
 
@@ -666,31 +1106,43 @@ let conversation = [];
 
 let interviewStarted = false;
 
+let interviewFinished = false;
 
-/* =========================
-   GO BACK
-========================= */
+let finalResult = null;
+
+
+/* =====================================================
+   BACK
+===================================================== */
 
 function goBack(){
 
   stopMic();
+
+  if(
+    "speechSynthesis" in window
+  ){
+
+    window.speechSynthesis.cancel();
+
+  }
 
   window.location.href = "home.html";
 
 }
 
 
-/* =========================
+/* =====================================================
    DESCRIPTION
-========================= */
+===================================================== */
 
 function openDescription(){
 
-  document.getElementById("descriptionInput").value =
-    description;
+  document.getElementById("descriptionInput")
+    .value = description;
 
-  document.getElementById("descriptionPopup").style.display =
-    "flex";
+  document.getElementById("descriptionPopup")
+    .style.display = "flex";
 
 }
 
@@ -699,8 +1151,8 @@ function saveDescription(){
 
   const value =
     document.getElementById("descriptionInput")
-    .value
-    .trim();
+      .value
+      .trim();
 
   if(!value){
 
@@ -714,7 +1166,7 @@ function saveDescription(){
 
   document.getElementById("descriptionValue")
     .textContent =
-    description.length > 45
+      description.length > 45
       ? description.substring(0,45) + "..."
       : description;
 
@@ -725,18 +1177,19 @@ function saveDescription(){
 }
 
 
-/* =========================
+/* =====================================================
    LANGUAGE
-========================= */
+===================================================== */
 
 function openLanguage(){
 
   renderLanguages(languages);
 
-  document.getElementById("languageSearch").value = "";
+  document.getElementById("languageSearch")
+    .value = "";
 
-  document.getElementById("languagePopup").style.display =
-    "flex";
+  document.getElementById("languagePopup")
+    .style.display = "flex";
 
 }
 
@@ -753,7 +1206,8 @@ function renderLanguages(list){
     const div =
       document.createElement("div");
 
-    div.className = "popupOption";
+    div.className =
+      "popupOption";
 
     div.innerHTML =
       `<b>${item[0]}</b><br>
@@ -761,13 +1215,15 @@ function renderLanguages(list){
 
     div.onclick = function(){
 
-      selectedLanguage = item[0];
+      selectedLanguage =
+        item[0];
 
-      selectedLanguageCode = item[2];
+      selectedLanguageCode =
+        item[2];
 
       document.getElementById("languageValue")
         .textContent =
-        `${item[0]} • ${item[1]}`;
+          `${item[0]} • ${item[1]}`;
 
       closePopups();
 
@@ -786,14 +1242,23 @@ function searchLanguages(){
 
   const query =
     document.getElementById("languageSearch")
-    .value
-    .toLowerCase()
-    .trim();
+      .value
+      .toLowerCase()
+      .trim();
 
   const result =
     languages.filter(item =>
-      item[0].toLowerCase().includes(query) ||
-      item[1].toLowerCase().includes(query)
+
+      item[0]
+        .toLowerCase()
+        .includes(query)
+
+      ||
+
+      item[1]
+        .toLowerCase()
+        .includes(query)
+
     );
 
   renderLanguages(result);
@@ -801,9 +1266,9 @@ function searchLanguages(){
 }
 
 
-/* =========================
+/* =====================================================
    FIELD
-========================= */
+===================================================== */
 
 function openField(){
 
@@ -817,16 +1282,20 @@ function openField(){
     const div =
       document.createElement("div");
 
-    div.className = "popupOption";
+    div.className =
+      "popupOption";
 
-    div.textContent = field;
+    div.textContent =
+      field;
 
     div.onclick = function(){
 
-      selectedField = field;
+      selectedField =
+        field;
 
       document.getElementById("fieldValue")
-        .textContent = field;
+        .textContent =
+          field;
 
       closePopups();
 
@@ -838,27 +1307,32 @@ function openField(){
 
   });
 
-  document.getElementById("fieldPopup").style.display =
-    "flex";
+  document.getElementById("fieldPopup")
+    .style.display = "flex";
 
 }
 
 
-/* =========================
-   POPUP CLOSE
-========================= */
+/* =====================================================
+   CLOSE POPUPS
+===================================================== */
 
 function closePopups(){
 
-  document.querySelectorAll(".popupBg")
-    .forEach(p => p.style.display = "none");
+  document
+    .querySelectorAll(".popupBg")
+    .forEach(p => {
+
+      p.style.display = "none";
+
+    });
 
 }
 
 
-/* =========================
-   START BUTTON
-========================= */
+/* =====================================================
+   START CHECK
+===================================================== */
 
 function checkStart(){
 
@@ -873,9 +1347,9 @@ function checkStart(){
 }
 
 
-/* =========================
+/* =====================================================
    START INTERVIEW
-========================= */
+===================================================== */
 
 async function startInterview(){
 
@@ -889,6 +1363,10 @@ async function startInterview(){
 
   }
 
+  conversation = [];
+
+  interviewFinished = false;
+
   interviewStarted = true;
 
   document.getElementById("setup")
@@ -900,18 +1378,21 @@ async function startInterview(){
   document.getElementById("bottom")
     .style.display = "block";
 
+  document.getElementById("result")
+    .style.display = "none";
+
   document.getElementById("interviewInfo")
     .textContent =
-    `${selectedField} • ${selectedLanguage}`;
+      `${selectedField} • ${selectedLanguage}`;
 
   await getFirstQuestion();
 
 }
 
 
-/* =========================
+/* =====================================================
    CHAT
-========================= */
+===================================================== */
 
 function addMessage(role,text){
 
@@ -923,22 +1404,29 @@ function addMessage(role,text){
 
   message.className =
     "message " +
-    (role === "user" ? "user" : "ai");
+    (role === "user"
+      ? "user"
+      : "ai");
 
   const bubble =
     document.createElement("div");
 
-  bubble.className = "bubble";
+  bubble.className =
+    "bubble";
 
-  bubble.textContent = text;
+  bubble.textContent =
+    text;
 
   message.appendChild(bubble);
 
   chat.appendChild(message);
 
   window.scrollTo({
+
     top:document.body.scrollHeight,
+
     behavior:"smooth"
+
   });
 
 }
@@ -952,9 +1440,11 @@ function addLoading(){
   const message =
     document.createElement("div");
 
-  message.className = "message ai";
+  message.className =
+    "message ai";
 
-  message.id = "loadingMessage";
+  message.id =
+    "loadingMessage";
 
   const bubble =
     document.createElement("div");
@@ -975,7 +1465,9 @@ function addLoading(){
 function removeLoading(){
 
   const loading =
-    document.getElementById("loadingMessage");
+    document.getElementById(
+      "loadingMessage"
+    );
 
   if(loading){
 
@@ -986,9 +1478,9 @@ function removeLoading(){
 }
 
 
-/* =========================
+/* =====================================================
    FIRST QUESTION
-========================= */
+===================================================== */
 
 async function getFirstQuestion(){
 
@@ -997,13 +1489,19 @@ async function getFirstQuestion(){
   try{
 
     const response =
-      await callAI("");
+      await callAI(
+        "",
+        "interview"
+      );
 
     removeLoading();
 
     if(response){
 
-      addMessage("ai",response);
+      addMessage(
+        "ai",
+        response
+      );
 
       speakAI(response);
 
@@ -1025,38 +1523,53 @@ async function getFirstQuestion(){
 }
 
 
-/* =========================
+/* =====================================================
    AI API
-========================= */
+===================================================== */
 
-async function callAI(userAnswer){
+async function callAI(
+  userAnswer,
+  mode = "interview"
+){
 
   const response =
-    await fetch("/api/interview",{
+    await fetch(
+      "/api/interview",
+      {
 
-      method:"POST",
+        method:"POST",
 
-      headers:{
-        "Content-Type":"application/json"
-      },
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
 
-      body:JSON.stringify({
+        body:JSON.stringify({
 
-        interviewType:selectedField,
+          mode:mode,
 
-        field:selectedField,
+          interviewType:
+            selectedField,
 
-        description:description,
+          field:
+            selectedField,
 
-        language:selectedLanguage,
+          description:
+            description,
 
-        userAnswer:userAnswer,
+          language:
+            selectedLanguage,
 
-        conversation:conversation
+          userAnswer:
+            userAnswer,
 
-      })
+          conversation:
+            conversation
 
-    });
+        })
+
+      }
+    );
 
 
   const data =
@@ -1088,32 +1601,21 @@ async function callAI(userAnswer){
   }
 
 
-  const text =
-    data.response?.trim();
-
-
-  if(!text){
-
-    throw new Error(
-      "Empty AI response"
-    );
-
-  }
-
-
-  return text;
+  return data;
 
 }
 
 
-/* =========================
+/* =====================================================
    TEXT ANSWER
-========================= */
+===================================================== */
 
 async function sendTextAnswer(){
 
   const input =
-    document.getElementById("textInput");
+    document.getElementById(
+      "textInput"
+    );
 
   const answer =
     input.value.trim();
@@ -1127,20 +1629,31 @@ async function sendTextAnswer(){
 }
 
 
-/* =========================
+/* =====================================================
    SEND ANSWER
-========================= */
+===================================================== */
 
 let aiThinking = false;
 
 
 async function sendAnswer(answer){
 
-  if(!answer || aiThinking) return;
+  if(
+    !answer ||
+    aiThinking ||
+    interviewFinished
+  ){
+
+    return;
+
+  }
 
   aiThinking = true;
 
-  addMessage("user",answer);
+  addMessage(
+    "user",
+    answer
+  );
 
   conversation.push({
 
@@ -1156,24 +1669,36 @@ async function sendAnswer(answer){
 
   try{
 
-    const response =
-      await callAI(answer);
+    const data =
+      await callAI(
+        answer,
+        "interview"
+      );
 
     removeLoading();
 
-    addMessage("ai",response);
+    const response =
+      data.response?.trim();
 
 
-    conversation.push({
+    if(response){
 
-      role:"assistant",
+      addMessage(
+        "ai",
+        response
+      );
 
-      content:response
+      conversation.push({
 
-    });
+        role:"assistant",
 
+        content:response
 
-    speakAI(response);
+      });
+
+      speakAI(response);
+
+    }
 
   }catch(error){
 
@@ -1194,9 +1719,9 @@ async function sendAnswer(answer){
 }
 
 
-/* =================================================
-   NATURAL VOICE SYSTEM
-================================================= */
+/* =====================================================
+   NATURAL VOICE
+===================================================== */
 
 let recognition = null;
 
@@ -1210,10 +1735,12 @@ let silenceTimer = null;
 
 let restarting = false;
 
+let speechActive = false;
 
-/* =========================
+
+/* =====================================================
    CREATE RECOGNITION
-========================= */
+===================================================== */
 
 function createRecognition(){
 
@@ -1241,138 +1768,156 @@ function createRecognition(){
   rec.interimResults = true;
 
   rec.lang =
-    selectedLanguageCode || "en-IN";
+    selectedLanguageCode ||
+    "en-IN";
 
 
   rec.onstart = function(){
 
-    recognitionRunning = true;
+    recognitionRunning =
+      true;
 
     updateMicUI();
 
   };
 
 
-  rec.onresult = function(event){
+  rec.onresult =
+    function(event){
 
-    let interim = "";
+      let interim = "";
 
-    let currentFinal = "";
-
-
-    for(
-      let i = event.resultIndex;
-      i < event.results.length;
-      i++
-    ){
-
-      const transcript =
-        event.results[i][0].transcript;
+      let currentFinal = "";
 
 
-      if(event.results[i].isFinal){
+      for(
 
-        currentFinal += transcript + " ";
+        let i =
+          event.resultIndex;
 
-      }else{
+        i <
+          event.results.length;
 
-        interim += transcript;
+        i++
+
+      ){
+
+        const transcript =
+          event.results[i][0]
+            .transcript;
+
+
+        if(
+          event.results[i]
+            .isFinal
+        ){
+
+          currentFinal +=
+            transcript + " ";
+
+        }else{
+
+          interim +=
+            transcript;
+
+        }
 
       }
 
-    }
+
+      if(currentFinal){
+
+        finalSpeech +=
+          currentFinal;
+
+      }
 
 
-    if(currentFinal){
-
-      finalSpeech += currentFinal;
-
-    }
-
-
-    const currentText =
-      (finalSpeech + interim).trim();
+      const currentText =
+        (
+          finalSpeech +
+          interim
+        ).trim();
 
 
-    document.getElementById("textInput")
-      .value = currentText;
+      document.getElementById(
+        "textInput"
+      ).value =
+        currentText;
 
 
-    clearTimeout(silenceTimer);
-
-
-    if(currentText){
-
-      silenceTimer =
-        setTimeout(
-          autoSendVoice,
-          1500
-        );
-
-    }
-
-  };
-
-
-  rec.onerror = function(event){
-
-    console.log(
-      "Speech error:",
-      event.error
-    );
-
-
-    recognitionRunning = false;
-
-
-    /*
-      काही mobile browsers मध्ये
-      no-speech / aborted / network
-      नंतर recognition बंद होते.
-      Voice mode ON असेल तर पुन्हा सुरू करतो.
-    */
-
-    if(
-      listening &&
-      event.error !== "not-allowed"
-    ){
-
-      setTimeout(
-        restartRecognition,
-        500
+      clearTimeout(
+        silenceTimer
       );
 
-    }else{
+
+      if(currentText){
+
+        silenceTimer =
+          setTimeout(
+            autoSendVoice,
+            1500
+          );
+
+      }
+
+    };
+
+
+  rec.onerror =
+    function(event){
+
+      console.log(
+        "Speech error:",
+        event.error
+      );
+
+      recognitionRunning =
+        false;
+
+
+      if(
+        listening &&
+        event.error !==
+          "not-allowed"
+      ){
+
+        setTimeout(
+          restartRecognition,
+          500
+        );
+
+      }else{
+
+        updateMicUI();
+
+      }
+
+    };
+
+
+  rec.onend =
+    function(){
+
+      recognitionRunning =
+        false;
 
       updateMicUI();
 
-    }
 
-  };
+      if(
+        listening &&
+        !speechActive
+      ){
 
+        setTimeout(
+          restartRecognition,
+          400
+        );
 
-  rec.onend = function(){
+      }
 
-    recognitionRunning = false;
-
-    updateMicUI();
-
-
-    /*
-      User ने Mic OFF केलेला नसेल,
-      तर recognition पुन्हा सुरू.
-    */
-
-    if(listening){
-
-      setTimeout(
-        restartRecognition,
-        400
-      );
-
-    }
-
-  };
+    };
 
 
   return rec;
@@ -1380,18 +1925,16 @@ function createRecognition(){
 }
 
 
-/* =========================
+/* =====================================================
    START RECOGNITION
-========================= */
+===================================================== */
 
 function startRecognition(){
 
   if(!listening) return;
 
 
-  if(
-    !recognition
-  ){
+  if(!recognition){
 
     recognition =
       createRecognition();
@@ -1402,7 +1945,8 @@ function startRecognition(){
   if(
     !recognition ||
     recognitionRunning ||
-    restarting
+    restarting ||
+    speechActive
   ){
 
     return;
@@ -1415,7 +1959,8 @@ function startRecognition(){
     restarting = true;
 
     recognition.lang =
-      selectedLanguageCode || "en-IN";
+      selectedLanguageCode ||
+      "en-IN";
 
     recognition.start();
 
@@ -1431,7 +1976,9 @@ function startRecognition(){
 
   setTimeout(
     () => {
+
       restarting = false;
+
     },
     700
   );
@@ -1439,9 +1986,9 @@ function startRecognition(){
 }
 
 
-/* =========================
+/* =====================================================
    RESTART
-========================= */
+===================================================== */
 
 function restartRecognition(){
 
@@ -1449,7 +1996,8 @@ function restartRecognition(){
 
   if(
     recognitionRunning ||
-    restarting
+    restarting ||
+    speechActive
   ){
 
     return;
@@ -1461,19 +2009,22 @@ function restartRecognition(){
 }
 
 
-/* =========================
+/* =====================================================
    STOP MIC
-========================= */
+===================================================== */
 
 function stopMic(){
 
   listening = false;
 
-  clearTimeout(silenceTimer);
+  clearTimeout(
+    silenceTimer
+  );
 
   finalSpeech = "";
 
-  recognitionRunning = false;
+  recognitionRunning =
+    false;
 
   restarting = false;
 
@@ -1496,9 +2047,9 @@ function stopMic(){
 }
 
 
-/* =========================
+/* =====================================================
    TOGGLE MIC
-========================= */
+===================================================== */
 
 function toggleMic(){
 
@@ -1511,20 +2062,17 @@ function toggleMic(){
   }
 
 
-  /*
-    User ने manually ON केल्यावर
-    listening true राहते.
-  */
-
   listening = true;
 
   finalSpeech = "";
 
-  document.getElementById("textInput")
-    .value = "";
+  document.getElementById(
+    "textInput"
+  ).value = "";
 
 
-  recognition = createRecognition();
+  recognition =
+    createRecognition();
 
 
   if(recognition){
@@ -1538,9 +2086,9 @@ function toggleMic(){
 }
 
 
-/* =========================
+/* =====================================================
    AUTO SEND VOICE
-========================= */
+===================================================== */
 
 function autoSendVoice(){
 
@@ -1548,9 +2096,13 @@ function autoSendVoice(){
 
   if(aiThinking) return;
 
+  if(interviewFinished) return;
+
 
   const input =
-    document.getElementById("textInput");
+    document.getElementById(
+      "textInput"
+    );
 
 
   const answer =
@@ -1560,17 +2112,13 @@ function autoSendVoice(){
   if(!answer) return;
 
 
-  /*
-    Answer capture झाल्यावर text clear.
-    पण listening = trueच राहते.
-    त्यामुळे Mic OFF होत नाही.
-  */
-
   finalSpeech = "";
 
   input.value = "";
 
-  clearTimeout(silenceTimer);
+  clearTimeout(
+    silenceTimer
+  );
 
 
   sendAnswer(answer);
@@ -1578,35 +2126,45 @@ function autoSendVoice(){
 }
 
 
-/* =========================
+/* =====================================================
    MIC UI
-========================= */
+===================================================== */
 
 function updateMicUI(){
 
   const button =
-    document.getElementById("micBtn");
+    document.getElementById(
+      "micBtn"
+    );
 
   const status =
-    document.getElementById("micStatus");
+    document.getElementById(
+      "micStatus"
+    );
 
 
   if(listening){
 
-    button.classList.add("active");
+    button.classList.add(
+      "active"
+    );
 
-    button.textContent = "🎙️";
+    button.textContent =
+      "🎙️";
 
     status.textContent =
       recognitionRunning
-        ? "Mic ON • Listening..."
-        : "Mic ON • Starting...";
+      ? "Mic ON • Listening..."
+      : "Mic ON • Starting...";
 
   }else{
 
-    button.classList.remove("active");
+    button.classList.remove(
+      "active"
+    );
 
-    button.textContent = "🎤";
+    button.textContent =
+      "🎤";
 
     status.textContent =
       "Mic OFF";
@@ -1616,24 +2174,21 @@ function updateMicUI(){
 }
 
 
-/* =================================================
+/* =====================================================
    AI VOICE
-================================================= */
-
-let speechActive = false;
-
+===================================================== */
 
 function speakAI(text){
 
   const voiceToggle =
-    document.getElementById("aiVoice");
+    document.getElementById(
+      "aiVoice"
+    );
 
 
-  if(!voiceToggle.checked){
-
-    /*
-      AI voice OFF असेल तर mic चालूच राहील.
-    */
+  if(
+    !voiceToggle.checked
+  ){
 
     if(listening){
 
@@ -1658,12 +2213,10 @@ function speakAI(text){
   }
 
 
-  /*
-    AI बोलण्याआधी recognition pause.
-    यामुळे AI चा आवाज answer म्हणून capture होत नाही.
-  */
-
-  if(listening && recognition){
+  if(
+    listening &&
+    recognition
+  ){
 
     try{
 
@@ -1676,81 +2229,379 @@ function speakAI(text){
 
   speechActive = true;
 
-
   window.speechSynthesis.cancel();
 
 
   const utterance =
-    new SpeechSynthesisUtterance(text);
+    new SpeechSynthesisUtterance(
+      text
+    );
 
 
   utterance.lang =
-    selectedLanguageCode || "en-IN";
+    selectedLanguageCode ||
+    "en-IN";
+
+  utterance.rate =
+    0.95;
+
+  utterance.pitch =
+    1;
 
 
-  utterance.rate = 0.95;
+  utterance.onend =
+    function(){
 
-  utterance.pitch = 1;
+      speechActive =
+        false;
 
+      if(listening){
 
-  utterance.onend = function(){
+        setTimeout(
+          restartRecognition,
+          300
+        );
 
-    speechActive = false;
+      }
 
-
-    /*
-      AI बोलून झाल्यावर
-      User ने Mic ON ठेवले असेल तर
-      पुन्हा automatically listening.
-    */
-
-    if(listening){
-
-      setTimeout(
-        restartRecognition,
-        300
-      );
-
-    }
-
-  };
+    };
 
 
-  utterance.onerror = function(){
+  utterance.onerror =
+    function(){
 
-    speechActive = false;
+      speechActive =
+        false;
+
+      if(listening){
+
+        setTimeout(
+          restartRecognition,
+          300
+        );
+
+      }
+
+    };
 
 
-    if(listening){
-
-      setTimeout(
-        restartRecognition,
-        300
-      );
-
-    }
-
-  };
-
-
-  window.speechSynthesis.speak(
-    utterance
-  );
+  window.speechSynthesis
+    .speak(utterance);
 
 }
 
 
-/* =========================
+/* =====================================================
+   FINISH INTERVIEW
+===================================================== */
+
+async function finishInterview(){
+
+  if(
+    interviewFinished ||
+    aiThinking
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    conversation.length < 2
+  ){
+
+    alert(
+      "Score मिळवण्यासाठी आधी काही interview questions ची उत्तरं द्या."
+    );
+
+    return;
+
+  }
+
+
+  const confirmFinish =
+    confirm(
+      "Interview finish करून score पाहायचा आहे का?"
+    );
+
+
+  if(!confirmFinish){
+
+    return;
+
+  }
+
+
+  interviewFinished = true;
+
+  stopMic();
+
+
+  if(
+    "speechSynthesis" in window
+  ){
+
+    window.speechSynthesis.cancel();
+
+  }
+
+
+  document.getElementById(
+    "finishButton"
+  ).disabled = true;
+
+
+  document.getElementById(
+    "finishButton"
+  ).textContent =
+    "🤖 AI Score तयार करत आहे...";
+
+
+  try{
+
+    const data =
+      await callAI(
+        "",
+        "score"
+      );
+
+
+    showResult(
+      data.result
+    );
+
+  }catch(error){
+
+    console.error(
+      "SCORE ERROR:",
+      error
+    );
+
+    interviewFinished = false;
+
+    document.getElementById(
+      "finishButton"
+    ).disabled = false;
+
+    document.getElementById(
+      "finishButton"
+    ).textContent =
+      "🏁 Finish Interview";
+
+
+    alert(
+      "Score तयार करता आला नाही. पुन्हा प्रयत्न कर."
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   SHOW RESULT
+===================================================== */
+
+function showResult(result){
+
+  finalResult =
+    result;
+
+
+  document.getElementById(
+    "interview"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "bottom"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "overallScore"
+  ).textContent =
+    result.overallScore ?? "--";
+
+
+  document.getElementById(
+    "communicationScore"
+  ).textContent =
+    result.communication ?? "--";
+
+
+  document.getElementById(
+    "knowledgeScore"
+  ).textContent =
+    result.knowledge ?? "--";
+
+
+  document.getElementById(
+    "answerQualityScore"
+  ).textContent =
+    result.answerQuality ?? "--";
+
+
+  document.getElementById(
+    "confidenceScore"
+  ).textContent =
+    result.confidence ?? "--";
+
+
+  document.getElementById(
+    "strengths"
+  ).textContent =
+    result.strengths ||
+    "No data";
+
+
+  document.getElementById(
+    "improvements"
+  ).textContent =
+    result.improvements ||
+    "No data";
+
+
+  document.getElementById(
+    "finalFeedback"
+  ).textContent =
+    result.finalFeedback ||
+    "No feedback";
+
+}
+
+
+/* =====================================================
+   ASK DOUBT
+===================================================== */
+
+function openDoubt(){
+
+  document.getElementById(
+    "doubtInput"
+  ).value = "";
+
+  document.getElementById(
+    "doubtAnswer"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "doubtPopup"
+  ).style.display =
+    "flex";
+
+}
+
+
+/* =====================================================
+   ASK DOUBT API
+===================================================== */
+
+async function askDoubt(){
+
+  const input =
+    document.getElementById(
+      "doubtInput"
+    );
+
+  const doubt =
+    input.value.trim();
+
+
+  if(!doubt){
+
+    alert(
+      "तुझा doubt लिहा."
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "askDoubtButton"
+    );
+
+  const answerBox =
+    document.getElementById(
+      "doubtAnswer"
+    );
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "🤖 AI विचार करत आहे...";
+
+
+  answerBox.style.display =
+    "block";
+
+  answerBox.textContent =
+    "AI explain करत आहे...";
+
+
+  try{
+
+    const data =
+      await callAI(
+        doubt,
+        "doubt"
+      );
+
+
+    answerBox.textContent =
+      data.response ||
+      "AI response मिळाली नाही.";
+
+  }catch(error){
+
+    console.error(
+      "DOUBT ERROR:",
+      error
+    );
+
+    answerBox.textContent =
+      "क्षमस्व 😕 Doubt explain करता आला नाही.";
+
+  }
+
+
+  button.disabled = false;
+
+  button.textContent =
+    "🤖 Ask AI";
+
+}
+
+
+/* =====================================================
    ENTER TO SEND
-========================= */
+===================================================== */
 
 document
-  .getElementById("textInput")
+  .getElementById(
+    "textInput"
+  )
   .addEventListener(
     "keydown",
     function(event){
 
-      if(event.key === "Enter"){
+      if(
+        event.key === "Enter"
+      ){
 
         event.preventDefault();
 
@@ -1762,9 +2613,9 @@ document
   );
 
 
-/* =========================
+/* =====================================================
    CLEANUP
-========================= */
+===================================================== */
 
 window.addEventListener(
   "beforeunload",
@@ -1784,9 +2635,9 @@ window.addEventListener(
 );
 
 
-/* =========================
+/* =====================================================
    INITIAL
-========================= */
+===================================================== */
 
 checkStart();
 
