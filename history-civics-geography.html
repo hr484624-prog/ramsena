@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="mr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - History Civics Geography</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  color:#172033;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#f4f7fb;
+  padding-bottom:30px;
+}
+
+/* HEADER */
+
+.header{
+  height:70px;
+  background:white;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 2px 10px rgba(0,0,0,.07);
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:#eef1f7;
+  font-size:23px;
+  cursor:pointer;
+}
+
+.title{
+  flex:1;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.header-space{
+  width:42px;
+}
+
+/* HOME */
+
+.home{
+  padding:18px 15px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
+  color:white;
+  border-radius:22px;
+  padding:22px 18px;
+  margin-bottom:20px;
+  box-shadow:0 8px 20px rgba(23,105,224,.22);
+}
+
+.hero h2{
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.hero p{
+  font-size:13px;
+  line-height:1.5;
+  opacity:.94;
+}
+
+/* SUBJECTS */
+
+.section-title{
+  font-size:19px;
+  font-weight:bold;
+  margin-bottom:13px;
+}
+
+.subject-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+
+.subject{
+  background:white;
+  border-radius:18px;
+  padding:19px 14px;
+  box-shadow:0 4px 12px rgba(0,0,0,.06);
+  cursor:pointer;
+  border:1px solid #edf0f5;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.subject:active{
+  transform:scale(.97);
+}
+
+.icon{
+  font-size:35px;
+  margin-bottom:10px;
+}
+
+.subject h3{
+  font-size:16px;
+  margin-bottom:5px;
+}
+
+.subject p{
+  color:#777;
+  font-size:12px;
+  line-height:1.4;
+}
+
+/* POPUP */
+
+.popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.58);
+  z-index:100;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.popup-box{
+  width:100%;
+  max-width:430px;
+  max-height:84vh;
+  overflow-y:auto;
+  background:white;
+  border-radius:26px 26px 0 0;
+  padding:22px 17px 30px;
+  animation:up .25s ease;
+}
+
+@keyframes up{
+  from{
+    transform:translateY(100%);
+  }
+  to{
+    transform:translateY(0);
+  }
+}
+
+.popup-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.popup-head h2{
+  font-size:20px;
+}
+
+.close{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:50%;
+  background:#eef1f6;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* STANDARD */
+
+.standard-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.standard{
+  border:0;
+  border-radius:14px;
+  padding:15px 8px;
+  background:#edf4ff;
+  color:#1769e0;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.standard:active{
+  transform:scale(.96);
+}
+
+/* CHAPTER LIST */
+
+.chapter-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.chapter{
+  width:100%;
+  border:0;
+  background:#f6f8fc;
+  border:1px solid #e7ebf2;
+  border-radius:15px;
+  padding:15px;
+  text-align:left;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:bold;
+  color:#172033;
+  line-height:1.4;
+}
+
+.chapter:active{
+  background:#eaf2ff;
+}
+
+/* LESSON */
+
+.lesson{
+  display:none;
+  min-height:100vh;
+  background:#f4f7fb;
+}
+
+.lesson-header{
+  height:70px;
+  background:white;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  box-shadow:0 2px 9px rgba(0,0,0,.07);
+  position:sticky;
+  top:0;
+  z-index:30;
+}
+
+.lesson-title{
+  flex:1;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  padding:0 8px;
+}
+
+.lesson-content{
+  padding:20px 16px 35px;
+}
+
+.lesson-card{
+  background:white;
+  border-radius:20px;
+  padding:21px 17px;
+  margin-bottom:15px;
+  box-shadow:0 4px 13px rgba(0,0,0,.05);
+}
+
+.lesson-card h2{
+  color:#1769e0;
+  font-size:21px;
+  margin-bottom:12px;
+  line-height:1.35;
+}
+
+.lesson-card h3{
+  font-size:17px;
+  margin-bottom:9px;
+}
+
+.lesson-card p{
+  font-size:16px;
+  line-height:1.75;
+  color:#333;
+}
+
+.lesson-card ul{
+  padding-left:21px;
+}
+
+.lesson-card li{
+  font-size:16px;
+  line-height:1.75;
+  margin-bottom:6px;
+}
+
+.highlight{
+  background:#edf5ff;
+  border-left:4px solid #1769e0;
+  border-radius:10px;
+  padding:14px;
+  margin-top:10px;
+  font-size:15px;
+  line-height:1.65;
+}
+
+.practice{
+  background:#fff8e8;
+  border-left:4px solid #e7a500;
+  border-radius:10px;
+  padding:14px;
+  font-size:15px;
+  line-height:1.65;
+}
+
+/* HIDE */
+
+.hidden{
+  display:none!important;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= HEADER ================= -->
+
+<div class="header">
+
+<button
+  class="back"
+  onclick="goBack()">
+←
+</button>
+
+<div class="title">
+History • Civics • Geography
+</div>
+
+<div class="header-space"></div>
+
+</div>
+
+
+<!-- ================= HOME ================= -->
+
+<div id="homePage" class="home">
+
+<div class="hero">
+
+<h2>📚 Social Studies</h2>
+
+<p>
+महाराष्ट्र राज्य मंडळाच्या
+बालभारती अभ्यासक्रमानुसार
+इतिहास, नागरिकशास्त्र आणि
+भूगोल शिकूया.
+</p>
+
+</div>
+
+
+<div class="section-title">
+विषय निवडा
+</div>
+
+
+<div class="subject-grid">
+
+<div
+  class="subject"
+  onclick="openSubject('history')">
+
+<div class="icon">
+🏛️
+</div>
+
+<h3>
+इतिहास
+</h3>
+
+<p>
+भूतकाळातील घटना,
+व्यक्ती आणि संस्कृती
+</p>
+
+</div>
+
+
+<div
+  class="subject"
+  onclick="openSubject('civics')">
+
+<div class="icon">
+⚖️
+</div>
+
+<h3>
+नागरिकशास्त्र
+</h3>
+
+<p>
+संविधान, लोकशाही,
+हक्क आणि कर्तव्ये
+</p>
+
+</div>
+
+
+<div
+  class="subject"
+  onclick="openSubject('geography')">
+
+<div class="icon">
+🌍
+</div>
+
+<h3>
+भूगोल
+</h3>
+
+<p>
+पृथ्वी, नकाशे,
+पर्यावरण आणि प्रदेश
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= STANDARD POPUP ================= -->
+
+<div
+  class="popup"
+  id="standardPopup"
+  onclick="outsideClose(event,'standardPopup')">
+
+<div class="popup-box">
+
+<div class="popup-head">
+
+<h2 id="standardTitle">
+📚 Standard
+</h2>
+
+<button
+  class="close"
+  onclick="closeStandard()">
+✕
+</button>
+
+</div>
+
+
+<div class="standard-grid">
+
+<button class="standard" onclick="openChapters(5)">
+5 वी
+</button>
+
+<button class="standard" onclick="openChapters(6)">
+6 वी
+</button>
+
+<button class="standard" onclick="openChapters(7)">
+7 वी
+</button>
+
+<button class="standard" onclick="openChapters(8)">
+8 वी
+</button>
+
+<button class="standard" onclick="openChapters(9)">
+9 वी
+</button>
+
+<button class="standard" onclick="openChapters(10)">
+10 वी
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= CHAPTER POPUP ================= -->
+
+<div
+  class="popup"
+  id="chapterPopup"
+  onclick="outsideClose(event,'chapterPopup')">
+
+<div class="popup-box">
+
+<div class="popup-head">
+
+<h2 id="chapterTitle">
+📖 Chapters
+</h2>
+
+<button
+  class="close"
+  onclick="closeChapters()">
+✕
+</button>
+
+</div>
+
+<div
+  id="chapterList"
+  class="chapter-list">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= LESSON ================= -->
+
+<div
+  id="lessonPage"
+  class="lesson">
+
+<div class="lesson-header">
+
+<button
+  class="back"
+  onclick="backToChapters()">
+←
+</button>
+
+<div
+  class="lesson-title"
+  id="lessonHeader">
+Chapter
+</div>
+
+<div class="header-space"></div>
+
+</div>
+
+
+<div
+  class="lesson-content"
+  id="lessonContent">
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   VARIABLES
+========================= */
+
+let selectedSubject = "";
+let selectedStandard = 0;
+
+
+/* =========================
+   SUBJECT DATA
+========================= */
+
+const data = {
+
+
+history: {
+
+name:"इतिहास",
+
+chapters: {
+
+5:[
+"इतिहासाची ओळख",
+"इतिहासाची साधने",
+"प्राचीन भारत",
+"मध्ययुगीन भारत",
+"महाराष्ट्राचा इतिहास"
+],
+
+6:[
+"इतिहासाची साधने",
+"भारतीय उपखंड आणि इतिहास",
+"हडप्पा संस्कृती",
+"वैदिक संस्कृती",
+"जनपदे आणि महाजनपदे",
+"मौर्यकालीन भारत",
+"गुप्तकालीन भारत",
+"दक्षिण भारतातील प्राचीन राज्ये"
+],
+
+7:[
+"इतिहासाची साधने",
+"शिवपूर्वकालीन भारत",
+"शिवपूर्वकालीन महाराष्ट्र",
+"स्वराज्याची स्थापना",
+"मुघलांशी संघर्ष",
+"स्वराज्याचा विस्तार",
+"मराठा आरमार",
+"मराठ्यांचा स्वातंत्र्यसंग्राम",
+"मराठ्यांच्या सत्तेचा विस्तार",
+"मराठेशाहीचा अस्त",
+"महाराष्ट्रातील समाजजीवन"
+],
+
+8:[
+"इतिहासाची साधने",
+"युरोपातील प्रबोधन आणि त्याचे परिणाम",
+"युरोपातील राष्ट्रवाद",
+"१८५७ चा स्वातंत्र्यलढा",
+"सामाजिक व धार्मिक प्रबोधन",
+"स्वातंत्र्य चळवळीच्या युगास प्रारंभ",
+"असहकार चळवळ",
+"सविनय कायदेभंग चळवळ",
+"स्वातंत्र्यलढ्याचे अंतिम पर्व",
+"सशस्त्र क्रांतिकारी चळवळ",
+"डॉ. बाबासाहेब आंबेडकर",
+"भारतीय स्वातंत्र्याचा इतिहास",
+"स्वातंत्र्योत्तर भारत"
+],
+
+9:[
+"इतिहासाची साधने",
+"भारत : १९६० नंतरच्या घडामोडी",
+"भारतापुढील अंतर्गत आव्हाने",
+"आर्थिक विकास",
+"शैक्षणिक वाटचाल",
+"महिला व अन्य दुर्बल घटकांचे सक्षमीकरण",
+"विज्ञान व तंत्रज्ञान",
+"उद्योग व व्यापार",
+"बदलते जीवन : भाग १",
+"बदलते जीवन : भाग २"
+],
+
+10:[
+"इतिहासलेखन : पाश्चात्त्य परंपरा",
+"इतिहासलेखन : भारतीय परंपरा",
+"उपयोजित इतिहास",
+"भारतीय कलांचा इतिहास",
+"प्रसारमाध्यमे आणि इतिहास",
+"मनोरंजनाची माध्यमे आणि इतिहास",
+"खेळ आणि इतिहास",
+"पर्यटन आणि इतिहास",
+"ऐतिहासिक ठेव्यांचे जतन"
+]
+
+}
+
+},
+
+
+civics: {
+
+name:"नागरिकशास्त्र",
+
+chapters: {
+
+5:[
+"आपले संविधान",
+"लोकशाही",
+"आपले हक्क",
+"आपली कर्तव्ये"
+],
+
+6:[
+"आपले समाजजीवन",
+"स्थानिक स्वराज्य संस्था",
+"ग्रामपंचायत",
+"नगरपालिका",
+"जिल्हा परिषद"
+],
+
+7:[
+"आपल्या संविधानाची ओळख",
+"मूलभूत हक्क भाग - १",
+"मूलभूत हक्क भाग - २",
+"राज्याची मार्गदर्शक तत्त्वे",
+"मूलभूत कर्तव्ये",
+"सामाजिक न्याय",
+"लोकशाहीतील नागरिक"
+],
+
+8:[
+"संसदीय शासन पद्धतीची ओळख",
+"संसद आणि विधिमंडळ",
+"कार्यकारी मंडळ",
+"न्यायमंडळ",
+"लोकशाहीतील निवडणुका",
+"सामाजिक न्याय"
+],
+
+9:[
+"लोकशाहीतील विविधता",
+"लोकशाहीतील संघर्ष",
+"भारतीय लोकशाहीसमोरील आव्हाने",
+"लोकशाहीची वैशिष्ट्ये",
+"लोकशाही आणि नागरिक"
+],
+
+10:[
+"संविधानाची वाटचाल",
+"भारतीय संविधानाची वैशिष्ट्ये",
+"राजकीय पक्ष",
+"सामाजिक चळवळी",
+"भारतीय लोकशाहीसमोरील आव्हाने"
+]
+
+}
+
+},
+
+
+geography: {
+
+name:"भूगोल",
+
+chapters: {
+
+5:[
+"पृथ्वी आणि तिचे स्वरूप",
+"दिशा आणि नकाशे",
+"पर्वत आणि पठारे",
+"मैदाने आणि किनारे",
+"नद्या",
+"हवामान"
+],
+
+6:[
+"पृथ्वी : एक ग्रह",
+"अक्षांश आणि रेखांश",
+"पृथ्वीचे अंतरंग",
+"खडक आणि खनिजे",
+"भूरूपे",
+"नद्या",
+"वायू आणि वातावरण",
+"हवामान"
+],
+
+7:[
+"भूगोलाची ओळख",
+"सूर्यमाला आणि पृथ्वी",
+"पृथ्वीचे अंतर्गत भाग",
+"वायूचे घटक",
+"हवामान",
+"नैसर्गिक वनस्पती",
+"मानवी वस्ती",
+"उपजीविका",
+"वाहतूक आणि संदेशवहन"
+],
+
+8:[
+"स्थानिक वेळ आणि प्रमाणवेळ",
+"अंतर्गत हालचाली",
+"बाह्यप्रक्रिया",
+"नैसर्गिक प्रदेश",
+"लोकसंख्या",
+"मानवी वस्ती",
+"उद्योग",
+"वाहतूक आणि दळणवळण",
+"पर्यटन"
+],
+
+9:[
+"वितरणाचे नकाशे",
+"अंतर्गत हालचाली",
+"बाह्यप्रक्रिया भाग - १",
+"बाह्यप्रक्रिया भाग - २",
+"वृष्टी",
+"महासागर प्रवाह",
+"मानवी वस्ती",
+"अर्थव्यवस्था आणि व्यवसाय",
+"भारत : स्थान आणि विस्तार"
+],
+
+10:[
+"क्षेत्रभेट",
+"स्थानिक वेळ व प्रमाणवेळ",
+"प्राकृतिक रचना आणि जलप्रणाली",
+"हवामान",
+"नैसर्गिक वनस्पती व वन्यजीव",
+"लोकसंख्या",
+"मानवी वस्ती",
+"अर्थव्यवस्था आणि व्यवसाय",
+"पर्यटन, वाहतूक आणि संदेशवहन"
+]
+
+}
+
+}
+
+};
+
+
+/* =========================
+   OPEN SUBJECT
+========================= */
+
+function openSubject(subject){
+
+selectedSubject = subject;
+
+document.getElementById("standardTitle").textContent =
+  "📚 " + data[subject].name + " - इयत्ता निवडा";
+
+document.getElementById("standardPopup").style.display =
+  "flex";
+
+}
+
+
+/* =========================
+   CLOSE STANDARD
+========================= */
+
+function closeStandard(){
+
+document.getElementById("standardPopup").style.display =
+  "none";
+
+}
+
+
+/* =========================
+   OPEN CHAPTERS
+========================= */
+
+function openChapters(standard){
+
+selectedStandard = standard;
+
+closeStandard();
+
+const subjectData =
+  data[selectedSubject];
+
+const chapters =
+  subjectData.chapters[standard] || [];
+
+document.getElementById("chapterTitle").textContent =
+  "📖 " +
+  subjectData.name +
+  " • इयत्ता " +
+  standard +
+  " वी";
+
+
+const list =
+  document.getElementById("chapterList");
+
+list.innerHTML = "";
+
+
+if(chapters.length === 0){
+
+list.innerHTML =
+  `<div class="lesson-card">
+    <h3>अभ्यासक्रम उपलब्ध नाही</h3>
+    <p>या इयत्तेसाठी chapter data अजून जोडलेला नाही.</p>
+  </div>`;
+
+}
+else{
+
+chapters.forEach(function(chapter,index){
+
+const button =
+  document.createElement("button");
+
+button.className = "chapter";
+
+button.textContent =
+  (index + 1) + ". " + chapter;
+
+button.onclick =
+  function(){
+    openLesson(chapter,index);
+  };
+
+list.appendChild(button);
+
+});
+
+}
+
+document.getElementById("chapterPopup").style.display =
+  "flex";
+
+}
+
+
+/* =========================
+   CLOSE CHAPTERS
+========================= */
+
+function closeChapters(){
+
+document.getElementById("chapterPopup").style.display =
+  "none";
+
+}
+
+
+/* =========================
+   OPEN LESSON
+========================= */
+
+function openLesson(chapter,index){
+
+document.getElementById("chapterPopup").style.display =
+  "none";
+
+document.getElementById("homePage").style.display =
+  "none";
+
+document.getElementById("lessonPage").style.display =
+  "block";
+
+
+document.getElementById("lessonHeader").textContent =
+  chapter;
+
+
+const subjectName =
+  data[selectedSubject].name;
+
+
+document.getElementById("lessonContent").innerHTML = `
+
+<div class="lesson-card">
+
+<h2>
+${chapter}
+</h2>
+
+<p>
+इयत्ता ${selectedStandard} वी •
+${subjectName}
+</p>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h3>
+📖 धड्याची ओळख
+</h3>
+
+<p>
+या धड्यात आपण
+<strong>${chapter}</strong>
+या विषयाचा अभ्यास करणार आहोत.
+धडा समजून घेताना महत्त्वाच्या संकल्पना,
+घटना, व्यक्ती, ठिकाणे आणि त्यांचा
+परस्पर संबंध समजून घेणे महत्त्वाचे आहे.
+</p>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h3>
+🧠 मुख्य मुद्दे
+</h3>
+
+<ul>
+
+<li>
+धड्यातील महत्त्वाच्या संकल्पना ओळखा.
+</li>
+
+<li>
+महत्त्वाच्या घटना आणि त्यांचा क्रम समजून घ्या.
+</li>
+
+<li>
+नकाशे, चित्रे, तक्ते किंवा उदाहरणे
+लक्षपूर्वक पहा.
+</li>
+
+<li>
+नवीन शब्दांचे अर्थ समजून घ्या.
+</li>
+
+<li>
+धड्याचा शेवटी स्वतःच्या शब्दांत
+सारांश तयार करा.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h3>
+💡 सोप्या भाषेत
+</h3>
+
+<div class="highlight">
+
+<strong>${chapter}</strong>
+हा धडा समजून घेण्यासाठी आधी
+त्यातील मूलभूत संकल्पना समजून घ्या.
+प्रत्येक मुद्दा एकामागोमाग एक वाचा,
+उदाहरणे समजून घ्या आणि शेवटी
+स्वतःची उजळणी करा.
+
+</div>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h3>
+📝 अभ्यास कसा करावा?
+</h3>
+
+<ul>
+
+<li>
+प्रथम संपूर्ण धडा शांतपणे वाचा.
+</li>
+
+<li>
+महत्त्वाचे शब्द आणि मुद्दे लिहून ठेवा.
+</li>
+
+<li>
+नकाशा किंवा चित्र असल्यास त्याचा अभ्यास करा.
+</li>
+
+<li>
+स्वाध्यायातील प्रश्न स्वतः सोडवण्याचा प्रयत्न करा.
+</li>
+
+<li>
+चुका झाल्यास पुन्हा संबंधित भाग वाचा.
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h3>
+🎯 छोटा सराव
+</h3>
+
+<div class="practice">
+
+<strong>प्रश्न:</strong><br><br>
+
+या धड्यातील सर्वात महत्त्वाचे
+तीन मुद्दे तुमच्या स्वतःच्या
+शब्दांत लिहा.
+
+</div>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h3>
+⚡ Quick Revision
+</h3>
+
+<p>
+
+<strong>विषय:</strong>
+${subjectName}
+
+<br><br>
+
+<strong>इयत्ता:</strong>
+${selectedStandard} वी
+
+<br><br>
+
+<strong>धडा:</strong>
+${chapter}
+
+<br><br>
+
+धडा समजला की त्यातील
+मुख्य मुद्दे पुन्हा एकदा वाचा
+आणि स्वतःची उजळणी करा.
+
+</p>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   BACK TO CHAPTERS
+========================= */
+
+function backToChapters(){
+
+document.getElementById("lessonPage").style.display =
+  "none";
+
+document.getElementById("homePage").style.display =
+  "block";
+
+openSubject(selectedSubject);
+
+}
+
+
+/* =========================
+   OUTSIDE CLOSE
+========================= */
+
+function outsideClose(event,id){
+
+if(event.target.id === id){
+
+document.getElementById(id).style.display =
+  "none";
+
+}
+
+}
+
+
+/* =========================
+   MAIN BACK
+========================= */
+
+function goBack(){
+
+window.location.href =
+  "learn.html";
+
+}
+
+</script>
+
+</body>
+
+</html>
