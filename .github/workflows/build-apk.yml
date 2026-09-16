@@ -38,7 +38,7 @@ jobs:
           npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
 
-      # 5. Prepare website files
+      # 5. Prepare website
       - name: Prepare www folder
         run: |
           rm -rf www
@@ -54,27 +54,28 @@ jobs:
             ! -name "package-lock.json" \
             -exec cp -r {} www/ \;
 
-          echo "Website files:"
+          echo "===== WWW FILES ====="
           find www -maxdepth 2 -type f | head -100
 
 
-      # 6. Create Capacitor config
+      # 6. Create Capacitor JSON config
       - name: Create Capacitor config
         run: |
-          cat > capacitor.config.ts <<'EOF'
-          import type { CapacitorConfig } from '@capacitor/cli';
+          rm -f capacitor.config.ts
 
-          const config: CapacitorConfig = {
-            appId: 'com.ramsena.xi',
-            appName: 'GYAN-SETU',
-            webDir: 'www',
-            server: {
-              androidScheme: 'https'
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "com.ramsena.xi",
+            "appName": "GYAN-SETU",
+            "webDir": "www",
+            "server": {
+              "androidScheme": "https"
             }
-          };
-
-          export default config;
+          }
           EOF
+
+          echo "Capacitor JSON config created"
+          cat capacitor.config.json
 
 
       # 7. Add Android
@@ -83,7 +84,7 @@ jobs:
           npx cap add android
 
 
-      # 8. Add Android permissions
+      # 8. Configure Android permissions
       - name: Configure Android permissions
         run: |
           python3 - <<'PY'
@@ -109,6 +110,7 @@ jobs:
 
           for permission in permissions:
               tag = f'<uses-permission android:name="{permission}" />'
+
               if tag not in text:
                   text = text.replace(
                       "<application",
@@ -157,7 +159,9 @@ jobs:
 
                   webView.setWebChromeClient(new WebChromeClient() {
                       @Override
-                      public void onPermissionRequest(final PermissionRequest request) {
+                      public void onPermissionRequest(
+                              final PermissionRequest request) {
+
                           runOnUiThread(() -> {
                               request.grant(request.getResources());
                           });
@@ -174,7 +178,7 @@ jobs:
           npx cap sync android
 
 
-      # 11. Fix debug APK V1 signing
+      # 11. Configure debug APK signing
       - name: Configure APK signing
         run: |
           python3 - <<'PY'
@@ -183,58 +187,49 @@ jobs:
           with open(path, "r", encoding="utf-8") as f:
               text = f.read()
 
-          signing_block = r'''
+          if "enableV1Signing false" not in text:
+
+              signing_config = """
               signingConfigs {
                   debug {
                       enableV1Signing false
                       enableV2Signing true
                   }
               }
-          '''
+          """
 
-          if "signingConfigs {" not in text:
               marker = "android {"
-              if marker in text:
-                  text = text.replace(
-                      marker,
-                      marker + "\n" + signing_block,
-                      1
-                  )
-              else:
+
+              if marker not in text:
                   raise SystemExit("android { block not found")
+
+              text = text.replace(
+                  marker,
+                  marker + signing_config,
+                  1
+              )
 
           with open(path, "w", encoding="utf-8") as f:
               f.write(text)
 
-          print("APK signing configuration added")
+          print("Debug APK signing configured")
           PY
 
 
-      # 12. Show Gradle configuration
-      - name: Check Gradle configuration
-        run: |
-          echo "===== android/app/build.gradle ====="
-          sed -n '1,180p' android/app/build.gradle
-
-          echo "===== Gradle version ====="
-          cd android
-          ./gradlew --version
-
-
-      # 13. Build APK
+      # 12. Build APK
       - name: Build APK
         run: |
           cd android
           ./gradlew assembleDebug --no-daemon --stacktrace
 
 
-      # 14. Check APK
+      # 13. Check APK
       - name: Check APK
         run: |
           if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
-            echo "======================================"
+            echo "================================"
             echo "APK BUILD SUCCESSFUL"
-            echo "======================================"
+            echo "================================"
             ls -lh android/app/build/outputs/apk/debug/app-debug.apk
           else
             echo "APK NOT FOUND"
@@ -242,7 +237,7 @@ jobs:
           fi
 
 
-      # 15. Upload APK
+      # 14. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
