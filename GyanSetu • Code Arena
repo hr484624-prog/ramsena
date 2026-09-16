@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>GyanSetu • Code Lab</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+  --bg:#080b12;
+  --panel:#10151f;
+  --panel2:#151c28;
+  --border:#263244;
+  --text:#f4f7fb;
+  --muted:#8d99aa;
+  --gold:#d7ad55;
+  --gold2:#f0cf7a;
+  --blue:#3b82f6;
+  --green:#22c55e;
+  --red:#ef4444;
+}
+
+body{
+  background:
+    radial-gradient(circle at top,#182033 0,#080b12 42%,#05070b 100%);
+  color:var(--text);
+  min-height:100vh;
+}
+
+.app{
+  width:100%;
+  max-width:480px;
+  min-height:100vh;
+  margin:auto;
+  background:rgba(7,10,16,.96);
+  position:relative;
+  overflow:hidden;
+}
+
+/* HEADER */
+
+.header{
+  height:68px;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  background:
+    linear-gradient(180deg,#151c28,#0c1119);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.back{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  border:1px solid #303b4d;
+  background:#121925;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  cursor:pointer;
+}
+
+.logo{
+  width:39px;
+  height:39px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#b78b32,#f2d17d);
+  color:#17120a;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:bold;
+  box-shadow:0 0 20px rgba(215,173,85,.18);
+}
+
+.headerText{
+  flex:1;
+}
+
+.headerText h1{
+  font-size:17px;
+  letter-spacing:.3px;
+}
+
+.headerText p{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:3px;
+}
+
+.status{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+
+/* HOME */
+
+.home{
+  padding:18px;
+}
+
+.hero{
+  padding:22px;
+  border-radius:22px;
+  background:
+    linear-gradient(145deg,#171e2b,#0d121b);
+  border:1px solid #2c3748;
+  box-shadow:0 15px 45px rgba(0,0,0,.28);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:170px;
+  height:170px;
+  right:-80px;
+  top:-80px;
+  border-radius:50%;
+  background:rgba(215,173,85,.08);
+}
+
+.crown{
+  color:var(--gold2);
+  font-size:25px;
+  margin-bottom:10px;
+}
+
+.hero h2{
+  font-size:25px;
+  margin-bottom:7px;
+}
+
+.hero p{
+  color:#aab4c3;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.sectionTitle{
+  margin:24px 0 13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.sectionTitle h3{
+  font-size:17px;
+}
+
+.sectionTitle span{
+  color:var(--gold);
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+/* LANGUAGES */
+
+.languages{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.language{
+  min-height:100px;
+  padding:15px;
+  border:1px solid #273244;
+  border-radius:18px;
+  background:
+    linear-gradient(145deg,#141b27,#0d131d);
+  cursor:pointer;
+  transition:.2s;
+  position:relative;
+  overflow:hidden;
+}
+
+.language:hover{
+  transform:translateY(-2px);
+  border-color:#8d6c2f;
+}
+
+.language:active{
+  transform:scale(.97);
+}
+
+.langIcon{
+  font-size:27px;
+  margin-bottom:9px;
+}
+
+.language h4{
+  font-size:15px;
+}
+
+.language p{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.arrow{
+  position:absolute;
+  right:13px;
+  bottom:13px;
+  color:var(--gold);
+}
+
+/* EDITOR */
+
+.editorPage{
+  display:none;
+  min-height:calc(100vh - 68px);
+}
+
+.editorTop{
+  padding:13px 15px;
+  background:#0c1119;
+  border-bottom:1px solid var(--border);
+}
+
+.editorLanguage{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.editorLanguage strong{
+  font-size:16px;
+}
+
+.badge{
+  color:var(--gold2);
+  border:1px solid #6b5328;
+  background:#211a0e;
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:10px;
+}
+
+.fileBar{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.file{
+  background:#161e2b;
+  border:1px solid #2a3546;
+  padding:8px 12px;
+  border-radius:8px 8px 0 0;
+  color:#c9d2df;
+  font-size:12px;
+}
+
+.fileActions{
+  display:flex;
+  gap:7px;
+}
+
+.smallBtn{
+  border:1px solid #2b3749;
+  background:#121925;
+  color:#cdd5e0;
+  padding:7px 10px;
+  border-radius:8px;
+  font-size:11px;
+  cursor:pointer;
+}
+
+/* CODE AREA */
+
+.editorWrap{
+  margin:0 15px;
+  border:1px solid #283446;
+  border-radius:0 0 15px 15px;
+  overflow:hidden;
+  background:#090d13;
+  box-shadow:inset 0 0 30px rgba(0,0,0,.3);
+}
+
+.editor{
+  width:100%;
+  min-height:360px;
+  display:flex;
+}
+
+.lineNumbers{
+  width:43px;
+  padding:15px 8px;
+  text-align:right;
+  color:#4e5b6d;
+  background:#0c1118;
+  font:13px/1.6 monospace;
+  user-select:none;
+  overflow:hidden;
+}
+
+#code{
+  flex:1;
+  min-width:0;
+  min-height:360px;
+  resize:none;
+  border:0;
+  outline:none;
+  padding:15px 12px;
+  background:#090d13;
+  color:#e5e7eb;
+  font:13px/1.6 monospace;
+  tab-size:2;
+  white-space:pre;
+  overflow:auto;
+}
+
+#code::selection{
+  background:#334155;
+}
+
+/* TOOLBAR */
+
+.toolbar{
+  padding:12px 15px;
+  display:flex;
+  gap:9px;
+  background:#0c1119;
+  border-bottom:1px solid var(--border);
+}
+
+.run{
+  flex:1;
+  border:0;
+  border-radius:11px;
+  padding:12px;
+  background:linear-gradient(135deg,#d7ad55,#f1d27e);
+  color:#17120a;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.clear{
+  border:1px solid #344052;
+  border-radius:11px;
+  padding:12px 14px;
+  background:#141b26;
+  color:#d0d7e2;
+  cursor:pointer;
+}
+
+/* OUTPUT */
+
+.outputSection{
+  padding:15px;
+}
+
+.outputHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:9px;
+}
+
+.outputHeader strong{
+  font-size:14px;
+}
+
+.outputHeader span{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.output{
+  min-height:130px;
+  max-height:260px;
+  overflow:auto;
+  border:1px solid #283446;
+  border-radius:14px;
+  padding:14px;
+  background:#05080d;
+  color:#cbd5e1;
+  font:12px/1.6 monospace;
+  white-space:pre-wrap;
+}
+
+.output.success{
+  color:#b9f6c9;
+}
+
+.output.error{
+  color:#ffb4b4;
+}
+
+/* INFO */
+
+.info{
+  margin:0 15px 20px;
+  padding:13px;
+  border-radius:13px;
+  border:1px solid #273244;
+  background:#0f151f;
+  color:#8f9bac;
+  font-size:11px;
+  line-height:1.6;
+}
+
+/* PRACTICE */
+
+.practice{
+  margin:0 15px 25px;
+  padding:17px;
+  border-radius:17px;
+  background:linear-gradient(145deg,#141c28,#0d131d);
+  border:1px solid #283446;
+}
+
+.practice h3{
+  font-size:15px;
+  margin-bottom:8px;
+}
+
+.practice p{
+  color:#909bab;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.practice button{
+  margin-top:12px;
+  border:1px solid #735a2c;
+  background:#20190e;
+  color:var(--gold2);
+  padding:9px 13px;
+  border-radius:9px;
+  font-size:11px;
+}
+
+/* SEARCH */
+
+.search{
+  width:100%;
+  margin-top:16px;
+  background:#0d131d;
+  border:1px solid #2a3546;
+  border-radius:12px;
+  padding:12px 13px;
+  color:white;
+  outline:none;
+}
+
+.search::placeholder{
+  color:#667386;
+}
+
+/* DESKTOP */
+
+@media(min-width:700px){
+  .app{
+    max-width:900px;
+  }
+
+  .languages{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .editorPage{
+    padding-bottom:30px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HEADER -->
+
+<header class="header">
+
+  <button class="back" onclick="goHome()">‹</button>
+
+  <div class="logo">&lt;/&gt;</div>
+
+  <div class="headerText">
+    <h1>GyanSetu Code Lab</h1>
+    <p>Professional Coding Practice</p>
+  </div>
+
+  <div class="status"></div>
+
+</header>
+
+
+<!-- LANGUAGE HOME -->
+
+<main class="home" id="homePage">
+
+  <section class="hero">
+
+    <div class="crown">♛</div>
+
+    <h2>Code. Build. Master.</h2>
+
+    <p>
+      Choose your programming language and start
+      practising in a focused coding environment.
+    </p>
+
+    <input
+      class="search"
+      id="languageSearch"
+      type="text"
+      placeholder="Search language..."
+      oninput="searchLanguage()"
+    >
+
+  </section>
+
+
+  <div class="sectionTitle">
+
+    <h3>Programming Languages</h3>
+
+    <span>CODE LAB</span>
+
+  </div>
+
+
+  <section class="languages" id="languages">
+
+
+    <div class="language" data-name="python"
+         onclick="openEditor('Python','python')">
+
+      <div class="langIcon">🐍</div>
+
+      <h4>Python</h4>
+
+      <p>Programming Language</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="javascript"
+         onclick="openEditor('JavaScript','javascript')">
+
+      <div class="langIcon">JS</div>
+
+      <h4>JavaScript</h4>
+
+      <p>Web Programming</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="html"
+         onclick="openEditor('HTML','html')">
+
+      <div class="langIcon">🌐</div>
+
+      <h4>HTML</h4>
+
+      <p>Web Structure</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="css"
+         onclick="openEditor('CSS','css')">
+
+      <div class="langIcon">🎨</div>
+
+      <h4>CSS</h4>
+
+      <p>Web Styling</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="c"
+         onclick="openEditor('C','c')">
+
+      <div class="langIcon">C</div>
+
+      <h4>C</h4>
+
+      <p>Programming Language</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="c++"
+         onclick="openEditor('C++','cpp')">
+
+      <div class="langIcon">C+</div>
+
+      <h4>C++</h4>
+
+      <p>Programming Language</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="java"
+         onclick="openEditor('Java','java')">
+
+      <div class="langIcon">☕</div>
+
+      <h4>Java</h4>
+
+      <p>Programming Language</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="sql"
+         onclick="openEditor('SQL','sql')">
+
+      <div class="langIcon">🗄️</div>
+
+      <h4>SQL</h4>
+
+      <p>Database Language</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="typescript"
+         onclick="openEditor('TypeScript','typescript')">
+
+      <div class="langIcon">TS</div>
+
+      <h4>TypeScript</h4>
+
+      <p>Typed JavaScript</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="php"
+         onclick="openEditor('PHP','php')">
+
+      <div class="langIcon">PHP</div>
+
+      <h4>PHP</h4>
+
+      <p>Server Programming</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="kotlin"
+         onclick="openEditor('Kotlin','kotlin')">
+
+      <div class="langIcon">K</div>
+
+      <h4>Kotlin</h4>
+
+      <p>Modern Programming</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+    <div class="language" data-name="swift"
+         onclick="openEditor('Swift','swift')">
+
+      <div class="langIcon">S</div>
+
+      <h4>Swift</h4>
+
+      <p>Apple Development</p>
+
+      <div class="arrow">→</div>
+
+    </div>
+
+
+  </section>
+
+</main>
+
+
+<!-- EDITOR PAGE -->
+
+<section class="editorPage" id="editorPage">
+
+
+  <div class="editorTop">
+
+    <div class="editorLanguage">
+
+      <strong id="editorTitle">
+        Python
+      </strong>
+
+      <span class="badge">
+        PRACTICE
+      </span>
+
+    </div>
+
+
+    <div class="fileBar">
+
+      <div class="file">
+        main.code
+      </div>
+
+      <div class="fileActions">
+
+        <button
+          class="smallBtn"
+          onclick="copyCode()">
+          Copy
+        </button>
+
+        <button
+          class="smallBtn"
+          onclick="resetCode()">
+          Reset
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="editorWrap">
+
+    <div class="editor">
+
+      <div class="lineNumbers" id="lineNumbers">
+        1
+      </div>
+
+      <textarea
+        id="code"
+        spellcheck="false"
+        oninput="updateLines()"
+        onkeydown="handleTab(event)"
+      ></textarea>
+
+    </div>
+
+  </div>
+
+
+  <div class="toolbar">
+
+    <button
+      class="run"
+      onclick="runCode()">
+      ▶ Run Code
+    </button>
+
+    <button
+      class="clear"
+      onclick="clearCode()">
+      Clear
+    </button>
+
+  </div>
+
+
+  <div class="outputSection">
+
+    <div class="outputHeader">
+
+      <strong>Terminal / Output</strong>
+
+      <span id="runStatus">
+        Ready
+      </span>
+
+    </div>
+
+    <div
+      class="output"
+      id="output">
+      Click "Run Code" to execute your program.
+    </div>
+
+  </div>
+
+
+  <div class="info" id="languageInfo">
+    JavaScript, HTML and CSS can run directly in your browser.
+    Other languages require a compiler/runtime backend.
+  </div>
+
+
+  <div class="practice">
+
+    <h3>♛ Practice Mode</h3>
+
+    <p id="practiceText">
+      Write your own code, run it and experiment with different concepts.
+    </p>
+
+    <button onclick="insertStarter()">
+      Insert Starter Code
+    </button>
+
+  </div>
+
+
+</section>
+
+</div>
+
+
+<script>
+
+let currentLanguage = "";
+let currentKey = "";
+
+
+// STARTER CODE
+
+const starterCode = {
+
+  python:
+`# GyanSetu Code Lab
+
+name = "GyanSetu"
+
+print("Hello,", name)
+`,
+
+  javascript:
+`// GyanSetu Code Lab
+
+const name = "GyanSetu";
+
+console.log("Hello, " + name);
+`,
+
+  html:
+`<!DOCTYPE html>
+<html>
+<head>
+  <title>My Page</title>
+</head>
+
+<body>
+
+  <h1>Hello GyanSetu!</h1>
+  <p>My first web page.</p>
+
+</body>
+</html>
+`,
+
+  css:
+`body {
+  background: #111827;
+  color: white;
+  font-family: Arial;
+}
+
+h1 {
+  color: gold;
+}
+`,
+
+  c:
+`#include <stdio.h>
+
+int main() {
+
+    printf("Hello, GyanSetu!");
+
+    return 0;
+}
+`,
+
+  cpp:
+`#include <iostream>
+using namespace std;
+
+int main() {
+
+    cout << "Hello, GyanSetu!";
+
+    return 0;
+}
+`,
+
+  java:
+`public class Main {
+
+    public static void main(String[] args) {
+
+        System.out.println("Hello, GyanSetu!");
+
+    }
+}
+`,
+
+  sql:
+`-- GyanSetu SQL Practice
+
+SELECT 'Hello, GyanSetu' AS message;
+`,
+
+  typescript:
+`const message: string = "Hello, GyanSetu";
+
+console.log(message);
+`,
+
+  php:
+`<?php
+
+$name = "GyanSetu";
+
+echo "Hello, " . $name;
+
+?>
+`,
+
+  kotlin:
+`fun main() {
+
+    println("Hello, GyanSetu!")
+
+}
+`,
+
+  swift:
+`import Foundation
+
+let message = "Hello, GyanSetu"
+
+print(message)
+`
+
+};
+
+
+// LANGUAGE OPEN
+
+function openEditor(name,key){
+
+  currentLanguage = name;
+  currentKey = key;
+
+  document.getElementById("homePage").style.display = "none";
+
+  document.getElementById("editorPage").style.display = "block";
+
+  document.getElementById("editorTitle").textContent = name;
+
+  document.getElementById("code").value =
+    starterCode[key] || "";
+
+  document.getElementById("output").textContent =
+    "Click \"Run Code\" to execute your program.";
+
+  document.getElementById("output").className =
+    "output";
+
+  document.getElementById("runStatus").textContent =
+    "Ready";
+
+  updateLines();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+// HOME
+
+function goHome(){
+
+  document.getElementById("editorPage").style.display =
+    "none";
+
+  document.getElementById("homePage").style.display =
+    "block";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+// SEARCH
+
+function searchLanguage(){
+
+  const query =
+    document.getElementById("languageSearch")
+    .value
+    .toLowerCase()
+    .trim();
+
+  const cards =
+    document.querySelectorAll(".language");
+
+  cards.forEach(card=>{
+
+    const name =
+      card.dataset.name.toLowerCase();
+
+    card.style.display =
+      name.includes(query)
+      ? ""
+      : "none";
+
+  });
+
+}
+
+
+// LINE NUMBERS
+
+function updateLines(){
+
+  const code =
+    document.getElementById("code").value;
+
+  const count =
+    code.split("\n").length;
+
+  let numbers = "";
+
+  for(let i=1;i<=count;i++){
+
+    numbers += i + "\n";
+
+  }
+
+  document.getElementById("lineNumbers").textContent =
+    numbers;
+
+}
+
+
+// TAB SUPPORT
+
+function handleTab(event){
+
+  if(event.key !== "Tab") return;
+
+  event.preventDefault();
+
+  const textarea =
+    document.getElementById("code");
+
+  const start =
+    textarea.selectionStart;
+
+  const end =
+    textarea.selectionEnd;
+
+  textarea.value =
+    textarea.value.substring(0,start) +
+    "  " +
+    textarea.value.substring(end);
+
+  textarea.selectionStart =
+    textarea.selectionEnd =
+    start + 2;
+
+  updateLines();
+
+}
+
+
+// CLEAR
+
+function clearCode(){
+
+  document.getElementById("code").value = "";
+
+  updateLines();
+
+  document.getElementById("output").textContent =
+    "Editor cleared.";
+
+  document.getElementById("runStatus").textContent =
+    "Ready";
+
+}
+
+
+// RESET
+
+function resetCode(){
+
+  document.getElementById("code").value =
+    starterCode[currentKey] || "";
+
+  updateLines();
+
+  document.getElementById("output").textContent =
+    "Code reset.";
+
+  document.getElementById("runStatus").textContent =
+    "Ready";
+
+}
+
+
+// COPY
+
+async function copyCode(){
+
+  const code =
+    document.getElementById("code").value;
+
+  try{
+
+    await navigator.clipboard.writeText(code);
+
+    document.getElementById("runStatus").textContent =
+      "Copied";
+
+  }catch(error){
+
+    document.getElementById("runStatus").textContent =
+      "Copy failed";
+
+  }
+
+}
+
+
+// STARTER
+
+function insertStarter(){
+
+  document.getElementById("code").value =
+    starterCode[currentKey] || "";
+
+  updateLines();
+
+}
+
+
+// RUN CODE
+
+function runCode(){
+
+  const code =
+    document.getElementById("code").value;
+
+  const output =
+    document.getElementById("output");
+
+  const status =
+    document.getElementById("runStatus");
+
+
+  if(!code.trim()){
+
+    output.className = "output error";
+
+    output.textContent =
+      "Error: Code editor is empty.";
+
+    status.textContent =
+      "Error";
+
+    return;
+
+  }
+
+
+  status.textContent =
+    "Running...";
+
+
+  output.className =
+    "output";
+
+
+  // JAVASCRIPT
+
+  if(currentKey === "javascript"){
+
+    runJavaScript(code);
+
+    return;
+
+  }
+
+
+  // HTML
+
+  if(currentKey === "html"){
+
+    runHTML(code);
+
+    return;
+
+  }
+
+
+  // CSS
+
+  if(currentKey === "css"){
+
+    runCSS(code);
+
+    return;
+
+  }
+
+
+  // OTHER LANGUAGES
+
+  output.className =
+    "output error";
+
+  output.textContent =
+`Runtime not connected for ${currentLanguage}.
+
+The editor is ready, but ${currentLanguage}
+needs a compiler/runtime backend to execute
+the code safely.
+
+Browser execution is currently available for:
+• JavaScript
+• HTML
+• CSS`;
+
+  status.textContent =
+    "Runtime required";
+
+}
+
+
+// JAVASCRIPT RUNNER
+
+function runJavaScript(code){
+
+  const output =
+    document.getElementById("output");
+
+  const status =
+    document.getElementById("runStatus");
+
+  let logs = [];
+
+  const originalLog =
+    console.log;
+
+  const originalWarn =
+    console.warn;
+
+  const originalError =
+    console.error;
+
+
+  console.log = function(...args){
+
+    logs.push(
+      args.map(formatValue).join(" ")
+    );
+
+  };
+
+
+  console.warn = function(...args){
+
+    logs.push(
+      "⚠ " +
+      args.map(formatValue).join(" ")
+    );
+
+  };
+
+
+  console.error = function(...args){
+
+    logs.push(
+      "❌ " +
+      args.map(formatValue).join(" ")
+    );
+
+  };
+
+
+  try{
+
+    const result =
+      Function('"use strict";\n' + code)();
+
+
+    if(
+      result !== undefined
+    ){
+
+      logs.push(
+        formatValue(result)
+      );
+
+    }
+
+
+    output.className =
+      "output success";
+
+    output.textContent =
+      logs.length
+      ? logs.join("\n")
+      : "✓ Code executed successfully.";
+
+    status.textContent =
+      "Success";
+
+  }catch(error){
+
+    output.className =
+      "output error";
+
+    output.textContent =
+      error.toString();
+
+    status.textContent =
+      "Error";
+
+  }finally{
+
+    console.log =
+      originalLog;
+
+    console.warn =
+      originalWarn;
+
+    console.error =
+      originalError;
+
+  }
+
+}
+
+
+// FORMAT VALUE
+
+function formatValue(value){
+
+  if(
+    typeof value === "object" &&
+    value !== null
+  ){
+
+    try{
+
+      return JSON.stringify(
+        value,
+        null,
+        2
+      );
+
+    }catch(e){
+
+      return String(value);
+
+    }
+
+  }
+
+  return String(value);
+
+}
+
+
+// HTML RUNNER
+
+function runHTML(code){
+
+  const output =
+    document.getElementById("output");
+
+  const status =
+    document.getElementById("runStatus");
+
+
+  const win =
+    window.open(
+      "",
+      "_blank"
+    );
+
+
+  if(!win){
+
+    output.className =
+      "output error";
+
+    output.textContent =
+      "Popup blocked. Allow popups to preview HTML.";
+
+    status.textContent =
+      "Blocked";
+
+    return;
+
+  }
+
+
+  win.document.open();
+
+  win.document.write(code);
+
+  win.document.close();
+
+
+  output.className =
+    "output success";
+
+  output.textContent =
+    "✓ HTML preview opened in a new tab.";
+
+  status.textContent =
+    "Success";
+
+}
+
+
+// CSS RUNNER
+
+function runCSS(code){
+
+  const output =
+    document.getElementById("output");
+
+  const status =
+    document.getElementById("runStatus");
+
+
+  const win =
+    window.open(
+      "",
+      "_blank"
+    );
+
+
+  if(!win){
+
+    output.className =
+      "output error";
+
+    output.textContent =
+      "Popup blocked. Allow popups to preview CSS.";
+
+    status.textContent =
+      "Blocked";
+
+    return;
+
+  }
+
+
+  win.document.open();
+
+  win.document.write(`
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CSS Preview</title>
+
+<style>
+
+${code}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>GyanSetu CSS Preview</h1>
+
+<p>
+This is your CSS practice preview.
+</p>
+
+<button>
+Sample Button
+</button>
+
+</body>
+</html>
+`);
+
+  win.document.close();
+
+
+  output.className =
+    "output success";
+
+  output.textContent =
+    "✓ CSS preview opened in a new tab.";
+
+  status.textContent =
+    "Success";
+
+}
+
+
+// INITIALIZE
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    updateLines();
+
+  }
+);
+
+</script>
+
+</body>
+</html>
