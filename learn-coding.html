@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Learn Coding</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f7ff;
+  color:#172554;
+}
+
+.app{
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#f4f7ff;
+  overflow:hidden;
+}
+
+/* HEADER */
+
+header{
+  height:64px;
+  background:linear-gradient(135deg,#0757d9,#2585ff);
+  color:white;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 4px 15px rgba(0,70,180,.18);
+}
+
+.back{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:12px;
+  background:rgba(255,255,255,.16);
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.header-title{
+  flex:1;
+}
+
+.header-title h2{
+  font-size:18px;
+}
+
+.header-title p{
+  font-size:11px;
+  opacity:.85;
+  margin-top:2px;
+}
+
+.code-icon{
+  font-size:25px;
+  font-family:monospace;
+}
+
+/* HOME */
+
+.home{
+  padding:18px 15px 30px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#071a3d,#103e91);
+  color:white;
+  border-radius:22px;
+  padding:22px 18px;
+  box-shadow:0 10px 25px rgba(0,50,150,.18);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"</>";
+  position:absolute;
+  right:-5px;
+  bottom:-20px;
+  font-size:100px;
+  font-family:monospace;
+  color:rgba(255,255,255,.05);
+}
+
+.hero h1{
+  font-size:24px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  font-size:13px;
+  line-height:1.5;
+  opacity:.9;
+}
+
+.start-btn{
+  margin-top:17px;
+  border:0;
+  background:#00d084;
+  color:#062d20;
+  padding:12px 18px;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* LANGUAGE */
+
+.section-title{
+  margin:22px 2px 12px;
+  font-size:17px;
+}
+
+.language-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.language{
+  background:white;
+  border:1px solid #e1e9f8;
+  border-radius:17px;
+  padding:17px 14px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(20,60,130,.05);
+  transition:.2s;
+}
+
+.language:active{
+  transform:scale(.97);
+}
+
+.language .emoji{
+  font-size:27px;
+}
+
+.language h3{
+  margin-top:8px;
+  font-size:15px;
+}
+
+.language p{
+  font-size:11px;
+  color:#64748b;
+  margin-top:4px;
+}
+
+/* COURSE */
+
+#coursePage{
+  display:none;
+}
+
+.course{
+  padding:18px 15px 40px;
+}
+
+.course-head{
+  background:white;
+  border-radius:20px;
+  padding:18px;
+  border:1px solid #e3eaf7;
+  box-shadow:0 5px 15px rgba(20,60,130,.06);
+}
+
+.course-head h1{
+  font-size:22px;
+}
+
+.course-head p{
+  font-size:13px;
+  color:#64748b;
+  line-height:1.5;
+  margin-top:7px;
+}
+
+.progress-wrap{
+  margin-top:15px;
+}
+
+.progress-info{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:#64748b;
+  margin-bottom:7px;
+}
+
+.progress{
+  height:8px;
+  background:#e5eaf3;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#0757d9,#00c98b);
+  border-radius:10px;
+  transition:.3s;
+}
+
+/* LESSON LIST */
+
+.lesson-list{
+  margin-top:18px;
+}
+
+.lesson{
+  background:white;
+  border:1px solid #e3eaf7;
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:11px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  box-shadow:0 3px 10px rgba(20,60,130,.04);
+}
+
+.lesson-number{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#eaf2ff;
+  color:#0757d9;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.lesson-info{
+  flex:1;
+}
+
+.lesson-info h3{
+  font-size:14px;
+}
+
+.lesson-info p{
+  font-size:11px;
+  color:#64748b;
+  margin-top:4px;
+}
+
+.lesson-status{
+  font-size:17px;
+}
+
+/* LESSON PAGE */
+
+#lessonPage{
+  display:none;
+}
+
+.lesson-page{
+  padding:18px 15px 40px;
+}
+
+.lesson-card{
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  border:1px solid #e3eaf7;
+  box-shadow:0 5px 15px rgba(20,60,130,.06);
+}
+
+.lesson-card h1{
+  font-size:22px;
+  color:#0f2860;
+}
+
+.lesson-card .subtitle{
+  color:#64748b;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:7px;
+}
+
+.lesson-section{
+  margin-top:22px;
+}
+
+.lesson-section h2{
+  font-size:17px;
+  margin-bottom:9px;
+  color:#0757d9;
+}
+
+.lesson-section p{
+  font-size:14px;
+  line-height:1.7;
+  color:#334155;
+}
+
+.tip{
+  background:#eef7ff;
+  border-left:4px solid #1769e0;
+  padding:12px;
+  border-radius:10px;
+  margin-top:12px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* CODE BOX */
+
+.code-box{
+  background:#07111f;
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:12px;
+  border:1px solid #172b46;
+}
+
+.code-top{
+  height:35px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 11px;
+  background:#0d1b2d;
+  color:#9fb4cc;
+  font-size:11px;
+}
+
+.copy-btn{
+  background:#18314e;
+  color:#dcecff;
+  border:0;
+  padding:5px 9px;
+  border-radius:7px;
+  font-size:10px;
+  cursor:pointer;
+}
+
+pre{
+  padding:15px;
+  color:#d8e8ff;
+  font-family:monospace;
+  font-size:13px;
+  line-height:1.7;
+  white-space:pre-wrap;
+  overflow-x:auto;
+}
+
+/* OUTPUT */
+
+.output{
+  background:#0b1725;
+  border-radius:13px;
+  margin-top:12px;
+  overflow:hidden;
+}
+
+.output-title{
+  padding:9px 12px;
+  color:#8ea6c0;
+  background:#102237;
+  font-size:11px;
+}
+
+.output-content{
+  padding:13px;
+  color:#00d084;
+  font-family:monospace;
+  font-size:13px;
+}
+
+/* PRACTICE */
+
+.practice{
+  margin-top:22px;
+  background:#f7fbff;
+  border:1px solid #d9e8ff;
+  border-radius:17px;
+  padding:16px;
+}
+
+.practice h2{
+  color:#0757d9;
+  font-size:17px;
+}
+
+.practice p{
+  margin-top:9px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.answer-input{
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #cbd8ec;
+  border-radius:11px;
+  outline:none;
+  font-size:14px;
+}
+
+.check-btn{
+  width:100%;
+  margin-top:9px;
+  padding:12px;
+  border:0;
+  border-radius:11px;
+  background:#0757d9;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.result{
+  margin-top:10px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+/* NAV BUTTONS */
+
+.bottom-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.action-btn{
+  flex:1;
+  padding:12px;
+  border:0;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.prev{
+  background:#e7eef9;
+  color:#17335e;
+}
+
+.next{
+  background:#0757d9;
+  color:white;
+}
+
+/* SEARCH */
+
+.search{
+  width:100%;
+  margin-top:15px;
+  padding:13px 15px;
+  border:1px solid #dce5f3;
+  border-radius:13px;
+  outline:none;
+  background:white;
+  font-size:13px;
+}
+
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#64748b;
+  display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HEADER -->
+
+<header>
+
+<button class="back" onclick="goBack()">‹</button>
+
+<div class="header-title">
+<h2>💻 Learn Coding</h2>
+<p>Zero पासून Coding शिका</p>
+</div>
+
+<div class="code-icon">&lt;/&gt;</div>
+
+</header>
+
+
+<!-- HOME PAGE -->
+
+<div id="homePage">
+
+<div class="home">
+
+<div class="hero">
+
+<h1>🚀 Coding शिकूया!</h1>
+
+<p>
+तुम्हाला Coding बद्दल काहीच माहिती नसेल तरी काळजी करू नका.
+इथे आपण अगदी <b>Basic पासून Step-by-Step</b> शिकणार आहोत.
+</p>
+
+<button class="start-btn" onclick="showLanguages()">
+Start Learning →
+</button>
+
+</div>
+
+
+<h2 class="section-title">🧑‍💻 Language निवडा</h2>
+
+<input
+class="search"
+id="languageSearch"
+placeholder="🔍 Search language..."
+oninput="searchLanguage()"
+>
+
+
+<div class="language-grid" id="languageGrid">
+
+<div class="language" data-name="python" onclick="selectLanguage('Python')">
+<div class="emoji">🐍</div>
+<h3>Python</h3>
+<p>Beginner Friendly</p>
+</div>
+
+<div class="language" data-name="javascript" onclick="selectLanguage('JavaScript')">
+<div class="emoji">⚡</div>
+<h3>JavaScript</h3>
+<p>Web Programming</p>
+</div>
+
+<div class="language" data-name="html" onclick="selectLanguage('HTML')">
+<div class="emoji">🌐</div>
+<h3>HTML</h3>
+<p>Web Basics</p>
+</div>
+
+<div class="language" data-name="css" onclick="selectLanguage('CSS')">
+<div class="emoji">🎨</div>
+<h3>CSS</h3>
+<p>Web Design</p>
+</div>
+
+<div class="language" data-name="c" onclick="selectLanguage('C')">
+<div class="emoji">🔵</div>
+<h3>C</h3>
+<p>Programming Basics</p>
+</div>
+
+<div class="language" data-name="cpp" onclick="selectLanguage('C++')">
+<div class="emoji">⚙️</div>
+<h3>C++</h3>
+<p>Programming</p>
+</div>
+
+<div class="language" data-name="java" onclick="selectLanguage('Java')">
+<div class="emoji">☕</div>
+<h3>Java</h3>
+<p>Object Oriented</p>
+</div>
+
+<div class="language" data-name="sql" onclick="selectLanguage('SQL')">
+<div class="emoji">🗄️</div>
+<h3>SQL</h3>
+<p>Database</p>
+</div>
+
+</div>
+
+<div class="empty" id="empty">
+Language सापडली नाही 😕
+</div>
+
+</div>
+
+</div>
+
+
+<!-- COURSE PAGE -->
+
+<div id="coursePage">
+
+<div class="course">
+
+<div class="course-head">
+
+<h1 id="courseTitle">🐍 Python Basics</h1>
+
+<p id="courseDescription">
+अगदी सुरुवातीपासून Python शिकूया.
+</p>
+
+<div class="progress-wrap">
+
+<div class="progress-info">
+<span>Course Progress</span>
+<span id="progressText">0%</span>
+</div>
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="lesson-list" id="lessonList"></div>
+
+</div>
+
+</div>
+
+
+<!-- LESSON PAGE -->
+
+<div id="lessonPage">
+
+<div class="lesson-page">
+
+<div class="lesson-card">
+
+<h1 id="lessonTitle"></h1>
+
+<p class="subtitle" id="lessonSubtitle"></p>
+
+
+<div class="lesson-section">
+
+<h2>📖 Concept</h2>
+
+<p id="lessonConcept"></p>
+
+</div>
+
+
+<div class="lesson-section">
+
+<h2>💡 Example</h2>
+
+<p id="lessonExplanation"></p>
+
+<div class="code-box">
+
+<div class="code-top">
+
+<span id="codeLanguage">Code</span>
+
+<button class="copy-btn" onclick="copyCode()">
+Copy
+</button>
+
+</div>
+
+<pre id="codeExample"></pre>
+
+</div>
+
+</div>
+
+
+<div class="lesson-section">
+
+<h2>🖥️ Output</h2>
+
+<div class="output">
+
+<div class="output-title">
+Terminal / Output
+</div>
+
+<div class="output-content" id="codeOutput"></div>
+
+</div>
+
+</div>
+
+
+<div class="tip">
+
+💡 <b>Beginner Tip:</b>
+<span id="lessonTip"></span>
+
+</div>
+
+
+<!-- PRACTICE -->
+
+<div class="practice">
+
+<h2>🧠 आता तुमची Practice!</h2>
+
+<p id="practiceQuestion"></p>
+
+<input
+class="answer-input"
+id="practiceAnswer"
+placeholder="तुमचं answer इथे लिहा..."
+>
+
+<button class="check-btn" onclick="checkAnswer()">
+✓ Check Answer
+</button>
+
+<div class="result" id="practiceResult"></div>
+
+</div>
+
+
+<div class="bottom-actions">
+
+<button class="action-btn prev" onclick="previousLesson()">
+← Previous
+</button>
+
+<button class="action-btn next" onclick="nextLesson()">
+Next →
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   DATA
+========================= */
+
+const courses = {
+
+Python: [
+
+{
+title:"Lesson 1 — Coding म्हणजे काय?",
+subtitle:"Coding ची अगदी पहिली ओळख",
+concept:"Coding म्हणजे computer ला आपण काय करायचं आहे हे programming language वापरून सांगणे. Computer स्वतःहून आपली इच्छा समजू शकत नाही. आपण त्याला instructions देतो.",
+explanation:"समजा तुम्हाला computer ला Hello म्हणायला सांगायचे आहे. Python मध्ये आपण print() वापरू शकतो.",
+code:'print("Hello World")',
+output:"Hello World",
+tip:"Coding शिकण्यासाठी सुरुवातीला फक्त basic concepts समजून घेणे महत्त्वाचे आहे.",
+question:'Python मध्ये "Hello World" print करण्यासाठी कोणता function वापरतो?',
+answer:"print"
+},
+
+{
+title:"Lesson 2 — print()",
+subtitle:"Computer कडून message दाखवणे",
+concept:"print() हा Python मधील अतिशय basic function आहे. त्याच्या मदतीने आपण screen वर text किंवा number दाखवू शकतो.",
+explanation:"print() च्या brackets मध्ये जे लिहितो ते output मध्ये दिसते.",
+code:'print("GyanSetu")\nprint("I am learning coding")',
+output:"GyanSetu\nI am learning coding",
+tip:"Text लिहिताना double quotes किंवा single quotes वापरू शकता.",
+question:'Screen वर काहीतरी दाखवण्यासाठी Python मध्ये कोणता function वापरतो?',
+answer:"print"
+},
+
+{
+title:"Lesson 3 — Variables",
+subtitle:"Information store करणे",
+concept:"Variable म्हणजे information ठेवण्यासाठी वापरलेली एक नावाची जागा. उदाहरणार्थ name या variable मध्ये विद्यार्थ्याचे नाव ठेवू शकतो.",
+explanation:"खाली name नावाच्या variable मध्ये GyanSetu हा text store केला आहे.",
+code:'name = "GyanSetu"\nprint(name)',
+output:"GyanSetu",
+tip:"Variable ला दिलेले नाव meaningful ठेवणे चांगले.",
+question:'name = "Rahul" मध्ये variable चे नाव काय आहे?',
+answer:"name"
+},
+
+{
+title:"Lesson 4 — Numbers",
+subtitle:"Numbers सोबत काम करणे",
+concept:"Programming मध्ये numbers चा वापर calculation करण्यासाठी केला जातो. Python मध्ये integer numbers थेट वापरता येतात.",
+explanation:"खाली दोन numbers add केले आहेत.",
+code:'a = 10\nb = 20\nprint(a + b)',
+output:"30",
+tip:"+ addition, - subtraction, * multiplication आणि / division साठी वापरता येतात.",
+question:'10 + 20 चे answer काय आहे?',
+answer:"30"
+},
+
+{
+title:"Lesson 5 — Strings",
+subtitle:"Text म्हणजे String",
+concept:"Programming मध्ये text ला String म्हणतात. String quotes मध्ये लिहिला जातो.",
+explanation:"खाली name आणि city हे दोन strings आहेत.",
+code:'name = "Swarup"\ncity = "Pune"\nprint(name)\nprint(city)',
+output:"Swarup\nPune",
+tip:"String म्हणजे text. उदाहरण: Hello, India, GyanSetu.",
+question:'"Hello" हा number आहे की String?',
+answer:"string"
+},
+
+{
+title:"Lesson 6 — Input",
+subtitle:"User कडून information घेणे",
+concept:"input() function वापरून आपण user कडून information घेऊ शकतो.",
+explanation:"खाली computer user ला नाव विचारतो आणि ते store करतो.",
+code:'name = input("Enter your name: ")\nprint("Hello", name)',
+output:"Enter your name: Rahul\nHello Rahul",
+tip:"input() वापरल्यावर user काहीतरी type करू शकतो.",
+question:'User कडून input घेण्यासाठी कोणता function वापरतो?',
+answer:"input"
+},
+
+{
+title:"Lesson 7 — if",
+subtitle:"Decision घेणे",
+concept:"if वापरून program एखादी condition तपासू शकतो. Condition true असेल तर त्याखालील code चालतो.",
+explanation:"खाली age 18 पेक्षा जास्त आहे का ते check केले आहे.",
+code:'age = 20\n\nif age >= 18:\n    print("Adult")',
+output:"Adult",
+tip:"if म्हणजे condition check करण्याचा एक basic मार्ग.",
+question:'Condition तपासण्यासाठी Python मध्ये कोणता keyword वापरतो?',
+answer:"if"
+},
+
+{
+title:"Lesson 8 — else",
+subtitle:"Condition false असेल तर",
+concept:"if ची condition false झाल्यावर दुसरा code चालवण्यासाठी else वापरतो.",
+explanation:"जर number 10 पेक्षा मोठा नसेल तर else चालेल.",
+code:'number = 5\n\nif number > 10:\n    print("Big")\nelse:\n    print("Small")',
+output:"Small",
+tip:"if आणि else मिळून program ला decision घेता येतो.",
+question:'if ची condition false झाल्यावर कोणता block चालतो?',
+answer:"else"
+},
+
+{
+title:"Lesson 9 — Loops",
+subtitle:"एकच काम पुन्हा पुन्हा करणे",
+concept:"Loop वापरून आपण एखादा code अनेक वेळा चालवू शकतो. त्यामुळे repeated कामासाठी पुन्हा पुन्हा code लिहावा लागत नाही.",
+explanation:"range(5) मुळे loop पाच वेळा चालतो.",
+code:'for i in range(5):\n    print("Hello")',
+output:"Hello\nHello\nHello\nHello\nHello",
+tip:"Loop programming मधील खूप महत्त्वाचा concept आहे.",
+question:'Loop चा उपयोग कशासाठी होतो?',
+answer:"repeat"
+},
+
+{
+title:"Lesson 10 — Functions",
+subtitle:"Code ला reusable बनवणे",
+concept:"Function म्हणजे instructions चा एक group. एकदा function तयार केल्यावर तो पुन्हा पुन्हा वापरता येतो.",
+explanation:"खाली greet नावाचा function तयार केला आहे.",
+code:'def greet():\n    print("Hello!")\n\ngreet()',
+output:"Hello!",
+tip:"मोठ्या programs मध्ये functions code व्यवस्थित ठेवण्यासाठी उपयोगी पडतात.",
+question:'Python मध्ये function तयार करण्यासाठी कोणता keyword वापरतो?',
+answer:"def"
+}
+
+],
+
+JavaScript: [
+
+{
+title:"Lesson 1 — JavaScript म्हणजे काय?",
+subtitle:"Web programming ची सुरुवात",
+concept:"JavaScript ही programming language आहे जी websites ला interactive बनवण्यासाठी मोठ्या प्रमाणावर वापरली जाते.",
+explanation:"console.log() वापरून आपण message दाखवू शकतो.",
+code:'console.log("Hello World");',
+output:"Hello World",
+tip:"JavaScript web development मध्ये खूप उपयोगी आहे.",
+question:'JavaScript मध्ये message console मध्ये दाखवण्यासाठी कोणता function वापरतात?',
+answer:"console.log"
+},
+
+{
+title:"Lesson 2 — Variables",
+subtitle:"Data store करणे",
+concept:"Variable मध्ये आपण data store करू शकतो.",
+explanation:"let वापरून variable तयार केला आहे.",
+code:'let name = "GyanSetu";\nconsole.log(name);',
+output:"GyanSetu",
+tip:"JavaScript मध्ये let आणि const खूप वापरले जातात.",
+question:'Variable तयार करण्यासाठी एक keyword सांगा.',
+answer:"let"
+},
+
+{
+title:"Lesson 3 — Numbers",
+subtitle:"Calculation",
+concept:"JavaScript मध्ये numbers सोबत arithmetic operations करता येतात.",
+explanation:"दोन numbers add केले आहेत.",
+code:'let a = 10;\nlet b = 20;\nconsole.log(a + b);',
+output:"30",
+tip:"+ addition साठी वापरला जातो.",
+question:'10 + 20 = ?',
+answer:"30"
+}
+
+],
+
+HTML: [
+
+{
+title:"Lesson 1 — HTML म्हणजे काय?",
+subtitle:"Web page ची सुरुवात",
+concept:"HTML म्हणजे HyperText Markup Language. Website चा structure तयार करण्यासाठी HTML वापरले जाते.",
+explanation:"h1 tag वापरून मोठे heading तयार करता येते.",
+code:'<h1>Hello World</h1>',
+output:"Hello World",
+tip:"HTML ही traditional programming language नसून markup language आहे.",
+question:'Heading तयार करण्यासाठी कोणता tag वापरू शकतो?',
+answer:"h1"
+},
+
+{
+title:"Lesson 2 — Paragraph",
+subtitle:"Text लिहिणे",
+concept:"p tag वापरून paragraph लिहिता येतो.",
+explanation:"खाली एक paragraph तयार केला आहे.",
+code:'<p>Welcome to GyanSetu</p>',
+output:"Welcome to GyanSetu",
+tip:"HTML मध्ये प्रत्येक element चा वेगळा उपयोग असतो.",
+question:'Paragraph साठी कोणता tag वापरतात?',
+answer:"p"
+}
+
+],
+
+CSS: [
+
+{
+title:"Lesson 1 — CSS म्हणजे काय?",
+subtitle:"Website ला design देणे",
+concept:"CSS म्हणजे Cascading Style Sheets. HTML elements ला colors, size, spacing आणि design देण्यासाठी CSS वापरतो.",
+explanation:"खाली paragraph चा रंग बदलला आहे.",
+code:'p {\n  color: blue;\n}',
+output:"Paragraph becomes blue",
+tip:"HTML structure तयार करते आणि CSS त्याचे design करते.",
+question:'CSS चा मुख्य उपयोग कशासाठी होतो?',
+answer:"design"
+}
+
+],
+
+C: [
+
+{
+title:"Lesson 1 — C ची ओळख",
+subtitle:"Programming ची सुरुवात",
+concept:"C ही एक लोकप्रिय programming language आहे. तिच्यामधून programming चे अनेक basic concepts शिकता येतात.",
+explanation:"printf वापरून message दाखवता येतो.",
+code:'#include <stdio.h>\n\nint main() {\n    printf("Hello World");\n    return 0;\n}',
+output:"Hello World",
+tip:"C शिकताना syntax आणि semicolon कडे लक्ष द्या.",
+question:'C मध्ये output दाखवण्यासाठी कोणता function वापरतात?',
+answer:"printf"
+}
+
+],
+
+"C++": [
+
+{
+title:"Lesson 1 — C++ ची ओळख",
+subtitle:"Programming basics",
+concept:"C++ ही powerful programming language आहे. तिच्यामध्ये procedural आणि object-oriented programming दोन्ही concepts वापरता येतात.",
+explanation:"cout वापरून output दाखवता येतो.",
+code:'#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello World";\n    return 0;\n}',
+output:"Hello World",
+tip:"C++ मध्ये statements च्या शेवटी semicolon वापरला जातो.",
+question:'C++ मध्ये output साठी कोणता object वापरला जातो?',
+answer:"cout"
+}
+
+],
+
+Java: [
+
+{
+title:"Lesson 1 — Java ची ओळख",
+subtitle:"Object-oriented programming",
+concept:"Java ही widely used programming language आहे. ती object-oriented programming concepts साठी प्रसिद्ध आहे.",
+explanation:"System.out.println() वापरून output दाखवता येतो.",
+code:'class Main {\n  public static void main(String[] args) {\n    System.out.println("Hello World");\n  }\n}',
+output:"Hello World",
+tip:"Java मध्ये class हा important concept आहे.",
+question:'Java मध्ये output दाखवण्यासाठी कोणता method वापरतो?',
+answer:"println"
+}
+
+],
+
+SQL: [
+
+{
+title:"Lesson 1 — SQL म्हणजे काय?",
+subtitle:"Database ची सुरुवात",
+concept:"SQL म्हणजे Structured Query Language. Database मधील data पाहण्यासाठी आणि manage करण्यासाठी SQL वापरले जाते.",
+explanation:"SELECT वापरून table मधील data पाहता येतो.",
+code:'SELECT * FROM students;',
+output:"students table data",
+tip:"SQL मध्ये database आणि tables हे basic concepts आहेत.",
+question:'Database मधून data पाहण्यासाठी कोणता keyword वापरतो?',
+answer:"select"
+}
+
+]
+
+};
+
+
+/* =========================
+   VARIABLES
+========================= */
+
+let selectedLanguage = "";
+let currentLesson = 0;
+
+
+/* =========================
+   BACK
+========================= */
+
+function goBack(){
+
+  if(
+    document.getElementById("lessonPage").style.display === "block"
+  ){
+
+    openCourse();
+
+    return;
+  }
+
+  if(
+    document.getElementById("coursePage").style.display === "block"
+  ){
+
+    showHome();
+
+    return;
+  }
+
+  window.location.href = "learn.html";
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function showHome(){
+
+  document.getElementById("homePage").style.display="block";
+  document.getElementById("coursePage").style.display="none";
+  document.getElementById("lessonPage").style.display="none";
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+function showLanguages(){
+
+  document.getElementById("languageGrid")
+  .scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function selectLanguage(language){
+
+  selectedLanguage = language;
+
+  currentLesson = 0;
+
+  document.getElementById("homePage").style.display="none";
+  document.getElementById("coursePage").style.display="block";
+  document.getElementById("lessonPage").style.display="none";
+
+  loadCourse();
+
+}
+
+
+/* =========================
+   COURSE
+========================= */
+
+function loadCourse(){
+
+  const lessons = courses[selectedLanguage];
+
+  document.getElementById("courseTitle").innerText =
+    getEmoji(selectedLanguage) + " " +
+    selectedLanguage +
+    " — Beginner Course";
+
+  document.getElementById("courseDescription").innerText =
+    selectedLanguage +
+    " अगदी Basic पासून Step-by-Step शिकूया.";
+
+  const list =
+    document.getElementById("lessonList");
+
+  list.innerHTML="";
+
+  lessons.forEach((lesson,index)=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className="lesson";
+
+    const completed =
+      localStorage.getItem(
+        "lesson_"+selectedLanguage+"_"+index
+      ) === "done";
+
+    item.innerHTML=`
+
+      <div class="lesson-number">
+        ${index+1}
+      </div>
+
+      <div class="lesson-info">
+
+        <h3>${lesson.title}</h3>
+
+        <p>${lesson.subtitle}</p>
+
+      </div>
+
+      <div class="lesson-status">
+        ${completed ? "✅" : "›"}
+      </div>
+
+    `;
+
+    item.onclick=()=>{
+
+      currentLesson=index;
+
+      openLesson();
+
+    };
+
+    list.appendChild(item);
+
+  });
+
+  updateProgress();
+
+}
+
+
+/* =========================
+   OPEN LESSON
+========================= */
+
+function openLesson(){
+
+  document.getElementById("coursePage").style.display="none";
+  document.getElementById("homePage").style.display="none";
+  document.getElementById("lessonPage").style.display="block";
+
+  const lesson =
+    courses[selectedLanguage][currentLesson];
+
+  document.getElementById("lessonTitle").innerText =
+    lesson.title;
+
+  document.getElementById("lessonSubtitle").innerText =
+    lesson.subtitle;
+
+  document.getElementById("lessonConcept").innerText =
+    lesson.concept;
+
+  document.getElementById("lessonExplanation").innerText =
+    lesson.explanation;
+
+  document.getElementById("codeLanguage").innerText =
+    selectedLanguage;
+
+  document.getElementById("codeExample").innerText =
+    lesson.code;
+
+  document.getElementById("codeOutput").innerText =
+    lesson.output;
+
+  document.getElementById("lessonTip").innerText =
+    lesson.tip;
+
+  document.getElementById("practiceQuestion").innerText =
+    lesson.question;
+
+  document.getElementById("practiceAnswer").value="";
+
+  document.getElementById("practiceResult").innerText="";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   COURSE VIEW
+========================= */
+
+function openCourse(){
+
+  document.getElementById("lessonPage").style.display="none";
+  document.getElementById("homePage").style.display="none";
+  document.getElementById("coursePage").style.display="block";
+
+  loadCourse();
+
+}
+
+
+/* =========================
+   NEXT
+========================= */
+
+function nextLesson(){
+
+  localStorage.setItem(
+    "lesson_"+selectedLanguage+"_"+currentLesson,
+    "done"
+  );
+
+  const lessons =
+    courses[selectedLanguage];
+
+  if(currentLesson < lessons.length - 1){
+
+    currentLesson++;
+
+    openLesson();
+
+  }else{
+
+    alert("🎉 Course Complete!");
+
+    openCourse();
+
+  }
+
+}
+
+
+/* =========================
+   PREVIOUS
+========================= */
+
+function previousLesson(){
+
+  if(currentLesson > 0){
+
+    currentLesson--;
+
+    openLesson();
+
+  }
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+function updateProgress(){
+
+  const lessons =
+    courses[selectedLanguage];
+
+  let completed=0;
+
+  lessons.forEach((_,index)=>{
+
+    if(
+      localStorage.getItem(
+        "lesson_"+selectedLanguage+"_"+index
+      ) === "done"
+    ){
+
+      completed++;
+
+    }
+
+  });
+
+  const percent =
+    Math.round(
+      (completed / lessons.length) * 100
+    );
+
+  document.getElementById("progressText").innerText =
+    percent+"%";
+
+  document.getElementById("progressBar").style.width =
+    percent+"%";
+
+}
+
+
+/* =========================
+   PRACTICE
+========================= */
+
+function checkAnswer(){
+
+  const lesson =
+    courses[selectedLanguage][currentLesson];
+
+  const userAnswer =
+    document.getElementById("practiceAnswer")
+    .value
+    .trim()
+    .toLowerCase();
+
+  const correct =
+    String(lesson.answer)
+    .toLowerCase();
+
+  const result =
+    document.getElementById("practiceResult");
+
+  if(!userAnswer){
+
+    result.innerText =
+      "✏️ आधी answer लिहा.";
+
+    result.style.color="#d97706";
+
+    return;
+
+  }
+
+  if(
+    userAnswer === correct ||
+    userAnswer.includes(correct)
+  ){
+
+    result.innerText =
+      "🎉 Correct! खूप छान!";
+
+    result.style.color="#059669";
+
+  }else{
+
+    result.innerText =
+      "❌ अजून एकदा विचार करा. Hint: " +
+      lesson.answer;
+
+    result.style.color="#dc2626";
+
+  }
+
+}
+
+
+/* =========================
+   COPY CODE
+========================= */
+
+function copyCode(){
+
+  const code =
+    document.getElementById("codeExample")
+    .innerText;
+
+  navigator.clipboard.writeText(code)
+  .then(()=>{
+
+    const btn =
+      document.querySelector(".copy-btn");
+
+    btn.innerText="Copied ✓";
+
+    setTimeout(()=>{
+
+      btn.innerText="Copy";
+
+    },1200);
+
+  });
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchLanguage(){
+
+  const value =
+    document.getElementById("languageSearch")
+    .value
+    .toLowerCase()
+    .trim();
+
+  const cards =
+    document.querySelectorAll(".language");
+
+  let found=0;
+
+  cards.forEach(card=>{
+
+    const name =
+      card.dataset.name;
+
+    if(name.includes(value)){
+
+      card.style.display="block";
+
+      found++;
+
+    }else{
+
+      card.style.display="none";
+
+    }
+
+  });
+
+  document.getElementById("empty").style.display =
+    found ? "none" : "block";
+
+}
+
+
+/* =========================
+   EMOJI
+========================= */
+
+function getEmoji(language){
+
+  const emojis={
+
+    Python:"🐍",
+    JavaScript:"⚡",
+    HTML:"🌐",
+    CSS:"🎨",
+    C:"🔵",
+    "C++":"⚙️",
+    Java:"☕",
+    SQL:"🗄️"
+
+  };
+
+  return emojis[language] || "💻";
+
+}
+
+</script>
+
+</body>
+</html>
