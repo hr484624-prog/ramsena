@@ -340,44 +340,36 @@ jobs:
 
 
       # =========================================
-      # FIX APK V1 SIGNING ERROR
+      # CONFIGURE DEBUG APK SIGNING
       # =========================================
 
-      - name: Configure APK signing
+      - name: Configure debug APK signing
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
+          cat >> android/app/build.gradle <<'EOF'
 
-          gradle = Path("android/app/build.gradle")
-
-          if not gradle.exists():
-              raise SystemExit("android/app/build.gradle not found")
-
-          text = gradle.read_text()
-
-          signing_code = """
-              signingConfigs {
-                  debug {
-                      enableV1Signing = false
-                      enableV2Signing = true
+          // GyanSetu APK signing configuration
+          androidComponents {
+              onVariants(selector().withName("debug")) {
+                  signingConfig {
+                      enableV1Signing false
+                      enableV2Signing true
                   }
               }
+          }
+          EOF
 
-          """
+          echo "Debug APK V1 signing disabled."
+          echo "Debug APK V2 signing enabled."
 
-          if "enableV1Signing" not in text:
-              text = text.replace(
-                  "android {",
-                  "android {\\n" + signing_code,
-                  1
-              )
 
-          gradle.write_text(text)
+      # =========================================
+      # VERIFY GRADLE FILE
+      # =========================================
 
-          print("APK signing configured:")
-          print("V1 signing = false")
-          print("V2 signing = true")
-          PY
+      - name: Verify Gradle configuration
+        run: |
+          cd android
+          ./gradlew tasks --no-daemon
 
 
       # =========================================
@@ -388,7 +380,7 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --no-daemon --stacktrace
 
 
       # =========================================
@@ -399,11 +391,13 @@ jobs:
         run: |
           if [ -f android/app/build/outputs/apk/debug/app-debug.apk ]; then
             echo "========================================="
-            echo "APK BUILD SUCCESSFUL"
+            echo "       APK BUILD SUCCESSFUL"
             echo "========================================="
             ls -lh android/app/build/outputs/apk/debug/app-debug.apk
           else
-            echo "APK NOT FOUND"
+            echo "========================================="
+            echo "          APK NOT FOUND"
+            echo "========================================="
             exit 1
           fi
 
