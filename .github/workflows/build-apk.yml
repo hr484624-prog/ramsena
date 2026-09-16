@@ -12,28 +12,19 @@ jobs:
 
     steps:
 
-      # =========================================
-      # CHECKOUT
-      # =========================================
-
+      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
 
-      # =========================================
-      # NODE.JS
-      # =========================================
-
+      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
 
-      # =========================================
-      # JAVA
-      # =========================================
-
+      # 3. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -41,374 +32,220 @@ jobs:
           java-version: 21
 
 
-      # =========================================
-      # INSTALL CAPACITOR
-      # =========================================
-
+      # 4. Install Capacitor
       - name: Install Capacitor
         run: |
           npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
 
-      # =========================================
-      # PREPARE WEB FILES
-      # =========================================
-
-      - name: Prepare web files
+      # 5. Prepare website files
+      - name: Prepare www folder
         run: |
+          rm -rf www
           mkdir -p www
 
-          find . -maxdepth 1 -type f \
-            ! -name "build-apk.yml" \
-            ! -name "package.json" \
-            -exec cp {} www/ \;
-
-          find . -maxdepth 1 -type d \
-            ! -name "." \
+          find . -maxdepth 1 -mindepth 1 \
             ! -name ".git" \
-            ! -name "www" \
+            ! -name ".github" \
+            ! -name "node_modules" \
             ! -name "android" \
+            ! -name "www" \
+            ! -name "package.json" \
+            ! -name "package-lock.json" \
             -exec cp -r {} www/ \;
 
+          echo "Website files:"
+          find www -maxdepth 2 -type f | head -100
 
-      # =========================================
-      # CAPACITOR CONFIG
-      # =========================================
 
+      # 6. Create Capacitor config
       - name: Create Capacitor config
         run: |
-          cat > capacitor.config.json <<'EOF'
-          {
-            "appId": "com.ramsena.xi",
-            "appName": "GYAN-SETU",
-            "webDir": "www",
-            "server": {
-              "androidScheme": "https"
+          cat > capacitor.config.ts <<'EOF'
+          import type { CapacitorConfig } from '@capacitor/cli';
+
+          const config: CapacitorConfig = {
+            appId: 'com.ramsena.xi',
+            appName: 'GYAN-SETU',
+            webDir: 'www',
+            server: {
+              androidScheme: 'https'
             }
-          }
+          };
+
+          export default config;
           EOF
 
 
-      # =========================================
-      # ADD ANDROID PLATFORM
-      # =========================================
-
+      # 7. Add Android
       - name: Add Android platform
         run: |
           npx cap add android
 
 
-      # =========================================
-      # ADD ANDROID PERMISSIONS
-      # =========================================
-
-      - name: Add Android permissions
+      # 8. Add Android permissions
+      - name: Configure Android permissions
         run: |
           python3 - <<'PY'
-          from pathlib import Path
+          path = "android/app/src/main/AndroidManifest.xml"
 
-          manifest = Path(
-              "android/app/src/main/AndroidManifest.xml"
-          )
-
-          text = manifest.read_text()
+          with open(path, "r", encoding="utf-8") as f:
+              text = f.read()
 
           permissions = [
               "android.permission.INTERNET",
               "android.permission.ACCESS_NETWORK_STATE",
-
               "android.permission.CAMERA",
               "android.permission.RECORD_AUDIO",
-
               "android.permission.ACCESS_FINE_LOCATION",
               "android.permission.ACCESS_COARSE_LOCATION",
-
               "android.permission.POST_NOTIFICATIONS",
-
               "android.permission.READ_CONTACTS",
               "android.permission.WRITE_CONTACTS",
-
               "android.permission.READ_CALENDAR",
               "android.permission.WRITE_CALENDAR",
-
-              "android.permission.READ_MEDIA_IMAGES",
-              "android.permission.READ_MEDIA_VIDEO",
-              "android.permission.READ_MEDIA_AUDIO",
-
-              "android.permission.READ_EXTERNAL_STORAGE",
-              "android.permission.WRITE_EXTERNAL_STORAGE",
-
               "android.permission.VIBRATE"
           ]
 
-          additions = []
-
           for permission in permissions:
-              if permission not in text:
-                  additions.append(
-                      f'    <uses-permission android:name="{permission}" />'
+              tag = f'<uses-permission android:name="{permission}" />'
+              if tag not in text:
+                  text = text.replace(
+                      "<application",
+                      tag + "\n\n    <application",
+                      1
                   )
 
-          if additions:
-              text = text.replace(
-                  "<application",
-                  "\n".join(additions) + "\n\n    <application",
-                  1
-              )
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(text)
 
-          manifest.write_text(text)
-
-          print("GyanSetu Android permissions added.")
+          print("Android permissions configured")
           PY
 
 
-      # =========================================
-      # CREATE MAIN ACTIVITY
-      # =========================================
-
+      # 9. Configure MainActivity
       - name: Configure MainActivity
         run: |
+          mkdir -p android/app/src/main/java/com/ramsena/xi
+
           cat > android/app/src/main/java/com/ramsena/xi/MainActivity.java <<'EOF'
           package com.ramsena.xi;
 
           import android.Manifest;
-          import android.content.pm.PackageManager;
           import android.os.Bundle;
           import android.webkit.PermissionRequest;
           import android.webkit.WebChromeClient;
           import android.webkit.WebView;
 
-          import androidx.annotation.NonNull;
-          import androidx.core.app.ActivityCompat;
-          import androidx.core.content.ContextCompat;
-
           import com.getcapacitor.BridgeActivity;
 
           public class MainActivity extends BridgeActivity {
-
-              private static final int MEDIA_PERMISSION_REQUEST = 1001;
-
-              private PermissionRequest pendingPermissionRequest;
 
               @Override
               public void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
-                  requestCameraMicrophonePermission();
+                  requestPermissions(
+                      new String[]{
+                          Manifest.permission.CAMERA,
+                          Manifest.permission.RECORD_AUDIO
+                      },
+                      1001
+                  );
 
                   WebView webView = getBridge().getWebView();
 
-                  webView.getSettings().setJavaScriptEnabled(true);
-                  webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
-
                   webView.setWebChromeClient(new WebChromeClient() {
-
                       @Override
-                      public void onPermissionRequest(
-                              final PermissionRequest request) {
-
+                      public void onPermissionRequest(final PermissionRequest request) {
                           runOnUiThread(() -> {
-
-                              String[] resources = request.getResources();
-
-                              boolean needsCamera = false;
-                              boolean needsMicrophone = false;
-
-                              for (String resource : resources) {
-
-                                  if (PermissionRequest.RESOURCE_VIDEO_CAPTURE.equals(resource)) {
-                                      needsCamera = true;
-                                  }
-
-                                  if (PermissionRequest.RESOURCE_AUDIO_CAPTURE.equals(resource)) {
-                                      needsMicrophone = true;
-                                  }
-                              }
-
-                              boolean cameraGranted =
-                                      !needsCamera ||
-                                      ContextCompat.checkSelfPermission(
-                                              MainActivity.this,
-                                              Manifest.permission.CAMERA
-                                      ) == PackageManager.PERMISSION_GRANTED;
-
-                              boolean microphoneGranted =
-                                      !needsMicrophone ||
-                                      ContextCompat.checkSelfPermission(
-                                              MainActivity.this,
-                                              Manifest.permission.RECORD_AUDIO
-                                      ) == PackageManager.PERMISSION_GRANTED;
-
-                              if (cameraGranted && microphoneGranted) {
-
-                                  request.grant(resources);
-
-                              } else {
-
-                                  pendingPermissionRequest = request;
-
-                                  requestCameraMicrophonePermission();
-                              }
+                              request.grant(request.getResources());
                           });
                       }
                   });
               }
-
-              private void requestCameraMicrophonePermission() {
-
-                  boolean cameraGranted =
-                          ContextCompat.checkSelfPermission(
-                                  this,
-                                  Manifest.permission.CAMERA
-                          ) == PackageManager.PERMISSION_GRANTED;
-
-                  boolean microphoneGranted =
-                          ContextCompat.checkSelfPermission(
-                                  this,
-                                  Manifest.permission.RECORD_AUDIO
-                          ) == PackageManager.PERMISSION_GRANTED;
-
-                  if (!cameraGranted || !microphoneGranted) {
-
-                      ActivityCompat.requestPermissions(
-                              this,
-                              new String[]{
-                                      Manifest.permission.CAMERA,
-                                      Manifest.permission.RECORD_AUDIO
-                              },
-                              MEDIA_PERMISSION_REQUEST
-                      );
-                  }
-              }
-
-              @Override
-              public void onRequestPermissionsResult(
-                      int requestCode,
-                      @NonNull String[] permissions,
-                      @NonNull int[] grantResults) {
-
-                  super.onRequestPermissionsResult(
-                          requestCode,
-                          permissions,
-                          grantResults
-                  );
-
-                  if (requestCode == MEDIA_PERMISSION_REQUEST) {
-
-                      if (pendingPermissionRequest != null) {
-
-                          boolean cameraGranted =
-                                  ContextCompat.checkSelfPermission(
-                                          this,
-                                          Manifest.permission.CAMERA
-                                  ) == PackageManager.PERMISSION_GRANTED;
-
-                          boolean microphoneGranted =
-                                  ContextCompat.checkSelfPermission(
-                                          this,
-                                          Manifest.permission.RECORD_AUDIO
-                                  ) == PackageManager.PERMISSION_GRANTED;
-
-                          if (cameraGranted && microphoneGranted) {
-
-                              pendingPermissionRequest.grant(
-                                      pendingPermissionRequest.getResources()
-                              );
-
-                          } else {
-
-                              pendingPermissionRequest.deny();
-                          }
-
-                          pendingPermissionRequest = null;
-                      }
-                  }
-              }
           }
           EOF
 
-          echo "MainActivity.java created successfully."
 
-
-      # =========================================
-      # SYNC CAPACITOR
-      # =========================================
-
+      # 10. Sync Capacitor
       - name: Sync Capacitor
         run: |
           npx cap sync android
 
 
-      # =========================================
-      # CONFIGURE DEBUG APK SIGNING
-      # =========================================
-
-      - name: Configure debug APK signing
+      # 11. Fix debug APK V1 signing
+      - name: Configure APK signing
         run: |
-          cat >> android/app/build.gradle <<'EOF'
+          python3 - <<'PY'
+          path = "android/app/build.gradle"
 
-          // GyanSetu APK signing configuration
-          androidComponents {
-              onVariants(selector().withName("debug")) {
-                  signingConfig {
+          with open(path, "r", encoding="utf-8") as f:
+              text = f.read()
+
+          signing_block = r'''
+              signingConfigs {
+                  debug {
                       enableV1Signing false
                       enableV2Signing true
                   }
               }
-          }
-          EOF
+          '''
 
-          echo "Debug APK V1 signing disabled."
-          echo "Debug APK V2 signing enabled."
+          if "signingConfigs {" not in text:
+              marker = "android {"
+              if marker in text:
+                  text = text.replace(
+                      marker,
+                      marker + "\n" + signing_block,
+                      1
+                  )
+              else:
+                  raise SystemExit("android { block not found")
+
+          with open(path, "w", encoding="utf-8") as f:
+              f.write(text)
+
+          print("APK signing configuration added")
+          PY
 
 
-      # =========================================
-      # VERIFY GRADLE FILE
-      # =========================================
-
-      - name: Verify Gradle configuration
+      # 12. Show Gradle configuration
+      - name: Check Gradle configuration
         run: |
+          echo "===== android/app/build.gradle ====="
+          sed -n '1,180p' android/app/build.gradle
+
+          echo "===== Gradle version ====="
           cd android
-          ./gradlew tasks --no-daemon
+          ./gradlew --version
 
 
-      # =========================================
-      # BUILD APK
-      # =========================================
-
+      # 13. Build APK
       - name: Build APK
         run: |
           cd android
-          chmod +x gradlew
           ./gradlew assembleDebug --no-daemon --stacktrace
 
 
-      # =========================================
-      # CHECK APK
-      # =========================================
-
+      # 14. Check APK
       - name: Check APK
         run: |
-          if [ -f android/app/build/outputs/apk/debug/app-debug.apk ]; then
-            echo "========================================="
-            echo "       APK BUILD SUCCESSFUL"
-            echo "========================================="
+          if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+            echo "======================================"
+            echo "APK BUILD SUCCESSFUL"
+            echo "======================================"
             ls -lh android/app/build/outputs/apk/debug/app-debug.apk
           else
-            echo "========================================="
-            echo "          APK NOT FOUND"
-            echo "========================================="
+            echo "APK NOT FOUND"
             exit 1
           fi
 
 
-      # =========================================
-      # UPLOAD APK
-      # =========================================
-
+      # 15. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RAMSENA-XI-APK
+          name: RAMSENA-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
