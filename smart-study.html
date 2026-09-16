@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - AI Study</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#eef5ff;
+  color:#172554;
+  min-height:100vh;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  margin:auto;
+  min-height:100vh;
+  background:#eef5ff;
+  padding-bottom:90px;
+}
+
+/* HEADER */
+
+.header{
+  height:65px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  color:white;
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
+  position:sticky;
+  top:0;
+  z-index:50;
+  box-shadow:0 3px 12px #1769e055;
+}
+
+.back{
+  border:0;
+  background:rgba(255,255,255,.18);
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  font-size:22px;
+}
+
+.headerTitle{
+  font-size:19px;
+  font-weight:bold;
+}
+
+.menu{
+  border:0;
+  background:rgba(255,255,255,.18);
+  color:white;
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  font-size:20px;
+}
+
+/* HERO */
+
+.hero{
+  margin:16px;
+  padding:20px;
+  border-radius:22px;
+  background:linear-gradient(135deg,#1769e0,#4d9cff);
+  color:white;
+  box-shadow:0 8px 20px #1769e044;
+}
+
+.hero h2{
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.hero p{
+  font-size:14px;
+  opacity:.95;
+  line-height:1.5;
+}
+
+.heroButtons{
+  display:flex;
+  gap:9px;
+  margin-top:16px;
+}
+
+.heroBtn{
+  flex:1;
+  border:0;
+  padding:11px 5px;
+  border-radius:12px;
+  background:white;
+  color:#1769e0;
+  font-weight:bold;
+}
+
+/* SECTION */
+
+.section{
+  padding:0 16px;
+}
+
+.sectionTitle{
+  font-size:18px;
+  font-weight:bold;
+  margin:18px 0 11px;
+}
+
+/* QUICK ACTIONS */
+
+.quickGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:11px;
+}
+
+.quick{
+  border:0;
+  background:#fff;
+  border-radius:17px;
+  padding:16px 12px;
+  text-align:left;
+  box-shadow:0 3px 12px #17255412;
+  color:#172554;
+}
+
+.quickIcon{
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.quickTitle{
+  font-weight:bold;
+  font-size:15px;
+}
+
+.quickSub{
+  color:#64748b;
+  font-size:12px;
+  margin-top:4px;
+}
+
+/* SELECT BOX */
+
+.card{
+  background:white;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 3px 12px #17255412;
+}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+select,
+input,
+textarea{
+  width:100%;
+  border:1px solid #d8e3f2;
+  background:#f8fbff;
+  border-radius:12px;
+  padding:13px;
+  outline:none;
+  color:#172554;
+  font-size:14px;
+}
+
+select:focus,
+input:focus,
+textarea:focus{
+  border-color:#1769e0;
+}
+
+.field{
+  margin-bottom:13px;
+}
+
+.startBtn{
+  width:100%;
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:14px;
+  border-radius:13px;
+  font-size:15px;
+  font-weight:bold;
+}
+
+/* AI CHAT */
+
+.chatBox{
+  display:none;
+  margin-top:15px;
+}
+
+.chat{
+  background:#f7faff;
+  border-radius:15px;
+  padding:13px;
+  margin-bottom:10px;
+  line-height:1.55;
+  font-size:14px;
+}
+
+.ai{
+  border-left:4px solid #1769e0;
+}
+
+.user{
+  background:#1769e0;
+  color:white;
+  margin-left:35px;
+}
+
+.chatName{
+  font-size:11px;
+  font-weight:bold;
+  margin-bottom:4px;
+  opacity:.7;
+}
+
+.chatInput{
+  display:flex;
+  gap:7px;
+  position:sticky;
+  bottom:80px;
+  background:#eef5ff;
+  padding:8px 0;
+}
+
+.chatInput input{
+  flex:1;
+}
+
+.sendBtn{
+  width:48px;
+  border:0;
+  background:#1769e0;
+  color:white;
+  border-radius:12px;
+  font-size:20px;
+}
+
+/* STUDY MODES */
+
+.modeGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+}
+
+.mode{
+  background:white;
+  border:1px solid #e1eaf5;
+  border-radius:14px;
+  padding:14px 5px;
+  text-align:center;
+  font-size:12px;
+}
+
+.mode b{
+  display:block;
+  font-size:22px;
+  margin-bottom:6px;
+}
+
+/* PROGRESS */
+
+.progressCard{
+  background:white;
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 3px 12px #17255412;
+}
+
+.progressTop{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.progressBar{
+  width:100%;
+  height:10px;
+  background:#e5edf8;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progressFill{
+  width:35%;
+  height:100%;
+  background:#1769e0;
+  border-radius:20px;
+}
+
+/* WEAK TOPICS */
+
+.topic{
+  background:white;
+  border-radius:14px;
+  padding:13px;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  box-shadow:0 2px 8px #1725540d;
+}
+
+.topic button{
+  border:0;
+  background:#e9f2ff;
+  color:#1769e0;
+  padding:8px 11px;
+  border-radius:9px;
+  font-weight:bold;
+}
+
+/* BOTTOM NAV */
+
+.bottomNav{
+  position:fixed;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:430px;
+  height:70px;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -3px 15px #17255418;
+  z-index:100;
+}
+
+.navItem{
+  border:0;
+  background:none;
+  color:#64748b;
+  font-size:11px;
+}
+
+.navItem span{
+  display:block;
+  font-size:22px;
+  margin-bottom:3px;
+}
+
+.navItem.active{
+  color:#1769e0;
+  font-weight:bold;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#00000066;
+  z-index:200;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.modalBox{
+  width:100%;
+  max-width:430px;
+  background:white;
+  border-radius:24px 24px 0 0;
+  padding:20px;
+  max-height:85vh;
+  overflow:auto;
+}
+
+.modalTitle{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:15px;
+}
+
+.close{
+  float:right;
+  border:0;
+  background:#eef5ff;
+  border-radius:10px;
+  width:35px;
+  height:35px;
+  font-size:18px;
+}
+
+.option{
+  width:100%;
+  border:1px solid #e0e9f5;
+  background:#f8fbff;
+  padding:14px;
+  border-radius:13px;
+  margin-bottom:9px;
+  text-align:left;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.option:hover{
+  border-color:#1769e0;
+}
+
+/* QUIZ */
+
+.quizQuestion{
+  font-size:17px;
+  font-weight:bold;
+  line-height:1.5;
+  margin-bottom:14px;
+}
+
+.answer{
+  width:100%;
+  border:1px solid #dbe6f4;
+  background:white;
+  padding:13px;
+  border-radius:12px;
+  margin-bottom:8px;
+  text-align:left;
+}
+
+.answer.correct{
+  background:#dcfce7;
+  border-color:#22c55e;
+}
+
+.answer.wrong{
+  background:#fee2e2;
+  border-color:#ef4444;
+}
+
+/* LOADING */
+
+.loading{
+  text-align:center;
+  padding:15px;
+  color:#1769e0;
+  font-weight:bold;
+}
+
+/* HIDDEN */
+
+.hidden{
+  display:none !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <button class="back" onclick="goBack()">‹</button>
+
+    <div class="headerTitle">
+      🤖 AI Study
+    </div>
+
+    <button class="menu" onclick="openMenu()">⋮</button>
+
+  </header>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <h2>📚 तुमचा AI Study साथी!</h2>
+
+    <p>
+      प्रश्न विचारा, शिकून घ्या, practice करा आणि
+      तुमच्या अभ्यासातील अडचणी AI सोबत सोडवा.
+    </p>
+
+    <div class="heroButtons">
+
+      <button class="heroBtn" onclick="openDoubt()">
+        🤔 Doubt
+      </button>
+
+      <button class="heroBtn" onclick="openQuiz()">
+        🧠 Quiz
+      </button>
+
+      <button class="heroBtn" onclick="startVoice()">
+        🎤 Voice
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- QUICK FEATURES -->
+
+  <section class="section">
+
+    <div class="sectionTitle">
+      ⚡ Quick Study
+    </div>
+
+    <div class="quickGrid">
+
+      <button class="quick" onclick="openDoubt()">
+        <div class="quickIcon">🤔</div>
+        <div class="quickTitle">Ask a Doubt</div>
+        <div class="quickSub">काहीही प्रश्न विचारा</div>
+      </button>
+
+      <button class="quick" onclick="openTeacher()">
+        <div class="quickIcon">🧑‍🏫</div>
+        <div class="quickTitle">AI Teacher</div>
+        <div class="quickSub">Topic शिकून घ्या</div>
+      </button>
+
+      <button class="quick" onclick="openQuiz()">
+        <div class="quickIcon">🧠</div>
+        <div class="quickTitle">Practice Quiz</div>
+        <div class="quickSub">प्रश्नांची practice</div>
+      </button>
+
+      <button class="quick" onclick="openNotes()">
+        <div class="quickIcon">📝</div>
+        <div class="quickTitle">Smart Notes</div>
+        <div class="quickSub">Short notes तयार करा</div>
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- STUDY MODE -->
+
+  <section class="section">
+
+    <div class="sectionTitle">
+      🎯 Study Modes
+    </div>
+
+    <div class="modeGrid">
+
+      <button class="mode" onclick="openMode('Concept')">
+        <b>📖</b>
+        Concept
+      </button>
+
+      <button class="mode" onclick="openMode('Practice')">
+        <b>✍️</b>
+        Practice
+      </button>
+
+      <button class="mode" onclick="openMode('Revision')">
+        <b>🔄</b>
+        Revision
+      </button>
+
+      <button class="mode" onclick="openMode('Formula')">
+        <b>📐</b>
+        Formula
+      </button>
+
+      <button class="mode" onclick="openMode('Examples')">
+        <b>💡</b>
+        Examples
+      </button>
+
+      <button class="mode" onclick="openMode('Exam')">
+        <b>🎯</b>
+        Exam Prep
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- AI STUDY AREA -->
+
+  <section class="section">
+
+    <div class="sectionTitle">
+      🤖 AI Teacher
+    </div>
+
+    <div class="card">
+
+      <div class="field">
+
+        <label>इयत्ता</label>
+
+        <select id="classSelect">
+
+          <option value="">इयत्ता निवडा</option>
+          <option>1ली</option>
+          <option>2री</option>
+          <option>3री</option>
+          <option>4थी</option>
+          <option>5वी</option>
+          <option>6वी</option>
+          <option>7वी</option>
+          <option>8वी</option>
+          <option>9वी</option>
+          <option>10वी</option>
+          <option>11वी</option>
+          <option>12वी</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>विषय</label>
+
+        <select id="subjectSelect">
+
+          <option value="">विषय निवडा</option>
+          <option>गणित</option>
+          <option>विज्ञान</option>
+          <option>भौतिकशास्त्र</option>
+          <option>रसायनशास्त्र</option>
+          <option>जीवशास्त्र</option>
+          <option>इतिहास</option>
+          <option>भूगोल</option>
+          <option>इंग्रजी</option>
+          <option>मराठी</option>
+          <option>हिंदी</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Topic / Chapter</label>
+
+        <input
+          id="topicInput"
+          placeholder="उदा. बेरीज, त्रिकोण, प्रकाश..."
+        >
+
+      </div>
+
+
+      <button class="startBtn" onclick="startTeacher()">
+        🚀 शिकायला सुरुवात करा
+      </button>
+
+
+      <div id="chatBox" class="chatBox">
+
+        <div class="chat ai">
+
+          <div class="chatName">
+            🤖 GyanSetu AI
+          </div>
+
+          नमस्कार! 👋 मी तुमचा AI Teacher आहे.
+          तुम्हाला कोणता topic शिकायचा आहे?
+
+        </div>
+
+
+        <div id="chatMessages"></div>
+
+
+        <div class="chatInput">
+
+          <input
+            id="chatInput"
+            placeholder="तुमचा प्रश्न लिहा..."
+            onkeydown="if(event.key==='Enter') sendMessage()"
+          >
+
+          <button class="sendBtn" onclick="sendMessage()">
+            ➤
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PROGRESS -->
+
+  <section class="section">
+
+    <div class="sectionTitle">
+      📊 My Progress
+    </div>
+
+    <div class="progressCard">
+
+      <div class="progressTop">
+
+        <b>आजचा अभ्यास</b>
+
+        <b id="progressPercent">
+          35%
+        </b>
+
+      </div>
+
+      <div class="progressBar">
+
+        <div
+          class="progressFill"
+          id="progressFill">
+        </div>
+
+      </div>
+
+      <p style="margin-top:10px;font-size:13px;color:#64748b;">
+        अभ्यास सुरू ठेवा! 🚀
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- WEAK TOPICS -->
+
+  <section class="section">
+
+    <div class="sectionTitle">
+      🎯 Practice More
+    </div>
+
+    <div class="topic">
+
+      <div>
+        <b>गणित</b>
+        <div style="font-size:12px;color:#64748b;">
+          बेरीज आणि वजाबाकी
+        </div>
+      </div>
+
+      <button onclick="practiceTopic('गणित')">
+        Practice
+      </button>
+
+    </div>
+
+
+    <div class="topic">
+
+      <div>
+        <b>विज्ञान</b>
+        <div style="font-size:12px;color:#64748b;">
+          Basic Concepts
+        </div>
+      </div>
+
+      <button onclick="practiceTopic('विज्ञान')">
+        Practice
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- BOTTOM NAV -->
+
+  <nav class="bottomNav">
+
+    <button class="navItem" onclick="goHome()">
+      <span>🏠</span>
+      Home
+    </button>
+
+    <button class="navItem" onclick="goLearn()">
+      <span>📚</span>
+      Learn
+    </button>
+
+    <button class="navItem active">
+      <span>🤖</span>
+      AI Study
+    </button>
+
+    <button class="navItem" onclick="goProfile()">
+      <span>👤</span>
+      Profile
+    </button>
+
+  </nav>
+
+</div>
+
+
+<!-- GENERAL MODAL -->
+
+<div id="modal" class="modal" onclick="closeOutside(event)">
+
+  <div class="modalBox">
+
+    <button class="close" onclick="closeModal()">
+      ✕
+    </button>
+
+    <div id="modalContent"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function goBack(){
+  window.location.href="home.html";
+}
+
+function goHome(){
+  window.location.href="home.html";
+}
+
+function goLearn(){
+  window.location.href="learn.html";
+}
+
+function goProfile(){
+  window.location.href="profile.html";
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(html){
+
+  document.getElementById("modalContent").innerHTML=html;
+
+  document.getElementById("modal").style.display="flex";
+}
+
+function closeModal(){
+
+  document.getElementById("modal").style.display="none";
+}
+
+function closeOutside(e){
+
+  if(e.target.id==="modal"){
+    closeModal();
+  }
+
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+function openMenu(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      ⚙️ AI Study Options
+    </div>
+
+    <button class="option" onclick="openLanguage()">
+      🌐 Study Language
+    </button>
+
+    <button class="option" onclick="openHelp()">
+      🆘 Study Help
+    </button>
+
+    <button class="option" onclick="openTips()">
+      💡 Study Tips
+    </button>
+
+    <button class="option" onclick="closeModal()">
+      ✕ Close
+    </button>
+
+  `);
+
+}
+
+
+/* =========================
+   DOUBT SOLVER
+========================= */
+
+function openDoubt(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      🤔 AI Doubt Solver
+    </div>
+
+    <div class="field">
+
+      <label>तुमचा प्रश्न</label>
+
+      <textarea
+        id="doubtText"
+        rows="5"
+        placeholder="तुमचा प्रश्न इथे लिहा..."
+      ></textarea>
+
+    </div>
+
+    <button
+      class="startBtn"
+      onclick="solveDoubt()"
+    >
+      🤖 Solve My Doubt
+    </button>
+
+    <div id="doubtAnswer"
+         style="margin-top:15px;">
+    </div>
+
+  `);
+
+}
+
+
+async function solveDoubt(){
+
+  const text=document.getElementById("doubtText").value.trim();
+
+  if(!text){
+
+    alert("कृपया प्रश्न लिहा.");
+
+    return;
+  }
+
+  document.getElementById("doubtAnswer").innerHTML=
+  `<div class="loading">🤖 AI विचार करत आहे...</div>`;
+
+  try{
+
+    const response=await fetch("/api/ai-study",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        mode:"doubt",
+        question:text
+
+      })
+
+    });
+
+    if(!response.ok){
+      throw new Error("API Error");
+    }
+
+    const data=await response.json();
+
+    document.getElementById("doubtAnswer").innerHTML=`
+
+      <div class="chat ai">
+
+        <div class="chatName">
+          🤖 GyanSetu AI
+        </div>
+
+        ${formatAI(data.answer || "उत्तर मिळाले नाही.")}
+
+      </div>
+
+    `;
+
+  }catch(error){
+
+    document.getElementById("doubtAnswer").innerHTML=`
+
+      <div class="chat ai">
+
+        🤖 AI सध्या connect झालेला नाही.
+        <br><br>
+        Backend मध्ये <b>/api/ai-study</b> endpoint जोडल्यावर
+        हा feature काम करेल.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   AI TEACHER
+========================= */
+
+async function startTeacher(){
+
+  const cls=document.getElementById("classSelect").value;
+
+  const subject=document.getElementById("subjectSelect").value;
+
+  const topic=document.getElementById("topicInput").value.trim();
+
+
+  if(!cls || !subject || !topic){
+
+    alert("इयत्ता, विषय आणि topic निवडा.");
+
+    return;
+  }
+
+
+  document.getElementById("chatBox").style.display="block";
+
+  document.getElementById("chatMessages").innerHTML=`
+
+    <div class="loading">
+      🤖 ${topic} शिकवण्यासाठी AI तयार होत आहे...
+    </div>
+
+  `;
+
+
+  try{
+
+    const response=await fetch("/api/ai-study",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        mode:"teacher",
+        className:cls,
+        subject:subject,
+        topic:topic
+
+      })
+
+    });
+
+
+    if(!response.ok){
+      throw new Error("API Error");
+    }
+
+
+    const data=await response.json();
+
+
+    document.getElementById("chatMessages").innerHTML=`
+
+      <div class="chat ai">
+
+        <div class="chatName">
+          🤖 AI Teacher
+        </div>
+
+        ${formatAI(data.answer || "चला हा topic शिकूया!")}
+
+      </div>
+
+    `;
+
+
+  }catch(error){
+
+    document.getElementById("chatMessages").innerHTML=`
+
+      <div class="chat ai">
+
+        <div class="chatName">
+          🤖 AI Teacher
+        </div>
+
+        चला <b>${topic}</b> अगदी basic पासून शिकूया! 📚
+        <br><br>
+        तुम्हाला कुठे अडचण आली तर
+        <b>"समजलं नाही"</b> असे लिहा.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   CHAT
+========================= */
+
+async function sendMessage(){
+
+  const input=document.getElementById("chatInput");
+
+  const text=input.value.trim();
+
+  if(!text) return;
+
+
+  const messages=document.getElementById("chatMessages");
+
+
+  messages.innerHTML+=`
+
+    <div class="chat user">
+
+      <div class="chatName">
+        👦 तुम्ही
+      </div>
+
+      ${escapeHTML(text)}
+
+    </div>
+
+  `;
+
+
+  input.value="";
+
+
+  messages.innerHTML+=`
+
+    <div id="chatLoading"
+         class="loading">
+      🤖 विचार करत आहे...
+    </div>
+
+  `;
+
+
+  try{
+
+    const response=await fetch("/api/ai-study",{
+
+      method:"POST",
+
+      headers:{
+        "Content-Type":"application/json"
+      },
+
+      body:JSON.stringify({
+
+        mode:"chat",
+        question:text,
+        topic:document.getElementById("topicInput").value
+
+      })
+
+    });
+
+
+    if(!response.ok){
+      throw new Error("API Error");
+    }
+
+
+    const data=await response.json();
+
+
+    document.getElementById("chatLoading").remove();
+
+
+    messages.innerHTML+=`
+
+      <div class="chat ai">
+
+        <div class="chatName">
+          🤖 AI Teacher
+        </div>
+
+        ${formatAI(data.answer || "चला पुढे शिकूया!")}
+
+      </div>
+
+    `;
+
+  }catch(error){
+
+    document.getElementById("chatLoading").remove();
+
+
+    messages.innerHTML+=`
+
+      <div class="chat ai">
+
+        <div class="chatName">
+          🤖 AI Teacher
+        </div>
+
+        समजलं 👍
+        हा प्रश्न आपण step-by-step सोडवूया.
+        <br><br>
+        Backend AI जोडल्यावर मी पूर्ण उत्तर देऊ शकेन.
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================
+   QUIZ
+========================= */
+
+function openQuiz(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      🧠 Practice Quiz
+    </div>
+
+    <div class="quizQuestion">
+      5 + 7 = ?
+    </div>
+
+    <button class="answer"
+      onclick="quizAnswer(this,false)">
+      10
+    </button>
+
+    <button class="answer"
+      onclick="quizAnswer(this,true)">
+      12
+    </button>
+
+    <button class="answer"
+      onclick="quizAnswer(this,false)">
+      13
+    </button>
+
+    <button class="answer"
+      onclick="quizAnswer(this,false)">
+      14
+    </button>
+
+    <div id="quizResult"
+         style="margin-top:12px;font-weight:bold;">
+    </div>
+
+  `);
+
+}
+
+
+function quizAnswer(btn,correct){
+
+  if(correct){
+
+    btn.classList.add("correct");
+
+    document.getElementById("quizResult").innerHTML=
+      "🎉 बरोबर! खूप छान!";
+
+  }else{
+
+    btn.classList.add("wrong");
+
+    document.getElementById("quizResult").innerHTML=
+      "❌ हे उत्तर चुकीचे आहे. पुन्हा प्रयत्न करा.";
+
+  }
+
+}
+
+
+/* =========================
+   NOTES
+========================= */
+
+function openNotes(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      📝 Smart Notes
+    </div>
+
+    <div class="field">
+
+      <label>Topic</label>
+
+      <input
+        id="noteTopic"
+        placeholder="उदा. प्रकाश"
+      >
+
+    </div>
+
+    <button class="startBtn"
+      onclick="generateNotes()">
+      ✨ Notes तयार करा
+    </button>
+
+    <div id="notesResult"
+         style="margin-top:15px;">
+    </div>
+
+  `);
+
+}
+
+
+function generateNotes(){
+
+  const topic=document.getElementById("noteTopic").value.trim();
+
+  if(!topic){
+
+    alert("Topic लिहा.");
+
+    return;
+  }
+
+
+  document.getElementById("notesResult").innerHTML=`
+
+    <div class="chat ai">
+
+      <b>📖 ${escapeHTML(topic)} — Short Notes</b>
+
+      <br><br>
+
+      • मुख्य संकल्पना समजून घ्या<br>
+      • महत्त्वाच्या definitions लक्षात ठेवा<br>
+      • उदाहरणे सोडवा<br>
+      • स्वतःची practice करा<br>
+      • शेवटी revision करा
+
+      <br><br>
+
+      💡 AI backend जोडल्यावर
+      topic-specific notes तयार होतील.
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   AI TEACHER MODAL
+========================= */
+
+function openTeacher(){
+
+  closeModal();
+
+  document.getElementById("topicInput").focus();
+
+}
+
+
+/* =========================
+   VOICE
+========================= */
+
+function startVoice(){
+
+  if(!("webkitSpeechRecognition" in window) &&
+     !("SpeechRecognition" in window)){
+
+    openModal(`
+
+      <div class="modalTitle">
+        🎤 Voice Study
+      </div>
+
+      <div class="chat ai">
+
+        तुमच्या browser मध्ये voice recognition
+        उपलब्ध नाही.
+
+      </div>
+
+    `);
+
+    return;
+  }
+
+
+  const SpeechRecognition=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+
+  const recognition=new SpeechRecognition();
+
+  recognition.lang="mr-IN";
+
+  recognition.interimResults=false;
+
+  recognition.start();
+
+
+  openModal(`
+
+    <div class="modalTitle">
+      🎤 Voice Study
+    </div>
+
+    <div class="loading">
+      🎤 ऐकत आहे...
+    </div>
+
+    <div id="voiceText"
+         class="chat ai">
+      बोला...
+    </div>
+
+  `);
+
+
+  recognition.onresult=function(event){
+
+    const text=event.results[0][0].transcript;
+
+    document.getElementById("voiceText").innerHTML=
+      "🗣️ तुम्ही म्हणालात:<br><br>" +
+      escapeHTML(text);
+
+    document.getElementById("topicInput").value=text;
+
+  };
+
+
+  recognition.onerror=function(){
+
+    document.getElementById("voiceText").innerHTML=
+      "❌ Voice input घेता आला नाही.";
+
+  };
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+function openLanguage(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      🌐 Study Language
+    </div>
+
+    <button class="option"
+      onclick="setLanguage('मराठी')">
+      🇮🇳 मराठी
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('हिंदी')">
+      🇮🇳 हिंदी
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('English')">
+      🇬🇧 English
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('ગુજરાતી')">
+      ગુજરાતી
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('বাংলা')">
+      বাংলা
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('தமிழ்')">
+      தமிழ்
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('తెలుగు')">
+      తెలుగు
+    </button>
+
+    <button class="option"
+      onclick="setLanguage('ಕನ್ನಡ')">
+      ಕನ್ನಡ
+    </button>
+
+  `);
+
+}
+
+
+function setLanguage(language){
+
+  localStorage.setItem("studyLanguage",language);
+
+  closeModal();
+
+}
+
+
+/* =========================
+   STUDY MODE
+========================= */
+
+function openMode(mode){
+
+  openModal(`
+
+    <div class="modalTitle">
+      🎯 ${mode} Mode
+    </div>
+
+    <div class="chat ai">
+
+      🤖 <b>${mode}</b> mode सुरू आहे.
+
+      <br><br>
+
+      तुमच्या level नुसार अभ्यास करण्यासाठी
+      हा mode वापरता येईल.
+
+    </div>
+
+    <button class="startBtn"
+      onclick="closeModal()">
+      🚀 सुरू करा
+    </button>
+
+  `);
+
+}
+
+
+/* =========================
+   PRACTICE TOPIC
+========================= */
+
+function practiceTopic(subject){
+
+  openModal(`
+
+    <div class="modalTitle">
+      ✍️ ${subject} Practice
+    </div>
+
+    <div class="chat ai">
+
+      चला ${subject} ची practice करूया! 💪
+
+      <br><br>
+
+      Easy → Medium → Hard
+      अशा क्रमाने प्रश्न सोडवूया.
+
+    </div>
+
+    <button class="startBtn"
+      onclick="openQuiz()">
+      🧠 Quiz सुरू करा
+    </button>
+
+  `);
+
+}
+
+
+/* =========================
+   HELP
+========================= */
+
+function openHelp(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      🆘 Study Help
+    </div>
+
+    <div class="chat ai">
+
+      कुठे अडचण आली?
+
+      <br><br>
+
+      🤔 Question समजत नाही<br>
+      📖 Chapter समजत नाही<br>
+      ✍️ Answer लिहिता येत नाही<br>
+      🧠 लक्षात राहत नाही<br>
+      🎯 Exam preparation हवी आहे
+
+      <br><br>
+
+      AI Study मध्ये तुमचा प्रश्न लिहा.
+      मी तो step-by-step समजावण्याचा प्रयत्न करेन.
+
+    </div>
+
+  `);
+
+}
+
+
+/* =========================
+   STUDY TIPS
+========================= */
+
+function openTips(){
+
+  openModal(`
+
+    <div class="modalTitle">
+      💡 Study Tips
+    </div>
+
+    <div class="chat ai">
+
+      📌 एकावेळी एक topic शिका.<br><br>
+
+      📌 फक्त वाचू नका—questions solve करा.<br><br>
+
+      📌 चुकलेले questions पुन्हा सोडवा.<br><br>
+
+      📌 दररोज थोडे revision करा.<br><br>
+
+      📌 समजले नाही तर पुन्हा विचारायला अजिबात घाबरू नका.
+
+    </div>
+
+  `);
+
+}
+
+
+/* =========================
+   FORMAT AI
+========================= */
+
+function formatAI(text){
+
+  return escapeHTML(text)
+    .replace(/\n/g,"<br>")
+    .replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+
+}
+
+
+function escapeHTML(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+window.addEventListener("load",function(){
+
+  const savedLanguage=
+    localStorage.getItem("studyLanguage");
+
+  if(savedLanguage){
+
+    console.log("Study Language:",savedLanguage);
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>
