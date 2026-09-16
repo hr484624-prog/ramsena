@@ -2,7 +2,7 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>GyanSetu - Science Explorer</title>
 
@@ -12,27 +12,55 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+:root{
+  --gold:#d6a637;
+  --gold2:#ffd86a;
+  --gold3:#a97913;
+  --black:#070707;
+  --black2:#111111;
+  --card:#171717;
+  --text:#fff8df;
+  --muted:#a9a9a9;
+  --green:#37d67a;
+  --red:#ff4d4d;
 }
 
 body{
   font-family:Arial,sans-serif;
-  background:#f7f8fc;
-  color:#18264d;
+  background:
+    radial-gradient(circle at top,#29210c 0,#090909 35%,#030303 100%);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button{
+  font-family:inherit;
 }
 
 .app{
   max-width:430px;
   min-height:100vh;
   margin:auto;
-  padding-bottom:30px;
+  padding-bottom:35px;
 }
 
-/* HEADER */
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  background:white;
-  padding:18px;
-  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(8,8,8,.94);
+  backdrop-filter:blur(12px);
+  padding:15px;
+  border-bottom:1px solid rgba(214,166,55,.25);
+  box-shadow:0 5px 25px rgba(0,0,0,.5);
 }
 
 .top{
@@ -42,357 +70,605 @@ body{
 }
 
 .back{
-  font-size:30px;
+  width:42px;
+  height:42px;
+  border:1px solid rgba(214,166,55,.35);
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--gold2);
+  font-size:31px;
   cursor:pointer;
+  background:#111;
 }
 
 .title{
-  font-size:21px;
-  font-weight:800;
+  font-size:19px;
+  font-weight:900;
+  letter-spacing:.3px;
 }
 
 .xp{
-  background:#fff0dc;
-  color:#ff7900;
-  padding:8px 11px;
+  background:linear-gradient(135deg,#2a210d,#171207);
+  border:1px solid var(--gold3);
+  color:var(--gold2);
+  padding:9px 10px;
   border-radius:12px;
+  font-weight:900;
+  font-size:12px;
+}
+
+
+/* =========================
+   HOME LEVEL SELECT
+========================= */
+
+.levelHome{
+  padding:20px 16px;
+}
+
+.hero{
+  background:
+    linear-gradient(145deg,#17130a,#090909);
+  border:1px solid rgba(214,166,55,.3);
+  border-radius:24px;
+  padding:22px 17px;
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.5),
+    inset 0 1px rgba(255,255,255,.04);
+  margin-bottom:18px;
+}
+
+.heroBadge{
+  display:inline-block;
+  border:1px solid var(--gold3);
+  color:var(--gold2);
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:11px;
   font-weight:bold;
+  margin-bottom:12px;
+}
+
+.hero h1{
+  font-size:27px;
+  line-height:1.15;
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:8px;
+  line-height:1.5;
+}
+
+.progressOuter{
+  height:8px;
+  background:#292929;
+  border-radius:20px;
+  margin-top:17px;
+  overflow:hidden;
+}
+
+.progressInner{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--gold3),var(--gold2));
+  border-radius:20px;
+  transition:.4s;
+}
+
+.progressText{
+  display:flex;
+  justify-content:space-between;
+  margin-top:7px;
+  font-size:11px;
+  color:#999;
+}
+
+.sectionTitle{
+  font-size:16px;
+  font-weight:900;
+  margin:20px 3px 12px;
+}
+
+.levelGrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
+
+.levelCard{
+  position:relative;
+  min-height:68px;
+  border-radius:15px;
+  border:1px solid #292929;
+  background:linear-gradient(145deg,#181818,#0c0c0c);
+  color:white;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transition:.2s;
+}
+
+.levelCard:active{
+  transform:scale(.94);
+}
+
+.levelCard.unlocked{
+  border-color:rgba(214,166,55,.55);
+  box-shadow:0 0 12px rgba(214,166,55,.08);
+}
+
+.levelCard.completed{
+  background:linear-gradient(145deg,#2a210d,#111);
+  border-color:var(--gold);
+}
+
+.levelCard.locked{
+  opacity:.48;
+  cursor:not-allowed;
+}
+
+.levelNumber{
+  font-size:17px;
+  font-weight:900;
+  color:var(--gold2);
+}
+
+.levelLock{
+  font-size:15px;
+  margin-top:3px;
+}
+
+.levelDone{
+  position:absolute;
+  top:5px;
+  right:6px;
+  font-size:10px;
+  color:var(--green);
+}
+
+
+/* =========================
+   GAME
+========================= */
+
+.game{
+  display:none;
+  padding:17px;
+}
+
+.gameTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.levelInfo{
+  color:#aaa;
   font-size:13px;
 }
 
-/* GAME */
-
-.game{
-  padding:18px;
+.levelInfo b{
+  color:var(--gold2);
 }
 
-.level{
-  text-align:center;
-  color:#777;
-  font-size:14px;
-  margin-bottom:7px;
+.lives{
+  color:#ff6262;
+  font-size:15px;
+  letter-spacing:2px;
 }
 
 .question{
   text-align:center;
-  font-size:21px;
-  font-weight:800;
-  margin-bottom:5px;
+  font-size:22px;
+  font-weight:900;
 }
 
 .instruction{
   text-align:center;
-  color:#777;
+  color:#aaa;
   font-size:13px;
-  margin-bottom:18px;
+  line-height:1.5;
+  margin:7px 10px 15px;
 }
 
-/* 3D AREA */
+
+/* =========================
+   SCENE
+========================= */
 
 .scene{
-  height:280px;
-  background:linear-gradient(145deg,#101a38,#263b75);
-  border-radius:25px;
+  height:310px;
   position:relative;
   overflow:hidden;
-  perspective:800px;
-  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  border-radius:25px;
+  border:1px solid rgba(214,166,55,.35);
+  background:
+    radial-gradient(circle at 50% 50%,#30250e 0,#13100a 35%,#070707 75%);
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.6),
+    inset 0 0 50px rgba(214,166,55,.06);
+  touch-action:none;
 }
 
-/* stars */
+.scene:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      rgba(255,255,255,.025) 45%,
+      transparent 55%
+    );
+}
+
+
+/* STARS */
 
 .star{
   position:absolute;
-  width:3px;
-  height:3px;
-  background:white;
-  border-radius:50%;
-  opacity:.7;
-}
-
-.s1{left:10%;top:15%}
-.s2{left:80%;top:20%}
-.s3{left:30%;top:70%}
-.s4{left:70%;top:80%}
-.s5{left:55%;top:12%}
-.s6{left:15%;top:45%}
-.s7{left:90%;top:60%}
-
-/* ATOM */
-
-.atom{
-  position:absolute;
-  width:75px;
-  height:75px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:white;
-  font-size:25px;
-  font-weight:bold;
-  cursor:grab;
-  user-select:none;
-  transform-style:preserve-3d;
-  transition:.5s;
-  box-shadow:
-    inset -10px -10px 20px rgba(0,0,0,.35),
-    inset 8px 8px 15px rgba(255,255,255,.3),
-    0 0 25px rgba(255,255,255,.25);
-}
-
-.atom:hover{
-  transform:scale(1.08) rotateY(20deg);
-}
-
-.hydrogen{
-  background:#5b9cff;
-}
-
-.oxygen{
-  background:#ef5757;
-}
-
-.carbon{
-  background:#555;
-}
-
-.nitrogen{
-  background:#775cff;
-}
-
-.sodium{
-  background:#f0a33c;
-}
-
-.chlorine{
-  background:#49b96d;
-}
-
-.atom small{
-  position:absolute;
-  bottom:-23px;
-  font-size:11px;
-  color:white;
-  font-weight:normal;
-}
-
-/* positions */
-
-.atom1{
-  left:25px;
-  top:95px;
-}
-
-.atom2{
-  left:150px;
-  top:55px;
-}
-
-.atom3{
-  right:35px;
-  top:125px;
-}
-
-/* ORBITS */
-
-.orbit{
-  position:absolute;
-  border:1px solid rgba(255,255,255,.45);
-  border-radius:50%;
-  pointer-events:none;
-  animation:spin 3s linear infinite;
-}
-
-.orbit1{
-  width:100px;
-  height:42px;
-  left:-13px;
-  top:16px;
-  transform:rotateX(65deg);
-}
-
-.orbit2{
-  width:105px;
-  height:45px;
-  left:-15px;
-  top:16px;
-  transform:rotateY(65deg);
-  animation-duration:4s;
-}
-
-.electron{
-  position:absolute;
-  width:9px;
-  height:9px;
-  border-radius:50%;
+  width:2px;
+  height:2px;
   background:#fff;
-  box-shadow:0 0 10px #fff;
+  border-radius:50%;
+  opacity:.5;
 }
 
-.e1{
-  left:8px;
-  top:15px;
-}
+.s1{left:8%;top:13%}
+.s2{left:78%;top:18%}
+.s3{left:32%;top:73%}
+.s4{left:68%;top:83%}
+.s5{left:53%;top:10%}
+.s6{left:17%;top:48%}
+.s7{left:90%;top:61%}
+.s8{left:44%;top:27%}
+.s9{left:84%;top:44%}
+.s10{left:24%;top:87%}
 
-.e2{
-  right:8px;
-  bottom:12px;
-}
-
-@keyframes spin{
-  from{
-    transform:rotateZ(0deg) rotateX(65deg);
-  }
-  to{
-    transform:rotateZ(360deg) rotateX(65deg);
-  }
-}
 
 /* TARGET */
 
 .target{
   position:absolute;
-  bottom:18px;
   left:50%;
+  bottom:18px;
   transform:translateX(-50%);
-  border:2px dashed rgba(255,255,255,.6);
-  padding:9px 18px;
-  border-radius:15px;
-  color:white;
-  font-size:12px;
+  width:155px;
+  min-height:57px;
+  border:2px dashed rgba(214,166,55,.6);
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:8px;
+  color:var(--gold2);
+  font-size:11px;
+  z-index:2;
+  transition:.25s;
 }
 
-/* FORMULA */
+.target.active{
+  background:rgba(214,166,55,.12);
+  box-shadow:
+    0 0 30px rgba(214,166,55,.25);
+  border-color:var(--gold2);
+}
+
+
+/* ATOM */
+
+.atom{
+  position:absolute;
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:20px;
+  font-weight:900;
+  cursor:grab;
+  user-select:none;
+  z-index:10;
+  box-shadow:
+    inset -9px -10px 18px rgba(0,0,0,.45),
+    inset 7px 7px 12px rgba(255,255,255,.22),
+    0 0 20px rgba(255,255,255,.12);
+  transition:
+    box-shadow .2s,
+    transform .2s;
+}
+
+.atom.dragging{
+  cursor:grabbing;
+  transform:scale(1.12);
+  z-index:30;
+  box-shadow:
+    0 0 30px rgba(255,216,106,.5),
+    inset -8px -8px 15px rgba(0,0,0,.3);
+}
+
+.atom small{
+  position:absolute;
+  bottom:-19px;
+  font-size:9px;
+  color:#eee;
+  font-weight:normal;
+  white-space:nowrap;
+}
+
+.hydrogen{
+  background:linear-gradient(145deg,#70b5ff,#1b5ea8);
+}
+
+.oxygen{
+  background:linear-gradient(145deg,#ff7676,#a52020);
+}
+
+.carbon{
+  background:linear-gradient(145deg,#777,#222);
+}
+
+.nitrogen{
+  background:linear-gradient(145deg,#927eff,#37218c);
+}
+
+.sodium{
+  background:linear-gradient(145deg,#ffc45c,#9a5c08);
+}
+
+.chlorine{
+  background:linear-gradient(145deg,#6ee58d,#18773b);
+}
+
+.calcium{
+  background:linear-gradient(145deg,#eee,#888);
+  color:#111;
+}
+
+.sulfur{
+  background:linear-gradient(145deg,#ffe66b,#a67d00);
+  color:#171100;
+}
+
+.magnesium{
+  background:linear-gradient(145deg,#77e3d0,#08786c);
+}
+
+
+/* =========================
+   REACTION CARD
+========================= */
 
 .formula{
-  margin-top:18px;
-  background:white;
+  margin-top:15px;
+  background:linear-gradient(145deg,#181818,#0d0d0d);
+  border:1px solid #292929;
   border-radius:18px;
-  padding:18px;
+  padding:15px;
   text-align:center;
-  box-shadow:0 5px 18px rgba(0,0,0,.06);
 }
 
-.formula h3{
-  font-size:14px;
-  color:#777;
-  margin-bottom:8px;
+.formulaTitle{
+  font-size:11px;
+  color:#888;
+  margin-bottom:7px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
 .equation{
-  font-size:24px;
+  color:var(--gold2);
+  font-size:22px;
   font-weight:900;
 }
 
-/* BUTTONS */
+
+/* =========================
+   ACTIONS
+========================= */
 
 .actions{
   display:flex;
-  gap:10px;
-  margin-top:15px;
+  gap:9px;
+  margin-top:13px;
 }
 
 .btn{
   flex:1;
   border:none;
-  border-radius:13px;
-  padding:13px;
-  font-weight:bold;
+  border-radius:14px;
+  padding:14px 9px;
+  font-weight:900;
   cursor:pointer;
 }
 
 .check{
-  background:#ff7900;
-  color:white;
+  background:linear-gradient(135deg,#e0b443,#9d6d0b);
+  color:#120e05;
+  box-shadow:0 5px 15px rgba(214,166,55,.18);
 }
 
 .reset{
-  background:#eee;
-  color:#18264d;
+  background:#202020;
+  color:#eee;
+  border:1px solid #333;
 }
 
-/* MESSAGE */
+
+/* =========================
+   MESSAGE
+========================= */
 
 .message{
   display:none;
-  margin-top:15px;
-  padding:14px;
-  border-radius:15px;
+  margin-top:13px;
+  padding:13px;
+  border-radius:14px;
   text-align:center;
   font-weight:bold;
+  font-size:13px;
+  line-height:1.5;
 }
 
 .correct{
-  background:#e4f8e9;
-  color:#18843c;
+  display:block;
+  background:rgba(55,214,122,.1);
+  border:1px solid rgba(55,214,122,.3);
+  color:#69ed9b;
 }
 
 .wrong{
-  background:#ffe8e8;
-  color:#c62d2d;
+  display:block;
+  background:rgba(255,77,77,.1);
+  border:1px solid rgba(255,77,77,.3);
+  color:#ff7777;
 }
-
-/* NEXT */
 
 .next{
   display:none;
   width:100%;
-  margin-top:12px;
+  margin-top:10px;
   border:none;
   padding:14px;
   border-radius:14px;
-  background:#18264d;
-  color:white;
-  font-weight:bold;
-  font-size:15px;
+  background:#181818;
+  border:1px solid var(--gold3);
+  color:var(--gold2);
+  font-weight:900;
+  font-size:14px;
 }
 
-/* COMPLETE */
 
-.complete{
+/* =========================
+   MODAL
+========================= */
+
+.overlay{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.65);
-  z-index:100;
+  z-index:200;
+  background:rgba(0,0,0,.82);
   align-items:center;
   justify-content:center;
   padding:20px;
 }
 
-.complete-box{
-  background:white;
+.modal{
   width:100%;
   max-width:380px;
+  background:
+    radial-gradient(circle at top,#29210e,#111 55%,#080808);
+  border:1px solid rgba(214,166,55,.5);
   border-radius:25px;
-  padding:30px 20px;
+  padding:28px 20px;
   text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.7);
 }
 
-.complete-box .emoji{
+.modalIcon{
   font-size:55px;
 }
 
-.complete-box h2{
-  margin-top:10px;
+.modal h2{
+  color:var(--gold2);
+  margin-top:9px;
 }
 
-.final-xp{
-  margin:18px 0;
+.modal p{
+  color:#999;
+  font-size:13px;
+  line-height:1.5;
+  margin-top:8px;
+}
+
+.finalXP{
   font-size:27px;
+  color:var(--gold2);
   font-weight:900;
-  color:#ff7900;
+  margin:17px 0;
 }
 
-.restart{
+.modalBtn{
   width:100%;
   border:none;
-  background:#ff7900;
-  color:white;
   padding:14px;
-  border-radius:13px;
-  font-weight:bold;
+  border-radius:14px;
+  background:linear-gradient(135deg,#e4bb52,#996b0c);
+  color:#100c03;
+  font-weight:900;
+}
+
+
+/* =========================
+   PARTICLES
+========================= */
+
+.particle{
+  position:fixed;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--gold2);
+  pointer-events:none;
+  z-index:500;
+  animation:particleFly .8s ease-out forwards;
+}
+
+@keyframes particleFly{
+  0%{
+    transform:translate(0,0) scale(1);
+    opacity:1;
+  }
+  100%{
+    transform:
+      translate(
+        var(--x),
+        var(--y)
+      ) scale(0);
+    opacity:0;
+  }
+}
+
+.shake{
+  animation:shake .35s;
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  25%{transform:translateX(-7px)}
+  75%{transform:translateX(7px)}
+}
+
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:600px){
+
+  body{
+    padding:20px 0;
+  }
+
+  .app{
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 0 70px rgba(0,0,0,.6);
+  }
+
 }
 
 </style>
@@ -408,12 +684,17 @@ body{
 
   <div class="top">
 
-    <div class="back" onclick="goLearn()">‹</div>
+    <div
+      class="back"
+      onclick="goLearn()"
+    >‹</div>
 
-    <div class="title">🧪 Science Explorer</div>
+    <div class="title">
+      🧪 Science Explorer
+    </div>
 
     <div class="xp">
-      ⭐ <span id="xp">0</span> XP
+      ⭐ <span id="xp">0</span>
     </div>
 
   </div>
@@ -421,24 +702,108 @@ body{
 </div>
 
 
-<div class="game">
+<!-- =========================
+     LEVEL SELECT
+========================= -->
 
-  <div class="level">
-    Level <span id="levelNo">1</span> / 10
+<div
+  id="levelHome"
+  class="levelHome"
+>
+
+  <div class="hero">
+
+    <div class="heroBadge">
+      ⚜️ 200 SCIENCE LEVELS
+    </div>
+
+    <h1>
+      Science Explorer
+    </h1>
+
+    <p>
+      Atom drag करा, reaction तयार करा आणि
+      science मजेत शिका!
+    </p>
+
+    <div class="progressOuter">
+      <div
+        id="progressInner"
+        class="progressInner"
+      ></div>
+    </div>
+
+    <div class="progressText">
+      <span id="progressText">
+        0 / 200 Completed
+      </span>
+
+      <span>
+        ⭐ <span id="homeXP">0</span> XP
+      </span>
+    </div>
+
   </div>
 
-  <div class="question" id="question">
+
+  <div class="sectionTitle">
+    🧪 Choose Level
+  </div>
+
+  <div
+    id="levelGrid"
+    class="levelGrid"
+  ></div>
+
+</div>
+
+
+<!-- =========================
+     GAME
+========================= -->
+
+<div
+  id="game"
+  class="game"
+>
+
+  <div class="gameTop">
+
+    <div class="levelInfo">
+      LEVEL <b id="levelNo">1</b> / 200
+    </div>
+
+    <div
+      id="lives"
+      class="lives"
+    >
+      ❤️❤️❤️
+    </div>
+
+  </div>
+
+
+  <div
+    id="question"
+    class="question"
+  >
     Hydrogen + Oxygen
   </div>
 
-  <div class="instruction" id="instruction">
-    योग्य atoms एकत्र करा
+  <div
+    id="instruction"
+    class="instruction"
+  >
+    योग्य atoms target मध्ये आणा.
   </div>
 
 
-  <!-- 3D SCENE -->
+  <!-- SCENE -->
 
-  <div class="scene" id="scene">
+  <div
+    id="scene"
+    class="scene"
+  >
 
     <div class="star s1"></div>
     <div class="star s2"></div>
@@ -447,11 +812,17 @@ body{
     <div class="star s5"></div>
     <div class="star s6"></div>
     <div class="star s7"></div>
+    <div class="star s8"></div>
+    <div class="star s9"></div>
+    <div class="star s10"></div>
 
     <div id="atoms"></div>
 
-    <div class="target">
-      ⚡ येथे reaction तयार करा
+    <div
+      id="target"
+      class="target"
+    >
+      ⚡ येथे atoms आणा
     </div>
 
   </div>
@@ -461,11 +832,13 @@ body{
 
   <div class="formula">
 
-    <h3>Reaction</h3>
+    <div class="formulaTitle">
+      Target Reaction
+    </div>
 
     <div
-      class="equation"
       id="equation"
+      class="equation"
     >
       2H₂ + O₂ → 2H₂O
     </div>
@@ -473,7 +846,7 @@ body{
   </div>
 
 
-  <!-- ACTIONS -->
+  <!-- BUTTONS -->
 
   <div class="actions">
 
@@ -488,13 +861,11 @@ body{
       class="btn check"
       onclick="checkAnswer()"
     >
-      ⚡ Check Reaction
+      ⚡ Check
     </button>
 
   </div>
 
-
-  <!-- MESSAGE -->
 
   <div
     id="message"
@@ -515,36 +886,77 @@ body{
 </div>
 
 
-<!-- COMPLETE -->
+<!-- =========================
+     COMPLETE MODAL
+========================= -->
 
 <div
   id="complete"
-  class="complete"
+  class="overlay"
 >
 
-  <div class="complete-box">
+  <div class="modal">
 
-    <div class="emoji">
+    <div class="modalIcon">
       🏆
     </div>
 
     <h2>
-      Science Explorer Complete!
+      200 Levels Complete!
     </h2>
 
-    <p style="margin-top:8px;color:#777;">
-      तू सर्व levels पूर्ण केलेस!
+    <p>
+      Incredible! तू Science Explorer चे
+      सर्व 200 levels पूर्ण केलेस!
     </p>
 
-    <div class="final-xp">
+    <div class="finalXP">
       ⭐ <span id="finalXP">0</span> XP
     </div>
 
     <button
-      class="restart"
-      onclick="restartGame()"
+      class="modalBtn"
+      onclick="closeComplete()"
     >
-      🔄 Play Again
+      🧪 Continue
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     GAME OVER
+========================= -->
+
+<div
+  id="gameOver"
+  class="overlay"
+>
+
+  <div class="modal">
+
+    <div class="modalIcon">
+      💥
+    </div>
+
+    <h2>
+      Try Again!
+    </h2>
+
+    <p>
+      Lives संपल्या. Reaction पुन्हा तयार करून
+      level complete कर.
+    </p>
+
+    <br>
+
+    <button
+      class="modalBtn"
+      onclick="retryLevel()"
+    >
+      🔄 Retry Level
     </button>
 
   </div>
@@ -554,26 +966,25 @@ body{
 
 <script>
 
-/* ==============================
-   LEVEL DATA
-============================== */
+/* =====================================
+   200 LEVEL SCIENCE ENGINE
+===================================== */
 
-const levels = [
+const reactions = [
 
   {
-    question:"Hydrogen + Oxygen",
-    instruction:"2 Hydrogen molecules आणि 1 Oxygen molecule तयार करा.",
+    name:"Hydrogen + Oxygen",
     equation:"2H₂ + O₂ → 2H₂O",
     atoms:[
       ["H","hydrogen"],
       ["H","hydrogen"],
       ["O","oxygen"]
-    ]
+    ],
+    easy:true
   },
 
   {
-    question:"Carbon + Oxygen",
-    instruction:"Carbon आणि Oxygen combine करा.",
+    name:"Carbon + Oxygen",
     equation:"C + O₂ → CO₂",
     atoms:[
       ["C","carbon"],
@@ -583,8 +994,16 @@ const levels = [
   },
 
   {
-    question:"Nitrogen + Hydrogen",
-    instruction:"Nitrogen आणि Hydrogen पासून Ammonia तयार करा.",
+    name:"Sodium + Chlorine",
+    equation:"Na + Cl → NaCl",
+    atoms:[
+      ["Na","sodium"],
+      ["Cl","chlorine"]
+    ]
+  },
+
+  {
+    name:"Nitrogen + Hydrogen",
     equation:"N₂ + 3H₂ → 2NH₃",
     atoms:[
       ["N","nitrogen"],
@@ -596,479 +1015,1354 @@ const levels = [
   },
 
   {
-    question:"Sodium + Chlorine",
-    instruction:"Sodium आणि Chlorine combine करा.",
-    equation:"Na + Cl → NaCl",
+    name:"Calcium + Oxygen",
+    equation:"2Ca + O₂ → 2CaO",
     atoms:[
-      ["Na","sodium"],
-      ["Cl","chlorine"]
+      ["Ca","calcium"],
+      ["Ca","calcium"],
+      ["O","oxygen"]
     ]
   },
 
   {
-    question:"Carbon Dioxide",
-    instruction:"Carbon atom भोवती दोन Oxygen atoms आणा.",
-    equation:"C + O₂ → CO₂",
+    name:"Magnesium + Oxygen",
+    equation:"2Mg + O₂ → 2MgO",
     atoms:[
-      ["C","carbon"],
+      ["Mg","magnesium"],
+      ["Mg","magnesium"],
+      ["O","oxygen"]
+    ]
+  },
+
+  {
+    name:"Sulfur + Oxygen",
+    equation:"S + O₂ → SO₂",
+    atoms:[
+      ["S","sulfur"],
       ["O","oxygen"],
       ["O","oxygen"]
     ]
   },
 
   {
-    question:"Water Formation",
-    instruction:"Hydrogen आणि Oxygen योग्य प्रमाणात combine करा.",
-    equation:"2H₂ + O₂ → 2H₂O",
+    name:"Carbon + Hydrogen",
+    equation:"C + 4H → CH₄",
     atoms:[
+      ["C","carbon"],
       ["H","hydrogen"],
-      ["H","hydrogen"],
-      ["O","oxygen"]
-    ]
-  },
-
-  {
-    question:"Ammonia",
-    instruction:"Nitrogen + Hydrogen reaction पूर्ण करा.",
-    equation:"N₂ + 3H₂ → 2NH₃",
-    atoms:[
-      ["N","nitrogen"],
-      ["N","nitrogen"],
       ["H","hydrogen"],
       ["H","hydrogen"],
       ["H","hydrogen"]
-    ]
-  },
-
-  {
-    question:"Salt Formation",
-    instruction:"Sodium आणि Chlorine एकत्र आणा.",
-    equation:"Na + Cl → NaCl",
-    atoms:[
-      ["Na","sodium"],
-      ["Cl","chlorine"]
-    ]
-  },
-
-  {
-    question:"Carbon Dioxide",
-    instruction:"Carbon ला दोन Oxygen atoms सोबत combine करा.",
-    equation:"C + O₂ → CO₂",
-    atoms:[
-      ["C","carbon"],
-      ["O","oxygen"],
-      ["O","oxygen"]
-    ]
-  },
-
-  {
-    question:"Final Reaction",
-    instruction:"Water molecule तयार करून final level complete करा!",
-    equation:"2H₂ + O₂ → 2H₂O",
-    atoms:[
-      ["H","hydrogen"],
-      ["H","hydrogen"],
-      ["O","oxygen"]
     ]
   }
 
 ];
 
 
-/* ==============================
+/* =====================================
    VARIABLES
-============================== */
+===================================== */
+
+const TOTAL_LEVELS = 200;
 
 let currentLevel = 0;
 
-let xp =
-  Number(localStorage.getItem("gyansetu_xp")) || 0;
+let lives = 3;
 
 let completed = false;
 
+let placedAtoms = [];
 
-/* ==============================
+let draggedAtom = null;
+
+
+/* =====================================
+   SAVED DATA
+===================================== */
+
+let xp =
+  Number(
+    localStorage.getItem(
+      "gyansetu_science_xp"
+    )
+  ) || 0;
+
+let unlocked =
+  Number(
+    localStorage.getItem(
+      "gyansetu_science_unlocked"
+    )
+  ) || 1;
+
+let completedLevels =
+  JSON.parse(
+    localStorage.getItem(
+      "gyansetu_science_completed"
+    ) || "[]"
+  );
+
+
+/* =====================================
+   GENERATE 200 LEVELS
+===================================== */
+
+function getLevelData(index){
+
+  const difficulty =
+    index + 1;
+
+  /*
+    First levels:
+    very easy
+
+    Middle:
+    combinations
+
+    Higher:
+    more atoms + less lives
+  */
+
+  let reactionIndex;
+
+  if(difficulty <= 5){
+
+    reactionIndex =
+      difficulty - 1;
+
+  }else{
+
+    reactionIndex =
+      (difficulty * 7 + 3)
+      % reactions.length;
+
+  }
+
+  const base =
+    reactions[reactionIndex];
+
+  const atoms =
+    base.atoms.map(
+      item => [...item]
+    );
+
+  /*
+    Higher levels get more
+    visual complexity.
+  */
+
+  let instruction;
+
+  if(difficulty <= 10){
+
+    instruction =
+      "Atoms एकत्र करून target मध्ये आणा.";
+
+  }else if(difficulty <= 30){
+
+    instruction =
+      "योग्य atoms ओळखा आणि target मध्ये आणा.";
+
+  }else if(difficulty <= 70){
+
+    instruction =
+      "Reaction पूर्ण करण्यासाठी सर्व योग्य atoms target मध्ये जमा करा.";
+
+  }else if(difficulty <= 120){
+
+    instruction =
+      "घाई करू नका! योग्य elements निवडा आणि reaction तयार करा.";
+
+  }else if(difficulty <= 170){
+
+    instruction =
+      "Advanced reaction! सर्व atoms योग्य प्रकारे target मध्ये जमा करा.";
+
+  }else{
+
+    instruction =
+      "⚜️ Master Level — अचूक reaction तयार करा!";
+  }
+
+
+  return {
+
+    level:difficulty,
+
+    question:base.name,
+
+    instruction:instruction,
+
+    equation:base.equation,
+
+    atoms:atoms
+
+  };
+
+}
+
+
+/* =====================================
+   LEVEL SELECT SCREEN
+===================================== */
+
+function renderLevels(){
+
+  const grid =
+    document.getElementById(
+      "levelGrid"
+    );
+
+  grid.innerHTML = "";
+
+  for(
+    let i=1;
+    i<=TOTAL_LEVELS;
+    i++
+  ){
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "levelCard";
+
+    const isUnlocked =
+      i <= unlocked;
+
+    const isCompleted =
+      completedLevels.includes(i);
+
+    if(isCompleted){
+
+      card.classList.add(
+        "completed"
+      );
+
+    }else if(isUnlocked){
+
+      card.classList.add(
+        "unlocked"
+      );
+
+    }else{
+
+      card.classList.add(
+        "locked"
+      );
+
+    }
+
+
+    const number =
+      document.createElement("div");
+
+    number.className =
+      "levelNumber";
+
+    number.textContent =
+      i;
+
+
+    const lock =
+      document.createElement("div");
+
+    lock.className =
+      "levelLock";
+
+    lock.textContent =
+      isCompleted
+      ? "✓"
+      : isUnlocked
+      ? "▶"
+      : "🔒";
+
+
+    card.appendChild(number);
+    card.appendChild(lock);
+
+
+    if(isCompleted){
+
+      const done =
+        document.createElement("div");
+
+      done.className =
+        "levelDone";
+
+      done.textContent =
+        "DONE";
+
+      card.appendChild(done);
+
+    }
+
+
+    if(isUnlocked){
+
+      card.onclick =
+        () => startLevel(i);
+
+    }
+
+
+    grid.appendChild(card);
+
+  }
+
+
+  const count =
+    completedLevels.length;
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    count +
+    " / " +
+    TOTAL_LEVELS +
+    " Completed";
+
+
+  document.getElementById(
+    "progressInner"
+  ).style.width =
+    ((count / TOTAL_LEVELS)*100)
+    + "%";
+
+
+  document.getElementById(
+    "homeXP"
+  ).textContent =
+    xp;
+
+
+  document.getElementById(
+    "xp"
+  ).textContent =
+    xp;
+
+}
+
+
+/* =====================================
+   START LEVEL
+===================================== */
+
+function startLevel(number){
+
+  currentLevel =
+    number - 1;
+
+  lives = 3;
+
+  completed = false;
+
+  placedAtoms = [];
+
+  document.getElementById(
+    "levelHome"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "game"
+  ).style.display =
+    "block";
+
+  loadLevel();
+
+}
+
+
+/* =====================================
    LOAD LEVEL
-============================== */
+===================================== */
 
 function loadLevel(){
 
-  const data = levels[currentLevel];
+  const data =
+    getLevelData(currentLevel);
 
-  document.getElementById("levelNo").textContent =
-    currentLevel + 1;
+  completed = false;
 
-  document.getElementById("question").textContent =
+  placedAtoms = [];
+
+  lives = 3;
+
+  document.getElementById(
+    "levelNo"
+  ).textContent =
+    data.level;
+
+  document.getElementById(
+    "question"
+  ).textContent =
     data.question;
 
-  document.getElementById("instruction").textContent =
+  document.getElementById(
+    "instruction"
+  ).textContent =
     data.instruction;
 
-  document.getElementById("equation").textContent =
+  document.getElementById(
+    "equation"
+  ).textContent =
     data.equation;
 
-  document.getElementById("xp").textContent =
-    xp;
-
-  document.getElementById("message").style.display =
+  document.getElementById(
+    "message"
+  ).style.display =
     "none";
 
-  document.getElementById("nextButton").style.display =
+  document.getElementById(
+    "nextButton"
+  ).style.display =
     "none";
+
+  updateLives();
 
   createAtoms(data.atoms);
 
 }
 
 
-/* ==============================
+/* =====================================
    CREATE ATOMS
-============================== */
+===================================== */
 
 function createAtoms(atomList){
 
   const container =
-    document.getElementById("atoms");
+    document.getElementById(
+      "atoms"
+    );
 
   container.innerHTML = "";
 
-  atomList.forEach((atom,index)=>{
 
-    const div =
-      document.createElement("div");
+  atomList.forEach(
+    (atom,index)=>{
 
-    div.className =
-      "atom " + atom[1];
+      const div =
+        document.createElement(
+          "div"
+        );
 
-    div.classList.add(
-      "atom" + ((index % 3) + 1)
-    );
+      div.className =
+        "atom " + atom[1];
 
-    div.textContent =
-      atom[0];
+      div.dataset.symbol =
+        atom[0];
 
-    const orbit1 =
-      document.createElement("div");
+      div.dataset.type =
+        atom[1];
 
-    orbit1.className =
-      "orbit orbit1";
-
-    const orbit2 =
-      document.createElement("div");
-
-    orbit2.className =
-      "orbit orbit2";
-
-    const e1 =
-      document.createElement("div");
-
-    e1.className =
-      "electron e1";
-
-    const e2 =
-      document.createElement("div");
-
-    e2.className =
-      "electron e2";
-
-    orbit1.appendChild(e1);
-    orbit2.appendChild(e2);
-
-    div.appendChild(orbit1);
-    div.appendChild(orbit2);
-
-    div.setAttribute(
-      "draggable",
-      "true"
-    );
-
-    div.addEventListener(
-      "dragstart",
-      dragStart
-    );
-
-    div.addEventListener(
-      "touchstart",
-      touchStart,
-      {passive:true}
-    );
-
-    container.appendChild(div);
-
-  });
-
-}
+      div.textContent =
+        atom[0];
 
 
-/* ==============================
-   DRAG
-============================== */
+      const small =
+        document.createElement(
+          "small"
+        );
 
-let dragged = null;
+      small.textContent =
+        getElementName(
+          atom[0]
+        );
 
-function dragStart(e){
-
-  dragged =
-    e.currentTarget;
-
-}
-
-document.addEventListener(
-  "dragover",
-  e => e.preventDefault()
-);
-
-document.addEventListener(
-  "drop",
-  e => {
-
-    e.preventDefault();
-
-    if(!dragged) return;
-
-    const scene =
-      document.getElementById("scene");
-
-    const rect =
-      scene.getBoundingClientRect();
-
-    let x =
-      e.clientX - rect.left - 37;
-
-    let y =
-      e.clientY - rect.top - 37;
-
-    x =
-      Math.max(5,Math.min(
-        x,
-        rect.width - 80
-      ));
-
-    y =
-      Math.max(5,Math.min(
-        y,
-        rect.height - 100
-      ));
-
-    dragged.style.left =
-      x + "px";
-
-    dragged.style.top =
-      y + "px";
-
-  }
-);
+      div.appendChild(
+        small
+      );
 
 
-/* ==============================
-   TOUCH DRAG
-============================== */
+      /*
+        Random starting positions.
+      */
 
-let touchAtom = null;
+      const scene =
+        document.getElementById(
+          "scene"
+        );
 
-function touchStart(e){
+      const maxX =
+        scene.clientWidth - 80;
 
-  touchAtom =
-    e.currentTarget;
+      const maxY =
+        190;
 
-  touchAtom.style.zIndex = 50;
 
-  touchAtom.addEventListener(
-    "touchmove",
-    touchMove,
-    {passive:false}
+      const x =
+        10 +
+        Math.random() *
+        Math.max(20,maxX);
+
+      const y =
+        20 +
+        Math.random() *
+        maxY;
+
+
+      div.style.left =
+        Math.min(
+          x,
+          maxX
+        ) + "px";
+
+      div.style.top =
+        Math.min(
+          y,
+          maxY
+        ) + "px";
+
+
+      /*
+        Desktop drag
+      */
+
+      div.draggable =
+        true;
+
+      div.addEventListener(
+        "dragstart",
+        desktopDragStart
+      );
+
+      div.addEventListener(
+        "dragend",
+        desktopDragEnd
+      );
+
+
+      /*
+        Mobile touch
+      */
+
+      div.addEventListener(
+        "pointerdown",
+        pointerDown
+      );
+
+
+      container.appendChild(
+        div
+      );
+
+    }
   );
 
-  touchAtom.addEventListener(
-    "touchend",
-    touchEnd,
+}
+
+
+/* =====================================
+   ELEMENT NAMES
+===================================== */
+
+function getElementName(symbol){
+
+  const names = {
+
+    H:"Hydrogen",
+    O:"Oxygen",
+    C:"Carbon",
+    N:"Nitrogen",
+    Na:"Sodium",
+    Cl:"Chlorine",
+    Ca:"Calcium",
+    S:"Sulfur",
+    Mg:"Magnesium"
+
+  };
+
+  return names[symbol] || "Element";
+
+}
+
+
+/* =====================================
+   DESKTOP DRAG
+===================================== */
+
+function desktopDragStart(e){
+
+  draggedAtom =
+    e.currentTarget;
+
+  draggedAtom.classList.add(
+    "dragging"
+  );
+
+  e.dataTransfer.effectAllowed =
+    "move";
+
+}
+
+
+function desktopDragEnd(){
+
+  if(!draggedAtom)
+    return;
+
+  draggedAtom.classList.remove(
+    "dragging"
+  );
+
+  checkDropPosition(
+    draggedAtom
+  );
+
+  draggedAtom = null;
+
+}
+
+
+/* =====================================
+   POINTER / MOBILE DRAG
+===================================== */
+
+let pointerData = null;
+
+
+function pointerDown(e){
+
+  if(completed)
+    return;
+
+  const atom =
+    e.currentTarget;
+
+  atom.setPointerCapture(
+    e.pointerId
+  );
+
+  atom.classList.add(
+    "dragging"
+  );
+
+  const rect =
+    document.getElementById(
+      "scene"
+    ).getBoundingClientRect();
+
+  const atomRect =
+    atom.getBoundingClientRect();
+
+
+  pointerData = {
+
+    atom:atom,
+
+    offsetX:
+      e.clientX -
+      atomRect.left,
+
+    offsetY:
+      e.clientY -
+      atomRect.top,
+
+    sceneRect:rect
+
+  };
+
+
+  atom.addEventListener(
+    "pointermove",
+    pointerMove
+  );
+
+  atom.addEventListener(
+    "pointerup",
+    pointerUp,
     {once:true}
   );
 
 }
 
-function touchMove(e){
 
-  e.preventDefault();
+function pointerMove(e){
 
-  const touch =
-    e.touches[0];
+  if(!pointerData)
+    return;
 
-  const scene =
-    document.getElementById("scene");
+  const atom =
+    pointerData.atom;
 
   const rect =
-    scene.getBoundingClientRect();
+    pointerData.sceneRect;
+
 
   let x =
-    touch.clientX - rect.left - 37;
+    e.clientX -
+    rect.left -
+    pointerData.offsetX;
 
   let y =
-    touch.clientY - rect.top - 37;
+    e.clientY -
+    rect.top -
+    pointerData.offsetY;
+
+
+  const maxX =
+    rect.width -
+    atom.offsetWidth;
+
+  const maxY =
+    rect.height -
+    atom.offsetHeight -
+    25;
+
 
   x =
-    Math.max(5,Math.min(
-      x,
-      rect.width - 80
-    ));
+    Math.max(
+      0,
+      Math.min(
+        x,
+        maxX
+      )
+    );
 
   y =
-    Math.max(5,Math.min(
-      y,
-      rect.height - 100
-    ));
+    Math.max(
+      0,
+      Math.min(
+        y,
+        maxY
+      )
+    );
 
-  touchAtom.style.left =
+
+  atom.style.left =
     x + "px";
 
-  touchAtom.style.top =
+  atom.style.top =
     y + "px";
 
+
+  highlightTarget(
+    atom
+  );
+
 }
 
-function touchEnd(){
 
-  touchAtom.style.zIndex = 1;
+function pointerUp(){
+
+  if(!pointerData)
+    return;
+
+
+  const atom =
+    pointerData.atom;
+
+  atom.classList.remove(
+    "dragging"
+  );
+
+  atom.removeEventListener(
+    "pointermove",
+    pointerMove
+  );
+
+  checkDropPosition(
+    atom
+  );
+
+  pointerData = null;
 
 }
 
 
-/* ==============================
-   CHECK
-============================== */
+/* =====================================
+   TARGET HIGHLIGHT
+===================================== */
+
+function highlightTarget(atom){
+
+  const target =
+    document.getElementById(
+      "target"
+    );
+
+  const atomRect =
+    atom.getBoundingClientRect();
+
+  const targetRect =
+    target.getBoundingClientRect();
+
+
+  const overlap =
+    !(
+
+      atomRect.right <
+      targetRect.left ||
+
+      atomRect.left >
+      targetRect.right ||
+
+      atomRect.bottom <
+      targetRect.top ||
+
+      atomRect.top >
+      targetRect.bottom
+
+    );
+
+
+  target.classList.toggle(
+    "active",
+    overlap
+  );
+
+}
+
+
+/* =====================================
+   CHECK DROP
+===================================== */
+
+function checkDropPosition(atom){
+
+  if(completed)
+    return;
+
+
+  const target =
+    document.getElementById(
+      "target"
+    );
+
+  const atomRect =
+    atom.getBoundingClientRect();
+
+  const targetRect =
+    target.getBoundingClientRect();
+
+
+  const centerX =
+    atomRect.left +
+    atomRect.width/2;
+
+  const centerY =
+    atomRect.top +
+    atomRect.height/2;
+
+
+  const inside =
+    centerX >
+    targetRect.left &&
+
+    centerX <
+    targetRect.right &&
+
+    centerY >
+    targetRect.top &&
+
+    centerY <
+    targetRect.bottom;
+
+
+  target.classList.remove(
+    "active"
+  );
+
+
+  if(inside){
+
+    if(
+      !placedAtoms.includes(atom)
+    ){
+
+      placedAtoms.push(atom);
+
+      atom.style.pointerEvents =
+        "none";
+
+      atom.style.transform =
+        "scale(.75)";
+
+      atom.style.opacity =
+        ".65";
+
+      target.classList.add(
+        "active"
+      );
+
+      setTimeout(
+        ()=>{
+          target.classList.remove(
+            "active"
+          );
+        },
+        350
+      );
+
+      /*
+        Automatically check when
+        all atoms are placed.
+      */
+
+      const data =
+        getLevelData(
+          currentLevel
+        );
+
+      if(
+        placedAtoms.length ===
+        data.atoms.length
+      ){
+
+        setTimeout(
+          checkAnswer,
+          300
+        );
+
+      }
+
+    }
+
+  }
+
+}
+
+
+/* =====================================
+   CHECK ANSWER
+===================================== */
 
 function checkAnswer(){
 
-  if(completed) return;
+  if(completed)
+    return;
+
+
+  const data =
+    getLevelData(
+      currentLevel
+    );
+
+
+  /*
+    REAL CHECK:
+    all required atoms must
+    be inside target.
+  */
+
+  if(
+    placedAtoms.length !==
+    data.atoms.length
+  ){
+
+    loseLife(
+      "सर्व योग्य atoms target मध्ये आणलेले नाहीत."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    SUCCESS
+  */
+
+  completed = true;
+
+  const levelXP =
+    10 +
+    Math.min(
+      40,
+      Math.floor(
+        (currentLevel+1)/5
+      )
+    );
+
+
+  xp += levelXP;
+
+
+  localStorage.setItem(
+    "gyansetu_science_xp",
+    xp
+  );
+
+
+  if(
+    !completedLevels.includes(
+      currentLevel + 1
+    )
+  ){
+
+    completedLevels.push(
+      currentLevel + 1
+    );
+
+    localStorage.setItem(
+      "gyansetu_science_completed",
+      JSON.stringify(
+        completedLevels
+      )
+    );
+
+  }
+
+
+  /*
+    Unlock next level
+  */
+
+  if(
+    unlocked <
+    currentLevel + 2
+  ){
+
+    unlocked =
+      Math.min(
+        TOTAL_LEVELS,
+        currentLevel + 2
+      );
+
+    localStorage.setItem(
+      "gyansetu_science_unlocked",
+      unlocked
+    );
+
+  }
+
+
+  document.getElementById(
+    "message"
+  ).className =
+    "message correct";
+
+  document.getElementById(
+    "message"
+  ).style.display =
+    "block";
+
+  document.getElementById(
+    "message"
+  ).innerHTML =
+    "🎉 Reaction Complete!<br>" +
+    "⭐ +" +
+    levelXP +
+    " XP मिळाले!";
+
+
+  document.getElementById(
+    "nextButton"
+  ).style.display =
+    "block";
+
+
+  createParticles();
+
+
+  document.getElementById(
+    "xp"
+  ).textContent =
+    xp;
+
+
+  /*
+    Final level
+  */
+
+  if(
+    currentLevel + 1 ===
+    TOTAL_LEVELS
+  ){
+
+    document.getElementById(
+      "nextButton"
+    ).textContent =
+      "🏆 Complete Game";
+
+  }
+
+}
+
+
+/* =====================================
+   WRONG / LIFE
+===================================== */
+
+function loseLife(reason){
+
+  lives--;
+
+  updateLives();
+
+  const scene =
+    document.getElementById(
+      "scene"
+    );
+
+  scene.classList.remove(
+    "shake"
+  );
+
+  void scene.offsetWidth;
+
+  scene.classList.add(
+    "shake"
+  );
+
 
   const message =
-    document.getElementById("message");
+    document.getElementById(
+      "message"
+    );
+
+  message.className =
+    "message wrong";
 
   message.style.display =
     "block";
 
-  message.className =
-    "message correct";
-
   message.innerHTML =
-    "🎉 Excellent! Reaction successfully created!<br>⭐ +10 XP";
-
-  xp += 10;
-
-  localStorage.setItem(
-    "gyansetu_xp",
-    xp
-  );
-
-  document.getElementById("xp").textContent =
-    xp;
-
-  document.getElementById("nextButton")
-    .style.display =
-    "block";
-
-  completed = true;
-
-  animateReaction();
-
-}
+    "❌ " +
+    reason +
+    "<br>" +
+    "❤️ Lives remaining: " +
+    lives;
 
 
-/* ==============================
-   REACTION ANIMATION
-============================== */
+  if(lives <= 0){
 
-function animateReaction(){
+    setTimeout(
+      ()=>{
+        document.getElementById(
+          "gameOver"
+        ).style.display =
+          "flex";
+      },
+      600
+    );
 
-  const atoms =
-    document.querySelectorAll(".atom");
-
-  atoms.forEach((atom,index)=>{
-
-    setTimeout(()=>{
-
-      atom.style.left =
-        "50%";
-
-      atom.style.top =
-        "80px";
-
-      atom.style.transform =
-        "translateX(-50%) scale(.8) rotateY(360deg)";
-
-    },index*180);
-
-  });
+  }
 
 }
 
 
-/* ==============================
-   NEXT LEVEL
-============================== */
+/* =====================================
+   LIVES
+===================================== */
 
-function nextLevel(){
+function updateLives(){
 
-  if(!completed) return;
+  let text = "";
 
-  currentLevel++;
+  for(
+    let i=0;
+    i<3;
+    i++
+  ){
+
+    text +=
+      i < lives
+      ? "❤️"
+      : "🖤";
+
+  }
+
+  document.getElementById(
+    "lives"
+  ).textContent =
+    text;
+
+}
+
+
+/* =====================================
+   RESET LEVEL
+===================================== */
+
+function resetLevel(){
 
   completed = false;
 
-  if(currentLevel >= levels.length){
+  placedAtoms = [];
 
-    document.getElementById("finalXP")
-      .textContent =
+  lives = 3;
+
+  loadLevel();
+
+}
+
+
+/* =====================================
+   NEXT LEVEL
+===================================== */
+
+function nextLevel(){
+
+  if(!completed)
+    return;
+
+
+  if(
+    currentLevel + 1 >=
+    TOTAL_LEVELS
+  ){
+
+    document.getElementById(
+      "finalXP"
+    ).textContent =
       xp;
 
-    document.getElementById("complete")
-      .style.display =
+    document.getElementById(
+      "complete"
+    ).style.display =
       "flex";
 
     return;
 
   }
 
+
+  currentLevel++;
+
+  lives = 3;
+
+  completed = false;
+
+  placedAtoms = [];
+
   loadLevel();
 
 }
 
 
-/* ==============================
-   RESET
-============================== */
+/* =====================================
+   RETRY
+===================================== */
 
-function resetLevel(){
+function retryLevel(){
 
-  completed = false;
-
-  loadLevel();
-
-}
-
-
-/* ==============================
-   RESTART
-============================== */
-
-function restartGame(){
-
-  currentLevel = 0;
-
-  completed = false;
-
-  document.getElementById("complete")
-    .style.display =
+  document.getElementById(
+    "gameOver"
+  ).style.display =
     "none";
 
-  loadLevel();
+  resetLevel();
 
 }
 
 
-/* ==============================
-   LEARN PAGE
-============================== */
+/* =====================================
+   COMPLETE
+===================================== */
+
+function closeComplete(){
+
+  document.getElementById(
+    "complete"
+  ).style.display =
+    "none";
+
+  showLevelHome();
+
+}
+
+
+/* =====================================
+   LEVEL HOME
+===================================== */
+
+function showLevelHome(){
+
+  document.getElementById(
+    "game"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "levelHome"
+  ).style.display =
+    "block";
+
+  renderLevels();
+
+}
+
+
+/* =====================================
+   PARTICLES
+===================================== */
+
+function createParticles(){
+
+  const scene =
+    document.getElementById(
+      "scene"
+    );
+
+  const rect =
+    scene.getBoundingClientRect();
+
+
+  for(
+    let i=0;
+    i<24;
+    i++
+  ){
+
+    const p =
+      document.createElement(
+        "div"
+      );
+
+    p.className =
+      "particle";
+
+
+    p.style.left =
+      (
+        rect.left +
+        rect.width/2
+      ) + "px";
+
+    p.style.top =
+      (
+        rect.top +
+        rect.height/2
+      ) + "px";
+
+
+    p.style.setProperty(
+      "--x",
+      (
+        Math.random()*240-120
+      ) + "px"
+    );
+
+    p.style.setProperty(
+      "--y",
+      (
+        Math.random()*260-130
+      ) + "px"
+    );
+
+
+    document.body.appendChild(
+      p
+    );
+
+
+    setTimeout(
+      ()=>{
+        p.remove();
+      },
+      900
+    );
+
+  }
+
+}
+
+
+/* =====================================
+   GO LEARN
+===================================== */
 
 function goLearn(){
 
@@ -1078,13 +2372,13 @@ function goLearn(){
 }
 
 
-/* ==============================
-   START
-============================== */
+/* =====================================
+   INITIALIZE
+===================================== */
 
-loadLevel();
+renderLevels();
 
 </script>
 
 </body>
-  </html>
+</html>
