@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<title>GyanSetu • Language Study</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#eef5ff;
+  color:#172554;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#fff;
+}
+
+header{
+  height:64px;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  color:white;
+  background:linear-gradient(135deg,#1257c9,#2688ff);
+  box-shadow:0 4px 15px rgba(20,90,190,.2);
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+}
+
+.sub{
+  font-size:11px;
+  opacity:.85;
+  margin-top:3px;
+}
+
+main{
+  padding:18px 15px 35px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#e8f2ff,#f8fbff);
+  border:1px solid #d7e7ff;
+  border-radius:20px;
+  padding:21px 17px;
+  margin-bottom:20px;
+}
+
+.hero h1{
+  font-size:25px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  font-size:14px;
+  line-height:1.55;
+  color:#64748b;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:800;
+  margin:20px 3px 12px;
+}
+
+.subject-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+
+.subject-card{
+  border:1px solid #d8e6f8;
+  background:#fff;
+  border-radius:18px;
+  padding:19px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  cursor:pointer;
+  box-shadow:0 5px 16px rgba(20,80,150,.07);
+}
+
+.subject-card:active{
+  background:#f1f7ff;
+}
+
+.subject-icon{
+  width:54px;
+  height:54px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#e7f1ff;
+  font-size:29px;
+  flex-shrink:0;
+}
+
+.subject-card h2{
+  font-size:18px;
+  margin-bottom:5px;
+}
+
+.subject-card p{
+  font-size:12px;
+  color:#64748b;
+}
+
+/* POPUP */
+
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(4,18,42,.62);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:100;
+}
+
+.popup.show{
+  display:flex;
+}
+
+.sheet{
+  width:100%;
+  max-width:430px;
+  max-height:88vh;
+  overflow-y:auto;
+  background:#fff;
+  border-radius:26px 26px 0 0;
+  padding:19px 16px 30px;
+}
+
+.handle{
+  width:45px;
+  height:5px;
+  border-radius:10px;
+  background:#cbd5e1;
+  margin:0 auto 17px;
+}
+
+.sheet-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16px;
+}
+
+.sheet-head h2{
+  font-size:21px;
+}
+
+.close{
+  width:37px;
+  height:37px;
+  border:0;
+  border-radius:50%;
+  background:#edf4ff;
+  color:#155dcc;
+  font-size:21px;
+  cursor:pointer;
+}
+
+.option{
+  width:100%;
+  border:1px solid #dce8f8;
+  background:#f9fbff;
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.option:active{
+  background:#edf5ff;
+}
+
+.option-icon{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  background:#e7f1ff;
+  color:#155dcc;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:800;
+  font-size:18px;
+  flex-shrink:0;
+}
+
+.option strong{
+  display:block;
+  font-size:15px;
+}
+
+.option span{
+  display:block;
+  color:#64748b;
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* CHAPTER PAGE */
+
+.page{
+  display:none;
+}
+
+.page.show{
+  display:block;
+}
+
+.back-btn{
+  border:0;
+  background:#edf4ff;
+  color:#155dcc;
+  border-radius:12px;
+  padding:10px 14px;
+  font-weight:700;
+  margin-bottom:15px;
+  cursor:pointer;
+}
+
+.selected-box{
+  background:linear-gradient(135deg,#1257c9,#318cff);
+  color:white;
+  border-radius:20px;
+  padding:20px 16px;
+  margin-bottom:19px;
+}
+
+.selected-box .small{
+  font-size:12px;
+  opacity:.85;
+}
+
+.selected-box h1{
+  font-size:25px;
+  margin:7px 0;
+}
+
+.selected-box p{
+  font-size:13px;
+  opacity:.92;
+}
+
+.chapter-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.chapter{
+  border:1px solid #dce8f7;
+  background:#fff;
+  border-radius:17px;
+  padding:16px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  cursor:pointer;
+  box-shadow:0 4px 12px rgba(20,80,150,.06);
+}
+
+.chapter:active{
+  background:#f2f7ff;
+}
+
+.chapter-number{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:#e7f1ff;
+  color:#125dcc;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  flex-shrink:0;
+}
+
+.chapter h3{
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.chapter p{
+  font-size:11px;
+  color:#64748b;
+}
+
+/* LESSON */
+
+.lesson-title{
+  font-size:27px;
+  line-height:1.25;
+  margin-bottom:7px;
+}
+
+.lesson-meta{
+  font-size:13px;
+  color:#64748b;
+  margin-bottom:18px;
+}
+
+.lesson-card{
+  border:1px solid #dce8f7;
+  border-radius:19px;
+  padding:20px 17px;
+  margin-bottom:13px;
+  background:#fff;
+  box-shadow:0 5px 15px rgba(20,80,150,.06);
+}
+
+.lesson-card h2{
+  color:#125dcc;
+  font-size:20px;
+  margin-bottom:12px;
+}
+
+.lesson-card p,
+.lesson-card li{
+  font-size:17px;
+  line-height:1.8;
+  color:#26364d;
+}
+
+.lesson-card ul{
+  padding-left:22px;
+}
+
+.example{
+  background:#f0f7ff;
+  border-left:4px solid #1769e0;
+  border-radius:10px;
+  padding:14px;
+  margin-top:13px;
+}
+
+.example p{
+  font-size:16px;
+}
+
+.highlight{
+  background:#fff8df;
+  border:1px solid #f1df9b;
+  border-radius:12px;
+  padding:14px;
+  margin-top:13px;
+}
+
+.practice{
+  background:linear-gradient(135deg,#f0f7ff,#fff);
+}
+
+.practice button{
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:13px 18px;
+  border-radius:12px;
+  font-weight:800;
+  margin-top:13px;
+  cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div>
+    <div class="logo">📚 GyanSetu</div>
+    <div class="sub">Language Study</div>
+  </div>
+</header>
+
+<main>
+
+<!-- SUBJECT PAGE -->
+
+<div id="subjectPage">
+
+  <div class="hero">
+    <h1>🌐 Language Subjects</h1>
+    <p>
+      तुमचा भाषा विषय निवडा आणि त्या विषयातील
+      तुमच्या इयत्तेचे सर्व धडे अभ्यासा.
+    </p>
+  </div>
+
+  <div class="section-title">
+    📖 Select Subject
+  </div>
+
+  <div class="subject-grid">
+
+    <div class="subject-card" onclick="selectSubject('Marathi','मराठी','🪔')">
+      <div class="subject-icon">🪔</div>
+      <div>
+        <h2>मराठी</h2>
+        <p>Marathi Language</p>
+      </div>
+    </div>
+
+    <div class="subject-card" onclick="selectSubject('Hindi','हिंदी','🇮🇳')">
+      <div class="subject-icon">🇮🇳</div>
+      <div>
+        <h2>हिंदी</h2>
+        <p>Hindi Language</p>
+      </div>
+    </div>
+
+    <div class="subject-card" onclick="selectSubject('English','English','🇬🇧')">
+      <div class="subject-icon">🇬🇧</div>
+      <div>
+        <h2>English</h2>
+        <p>English Language</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- CHAPTER PAGE -->
+
+<div id="chapterPage" class="page">
+
+  <button class="back-btn" onclick="backToSubjects()">
+    ← Subjects
+  </button>
+
+  <div class="selected-box">
+    <div class="small">Selected Language Subject</div>
+    <h1 id="subjectName"></h1>
+    <p id="standardName"></p>
+  </div>
+
+  <div class="section-title">
+    📚 सर्व धडे
+  </div>
+
+  <div class="chapter-list" id="chapterList"></div>
+
+</div>
+
+
+<!-- LESSON PAGE -->
+
+<div id="lessonPage" class="page">
+
+  <button class="back-btn" onclick="backToChapters()">
+    ← सर्व धडे
+  </button>
+
+  <h1 class="lesson-title" id="lessonTitle"></h1>
+  <div class="lesson-meta" id="lessonMeta"></div>
+
+  <div id="lessonContent"></div>
+
+</div>
+
+</main>
+</div>
+
+
+<!-- STANDARD POPUP -->
+
+<div class="popup" id="standardPopup">
+
+  <div class="sheet">
+
+    <div class="handle"></div>
+
+    <div class="sheet-head">
+      <h2>🎓 Standard निवडा</h2>
+      <button class="close" onclick="closePopup('standardPopup')">×</button>
+    </div>
+
+    <div id="standardList"></div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+let selectedSubject = null;
+let selectedStandard = null;
+
+
+/* SUBJECT SELECT */
+
+function selectSubject(name,marathi,icon){
+
+  selectedSubject = {
+    name:name,
+    marathi:marathi,
+    icon:icon
+  };
+
+  createStandards();
+
+  document
+    .getElementById("standardPopup")
+    .classList.add("show");
+}
+
+
+/* STANDARD LIST */
+
+function createStandards(){
+
+  const list =
+    document.getElementById("standardList");
+
+  list.innerHTML = "";
+
+  for(let i=1;i<=12;i++){
+
+    const div =
+      document.createElement("div");
+
+    div.className = "option";
+
+    div.innerHTML = `
+      <div class="option-icon">
+        ${i}
+      </div>
+
+      <div>
+        <strong>इयत्ता ${i}वी</strong>
+        <span>${i}th Standard</span>
+      </div>
+    `;
+
+    div.onclick = function(){
+
+      selectedStandard = i;
+
+      closePopup("standardPopup");
+
+      showChapters();
+
+    };
+
+    list.appendChild(div);
+
+  }
+
+}
+
+
+/* CHAPTER DATA */
+
+const marathiChapters = {
+
+  1:[
+    "माझे घर",
+    "माझे कुटुंब",
+    "माझी शाळा",
+    "चला ओळखूया",
+    "चित्र पाहूया",
+    "शब्द ओळखूया",
+    "गाणी आणि कविता",
+    "गोष्टी ऐकूया",
+    "वाचनाची सुरुवात",
+    "लेखनाचा सराव"
+  ],
+
+  2:[
+    "माझा परिसर",
+    "माझे मित्र",
+    "फुलपाखरू",
+    "चिऊताई",
+    "पाऊस आला",
+    "खेळूया आणि शिकूया",
+    "गोष्टींचे जग",
+    "कविता वाचन",
+    "शब्द आणि वाक्य",
+    "लेखन सराव"
+  ],
+
+  3:[
+    "माझे जग",
+    "शब्दांचे खेळ",
+    "चित्रवाचन",
+    "कथा वाचन",
+    "कविता",
+    "माझे मित्र",
+    "निसर्ग",
+    "प्राणी-पक्षी",
+    "वाक्यरचना",
+    "शब्दसंपत्ती"
+  ],
+
+  4:[
+    "शब्दांची दुनिया",
+    "सुंदर वाचन",
+    "गोष्टी",
+    "कविता",
+    "निसर्ग आणि आपण",
+    "माझा भारत",
+    "संवाद",
+    "शब्दभांडार",
+    "व्याकरणाची ओळख",
+    "लेखनकौशल्य"
+  ],
+
+  5:[
+    "वाचन आणि आकलन",
+    "कविता",
+    "कथा",
+    "संवाद",
+    "नाम",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रियापद",
+    "वाक्यरचना",
+    "लेखनकौशल्य"
+  ],
+
+  6:[
+    "गद्य वाचन",
+    "पद्य वाचन",
+    "कथा आणि अनुभव",
+    "नाम व सर्वनाम",
+    "विशेषण",
+    "क्रियापद",
+    "काळ",
+    "वाक्यप्रकार",
+    "शब्दसंपत्ती",
+    "निबंधलेखन",
+    "पत्रलेखन",
+    "आकलन"
+  ],
+
+  7:[
+    "गद्य",
+    "पद्य",
+    "कथा",
+    "वाचन आकलन",
+    "नाम",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रियापद",
+    "काळ",
+    "वाक्यरचना",
+    "शब्दसंपत्ती",
+    "निबंधलेखन",
+    "पत्रलेखन",
+    "संवादलेखन"
+  ],
+
+  8:[
+    "गद्य आकलन",
+    "पद्य आकलन",
+    "कथा वाचन",
+    "कविता अभ्यास",
+    "शब्दांच्या जाती",
+    "वाक्यांचे प्रकार",
+    "काळ",
+    "प्रयोग",
+    "वाक्प्रचार",
+    "म्हणी",
+    "निबंधलेखन",
+    "पत्रलेखन",
+    "सर्जनशील लेखन"
+  ],
+
+  9:[
+    "गद्य विभाग",
+    "पद्य विभाग",
+    "कविता अभ्यास",
+    "गद्य आकलन",
+    "शब्दांच्या जाती",
+    "वाक्यप्रकार",
+    "काळ",
+    "वाक्प्रचार व म्हणी",
+    "अलंकार",
+    "निबंधलेखन",
+    "पत्रलेखन",
+    "सर्जनशील लेखन",
+    "व्याकरण सराव"
+  ],
+
+  10:[
+    "गद्य",
+    "पद्य",
+    "कविता",
+    "गद्य आकलन",
+    "व्याकरण",
+    "वाक्यरचना",
+    "शब्दसंपत्ती",
+    "अलंकार",
+    "वाक्प्रचार",
+    "निबंधलेखन",
+    "पत्रलेखन",
+    "सर्जनशील लेखन",
+    "लेखनकौशल्य",
+    "परीक्षा सराव"
+  ],
+
+  11:[
+    "भाषा आणि साहित्य",
+    "गद्य अभ्यास",
+    "पद्य अभ्यास",
+    "कविता विश्लेषण",
+    "गद्य आकलन",
+    "व्याकरण",
+    "शब्दसंपत्ती",
+    "अलंकार",
+    "निबंधलेखन",
+    "औपचारिक लेखन",
+    "सर्जनशील लेखन",
+    "आकलन सराव"
+  ],
+
+  12:[
+    "साहित्य अभ्यास",
+    "गद्य",
+    "पद्य",
+    "कविता विश्लेषण",
+    "साहित्यिक आकलन",
+    "व्याकरण",
+    "शब्दसंपत्ती",
+    "लेखनकौशल्य",
+    "निबंधलेखन",
+    "औपचारिक लेखन",
+    "सर्जनशील लेखन",
+    "परीक्षा तयारी",
+    "संपूर्ण पुनरावृत्ती"
+  ]
+
+};
+
+
+const hindiChapters = {
+
+  1:[
+    "वर्णमाला",
+    "स्वर और व्यंजन",
+    "मात्राएँ",
+    "शब्द पहचान",
+    "सरल वाक्य",
+    "चित्र देखकर बोलना",
+    "कविता",
+    "कहानी",
+    "पठन अभ्यास",
+    "लेखन अभ्यास"
+  ],
+
+  2:[
+    "वर्ण और मात्राएँ",
+    "शब्द और वाक्य",
+    "संज्ञा की पहचान",
+    "सर्वनाम की पहचान",
+    "क्रिया शब्द",
+    "विशेषण",
+    "कहानी पढ़ना",
+    "कविता पढ़ना",
+    "चित्र वर्णन",
+    "लेखन अभ्यास"
+  ],
+
+  3:[
+    "पठन कौशल",
+    "लेखन कौशल",
+    "संज्ञा",
+    "सर्वनाम",
+    "क्रिया",
+    "विशेषण",
+    "वचन",
+    "लिंग",
+    "कहानी",
+    "कविता",
+    "अनुच्छेद लेखन"
+  ],
+
+  4:[
+    "पठन और समझ",
+    "संज्ञा",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रिया",
+    "काल",
+    "वचन",
+    "लिंग",
+    "कहानी लेखन",
+    "पत्र लेखन",
+    "अनुच्छेद लेखन"
+  ],
+
+  5:[
+    "गद्य",
+    "पद्य",
+    "कहानी",
+    "कविता",
+    "संज्ञा",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रिया",
+    "काल",
+    "वाक्य",
+    "शब्द भंडार",
+    "लेखन"
+  ],
+
+  6:[
+    "गद्य पाठ",
+    "पद्य पाठ",
+    "कहानी",
+    "कविता",
+    "संज्ञा",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रिया",
+    "काल",
+    "वाक्य भेद",
+    "मुहावरे",
+    "निबंध लेखन",
+    "पत्र लेखन"
+  ],
+
+  7:[
+    "गद्य",
+    "पद्य",
+    "कहानी",
+    "कविता",
+    "संज्ञा",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रिया",
+    "काल",
+    "वाक्य रचना",
+    "मुहावरे",
+    "शब्द भंडार",
+    "लेखन कौशल"
+  ],
+
+  8:[
+    "गद्य अध्ययन",
+    "पद्य अध्ययन",
+    "कविता",
+    "कहानी",
+    "संधि",
+    "समास",
+    "संज्ञा",
+    "सर्वनाम",
+    "विशेषण",
+    "क्रिया",
+    "काल",
+    "मुहावरे",
+    "निबंध लेखन"
+  ],
+
+  9:[
+    "गद्य",
+    "पद्य",
+    "कविता",
+    "कहानी",
+    "व्याकरण",
+    "संधि",
+    "समास",
+    "अलंकार",
+    "वाक्य रचना",
+    "मुहावरे",
+    "निबंध लेखन",
+    "पत्र लेखन"
+  ],
+
+  10:[
+    "गद्य खंड",
+    "काव्य खंड",
+    "कविता अध्ययन",
+    "गद्य आकलन",
+    "व्याकरण",
+    "संधि",
+    "समास",
+    "अलंकार",
+    "मुहावरे",
+    "निबंध लेखन",
+    "पत्र लेखन",
+    "रचनात्मक लेखन",
+    "परीक्षा अभ्यास"
+  ],
+
+  11:[
+    "गद्य साहित्य",
+    "काव्य साहित्य",
+    "कविता विश्लेषण",
+    "गद्य आकलन",
+    "व्याकरण",
+    "शब्द भंडार",
+    "अलंकार",
+    "लेखन कौशल",
+    "निबंध लेखन",
+    "औपचारिक लेखन",
+    "रचनात्मक लेखन"
+  ],
+
+  12:[
+    "साहित्य अध्ययन",
+    "गद्य",
+    "काव्य",
+    "कविता विश्लेषण",
+    "साहित्यिक आकलन",
+    "व्याकरण",
+    "शब्द भंडार",
+    "लेखन कौशल",
+    "निबंध लेखन",
+    "औपचारिक लेखन",
+    "रचनात्मक लेखन",
+    "परीक्षा तैयारी",
+    "संपूर्ण पुनरावृत्ति"
+  ]
+
+};
+
+
+const englishChapters = {
+
+  1:[
+    "Alphabet",
+    "Vowels and Consonants",
+    "Phonics",
+    "Simple Words",
+    "Naming Words",
+    "Action Words",
+    "Describing Words",
+    "Simple Sentences",
+    "Reading Practice",
+    "Writing Practice"
+  ],
+
+  2:[
+    "Words and Sentences",
+    "Nouns",
+    "Pronouns",
+    "Action Words",
+    "Describing Words",
+    "Singular and Plural",
+    "Opposite Words",
+    "Reading",
+    "Poems",
+    "Story Reading",
+    "Writing Practice"
+  ],
+
+  3:[
+    "Reading Skills",
+    "Nouns",
+    "Pronouns",
+    "Verbs",
+    "Adjectives",
+    "Adverbs",
+    "Tenses",
+    "Singular and Plural",
+    "Sentence Formation",
+    "Story Writing",
+    "Paragraph Writing"
+  ],
+
+  4:[
+    "Reading Comprehension",
+    "Nouns",
+    "Pronouns",
+    "Adjectives",
+    "Verbs",
+    "Adverbs",
+    "Tenses",
+    "Articles",
+    "Prepositions",
+    "Sentence Formation",
+    "Letter Writing",
+    "Paragraph Writing"
+  ],
+
+  5:[
+    "Reading",
+    "Prose",
+    "Poetry",
+    "Nouns",
+    "Pronouns",
+    "Adjectives",
+    "Verbs",
+    "Adverbs",
+    "Tenses",
+    "Articles",
+    "Prepositions",
+    "Vocabulary",
+    "Writing Skills"
+  ],
+
+  6:[
+    "Prose",
+    "Poetry",
+    "Reading Comprehension",
+    "Nouns",
+    "Pronouns",
+    "Adjectives",
+    "Verbs",
+    "Adverbs",
+    "Tenses",
+    "Articles",
+    "Prepositions",
+    "Conjunctions",
+    "Essay Writing",
+    "Letter Writing"
+  ],
+
+  7:[
+    "Prose",
+    "Poetry",
+    "Reading Comprehension",
+    "Nouns",
+    "Pronouns",
+    "Adjectives",
+    "Verbs",
+    "Adverbs",
+    "Tenses",
+    "Voice",
+    "Sentence Types",
+    "Vocabulary",
+    "Essay Writing",
+    "Letter Writing"
+  ],
+
+  8:[
+    "Prose",
+    "Poetry",
+    "Story",
+    "Reading Comprehension",
+    "Parts of Speech",
+    "Tenses",
+    "Voice",
+    "Direct and Indirect Speech",
+    "Prepositions",
+    "Conjunctions",
+    "Vocabulary",
+    "Essay Writing",
+    "Creative Writing"
+  ],
+
+  9:[
+    "Prose",
+    "Poetry",
+    "Reading Comprehension",
+    "Grammar",
+    "Parts of Speech",
+    "Tenses",
+    "Voice",
+    "Direct and Indirect Speech",
+    "Sentence Transformation",
+    "Vocabulary",
+    "Essay Writing",
+    "Letter Writing",
+    "Creative Writing"
+  ],
+
+  10:[
+    "Prose",
+    "Poetry",
+    "Reading Comprehension",
+    "Grammar",
+    "Tenses",
+    "Voice",
+    "Direct and Indirect Speech",
+    "Sentence Transformation",
+    "Vocabulary",
+    "Idioms and Phrases",
+    "Essay Writing",
+    "Letter Writing",
+    "Creative Writing",
+    "Exam Practice"
+  ],
+
+  11:[
+    "Prose",
+    "Poetry",
+    "Literature",
+    "Reading Comprehension",
+    "Advanced Grammar",
+    "Vocabulary",
+    "Writing Skills",
+    "Essay Writing",
+    "Formal Writing",
+    "Creative Writing",
+    "Critical Reading"
+  ],
+
+  12:[
+    "Literature",
+    "Prose",
+    "Poetry",
+    "Poetry Analysis",
+    "Reading Comprehension",
+    "Advanced Grammar",
+    "Vocabulary",
+    "Writing Skills",
+    "Essay Writing",
+    "Formal Writing",
+    "Creative Writing",
+    "Exam Preparation",
+    "Complete Revision"
+  ]
+
+};
+
+
+/* GET CHAPTERS */
+
+function getChapters(){
+
+  if(selectedSubject.name === "Marathi"){
+    return marathiChapters[selectedStandard];
+  }
+
+  if(selectedSubject.name === "Hindi"){
+    return hindiChapters[selectedStandard];
+  }
+
+  return englishChapters[selectedStandard];
+
+}
+
+
+/* SHOW CHAPTERS */
+
+function showChapters(){
+
+  document.getElementById("subjectPage")
+    .style.display = "none";
+
+  document.getElementById("chapterPage")
+    .classList.add("show");
+
+  document.getElementById("lessonPage")
+    .classList.remove("show");
+
+  document.getElementById("subjectName")
+    .textContent =
+      selectedSubject.icon + " " +
+      selectedSubject.marathi;
+
+  document.getElementById("standardName")
+    .textContent =
+      "🎓 इयत्ता " + selectedStandard + "वी";
+
+  const list =
+    document.getElementById("chapterList");
+
+  list.innerHTML = "";
+
+  const chapters = getChapters();
+
+  chapters.forEach((chapter,index)=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className = "chapter";
+
+    div.innerHTML = `
+      <div class="chapter-number">
+        ${index+1}
+      </div>
+
+      <div>
+        <h3>${chapter}</h3>
+        <p>📖 धडा उघडण्यासाठी येथे टॅप करा</p>
+      </div>
+    `;
+
+    div.onclick = function(){
+      openLesson(chapter,index+1);
+    };
+
+    list.appendChild(div);
+
+  });
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* OPEN LESSON */
+
+function openLesson(chapter,number){
+
+  document.getElementById("chapterPage")
+    .classList.remove("show");
+
+  document.getElementById("lessonPage")
+    .classList.add("show");
+
+  document.getElementById("lessonTitle")
+    .textContent =
+      number + ". " + chapter;
+
+  document.getElementById("lessonMeta")
+    .textContent =
+      selectedSubject.marathi +
+      " • इयत्ता " +
+      selectedStandard +
+      "वी";
+
+  document.getElementById("lessonContent")
+    .innerHTML =
+      createLesson(chapter,number);
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* LESSON CONTENT */
+
+function createLesson(chapter,number){
+
+  let subjectText = selectedSubject.name;
+
+  if(selectedSubject.name === "Marathi"){
+    subjectText = "मराठी";
+  }
+
+  if(selectedSubject.name === "Hindi"){
+    subjectText = "हिंदी";
+  }
+
+  if(selectedSubject.name === "English"){
+    subjectText = "English";
+  }
+
+  return `
+
+  <div class="lesson-card">
+
+    <h2>📖 धडा समजून घेऊया</h2>
+
+    <p>
+      <strong>${chapter}</strong> हा
+      ${subjectText} विषयातील एक महत्त्वाचा भाग आहे.
+      हा धडा आपण अगदी सुरुवातीपासून, सोप्या भाषेत
+      आणि step-by-step पद्धतीने समजून घेणार आहोत.
+    </p>
+
+    <div class="highlight">
+
+      <p>
+        💡 <strong>लक्षात ठेवा:</strong><br>
+        धडा फक्त पाठ करण्यापेक्षा त्याचा अर्थ,
+        मुख्य कल्पना, नवीन शब्द आणि त्यांचा योग्य उपयोग
+        समजून घेणे जास्त महत्त्वाचे आहे.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="lesson-card">
+
+    <h2>🧠 मुख्य संकल्पना</h2>
+
+    <p>
+      या धड्यातील प्रत्येक नवीन गोष्ट आधी ओळखा.
+      त्यानंतर तिचा अर्थ समजून घ्या आणि ती वाक्यात
+      किंवा योग्य संदर्भात कशी वापरली जाते ते पाहा.
+    </p>
+
+    <div class="example">
+
+      <p>
+        <strong>उदाहरण:</strong><br><br>
+
+        एखादा नवीन शब्द भेटला तर प्रथम त्याचा
+        अर्थ समजून घ्या. त्यानंतर त्या शब्दाचा
+        स्वतःच्या वाक्यात उपयोग करा.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="lesson-card">
+
+    <h2>🔎 Step-by-Step अभ्यास</h2>
+
+    <ul>
+
+      <li>
+        प्रथम धडा शांतपणे वाचा.
+      </li>
+
+      <li>
+        नवीन किंवा कठीण शब्द वेगळे काढा.
+      </li>
+
+      <li>
+        प्रत्येक शब्दाचा अर्थ समजून घ्या.
+      </li>
+
+      <li>
+        धड्यातील मुख्य विचार ओळखा.
+      </li>
+
+      <li>
+        महत्त्वाची वाक्ये स्वतःच्या शब्दांत समजावून सांगा.
+      </li>
+
+      <li>
+        शेवटी स्वतःचा छोटा सारांश तयार करा.
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <div class="lesson-card">
+
+    <h2>⭐ Important Points</h2>
+
+    <ul>
+
+      <li>
+        नवीन शब्दांचा अर्थ लक्षात ठेवा.
+      </li>
+
+      <li>
+        शब्दांचा योग्य संदर्भात वापर करा.
+      </li>
+
+      <li>
+        वाक्यरचनेकडे लक्ष द्या.
+      </li>
+
+      <li>
+        Reading करताना प्रत्येक वाक्याचा अर्थ समजून घ्या.
+      </li>
+
+      <li>
+        Writing करताना spelling आणि grammar तपासा.
+      </li>
+
+    </ul>
+
+  </div>
+
+
+  <div class="lesson-card">
+
+    <h2>📝 स्वतःचा सराव</h2>
+
+    <p>
+      या धड्याबद्दल खालील गोष्टी स्वतः करून पाहा:
+    </p>
+
+    <div class="example">
+
+      <p>
+        1. धड्याचे नाव लिहा.<br><br>
+
+        2. धड्यातील 5 नवीन शब्द लिहा.<br><br>
+
+        3. त्या शब्दांचे अर्थ लिहा.<br><br>
+
+        4. त्या शब्दांचा वापर करून वाक्य तयार करा.<br><br>
+
+        5. धड्याचा छोटा सारांश स्वतःच्या शब्दांत लिहा.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="lesson-card">
+
+    <h2>🔁 Quick Revision</h2>
+
+    <p>
+      आज आपण <strong>${chapter}</strong> या धड्याची
+      basic idea, मुख्य मुद्दे, शब्दसंपत्ती आणि
+      अभ्यासाची पद्धत समजून घेतली.
+    </p>
+
+    <div class="highlight">
+
+      <p>
+        🎯 <strong>Revision Formula:</strong><br><br>
+        वाचा → समजा → उदाहरण पाहा →
+        स्वतः करा → पुन्हा revise करा.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="lesson-card practice">
+
+    <h2>🎯 Practice Time</h2>
+
+    <p>
+      आता तुमची turn!
+      <br><br>
+      <strong>
+        या धड्यातील तुम्हाला सर्वात महत्त्वाची
+        वाटणारी एक गोष्ट स्वतःच्या शब्दांत लिहा.
+      </strong>
+    </p>
+
+    <button onclick="nextChapter()">
+      पुढचा धडा →
+    </button>
+
+  </div>
+
+  `;
+
+}
+
+
+/* NEXT CHAPTER */
+
+function nextChapter(){
+
+  const chapters = getChapters();
+
+  const currentTitle =
+    document.getElementById("lessonTitle")
+      .textContent;
+
+  const currentNumber =
+    parseInt(currentTitle.split(".")[0]);
+
+  if(
+    currentNumber >= 1 &&
+    currentNumber < chapters.length
+  ){
+
+    openLesson(
+      chapters[currentNumber],
+      currentNumber + 1
+    );
+
+  }else{
+
+    backToChapters();
+
+  }
+
+}
+
+
+/* BACK TO SUBJECTS */
+
+function backToSubjects(){
+
+  document.getElementById("chapterPage")
+    .classList.remove("show");
+
+  document.getElementById("lessonPage")
+    .classList.remove("show");
+
+  document.getElementById("subjectPage")
+    .style.display = "block";
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* BACK TO CHAPTERS */
+
+function backToChapters(){
+
+  document.getElementById("lessonPage")
+    .classList.remove("show");
+
+  document.getElementById("chapterPage")
+    .classList.add("show");
+
+  window.scrollTo(0,0);
+
+}
+
+
+/* CLOSE POPUP */
+
+function closePopup(id){
+
+  document.getElementById(id)
+    .classList.remove("show");
+
+}
+
+
+/* CLOSE POPUP ON BACKDROP */
+
+document.getElementById("standardPopup")
+  .addEventListener("click",function(e){
+
+    if(e.target === this){
+      closePopup("standardPopup");
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
