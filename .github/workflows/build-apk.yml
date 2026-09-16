@@ -340,6 +340,47 @@ jobs:
 
 
       # =========================================
+      # FIX APK V1 SIGNING ERROR
+      # =========================================
+
+      - name: Configure APK signing
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          gradle = Path("android/app/build.gradle")
+
+          if not gradle.exists():
+              raise SystemExit("android/app/build.gradle not found")
+
+          text = gradle.read_text()
+
+          signing_code = """
+              signingConfigs {
+                  debug {
+                      enableV1Signing = false
+                      enableV2Signing = true
+                  }
+              }
+
+          """
+
+          if "enableV1Signing" not in text:
+              text = text.replace(
+                  "android {",
+                  "android {\\n" + signing_code,
+                  1
+              )
+
+          gradle.write_text(text)
+
+          print("APK signing configured:")
+          print("V1 signing = false")
+          print("V2 signing = true")
+          PY
+
+
+      # =========================================
       # BUILD APK
       # =========================================
 
@@ -347,7 +388,24 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
+
+
+      # =========================================
+      # CHECK APK
+      # =========================================
+
+      - name: Check APK
+        run: |
+          if [ -f android/app/build/outputs/apk/debug/app-debug.apk ]; then
+            echo "========================================="
+            echo "APK BUILD SUCCESSFUL"
+            echo "========================================="
+            ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+          else
+            echo "APK NOT FOUND"
+            exit 1
+          fi
 
 
       # =========================================
@@ -359,3 +417,4 @@ jobs:
         with:
           name: RAMSENA-XI-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
