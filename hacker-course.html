@@ -349,7 +349,7 @@ body{
 
 
 /* =====================================================
-   LANGUAGE OVERLAY
+   LANGUAGE POPUP
 ===================================================== */
 
 .languageOverlay{
@@ -549,10 +549,11 @@ body{
 
 
 /* =====================================================
-   ROBOT IMAGE
+   ROBOT IMAGE AREA
 ===================================================== */
 
 .robotImageWrap{
+
   position:relative;
 
   width:100%;
@@ -564,7 +565,13 @@ body{
   justify-content:center;
 }
 
+
+/* =====================================================
+   ROBOT GLOW
+===================================================== */
+
 .robotGlow{
+
   position:absolute;
 
   width:340px;
@@ -598,6 +605,11 @@ body{
   }
 
 }
+
+
+/* =====================================================
+   ROBOT IMAGE
+===================================================== */
 
 .robotImage{
 
@@ -660,28 +672,50 @@ body{
 
 
 /* =====================================================
-   MOUTH ANIMATION
+   ROBOT FACE CONTAINER
+   IMPORTANT FIX
 ===================================================== */
 
-/*
-  हा animated mouth robot image च्या चेहऱ्यावर
-  एक futuristic talking effect देतो.
-*/
-
-.robotMouth{
+.robotFace{
 
   position:absolute;
 
   z-index:10;
 
-  left:50%;
+  width:min(94vw,440px);
+  height:min(94vw,440px);
 
-  top:49%;
+  left:50%;
+  top:50%;
 
   transform:translate(-50%,-50%);
 
-  width:55px;
-  height:12px;
+  pointer-events:none;
+}
+
+
+/* =====================================================
+   TALKING MOUTH
+===================================================== */
+
+.robotMouth{
+
+  position:absolute;
+
+  /*
+     आधी 49% मुळे mouth डोक्यावर जात होता.
+     आता robot image च्या face area मध्ये
+     योग्य position ठेवली आहे.
+  */
+
+  left:50%;
+
+  top:62%;
+
+  transform:translate(-50%,-50%);
+
+  width:48px;
+  height:10px;
 
   border-radius:50%;
 
@@ -694,7 +728,7 @@ body{
       transparent 75%
     );
 
-  opacity:.0;
+  opacity:0;
 
   filter:
     blur(.4px)
@@ -718,6 +752,7 @@ body{
   0%{
     width:38px;
     height:7px;
+
     transform:
       translate(-50%,-50%)
       scaleY(.65);
@@ -726,6 +761,7 @@ body{
   50%{
     width:58px;
     height:18px;
+
     transform:
       translate(-50%,-50%)
       scaleY(1.2);
@@ -734,6 +770,7 @@ body{
   100%{
     width:45px;
     height:10px;
+
     transform:
       translate(-50%,-50%)
       scaleY(.8);
@@ -783,7 +820,8 @@ body{
   box-shadow:
     0 0 10px rgba(61,215,255,.8);
 
-  animation:wave .35s ease-in-out infinite alternate;
+  animation:
+    wave .35s ease-in-out infinite alternate;
 }
 
 .voiceWave span:nth-child(2){
@@ -920,6 +958,25 @@ body{
   font-size:10px;
 
   padding:28px 10px 5px;
+}
+
+
+/* =====================================================
+   MOBILE ROBOT POSITION
+===================================================== */
+
+@media(max-width:480px){
+
+  .robotImage,
+  .robotFace{
+    width:92vw;
+    height:92vw;
+  }
+
+  .robotMouth{
+    top:62%;
+  }
+
 }
 
 </style>
@@ -1200,14 +1257,25 @@ onclick="closeRobotClass()"
 <img
 id="robotImage"
 class="robotImage"
-src="file_00000000b36c8211b759e242875b4d62.png"
+src="IMG_20260917_221017.jpg"
 alt="GyanSetu AI Robot"
 >
 
 
+<!--
+  हा container robot image सोबत
+  same size आणि same center मध्ये आहे.
+  त्यामुळे mouth आता screen वर fixed
+  नसून robot च्या face area मध्ये राहतो.
+-->
+
+<div class="robotFace">
+
 <div
 id="robotMouth"
 class="robotMouth">
+</div>
+
 </div>
 
 
@@ -1358,7 +1426,7 @@ title:"Encryption Basics",
 icon:"🔐",
 mr:"Encryption म्हणजे readable information ला योग्य key शिवाय समजणे कठीण होईल अशा स्वरूपात बदलणे.",
 en:"Encryption changes readable information into a protected form that is difficult to understand without the correct key.",
-hi:"Encryption readable information को ऐसे protected form में बदलता है जिसे सही key के बिना समझना कठिन होता है."
+hi:"Encryption readable information को ऐसे protected form में बदलता है जिसे सही key के बिना समझना कठिन है."
 },
 
 {
@@ -1712,7 +1780,7 @@ let speechStarted = false;
 
 
 /* =====================================================
-   DISPLAY
+   DISPLAY LESSONS
 ===================================================== */
 
 function displayLessons(list = lessons){
