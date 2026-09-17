@@ -617,6 +617,7 @@ body{
   height:min(94vw,440px);
 
   object-fit:contain;
+  object-position:center;
 
   position:relative;
 
@@ -673,7 +674,6 @@ body{
 
 /* =====================================================
    ROBOT FACE CONTAINER
-   IMPORTANT FIX
 ===================================================== */
 
 .robotFace{
@@ -696,21 +696,22 @@ body{
 
 /* =====================================================
    TALKING MOUTH
+   FIXED FOR YOUR ROBOT PHOTO
 ===================================================== */
 
 .robotMouth{
 
   position:absolute;
 
-  /*
-     आधी 49% मुळे mouth डोक्यावर जात होता.
-     आता robot image च्या face area मध्ये
-     योग्य position ठेवली आहे.
-  */
-
   left:50%;
 
-  top:47%;
+  /*
+    तुझ्या फोटोमध्ये actual black face-screen
+    साधारण 41% position वर आहे.
+    त्यामुळे mouth आता त्याच screen मध्ये येईल.
+  */
+
+  top:41%;
 
   transform:translate(-50%,-50%);
 
@@ -962,19 +963,26 @@ body{
 
 
 /* =====================================================
-   MOBILE ROBOT POSITION
+   IMPORTANT MOBILE FIX
 ===================================================== */
 
 @media(max-width:480px){
 
   .robotImage,
   .robotFace{
+
     width:92vw;
     height:92vw;
+
   }
 
+  /*
+    येथे top:62% अजिबात ठेवलेले नाही.
+    Mouth चे main top:41%च वापरले जाते.
+  */
+
   .robotMouth{
-    top:62%;
+    top:41%;
   }
 
 }
@@ -1143,7 +1151,6 @@ GyanSetu • Learn Cyber Security Safely 🛡️
 </div>
 
 
-
 <!-- =====================================================
      LANGUAGE POPUP
 ===================================================== -->
@@ -1228,7 +1235,6 @@ onclick="closeLanguage()"
 </div>
 
 
-
 <!-- =====================================================
      ROBOT SCREEN
 ===================================================== -->
@@ -1261,13 +1267,6 @@ src="IMG_20260917_231202.jpg"
 alt="GyanSetu AI Robot"
 >
 
-
-<!--
-  हा container robot image सोबत
-  same size आणि same center मध्ये आहे.
-  त्यामुळे mouth आता screen वर fixed
-  नसून robot च्या face area मध्ये राहतो.
--->
 
 <div class="robotFace">
 
@@ -1309,7 +1308,6 @@ class="robotStatus"
 </div>
 
 
-
 <!-- =====================================================
      MENU
 ===================================================== -->
@@ -1340,7 +1338,6 @@ onclick="closeMenu()"
 </div>
 
 
-
 <script>
 
 /* =====================================================
@@ -1349,407 +1346,225 @@ onclick="closeMenu()"
 
 const lessons = [
 
-{
-title:"Cyber Security म्हणजे काय?",
-icon:"🛡️",
-mr:"Cyber Security म्हणजे computers, phones, networks, applications आणि data यांना unauthorized access, नुकसान आणि cyber threats पासून सुरक्षित ठेवण्याची प्रक्रिया.",
-en:"Cyber Security means protecting computers, phones, networks, applications and data from unauthorized access, damage and cyber threats.",
-hi:"Cyber Security का मतलब computers, phones, networks, applications और data को unauthorized access, नुकसान और cyber threats से सुरक्षित रखना है."
-},
-
-{
-title:"Ethical Hacking म्हणजे काय?",
-icon:"👨‍💻",
-mr:"Ethical hacking म्हणजे मालकाची स्पष्ट permission घेऊन system किंवा application मधील security weaknesses शोधणे.",
-en:"Ethical hacking means finding security weaknesses in a system or application with clear permission from the owner.",
-hi:"Ethical hacking का मतलब owner की स्पष्ट permission लेकर system या application की security weaknesses ढूंढना है."
-},
-
-{
-title:"Hacker चे प्रकार",
-icon:"🧑‍💻",
-mr:"White-hat hackers authorized security testing करतात. Black-hat hackers unauthorized harmful activity करू शकतात.",
-en:"White-hat hackers perform authorized security testing. Black-hat hackers may perform unauthorized harmful activities.",
-hi:"White-hat hackers authorized security testing करते हैं। Black-hat hackers unauthorized harmful activities कर सकते हैं."
-},
-
-{
-title:"Internet कसे काम करते?",
-icon:"🌐",
-mr:"Internet हे अनेक networks एकमेकांशी जोडलेले global system आहे. Devices data packets मध्ये माहिती पाठवतात.",
-en:"The Internet is a global system of interconnected networks. Devices send information using data packets.",
-hi:"Internet आपस में जुड़े हुए networks की एक global system है। Devices data packets के माध्यम से information भेजते हैं."
-},
-
-{
-title:"IP Address",
-icon:"📍",
-mr:"IP address network वरील device किंवा interface ओळखण्यासाठी वापरला जाणारा address आहे. IPv4 आणि IPv6 हे प्रमुख formats आहेत.",
-en:"An IP address identifies a device or network interface. IPv4 and IPv6 are the two major formats.",
-hi:"IP address network पर device या interface की पहचान करने वाला address है। IPv4 और IPv6 इसके प्रमुख formats हैं."
-},
-
-{
-title:"DNS Basics",
-icon:"🔎",
-mr:"DNS म्हणजे Domain Name System. हे domain names आणि IP addresses यांच्यात mapping करते.",
-en:"DNS means Domain Name System. It maps easy-to-read domain names to IP addresses.",
-hi:"DNS का मतलब Domain Name System है। यह domain names और IP addresses के बीच mapping करता है."
-},
-
-{
-title:"Ports म्हणजे काय?",
-icon:"🚪",
-mr:"Network ports हे services आणि network communication ओळखण्यासाठी वापरले जाणारे logical endpoints आहेत.",
-en:"Network ports are logical endpoints used to identify services and network communication.",
-hi:"Network ports services और network communication को identify करने वाले logical endpoints हैं."
-},
-
-{
-title:"TCP/IP Basics",
-icon:"📦",
-mr:"TCP/IP हा Internet communication मध्ये वापरला जाणारा protocols चा family आहे. TCP reliable delivery साठी आणि IP addressing व routing साठी महत्त्वाचा आहे.",
-en:"TCP/IP is a family of protocols used for Internet communication. TCP provides reliable delivery while IP handles addressing and routing.",
-hi:"TCP/IP Internet communication में इस्तेमाल होने वाले protocols का family है। TCP reliable delivery और IP addressing तथा routing के लिए महत्वपूर्ण है."
-},
-
-{
-title:"HTTP आणि HTTPS",
-icon:"🔗",
-mr:"HTTP web communication साठी वापरले जाते. HTTPS मध्ये TLS encryption मुळे browser आणि server मधील communication अधिक सुरक्षित होते.",
-en:"HTTP is used for web communication. HTTPS uses TLS encryption to make communication between the browser and server more secure.",
-hi:"HTTP web communication के लिए इस्तेमाल होता है। HTTPS में TLS encryption browser और server के communication को अधिक secure बनाता है."
-},
-
-{
-title:"Encryption Basics",
-icon:"🔐",
-mr:"Encryption म्हणजे readable information ला योग्य key शिवाय समजणे कठीण होईल अशा स्वरूपात बदलणे.",
-en:"Encryption changes readable information into a protected form that is difficult to understand without the correct key.",
-hi:"Encryption readable information को ऐसे protected form में बदलता है जिसे सही key के बिना समझना कठिन है."
-},
-
-{
-title:"Password Security",
-icon:"🔑",
-mr:"Strong आणि unique passwords account security साठी महत्त्वाचे आहेत. Multi-factor authentication मुळे protection अधिक मजबूत होते.",
-en:"Strong and unique passwords are important for account security. Multi-factor authentication provides additional protection.",
-hi:"Strong और unique passwords account security के लिए महत्वपूर्ण हैं। Multi-factor authentication अतिरिक्त protection देता है."
-},
-
-{
-title:"Password Hashing",
-icon:"🧂",
-mr:"Hashing ही information ला fixed-length value मध्ये बदलणारी one-way प्रक्रिया आहे. Password storage मध्ये secure hashing आणि salting महत्त्वाचे आहेत.",
-en:"Hashing converts information into a fixed-length value using a one-way process. Secure hashing and salting are important for password storage.",
-hi:"Hashing information को fixed-length value में बदलने की one-way process है। Password storage में secure hashing और salting महत्वपूर्ण हैं."
-},
-
-{
-title:"Authentication",
-icon:"👤",
-mr:"Authentication म्हणजे user कोण आहे हे verify करणे. Password, OTP, security key आणि biometric यांसारख्या पद्धती वापरल्या जातात.",
-en:"Authentication means verifying who a user is. Passwords, OTPs, security keys and biometrics can be used.",
-hi:"Authentication का मतलब user की पहचान verify करना है। Password, OTP, security key और biometric methods इस्तेमाल किए जा सकते हैं."
-},
-
-{
-title:"Authorization",
-icon:"🎫",
-mr:"Authorization म्हणजे authenticated user ला कोणती actions किंवा resources access करता येतील हे ठरवणे.",
-en:"Authorization determines which actions or resources an authenticated user is allowed to access.",
-hi:"Authorization तय करता है कि authenticated user किन actions या resources को access कर सकता है."
-},
-
-{
-title:"Firewall",
-icon:"🔥",
-mr:"Firewall network traffic वर security rules लागू करून unwanted communication block किंवा allow करण्यास मदत करते.",
-en:"A firewall applies security rules to network traffic and helps block or allow communication.",
-hi:"Firewall network traffic पर security rules लागू करके unwanted communication को block या allow करने में मदद करता है."
-},
-
-{
-title:"Malware Basics",
-icon:"🦠",
-mr:"Malware म्हणजे malicious software. Viruses, worms, trojans आणि ransomware या malware च्या categories आहेत.",
-en:"Malware means malicious software. Viruses, worms, trojans and ransomware are common malware categories.",
-hi:"Malware का मतलब malicious software है। Viruses, worms, trojans और ransomware इसकी common categories हैं."
-},
-
-{
-title:"Phishing समजून घेऊया",
-icon:"🎣",
-mr:"Phishing मध्ये legitimate दिसणारे messages किंवा pages वापरून sensitive information मिळवण्याचा प्रयत्न केला जाऊ शकतो.",
-en:"Phishing uses messages or pages that appear legitimate to trick users into revealing sensitive information.",
-hi:"Phishing में legitimate दिखने वाले messages या pages के जरिए users से sensitive information लेने की कोशिश की जाती है."
-},
-
-{
-title:"Social Engineering",
-icon:"🧠",
-mr:"Social engineering मध्ये technical weakness पेक्षा मानवी trust, urgency किंवा emotions यांचा गैरफायदा घेण्याचा प्रयत्न केला जातो.",
-en:"Social engineering attempts to exploit human trust, urgency or emotions instead of technical weaknesses.",
-hi:"Social engineering में technical weakness की बजाय human trust, urgency या emotions का फायदा उठाने की कोशिश की जाती है."
-},
-
-{
-title:"Email Security",
-icon:"📧",
-mr:"Email security मध्ये suspicious attachments, links, spoofing आणि account protection यांचा समावेश होतो.",
-en:"Email security includes dealing with suspicious attachments, links, spoofing and account protection.",
-hi:"Email security में suspicious attachments, links, spoofing और account protection शामिल हैं."
-},
-
-{
-title:"Mobile Security",
-icon:"📱",
-mr:"Mobile security मध्ये screen lock, app permissions, updates, secure networks आणि trusted app sources यांचा समावेश होतो.",
-en:"Mobile security includes screen locks, app permissions, updates, secure networks and trusted app sources.",
-hi:"Mobile security में screen lock, app permissions, updates, secure networks और trusted app sources शामिल हैं."
-},
-
-{
-title:"Computer Security",
-icon:"💻",
-mr:"Computer security म्हणजे operating system, applications, accounts, files आणि network connections सुरक्षित ठेवणे.",
-en:"Computer security means protecting the operating system, applications, accounts, files and network connections.",
-hi:"Computer security का मतलब operating system, applications, accounts, files और network connections को सुरक्षित रखना है."
-},
-
-{
-title:"Software Updates",
-icon:"🔄",
-mr:"Software updates मध्ये security patches असू शकतात जे known vulnerabilities fix करतात. त्यामुळे software updated ठेवणे महत्त्वाचे आहे.",
-en:"Software updates may contain security patches that fix known vulnerabilities. Keeping software updated is important.",
-hi:"Software updates में security patches हो सकते हैं जो known vulnerabilities को fix करते हैं। Software updated रखना जरूरी है."
-},
-
-{
-title:"Secure Wi-Fi",
-icon:"📶",
-mr:"Wi-Fi security साठी strong router password, modern security protocol आणि firmware updates महत्त्वाचे असतात.",
-en:"Wi-Fi security benefits from a strong router password, modern security protocols and firmware updates.",
-hi:"Wi-Fi security के लिए strong router password, modern security protocol और firmware updates महत्वपूर्ण हैं."
-},
-
-{
-title:"Web Security",
-icon:"🌐",
-mr:"Web security मध्ये websites आणि web applications मधील data, authentication, sessions आणि user input सुरक्षित ठेवणे येते.",
-en:"Web security protects data, authentication, sessions and user input in websites and web applications.",
-hi:"Web security websites और web applications के data, authentication, sessions और user input को सुरक्षित रखने से जुड़ी है."
-},
-
-{
-title:"OWASP Basics",
-icon:"🧱",
-mr:"OWASP ही web application security साठी एक widely used educational community आहे. OWASP Top 10 मध्ये common web security risks ची माहिती आहे.",
-en:"OWASP is a widely used educational community for web application security. OWASP Top 10 describes common web security risks.",
-hi:"OWASP web application security के लिए widely used educational community है। OWASP Top 10 common web security risks के बारे में बताता है."
-},
-
-{
-title:"Common Web Vulnerabilities",
-icon:"🚨",
-mr:"Web applications मध्ये अनेक प्रकारच्या vulnerabilities असू शकतात. Secure coding आणि proper access control यामुळे risk कमी होतो.",
-en:"Web applications can contain different types of vulnerabilities. Secure coding and proper access control help reduce risk.",
-hi:"Web applications में कई प्रकार की vulnerabilities हो सकती हैं। Secure coding और proper access control risk कम करने में मदद करते हैं."
-},
-
-{
-title:"Input Validation",
-icon:"🧹",
-mr:"User कडून आलेली input blindly trust न करता validate आणि safely process करणे application security साठी महत्त्वाचे आहे.",
-en:"Applications should validate and safely process user input instead of blindly trusting it.",
-hi:"Application security के लिए user input को blindly trust करने की बजाय validate और safely process करना जरूरी है."
-},
-
-{
-title:"Session Security",
-icon:"🎫",
-mr:"Secure session management मध्ये proper expiration, protection आणि secure cookies महत्त्वाच्या असतात.",
-en:"Secure session management includes proper expiration, protection and secure cookies.",
-hi:"Secure session management में proper expiration, protection और secure cookies महत्वपूर्ण हैं."
-},
-
-{
-title:"Cookies Security",
-icon:"🍪",
-mr:"Cookies website-related information store करू शकतात. Secure, HttpOnly आणि appropriate SameSite settings security improve करतात.",
-en:"Cookies can store website-related information. Secure, HttpOnly and appropriate SameSite settings can improve security.",
-hi:"Cookies website-related information store कर सकती हैं। Secure, HttpOnly और appropriate SameSite settings security improve कर सकती हैं."
-},
-
-{
-title:"Database Security",
-icon:"🗄️",
-mr:"Database security मध्ये access control, encryption, secure queries, backups आणि monitoring महत्त्वाचे आहेत.",
-en:"Database security includes access control, encryption, secure queries, backups and monitoring.",
-hi:"Database security में access control, encryption, secure queries, backups और monitoring महत्वपूर्ण हैं."
-},
-
-{
-title:"API Security",
-icon:"🔌",
-mr:"API security साठी authentication, authorization, input validation, rate limiting आणि secure data handling महत्त्वाचे आहेत.",
-en:"API security requires authentication, authorization, input validation, rate limiting and secure data handling.",
-hi:"API security के लिए authentication, authorization, input validation, rate limiting और secure data handling जरूरी हैं."
-},
-
-{
-title:"Cloud Security",
-icon:"☁️",
-mr:"Cloud security मध्ये identity management, permissions, data protection, configuration आणि monitoring यांचा समावेश होतो.",
-en:"Cloud security includes identity management, permissions, data protection, configuration and monitoring.",
-hi:"Cloud security में identity management, permissions, data protection, configuration और monitoring शामिल हैं."
-},
-
-{
-title:"App Security",
-icon:"📲",
-mr:"Application security मध्ये secure coding, dependency updates, authentication आणि data protection यांचा समावेश होतो.",
-en:"Application security includes secure coding, dependency updates, authentication and data protection.",
-hi:"Application security में secure coding, dependency updates, authentication और data protection शामिल हैं."
-},
-
-{
-title:"Cybersecurity Lab",
-icon:"🧪",
-mr:"Cybersecurity शिकण्यासाठी isolated आणि authorized practice environment वापरणे योग्य आहे.",
-en:"For learning cybersecurity, use an isolated and authorized practice environment.",
-hi:"Cybersecurity सीखने के लिए isolated और authorized practice environment का उपयोग करना सही है."
-},
-
-{
-title:"Security Testing Basics",
-icon:"🔎",
-mr:"Security testing मध्ये system किंवा application च्या security controls ची तपासणी केली जाते. Testing आधी permission आणि scope स्पष्ट असणे आवश्यक आहे.",
-en:"Security testing checks the security controls of a system or application. Permission and scope should be clear before testing.",
-hi:"Security testing में system या application के security controls की जांच की जाती है। Testing से पहले permission और scope clear होना चाहिए."
-},
-
-{
-title:"Logs समजून घेणे",
-icon:"📋",
-mr:"Logs system मध्ये घडलेल्या events ची records असतात. Security investigation आणि troubleshooting साठी logs उपयोगी असतात.",
-en:"Logs are records of events that happen in a system. They are useful for security investigation and troubleshooting.",
-hi:"Logs system में होने वाली घटनाओं के records होते हैं। Security investigation और troubleshooting में ये उपयोगी हैं."
-},
-
-{
-title:"Security Monitoring",
-icon:"📊",
-mr:"Security monitoring म्हणजे systems आणि networks मधील unusual activity वर लक्ष ठेवणे.",
-en:"Security monitoring means watching systems and networks for unusual activity.",
-hi:"Security monitoring का मतलब systems और networks में unusual activity पर नजर रखना है."
-},
-
-{
-title:"Incident Response",
-icon:"🚨",
-mr:"Incident response मध्ये identify, contain, investigate, recover आणि lessons learned अशा stages असू शकतात.",
-en:"Incident response can include identification, containment, investigation, recovery and lessons learned.",
-hi:"Incident response में identification, containment, investigation, recovery और lessons learned जैसे stages हो सकते हैं."
-},
-
-{
-title:"Backup & Recovery",
-icon:"💾",
-mr:"Backups मुळे data loss किंवा ransomware सारख्या incidents नंतर recovery शक्य होऊ शकते.",
-en:"Backups can help recover data after incidents such as data loss or ransomware.",
-hi:"Backups data loss या ransomware जैसे incidents के बाद data recovery में मदद कर सकते हैं."
-},
-
-{
-title:"Data Privacy",
-icon:"🔒",
-mr:"Data privacy म्हणजे personal information कसे collect, use, store आणि share केले जाते याबद्दल योग्य practices ठेवणे.",
-en:"Data privacy means using proper practices for collecting, using, storing and sharing personal information.",
-hi:"Data privacy का मतलब personal information को collect, use, store और share करने की proper practices रखना है."
-},
-
-{
-title:"Cyber Laws Basics",
-icon:"⚖️",
-mr:"Cyber activities वर देशानुसार कायदे आणि नियम लागू होतात. Permission शिवाय systems access करणे गंभीर कायदेशीर समस्या निर्माण करू शकते.",
-en:"Cyber activities are governed by laws and regulations. Accessing systems without permission can create serious legal problems.",
-hi:"Cyber activities पर laws और regulations लागू होते हैं। बिना permission systems access करना गंभीर legal problems पैदा कर सकता है."
-},
-
-{
-title:"India मधील Cyber Safety",
-icon:"🇮🇳",
-mr:"Online fraud, cybercrime आणि digital safety बद्दल सावध राहणे महत्त्वाचे आहे. Suspicious activity झाल्यास official reporting channels वापरा.",
-en:"People should stay alert about online fraud, cybercrime and digital safety. Use official reporting channels for suspicious activity.",
-hi:"Online fraud, cybercrime और digital safety के बारे में सावधान रहना जरूरी है। Suspicious activity होने पर official reporting channels का उपयोग करें."
-},
-
-{
-title:"Illegal Hacking का चुकीचे?",
-icon:"🚫",
-mr:"Permission शिवाय दुसऱ्याच्या account, device किंवा system मध्ये access करण्याचा प्रयत्न privacy आणि security ला नुकसान करू शकतो.",
-en:"Trying to access another person's account, device or system without permission can harm privacy and security.",
-hi:"बिना permission किसी दूसरे के account, device या system को access करने की कोशिश privacy और security को नुकसान पहुंचा सकती है."
-},
-
-{
-title:"Cybersecurity Mindset",
-icon:"🧠",
-mr:"Cybersecurity mindset म्हणजे प्रत्येक digital action मध्ये risk, trust, privacy आणि verification यांचा विचार करणे.",
-en:"A cybersecurity mindset means thinking about risk, trust, privacy and verification in every digital action.",
-hi:"Cybersecurity mindset का मतलब हर digital action में risk, trust, privacy और verification के बारे में सोचना है."
-},
-
-{
-title:"Security Tools ची ओळख",
-icon:"🛠️",
-mr:"Cybersecurity मध्ये network monitoring, log analysis, vulnerability assessment आणि defensive testing यासाठी विविध tools वापरली जातात.",
-en:"Cybersecurity uses different tools for network monitoring, log analysis, vulnerability assessment and defensive testing.",
-hi:"Cybersecurity में network monitoring, log analysis, vulnerability assessment और defensive testing के लिए अलग-अलग tools इस्तेमाल होते हैं."
-},
-
-{
-title:"Safe Practice Environment",
-icon:"🧪",
-mr:"Security learning साठी isolated lab, virtual machine किंवा purpose-built training platform वापरणे सुरक्षित approach आहे.",
-en:"For security learning, an isolated lab, virtual machine or purpose-built training platform is a safe approach.",
-hi:"Security learning के लिए isolated lab, virtual machine या purpose-built training platform एक safe approach है."
-},
-
-{
-title:"Beginner Security Challenge",
-icon:"🏆",
-mr:"Beginner challenge मध्ये password security, phishing detection, privacy आणि basic network concepts यांची समज तपासली जाते.",
-en:"A beginner challenge tests understanding of password security, phishing detection, privacy and basic network concepts.",
-hi:"Beginner challenge में password security, phishing detection, privacy और basic network concepts की understanding test की जाती है."
-},
-
-{
-title:"Intermediate Security Challenge",
-icon:"🏆",
-mr:"Intermediate level वर authentication, authorization, web security आणि incident response सारख्या concepts एकत्र विचारावे लागतात.",
-en:"At the intermediate level, concepts such as authentication, authorization, web security and incident response are combined.",
-hi:"Intermediate level पर authentication, authorization, web security और incident response जैसे concepts को साथ में समझना पड़ता है."
-},
-
-{
-title:"Final Security Challenge",
-icon:"👑",
-mr:"Final challenge मध्ये cybersecurity च्या विविध concepts चा combined understanding तपासला जातो.",
-en:"The final challenge tests combined understanding of different cybersecurity concepts.",
-hi:"Final challenge में अलग-अलग cybersecurity concepts की combined understanding test की जाती है."
-},
-
-{
-title:"Cyber Security Master Quiz",
-icon:"🎓",
-mr:"Master quiz हा संपूर्ण course मधील knowledge revise करण्यासाठी आहे. Strong cybersecurity learner security principles देखील समजतो.",
-en:"The Master Quiz helps revise the entire course. A strong cybersecurity learner understands security principles as well as tools.",
-hi:"Master Quiz पूरे course की knowledge revise करने के लिए है। एक अच्छा cybersecurity learner tools के साथ security principles भी समझता है."
-}
+["Cyber Security म्हणजे काय?","🛡️"],
+["Ethical Hacking म्हणजे काय?","👨‍💻"],
+["Hacker चे प्रकार","🧑‍💻"],
+["Internet कसे काम करते?","🌐"],
+["IP Address","📍"],
+["DNS Basics","🔎"],
+["Ports म्हणजे काय?","🚪"],
+["TCP/IP Basics","📦"],
+["HTTP आणि HTTPS","🔗"],
+["Encryption Basics","🔐"],
+["Password Security","🔑"],
+["Password Hashing","🧂"],
+["Authentication","👤"],
+["Authorization","🎫"],
+["Firewall","🔥"],
+["Malware Basics","🦠"],
+["Phishing समजून घेऊया","🎣"],
+["Social Engineering","🧠"],
+["Email Security","📧"],
+["Mobile Security","📱"],
+["Computer Security","💻"],
+["Software Updates","🔄"],
+["Secure Wi-Fi","📶"],
+["Web Security","🌐"],
+["OWASP Basics","🧱"],
+["Common Web Vulnerabilities","🚨"],
+["Input Validation","🧹"],
+["Session Security","🎫"],
+["Cookies Security","🍪"],
+["Database Security","🗄️"],
+["API Security","🔌"],
+["Cloud Security","☁️"],
+["App Security","📲"],
+["Cybersecurity Lab","🧪"],
+["Security Testing Basics","🔎"],
+["Logs समजून घेणे","📋"],
+["Security Monitoring","📊"],
+["Incident Response","🚨"],
+["Backup & Recovery","💾"],
+["Data Privacy","🔒"],
+["Cyber Laws Basics","⚖️"],
+["India मधील Cyber Safety","🇮🇳"],
+["Illegal Hacking का चुकीचे?","🚫"],
+["Cybersecurity Mindset","🧠"],
+["Security Tools ची ओळख","🛠️"],
+["Safe Practice Environment","🧪"],
+["Beginner Security Challenge","🏆"],
+["Intermediate Security Challenge","🏆"],
+["Final Security Challenge","👑"],
+["Cyber Security Master Quiz","🎓"]
 
 ];
+
+
+/* =====================================================
+   LESSON EXPLANATIONS
+===================================================== */
+
+const explanations = {
+
+mr:{
+
+"Cyber Security म्हणजे काय?":
+"Cyber Security म्हणजे computers, phones, networks, applications आणि data यांना unauthorized access, नुकसान आणि cyber threats पासून सुरक्षित ठेवण्याची प्रक्रिया.",
+
+"Ethical Hacking म्हणजे काय?":
+"Ethical hacking म्हणजे मालकाची स्पष्ट permission घेऊन system किंवा application मधील security weaknesses शोधणे.",
+
+"Hacker चे प्रकार":
+"White-hat hackers authorized security testing करतात. Black-hat hackers unauthorized harmful activity करू शकतात.",
+
+"Internet कसे काम करते?":
+"Internet हे अनेक networks एकमेकांशी जोडलेले global system आहे. Devices data packets मध्ये माहिती पाठवतात.",
+
+"IP Address":
+"IP address network वरील device किंवा interface ओळखण्यासाठी वापरला जाणारा address आहे.",
+
+"DNS Basics":
+"DNS म्हणजे Domain Name System. हे domain names आणि IP addresses यांच्यात mapping करते.",
+
+"Ports म्हणजे काय?":
+"Network ports हे services आणि network communication ओळखण्यासाठी वापरले जाणारे logical endpoints आहेत.",
+
+"TCP/IP Basics":
+"TCP/IP हा Internet communication मध्ये वापरला जाणारा protocols चा family आहे.",
+
+"HTTP आणि HTTPS":
+"HTTP web communication साठी वापरले जाते. HTTPS मध्ये TLS encryption मुळे communication अधिक सुरक्षित होते.",
+
+"Encryption Basics":
+"Encryption म्हणजे readable information ला योग्य key शिवाय समजणे कठीण होईल अशा स्वरूपात बदलणे.",
+
+"Password Security":
+"Strong आणि unique passwords account security साठी महत्त्वाचे आहेत. Multi-factor authentication मुळे protection अधिक मजबूत होते.",
+
+"Password Hashing":
+"Hashing ही information ला fixed-length value मध्ये बदलणारी one-way प्रक्रिया आहे.",
+
+"Authentication":
+"Authentication म्हणजे user कोण आहे हे verify करणे.",
+
+"Authorization":
+"Authorization म्हणजे authenticated user ला कोणती actions किंवा resources access करता येतील हे ठरवणे.",
+
+"Firewall":
+"Firewall network traffic वर security rules लागू करून unwanted communication block किंवा allow करण्यास मदत करते.",
+
+"Malware Basics":
+"Malware म्हणजे malicious software. Viruses, worms, trojans आणि ransomware या malware च्या categories आहेत.",
+
+"Phishing समजून घेऊया":
+"Phishing मध्ये legitimate दिसणारे messages किंवा pages वापरून sensitive information मिळवण्याचा प्रयत्न केला जाऊ शकतो.",
+
+"Social Engineering":
+"Social engineering मध्ये मानवी trust, urgency किंवा emotions यांचा गैरफायदा घेण्याचा प्रयत्न केला जातो.",
+
+"Email Security":
+"Email security मध्ये suspicious attachments, links, spoofing आणि account protection यांचा समावेश होतो.",
+
+"Mobile Security":
+"Mobile security मध्ये screen lock, app permissions, updates, secure networks आणि trusted app sources यांचा समावेश होतो.",
+
+"Computer Security":
+"Computer security म्हणजे operating system, applications, accounts, files आणि network connections सुरक्षित ठेवणे.",
+
+"Software Updates":
+"Software updates मध्ये security patches असू शकतात जे known vulnerabilities fix करतात.",
+
+"Secure Wi-Fi":
+"Wi-Fi security साठी strong router password, modern security protocol आणि firmware updates महत्त्वाचे असतात.",
+
+"Web Security":
+"Web security मध्ये websites आणि web applications मधील data, authentication, sessions आणि user input सुरक्षित ठेवणे येते.",
+
+"OWASP Basics":
+"OWASP ही web application security साठी widely used educational community आहे.",
+
+"Common Web Vulnerabilities":
+"Web applications मध्ये अनेक प्रकारच्या vulnerabilities असू शकतात. Secure coding आणि proper access control यामुळे risk कमी होतो.",
+
+"Input Validation":
+"User कडून आलेली input blindly trust न करता validate आणि safely process करणे application security साठी महत्त्वाचे आहे.",
+
+"Session Security":
+"Secure session management मध्ये proper expiration, protection आणि secure cookies महत्त्वाच्या असतात.",
+
+"Cookies Security":
+"Cookies website-related information store करू शकतात. Secure, HttpOnly आणि appropriate SameSite settings security improve करतात.",
+
+"Database Security":
+"Database security मध्ये access control, encryption, secure queries, backups आणि monitoring महत्त्वाचे आहेत.",
+
+"API Security":
+"API security साठी authentication, authorization, input validation, rate limiting आणि secure data handling महत्त्वाचे आहेत.",
+
+"Cloud Security":
+"Cloud security मध्ये identity management, permissions, data protection, configuration आणि monitoring यांचा समावेश होतो.",
+
+"App Security":
+"Application security मध्ये secure coding, dependency updates, authentication आणि data protection यांचा समावेश होतो.",
+
+"Cybersecurity Lab":
+"Cybersecurity शिकण्यासाठी isolated आणि authorized practice environment वापरणे योग्य आहे.",
+
+"Security Testing Basics":
+"Security testing मध्ये system किंवा application च्या security controls ची तपासणी केली जाते.",
+
+"Logs समजून घेणे":
+"Logs system मध्ये घडलेल्या events ची records असतात. Security investigation आणि troubleshooting साठी logs उपयोगी असतात.",
+
+"Security Monitoring":
+"Security monitoring म्हणजे systems आणि networks मधील unusual activity वर लक्ष ठेवणे.",
+
+"Incident Response":
+"Incident response मध्ये identify, contain, investigate, recover आणि lessons learned अशा stages असू शकतात.",
+
+"Backup & Recovery":
+"Backups मुळे data loss किंवा ransomware सारख्या incidents नंतर recovery शक्य होऊ शकते.",
+
+"Data Privacy":
+"Data privacy म्हणजे personal information कसे collect, use, store आणि share केले जाते याबद्दल योग्य practices ठेवणे.",
+
+"Cyber Laws Basics":
+"Cyber activities वर देशानुसार कायदे आणि नियम लागू होतात.",
+
+"India मधील Cyber Safety":
+"Online fraud, cybercrime आणि digital safety बद्दल सावध राहणे महत्त्वाचे आहे.",
+
+"Illegal Hacking का चुकीचे?":
+"Permission शिवाय दुसऱ्याच्या account, device किंवा system मध्ये access करण्याचा प्रयत्न privacy आणि security ला नुकसान करू शकतो.",
+
+"Cybersecurity Mindset":
+"Cybersecurity mindset म्हणजे प्रत्येक digital action मध्ये risk, trust, privacy आणि verification यांचा विचार करणे.",
+
+"Security Tools ची ओळख":
+"Cybersecurity मध्ये network monitoring, log analysis, vulnerability assessment आणि defensive testing यासाठी विविध tools वापरली जातात.",
+
+"Safe Practice Environment":
+"Security learning साठी isolated lab, virtual machine किंवा purpose-built training platform वापरणे सुरक्षित approach आहे.",
+
+"Beginner Security Challenge":
+"Beginner challenge मध्ये password security, phishing detection, privacy आणि basic network concepts यांची समज तपासली जाते.",
+
+"Intermediate Security Challenge":
+"Intermediate level वर authentication, authorization, web security आणि incident response सारख्या concepts एकत्र विचारावे लागतात.",
+
+"Final Security Challenge":
+"Final challenge मध्ये cybersecurity च्या विविध concepts चा combined understanding तपासला जातो.",
+
+"Cyber Security Master Quiz":
+"Master quiz हा संपूर्ण course मधील knowledge revise करण्यासाठी आहे."
+
+},
+
+en:{},
+
+hi:{}
+
+};
 
 
 /* =====================================================
@@ -1776,21 +1591,19 @@ let currentLesson = null;
 
 let selectedLanguage = "mr";
 
-let speechStarted = false;
-
 
 /* =====================================================
-   DISPLAY LESSONS
+   DISPLAY
 ===================================================== */
 
-function displayLessons(list = lessons){
+function displayLessons(list=lessons){
 
   const container =
     document.getElementById("lessons");
 
-  container.innerHTML = "";
+  container.innerHTML="";
 
-  list.forEach(lesson => {
+  list.forEach((lesson,index)=>{
 
     const realIndex =
       lessons.indexOf(lesson);
@@ -1803,28 +1616,27 @@ function displayLessons(list = lessons){
 
     card.className =
       "lesson " +
-      (done ? "done" : "");
+      (done ? "done":"");
 
-    card.onclick = () =>
+    card.onclick=()=>{
       selectLesson(realIndex);
+    };
 
-    card.innerHTML = `
+    card.innerHTML=`
 
       <div class="lessonNumber">
-
         ${
           done
           ? "✓"
-          : String(realIndex + 1).padStart(2,"0")
+          : String(realIndex+1).padStart(2,"0")
         }
-
       </div>
 
       <div class="lessonInfo">
 
         <h4>
-          ${lesson.icon}
-          ${lesson.title}
+          ${lesson[1]}
+          ${lesson[0]}
         </h4>
 
         <p>
@@ -1850,7 +1662,7 @@ function displayLessons(list = lessons){
   document.getElementById(
     "resultText"
   ).textContent =
-    list.length + " Topics";
+    list.length+" Topics";
 
 }
 
@@ -1869,8 +1681,8 @@ function searchLessons(){
     .trim();
 
   const filtered =
-    lessons.filter(lesson =>
-      lesson.title
+    lessons.filter(lesson=>
+      lesson[0]
       .toLowerCase()
       .includes(query)
     );
@@ -1881,12 +1693,12 @@ function searchLessons(){
 
 
 /* =====================================================
-   SELECT LESSON
+   SELECT
 ===================================================== */
 
 function selectLesson(index){
 
-  currentLesson = index;
+  currentLesson=index;
 
   document
     .getElementById("languageOverlay")
@@ -1901,8 +1713,7 @@ function selectLesson(index){
 
 function chooseLanguage(language){
 
-  selectedLanguage =
-    language;
+  selectedLanguage=language;
 
   document
     .getElementById("languageOverlay")
@@ -1912,14 +1723,13 @@ function chooseLanguage(language){
 
 }
 
-
 function closeLanguage(){
 
   document
     .getElementById("languageOverlay")
     .classList.remove("show");
 
-  currentLesson = null;
+  currentLesson=null;
 
 }
 
@@ -1930,7 +1740,7 @@ function closeLanguage(){
 
 function openRobotClass(){
 
-  if(currentLesson === null)
+  if(currentLesson===null)
     return;
 
   document
@@ -1943,9 +1753,9 @@ function openRobotClass(){
     );
 
   status.textContent =
-    selectedLanguage === "mr"
+    selectedLanguage==="mr"
     ? "🤖 Robot Marathi मध्ये शिकवत आहे..."
-    : selectedLanguage === "hi"
+    : selectedLanguage==="hi"
     ? "🤖 Robot Hindi में पढ़ा रहा है..."
     : "🤖 Robot is teaching in English...";
 
@@ -1966,7 +1776,7 @@ function closeRobotClass(){
     .getElementById("robotOverlay")
     .classList.remove("show");
 
-  currentLesson = null;
+  currentLesson=null;
 
 }
 
@@ -1977,58 +1787,51 @@ function closeRobotClass(){
 
 function getSpeechText(){
 
-  if(currentLesson === null)
+  if(currentLesson===null)
     return "";
 
   const lesson =
-    lessons[currentLesson];
+    lessons[currentLesson][0];
 
-  let text =
-    lesson[selectedLanguage];
+  const explanation =
+    explanations.mr[lesson] ||
+    lesson;
 
-  if(selectedLanguage === "mr"){
+  if(selectedLanguage==="mr"){
 
-    text =
-      "नमस्कार विद्यार्थ्यांनो. " +
-      "आज आपण " +
-      lesson.title +
-      " हा topic शिकणार आहोत. " +
-      text +
-      " हा concept नेहमी safe आणि authorized environment मध्येच practice करा. धन्यवाद.";
-
-  }
-
-  if(selectedLanguage === "hi"){
-
-    text =
-      "नमस्ते विद्यार्थियों। " +
-      "आज हम " +
-      lesson.title +
-      " के बारे में सीखेंगे। " +
-      text +
-      " इस concept की practice हमेशा safe और authorized environment में ही करें। धन्यवाद।";
+    return `
+    नमस्कार विद्यार्थ्यांनो.
+    आज आपण ${lesson} हा topic शिकणार आहोत.
+    ${explanation}
+    हा concept नेहमी safe आणि authorized environment मध्येच practice करा.
+    धन्यवाद.
+    `;
 
   }
 
-  if(selectedLanguage === "en"){
+  if(selectedLanguage==="hi"){
 
-    text =
-      "Hello students. " +
-      "Today we are going to learn about " +
-      lesson.title +
-      ". " +
-      text +
-      " Always practice cybersecurity only in a safe and authorized environment. Thank you.";
+    return `
+    नमस्ते विद्यार्थियों।
+    आज हम ${lesson} के बारे में सीखेंगे।
+    Cybersecurity हमेशा safe और authorized environment में ही practice करें।
+    धन्यवाद।
+    `;
 
   }
 
-  return text;
+  return `
+  Hello students.
+  Today we are going to learn about ${lesson}.
+  Always practice cybersecurity only in a safe and authorized environment.
+  Thank you.
+  `;
 
 }
 
 
 /* =====================================================
-   GET VOICE
+   VOICE
 ===================================================== */
 
 function getBestVoice(){
@@ -2039,11 +1842,11 @@ function getBestVoice(){
   if(!voices.length)
     return null;
 
-  let wanted = [];
+  let wanted=[];
 
-  if(selectedLanguage === "mr"){
+  if(selectedLanguage==="mr"){
 
-    wanted = [
+    wanted=[
       "mr-IN",
       "mr",
       "hi-IN",
@@ -2052,9 +1855,9 @@ function getBestVoice(){
 
   }
 
-  if(selectedLanguage === "hi"){
+  if(selectedLanguage==="hi"){
 
-    wanted = [
+    wanted=[
       "hi-IN",
       "hi",
       "mr-IN"
@@ -2062,9 +1865,9 @@ function getBestVoice(){
 
   }
 
-  if(selectedLanguage === "en"){
+  if(selectedLanguage==="en"){
 
-    wanted = [
+    wanted=[
       "en-IN",
       "en-US",
       "en-GB",
@@ -2075,9 +1878,9 @@ function getBestVoice(){
 
   for(const code of wanted){
 
-    const found =
+    const found=
       voices.find(
-        voice =>
+        voice=>
           voice.lang &&
           voice.lang
           .toLowerCase()
@@ -2097,7 +1900,7 @@ function getBestVoice(){
 
 
 /* =====================================================
-   START ROBOT SPEECH
+   START SPEECH
 ===================================================== */
 
 function startRobotSpeech(){
@@ -2106,7 +1909,7 @@ function startRobotSpeech(){
 
     document.getElementById(
       "robotStatus"
-    ).textContent =
+    ).textContent=
       "⚠️ या device मध्ये voice support उपलब्ध नाही.";
 
     return;
@@ -2115,48 +1918,38 @@ function startRobotSpeech(){
 
   speechSynthesis.cancel();
 
-  speechStarted = false;
-
   const text =
     getSpeechText();
 
   const utterance =
-    new SpeechSynthesisUtterance(
-      text
-    );
+    new SpeechSynthesisUtterance(text);
 
   const voice =
     getBestVoice();
 
   if(voice){
 
-    utterance.voice =
-      voice;
-
-    utterance.lang =
-      voice.lang;
+    utterance.voice=voice;
+    utterance.lang=voice.lang;
 
   }else{
 
-    utterance.lang =
-      selectedLanguage === "mr"
+    utterance.lang=
+      selectedLanguage==="mr"
       ? "mr-IN"
-      : selectedLanguage === "hi"
+      : selectedLanguage==="hi"
       ? "hi-IN"
       : "en-IN";
 
   }
 
-  utterance.rate =
-    selectedLanguage === "en"
-    ? 0.90
-    : 0.84;
+  utterance.rate=
+    selectedLanguage==="en"
+    ? .90
+    : .84;
 
-  utterance.pitch =
-    1.02;
-
-  utterance.volume =
-    1;
+  utterance.pitch=1.02;
+  utterance.volume=1;
 
 
   const robot =
@@ -2180,83 +1973,56 @@ function startRobotSpeech(){
     );
 
 
-  utterance.onstart =
-    function(){
+  utterance.onstart=function(){
 
-      speechStarted = true;
+    robot.classList.add("talking");
 
-      robot.classList.add(
-        "talking"
-      );
+    mouth.classList.add("talking");
 
-      mouth.classList.add(
-        "talking"
-      );
+    wave.classList.add("show");
 
-      wave.classList.add(
-        "show"
-      );
+    status.textContent =
+      selectedLanguage==="mr"
+      ? "🔊 Robot बोलत आहे..."
+      : selectedLanguage==="hi"
+      ? "🔊 Robot बोल रहा है..."
+      : "🔊 Robot is speaking...";
 
-      status.textContent =
-        selectedLanguage === "mr"
-        ? "🔊 Robot बोलत आहे..."
-        : selectedLanguage === "hi"
-        ? "🔊 Robot बोल रहा है..."
-        : "🔊 Robot is speaking...";
-
-    };
+  };
 
 
-  utterance.onend =
-    function(){
+  utterance.onend=function(){
 
-      speechStarted = false;
+    robot.classList.remove("talking");
 
-      robot.classList.remove(
-        "talking"
-      );
+    mouth.classList.remove("talking");
 
-      mouth.classList.remove(
-        "talking"
-      );
+    wave.classList.remove("show");
 
-      wave.classList.remove(
-        "show"
-      );
+    status.textContent =
+      selectedLanguage==="mr"
+      ? "✅ Lesson पूर्ण"
+      : selectedLanguage==="hi"
+      ? "✅ Lesson पूरा हुआ"
+      : "✅ Lesson completed";
 
-      status.textContent =
-        selectedLanguage === "mr"
-        ? "✅ Lesson पूर्ण"
-        : selectedLanguage === "hi"
-        ? "✅ Lesson पूरा हुआ"
-        : "✅ Lesson completed";
+    markLessonComplete();
 
-      markLessonComplete();
-
-    };
+  };
 
 
-  utterance.onerror =
-    function(){
+  utterance.onerror=function(){
 
-      speechStarted = false;
+    robot.classList.remove("talking");
 
-      robot.classList.remove(
-        "talking"
-      );
+    mouth.classList.remove("talking");
 
-      mouth.classList.remove(
-        "talking"
-      );
+    wave.classList.remove("show");
 
-      wave.classList.remove(
-        "show"
-      );
+    status.textContent=
+      "⚠️ Voice सुरू होऊ शकला नाही.";
 
-      status.textContent =
-        "⚠️ Voice सुरू होऊ शकला नाही.";
-
-    };
+  };
 
 
   speechSynthesis.speak(
@@ -2272,16 +2038,11 @@ function startRobotSpeech(){
 
 function stopRobotSpeech(){
 
-  if(
-    "speechSynthesis"
-    in window
-  ){
+  if("speechSynthesis" in window){
 
     speechSynthesis.cancel();
 
   }
-
-  speechStarted = false;
 
   const robot =
     document.getElementById(
@@ -2298,45 +2059,30 @@ function stopRobotSpeech(){
       "voiceWave"
     );
 
-  robot.classList.remove(
-    "talking"
-  );
+  robot.classList.remove("talking");
 
-  mouth.classList.remove(
-    "talking"
-  );
+  mouth.classList.remove("talking");
 
-  wave.classList.remove(
-    "show"
-  );
+  wave.classList.remove("show");
 
 }
 
 
 /* =====================================================
-   COMPLETE LESSON
+   COMPLETE
 ===================================================== */
 
 function markLessonComplete(){
 
-  if(currentLesson === null)
+  if(currentLesson===null)
     return;
 
-  if(
-    completed.includes(
-      currentLesson
-    )
-  ){
-
+  if(completed.includes(currentLesson))
     return;
 
-  }
+  completed.push(currentLesson);
 
-  completed.push(
-    currentLesson
-  );
-
-  xp += 10;
+  xp+=10;
 
   localStorage.setItem(
     COMPLETED_KEY,
@@ -2361,36 +2107,32 @@ function markLessonComplete(){
 
 function updateProgress(){
 
-  const total =
-    lessons.length;
+  const total=lessons.length;
 
-  const done =
-    completed.length;
+  const done=completed.length;
 
-  const percentage =
+  const percentage=
     Math.round(
-      (done / total) * 100
+      (done/total)*100
     );
 
   document.getElementById(
     "completedCount"
-  ).textContent =
-    done;
+  ).textContent=done;
 
   document.getElementById(
     "xpCount"
-  ).textContent =
-    xp;
+  ).textContent=xp;
 
   document.getElementById(
     "progressPercent"
-  ).textContent =
-    percentage + "%";
+  ).textContent=
+    percentage+"%";
 
   document.getElementById(
     "progressFill"
-  ).style.width =
-    percentage + "%";
+  ).style.width=
+    percentage+"%";
 
 }
 
@@ -2442,25 +2184,23 @@ online safety आणि authorized learning
 
 function goBack(){
 
-  window.location.href =
+  window.location.href=
     "learn.html";
 
 }
 
 
 /* =====================================================
-   OVERLAY CLICKS
+   MENU OUTSIDE CLICK
 ===================================================== */
 
 document
-  .getElementById(
-    "menuOverlay"
-  )
+  .getElementById("menuOverlay")
   .addEventListener(
     "click",
     function(e){
 
-      if(e.target === this){
+      if(e.target===this){
 
         closeMenu();
 
@@ -2474,16 +2214,12 @@ document
    VOICE LOAD
 ===================================================== */
 
-if(
-  "speechSynthesis"
-  in window
-){
+if("speechSynthesis" in window){
 
-  speechSynthesis.onvoiceschanged =
+  speechSynthesis.onvoiceschanged=
     function(){
 
-      speechSynthesis
-        .getVoices();
+      speechSynthesis.getVoices();
 
     };
 
@@ -2491,7 +2227,7 @@ if(
 
 
 /* =====================================================
-   INITIALIZE
+   INIT
 ===================================================== */
 
 updateProgress();
