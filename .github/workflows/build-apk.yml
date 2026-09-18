@@ -1,4 +1,4 @@
-name: Build RAMSENA APK
+name: Build GYANSETU APK
 
 on:
   workflow_dispatch:
@@ -58,7 +58,7 @@ jobs:
           find www -maxdepth 2 -type f | head -100
 
 
-      # 6. Create Capacitor JSON config
+      # 6. Create Capacitor config
       - name: Create Capacitor config
         run: |
           rm -f capacitor.config.ts
@@ -74,7 +74,7 @@ jobs:
           }
           EOF
 
-          echo "Capacitor JSON config created"
+          echo "===== CAPACITOR CONFIG ====="
           cat capacitor.config.json
 
 
@@ -98,30 +98,44 @@ jobs:
               "android.permission.ACCESS_NETWORK_STATE",
               "android.permission.CAMERA",
               "android.permission.RECORD_AUDIO",
+              "android.permission.MODIFY_AUDIO_SETTINGS",
               "android.permission.ACCESS_FINE_LOCATION",
               "android.permission.ACCESS_COARSE_LOCATION",
               "android.permission.POST_NOTIFICATIONS",
-              "android.permission.READ_CONTACTS",
-              "android.permission.WRITE_CONTACTS",
-              "android.permission.READ_CALENDAR",
-              "android.permission.WRITE_CALENDAR",
               "android.permission.VIBRATE"
           ]
 
           for permission in permissions:
+
               tag = f'<uses-permission android:name="{permission}" />'
 
               if tag not in text:
+
                   text = text.replace(
                       "<application",
-                      tag + "\n\n    <application",
+                      "    " + tag + "\n\n    <application",
+                      1
+                  )
+
+          features = [
+              '<uses-feature android:name="android.hardware.camera" android:required="false" />',
+              '<uses-feature android:name="android.hardware.microphone" android:required="false" />'
+          ]
+
+          for feature in features:
+
+              if feature not in text:
+
+                  text = text.replace(
+                      "<application",
+                      "    " + feature + "\n\n    <application",
                       1
                   )
 
           with open(path, "w", encoding="utf-8") as f:
               f.write(text)
 
-          print("Android permissions configured")
+          print("Camera + Microphone permissions configured")
           PY
 
 
@@ -134,42 +148,130 @@ jobs:
           package com.ramsena.xi;
 
           import android.Manifest;
+          import android.content.pm.PackageManager;
           import android.os.Bundle;
           import android.webkit.PermissionRequest;
           import android.webkit.WebChromeClient;
           import android.webkit.WebView;
 
+          import androidx.annotation.NonNull;
+
           import com.getcapacitor.BridgeActivity;
 
           public class MainActivity extends BridgeActivity {
+
+              private static final int CAMERA_MIC_PERMISSION = 1001;
 
               @Override
               public void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
-                  requestPermissions(
-                      new String[]{
-                          Manifest.permission.CAMERA,
-                          Manifest.permission.RECORD_AUDIO
-                      },
-                      1001
-                  );
+                  requestCameraAndMicrophone();
 
                   WebView webView = getBridge().getWebView();
 
+                  webView.getSettings().setJavaScriptEnabled(true);
+                  webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+
                   webView.setWebChromeClient(new WebChromeClient() {
+
                       @Override
                       public void onPermissionRequest(
                               final PermissionRequest request) {
 
-                          runOnUiThread(() -> {
-                              request.grant(request.getResources());
+                          runOnUiThread(new Runnable() {
+
+                              @Override
+                              public void run() {
+
+                                  if (checkSelfPermission(
+                                          Manifest.permission.CAMERA
+                                      ) == PackageManager.PERMISSION_GRANTED
+                                      &&
+                                      checkSelfPermission(
+                                          Manifest.permission.RECORD_AUDIO
+                                      ) == PackageManager.PERMISSION_GRANTED) {
+
+                                      request.grant(
+                                          request.getResources()
+                                      );
+
+                                  } else {
+
+                                      request.deny();
+                                  }
+                              }
                           });
                       }
                   });
               }
+
+
+              private void requestCameraAndMicrophone() {
+
+                  boolean cameraGranted =
+                      checkSelfPermission(
+                          Manifest.permission.CAMERA
+                      ) == PackageManager.PERMISSION_GRANTED;
+
+                  boolean microphoneGranted =
+                      checkSelfPermission(
+                          Manifest.permission.RECORD_AUDIO
+                      ) == PackageManager.PERMISSION_GRANTED;
+
+                  if (!cameraGranted || !microphoneGranted) {
+
+                      requestPermissions(
+                          new String[]{
+                              Manifest.permission.CAMERA,
+                              Manifest.permission.RECORD_AUDIO
+                          },
+                          CAMERA_MIC_PERMISSION
+                      );
+                  }
+              }
+
+
+              @Override
+              public void onRequestPermissionsResult(
+                      int requestCode,
+                      @NonNull String[] permissions,
+                      @NonNull int[] grantResults) {
+
+                  super.onRequestPermissionsResult(
+                      requestCode,
+                      permissions,
+                      grantResults
+                  );
+
+                  if (requestCode == CAMERA_MIC_PERMISSION) {
+
+                      boolean allGranted = true;
+
+                      for (int result : grantResults) {
+
+                          if (result != PackageManager.PERMISSION_GRANTED) {
+
+                              allGranted = false;
+                              break;
+                          }
+                      }
+
+                      if (allGranted) {
+
+                          WebView webView = getBridge().getWebView();
+
+                          if (webView != null) {
+                              webView.reload();
+                          }
+                      }
+                  }
+              }
           }
           EOF
+
+          echo "===== MAIN ACTIVITY ====="
+          cat android/app/src/main/java/com/ramsena/xi/MainActivity.java
 
 
       # 10. Sync Capacitor
@@ -196,7 +298,7 @@ jobs:
                       enableV2Signing true
                   }
               }
-          """
+              """
 
               marker = "android {"
 
@@ -227,13 +329,18 @@ jobs:
       - name: Check APK
         run: |
           if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
+
             echo "================================"
-            echo "APK BUILD SUCCESSFUL"
+            echo "GYANSETU APK BUILD SUCCESSFUL"
             echo "================================"
+
             ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+
           else
+
             echo "APK NOT FOUND"
             exit 1
+
           fi
 
 
@@ -241,6 +348,6 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: RAMSENA-APK
+          name: GYANSETU-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
