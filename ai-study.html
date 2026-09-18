@@ -14,171 +14,109 @@
   padding:0;
 }
 
-html,body{
-  width:100%;
-  min-height:100%;
-}
-
 body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f5f7fb;
-  color:#17213f;
-}
-
-button,
-textarea{
-  font-family:inherit;
-}
-
-button{
-  border:0;
-  outline:0;
-  cursor:pointer;
+  font-family:Arial,sans-serif;
+  background:#f4f9ff;
+  color:#123;
 }
 
 .app{
-  width:100%;
   max-width:480px;
-  min-height:100vh;
   margin:auto;
-  background:#fff;
-  position:relative;
-  padding-bottom:145px;
-}
-
-/* ================= HEADER ================= */
-
-.header{
-  height:64px;
-  background:#fff;
-  border-bottom:1px solid #e9edf4;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 14px;
-  position:sticky;
-  top:0;
-  z-index:30;
-}
-
-.headerLeft{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.backBtn{
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  background:#f1f4f9;
-  color:#17213f;
-  font-size:28px;
-}
-
-.logo{
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  background:linear-gradient(135deg,#2457ff,#6597ff);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-size:21px;
-  box-shadow:0 5px 15px rgba(36,87,255,.22);
-}
-
-.titleBox{
+  min-height:100vh;
+  background:white;
   display:flex;
   flex-direction:column;
 }
 
-.title{
-  font-size:15px;
-  font-weight:800;
+/* HEADER */
+
+.header{
+  height:65px;
+  background:white;
+  border-bottom:1px solid #e3edf7;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
-.online{
-  color:#19a463;
-  font-size:10px;
-  margin-top:2px;
-}
-
-.newBtn{
+.back-btn,
+.new-chat-btn{
+  border:none;
+  background:#eef6ff;
+  color:#087cff;
   width:40px;
   height:40px;
   border-radius:12px;
-  background:#f1f4f9;
-  color:#17213f;
-  font-size:24px;
+  font-size:20px;
+  cursor:pointer;
 }
 
-/* ================= CHAT ================= */
+.logo{
+  flex:1;
+}
 
-.chat{
-  min-height:calc(100vh - 130px);
-  padding:18px 13px 20px;
-  background:
-    radial-gradient(
-      circle at top,
-      #edf3ff 0,
-      #fff 32%
-    );
+.logo h2{
+  color:#087cff;
+  font-size:20px;
+}
+
+.logo p{
+  font-size:11px;
+  color:#777;
+}
+
+.online{
+  font-size:11px;
+  color:#168a3a;
+}
+
+/* CHAT */
+
+.chat-area{
+  flex:1;
+  padding:18px 14px 100px;
+  overflow-y:auto;
 }
 
 .welcome{
   text-align:center;
-  padding:42px 12px 30px;
+  padding:35px 10px 25px;
 }
 
 .robot{
-  width:76px;
-  height:76px;
-  margin:auto;
-  border-radius:24px;
-  background:linear-gradient(
-    135deg,
-    #2457ff,
-    #70a0ff
-  );
+  width:80px;
+  height:80px;
+  background:#eaf4ff;
+  border-radius:25px;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:38px;
-  box-shadow:0 12px 28px rgba(36,87,255,.23);
+  font-size:45px;
+  margin:0 auto 15px;
 }
 
 .welcome h1{
-  margin-top:17px;
+  color:#087cff;
   font-size:25px;
+  margin-bottom:8px;
 }
 
 .welcome p{
-  max-width:320px;
-  margin:9px auto;
-  color:#7d8799;
-  font-size:13px;
-  line-height:1.6;
+  color:#777;
+  font-size:14px;
+  line-height:1.5;
 }
 
-/* ================= MESSAGE ================= */
+/* MESSAGES */
 
 .message{
   display:flex;
-  margin:17px 0;
-  animation:appear .2s ease;
-}
-
-@keyframes appear{
-  from{
-    opacity:0;
-    transform:translateY(6px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+  margin:14px 0;
 }
 
 .message.user{
@@ -189,496 +127,383 @@ button{
   justify-content:flex-start;
 }
 
-.messageContent{
-  max-width:88%;
-}
-
-.avatar{
-  width:29px;
-  height:29px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:15px;
-  margin-bottom:6px;
-}
-
-.aiAvatar{
-  background:#edf3ff;
-}
-
-.userAvatar{
-  background:#17213f;
-  color:#fff;
-}
-
 .bubble{
+  max-width:85%;
   padding:12px 14px;
   border-radius:17px;
   font-size:14px;
-  line-height:1.6;
+  line-height:1.5;
   white-space:pre-wrap;
-  word-break:break-word;
 }
 
-.userBubble{
-  background:#2457ff;
-  color:#fff;
+.user .bubble{
+  background:#087cff;
+  color:white;
   border-bottom-right-radius:5px;
 }
 
-.aiBubble{
-  background:#f0f3f8;
-  color:#27324b;
+.ai .bubble{
+  background:#eef6ff;
+  color:#123;
   border-bottom-left-radius:5px;
 }
 
-.time{
-  margin-top:5px;
-  color:#9ba3b2;
-  font-size:9px;
+.copy-btn,
+.speak-btn{
+  border:none;
+  background:transparent;
+  color:#087cff;
+  font-size:12px;
+  margin-top:6px;
+  cursor:pointer;
 }
 
-/* ================= PHOTO ================= */
+/* IMAGE */
 
-.chatPhoto{
-  width:210px;
-  max-width:100%;
-  max-height:230px;
-  object-fit:cover;
-  border-radius:13px;
-  display:block;
-  margin-bottom:8px;
+.image-preview{
+  display:none;
+  position:relative;
+  margin:8px 0;
 }
 
-/* ================= ACTIONS ================= */
+.image-preview img{
+  max-width:120px;
+  max-height:120px;
+  border-radius:12px;
+  border:1px solid #dbeaff;
+}
 
-.actions{
+.remove-image{
+  position:absolute;
+  top:-7px;
+  left:105px;
+  width:25px;
+  height:25px;
+  border:none;
+  border-radius:50%;
+  background:#ff4444;
+  color:white;
+  cursor:pointer;
+}
+
+/* COMPOSER */
+
+.composer-wrap{
+  position:fixed;
+  bottom:58px;
+  left:50%;
+  transform:translateX(-50%);
+  width:100%;
+  max-width:480px;
+  background:white;
+  border-top:1px solid #e5eef8;
+  padding:8px 10px;
+  z-index:20;
+}
+
+.composer{
   display:flex;
-  gap:6px;
-  margin-top:7px;
+  align-items:flex-end;
+  gap:7px;
+  background:#f3f8ff;
+  border:1px solid #dcecff;
+  border-radius:18px;
+  padding:7px;
 }
 
-.action{
-  background:#fff;
-  border:1px solid #e1e6ee;
-  color:#667086;
-  padding:6px 9px;
-  border-radius:9px;
-  font-size:10px;
+.icon-btn{
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:12px;
+  background:white;
+  color:#087cff;
+  font-size:19px;
+  cursor:pointer;
+  flex-shrink:0;
 }
 
-/* ================= THINKING ================= */
+textarea{
+  flex:1;
+  border:none;
+  outline:none;
+  resize:none;
+  background:transparent;
+  min-height:38px;
+  max-height:100px;
+  font-size:14px;
+  padding:10px 5px;
+}
+
+.send-btn{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:13px;
+  background:#087cff;
+  color:white;
+  font-size:19px;
+  cursor:pointer;
+}
+
+.send-btn:disabled{
+  opacity:.5;
+}
+
+/* THINKING */
 
 .thinking{
-  display:flex;
-  gap:5px;
+  display:none;
   align-items:center;
-  background:#f0f3f8;
-  padding:14px 16px;
-  border-radius:17px;
-  border-bottom-left-radius:5px;
-  width:max-content;
+  gap:6px;
+  color:#087cff;
+  font-size:13px;
+  margin:10px;
 }
 
 .dot{
   width:7px;
   height:7px;
+  background:#087cff;
   border-radius:50%;
-  background:#68758d;
-  animation:dot 1s infinite;
+  animation:blink 1s infinite;
 }
 
 .dot:nth-child(2){
-  animation-delay:.15s;
+  animation-delay:.2s;
 }
 
 .dot:nth-child(3){
-  animation-delay:.3s;
+  animation-delay:.4s;
 }
 
-@keyframes dot{
-  0%,100%{
-    transform:translateY(0);
-    opacity:.35;
-  }
-  50%{
-    transform:translateY(-5px);
-    opacity:1;
-  }
+@keyframes blink{
+  0%,100%{opacity:.2}
+  50%{opacity:1}
 }
 
-/* ================= COMPOSER ================= */
+/* BOTTOM NAV */
 
-.composerArea{
+.bottom-nav{
   position:fixed;
-  left:50%;
-  bottom:68px;
-  transform:translateX(-50%);
-  width:100%;
-  max-width:480px;
-  background:rgba(255,255,255,.97);
-  padding:8px 11px 9px;
-  border-top:1px solid #e9edf4;
-  z-index:40;
-}
-
-.composer{
-  background:#fff;
-  border:1.5px solid #dce2ec;
-  border-radius:19px;
-  overflow:hidden;
-  box-shadow:0 5px 20px rgba(24,40,70,.08);
-}
-
-.preview{
-  display:none;
-  padding:9px;
-  border-bottom:1px solid #edf0f5;
-}
-
-.previewBox{
-  position:relative;
-  width:72px;
-  height:72px;
-}
-
-.previewImage{
-  width:72px;
-  height:72px;
-  object-fit:cover;
-  border-radius:12px;
-}
-
-.remove{
-  position:absolute;
-  top:-7px;
-  right:-7px;
-  width:23px;
-  height:23px;
-  border-radius:50%;
-  background:#17213f;
-  color:#fff;
-  font-size:15px;
-  border:2px solid #fff;
-}
-
-.inputRow{
-  display:flex;
-  align-items:flex-end;
-  gap:6px;
-  padding:7px;
-}
-
-#question{
-  flex:1;
-  min-height:42px;
-  max-height:120px;
-  resize:none;
-  border:0;
-  outline:0;
-  background:transparent;
-  padding:11px 7px;
-  font-size:14px;
-  line-height:1.4;
-  color:#17213f;
-}
-
-#question::placeholder{
-  color:#9aa3b3;
-}
-
-.tool{
-  width:40px;
-  height:40px;
-  flex:0 0 40px;
-  border-radius:12px;
-  background:#f1f4f9;
-  font-size:18px;
-}
-
-.send{
-  width:42px;
-  height:42px;
-  flex:0 0 42px;
-  border-radius:13px;
-  background:#2457ff;
-  color:#fff;
-  font-size:18px;
-  box-shadow:0 5px 14px rgba(36,87,255,.25);
-}
-
-.send:disabled{
-  opacity:.5;
-}
-
-/* ================= BOTTOM NAV ================= */
-
-.bottom{
-  position:fixed;
-  left:50%;
   bottom:0;
+  left:50%;
   transform:translateX(-50%);
   width:100%;
   max-width:480px;
-  height:68px;
-  background:#fff;
-  border-top:1px solid #e7ebf1;
+  height:58px;
+  background:white;
+  border-top:1px solid #e5eef8;
   display:flex;
   justify-content:space-around;
   align-items:center;
-  z-index:50;
+  z-index:30;
 }
 
-.nav{
-  text-align:center;
-  color:#8b94a5;
-  font-size:10px;
+.nav-item{
+  border:none;
+  background:transparent;
+  color:#777;
+  font-size:11px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
 }
 
-.navIcon{
-  display:block;
-  font-size:21px;
-  margin-bottom:3px;
+.nav-item span{
+  font-size:20px;
 }
 
-.nav.active{
-  color:#2457ff;
-  font-weight:bold;
+.nav-item.active{
+  color:#087cff;
 }
 
-/* ================= POPUP ================= */
+/* POPUP */
 
-.popupBg{
+.popup{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(10,20,40,.4);
-  backdrop-filter:blur(4px);
+  background:rgba(0,0,0,.45);
   z-index:100;
-  align-items:flex-end;
-  justify-content:center;
-}
-
-.popup{
-  width:100%;
-  max-width:480px;
-  background:#fff;
-  border-radius:25px 25px 0 0;
-  padding:23px 20px 25px;
-  animation:popup .22s ease;
-}
-
-@keyframes popup{
-  from{
-    transform:translateY(100%);
-  }
-  to{
-    transform:translateY(0);
-  }
-}
-
-.popupIcon{
-  width:48px;
-  height:48px;
-  border-radius:15px;
-  background:#edf3ff;
-  display:flex;
   align-items:center;
   justify-content:center;
-  font-size:23px;
+  padding:20px;
 }
 
-.popup h3{
-  margin-top:13px;
-  font-size:18px;
+.popup-box{
+  background:white;
+  width:100%;
+  max-width:400px;
+  border-radius:20px;
+  padding:22px;
+  text-align:center;
 }
 
-.popup p{
-  margin-top:6px;
-  color:#7c8698;
-  font-size:13px;
-  line-height:1.5;
+.popup-box h3{
+  color:#087cff;
+  margin-bottom:10px;
 }
 
-.popupButtons{
-  display:flex;
-  gap:9px;
-  margin-top:18px;
+.popup-box p{
+  color:#666;
+  font-size:14px;
+  margin-bottom:18px;
 }
 
-.popupButton{
-  flex:1;
-  height:45px;
-  border-radius:13px;
-  font-weight:bold;
+.popup-btn{
+  width:100%;
+  border:none;
+  background:#087cff;
+  color:white;
+  padding:12px;
+  border-radius:12px;
+  margin-top:8px;
+  font-size:14px;
+  cursor:pointer;
 }
 
-.cancel{
-  background:#eef1f5;
-  color:#586276;
+.close-btn{
+  background:#eef6ff;
+  color:#087cff;
 }
 
-.ok{
-  background:#2457ff;
-  color:#fff;
-}
+/* HIDDEN */
 
-#imageInput{
-  display:none;
+.hidden{
+  display:none !important;
 }
 
 </style>
 </head>
 
-
 <body>
 
 <div class="app">
 
+  <!-- HEADER -->
 
-<!-- ================= HEADER ================= -->
-
-<div class="header">
-
-  <div class="headerLeft">
+  <div class="header">
 
     <button
-      class="backBtn"
-      onclick="goHome()"
-    >
-      ‹
+      class="back-btn"
+      onclick="goHome()">
+      ←
     </button>
 
     <div class="logo">
-      🤖
+      <h2>🤖 GyanSetu AI</h2>
+      <p>AI Study Assistant</p>
     </div>
 
-    <div class="titleBox">
-
-      <div class="title">
-        GyanSetu AI
-      </div>
-
-      <div class="online">
-        ● Online
-      </div>
-
+    <div class="online">
+      ● Online
     </div>
+
+    <button
+      class="new-chat-btn"
+      onclick="newChat()">
+      ✨
+    </button>
 
   </div>
 
 
-  <button
-    class="newBtn"
-    onclick="newChat()"
-  >
-    ＋
-  </button>
-
-</div>
-
-
-<!-- ================= CHAT ================= -->
-
-<div
-  class="chat"
-  id="chat"
->
+  <!-- CHAT AREA -->
 
   <div
-    class="welcome"
-    id="welcome"
-  >
+    class="chat-area"
+    id="chatArea">
 
-    <div class="robot">
-      🤖
+    <div
+      class="welcome"
+      id="welcome">
+
+      <div class="robot">
+        🤖
+      </div>
+
+      <h1>GyanSetu AI</h1>
+
+      <p>
+        अभ्यास, प्रश्न, गणित, विज्ञान किंवा
+        कोणत्याही study topic बद्दल प्रश्न विचारा.
+      </p>
+
     </div>
 
-    <h1>
-      How can I help you?
-    </h1>
+    <div
+      class="thinking"
+      id="thinking">
 
-    <p>
-      Ask your study question, type in Hindi or English,
-      or attach a photo of your question.
-    </p>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+
+      <span>AI विचार करत आहे...</span>
+
+    </div>
 
   </div>
 
-</div>
+
+  <!-- IMAGE PREVIEW -->
+
+  <div
+    class="image-preview"
+    id="imagePreview">
+
+    <img
+      id="previewImg"
+      alt="Selected image">
+
+    <button
+      class="remove-image"
+      onclick="removeImage()">
+      ×
+    </button>
+
+  </div>
 
 
-<!-- ================= COMPOSER ================= -->
+  <!-- COMPOSER -->
 
-<div class="composerArea">
+  <div class="composer-wrap">
 
-  <div class="composer">
-
-
-    <!-- PHOTO PREVIEW -->
-
-    <div
-      class="preview"
-      id="preview"
-    >
-
-      <div class="previewBox">
-
-        <img
-          id="previewImage"
-          class="previewImage"
-          alt="Selected photo"
-        >
-
-        <button
-          class="remove"
-          onclick="removeImage()"
-        >
-          ×
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- INPUT -->
-
-    <div class="inputRow">
+    <div class="composer">
 
       <button
-        class="tool"
-        onclick="chooseImage()"
-      >
-        ＋
+        class="icon-btn"
+        onclick="selectImage()">
+        🖼️
       </button>
 
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        hidden
+        onchange="handleImage(event)">
 
       <textarea
         id="question"
-        placeholder="Message GyanSetu AI..."
+        placeholder="तुमचा प्रश्न विचारा..."
         rows="1"
-        oninput="resizeInput()"
-        onkeydown="enterSend(event)"
-      ></textarea>
-
+        onkeydown="handleEnter(event)"></textarea>
 
       <button
-        class="tool"
-        id="micButton"
-        onclick="voiceInput()"
-      >
-        🎤
+        class="icon-btn"
+        id="micBtn"
+        onclick="startVoice()">
+        🎙️
       </button>
 
-
       <button
-        class="send"
-        id="sendButton"
-        onclick="askAI()"
-      >
+        class="send-btn"
+        id="sendBtn"
+        onclick="askAI()">
         ➤
       </button>
 
@@ -686,289 +511,169 @@ button{
 
   </div>
 
-</div>
 
+  <!-- BOTTOM NAV -->
 
-<!-- ================= IMAGE INPUT ================= -->
+  <div class="bottom-nav">
 
-<input
-  type="file"
-  id="imageInput"
-  accept="image/*"
-  onchange="imageSelected(event)"
->
+    <button
+      class="nav-item"
+      onclick="goHome()">
 
+      <span>🏠</span>
+      Home
 
-<!-- ================= BOTTOM ================= -->
+    </button>
 
-<div class="bottom">
+    <button
+      class="nav-item"
+      onclick="goLearn()">
 
-  <div
-    class="nav"
-    onclick="goHome()"
-  >
-    <span class="navIcon">🏠</span>
-    Home
-  </div>
+      <span>📚</span>
+      Learn
 
-  <div
-    class="nav"
-    onclick="goLearn()"
-  >
-    <span class="navIcon">📚</span>
-    Learn
-  </div>
+    </button>
 
-  <div class="nav active">
-    <span class="navIcon">🤖</span>
-    AI
-  </div>
+    <button
+      class="nav-item active">
 
-  <div
-    class="nav"
-    onclick="goRank()"
-  >
-    <span class="navIcon">🏆</span>
-    Rank
-  </div>
+      <span>🤖</span>
+      AI
 
-  <div
-    class="nav"
-    onclick="goProfile()"
-  >
-    <span class="navIcon">👤</span>
-    Profile
+    </button>
+
+    <button
+      class="nav-item"
+      onclick="goRank()">
+
+      <span>🏆</span>
+      Rank
+
+    </button>
+
+    <button
+      class="nav-item"
+      onclick="goProfile()">
+
+      <span>👤</span>
+      Profile
+
+    </button>
+
   </div>
 
 </div>
 
 
-<!-- ================= POPUP ================= -->
+<!-- POPUP -->
 
 <div
-  class="popupBg"
-  id="popupBg"
->
+  class="popup"
+  id="messagePopup">
 
-  <div class="popup">
-
-    <div
-      class="popupIcon"
-      id="popupIcon"
-    >
-      ℹ️
-    </div>
+  <div class="popup-box">
 
     <h3 id="popupTitle">
-      GyanSetu AI
+      GyanSetu
     </h3>
 
-    <p id="popupText">
-      Message
-    </p>
+    <p id="popupText"></p>
 
-    <div class="popupButtons">
-
-      <button
-        class="popupButton cancel"
-        onclick="closePopup()"
-      >
-        Cancel
-      </button>
-
-      <button
-        class="popupButton ok"
-        id="popupOk"
-        onclick="popupOK()"
-      >
-        OK
-      </button>
-
-    </div>
+    <button
+      class="popup-btn close-btn"
+      onclick="closePopup()">
+      OK
+    </button>
 
   </div>
-
-</div>
-
 
 </div>
 
 
 <script>
 
-/* =====================================================
+/* =========================
    VARIABLES
-===================================================== */
+========================= */
 
-let selectedImage = null;
-let selectedImageType = null;
-
-let thinking = false;
-
-let popupFunction = null;
-
-let recognition = null;
-let listening = false;
+let selectedImage=null;
+let selectedImageType=null;
+let thinking=false;
 
 
-/* =====================================================
-   ELEMENTS
-===================================================== */
+/* =========================
+   HELPER
+========================= */
 
-const chat =
-  document.getElementById("chat");
-
-const welcome =
-  document.getElementById("welcome");
-
-const question =
-  document.getElementById("question");
-
-const sendButton =
-  document.getElementById("sendButton");
-
-const imageInput =
-  document.getElementById("imageInput");
-
-const preview =
-  document.getElementById("preview");
-
-const previewImage =
-  document.getElementById("previewImage");
-
-const micButton =
-  document.getElementById("micButton");
-
-
-/* =====================================================
-   POPUP
-===================================================== */
-
-function showPopup(
-  title,
-  text,
-  icon,
-  callback
-){
-
-  document.getElementById(
-    "popupTitle"
-  ).innerText = title;
-
-  document.getElementById(
-    "popupText"
-  ).innerText = text;
-
-  document.getElementById(
-    "popupIcon"
-  ).innerText = icon || "ℹ️";
-
-  popupFunction =
-    callback || null;
-
-  document.getElementById(
-    "popupBg"
-  ).style.display = "flex";
-
+function $(id){
+  return document.getElementById(id);
 }
 
+
+/* =========================
+   POPUP
+========================= */
+
+function showMessage(title,text){
+
+  $("popupTitle").textContent=title;
+  $("popupText").textContent=text;
+
+  $("messagePopup").style.display="flex";
+
+}
 
 function closePopup(){
 
-  document.getElementById(
-    "popupBg"
-  ).style.display = "none";
-
-  popupFunction = null;
+  $("messagePopup").style.display="none";
 
 }
 
 
-function popupOK(){
+/* =========================
+   IMAGE SELECT
+========================= */
 
-  const fn =
-    popupFunction;
+function selectImage(){
 
-  closePopup();
-
-  if(typeof fn === "function"){
-    fn();
-  }
+  $("imageInput").click();
 
 }
 
 
-/* =====================================================
-   IMAGE
-===================================================== */
+function handleImage(event){
 
-function chooseImage(){
-
-  imageInput.click();
-
-}
-
-
-function imageSelected(event){
-
-  const file =
-    event.target.files[0];
+  const file=event.target.files[0];
 
   if(!file){
     return;
   }
 
+  if(file.size>8*1024*1024){
 
-  if(!file.type.startsWith("image/")){
-
-    showPopup(
-      "Invalid Image",
-      "Please select a valid image.",
-      "🖼️"
+    showMessage(
+      "Image मोठी आहे",
+      "कृपया 8MB पेक्षा कमी image निवडा."
     );
 
-    imageInput.value = "";
-
+    $("imageInput").value="";
     return;
+
   }
 
+  selectedImageType=file.type;
 
-  if(file.size > 8 * 1024 * 1024){
+  const reader=new FileReader();
 
-    showPopup(
-      "Image Too Large",
-      "Please select an image smaller than 8 MB.",
-      "📦"
-    );
+  reader.onload=function(e){
 
-    imageInput.value = "";
+    selectedImage=e.target.result;
 
-    return;
-  }
+    $("previewImg").src=selectedImage;
 
+    $("imagePreview").style.display="block";
 
-  selectedImageType =
-    file.type;
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    function(e){
-
-      selectedImage =
-        e.target.result;
-
-      previewImage.src =
-        selectedImage;
-
-      preview.style.display =
-        "block";
-
-    };
-
+  };
 
   reader.readAsDataURL(file);
 
@@ -977,46 +682,256 @@ function imageSelected(event){
 
 function removeImage(){
 
-  selectedImage = null;
+  selectedImage=null;
+  selectedImageType=null;
 
-  selectedImageType = null;
+  $("imageInput").value="";
 
-  previewImage.removeAttribute(
-    "src"
+  $("imagePreview").style.display="none";
+
+  $("previewImg").src="";
+
+}
+
+
+/* =========================
+   ADD USER MESSAGE
+========================= */
+
+function addUserMessage(text,image){
+
+  const message=document.createElement("div");
+
+  message.className="message user";
+
+  let html="";
+
+  if(image){
+
+    html+=`
+      <img
+        src="${image}"
+        style="
+          max-width:180px;
+          max-height:180px;
+          border-radius:12px;
+          display:block;
+          margin-bottom:7px;
+        ">
+    `;
+
+  }
+
+  if(text){
+
+    html+=text;
+
+  }
+
+  message.innerHTML=`
+    <div class="bubble">
+      ${html}
+    </div>
+  `;
+
+  $("chatArea").insertBefore(
+    message,
+    $("thinking")
   );
 
-  preview.style.display =
-    "none";
+}
 
-  imageInput.value = "";
+
+/* =========================
+   ADD AI MESSAGE
+========================= */
+
+function addAIMessage(text){
+
+  const message=document.createElement("div");
+
+  message.className="message ai";
+
+  message.innerHTML=`
+
+    <div>
+
+      <div class="bubble">
+        ${escapeHTML(text)}
+      </div>
+
+      <button
+        class="copy-btn"
+        onclick="copyAnswer(this)">
+        📋 Copy
+      </button>
+
+      <button
+        class="speak-btn"
+        onclick="speakAnswer(this)">
+        🔊 Listen
+      </button>
+
+    </div>
+
+  `;
+
+  $("chatArea").insertBefore(
+    message,
+    $("thinking")
+  );
 
 }
 
 
-/* =====================================================
-   TEXT INPUT
-===================================================== */
+/* =========================
+   ESCAPE HTML
+========================= */
 
-function resizeInput(){
+function escapeHTML(text){
 
-  question.style.height =
-    "auto";
+  const div=document.createElement("div");
 
-  question.style.height =
-    Math.min(
-      question.scrollHeight,
-      120
-    ) + "px";
+  div.textContent=text;
+
+  return div.innerHTML
+    .replace(/\n/g,"<br>");
 
 }
 
 
-function enterSend(event){
+/* =========================
+   COPY
+========================= */
 
-  if(
-    event.key === "Enter" &&
-    !event.shiftKey
-  ){
+function copyAnswer(button){
+
+  const bubble=button
+    .parentElement
+    .querySelector(".bubble");
+
+  const text=bubble.innerText;
+
+  navigator.clipboard
+    .writeText(text)
+    .then(function(){
+
+      button.textContent="✅ Copied";
+
+      setTimeout(function(){
+
+        button.textContent="📋 Copy";
+
+      },1500);
+
+    });
+
+}
+
+
+/* =========================
+   SPEAK
+========================= */
+
+function speakAnswer(button){
+
+  const bubble=button
+    .parentElement
+    .querySelector(".bubble");
+
+  const text=bubble.innerText;
+
+  if(!("speechSynthesis" in window)){
+
+    showMessage(
+      "Voice unavailable",
+      "या device/browser मध्ये voice support उपलब्ध नाही."
+    );
+
+    return;
+
+  }
+
+  speechSynthesis.cancel();
+
+  const speech=new SpeechSynthesisUtterance(text);
+
+  speech.lang="mr-IN";
+  speech.rate=.95;
+
+  speechSynthesis.speak(speech);
+
+}
+
+
+/* =========================
+   VOICE INPUT
+========================= */
+
+function startVoice(){
+
+  const SpeechRecognition=
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!SpeechRecognition){
+
+    showMessage(
+      "Voice unavailable",
+      "तुमच्या browser मध्ये voice input support नाही."
+    );
+
+    return;
+
+  }
+
+  const recognition=
+    new SpeechRecognition();
+
+  recognition.lang="mr-IN";
+  recognition.interimResults=false;
+  recognition.continuous=false;
+
+  $("micBtn").textContent="🔴";
+
+  recognition.onresult=function(event){
+
+    const text=
+      event.results[0][0].transcript;
+
+    $("question").value+=
+      ($("question").value ? " " : "")+
+      text;
+
+  };
+
+  recognition.onerror=function(){
+
+    showMessage(
+      "Voice error",
+      "Voice input सुरू करता आले नाही."
+    );
+
+  };
+
+  recognition.onend=function(){
+
+    $("micBtn").textContent="🎙️";
+
+  };
+
+  recognition.start();
+
+}
+
+
+/* =========================
+   ENTER
+========================= */
+
+function handleEnter(event){
+
+  if(event.key==="Enter" && !event.shiftKey){
 
     event.preventDefault();
 
@@ -1027,365 +942,9 @@ function enterSend(event){
 }
 
 
-/* =====================================================
-   TIME
-===================================================== */
-
-function currentTime(){
-
-  return new Date()
-    .toLocaleTimeString(
-      [],
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    );
-
-}
-
-
-/* =====================================================
-   USER MESSAGE
-===================================================== */
-
-function addUserMessage(
-  text,
-  image
-){
-
-  welcome.style.display =
-    "none";
-
-
-  const message =
-    document.createElement("div");
-
-  message.className =
-    "message user";
-
-
-  const content =
-    document.createElement("div");
-
-  content.className =
-    "messageContent";
-
-
-  const avatar =
-    document.createElement("div");
-
-  avatar.className =
-    "avatar userAvatar";
-
-  avatar.innerText =
-    "👤";
-
-
-  content.appendChild(
-    avatar
-  );
-
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "bubble userBubble";
-
-
-  if(image){
-
-    const img =
-      document.createElement("img");
-
-    img.className =
-      "chatPhoto";
-
-    img.src =
-      image;
-
-    bubble.appendChild(
-      img
-    );
-
-  }
-
-
-  if(text){
-
-    const textDiv =
-      document.createElement("div");
-
-    textDiv.innerText =
-      text;
-
-    bubble.appendChild(
-      textDiv
-    );
-
-  }
-
-
-  content.appendChild(
-    bubble
-  );
-
-
-  const time =
-    document.createElement("div");
-
-  time.className =
-    "time";
-
-  time.innerText =
-    currentTime();
-
-
-  content.appendChild(
-    time
-  );
-
-  message.appendChild(
-    content
-  );
-
-  chat.appendChild(
-    message
-  );
-
-  scrollDown();
-
-}
-
-
-/* =====================================================
-   THINKING
-===================================================== */
-
-function showThinking(){
-
-  removeThinking();
-
-
-  const message =
-    document.createElement("div");
-
-  message.className =
-    "message ai";
-
-  message.id =
-    "thinkingMessage";
-
-
-  const content =
-    document.createElement("div");
-
-  content.className =
-    "messageContent";
-
-
-  const avatar =
-    document.createElement("div");
-
-  avatar.className =
-    "avatar aiAvatar";
-
-  avatar.innerText =
-    "🤖";
-
-
-  content.appendChild(
-    avatar
-  );
-
-
-  const thinkingBox =
-    document.createElement("div");
-
-  thinkingBox.className =
-    "thinking";
-
-  thinkingBox.innerHTML =
-    `
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    `;
-
-
-  content.appendChild(
-    thinkingBox
-  );
-
-  message.appendChild(
-    content
-  );
-
-  chat.appendChild(
-    message
-  );
-
-  scrollDown();
-
-}
-
-
-function removeThinking(){
-
-  const element =
-    document.getElementById(
-      "thinkingMessage"
-    );
-
-  if(element){
-    element.remove();
-  }
-
-}
-
-
-/* =====================================================
-   AI MESSAGE
-===================================================== */
-
-function addAIMessage(text){
-
-  removeThinking();
-
-
-  const message =
-    document.createElement("div");
-
-  message.className =
-    "message ai";
-
-
-  const content =
-    document.createElement("div");
-
-  content.className =
-    "messageContent";
-
-
-  const avatar =
-    document.createElement("div");
-
-  avatar.className =
-    "avatar aiAvatar";
-
-  avatar.innerText =
-    "🤖";
-
-
-  content.appendChild(
-    avatar
-  );
-
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "bubble aiBubble";
-
-  bubble.innerText =
-    text;
-
-
-  content.appendChild(
-    bubble
-  );
-
-
-  const actions =
-    document.createElement("div");
-
-  actions.className =
-    "actions";
-
-
-  const copy =
-    document.createElement("button");
-
-  copy.className =
-    "action";
-
-  copy.innerText =
-    "📋 Copy";
-
-
-  copy.onclick =
-    function(){
-
-      copyAnswer(text);
-
-    };
-
-
-  const listen =
-    document.createElement("button");
-
-  listen.className =
-    "action";
-
-  listen.innerText =
-    "🔊 Listen";
-
-
-  listen.onclick =
-    function(){
-
-      speakAnswer(text);
-
-    };
-
-
-  actions.appendChild(
-    copy
-  );
-
-  actions.appendChild(
-    listen
-  );
-
-
-  content.appendChild(
-    actions
-  );
-
-
-  const time =
-    document.createElement("div");
-
-  time.className =
-    "time";
-
-  time.innerText =
-    currentTime();
-
-
-  content.appendChild(
-    time
-  );
-
-
-  message.appendChild(
-    content
-  );
-
-  chat.appendChild(
-    message
-  );
-
-  scrollDown();
-
-}
-
-
-/* =====================================================
-   MAIN AI FUNCTION
-===================================================== */
+/* =========================
+   ASK AI
+========================= */
 
 async function askAI(){
 
@@ -1393,506 +952,213 @@ async function askAI(){
     return;
   }
 
+  const question=
+    $("question").value.trim();
 
-  const text =
-    question.value.trim();
+  if(!question && !selectedImage){
 
-
-  const image =
-    selectedImage;
-
-  const imageType =
-    selectedImageType;
-
-
-  if(!text && !image){
-
-    showPopup(
-      "Ask GyanSetu AI",
-      "Please type a question or attach a photo first.",
-      "💬"
+    showMessage(
+      "प्रश्न लिहा",
+      "कृपया तुमचा प्रश्न किंवा image पाठवा."
     );
 
     return;
+
   }
 
+  thinking=true;
 
-  thinking = true;
+  $("sendBtn").disabled=true;
 
-  sendButton.disabled =
-    true;
-
-  question.disabled =
-    true;
-
-
-  /*
-     Add user's message
-  */
+  $("welcome").style.display="none";
 
   addUserMessage(
-    text,
-    image
+    question,
+    selectedImage
   );
 
+  $("question").value="";
 
-  /*
-     Clear composer
-  */
+  const imageToSend=selectedImage;
+  const imageTypeToSend=selectedImageType;
 
   removeImage();
 
-  question.value =
-    "";
+  $("thinking").style.display="flex";
 
-  question.style.height =
-    "42px";
-
-
-  /*
-     Show thinking
-  */
-
-  showThinking();
+  $("chatArea").scrollTop=
+    $("chatArea").scrollHeight;
 
 
   try{
 
-    /*
-       YOUR EXISTING API
-    */
+    const response=await fetch(
+      "https://gyan-setu-self.vercel.app/api/chat",
+      {
+        method:"POST",
 
-    const response =
-      await fetch(
-        "https://gyan-setu-self.vercel.app/api/chat",
-        {
-          method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
 
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
+        body:JSON.stringify({
 
-          body:JSON.stringify({
+          question:question,
 
-            question:
-              text,
+          image:imageToSend,
 
-            image:
-              image || null,
+          imageType:imageTypeToSend
 
-            imageType:
-              imageType || null
+        })
 
-          })
-        }
-      );
-
-
-    let data;
-
-
-    try{
-
-      data =
-        await response.json();
-
-    }catch(error){
-
-      throw new Error(
-        "Invalid server response"
-      );
-
-    }
+      }
+    );
 
 
     if(!response.ok){
 
       throw new Error(
-        data.error ||
-        "AI request failed"
+        "API error: "+response.status
       );
 
     }
 
 
-    const answer =
-      data.answer;
+    const data=
+      await response.json();
+
+
+    let answer=
+      data.answer ||
+      data.message ||
+      data.response ||
+      data.text;
 
 
     if(!answer){
 
-  throw new Error(
-    "No answer received"
-  );
-
-}
+      answer=
+        "AI कडून उत्तर मिळाले नाही.";
+    }
 
 
-addAIMessage(
-  answer
-);
+    addAIMessage(answer);
 
-}catch(error){
+  }
+  catch(error){
 
-console.error(
-  "GyanSetu AI Error:",
-  error
-);
+    console.error(error);
 
-
-addAIMessage(
-  "Sorry, GyanSetu AI could not connect right now. Please try again."
-);
-
-}
-
-thinking = false;
-
-sendButton.disabled =
-false;
-
-question.disabled =
-false;
-
-question.focus();
-
-}
-
-/* =====================================================
-COPY ANSWER
-===================================================== */
-
-async function copyAnswer(text){
-
-try{
-
-if(
-  navigator.clipboard &&
-  navigator.clipboard.writeText
-){
-
-  await navigator.clipboard.writeText(
-    text
-  );
-
-}else{
-
-  const temp =
-    document.createElement(
-      "textarea"
+    addAIMessage(
+      "⚠️ AI शी connect होता आले नाही. Internet connection तपासा आणि पुन्हा प्रयत्न करा."
     );
 
-  temp.value =
-    text;
+  }
+  finally{
 
-  document.body.appendChild(
-    temp
-  );
+    thinking=false;
 
-  temp.select();
+    $("sendBtn").disabled=false;
 
-  document.execCommand(
-    "copy"
-  );
+    $("thinking").style.display="none";
 
-  temp.remove();
+    $("chatArea").scrollTop=
+      $("chatArea").scrollHeight;
 
-}
-
-
-showPopup(
-  "Copied!",
-  "AI answer has been copied.",
-  "📋"
-);
-
-}catch(error){
-
-showPopup(
-  "Copy Failed",
-  "Could not copy the answer.",
-  "⚠️"
-);
+  }
 
 }
 
-}
 
-/* =====================================================
-SPEAK ANSWER
-===================================================== */
-
-function speakAnswer(text){
-
-if(
-!("speechSynthesis" in window)
-){
-
-showPopup(
-  "Voice Not Available",
-  "Voice playback is not supported on this device.",
-  "🔊"
-);
-
-return;
-
-}
-
-window.speechSynthesis.cancel();
-
-const speech =
-new SpeechSynthesisUtterance(
-text
-);
-
-speech.lang =
-"en-IN";
-
-speech.rate =
-0.9;
-
-speech.pitch =
-1;
-
-window.speechSynthesis.speak(
-speech
-);
-
-}
-
-/* =====================================================
-VOICE INPUT
-===================================================== */
-
-function voiceInput(){
-
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
-
-if(!SpeechRecognition){
-
-showPopup(
-  "Voice Not Available",
-  "Voice input is not supported on this browser.",
-  "🎤"
-);
-
-return;
-
-}
-
-if(listening){
-
-if(recognition){
-  recognition.stop();
-}
-
-return;
-
-}
-
-recognition =
-new SpeechRecognition();
-
-recognition.lang =
-"en-IN";
-
-recognition.interimResults =
-false;
-
-recognition.continuous =
-false;
-
-listening =
-true;
-
-micButton.innerText =
-"🔴";
-
-recognition.start();
-
-recognition.onresult =
-function(event){
-
-  question.value =
-    event.results[0][0].transcript;
-
-  resizeInput();
-
-};
-
-recognition.onerror =
-function(){
-
-  showPopup(
-    "Voice Input",
-    "I couldn't hear you clearly. Please try again.",
-    "🎤"
-  );
-
-};
-
-recognition.onend =
-function(){
-
-  listening =
-    false;
-
-  micButton.innerText =
-    "🎤";
-
-};
-
-}
-
-/* =====================================================
-NEW CHAT
-===================================================== */
+/* =========================
+   NEW CHAT
+========================= */
 
 function newChat(){
 
-const messages =
-chat.querySelectorAll(
-".message"
-);
+  $("chatArea")
+    .querySelectorAll(".message")
+    .forEach(function(item){
 
-if(messages.length === 0){
+      item.remove();
 
-showPopup(
-  "New Chat",
-  "You are already in a new chat.",
-  "✨"
-);
+    });
 
-return;
+  $("welcome").style.display="block";
 
-}
-
-showPopup(
-"Start New Chat?",
-"Your current conversation will be cleared.",
-"🆕",
-function(){
-
-  chat.innerHTML =
-    "";
-
-  const newWelcome =
-    document.createElement(
-      "div"
-    );
-
-  newWelcome.className =
-    "welcome";
-
-  newWelcome.innerHTML =
-    `
-      <div class="robot">
-        🤖
-      </div>
-
-      <h1>
-        How can I help you?
-      </h1>
-
-      <p>
-        Ask your study question, type in Hindi or English,
-        or attach a photo of your question.
-      </p>
-    `;
-
-  chat.appendChild(
-    newWelcome
-  );
-
-  question.value =
-    "";
-
-  question.style.height =
-    "42px";
+  $("question").value="";
 
   removeImage();
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  speechSynthesis.cancel();
 
 }
 
-);
 
-}
-
-/* =====================================================
-SCROLL
-===================================================== */
-
-function scrollDown(){
-
-setTimeout(
-function(){
-
-  window.scrollTo({
-    top:
-      document.body.scrollHeight,
-    behavior:"smooth"
-  });
-
-},
-80
-
-);
-
-}
-
-/* =====================================================
-NAVIGATION
-===================================================== */
+/* =========================
+   NAVIGATION
+========================= */
 
 function goHome(){
 
-window.location.href =
-"home.html";
+  window.location.href="home.html";
 
 }
 
 function goLearn(){
 
-window.location.href =
-"learn.html";
+  window.location.href="learn.html";
 
 }
 
 function goRank(){
 
-window.location.href =
-"leaderboard.html";
+  window.location.href="leaderboard.html";
 
 }
 
 function goProfile(){
 
-window.location.href =
-"profile.html";
+  window.location.href="profile.html";
 
 }
 
-/* =====================================================
-PAGE LOAD
-===================================================== */
 
-window.addEventListener(
-"load",
-function(){
+/* =========================
+   AUTO TEXTAREA HEIGHT
+========================= */
 
-question.focus();
+$("question").addEventListener(
+  "input",
+  function(){
 
-}
+    this.style.height="auto";
+
+    this.style.height=
+      Math.min(this.scrollHeight,100)+"px";
+
+  }
+);
+
+
+/* =========================
+   POPUP CLOSE
+========================= */
+
+$("messagePopup").addEventListener(
+  "click",
+  function(event){
+
+    if(event.target===this){
+
+      closePopup();
+
+    }
+
+  }
 );
 
 </script>
+
 </body>
 </html>
