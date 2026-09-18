@@ -12,19 +12,16 @@ jobs:
 
     steps:
 
-      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
 
-      # 2. Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
 
-      # 3. Setup Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -32,37 +29,20 @@ jobs:
           java-version: 21
 
 
-      # 4. Install Capacitor
       - name: Install Capacitor
         run: |
+          npm init -y
           npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
 
 
-      # 5. Prepare website
-      - name: Prepare www folder
+      - name: Create www folder
         run: |
-          rm -rf www
           mkdir -p www
-
-          find . -maxdepth 1 -mindepth 1 \
-            ! -name ".git" \
-            ! -name ".github" \
-            ! -name "node_modules" \
-            ! -name "android" \
-            ! -name "www" \
-            ! -name "package.json" \
-            ! -name "package-lock.json" \
-            -exec cp -r {} www/ \;
-
-          echo "===== WWW FILES ====="
-          find www -maxdepth 2 -type f | head -100
+          cp -r *.html *.css *.js *.json *.png *.jpg *.jpeg *.webp www/ 2>/dev/null || true
 
 
-      # 6. Create Capacitor config
       - name: Create Capacitor config
         run: |
-          rm -f capacitor.config.ts
-
           cat > capacitor.config.json <<'EOF'
           {
             "appId": "com.ramsena.xi",
@@ -74,77 +54,77 @@ jobs:
           }
           EOF
 
-          echo "===== CAPACITOR CONFIG ====="
-          cat capacitor.config.json
+
+      - name: Add Android
+        run: npx cap add android
 
 
-      # 7. Add Android
-      - name: Add Android platform
-        run: |
-          npx cap add android
-
-
-      # 8. Configure Android permissions
-      - name: Configure Android permissions
+      - name: Add Android permissions
         run: |
           python3 - <<'PY'
-          path = "android/app/src/main/AndroidManifest.xml"
+          from pathlib import Path
 
-          with open(path, "r", encoding="utf-8") as f:
-              text = f.read()
+          p = Path(
+            "android/app/src/main/AndroidManifest.xml"
+          )
+
+          text = p.read_text()
 
           permissions = [
-              "android.permission.INTERNET",
-              "android.permission.ACCESS_NETWORK_STATE",
-              "android.permission.CAMERA",
-              "android.permission.RECORD_AUDIO",
-              "android.permission.MODIFY_AUDIO_SETTINGS",
-              "android.permission.ACCESS_FINE_LOCATION",
-              "android.permission.ACCESS_COARSE_LOCATION",
-              "android.permission.POST_NOTIFICATIONS",
-              "android.permission.VIBRATE"
+            'android.permission.INTERNET',
+            'android.permission.ACCESS_NETWORK_STATE',
+            'android.permission.CAMERA',
+            'android.permission.RECORD_AUDIO',
+            'android.permission.MODIFY_AUDIO_SETTINGS',
+            'android.permission.ACCESS_FINE_LOCATION',
+            'android.permission.ACCESS_COARSE_LOCATION',
+            'android.permission.POST_NOTIFICATIONS',
+            'android.permission.VIBRATE'
           ]
 
-          for permission in permissions:
+          lines = []
 
-              tag = f'<uses-permission android:name="{permission}" />'
+          for perm in permissions:
+              tag = f'<uses-permission android:name="{perm}" />'
 
               if tag not in text:
+                  lines.append(tag)
 
-                  text = text.replace(
-                      "<application",
-                      "    " + tag + "\n\n    <application",
-                      1
-                  )
+          if lines:
+              text = text.replace(
+                  '<manifest',
+                  '<manifest',
+                  1
+              )
 
-          features = [
-              '<uses-feature android:name="android.hardware.camera" android:required="false" />',
-              '<uses-feature android:name="android.hardware.microphone" android:required="false" />'
-          ]
+              first_tag_end = text.find(">") + 1
 
-          for feature in features:
+              text = (
+                  text[:first_tag_end]
+                  + "\n"
+                  + "\n".join(lines)
+                  + text[first_tag_end:]
+              )
 
-              if feature not in text:
-
-                  text = text.replace(
-                      "<application",
-                      "    " + feature + "\n\n    <application",
-                      1
-                  )
-
-          with open(path, "w", encoding="utf-8") as f:
-              f.write(text)
-
-          print("Camera + Microphone permissions configured")
+          p.write_text(text)
           PY
 
 
-      # 9. Configure MainActivity
-      - name: Configure MainActivity
+      - name: Configure camera and microphone
         run: |
-          mkdir -p android/app/src/main/java/com/ramsena/xi
+          python3 - <<'PY'
+          from pathlib import Path
 
-          cat > android/app/src/main/java/com/ramsena/xi/MainActivity.java <<'EOF'
+          p = Path(
+            "android/app/src/main/java/com/ramsena/xi/MainActivity.java"
+          )
+
+          p.parent.mkdir(
+            parents=True,
+            exist_ok=True
+          )
+
+          code = r'''
           package com.ramsena.xi;
 
           import android.Manifest;
@@ -154,43 +134,51 @@ jobs:
           import android.webkit.WebChromeClient;
           import android.webkit.WebView;
 
-          import androidx.annotation.NonNull;
+          import androidx.core.app.ActivityCompat;
+          import androidx.core.content.ContextCompat;
 
           import com.getcapacitor.BridgeActivity;
 
           public class MainActivity extends BridgeActivity {
 
-              private static final int CAMERA_MIC_PERMISSION = 1001;
+              private static final int REQUEST_MEDIA = 1001;
 
               @Override
               public void onCreate(Bundle savedInstanceState) {
                   super.onCreate(savedInstanceState);
 
-                  requestCameraAndMicrophone();
+                  requestMediaPermissions();
 
-                  WebView webView = getBridge().getWebView();
+                  WebView webView =
+                      this.bridge.getWebView();
 
-                  webView.getSettings().setJavaScriptEnabled(true);
-                  webView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+                  webView.getSettings()
+                      .setJavaScriptEnabled(true);
 
-                  webView.setWebChromeClient(new WebChromeClient() {
+                  webView.getSettings()
+                      .setMediaPlaybackRequiresUserGesture(false);
 
-                      @Override
-                      public void onPermissionRequest(
-                              final PermissionRequest request) {
+                  webView.setWebChromeClient(
+                      new WebChromeClient() {
 
-                          runOnUiThread(new Runnable() {
+                          @Override
+                          public void onPermissionRequest(
+                              PermissionRequest request
+                          ) {
 
-                              @Override
-                              public void run() {
+                              runOnUiThread(() -> {
 
-                                  if (checkSelfPermission(
+                                  if (
+                                      ContextCompat.checkSelfPermission(
+                                          MainActivity.this,
                                           Manifest.permission.CAMERA
                                       ) == PackageManager.PERMISSION_GRANTED
                                       &&
-                                      checkSelfPermission(
+                                      ContextCompat.checkSelfPermission(
+                                          MainActivity.this,
                                           Manifest.permission.RECORD_AUDIO
-                                      ) == PackageManager.PERMISSION_GRANTED) {
+                                      ) == PackageManager.PERMISSION_GRANTED
+                                  ) {
 
                                       request.grant(
                                           request.getResources()
@@ -199,44 +187,48 @@ jobs:
                                   } else {
 
                                       request.deny();
+
                                   }
-                              }
-                          });
+
+                              });
+                          }
                       }
-                  });
+                  );
               }
 
+              private void requestMediaPermissions() {
 
-              private void requestCameraAndMicrophone() {
-
-                  boolean cameraGranted =
-                      checkSelfPermission(
+                  boolean camera =
+                      ContextCompat.checkSelfPermission(
+                          this,
                           Manifest.permission.CAMERA
-                      ) == PackageManager.PERMISSION_GRANTED;
+                      ) != PackageManager.PERMISSION_GRANTED;
 
-                  boolean microphoneGranted =
-                      checkSelfPermission(
+                  boolean audio =
+                      ContextCompat.checkSelfPermission(
+                          this,
                           Manifest.permission.RECORD_AUDIO
-                      ) == PackageManager.PERMISSION_GRANTED;
+                      ) != PackageManager.PERMISSION_GRANTED;
 
-                  if (!cameraGranted || !microphoneGranted) {
+                  if (camera || audio) {
 
-                      requestPermissions(
-                          new String[]{
+                      ActivityCompat.requestPermissions(
+                          this,
+                          new String[] {
                               Manifest.permission.CAMERA,
                               Manifest.permission.RECORD_AUDIO
                           },
-                          CAMERA_MIC_PERMISSION
+                          REQUEST_MEDIA
                       );
                   }
               }
 
-
               @Override
               public void onRequestPermissionsResult(
-                      int requestCode,
-                      @NonNull String[] permissions,
-                      @NonNull int[] grantResults) {
+                  int requestCode,
+                  String[] permissions,
+                  int[] grantResults
+              ) {
 
                   super.onRequestPermissionsResult(
                       requestCode,
@@ -244,110 +236,46 @@ jobs:
                       grantResults
                   );
 
-                  if (requestCode == CAMERA_MIC_PERMISSION) {
+                  if (requestCode == REQUEST_MEDIA) {
 
-                      boolean allGranted = true;
+                      if (
+                          this.bridge != null &&
+                          this.bridge.getWebView() != null
+                      ) {
 
-                      for (int result : grantResults) {
-
-                          if (result != PackageManager.PERMISSION_GRANTED) {
-
-                              allGranted = false;
-                              break;
-                          }
-                      }
-
-                      if (allGranted) {
-
-                          WebView webView = getBridge().getWebView();
-
-                          if (webView != null) {
-                              webView.reload();
-                          }
+                          this.bridge
+                              .getWebView()
+                              .reload();
                       }
                   }
               }
           }
-          EOF
+          '''
 
-          echo "===== MAIN ACTIVITY ====="
-          cat android/app/src/main/java/com/ramsena/xi/MainActivity.java
-
-
-      # 10. Sync Capacitor
-      - name: Sync Capacitor
-        run: |
-          npx cap sync android
-
-
-      # 11. Configure debug APK signing
-      - name: Configure APK signing
-        run: |
-          python3 - <<'PY'
-          path = "android/app/build.gradle"
-
-          with open(path, "r", encoding="utf-8") as f:
-              text = f.read()
-
-          if "enableV1Signing false" not in text:
-
-              signing_config = """
-              signingConfigs {
-                  debug {
-                      enableV1Signing false
-                      enableV2Signing true
-                  }
-              }
-              """
-
-              marker = "android {"
-
-              if marker not in text:
-                  raise SystemExit("android { block not found")
-
-              text = text.replace(
-                  marker,
-                  marker + signing_config,
-                  1
-              )
-
-          with open(path, "w", encoding="utf-8") as f:
-              f.write(text)
-
-          print("Debug APK signing configured")
+          p.write_text(code)
           PY
 
 
-      # 12. Build APK
-      - name: Build APK
+      - name: Sync Capacitor
+        run: npx cap sync android
+
+
+      - name: Configure debug signing
         run: |
           cd android
-          ./gradlew assembleDebug --no-daemon --stacktrace
+
+          chmod +x gradlew
+
+          ./gradlew assembleDebug
 
 
-      # 13. Check APK
       - name: Check APK
         run: |
-          if [ -f "android/app/build/outputs/apk/debug/app-debug.apk" ]; then
-
-            echo "================================"
-            echo "GYANSETU APK BUILD SUCCESSFUL"
-            echo "================================"
-
-            ls -lh android/app/build/outputs/apk/debug/app-debug.apk
-
-          else
-
-            echo "APK NOT FOUND"
-            exit 1
-
-          fi
+          ls -lh android/app/build/outputs/apk/debug/app-debug.apk
 
 
-      # 14. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: GYANSETU-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
