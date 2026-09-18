@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Offline Mathematics</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  color:#172033;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#fff;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:linear-gradient(135deg,#0757d9,#1769e0);
+  color:white;
+  padding:15px;
+  box-shadow:0 3px 12px rgba(0,0,0,.15);
+}
+
+.header-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:12px;
+  background:rgba(255,255,255,.18);
+  color:white;
+  font-size:22px;
+  cursor:pointer;
+}
+
+.title{
+  font-size:20px;
+  font-weight:800;
+}
+
+.subtitle{
+  font-size:12px;
+  opacity:.9;
+  margin-top:3px;
+}
+
+.content{
+  padding:16px;
+  padding-bottom:35px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#0b5ddd,#4d8cff);
+  color:white;
+  padding:20px;
+  border-radius:20px;
+  margin-bottom:16px;
+  box-shadow:0 8px 22px rgba(20,90,210,.18);
+}
+
+.hero h2{
+  font-size:23px;
+  margin-bottom:6px;
+}
+
+.hero p{
+  font-size:13px;
+  line-height:1.5;
+}
+
+.progress-box{
+  margin-top:15px;
+  background:rgba(255,255,255,.18);
+  padding:12px;
+  border-radius:14px;
+}
+
+.progress-text{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.progress{
+  height:9px;
+  background:rgba(255,255,255,.3);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:white;
+  transition:.3s;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:800;
+  margin:20px 0 12px;
+}
+
+.classes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.class-card{
+  border:0;
+  background:#fff;
+  padding:18px 10px;
+  border-radius:17px;
+  box-shadow:0 4px 15px rgba(0,0,0,.09);
+  cursor:pointer;
+  text-align:center;
+  transition:.2s;
+}
+
+.class-card:active{
+  transform:scale(.96);
+}
+
+.class-icon{
+  font-size:28px;
+}
+
+.class-name{
+  margin-top:8px;
+  font-weight:800;
+  color:#1259ca;
+}
+
+.class-info{
+  margin-top:4px;
+  color:#777;
+  font-size:11px;
+}
+
+.chapter-list{
+  display:none;
+}
+
+.chapter-card{
+  background:white;
+  border-radius:17px;
+  padding:15px;
+  margin-bottom:11px;
+  box-shadow:0 3px 13px rgba(0,0,0,.08);
+  cursor:pointer;
+  border-left:5px solid #1769e0;
+}
+
+.chapter-number{
+  font-size:11px;
+  color:#1769e0;
+  font-weight:bold;
+}
+
+.chapter-title{
+  margin-top:4px;
+  font-size:16px;
+  font-weight:800;
+}
+
+.chapter-status{
+  margin-top:5px;
+  font-size:11px;
+  color:#777;
+}
+
+.lesson{
+  display:none;
+}
+
+.lesson-card{
+  background:#fff;
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+}
+
+.lesson-badge{
+  display:inline-block;
+  background:#e8f0ff;
+  color:#1259ca;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+.lesson h2{
+  font-size:22px;
+  margin-bottom:12px;
+}
+
+.lesson h3{
+  margin:20px 0 8px;
+  color:#1259ca;
+}
+
+.lesson p{
+  line-height:1.65;
+  font-size:14px;
+}
+
+.example{
+  background:#f1f6ff;
+  border-left:4px solid #1769e0;
+  padding:13px;
+  border-radius:10px;
+  margin-top:10px;
+  line-height:1.6;
+}
+
+.tip{
+  background:#fff7df;
+  padding:13px;
+  border-radius:12px;
+  margin-top:14px;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.start-btn,
+.next-btn,
+.quiz-btn{
+  width:100%;
+  border:0;
+  padding:14px;
+  border-radius:14px;
+  background:#1769e0;
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  margin-top:18px;
+  cursor:pointer;
+}
+
+.practice{
+  margin-top:20px;
+  background:#f8f9fc;
+  padding:15px;
+  border-radius:15px;
+}
+
+.practice-question{
+  font-weight:bold;
+  line-height:1.5;
+}
+
+.option{
+  width:100%;
+  border:1px solid #d9dfeb;
+  background:white;
+  padding:12px;
+  margin-top:8px;
+  border-radius:11px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.option.correct{
+  background:#dff7e7;
+  border-color:#29a354;
+}
+
+.option.wrong{
+  background:#ffe3e3;
+  border-color:#d83a3a;
+}
+
+.result{
+  margin-top:10px;
+  font-weight:bold;
+  line-height:1.5;
+}
+
+.quiz-box{
+  display:none;
+  background:white;
+  padding:18px;
+  border-radius:20px;
+  box-shadow:0 4px 16px rgba(0,0,0,.08);
+}
+
+.quiz-number{
+  font-size:12px;
+  color:#1769e0;
+  font-weight:bold;
+}
+
+.quiz-question{
+  font-size:18px;
+  font-weight:800;
+  margin:12px 0;
+  line-height:1.5;
+}
+
+.xp{
+  text-align:center;
+  margin-top:15px;
+  background:#fff5cf;
+  padding:12px;
+  border-radius:14px;
+  font-weight:bold;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:25px;
+}
+
+.hide{
+  display:none!important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="header-row">
+    <button class="back" onclick="goBack()">←</button>
+
+    <div>
+      <div class="title">📘 Offline Mathematics</div>
+      <div class="subtitle">इयत्ता 1ली ते 10वी • Smart Learning</div>
+    </div>
+  </div>
+</header>
+
+<div class="content">
+
+<!-- HOME -->
+
+<div id="home">
+
+  <div class="hero">
+    <h2>🧠 Mathematics Master</h2>
+    <p>
+      Internet शिवाय गणित शिका, उदाहरणे सोडवा,
+      Practice करा आणि Quiz मधून XP मिळवा.
+    </p>
+
+    <div class="progress-box">
+      <div class="progress-text">
+        <span>Overall Progress</span>
+        <span id="overallPercent">0%</span>
+      </div>
+
+      <div class="progress">
+        <div class="progress-fill" id="overallBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">📚 इयत्ता निवडा</div>
+
+  <div class="classes" id="classGrid"></div>
+
+</div>
+
+
+<!-- CHAPTERS -->
+
+<div id="chapterList" class="chapter-list">
+
+  <div class="section-title" id="classTitle"></div>
+
+  <div id="chapters"></div>
+
+</div>
+
+
+<!-- LESSON -->
+
+<div id="lesson" class="lesson">
+
+  <div class="lesson-card">
+
+    <span class="lesson-badge" id="lessonBadge"></span>
+
+    <h2 id="lessonTitle"></h2>
+
+    <div id="lessonContent"></div>
+
+    <button class="quiz-btn" onclick="startQuiz()">
+      🎯 Chapter Quiz सुरू करा
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- QUIZ -->
+
+<div id="quizBox" class="quiz-box">
+
+  <div class="quiz-number" id="quizNumber"></div>
+
+  <div class="quiz-question" id="quizQuestion"></div>
+
+  <div id="quizOptions"></div>
+
+  <div class="result" id="quizResult"></div>
+
+  <button
+    id="nextBtn"
+    class="next-btn hide"
+    onclick="nextQuestion()">
+    पुढचा प्रश्न →
+  </button>
+
+</div>
+
+
+<div class="xp" id="xpBox">
+  ⭐ XP: <span id="xp">0</span>
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+/* =====================================================
+   DATA
+===================================================== */
+
+const data = {
+
+1:[
+["संख्या ओळख","संख्या म्हणजे काय? 1 ते 100 पर्यंत संख्या ओळखणे आणि वाचणे शिका."],
+["मोजणी","वस्तू मोजणे आणि योग्य संख्या लिहिणे."],
+["तुलना","मोठी संख्या, छोटी संख्या आणि समान संख्या ओळखणे."],
+["बेरीज","दोन किंवा अधिक संख्यांची बेरीज करणे."],
+["वजाबाकी","संख्यांमधून संख्या कमी करणे."],
+["गुणाकाराची ओळख","समान संख्यांची वारंवार बेरीज म्हणजे गुणाकार."],
+["भागाकाराची ओळख","वस्तू समान गटात वाटणे म्हणजे भागाकार."],
+["आकार","वर्तुळ, त्रिकोण, चौकोन आणि आयत ओळखणे."],
+["मापन","लांबी, वजन आणि क्षमता यांची प्राथमिक ओळख."],
+["वेळ","दिवस, आठवडा, महिना आणि घड्याळाची ओळख."],
+["पैसे","नाणी आणि नोटा ओळखणे व साधे व्यवहार."],
+["Patterns","संख्या आणि आकारांमधील patterns ओळखणे."]
+],
+
+2:[
+["संख्या","1 ते 1000 पर्यंत संख्या आणि place value."],
+["बेरीज","दोन व तीन अंकी संख्यांची बेरीज."],
+["वजाबाकी","दोन व तीन अंकी संख्यांची वजाबाकी."],
+["गुणाकार","गुणाकाराची संकल्पना आणि पाढे."],
+["भागाकार","समान वाटणी आणि साधा भागाकार."],
+["अपूर्णांक","अर्धा, पाव आणि साधे fractions."],
+["मापन","लांबी, वजन आणि क्षमता."],
+["वेळ","घड्याळ आणि वेळेचे गणित."],
+["पैसे","बेरीज-वजाबाकीचे money problems."],
+["भूमिती","रेषा, आकार आणि basic geometry."],
+["Patterns","संख्या आणि आकारांचे patterns."]
+],
+
+3:[
+["मोठ्या संख्या","चार अंकी संख्यांची ओळख."],
+["बेरीज","मोठ्या संख्यांची बेरीज."],
+["वजाबाकी","मोठ्या संख्यांची वजाबाकी."],
+["गुणाकार","गुणाकाराचे नियम आणि पाढे."],
+["भागाकार","भागाकार व remainder ची ओळख."],
+["अपूर्णांक","साधे fractions समजून घेणे."],
+["मापन","लांबी, वजन, क्षमता."],
+["वेळ","तास, मिनिटे आणि calendar."],
+["पैसे","पैशांवरील शब्दसमस्या."],
+["भूमिती","2D आकार आणि त्यांचे गुणधर्म."],
+["परिमिती","आकाराच्या कडेची लांबी समजणे."],
+["Data Handling","साधे tables आणि pictographs."]
+],
+
+4:[
+["मोठ्या संख्या","मोठ्या संख्यांचे स्थानमूल्य."],
+["बेरीज व वजाबाकी","मोठ्या संख्यांवरील चार क्रिया."],
+["गुणाकार","बहुअंकी गुणाकार."],
+["भागाकार","मोठ्या संख्यांचा भागाकार."],
+["Factors","संख्यांचे factors शोधणे."],
+["Multiples","संख्यांचे multiples समजणे."],
+["अपूर्णांक","समतुल्य fractions."],
+["दशांश","decimal ची प्राथमिक ओळख."],
+["कोन","विविध प्रकारचे angles."],
+["परिमिती व क्षेत्रफळ","आकारांची perimeter आणि area."],
+["मापन","वेगवेगळी units."],
+["Data","तक्ते आणि graphs."]
+],
+
+5:[
+["संख्या","मोठ्या संख्यांचे स्थानमूल्य."],
+["चार क्रिया","बेरीज, वजाबाकी, गुणाकार, भागाकार."],
+["Factors व Multiples","HCF/LCM ची प्राथमिक संकल्पना."],
+["अपूर्णांक","fractions ची बेरीज व वजाबाकी."],
+["दशांश","decimal numbers आणि operations."],
+["टक्केवारी","percentage ची प्राथमिक संकल्पना."],
+["कोन","angles आणि त्यांचे प्रकार."],
+["भूमिती","रेषा, कोन आणि shapes."],
+["परिमिती","विविध आकारांची perimeter."],
+["क्षेत्रफळ","आकारांचे area."],
+["घनफळ","घन वस्तूंची capacity समजणे."],
+["Data Handling","bar graph आणि tables."]
+],
+
+6:[
+["संख्या प्रणाली","Natural, whole आणि integers."],
+["पूर्णांक","positive आणि negative numbers."],
+["अपूर्णांक","fractions वर operations."],
+["दशांश","decimal operations."],
+["अनुपात","ratio ची संकल्पना."],
+["बीजगणिताची ओळख","variables आणि expressions."],
+["रेषीय समीकरणे","सोप्या equations सोडवणे."],
+["भूमिती","lines आणि angles."],
+["त्रिकोण","triangles चे प्रकार."],
+["परिमिती व क्षेत्रफळ","विविध 2D shapes."],
+["घन आकृत्या","3D shapes ची ओळख."],
+["Data Handling","data, tables आणि graphs."]
+],
+
+7:[
+["Rational Numbers","rational numbers ची ओळख व operations."],
+["Fractions व Decimals","fractions आणि decimals चे गणित."],
+["Algebraic Expressions","terms, coefficients आणि expressions."],
+["Simple Equations","एक चल असलेली समीकरणे."],
+["Ratio व Proportion","ratio आणि proportion."],
+["Percentage","percentage, profit आणि loss ची ओळख."],
+["Lines व Angles","रेषा आणि angles चे संबंध."],
+["Triangles","triangle चे गुणधर्म."],
+["Perimeter व Area","विविध shapes चे area."],
+["Data Handling","mean आणि graphs ची ओळख."],
+["Probability","संभाव्यतेची प्राथमिक कल्पना."]
+],
+
+8:[
+["Rational Numbers","rational numbers वर operations."],
+["Linear Equations","एका चलाची linear equations."],
+["Squares व Square Roots","वर्ग आणि वर्गमूळ."],
+["Cubes व Cube Roots","घन आणि घनमूळ."],
+["Exponents","घातांकांचे नियम."],
+["Algebraic Identities","महत्त्वाच्या algebraic identities."],
+["Factorisation","algebraic expressions चे factorisation."],
+["Graphs","coordinates आणि graphs."],
+["Mensuration","area आणि volume."],
+["Geometry","quadrilaterals आणि polygons."],
+["Statistics","data चे analysis."],
+["Probability","basic probability."]
+],
+
+9:[
+["Number Systems","real numbers आणि irrational numbers."],
+["Polynomials","polynomials आणि त्यांचे operations."],
+["Coordinate Geometry","Cartesian plane आणि coordinates."],
+["Linear Equations","दोन variables असलेली equations."],
+["Euclid Geometry","Euclid चे axioms आणि postulates."],
+["Lines व Angles","रेषा आणि angles."],
+["Triangles","triangles चे congruence."],
+["Quadrilaterals","quadrilaterals चे गुणधर्म."],
+["Circles","circle चे basic theorems."],
+["Constructions","geometrical constructions."],
+["Heron's Formula","triangle चे area."],
+["Surface Areas व Volumes","3D shapes चे measurement."],
+["Statistics","mean, median आणि mode."],
+["Probability","elementary probability."]
+],
+
+10:[
+["Real Numbers","Euclid algorithm आणि real numbers."],
+["Polynomials","zeros आणि polynomial equations."],
+["Pair of Linear Equations","दोन linear equations सोडवणे."],
+["Quadratic Equations","quadratic equations आणि roots."],
+["Arithmetic Progressions","AP आणि nth term."],
+["Triangles","similarity आणि theorems."],
+["Coordinate Geometry","distance आणि section formula."],
+["Introduction to Trigonometry","sin, cos आणि tan."],
+["Applications of Trigonometry","heights आणि distances."],
+["Circles","tangent आणि circle theorems."],
+["Constructions","geometrical constructions."],
+["Areas Related to Circles","sector आणि segment."],
+["Surface Areas व Volumes","cylinder, cone आणि sphere."],
+["Statistics","grouped data आणि cumulative frequency."],
+["Probability","theoretical probability."]
+]
+
+};
+
+
+/* =====================================================
+   QUIZ DATA
+===================================================== */
+
+const quizzes = {
+
+"बेरीज":[
+["5 + 3 = ?",["6","7","8","9"],"8"],
+["12 + 5 = ?",["15","16","17","18"],"17"],
+["20 + 10 = ?",["20","25","30","40"],"30"]
+],
+
+"वजाबाकी":[
+["10 - 4 = ?",["4","5","6","7"],"6"],
+["20 - 8 = ?",["10","11","12","13"],"12"],
+["35 - 15 = ?",["15","20","25","30"],"20"]
+],
+
+"गुणाकार":[
+["3 × 4 = ?",["7","10","12","14"],"12"],
+["5 × 6 = ?",["20","25","30","35"],"30"],
+["7 × 8 = ?",["48","54","56","64"],"56"]
+],
+
+"भागाकार":[
+["12 ÷ 3 = ?",["2","3","4","5"],"4"],
+["20 ÷ 5 = ?",["2","3","4","5"],"4"],
+["36 ÷ 6 = ?",["4","5","6","7"],"6"]
+],
+
+"अपूर्णांक":[
+["1/2 म्हणजे काय?",["पूर्ण","अर्धा","दुप्पट","तिप्पट"],"अर्धा"]
+],
+
+"Percentage":[
+["50% म्हणजे किती?",["1/4","1/2","1/3","1"],"1/2"]
+],
+
+"Number Systems":[
+["√2 ही संख्या कोणत्या प्रकारची आहे?",["Rational","Irrational","Integer","Natural"],"Irrational"]
+],
+
+"Quadratic Equations":[
+["x² = 25 असल्यास x ची positive value?",["3","4","5","6"],"5"]
+],
+
+"Introduction to Trigonometry":[
+["sin 30° = ?",["0","1/2","1","2"],"1/2"]
+]
+
+};
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let selectedClass = 0;
+let selectedChapter = 0;
+let currentQuiz = [];
+let quizIndex = 0;
+let quizScore = 0;
+
+const progressKey = "gyansetu_offline_math_progress";
+const xpKey = "gyansetu_offline_math_xp";
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+function init(){
+
+  const grid = document.getElementById("classGrid");
+
+  grid.innerHTML = "";
+
+  for(let i=1;i<=10;i++){
+
+    const count = data[i].length;
+
+    grid.innerHTML += `
+      <button class="class-card" onclick="openClass(${i})">
+        <div class="class-icon">📘</div>
+        <div class="class-name">इयत्ता ${i}वी</div>
+        <div class="class-info">${count} Chapters</div>
+      </button>
+    `;
+  }
+
+  updateXP();
+  updateOverall();
+
+}
+
+
+/* =====================================================
+   OPEN CLASS
+===================================================== */
+
+function openClass(cls){
+
+  selectedClass = cls;
+
+  document.getElementById("home").style.display="none";
+  document.getElementById("lesson").style.display="none";
+  document.getElementById("quizBox").style.display="none";
+  document.getElementById("chapterList").style.display="block";
+
+  document.getElementById("classTitle").innerHTML =
+    `📚 इयत्ता ${cls}वी Mathematics`;
+
+  const box = document.getElementById("chapters");
+
+  box.innerHTML="";
+
+  data[cls].forEach((chapter,index)=>{
+
+    const key = getChapterKey(cls,index);
+
+    const done =
+      localStorage.getItem(key)==="done";
+
+    box.innerHTML += `
+      <div class="chapter-card"
+           onclick="openChapter(${index})">
+
+        <div class="chapter-number">
+          CHAPTER ${index+1}
+        </div>
+
+        <div class="chapter-title">
+          ${chapter[0]}
+        </div>
+
+        <div class="chapter-status">
+          ${done ? "✅ Completed" : "📖 Start Learning"}
+        </div>
+
+      </div>
+    `;
+
+  });
+
+}
+
+
+/* =====================================================
+   OPEN CHAPTER
+===================================================== */
+
+function openChapter(index){
+
+  selectedChapter = index;
+
+  const chapter = data[selectedClass][index];
+
+  document.getElementById("chapterList").style.display="none";
+  document.getElementById("lesson").style.display="block";
+  document.getElementById("quizBox").style.display="none";
+
+  document.getElementById("lessonBadge").textContent =
+    `इयत्ता ${selectedClass}वी • Chapter ${index+1}`;
+
+  document.getElementById("lessonTitle").textContent =
+    chapter[0];
+
+  document.getElementById("lessonContent").innerHTML = `
+
+    <p>
+      ${chapter[1]}
+    </p>
+
+    <h3>📖 Concept</h3>
+
+    <p>
+      या chapter मध्ये आपण गणितातील महत्त्वाची संकल्पना
+      step-by-step समजून घेणार आहोत. प्रश्न सोडवताना
+      प्रत्येक step काळजीपूर्वक विचार करा.
+    </p>
+
+    <h3>✏️ Example</h3>
+
+    <div class="example">
+      <b>उदाहरण:</b><br><br>
+      जर एखादा प्रश्न दिला असेल तर प्रथम त्यात
+      दिलेली माहिती ओळखा. त्यानंतर योग्य mathematical
+      operation निवडा आणि शेवटी उत्तर तपासा.
+    </div>
+
+    <h3>🧠 Smart Thinking</h3>
+
+    <div class="tip">
+      प्रश्न लगेच सोडवण्याऐवजी आधी विचार करा:
+      <br><br>
+      1️⃣ मला काय दिले आहे?<br>
+      2️⃣ मला काय शोधायचे आहे?<br>
+      3️⃣ कोणता नियम किंवा formula वापरायचा?<br>
+      4️⃣ माझे उत्तर योग्य आहे का?
+    </div>
+
+    <div class="practice">
+      <b>🎯 Practice Mission</b>
+      <p style="margin-top:8px">
+        या chapter वर स्वतः 5 उदाहरणे तयार करा
+        आणि ती वहीत सोडवा.
+      </p>
+    </div>
+
+  `;
+
+}
+
+
+/* =====================================================
+   QUIZ
+===================================================== */
+
+function startQuiz(){
+
+  const chapter = data[selectedClass][selectedChapter][0];
+
+  currentQuiz = quizzes[chapter];
+
+  if(!currentQuiz){
+
+    currentQuiz = generateQuiz(chapter);
+
+  }
+
+  quizIndex=0;
+  quizScore=0;
+
+  document.getElementById("lesson").style.display="none";
+  document.getElementById("quizBox").style.display="block";
+
+  showQuiz();
+
+}
+
+
+/* =====================================================
+   GENERATED QUIZ
+===================================================== */
+
+function generateQuiz(chapter){
+
+  const arr=[];
+
+  for(let i=0;i<5;i++){
+
+    const a =
+      selectedClass * 3 + i + 2;
+
+    const b =
+      i + 2;
+
+    const answer =
+      a + b;
+
+    arr.push([
+      `${a} + ${b} = ?`,
+      [
+        String(answer-2),
+        String(answer-1),
+        String(answer),
+        String(answer+2)
+      ],
+      String(answer)
+    ]);
+
+  }
+
+  return arr;
+
+}
+
+
+/* =====================================================
+   SHOW QUIZ
+===================================================== */
+
+function showQuiz(){
+
+  const q = currentQuiz[quizIndex];
+
+  document.getElementById("quizNumber").textContent =
+    `Question ${quizIndex+1} / ${currentQuiz.length}`;
+
+  document.getElementById("quizQuestion").textContent =
+    q[0];
+
+  document.getElementById("quizResult").textContent="";
+
+  document.getElementById("nextBtn").classList.add("hide");
+
+  const options =
+    document.getElementById("quizOptions");
+
+  options.innerHTML="";
+
+  q[1].forEach(option=>{
+
+    const btn =
+      document.createElement("button");
+
+    btn.className="option";
+    btn.textContent=option;
+
+    btn.onclick=()=>checkAnswer(btn,option,q[2]);
+
+    options.appendChild(btn);
+
+  });
+
+}
+
+
+/* =====================================================
+   CHECK ANSWER
+===================================================== */
+
+function checkAnswer(btn,selected,correct){
+
+  const buttons =
+    document.querySelectorAll(".option");
+
+  buttons.forEach(b=>b.disabled=true);
+
+  if(selected===correct){
+
+    btn.classList.add("correct");
+
+    document.getElementById("quizResult").textContent =
+      "✅ बरोबर! छान विचार केला.";
+
+    quizScore++;
+
+    addXP(10);
+
+  }else{
+
+    btn.classList.add("wrong");
+
+    document.getElementById("quizResult").textContent =
+      `❌ चुकीचे. योग्य उत्तर: ${correct}`;
+
+  }
+
+  document
+    .getElementById("nextBtn")
+    .classList.remove("hide");
+
+}
+
+
+/* =====================================================
+   NEXT
+===================================================== */
+
+function nextQuestion(){
+
+  quizIndex++;
+
+  if(quizIndex >= currentQuiz.length){
+
+    finishQuiz();
+    return;
+
+  }
+
+  showQuiz();
+
+}
+
+
+/* =====================================================
+   FINISH
+===================================================== */
+
+function finishQuiz(){
+
+  const key =
+    getChapterKey(selectedClass,selectedChapter);
+
+  localStorage.setItem(key,"done");
+
+  document.getElementById("quizBox").innerHTML = `
+
+    <div style="text-align:center">
+
+      <div style="font-size:55px">🏆</div>
+
+      <h2>Quiz Complete!</h2>
+
+      <p style="margin-top:10px">
+        तुमचा Score:
+        <b>${quizScore}/${currentQuiz.length}</b>
+      </p>
+
+      <p style="margin-top:10px">
+        ⭐ XP मिळाले!
+      </p>
+
+      <button
+        class="start-btn"
+        onclick="openClass(${selectedClass})">
+
+        📚 Chapters कडे जा
+
+      </button>
+
+    </div>
+
+  `;
+
+  updateOverall();
+
+}
+
+
+/* =====================================================
+   PROGRESS
+===================================================== */
+
+function getChapterKey(cls,index){
+
+  return `gyansetu_math_${cls}_${index}`;
+
+}
+
+
+function updateOverall(){
+
+  let total=0;
+  let done=0;
+
+  for(let cls=1;cls<=10;cls++){
+
+    total += data[cls].length;
+
+    data[cls].forEach((_,index)=>{
+
+      if(
+        localStorage.getItem(
+          getChapterKey(cls,index)
+        )==="done"
+      ){
+
+        done++;
+
+      }
+
+    });
+
+  }
+
+  const percent =
+    total===0 ? 0 : Math.round((done/total)*100);
+
+  document.getElementById("overallPercent").textContent =
+    percent+"%";
+
+  document.getElementById("overallBar").style.width =
+    percent+"%";
+
+}
+
+
+/* =====================================================
+   XP
+===================================================== */
+
+function addXP(amount){
+
+  let xp =
+    Number(localStorage.getItem(xpKey) || 0);
+
+  xp += amount;
+
+  localStorage.setItem(xpKey,xp);
+
+  updateXP();
+
+}
+
+
+function updateXP(){
+
+  document.getElementById("xp").textContent =
+    Number(localStorage.getItem(xpKey) || 0);
+
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+  const lesson =
+    document.getElementById("lesson").style.display;
+
+  const chapters =
+    document.getElementById("chapterList").style.display;
+
+  const quiz =
+    document.getElementById("quizBox").style.display;
+
+  if(quiz==="block"){
+
+    openChapter(selectedChapter);
+    return;
+
+  }
+
+  if(lesson==="block"){
+
+    openClass(selectedClass);
+    return;
+
+  }
+
+  if(chapters==="block"){
+
+    document.getElementById("chapterList").style.display="none";
+    document.getElementById("home").style.display="block";
+    return;
+
+  }
+
+  window.location.href="offline-study.html";
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+init();
+
+</script>
+
+</body>
+</html>
