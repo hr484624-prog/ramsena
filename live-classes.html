@@ -278,17 +278,6 @@ main{
   font-size:14px;
 }
 
-.audio-status{
-  padding:10px 12px;
-  border-radius:10px;
-  background:#eef7ff;
-  color:#1769e0;
-  margin-top:10px;
-  font-size:14px;
-  font-weight:bold;
-  text-align:center;
-}
-
 .video-wrap{
   position:relative;
   width:100%;
@@ -331,16 +320,14 @@ main{
 }
 
 .audio-badge{
-  position:absolute;
-  top:10px;
-  right:10px;
-  background:rgba(23,105,224,.9);
+  display:inline-block;
+  background:#168a3a;
   color:white;
-  padding:6px 10px;
+  padding:7px 12px;
   border-radius:20px;
-  font-size:12px;
+  font-size:13px;
+  margin-top:10px;
   font-weight:bold;
-  z-index:4;
 }
 
 .fullscreen-btn{
@@ -715,12 +702,6 @@ main{
           🔴 LIVE
         </span>
 
-        <span
-          id="sirAudioBadge"
-          class="audio-badge hidden">
-          🎙️ Audio ON
-        </span>
-
         <button
           class="fullscreen-btn"
           onclick="toggleFullscreen('sirVideoWrap')">
@@ -728,6 +709,12 @@ main{
         </button>
 
       </div>
+
+      <span
+        id="sirAudioBadge"
+        class="audio-badge hidden">
+        🎤 Sir Mic ON
+      </span>
 
       <span
         id="studentCountBadge"
@@ -842,31 +829,18 @@ main{
         Live Class connecting...
       </div>
 
-      <div
-        id="studentAudioStatus"
-        class="audio-status">
-        🔊 Sir चा Audio connect होत आहे...
-      </div>
-
       <div class="video-wrap" id="studentVideoWrap">
 
         <video
           id="studentVideo"
           autoplay
-          playsinline
-          controls>
+          playsinline>
         </video>
 
         <span
           id="studentLiveBadge"
           class="live-badge hidden">
           🔴 LIVE
-        </span>
-
-        <span
-          id="studentAudioBadge"
-          class="audio-badge hidden">
-          🔊 Audio ON
         </span>
 
         <button
@@ -876,6 +850,12 @@ main{
         </button>
 
       </div>
+
+      <span
+        id="studentAudioBadge"
+        class="audio-badge hidden">
+        🔊 Sir Audio ON
+      </span>
 
       <button
         id="enableAudioBtn"
@@ -1564,13 +1544,7 @@ function handleSirIncomingCall(call){
   sirCalls.push(call);
 
   try{
-
-    /*
-      Sir चा पूर्ण stream answer केला जातो.
-      यात Video + Microphone Audio दोन्ही tracks आहेत.
-    */
     call.answer(sirStream);
-
   }catch(e){}
 
   call.on(
@@ -1738,10 +1712,6 @@ async function startSirCamera(){
 
   try{
 
-    /*
-      IMPORTANT:
-      Sir च्या stream मध्ये Video + Microphone Audio दोन्ही घेतले जातात.
-    */
     const stream=
       await navigator.mediaDevices
         .getUserMedia({
@@ -1763,7 +1733,6 @@ async function startSirCamera(){
       .srcObject=stream;
 
     $("sirVideo").muted=true;
-    $("sirVideo").volume=0;
 
     const audioTracks=
       stream.getAudioTracks();
@@ -1797,13 +1766,8 @@ async function startSirCamera(){
 
     $("sirStatus")
       .textContent=
-        audioTracks.length>0
-        ? "🔴 Live Class सुरू आहे • 🎙️ Audio ON"
-        : "🔴 Live Class सुरू आहे • Audio उपलब्ध नाही";
+        "🔴 Live Class सुरू आहे • 🎤 Mic ON";
 
-    /*
-      Sir recording = Video + Audio
-    */
     startSirRecording();
 
     broadcastClassStatus();
@@ -1811,7 +1775,7 @@ async function startSirCamera(){
   }catch(error){
 
     console.error(
-      "Camera/Microphone error:",
+      "Sir media error:",
       error
     );
 
@@ -1824,7 +1788,7 @@ async function startSirCamera(){
 
     showMessage(
       "Camera / Microphone सुरू झाला नाही",
-      "Camera आणि Microphone permission Allow करा.\n\nSir चा आवाज Student ला ऐकवण्यासाठी Microphone permission आवश्यक आहे.",
+      "Camera आणि Microphone permission Allow करा.",
       "❌"
     );
   }
@@ -1875,13 +1839,6 @@ function startSirRecording(){
   if(
     typeof MediaRecorder==="undefined"
   ){
-
-    showMessage(
-      "Recording Unsupported",
-      "या browser मध्ये video recording उपलब्ध नाही.",
-      "⚠️"
-    );
-
     return;
   }
 
@@ -1918,23 +1875,8 @@ function startSirRecording(){
         }
       };
 
-    recorder.onerror=
-      function(event){
-
-        console.error(
-          "Sir recorder error:",
-          event
-        );
-
-      };
-
     recorder.onstop=
       function(){
-
-        /*
-          recorder variable local आहे,
-          त्यामुळे stop नंतरही mimeType सुरक्षित राहतो.
-        */
 
         if(
           sirRecordingChunks.length===0
@@ -1958,7 +1900,7 @@ function startSirRecording(){
           );
 
         saveRecording(
-          "Sir Live Class",
+          "Sir Live Class - Video + Audio",
           blob,
           "sir"
         );
@@ -2138,10 +2080,6 @@ function endSirClass(showPopup=true){
     }
   );
 
-  /*
-    Recording stop करण्यापूर्वी stream चालू आहे,
-    त्यामुळे शेवटचा audio/video data recorder ला मिळतो.
-  */
   stopSirRecording();
 
   sirCalls.forEach(
@@ -2237,13 +2175,13 @@ function endSirClass(showPopup=true){
 
         showMessage(
           "Class Ended",
-          "Live Class समाप्त झाली.\nRecording मध्ये Video + Audio save होत आहे.",
+          "Live Class समाप्त झाली.\nRecording Video + Audio save होत आहे.",
           "✅"
         );
       }
 
     },
-    700
+    400
   );
 }
 
@@ -2268,13 +2206,8 @@ function stopSirRecording(){
     }
 
   }catch(e){}
-
 }
 
-
-/* =========================
-   SIR MEDIA
-========================= */
 
 function stopSirMedia(){
 
@@ -2587,7 +2520,7 @@ function handleStudentData(data){
 
 
 /* =========================
-   STUDENT RECEIVE STREAM
+   STUDENT CALL
 ========================= */
 
 function createReceiveStream(){
@@ -2618,10 +2551,6 @@ function createReceiveStream(){
 }
 
 
-/* =========================
-   STUDENT LIVE CALL
-========================= */
-
 function startStudentCall(){
 
   if(
@@ -2637,10 +2566,6 @@ function startStudentCall(){
 
   try{
 
-    /*
-      Student कडून camera/mic पाठवला जात नाही.
-      हा call Sir चा Video + Audio receive करण्यासाठी आहे.
-    */
     studentCall=
       peer.call(
         studentHostId,
@@ -2651,7 +2576,7 @@ function startStudentCall(){
 
     showMessage(
       "Live Error",
-      "Live video/audio connect करता आला नाही.",
+      "Live video connect करता आला नाही.",
       "❌"
     );
 
@@ -2669,32 +2594,31 @@ function startStudentCall(){
       studentRemoteStream=
         remoteStream;
 
+      const video=
+        $("studentVideo");
+
+      video.srcObject=
+        remoteStream;
+
+      video.muted=false;
+      video.volume=1;
+
       const audioTracks=
         remoteStream.getAudioTracks();
 
-      const videoTracks=
-        remoteStream.getVideoTracks();
+      if(audioTracks.length>0){
 
-      console.log(
-        "Remote video tracks:",
-        videoTracks.length
-      );
+        audioTracks.forEach(
+          function(track){
+            track.enabled=true;
+          }
+        );
 
-      console.log(
-        "Remote audio tracks:",
-        audioTracks.length
-      );
+        $("studentAudioBadge")
+          .classList
+          .remove("hidden");
 
-      $("studentVideo")
-        .srcObject=
-          remoteStream;
-
-      /*
-        Browser autoplay audio block करू शकतो,
-        म्हणून video muted=false ठेवले आहे.
-      */
-      $("studentVideo").muted=false;
-      $("studentVideo").volume=1;
+      }
 
       $("studentJoinArea")
         .classList
@@ -2708,74 +2632,45 @@ function startStudentCall(){
         .classList
         .remove("hidden");
 
-      if(audioTracks.length>0){
-
-        audioTracks.forEach(
-          function(track){
-            track.enabled=true;
-          }
-        );
-
-        $("studentAudioStatus")
-          .textContent=
-            "🔊 Sir चा Audio उपलब्ध आहे.";
-
-        $("enableAudioBtn")
-          .classList
-          .remove("hidden");
-
-      }else{
-
-        $("studentAudioStatus")
-          .textContent=
-            "⚠️ Sir चा Audio track मिळाला नाही.";
-
-        $("enableAudioBtn")
-          .classList
-          .add("hidden");
-      }
-
       $("studentLiveStatus")
         .textContent=
           audioTracks.length>0
-          ? "🔴 Live Class चालू आहे • 🔊 Audio"
-          : "🔴 Live Class चालू आहे";
+          ? "🔴 Live Class चालू आहे • 🔊 Sir Audio उपलब्ध"
+          : "🔴 Live Class चालू आहे.";
 
-      /*
-        User gesture नसेल तर browser autoplay रोकू शकतो.
-      */
-      $("studentVideo")
-        .play()
+      video.play()
         .then(
           function(){
 
             if(audioTracks.length>0){
 
-              $("studentAudioBadge")
-                .classList
-                .remove("hidden");
+              $("enableAudioBtn")
+                .textContent=
+                  "🔊 Sir Audio ON";
+
+              $("enableAudioBtn")
+                .style.background=
+                  "#168a3a";
 
             }
 
           }
         )
         .catch(
-          function(){
+          function(error){
 
-            if(audioTracks.length>0){
+            console.log(
+              "Autoplay with audio blocked:",
+              error
+            );
 
-              $("studentAudioStatus")
-                .textContent=
-                  "🔊 Sir चा आवाज सुरू करण्यासाठी Enable Sir Audio दाबा.";
-
-            }
+            $("enableAudioBtn")
+              .classList
+              .remove("hidden");
 
           }
         );
 
-      /*
-        Student recording = Sir चा Video + Audio
-      */
       startStudentRecording(
         remoteStream
       );
@@ -2790,7 +2685,7 @@ function startStudentCall(){
       if(studentRemoteStream){
 
         stopStudentClass(
-          "Live video/audio connection बंद झाली."
+          "Live video connection बंद झाली."
         );
       }
 
@@ -2813,7 +2708,7 @@ function startStudentCall(){
       );
 
       stopStudentClass(
-        "Live video/audio connection बंद झाली."
+        "Live video connection बंद झाली."
       );
     }
   );
@@ -2836,38 +2731,36 @@ function enableStudentAudio(){
   video.muted=false;
   video.volume=1;
 
-  const stream=
-    video.srcObject;
+  const tracks=
+    studentRemoteStream
+      ? studentRemoteStream.getAudioTracks()
+      : [];
 
-  if(stream){
+  tracks.forEach(
+    function(track){
+      track.enabled=true;
+    }
+  );
 
-    stream
-      .getAudioTracks()
-      .forEach(
-        function(track){
-
-          track.enabled=true;
-
-        }
-      );
-  }
-
-  video
-    .play()
+  video.play()
     .then(
       function(){
 
-        $("studentAudioStatus")
+        $("enableAudioBtn")
           .textContent=
-            "🔊 Sir चा Audio ON आहे.";
+            "🔊 Sir Audio ON";
+
+        $("enableAudioBtn")
+          .style.background=
+            "#168a3a";
 
         $("studentAudioBadge")
           .classList
           .remove("hidden");
 
-        $("enableAudioBtn")
+        $("studentLiveStatus")
           .textContent=
-            "🔊 Audio ON";
+            "🔴 Live Class चालू आहे • 🔊 Sir Audio ON";
 
       }
     )
@@ -2875,13 +2768,13 @@ function enableStudentAudio(){
       function(error){
 
         console.error(
-          "Audio play error:",
+          "Enable audio error:",
           error
         );
 
         showMessage(
           "Audio सुरू झाला नाही",
-          "Video वर Play दाबून पुन्हा Audio ON करा.",
+          "Video वर Play करा आणि फोनचा Media Volume वाढवा.",
           "🔊"
         );
       }
@@ -2909,12 +2802,21 @@ function startStudentRecording(remoteStream){
     return;
   }
 
-  try{
+  const audioTracks=
+    remoteStream.getAudioTracks();
 
-    /*
-      remoteStream मध्ये Sir चा Video + Audio असतो.
-      त्यामुळे MediaRecorder दोन्ही record करतो.
-    */
+  console.log(
+    "Student received audio tracks:",
+    audioTracks.length
+  );
+
+  audioTracks.forEach(
+    function(track){
+      track.enabled=true;
+    }
+  );
+
+  try{
 
     const mimeType=
       getRecorderMimeType();
@@ -2946,16 +2848,6 @@ function startStudentRecording(remoteStream){
         }
       };
 
-    recorder.onerror=
-      function(event){
-
-        console.error(
-          "Student recorder error:",
-          event
-        );
-
-      };
-
     recorder.onstop=
       function(){
 
@@ -2981,7 +2873,7 @@ function startStudentRecording(remoteStream){
           );
 
         saveRecording(
-          "Student Watched Class",
+          "Student Watched Class - Video + Audio",
           blob,
           "student"
         );
@@ -3067,16 +2959,13 @@ function stopStudentClass(message){
   }
 
   $("studentVideo")
-    .pause();
-
-  $("studentVideo")
-    .muted=true;
-
-  $("studentVideo")
-    .removeAttribute("src");
-
-  $("studentVideo")
     .srcObject=null;
+
+  $("studentVideo")
+    .muted=false;
+
+  $("studentVideo")
+    .volume=1;
 
   if(studentConnection){
 
@@ -3114,15 +3003,15 @@ function stopStudentClass(message){
     .classList
     .remove("hidden");
 
-  resetStudentJoinButton();
-
-  $("studentAudioStatus")
-    .textContent=
-      "🔊 Sir चा Audio connect झाल्यावर येथे दिसेल.";
-
   $("enableAudioBtn")
     .textContent=
       "🔊 Enable Sir Audio";
+
+  $("enableAudioBtn")
+    .style.background=
+      "#1769e0";
+
+  resetStudentJoinButton();
 
   $("studentStatus")
     .textContent=
@@ -3146,7 +3035,7 @@ function stopStudentClass(message){
         }
 
       },
-      700
+      500
     );
   }
 }
@@ -3540,10 +3429,6 @@ function loadRecordingsInto(id){
 
 function renderRecordings(records){
 
-  /*
-    Main page वर list नाही ठेवत.
-    Recorded Class popup मधून recordings दिसतील.
-  */
 }
 
 
@@ -3604,8 +3489,8 @@ function renderRecordingContainer(
 
       type.textContent=
         recording.type==="sir"
-        ? "👨‍🏫 Sir Class"
-        : "👨‍🎓 Student Watched";
+        ? "👨‍🏫 Sir Class • 🎤 Audio"
+        : "👨‍🎓 Student Watched • 🔊 Audio";
 
       const date=
         document.createElement("div");
@@ -3742,8 +3627,11 @@ function playRecording(recording){
     .src=
       currentPlaybackUrl;
 
-  $("recordingVideo").muted=false;
-  $("recordingVideo").volume=1;
+  $("recordingVideo")
+    .muted=false;
+
+  $("recordingVideo")
+    .volume=1;
 
   $("playerTitle")
     .textContent=
