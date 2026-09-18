@@ -2425,4 +2425,2073 @@ showMessage(
 
 /* =====================================================
 STUDENT CONNECTION
-=====================================================
+===================================================== */
+
+function connectStudentToSir(){
+
+if(
+!peer ||
+!studentHostId
+){
+return;
+}
+
+
+studentConnection=
+peer.connect(
+studentHostId,
+{
+reliable:true
+}
+);
+
+
+studentConnection.on(
+"open",
+function(){
+
+$("studentStatus")
+.textContent=
+"✅ Sir ला connect झाले.";
+
+try{
+
+studentConnection.send({
+type:"STUDENT_JOINED"
+});
+
+}catch(e){}
+
+}
+);
+
+
+studentConnection.on(
+"data",
+function(data){
+
+handleStudentData(data);
+
+}
+);
+
+
+studentConnection.on(
+"close",
+function(){
+
+if(!studentCall){
+
+resetStudentJoinButton();
+
+$("studentStatus")
+.textContent=
+"❌ Sir connection बंद झाली.";
+
+}
+
+}
+);
+
+
+studentConnection.on(
+"error",
+function(error){
+
+console.error(error);
+
+}
+);
+
+}
+
+
+/* =========================
+STUDENT DATA
+========================= */
+
+function handleStudentData(data){
+
+if(
+!data ||
+typeof data!=="object"
+){
+return;
+}
+
+
+if(
+data.type==="CLASS_STATUS"
+){
+
+if(data.live){
+
+$("studentStatus")
+.textContent=
+"🔴 Live Class आहे. Video + Audio connect होत आहे...";
+
+startStudentCall();
+
+}else{
+
+$("studentStatus")
+.textContent=
+"⏳ Sir ने अजून Live Class सुरू केलेली नाही.";
+
+}
+
+return;
+
+}
+
+
+if(
+data.type==="CLASS_ENDED"
+){
+
+stopStudentClass(
+data.message ||
+"Sir ने Live Class समाप्त केली."
+);
+
+}
+
+}
+
+
+/* =====================================================
+IMPORTANT AUDIO RECEIVE STREAM
+===================================================== */
+
+function createReceiveStream(){
+
+try{
+
+/* =========================
+VIDEO TRACK
+========================= */
+
+const canvas=
+document.createElement("canvas");
+
+canvas.width=2;
+canvas.height=2;
+
+const context=
+canvas.getContext("2d");
+
+context.fillStyle="#000";
+context.fillRect(
+0,
+0,
+2,
+2
+);
+
+const stream=
+canvas.captureStream(1);
+
+
+/* =========================
+AUDIO TRACK
+========================= */
+
+/*
+Student ने Start Class button दाबलेला
+असतो, त्यामुळे AudioContext सुरू करता येतो.
+
+हा silent outgoing audio track आहे.
+तो Sir ला आवाज पाठवत नाही.
+
+याचा उपयोग WebRTC मध्ये audio channel
+negotiate करण्यासाठी होतो.
+
+Sir कडून येणारा actual microphone
+audio Student ला मिळतो.
+*/
+
+const AudioContext=
+window.AudioContext ||
+window.webkitAudioContext;
+
+if(AudioContext){
+
+studentAudioContext=
+new AudioContext();
+
+if(
+studentAudioContext.state==="suspended"
+){
+
+studentAudioContext.resume()
+.catch(function(){});
+
+}
+
+
+const oscillator=
+studentAudioContext.createOscillator();
+
+const gain=
+studentAudioContext.createGain();
+
+const destination=
+studentAudioContext
+.createMediaStreamDestination();
+
+
+/*
+Silent outgoing audio.
+*/
+
+gain.gain.value=0;
+
+oscillator.connect(gain);
+
+gain.connect(destination);
+
+oscillator.start();
+
+
+const audioTrack=
+destination
+.stream
+.getAudioTracks()[0];
+
+
+if(audioTrack){
+
+audioTrack.enabled=true;
+
+stream.addTrack(
+audioTrack
+);
+
+}
+
+studentOscillator=
+oscillator;
+
+}
+
+
+return stream;
+
+
+}catch(error){
+
+console.error(
+"Receive stream error:",
+error
+);
+
+return new MediaStream();
+
+}
+
+}
+
+
+/* =====================================================
+STUDENT CALL
+===================================================== */
+
+function startStudentCall(){
+
+if(
+!peer ||
+!studentHostId ||
+studentCall
+){
+return;
+}
+
+
+const receiveStream=
+createReceiveStream();
+
+
+try{
+
+/*
+IMPORTANT:
+Student call now contains
+VIDEO + AUDIO track.
+*/
+
+studentCall=
+peer.call(
+studentHostId,
+receiveStream
+);
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Live Error",
+"Live connection सुरू करता आली नाही.",
+"❌"
+);
+
+return;
+
+}
+
+
+if(!studentCall){
+return;
+}
+
+
+studentCall.on(
+"stream",
+function(remoteStream){
+
+studentRemoteStream=
+remoteStream;
+
+
+/* =========================
+REMOTE VIDEO
+========================= */
+
+const video=
+$("studentVideo");
+
+video.srcObject=
+remoteStream;
+
+
+/* =========================
+REMOTE AUDIO
+========================= */
+
+video.muted=false;
+
+video.volume=1;
+
+
+const audioTracks=
+remoteStream.getAudioTracks();
+
+
+console.log(
+"Sir Audio Tracks:",
+audioTracks.length
+);
+
+
+audioTracks.forEach(
+function(track){
+
+track.enabled=true;
+
+}
+);
+
+
+if(audioTracks.length>0){
+
+$("studentAudioBadge")
+.classList
+.remove("hidden");
+
+$("studentLiveStatus")
+.textContent=
+"🔴 Live Class चालू आहे • 🔊 Sir Audio उपलब्ध";
+
+}else{
+
+$("studentLiveStatus")
+.textContent=
+"🔴 Live Class चालू आहे • Audio track सापडला नाही";
+
+}
+
+
+/* =========================
+SHOW LIVE AREA
+========================= */
+
+$("studentJoinArea")
+.classList
+.add("hidden");
+
+$("studentLiveArea")
+.classList
+.remove("hidden");
+
+$("studentLiveBadge")
+.classList
+.remove("hidden");
+
+
+/* =========================
+TRY AUTOPLAY
+========================= */
+
+video.play()
+.then(
+function(){
+
+if(audioTracks.length>0){
+
+$("enableAudioBtn")
+.textContent=
+"🔊 Sir Audio ON";
+
+$("enableAudioBtn")
+.style.background=
+"#168a3a";
+
+}
+
+}
+)
+.catch(
+function(error){
+
+console.log(
+"Autoplay with audio blocked:",
+error
+);
+
+/*
+Android Chrome मध्ये sound autoplay
+block होऊ शकतो.
+Button user manually दाबू शकतो.
+*/
+
+$("enableAudioBtn")
+.classList
+.remove("hidden");
+
+}
+);
+
+
+/* =========================
+RECORD VIDEO + AUDIO
+========================= */
+
+startStudentRecording(
+remoteStream
+);
+
+}
+);
+
+
+/* =========================
+CALL CLOSED
+========================= */
+
+studentCall.on(
+"close",
+function(){
+
+if(studentRemoteStream){
+
+stopStudentClass(
+"Live video connection बंद झाली."
+);
+
+}
+
+}
+);
+
+
+studentCall.on(
+"error",
+function(error){
+
+console.error(
+"Student Call Error:",
+error
+);
+
+stopStudentClass(
+"Live video connection बंद झाली."
+);
+
+showMessage(
+"Live Error",
+"Sir चा Live video/audio connection बंद झाला.",
+"❌"
+);
+
+}
+);
+
+}
+
+
+/* =====================================================
+ENABLE SIR AUDIO
+===================================================== */
+
+function enableStudentAudio(){
+
+const video=
+$("studentVideo");
+
+if(!video){
+return;
+}
+
+
+video.muted=false;
+
+video.volume=1;
+
+
+if(studentRemoteStream){
+
+const tracks=
+studentRemoteStream
+.getAudioTracks();
+
+tracks.forEach(
+function(track){
+
+track.enabled=true;
+
+}
+);
+
+}
+
+
+video.play()
+.then(
+function(){
+
+$("enableAudioBtn")
+.textContent=
+"🔊 Sir Audio ON";
+
+$("enableAudioBtn")
+.style.background=
+"#168a3a";
+
+$("studentAudioBadge")
+.classList
+.remove("hidden");
+
+$("studentLiveStatus")
+.textContent=
+"🔴 Live Class चालू आहे • 🔊 Sir Audio ON";
+
+}
+)
+.catch(
+function(error){
+
+console.error(
+"Audio error:",
+error
+);
+
+showMessage(
+"Audio सुरू झाला नाही",
+"Video वर Play करा आणि फोनचा Media Volume वाढवा.",
+"🔊"
+);
+
+}
+);
+
+}
+
+
+/* =====================================================
+STUDENT RECORDING
+===================================================== */
+
+function startStudentRecording(remoteStream){
+
+if(
+!remoteStream ||
+typeof MediaRecorder==="undefined"
+){
+return;
+}
+
+if(studentRecorder){
+return;
+}
+
+
+const audioTracks=
+remoteStream.getAudioTracks();
+
+
+console.log(
+"Recording Audio Tracks:",
+audioTracks.length
+);
+
+
+audioTracks.forEach(
+function(track){
+
+track.enabled=true;
+
+}
+);
+
+
+try{
+
+const mimeType=
+getRecorderMimeType();
+
+const recorder=
+mimeType
+? new MediaRecorder(
+remoteStream,
+{mimeType:mimeType}
+)
+: new MediaRecorder(
+remoteStream
+);
+
+
+studentRecorder=recorder;
+
+studentRecordingChunks=[];
+
+
+recorder.ondataavailable=
+function(event){
+
+if(
+event.data &&
+event.data.size>0
+){
+
+studentRecordingChunks.push(
+event.data
+);
+
+}
+
+};
+
+
+recorder.onstop=
+function(){
+
+if(
+!studentRecordingChunks.length
+){
+
+if(studentRecorder===recorder){
+studentRecorder=null;
+}
+
+return;
+
+}
+
+
+const blob=
+new Blob(
+studentRecordingChunks,
+{
+type:
+recorder.mimeType ||
+"video/webm"
+}
+);
+
+
+saveRecording(
+"Student Watched Class - Video + Audio",
+blob,
+"student"
+);
+
+
+studentRecordingChunks=[];
+
+
+if(studentRecorder===recorder){
+
+studentRecorder=null;
+
+}
+
+};
+
+
+recorder.start(1000);
+
+
+}catch(error){
+
+console.error(
+"Student recording error:",
+error
+);
+
+}
+
+}
+
+
+/* =====================================================
+STOP STUDENT RECORDING
+===================================================== */
+
+function stopStudentRecording(){
+
+if(!studentRecorder){
+return;
+}
+
+const recorder=
+studentRecorder;
+
+try{
+
+if(
+recorder.state!=="inactive"
+){
+
+recorder.stop();
+
+}
+
+}catch(e){}
+
+}
+
+
+/* =====================================================
+STOP STUDENT CLASS
+===================================================== */
+
+function stopStudentClass(message){
+
+const hadClass=
+!!studentCall ||
+!!studentRemoteStream;
+
+
+/* =========================
+STOP RECORDING
+========================= */
+
+stopStudentRecording();
+
+
+/* =========================
+CLOSE CALL
+========================= */
+
+if(studentCall){
+
+try{
+studentCall.close();
+}catch(e){}
+
+studentCall=null;
+
+}
+
+
+/* =========================
+STOP REMOTE STREAM
+========================= */
+
+if(studentRemoteStream){
+
+studentRemoteStream
+.getTracks()
+.forEach(
+function(track){
+
+try{
+track.stop();
+}catch(e){}
+
+}
+);
+
+studentRemoteStream=null;
+
+}
+
+
+/* =========================
+STOP AUDIO CONTEXT
+========================= */
+
+if(studentOscillator){
+
+try{
+studentOscillator.stop();
+}catch(e){}
+
+studentOscillator=null;
+
+}
+
+
+if(studentAudioContext){
+
+try{
+studentAudioContext.close();
+}catch(e){}
+
+studentAudioContext=null;
+
+}
+
+
+/* =========================
+VIDEO RESET
+========================= */
+
+$("studentVideo")
+.srcObject=null;
+
+$("studentVideo").muted=false;
+
+$("studentVideo").volume=1;
+
+
+/* =========================
+CONNECTION
+========================= */
+
+if(studentConnection){
+
+try{
+studentConnection.close();
+}catch(e){}
+
+studentConnection=null;
+
+}
+
+
+/* =========================
+PEER
+========================= */
+
+if(peer){
+
+try{
+peer.destroy();
+}catch(e){}
+
+peer=null;
+
+}
+
+studentHostId=null;
+
+
+/* =========================
+UI RESET
+========================= */
+
+$("studentLiveBadge")
+.classList.add("hidden");
+
+$("studentAudioBadge")
+.classList.add("hidden");
+
+$("studentLiveArea")
+.classList.add("hidden");
+
+$("studentJoinArea")
+.classList.remove("hidden");
+
+
+$("enableAudioBtn")
+.textContent=
+"🔊 Enable Sir Audio";
+
+$("enableAudioBtn")
+.style.background=
+"#1769e0";
+
+
+resetStudentJoinButton();
+
+
+$("studentStatus")
+.textContent=
+"Class बंद झाली.";
+
+
+if(hadClass){
+
+setTimeout(
+function(){
+
+loadRecordingsInto(
+"recordingsPopupList"
+);
+
+if(message){
+
+showMessage(
+"Class Ended",
+message+
+"\nVideo + Audio recording save होत आहे.",
+"✅"
+);
+
+}
+
+},
+500
+);
+
+}
+
+}
+
+
+/* =========================
+RESET BUTTON
+========================= */
+
+function resetStudentJoinButton(){
+
+$("joinStudentBtn")
+.disabled=false;
+
+$("joinStudentBtn")
+.textContent=
+"▶️ Start Class";
+
+}
+
+
+/* =========================
+LEAVE
+========================= */
+
+function notifyStudentLeft(){
+
+if(
+studentConnection &&
+studentConnection.open
+){
+
+try{
+
+studentConnection.send({
+type:"STUDENT_LEFT"
+});
+
+}catch(e){}
+
+}
+
+}
+
+
+function leaveStudentClass(){
+
+notifyStudentLeft();
+
+stopStudentClass(
+"तुम्ही Live Class मधून बाहेर पडलात."
+);
+
+}
+
+
+/* =====================================================
+FULLSCREEN
+===================================================== */
+
+async function toggleFullscreen(id){
+
+const element=$(id);
+
+if(!element){
+return;
+}
+
+try{
+
+if(document.fullscreenElement){
+
+await document.exitFullscreen();
+
+return;
+
+}
+
+if(element.requestFullscreen){
+
+await element.requestFullscreen();
+
+return;
+
+}
+
+if(element.webkitRequestFullscreen){
+
+element.webkitRequestFullscreen();
+
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+
+/* =====================================================
+RECORDED POPUP
+===================================================== */
+
+function openRecordedPopup(){
+
+$("recordedOverlay")
+.classList
+.remove("hidden");
+
+loadRecordingsInto(
+"recordingsPopupList"
+);
+
+}
+
+
+function closeRecordedPopup(){
+
+$("recordedOverlay")
+.classList
+.add("hidden");
+
+}
+
+
+/* =====================================================
+INDEXED DB
+===================================================== */
+
+let db=null;
+
+const DB_NAME=
+"GyanSetuLiveDB";
+
+const DB_VERSION=1;
+
+const STORE_NAME=
+"recordings";
+
+
+function openDatabase(){
+
+return new Promise(
+function(resolve,reject){
+
+if(db){
+
+resolve(db);
+
+return;
+
+}
+
+
+const request=
+indexedDB.open(
+DB_NAME,
+DB_VERSION
+);
+
+
+request.onupgradeneeded=
+function(event){
+
+const database=
+event.target.result;
+
+if(
+!database.objectStoreNames
+.contains(STORE_NAME)
+){
+
+const store=
+database.createObjectStore(
+STORE_NAME,
+{
+keyPath:"id",
+autoIncrement:true
+}
+);
+
+store.createIndex(
+"createdAt",
+"createdAt",
+{
+unique:false
+}
+);
+
+}
+
+};
+
+
+request.onsuccess=
+function(event){
+
+db=
+event.target.result;
+
+resolve(db);
+
+};
+
+
+request.onerror=
+function(){
+
+reject(
+request.error
+);
+
+};
+
+}
+);
+
+}
+
+
+/* =====================================================
+SAVE RECORDING
+===================================================== */
+
+function saveRecording(
+title,
+blob,
+type
+){
+
+if(
+!blob ||
+blob.size===0
+){
+return;
+}
+
+
+openDatabase()
+.then(
+function(database){
+
+return new Promise(
+function(resolve,reject){
+
+const transaction=
+database.transaction(
+[STORE_NAME],
+"readwrite"
+);
+
+const store=
+transaction.objectStore(
+STORE_NAME
+);
+
+
+store.add({
+
+title:title,
+
+blob:blob,
+
+type:type,
+
+createdAt:
+new Date().toISOString(),
+
+size:blob.size
+
+});
+
+
+transaction.oncomplete=
+function(){
+
+resolve();
+
+};
+
+
+transaction.onerror=
+function(){
+
+reject(
+transaction.error
+);
+
+};
+
+}
+);
+
+}
+)
+.then(
+function(){
+
+loadRecordingsInto(
+"recordingsPopupList"
+);
+
+}
+)
+.catch(
+function(error){
+
+console.error(
+"Save recording error:",
+error
+);
+
+}
+);
+
+}
+
+
+/* =====================================================
+GET RECORDINGS
+===================================================== */
+
+function getAllRecordings(){
+
+return openDatabase()
+.then(
+function(database){
+
+return new Promise(
+function(resolve,reject){
+
+const transaction=
+database.transaction(
+[STORE_NAME],
+"readonly"
+);
+
+const store=
+transaction.objectStore(
+STORE_NAME
+);
+
+const request=
+store.getAll();
+
+
+request.onsuccess=
+function(){
+
+const records=
+request.result || [];
+
+
+records.sort(
+function(a,b){
+
+return new Date(
+b.createdAt
+)
+-
+new Date(
+a.createdAt
+);
+
+}
+);
+
+
+resolve(records);
+
+};
+
+
+request.onerror=
+function(){
+
+reject(
+request.error
+);
+
+};
+
+}
+);
+
+}
+);
+
+}
+
+
+/* =====================================================
+LOAD RECORDINGS
+========================================================= */
+
+function loadRecordingsInto(id){
+
+getAllRecordings()
+.then(
+function(records){
+
+renderRecordingContainer(
+$(id),
+records
+);
+
+}
+)
+.catch(
+function(error){
+
+console.error(error);
+
+}
+);
+
+}
+
+
+/* =====================================================
+RENDER
+========================================================= */
+
+function renderRecordingContainer(
+container,
+recordings
+){
+
+if(!container){
+return;
+}
+
+container.innerHTML="";
+
+
+if(
+!recordings ||
+recordings.length===0
+){
+
+const empty=
+document.createElement("div");
+
+empty.className=
+"empty-recordings";
+
+empty.textContent=
+"अजून कोणतीही Recorded Class नाही.";
+
+container.appendChild(empty);
+
+return;
+
+}
+
+
+recordings.forEach(
+function(recording){
+
+const card=
+document.createElement("div");
+
+card.className=
+"record-card";
+
+
+const title=
+document.createElement("div");
+
+title.className=
+"record-title";
+
+title.textContent=
+recording.title ||
+"GyanSetu Live Class";
+
+
+const type=
+document.createElement("span");
+
+type.className=
+"record-type";
+
+type.textContent=
+recording.type==="sir"
+? "👨‍🏫 Sir Class • 🎤 Audio"
+: "👨‍🎓 Student Class • 🔊 Audio";
+
+
+const date=
+document.createElement("div");
+
+date.className=
+"record-date";
+
+date.textContent=
+formatDate(
+recording.createdAt
+);
+
+
+const size=
+document.createElement("div");
+
+size.className=
+"record-size";
+
+size.textContent=
+formatFileSize(
+recording.size ||
+recording.blob?.size ||
+0
+);
+
+
+const actions=
+document.createElement("div");
+
+actions.className=
+"record-actions";
+
+
+const watch=
+document.createElement("button");
+
+watch.className=
+"small-btn watch-btn";
+
+watch.textContent=
+"▶️ Watch";
+
+watch.onclick=
+function(){
+
+playRecording(
+recording
+);
+
+};
+
+
+const download=
+document.createElement("button");
+
+download.className=
+"small-btn download-btn";
+
+download.textContent=
+"⬇️ Download";
+
+download.onclick=
+function(){
+
+downloadRecording(
+recording
+);
+
+};
+
+
+const remove=
+document.createElement("button");
+
+remove.className=
+"small-btn delete-btn";
+
+remove.textContent=
+"🗑️ Delete";
+
+remove.onclick=
+function(){
+
+deleteRecording(
+recording.id
+);
+
+};
+
+
+actions.appendChild(watch);
+actions.appendChild(download);
+actions.appendChild(remove);
+
+
+card.appendChild(title);
+card.appendChild(type);
+card.appendChild(date);
+card.appendChild(size);
+card.appendChild(actions);
+
+
+container.appendChild(card);
+
+}
+);
+
+}
+
+
+/* =====================================================
+PLAY
+========================================================= */
+
+function playRecording(recording){
+
+if(
+!recording ||
+!recording.blob
+){
+
+showMessage(
+"Video Error",
+"Recording file उपलब्ध नाही.",
+"❌"
+);
+
+return;
+
+}
+
+
+if(currentPlaybackUrl){
+
+URL.revokeObjectURL(
+currentPlaybackUrl
+);
+
+currentPlaybackUrl=null;
+
+}
+
+
+currentPlaybackUrl=
+URL.createObjectURL(
+recording.blob
+);
+
+
+$("recordingVideo")
+.src=
+currentPlaybackUrl;
+
+$("recordingVideo").muted=false;
+
+$("recordingVideo").volume=1;
+
+
+$("playerTitle")
+.textContent=
+recording.title ||
+"🎬 Recorded Class";
+
+
+$("playerOverlay")
+.classList
+.remove("hidden");
+
+
+$("recordingVideo")
+.play()
+.catch(
+function(){}
+);
+
+}
+
+
+/* =====================================================
+CLOSE PLAYER
+========================================================= */
+
+function closePlayerPopup(){
+
+const video=
+$("recordingVideo");
+
+try{
+video.pause();
+}catch(e){}
+
+video.removeAttribute("src");
+
+video.load();
+
+
+if(currentPlaybackUrl){
+
+URL.revokeObjectURL(
+currentPlaybackUrl
+);
+
+currentPlaybackUrl=null;
+
+}
+
+
+$("playerOverlay")
+.classList
+.add("hidden");
+
+}
+
+
+/* =====================================================
+DOWNLOAD
+========================================================= */
+
+function downloadRecording(recording){
+
+if(
+!recording ||
+!recording.blob
+){
+return;
+}
+
+
+const url=
+URL.createObjectURL(
+recording.blob
+);
+
+
+const a=
+document.createElement("a");
+
+a.href=url;
+
+a.download=
+safeFileName(
+recording.title ||
+"GyanSetu Recorded Class"
+)+
+".webm";
+
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+
+setTimeout(
+function(){
+
+URL.revokeObjectURL(url);
+
+},
+1000
+);
+
+}
+
+
+/* =====================================================
+DELETE
+========================================================= */
+
+function deleteRecording(id){
+
+if(!id){
+return;
+}
+
+
+openDatabase()
+.then(
+function(database){
+
+return new Promise(
+function(resolve,reject){
+
+const transaction=
+database.transaction(
+[STORE_NAME],
+"readwrite"
+);
+
+const store=
+transaction.objectStore(
+STORE_NAME
+);
+
+store.delete(id);
+
+
+transaction.oncomplete=
+function(){
+
+resolve();
+
+};
+
+
+transaction.onerror=
+function(){
+
+reject(
+transaction.error
+);
+
+};
+
+}
+);
+
+}
+)
+.then(
+function(){
+
+loadRecordingsInto(
+"recordingsPopupList"
+);
+
+}
+)
+.catch(
+function(error){
+
+console.error(error);
+
+}
+);
+
+}
+
+
+/* =====================================================
+HELPERS
+========================================================= */
+
+function formatDate(date){
+
+try{
+
+return new Date(date)
+.toLocaleString(
+"en-IN",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+);
+
+}catch(e){
+
+return String(date || "");
+
+}
+
+}
+
+
+function formatFileSize(bytes){
+
+if(
+!bytes ||
+bytes<=0
+){
+
+return "0 KB";
+
+}
+
+
+const units=[
+"Bytes",
+"KB",
+"MB",
+"GB"
+];
+
+let index=0;
+
+let size=bytes;
+
+
+while(
+size>=1024 &&
+index<units.length-1
+){
+
+size/=1024;
+
+index++;
+
+}
+
+
+return size.toFixed(
+index===0 ? 0 : 2
+)+
+" "+
+units[index];
+
+}
+
+
+function safeFileName(value){
+
+return String(
+value ||
+"recording"
+)
+.replace(
+/[<>:"/\\|?*\x00-\x1F]/g,
+"_"
+)
+.replace(
+/\s+/g,
+" "
+)
+.trim()
+.slice(0,80);
+
+}
+
+
+/* =====================================================
+INPUT
+========================================================= */
+
+$("channelInput")
+.addEventListener(
+"input",
+function(){
+
+this.value=
+this.value
+.toUpperCase()
+.replace(
+/[^A-Z0-9-]/g,
+""
+)
+.slice(0,50);
+
+}
+);
+
+
+$("channelInput")
+.addEventListener(
+"keydown",
+function(event){
+
+if(event.key==="Enter"){
+
+joinStudentClass();
+
+}
+
+}
+);
+
+
+$("channelNameInput")
+.addEventListener(
+"input",
+function(){
+
+this.value=
+this.value
+.replace(/\s+/g," ")
+.slice(0,50);
+
+}
+);
+
+
+/* =====================================================
+OUTSIDE CLICK
+========================================================= */
+
+$("roleOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("roleOverlay")
+){
+
+closeRolePopup();
+
+}
+
+}
+);
+
+
+$("sirOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("sirOverlay")
+){
+
+closeSirPopup();
+
+}
+
+}
+);
+
+
+$("studentOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("studentOverlay")
+){
+
+if(!studentCall){
+
+closeStudentPopup();
+
+}
+
+}
+
+}
+);
+
+
+$("recordedOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("recordedOverlay")
+){
+
+closeRecordedPopup();
+
+}
+
+}
+);
+
+
+$("playerOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("playerOverlay")
+){
+
+closePlayerPopup();
+
+}
+
+}
+);
+
+
+$("channelEditOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("channelEditOverlay")
+){
+
+closeEditChannelPopup();
+
+}
+
+}
+);
+
+
+/* =====================================================
+PAGE EXIT
+========================================================= */
+
+window.addEventListener(
+"beforeunload",
+function(){
+
+if(studentConnection){
+
+notifyStudentLeft();
+
+}
+
+}
+);
+
+
+/* =====================================================
+START
+========================================================= */
+
+document.addEventListener(
+"DOMContentLoaded",
+function(){
+
+openDatabase()
+.then(
+function(){
+
+loadRecordingsInto(
+"recordingsPopupList"
+);
+
+}
+)
+.catch(
+function(error){
+
+console.error(error);
+
+}
+);
+
+}
+);
+
+</script>
+
+</body>
+</html>
