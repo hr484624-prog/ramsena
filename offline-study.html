@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Offline Study</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f7fb;
+  color:#172033;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#f4f7fb;
+}
+
+/* HEADER */
+
+.header{
+  height:70px;
+  background:white;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:#eef3fa;
+  font-size:23px;
+}
+
+.title{
+  flex:1;
+  text-align:center;
+  font-size:19px;
+  font-weight:bold;
+}
+
+/* MAIN */
+
+.main{
+  padding:18px 15px 35px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#1769e0,#5b9cff);
+  color:white;
+  border-radius:24px;
+  padding:23px 19px;
+  margin-bottom:16px;
+  box-shadow:0 10px 25px rgba(23,105,224,.25);
+}
+
+.hero h1{
+  font-size:24px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* LOCK */
+
+.lock-card{
+  background:white;
+  border-radius:22px;
+  padding:22px 18px;
+  box-shadow:0 5px 18px rgba(0,0,0,.07);
+  margin-bottom:15px;
+}
+
+.lock-icon{
+  width:70px;
+  height:70px;
+  border-radius:20px;
+  background:#edf4ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:36px;
+  margin:auto auto 15px;
+}
+
+.lock-card h2{
+  text-align:center;
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.lock-card p{
+  text-align:center;
+  color:#666;
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* PROGRESS */
+
+.progress-card{
+  background:white;
+  border-radius:20px;
+  padding:18px;
+  margin-bottom:15px;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+  font-weight:bold;
+}
+
+.progress{
+  height:13px;
+  background:#e9edf4;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#1769e0,#4d9cff);
+  transition:.3s;
+}
+
+/* BUTTON */
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:16px;
+  background:#1769e0;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  margin-top:15px;
+  cursor:pointer;
+}
+
+.primary:active{
+  transform:scale(.98);
+}
+
+/* QUIZ */
+
+.quiz{
+  display:none;
+}
+
+.question-card{
+  background:white;
+  border-radius:22px;
+  padding:20px 17px;
+  box-shadow:0 5px 18px rgba(0,0,0,.07);
+}
+
+.q-number{
+  color:#1769e0;
+  font-weight:bold;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.question{
+  font-size:19px;
+  font-weight:bold;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+.option{
+  width:100%;
+  border:1px solid #e2e7ef;
+  background:#f8faff;
+  border-radius:14px;
+  padding:14px;
+  text-align:left;
+  font-size:15px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.option:active{
+  transform:scale(.98);
+}
+
+.option.correct{
+  background:#e9f9ef;
+  border-color:#28a745;
+}
+
+.option.wrong{
+  background:#fff0f0;
+  border-color:#dc3545;
+}
+
+.next{
+  display:none;
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px;
+  background:#172033;
+  color:white;
+  font-weight:bold;
+  font-size:15px;
+  margin-top:8px;
+}
+
+/* UNLOCK */
+
+.unlock{
+  display:none;
+}
+
+.unlock-card{
+  background:white;
+  border-radius:24px;
+  padding:25px 18px;
+  text-align:center;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+.success{
+  font-size:55px;
+  margin-bottom:12px;
+}
+
+.unlock-card h2{
+  color:#1769e0;
+  margin-bottom:10px;
+}
+
+.unlock-card p{
+  color:#666;
+  line-height:1.6;
+  font-size:14px;
+}
+
+.code-box{
+  margin-top:18px;
+  background:#f1f5fa;
+  border-radius:15px;
+  padding:18px;
+  font-size:25px;
+  letter-spacing:4px;
+  font-weight:bold;
+  color:#172033;
+}
+
+.copy{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:15px;
+  background:#1769e0;
+  color:white;
+  font-weight:bold;
+  margin-top:12px;
+}
+
+/* ENTER CODE */
+
+.enter{
+  margin-top:15px;
+  background:white;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 5px 18px rgba(0,0,0,.06);
+}
+
+.enter h3{
+  margin-bottom:8px;
+}
+
+.enter p{
+  color:#777;
+  font-size:13px;
+  margin-bottom:13px;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  border:1px solid #dce2eb;
+  border-radius:13px;
+  font-size:18px;
+  outline:none;
+  text-align:center;
+  letter-spacing:3px;
+}
+
+.error{
+  display:none;
+  color:#d93025;
+  font-size:13px;
+  text-align:center;
+  margin-top:10px;
+}
+
+.offline-home{
+  display:none;
+}
+
+.feature{
+  background:white;
+  border-radius:17px;
+  padding:17px;
+  margin-bottom:10px;
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="header">
+
+<button class="back" onclick="goBack()">←</button>
+
+<div class="title">
+📥 Offline Study
+</div>
+
+</div>
+
+
+<div class="main">
+
+<!-- LOCK SCREEN -->
+
+<div id="lockedPage">
+
+<div class="hero">
+
+<h1>🔐 Offline Study Mode</h1>
+
+<p>
+GyanSetu चा पूर्ण Offline Study Mode unlock करण्यासाठी
+1000 unique अभ्यास प्रश्न सोडवा.
+</p>
+
+</div>
+
+
+<div class="lock-card">
+
+<div class="lock-icon">
+🔒
+</div>
+
+<h2>
+Study करून Unlock करा
+</h2>
+
+<p>
+एकदा प्रश्न बरोबर/चुकीचे सोडवल्यानंतर
+तो प्रश्न पुन्हा तुमच्या challenge मध्ये येणार नाही.
+Progress तुमच्या device वर save राहील.
+</p>
+
+</div>
+
+
+<div class="progress-card">
+
+<div class="progress-top">
+
+<span>🏆 Challenge Progress</span>
+
+<span id="progressText">
+0 / 1000
+</span>
+
+</div>
+
+<div class="progress">
+
+<div
+id="progressBar"
+class="progress-bar">
+</div>
+
+</div>
+
+<button
+class="primary"
+onclick="startQuiz()">
+
+🎯 1000 Question Challenge सुरू करा
+
+</button>
+
+</div>
+
+
+<div class="enter">
+
+<h3>🔑 Unlock Code आहे?</h3>
+
+<p>
+1000 questions पूर्ण केल्यानंतर मिळालेला code येथे टाका.
+</p>
+
+<input
+id="codeInput"
+type="password"
+inputmode="numeric"
+maxlength="10"
+placeholder="10 digit code">
+
+<button
+class="primary"
+onclick="unlockWithCode()">
+
+🔓 Offline Mode Unlock
+
+</button>
+
+<div
+id="codeError"
+class="error">
+
+❌ Code चुकीचा आहे.
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- QUIZ -->
+
+<div
+id="quizPage"
+class="quiz">
+
+<div class="question-card">
+
+<div
+id="questionNumber"
+class="q-number">
+Question 1 / 1000
+</div>
+
+<div
+id="questionText"
+class="question">
+Question
+</div>
+
+<div id="options"></div>
+
+<button
+id="nextButton"
+class="next"
+onclick="nextQuestion()">
+
+पुढचा प्रश्न →
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- UNLOCK SUCCESS -->
+
+<div
+id="unlockPage"
+class="unlock">
+
+<div class="unlock-card">
+
+<div class="success">
+🏆
+</div>
+
+<h2>
+1000 Questions Complete!
+</h2>
+
+<p>
+अभिनंदन! तुम्ही Offline Study Challenge पूर्ण केला आहे.
+आता तुमच्याकडे GyanSetu Offline Unlock Code आहे.
+</p>
+
+<div class="code-box">
+5923574822
+</div>
+
+<button
+class="copy"
+onclick="copyCode()">
+
+📋 Code Copy करा
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- OFFLINE HOME -->
+
+<div
+id="offlineHome"
+class="offline-home">
+
+<div class="hero">
+
+<h1>👑 GyanSetu Offline</h1>
+
+<p>
+Offline Study Mode successfully unlocked.
+</p>
+
+</div>
+
+<div class="feature">
+📚 Mathematics — इयत्ता 1 ते 10
+</div>
+
+<div class="feature">
+🔬 Science
+</div>
+
+<div class="feature">
+🏛️ History
+</div>
+
+<div class="feature">
+⚖️ Civics
+</div>
+
+<div class="feature">
+🌍 Geography
+</div>
+
+<div class="feature">
+🗣️ Languages
+</div>
+
+<div class="feature">
+💻 Code Lab
+</div>
+
+<div class="feature">
+🛡️ Cyber Security Course
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+const TOTAL_QUESTIONS = 1000;
+
+/*
+  Code plain text मध्ये ठेवलेला नाही.
+  SHA-256 hash:
+  5923574822
+*/
+const UNLOCK_HASH =
+"cdf41ce316a935e338ebd55e32d465434e2380a191515901af5a35a38879da28";
+
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+const STORAGE_PROGRESS =
+"gyansetu_offline_progress";
+
+const STORAGE_UNLOCK =
+"gyansetu_offline_unlocked";
+
+const STORAGE_USED =
+"gyansetu_offline_used_questions";
+
+
+/* =====================================================
+   QUESTION BANK
+===================================================== */
+
+/*
+  येथे actual 1000 questions जोडायचे आहेत.
+
+  प्रत्येक question ला unique id असणे आवश्यक आहे.
+
+  Format:
+
+  {
+    id: 1,
+    question: "...",
+    options: ["...","...","...","..."],
+    answer: 0
+  }
+*/
+
+const questionBank = [];
+
+
+/* =====================================================
+   DEMO BANK GENERATOR
+===================================================== */
+
+/*
+  हा generator system test करण्यासाठी आहे.
+  Final version मध्ये याच्या जागी actual
+  GyanSetu educational 1000-question bank ठेवायचा आहे.
+*/
+
+for(let i=1;i<=1000;i++){
+
+  let a = i;
+  let b = (i % 20) + 1;
+
+  questionBank.push({
+
+    id:i,
+
+    question:
+      `${a} + ${b} = ?`,
+
+    options:[
+      String(a+b),
+      String(a+b+1),
+      String(a+b-1),
+      String(a+b+2)
+    ],
+
+    answer:0
+
+  });
+
+}
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentQuestion = 0;
+
+let quizQuestions = [];
+
+let answered = false;
+
+
+/* =====================================================
+   LOAD PROGRESS
+===================================================== */
+
+function getProgress(){
+
+  return Number(
+    localStorage.getItem(STORAGE_PROGRESS) || 0
+  );
+
+}
+
+
+function getUsedQuestions(){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(STORAGE_USED) || "[]"
+    );
+
+  }catch(e){
+
+    return [];
+
+  }
+
+}
+
+
+function saveUsedQuestions(list){
+
+  localStorage.setItem(
+    STORAGE_USED,
+    JSON.stringify(list)
+  );
+
+}
+
+
+/* =====================================================
+   UPDATE UI
+===================================================== */
+
+function updateProgress(){
+
+  const progress = getProgress();
+
+  document.getElementById(
+    "progressText"
+  ).textContent =
+    progress + " / " + TOTAL_QUESTIONS;
+
+  document.getElementById(
+    "progressBar"
+  ).style.width =
+    (progress / TOTAL_QUESTIONS * 100) + "%";
+
+}
+
+
+/* =====================================================
+   START QUIZ
+===================================================== */
+
+function startQuiz(){
+
+  const progress = getProgress();
+
+  if(progress >= TOTAL_QUESTIONS){
+
+    showUnlock();
+
+    return;
+
+  }
+
+  document.getElementById(
+    "lockedPage"
+  ).style.display = "none";
+
+  document.getElementById(
+    "quizPage"
+  ).style.display = "block";
+
+
+  const used = new Set(
+    getUsedQuestions()
+  );
+
+  quizQuestions =
+    questionBank.filter(
+      q => !used.has(q.id)
+    );
+
+
+  /*
+    कोणताही completed question
+    पुन्हा घेतला जाणार नाही.
+  */
+
+  currentQuestion = 0;
+
+  showQuestion();
+
+}
+
+
+/* =====================================================
+   SHOW QUESTION
+===================================================== */
+
+function showQuestion(){
+
+  if(currentQuestion >= quizQuestions.length){
+
+    finishQuiz();
+
+    return;
+
+  }
+
+  answered = false;
+
+  const q =
+    quizQuestions[currentQuestion];
+
+
+  document.getElementById(
+    "questionNumber"
+  ).textContent =
+    "Question " +
+    (getProgress()+1) +
+    " / " +
+    TOTAL_QUESTIONS;
+
+
+  document.getElementById(
+    "questionText"
+  ).textContent =
+    q.question;
+
+
+  const options =
+    document.getElementById("options");
+
+  options.innerHTML = "";
+
+
+  q.options.forEach(
+    function(option,index){
+
+      const button =
+        document.createElement("button");
+
+      button.className =
+        "option";
+
+      button.textContent =
+        option;
+
+      button.onclick =
+        function(){
+
+          selectAnswer(
+            button,
+            index,
+            q
+          );
+
+        };
+
+      options.appendChild(button);
+
+    }
+  );
+
+
+  document.getElementById(
+    "nextButton"
+  ).style.display =
+    "none";
+
+}
+
+
+/* =====================================================
+   ANSWER
+===================================================== */
+
+function selectAnswer(
+  button,
+  index,
+  question
+){
+
+  if(answered) return;
+
+  answered = true;
+
+
+  const buttons =
+    document.querySelectorAll(".option");
+
+
+  buttons.forEach(
+    function(btn){
+
+      btn.disabled = true;
+
+    }
+  );
+
+
+  /*
+    प्रश्न एकदा answer केला की
+    तो permanently used list मध्ये जातो.
+  */
+
+  const used =
+    getUsedQuestions();
+
+
+  if(!used.includes(question.id)){
+
+    used.push(question.id);
+
+    saveUsedQuestions(used);
+
+  }
+
+
+  let progress =
+    getProgress() + 1;
+
+
+  localStorage.setItem(
+    STORAGE_PROGRESS,
+    progress
+  );
+
+
+  if(index === question.answer){
+
+    button.classList.add("correct");
+
+  }else{
+
+    button.classList.add("wrong");
+
+    buttons[
+      question.answer
+    ].classList.add("correct");
+
+  }
+
+
+  updateProgress();
+
+
+  document.getElementById(
+    "nextButton"
+  ).style.display =
+    "block";
+
+}
+
+
+/* =====================================================
+   NEXT
+===================================================== */
+
+function nextQuestion(){
+
+  const progress =
+    getProgress();
+
+
+  if(progress >= TOTAL_QUESTIONS){
+
+    finishQuiz();
+
+    return;
+
+  }
+
+
+  currentQuestion++;
+
+  showQuestion();
+
+}
+
+
+/* =====================================================
+   FINISH
+===================================================== */
+
+function finishQuiz(){
+
+  document.getElementById(
+    "quizPage"
+  ).style.display =
+    "none";
+
+
+  if(getProgress() >= TOTAL_QUESTIONS){
+
+    localStorage.setItem(
+      STORAGE_UNLOCK,
+      "true"
+    );
+
+    showUnlock();
+
+  }else{
+
+    document.getElementById(
+      "lockedPage"
+    ).style.display =
+      "block";
+
+    updateProgress();
+
+  }
+
+}
+
+
+/* =====================================================
+   SHOW UNLOCK
+===================================================== */
+
+function showUnlock(){
+
+  document.getElementById(
+    "lockedPage"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "quizPage"
+  ).style.display =
+    "none";
+
+  document.getElementById(
+    "unlockPage"
+  ).style.display =
+    "block";
+
+}
+
+
+/* =====================================================
+   SHA-256
+===================================================== */
+
+async function sha256(text){
+
+  const data =
+    new TextEncoder().encode(text);
+
+  const hashBuffer =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
+
+  const hashArray =
+    Array.from(
+      new Uint8Array(hashBuffer)
+    );
+
+  return hashArray
+    .map(
+      b => b.toString(16).padStart(2,"0")
+    )
+    .join("");
+
+}
+
+
+/* =====================================================
+   UNLOCK CODE
+===================================================== */
+
+async function unlockWithCode(){
+
+  const input =
+    document.getElementById(
+      "codeInput"
+    ).value.trim();
+
+
+  const hash =
+    await sha256(input);
+
+
+  if(hash === UNLOCK_HASH){
+
+    localStorage.setItem(
+      STORAGE_UNLOCK,
+      "true"
+    );
+
+
+    document.getElementById(
+      "codeError"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "lockedPage"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "offlineHome"
+    ).style.display =
+      "block";
+
+  }else{
+
+    document.getElementById(
+      "codeError"
+    ).style.display =
+      "block";
+
+  }
+
+}
+
+
+/* =====================================================
+   COPY CODE
+===================================================== */
+
+function copyCode(){
+
+  navigator.clipboard.writeText(
+    "5923574822"
+  );
+
+  alert(
+    "Unlock Code copied!"
+  );
+
+}
+
+
+/* =====================================================
+   EXISTING UNLOCK CHECK
+===================================================== */
+
+function checkUnlock(){
+
+  updateProgress();
+
+
+  if(
+    localStorage.getItem(
+      STORAGE_UNLOCK
+    ) === "true"
+  ){
+
+    document.getElementById(
+      "lockedPage"
+    ).style.display =
+      "none";
+
+    document.getElementById(
+      "offlineHome"
+    ).style.display =
+      "block";
+
+  }
+
+}
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+  window.location.href =
+    "username.html";
+
+}
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+checkUnlock();
+
+</script>
+
+</body>
+</html>
