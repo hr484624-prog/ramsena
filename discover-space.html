@@ -1,0 +1,763 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>GyanSetu Space Discovery</title><style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#020617;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* STAR BACKGROUND */
+#stars{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    background:
+      radial-gradient(circle at 50% 20%,#172554 0%,#020617 45%,#000 100%);
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+    from{opacity:.2;transform:scale(.7)}
+    to{opacity:1;transform:scale(1.4)}
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:10;
+    background:rgba(2,6,23,.88);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid rgba(255,255,255,.1);
+    padding:14px;
+}
+
+.topbar{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:bold;
+}
+
+.logo span{
+    color:#38bdf8;
+}
+
+.starwalk-btn{
+    border:0;
+    border-radius:12px;
+    padding:10px 15px;
+    background:#2563eb;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* HERO */
+
+.hero{
+    max-width:1100px;
+    margin:auto;
+    padding:55px 18px 30px;
+    text-align:center;
+}
+
+.hero h1{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+.hero h1 span{
+    color:#38bdf8;
+}
+
+.hero p{
+    color:#cbd5e1;
+    font-size:16px;
+    line-height:1.6;
+}
+
+/* SEARCH */
+
+.search-box{
+    max-width:650px;
+    margin:25px auto;
+    display:flex;
+    background:#0f172a;
+    border:1px solid #334155;
+    border-radius:16px;
+    overflow:hidden;
+}
+
+.search-box input{
+    flex:1;
+    background:transparent;
+    border:0;
+    outline:0;
+    color:white;
+    padding:16px;
+    font-size:16px;
+}
+
+.search-box button{
+    border:0;
+    background:#0ea5e9;
+    color:white;
+    padding:0 20px;
+    font-size:20px;
+    cursor:pointer;
+}
+
+/* SKY */
+
+.sky{
+    max-width:1100px;
+    height:300px;
+    margin:20px auto 40px;
+    position:relative;
+    overflow:hidden;
+    border-radius:24px;
+    border:1px solid rgba(255,255,255,.1);
+    background:
+      radial-gradient(circle at 50% 50%,rgba(30,64,175,.3),transparent 45%),
+      #020617;
+}
+
+.sky-title{
+    position:absolute;
+    top:20px;
+    left:20px;
+    z-index:2;
+    color:#cbd5e1;
+}
+
+.planet-orbit{
+    position:absolute;
+    width:180px;
+    height:180px;
+    border:1px solid rgba(56,189,248,.2);
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+}
+
+.planet{
+    position:absolute;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle at 30% 30%,#bae6fd,#0284c7 55%,#082f49);
+    box-shadow:0 0 45px #0ea5e9;
+}
+
+/* SECTION */
+
+.section{
+    max-width:1100px;
+    margin:auto;
+    padding:10px 18px 60px;
+}
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.section-head h2{
+    font-size:25px;
+}
+
+.count{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+/* CARDS */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:16px;
+}
+
+.card{
+    background:rgba(15,23,42,.9);
+    border:1px solid #1e293b;
+    border-radius:18px;
+    padding:18px;
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    border-color:#0ea5e9;
+}
+
+.card-planet{
+    width:85px;
+    height:85px;
+    margin:5px auto 15px;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%,#fde68a,#f97316 50%,#431407);
+    box-shadow:0 0 30px rgba(249,115,22,.35);
+}
+
+.card h3{
+    text-align:center;
+    font-size:19px;
+    margin-bottom:12px;
+}
+
+.info{
+    display:flex;
+    justify-content:space-between;
+    padding:7px 0;
+    border-bottom:1px solid #1e293b;
+    font-size:13px;
+}
+
+.info span:first-child{
+    color:#94a3b8;
+}
+
+.info span:last-child{
+    color:#e2e8f0;
+    text-align:right;
+}
+
+.details{
+    margin-top:14px;
+    width:100%;
+    border:0;
+    padding:10px;
+    border-radius:10px;
+    background:#1d4ed8;
+    color:white;
+    cursor:pointer;
+}
+
+/* LOADING */
+
+.loading{
+    text-align:center;
+    padding:35px;
+    color:#94a3b8;
+}
+
+/* MORE */
+
+.more{
+    display:block;
+    margin:25px auto;
+    border:1px solid #334155;
+    background:#0f172a;
+    color:white;
+    padding:12px 25px;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+/* POPUP */
+
+.popup-bg{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:100;
+}
+
+.popup{
+    max-width:500px;
+    width:100%;
+    background:#0f172a;
+    border:1px solid #334155;
+    border-radius:20px;
+    padding:22px;
+    max-height:85vh;
+    overflow:auto;
+}
+
+.popup h2{
+    margin-bottom:15px;
+}
+
+.popup p{
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+.close{
+    margin-top:20px;
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+}
+
+.error{
+    text-align:center;
+    padding:25px;
+    color:#fca5a5;
+}
+
+@media(max-width:600px){
+
+    .hero h1{
+        font-size:30px;
+    }
+
+    .sky{
+        height:250px;
+    }
+
+    .starwalk-btn{
+        padding:9px 11px;
+        font-size:12px;
+    }
+}
+</style></head><body><div id="stars"></div><header>
+    <div class="topbar">    <div class="logo">
+        🌌 Gyan<span>Setu</span>
+    </div>
+
+    <!-- CHANGE THIS LINK TO YOUR STAR WALK HTML FILE -->
+    <button class="starwalk-btn"
+    onclick="location.href='starwalk.html'">
+        🔭 Star Walk
+    </button>
+
+</div>
+
+</header><section class="hero"><h1>
+    Explore the <span>Universe</span> 🌌
+</h1>
+
+<p>
+    Discover planets found beyond our Solar System,
+    explore their properties and learn about the amazing universe.
+</p>
+
+<div class="search-box">
+
+    <input
+        id="search"
+        type="text"
+        placeholder="Search exoplanet..."
+        oninput="searchPlanets()"
+    >
+
+    <button onclick="searchPlanets()">🔎</button>
+
+</div>
+
+</section><section class="sky"><div class="sky-title">
+    ✨ Live-style Space View
+</div>
+
+<div class="planet-orbit"></div>
+
+<div class="planet"></div>
+
+</section><section class="section"><div class="section-head">
+
+    <h2>🪐 Discovered Exoplanets</h2>
+
+    <div class="count" id="count">
+        Loading...
+    </div>
+
+</div>
+
+<div id="planetGrid" class="grid"></div>
+
+<div id="loading" class="loading">
+    🔭 Loading discoveries...
+</div>
+
+<button
+    id="moreBtn"
+    class="more"
+    onclick="loadMore()"
+    style="display:none">
+    Load More
+</button>
+
+</section><!-- POPUP --><div id="popupBg" class="popup-bg"><div class="popup">
+
+    <h2 id="popupTitle"></h2>
+
+    <div id="popupContent"></div>
+
+    <button
+        class="close"
+        onclick="closePopup()">
+        Close
+    </button>
+
+</div>
+
+</div><script>
+
+/* CREATE RANDOM STARS */
+
+const stars = document.getElementById("stars");
+
+for(let i=0;i<180;i++){
+
+    const star=document.createElement("div");
+
+    star.className="star";
+
+    star.style.left=Math.random()*100+"%";
+    star.style.top=Math.random()*100+"%";
+
+    star.style.animationDelay=(Math.random()*3)+"s";
+
+    star.style.opacity=Math.random();
+
+    stars.appendChild(star);
+}
+
+
+/*
+ NASA EXOPLANET ARCHIVE TAP SERVICE
+
+ We request a large confirmed-planet dataset.
+*/
+
+const API =
+"https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query="+
+encodeURIComponent(
+`select pl_name,hostname,discoverymethod,disc_year,
+pl_orbper,pl_rade,pl_bmasse,sy_dist
+from ps
+where default_flag=1
+order by disc_year desc
+`
+)+
+"&format=json";
+
+
+let planets=[];
+let shown=0;
+const PAGE_SIZE=24;
+
+
+/* LOAD DATA */
+
+async function loadPlanets(){
+
+    const loading=document.getElementById("loading");
+
+    try{
+
+        const response=await fetch(API);
+
+        if(!response.ok){
+            throw new Error("NASA API unavailable");
+        }
+
+        planets=await response.json();
+
+        loading.style.display="none";
+
+        document.getElementById("count").textContent =
+            planets.length.toLocaleString()+" discoveries loaded";
+
+        renderPlanets();
+
+    }catch(error){
+
+        loading.innerHTML=`
+            <div class="error">
+                ⚠️ Space database could not be loaded.<br><br>
+                Please check your internet connection and try again.
+            </div>
+        `;
+
+    }
+}
+
+
+/* PLANET CARD */
+
+function planetCard(p){
+
+    const name=p.pl_name || "Unknown";
+
+    const distance=
+        p.sy_dist ?
+        Number(p.sy_dist).toFixed(1)+" pc":
+        "Unknown";
+
+    const radius=
+        p.pl_rade ?
+        Number(p.pl_rade).toFixed(2)+" Earth":
+        "Unknown";
+
+    const mass=
+        p.pl_bmasse ?
+        Number(p.pl_bmasse).toFixed(2)+" Earth":
+        "Unknown";
+
+    const period=
+        p.pl_orbper ?
+        Number(p.pl_orbper).toFixed(2)+" days":
+        "Unknown";
+
+    return `
+
+    <div class="card">
+
+        <div class="card-planet"></div>
+
+        <h3>${escapeHTML(name)}</h3>
+
+        <div class="info">
+            <span>Host Star</span>
+            <span>${escapeHTML(p.hostname || "Unknown")}</span>
+        </div>
+
+        <div class="info">
+            <span>Discovered</span>
+            <span>${p.disc_year || "Unknown"}</span>
+        </div>
+
+        <div class="info">
+            <span>Distance</span>
+            <span>${distance}</span>
+        </div>
+
+        <div class="info">
+            <span>Radius</span>
+            <span>${radius}</span>
+        </div>
+
+        <div class="info">
+            <span>Mass</span>
+            <span>${mass}</span>
+        </div>
+
+        <button
+            class="details"
+            onclick="showDetails(${shown})">
+            🔭 Explore Planet
+        </button>
+
+    </div>
+
+    `;
+}
+
+
+/* RENDER */
+
+function renderPlanets(){
+
+    const grid=document.getElementById("planetGrid");
+
+    const end=Math.min(
+        shown+PAGE_SIZE,
+        planets.length
+    );
+
+    for(let i=shown;i<end;i++){
+
+        grid.innerHTML += planetCard(planets[i]);
+
+        shown++;
+    }
+
+    document.getElementById("moreBtn").style.display =
+        shown < planets.length ? "block" : "none";
+}
+
+
+/* LOAD MORE */
+
+function loadMore(){
+
+    renderPlanets();
+
+}
+
+
+/* SEARCH */
+
+function searchPlanets(){
+
+    const query=
+        document.getElementById("search")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const grid=document.getElementById("planetGrid");
+
+    if(!query){
+
+        grid.innerHTML="";
+        shown=0;
+        renderPlanets();
+        return;
+    }
+
+    const results=planets.filter(p=>
+        (p.pl_name || "").toLowerCase().includes(query) ||
+        (p.hostname || "").toLowerCase().includes(query)
+    );
+
+    grid.innerHTML="";
+
+    if(results.length===0){
+
+        grid.innerHTML=`
+            <div class="error">
+                🔎 No planet found.
+            </div>
+        `;
+
+        return;
+    }
+
+    results.slice(0,60).forEach((p,index)=>{
+
+        const old=shown;
+
+        shown=index;
+
+        grid.innerHTML += planetCard(p);
+
+        shown=old;
+
+    });
+
+}
+
+
+/* DETAILS POPUP */
+
+function showDetails(index){
+
+    const p=planets[index];
+
+    if(!p) return;
+
+    document.getElementById("popupTitle").textContent =
+        "🪐 "+p.pl_name;
+
+    document.getElementById("popupContent").innerHTML=`
+
+        <p>
+        <b>Host Star:</b> ${escapeHTML(p.hostname || "Unknown")}
+        </p>
+
+        <p>
+        <b>Discovery year:</b> ${p.disc_year || "Unknown"}
+        </p>
+
+        <p>
+        <b>Discovery method:</b>
+        ${escapeHTML(p.discoverymethod || "Unknown")}
+        </p>
+
+        <p>
+        <b>Orbital period:</b>
+        ${p.pl_orbper ?
+        Number(p.pl_orbper).toFixed(2)+" days":
+        "Unknown"}
+        </p>
+
+        <p>
+        <b>Planet radius:</b>
+        ${p.pl_rade ?
+        Number(p.pl_rade).toFixed(2)+" Earth radii":
+        "Unknown"}
+        </p>
+
+        <p>
+        <b>Planet mass:</b>
+        ${p.pl_bmasse ?
+        Number(p.pl_bmasse).toFixed(2)+" Earth masses":
+        "Unknown"}
+        </p>
+
+        <p>
+        <b>Distance from Earth:</b>
+        ${p.sy_dist ?
+        Number(p.sy_dist).toFixed(2)+" parsecs":
+        "Unknown"}
+        </p>
+
+    `;
+
+    document.getElementById("popupBg").style.display="flex";
+}
+
+
+function closePopup(){
+
+    document.getElementById("popupBg").style.display="none";
+
+}
+
+
+/* SECURITY */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+/* START */
+
+loadPlanets();
+
+</script></body>
+</html>
