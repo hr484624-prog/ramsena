@@ -1,763 +1,935 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>GyanSetu Space Discovery</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu • Discover Space</title>
+
+<style>
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 body{
-    font-family:Arial, sans-serif;
-    background:#020617;
-    color:white;
-    overflow-x:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 20% 10%,#172554 0%,transparent 25%),
+    radial-gradient(circle at 80% 30%,#312e81 0%,transparent 22%),
+    linear-gradient(180deg,#020617,#030712 55%,#000);
+  color:white;
+  min-height:100vh;
 }
 
-/* STAR BACKGROUND */
-#stars{
-    position:fixed;
-    inset:0;
-    z-index:-2;
-    background:
-      radial-gradient(circle at 50% 20%,#172554 0%,#020617 45%,#000 100%);
-}
-
-.star{
-    position:absolute;
-    width:2px;
-    height:2px;
-    background:white;
-    border-radius:50%;
-    animation:twinkle 2s infinite alternate;
-}
-
-@keyframes twinkle{
-    from{opacity:.2;transform:scale(.7)}
-    to{opacity:1;transform:scale(1.4)}
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  padding-bottom:30px;
 }
 
 /* HEADER */
-
-header{
-    position:sticky;
-    top:0;
-    z-index:10;
-    background:rgba(2,6,23,.88);
-    backdrop-filter:blur(12px);
-    border-bottom:1px solid rgba(255,255,255,.1);
-    padding:14px;
+.header{
+  padding:18px 16px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
-.topbar{
-    max-width:1100px;
-    margin:auto;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .logo{
-    font-size:21px;
-    font-weight:bold;
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  box-shadow:0 0 25px #2563eb55;
 }
 
-.logo span{
-    color:#38bdf8;
+.brand h1{
+  font-size:21px;
 }
 
-.starwalk-btn{
-    border:0;
-    border-radius:12px;
-    padding:10px 15px;
-    background:#2563eb;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
+.brand p{
+  font-size:11px;
+  color:#94a3b8;
+  margin-top:3px;
+}
+
+.home-btn{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:13px;
+  background:#111827;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
 }
 
 /* HERO */
-
 .hero{
-    max-width:1100px;
-    margin:auto;
-    padding:55px 18px 30px;
-    text-align:center;
+  margin:8px 16px 18px;
+  padding:22px 18px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 80% 20%,#6366f155,transparent 35%),
+    linear-gradient(135deg,#111827,#172554);
+  border:1px solid #334155;
+  overflow:hidden;
+  position:relative;
 }
 
-.hero h1{
-    font-size:42px;
-    margin-bottom:12px;
+.hero:before,
+.hero:after{
+  content:"✦";
+  position:absolute;
+  color:white;
+  opacity:.7;
 }
 
-.hero h1 span{
-    color:#38bdf8;
+.hero:before{
+  top:18px;
+  right:35px;
+}
+
+.hero:after{
+  bottom:25px;
+  left:35px;
+}
+
+.hero h2{
+  font-size:27px;
+  margin-bottom:8px;
 }
 
 .hero p{
-    color:#cbd5e1;
-    font-size:16px;
-    line-height:1.6;
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.5;
 }
 
 /* SEARCH */
-
 .search-box{
-    max-width:650px;
-    margin:25px auto;
-    display:flex;
-    background:#0f172a;
-    border:1px solid #334155;
-    border-radius:16px;
-    overflow:hidden;
+  margin:0 16px 18px;
+  position:relative;
 }
 
 .search-box input{
-    flex:1;
-    background:transparent;
-    border:0;
-    outline:0;
-    color:white;
-    padding:16px;
-    font-size:16px;
+  width:100%;
+  padding:15px 45px 15px 16px;
+  border-radius:16px;
+  border:1px solid #334155;
+  outline:none;
+  background:#0f172a;
+  color:white;
+  font-size:15px;
 }
 
-.search-box button{
-    border:0;
-    background:#0ea5e9;
-    color:white;
-    padding:0 20px;
-    font-size:20px;
-    cursor:pointer;
+.search-box input::placeholder{
+  color:#64748b;
 }
 
-/* SKY */
-
-.sky{
-    max-width:1100px;
-    height:300px;
-    margin:20px auto 40px;
-    position:relative;
-    overflow:hidden;
-    border-radius:24px;
-    border:1px solid rgba(255,255,255,.1);
-    background:
-      radial-gradient(circle at 50% 50%,rgba(30,64,175,.3),transparent 45%),
-      #020617;
+.search-icon{
+  position:absolute;
+  right:15px;
+  top:13px;
+  font-size:21px;
 }
 
-.sky-title{
-    position:absolute;
-    top:20px;
-    left:20px;
-    z-index:2;
-    color:#cbd5e1;
+/* STAR WALK BUTTON */
+.starwalk{
+  margin:0 16px 22px;
+  padding:17px;
+  border-radius:19px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  cursor:pointer;
+  box-shadow:0 12px 35px #4f46e544;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
 
-.planet-orbit{
-    position:absolute;
-    width:180px;
-    height:180px;
-    border:1px solid rgba(56,189,248,.2);
-    border-radius:50%;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
+.starwalk-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
 }
 
-.planet{
-    position:absolute;
-    width:70px;
-    height:70px;
-    border-radius:50%;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    background:radial-gradient(circle at 30% 30%,#bae6fd,#0284c7 55%,#082f49);
-    box-shadow:0 0 45px #0ea5e9;
+.star-icon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#ffffff18;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+}
+
+.starwalk h3{
+  font-size:16px;
+}
+
+.starwalk p{
+  font-size:11px;
+  color:#ddd6fe;
+  margin-top:3px;
 }
 
 /* SECTION */
-
 .section{
-    max-width:1100px;
-    margin:auto;
-    padding:10px 18px 60px;
+  padding:0 16px;
 }
 
-.section-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom:20px;
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
 }
 
-.section-head h2{
-    font-size:25px;
+.section-title h2{
+  font-size:19px;
 }
 
-.count{
-    color:#94a3b8;
-    font-size:14px;
+.section-title span{
+  font-size:11px;
+  color:#64748b;
 }
 
 /* CARDS */
-
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:24px;
 }
 
 .card{
-    background:rgba(15,23,42,.9);
-    border:1px solid #1e293b;
-    border-radius:18px;
-    padding:18px;
-    transition:.2s;
+  min-height:145px;
+  padding:15px;
+  border-radius:19px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  cursor:pointer;
+  transition:.2s;
+  position:relative;
+  overflow:hidden;
 }
 
-.card:hover{
-    transform:translateY(-4px);
-    border-color:#0ea5e9;
+.card:active{
+  transform:scale(.97);
 }
 
-.card-planet{
-    width:85px;
-    height:85px;
-    margin:5px auto 15px;
-    border-radius:50%;
-    background:radial-gradient(circle at 30% 30%,#fde68a,#f97316 50%,#431407);
-    box-shadow:0 0 30px rgba(249,115,22,.35);
+.card-icon{
+  font-size:35px;
+  margin-bottom:13px;
 }
 
 .card h3{
-    text-align:center;
-    font-size:19px;
-    margin-bottom:12px;
+  font-size:15px;
+  margin-bottom:5px;
 }
 
+.card p{
+  color:#94a3b8;
+  font-size:11px;
+  line-height:1.4;
+}
+
+.card .arrow{
+  position:absolute;
+  right:13px;
+  bottom:13px;
+  color:#64748b;
+}
+
+/* OBJECTS */
+.objects{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:8px;
+  margin-bottom:25px;
+}
+
+.objects::-webkit-scrollbar{
+  display:none;
+}
+
+.object{
+  min-width:105px;
+  padding:14px 12px;
+  border-radius:17px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  cursor:pointer;
+}
+
+.object-icon{
+  font-size:28px;
+  margin-bottom:9px;
+}
+
+.object h4{
+  font-size:13px;
+}
+
+.object p{
+  color:#64748b;
+  font-size:10px;
+  margin-top:3px;
+}
+
+/* INFO */
 .info{
-    display:flex;
-    justify-content:space-between;
-    padding:7px 0;
-    border-bottom:1px solid #1e293b;
-    font-size:13px;
+  margin:0 16px;
+  padding:17px;
+  border-radius:19px;
+  background:#0b1220;
+  border:1px solid #1e293b;
 }
 
-.info span:first-child{
-    color:#94a3b8;
+.info h3{
+  font-size:15px;
+  margin-bottom:8px;
 }
 
-.info span:last-child{
-    color:#e2e8f0;
-    text-align:right;
-}
-
-.details{
-    margin-top:14px;
-    width:100%;
-    border:0;
-    padding:10px;
-    border-radius:10px;
-    background:#1d4ed8;
-    color:white;
-    cursor:pointer;
-}
-
-/* LOADING */
-
-.loading{
-    text-align:center;
-    padding:35px;
-    color:#94a3b8;
-}
-
-/* MORE */
-
-.more{
-    display:block;
-    margin:25px auto;
-    border:1px solid #334155;
-    background:#0f172a;
-    color:white;
-    padding:12px 25px;
-    border-radius:12px;
-    cursor:pointer;
+.info p{
+  color:#94a3b8;
+  font-size:12px;
+  line-height:1.6;
 }
 
 /* POPUP */
-
-.popup-bg{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-    z-index:100;
+.overlay{
+  position:fixed;
+  inset:0;
+  background:#000000aa;
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:100;
 }
 
 .popup{
-    max-width:500px;
-    width:100%;
-    background:#0f172a;
-    border:1px solid #334155;
-    border-radius:20px;
-    padding:22px;
-    max-height:85vh;
-    overflow:auto;
+  width:100%;
+  max-width:430px;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:28px 28px 0 0;
+  padding:24px 20px 30px;
+  animation:up .25s ease;
+}
+
+@keyframes up{
+  from{
+    transform:translateY(100%);
+  }
+  to{
+    transform:translateY(0);
+  }
+}
+
+.popup-icon{
+  font-size:48px;
+  margin-bottom:12px;
 }
 
 .popup h2{
-    margin-bottom:15px;
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.popup small{
+  color:#818cf8;
 }
 
 .popup p{
-    color:#cbd5e1;
-    line-height:1.7;
+  color:#cbd5e1;
+  line-height:1.6;
+  font-size:14px;
+  margin:14px 0 20px;
 }
 
 .close{
-    margin-top:20px;
-    width:100%;
-    padding:12px;
-    border:0;
-    border-radius:10px;
-    background:#2563eb;
-    color:white;
-    cursor:pointer;
+  width:100%;
+  border:none;
+  padding:14px;
+  border-radius:15px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
 }
 
-.error{
-    text-align:center;
-    padding:25px;
-    color:#fca5a5;
+/* NO RESULT */
+.no-result{
+  display:none;
+  text-align:center;
+  padding:25px;
+  color:#64748b;
+  font-size:13px;
 }
+</style>
+</head>
 
-@media(max-width:600px){
+<body>
 
-    .hero h1{
-        font-size:30px;
-    }
+<div class="app">
 
-    .sky{
-        height:250px;
-    }
+  <header class="header">
 
-    .starwalk-btn{
-        padding:9px 11px;
-        font-size:12px;
-    }
-}
-</style></head><body><div id="stars"></div><header>
-    <div class="topbar">    <div class="logo">
-        🌌 Gyan<span>Setu</span>
+    <div class="brand">
+      <div class="logo">🌌</div>
+      <div>
+        <h1>GyanSetu</h1>
+        <p>Discover Space</p>
+      </div>
     </div>
 
-    <!-- CHANGE THIS LINK TO YOUR STAR WALK HTML FILE -->
-    <button class="starwalk-btn"
-    onclick="location.href='starwalk.html'">
-        🔭 Star Walk
-    </button>
+    <button class="home-btn" onclick="goHome()">⌂</button>
 
-</div>
+  </header>
 
-</header><section class="hero"><h1>
-    Explore the <span>Universe</span> 🌌
-</h1>
 
-<p>
-    Discover planets found beyond our Solar System,
-    explore their properties and learn about the amazing universe.
-</p>
+  <section class="hero">
 
-<div class="search-box">
+    <h2>Explore the Universe 🌌</h2>
+
+    <p>
+      Discover planets, stars, galaxies and amazing objects
+      beyond our Solar System.
+    </p>
+
+  </section>
+
+
+  <div class="search-box">
 
     <input
-        id="search"
-        type="text"
-        placeholder="Search exoplanet..."
-        oninput="searchPlanets()"
+      id="search"
+      type="text"
+      placeholder="Search planet, star, galaxy..."
+      oninput="searchSpace()"
     >
 
-    <button onclick="searchPlanets()">🔎</button>
+    <div class="search-icon">🔎</div>
 
-</div>
+  </div>
 
-</section><section class="sky"><div class="sky-title">
-    ✨ Live-style Space View
-</div>
 
-<div class="planet-orbit"></div>
+  <!-- STAR WALK -->
+  <div class="starwalk" onclick="openStarWalk()">
 
-<div class="planet"></div>
+    <div class="starwalk-left">
 
-</section><section class="section"><div class="section-head">
+      <div class="star-icon">🔭</div>
 
-    <h2>🪐 Discovered Exoplanets</h2>
+      <div>
+        <h3>Open Sky Map</h3>
+        <p>Explore the night sky</p>
+      </div>
 
-    <div class="count" id="count">
-        Loading...
     </div>
 
+    <div>➜</div>
+
+  </div>
+
+
+  <!-- PLANETS -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>🪐 Planets</h2>
+      <span>Solar System</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card searchable"
+           data-name="mercury"
+           onclick="showInfo(
+           '☿️',
+           'Mercury',
+           'Planet',
+           'Mercury is the closest planet to the Sun. It has a very thin atmosphere and experiences large temperature changes.'
+           )">
+
+        <div class="card-icon">☿️</div>
+        <h3>Mercury</h3>
+        <p>Closest to the Sun</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="venus"
+           onclick="showInfo(
+           '♀️',
+           'Venus',
+           'Planet',
+           'Venus is the second planet from the Sun. Its thick atmosphere makes it the hottest planet in our Solar System.'
+           )">
+
+        <div class="card-icon">♀️</div>
+        <h3>Venus</h3>
+        <p>Hot and cloudy world</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="earth"
+           onclick="showInfo(
+           '🌍',
+           'Earth',
+           'Planet',
+           'Earth is our home planet and the only world currently known to support life.'
+           )">
+
+        <div class="card-icon">🌍</div>
+        <h3>Earth</h3>
+        <p>Our home planet</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="mars"
+           onclick="showInfo(
+           '🔴',
+           'Mars',
+           'Planet',
+           'Mars is known as the Red Planet. Scientists study it because it preserves evidence of a watery past.'
+           )">
+
+        <div class="card-icon">🔴</div>
+        <h3>Mars</h3>
+        <p>The Red Planet</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="jupiter"
+           onclick="showInfo(
+           '🟠',
+           'Jupiter',
+           'Planet',
+           'Jupiter is the largest planet in our Solar System and is a gas giant with many moons.'
+           )">
+
+        <div class="card-icon">🟠</div>
+        <h3>Jupiter</h3>
+        <p>Largest planet</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="saturn"
+           onclick="showInfo(
+           '🪐',
+           'Saturn',
+           'Planet',
+           'Saturn is famous for its spectacular ring system and is the second-largest planet in our Solar System.'
+           )">
+
+        <div class="card-icon">🪐</div>
+        <h3>Saturn</h3>
+        <p>Planet of rings</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="uranus"
+           onclick="showInfo(
+           '🔵',
+           'Uranus',
+           'Planet',
+           'Uranus is an ice giant with a blue-green appearance and an unusual sideways rotation.'
+           )">
+
+        <div class="card-icon">🔵</div>
+        <h3>Uranus</h3>
+        <p>Ice giant</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="neptune"
+           onclick="showInfo(
+           '🔵',
+           'Neptune',
+           'Planet',
+           'Neptune is the eighth planet from the Sun and one of the most distant major planets in our Solar System.'
+           )">
+
+        <div class="card-icon">🔵</div>
+        <h3>Neptune</h3>
+        <p>Faraway blue world</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- STARS -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>⭐ Famous Stars</h2>
+      <span>Stars</span>
+    </div>
+
+    <div class="objects">
+
+      <div class="object searchable"
+           data-name="sirius"
+           onclick="showInfo(
+           '⭐',
+           'Sirius',
+           'Star',
+           'Sirius is the brightest star in Earths night sky as seen with the unaided eye.'
+           )">
+
+        <div class="object-icon">⭐</div>
+        <h4>Sirius</h4>
+        <p>Bright star</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="vega"
+           onclick="showInfo(
+           '✨',
+           'Vega',
+           'Star',
+           'Vega is one of the brightest stars visible in the northern sky.'
+           )">
+
+        <div class="object-icon">✨</div>
+        <h4>Vega</h4>
+        <p>Bright star</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="polaris"
+           onclick="showInfo(
+           '🌟',
+           'Polaris',
+           'Star',
+           'Polaris is commonly called the North Star because it lies close to the north celestial pole.'
+           )">
+
+        <div class="object-icon">🌟</div>
+        <h4>Polaris</h4>
+        <p>North Star</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="betelgeuse"
+           onclick="showInfo(
+           '🔴',
+           'Betelgeuse',
+           'Star',
+           'Betelgeuse is a red supergiant star in the constellation Orion.'
+           )">
+
+        <div class="object-icon">🔴</div>
+        <h4>Betelgeuse</h4>
+        <p>Red supergiant</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- GALAXIES -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>🌌 Galaxies</h2>
+      <span>Deep Space</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card searchable"
+           data-name="milky way"
+           onclick="showInfo(
+           '🌌',
+           'Milky Way',
+           'Galaxy',
+           'The Milky Way is the galaxy that contains our Solar System.'
+           )">
+
+        <div class="card-icon">🌌</div>
+        <h3>Milky Way</h3>
+        <p>Our galaxy</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="andromeda"
+           onclick="showInfo(
+           '🌌',
+           'Andromeda',
+           'Galaxy',
+           'The Andromeda Galaxy is a large spiral galaxy relatively close to the Milky Way.'
+           )">
+
+        <div class="card-icon">🌌</div>
+        <h3>Andromeda</h3>
+        <p>Nearby galaxy</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- OTHER OBJECTS -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>🚀 Space Objects</h2>
+      <span>Explore</span>
+    </div>
+
+    <div class="objects">
+
+      <div class="object searchable"
+           data-name="moon"
+           onclick="showInfo(
+           '🌕',
+           'Moon',
+           'Natural Satellite',
+           'The Moon is Earths natural satellite and is the brightest object in our night sky after the Sun.'
+           )">
+
+        <div class="object-icon">🌕</div>
+        <h4>Moon</h4>
+        <p>Earth's moon</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="comet"
+           onclick="showInfo(
+           '☄️',
+           'Comet',
+           'Small Solar System Body',
+           'Comets are icy bodies that can develop a glowing coma and tail when they approach the Sun.'
+           )">
+
+        <div class="object-icon">☄️</div>
+        <h4>Comets</h4>
+        <p>Icy objects</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="asteroid"
+           onclick="showInfo(
+           '☄️',
+           'Asteroids',
+           'Small Solar System Bodies',
+           'Asteroids are rocky or metallic objects that orbit the Sun.'
+           )">
+
+        <div class="object-icon">☄️</div>
+        <h4>Asteroids</h4>
+        <p>Rocky bodies</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="black hole"
+           onclick="showInfo(
+           '⚫',
+           'Black Hole',
+           'Cosmic Object',
+           'A black hole is an object whose gravity is so strong that light cannot escape from within its event horizon.'
+           )">
+
+        <div class="object-icon">⚫</div>
+        <h4>Black Hole</h4>
+        <p>Extreme gravity</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="no-result" id="noResult">
+    🔭 No space object found.
+  </div>
+
+
+  <div class="info">
+
+    <h3>🧠 Learn while you explore</h3>
+
+    <p>
+      GyanSetu Space is designed to make astronomy easier to explore.
+      Open the Sky Map to look around the stars and discover objects
+      in the night sky.
+    </p>
+
+  </div>
+
 </div>
 
-<div id="planetGrid" class="grid"></div>
 
-<div id="loading" class="loading">
-    🔭 Loading discoveries...
-</div>
+<!-- POPUP -->
 
-<button
-    id="moreBtn"
-    class="more"
-    onclick="loadMore()"
-    style="display:none">
-    Load More
-</button>
+<div class="overlay" id="overlay" onclick="closePopup(event)">
 
-</section><!-- POPUP --><div id="popupBg" class="popup-bg"><div class="popup">
+  <div class="popup">
 
-    <h2 id="popupTitle"></h2>
+    <div class="popup-icon" id="popupIcon">🌍</div>
 
-    <div id="popupContent"></div>
+    <h2 id="popupTitle">Earth</h2>
 
-    <button
-        class="close"
-        onclick="closePopup()">
-        Close
+    <small id="popupType">Planet</small>
+
+    <p id="popupText"></p>
+
+    <button class="close" onclick="closePopup()">
+      Close
     </button>
 
+  </div>
+
 </div>
 
-</div><script>
 
-/* CREATE RANDOM STARS */
+<script>
 
-const stars = document.getElementById("stars");
-
-for(let i=0;i<180;i++){
-
-    const star=document.createElement("div");
-
-    star.className="star";
-
-    star.style.left=Math.random()*100+"%";
-    star.style.top=Math.random()*100+"%";
-
-    star.style.animationDelay=(Math.random()*3)+"s";
-
-    star.style.opacity=Math.random();
-
-    stars.appendChild(star);
+function goHome(){
+  window.location.href="home.html";
 }
 
 
-/*
- NASA EXOPLANET ARCHIVE TAP SERVICE
-
- We request a large confirmed-planet dataset.
-*/
-
-const API =
-"https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query="+
-encodeURIComponent(
-`select pl_name,hostname,discoverymethod,disc_year,
-pl_orbper,pl_rade,pl_bmasse,sy_dist
-from ps
-where default_flag=1
-order by disc_year desc
-`
-)+
-"&format=json";
+function openStarWalk(){
+  window.location.href="starwalk.html";
+}
 
 
-let planets=[];
-let shown=0;
-const PAGE_SIZE=24;
+function showInfo(icon,title,type,text){
+
+  document.getElementById("popupIcon").textContent=icon;
+
+  document.getElementById("popupTitle").textContent=title;
+
+  document.getElementById("popupType").textContent=type;
+
+  document.getElementById("popupText").textContent=text;
+
+  document.getElementById("overlay").style.display="flex";
+
+}
 
 
-/* LOAD DATA */
+function closePopup(event){
 
-async function loadPlanets(){
+  if(
+    !event ||
+    event.target===document.getElementById("overlay") ||
+    event.target.classList.contains("close")
+  ){
 
-    const loading=document.getElementById("loading");
+    document.getElementById("overlay").style.display="none";
 
-    try{
+  }
 
-        const response=await fetch(API);
+}
 
-        if(!response.ok){
-            throw new Error("NASA API unavailable");
-        }
 
-        planets=await response.json();
+function searchSpace(){
 
-        loading.style.display="none";
+  const query=
+    document
+    .getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
 
-        document.getElementById("count").textContent =
-            planets.length.toLocaleString()+" discoveries loaded";
+  const items=
+    document.querySelectorAll(".searchable");
 
-        renderPlanets();
+  let found=0;
 
-    }catch(error){
+  items.forEach(item=>{
 
-        loading.innerHTML=`
-            <div class="error">
-                ⚠️ Space database could not be loaded.<br><br>
-                Please check your internet connection and try again.
-            </div>
-        `;
+    const name=
+      item.dataset.name.toLowerCase();
+
+    if(name.includes(query)){
+
+      item.style.display="block";
+      found++;
+
+    }else{
+
+      item.style.display="none";
 
     }
-}
+
+  });
 
 
-/* PLANET CARD */
-
-function planetCard(p){
-
-    const name=p.pl_name || "Unknown";
-
-    const distance=
-        p.sy_dist ?
-        Number(p.sy_dist).toFixed(1)+" pc":
-        "Unknown";
-
-    const radius=
-        p.pl_rade ?
-        Number(p.pl_rade).toFixed(2)+" Earth":
-        "Unknown";
-
-    const mass=
-        p.pl_bmasse ?
-        Number(p.pl_bmasse).toFixed(2)+" Earth":
-        "Unknown";
-
-    const period=
-        p.pl_orbper ?
-        Number(p.pl_orbper).toFixed(2)+" days":
-        "Unknown";
-
-    return `
-
-    <div class="card">
-
-        <div class="card-planet"></div>
-
-        <h3>${escapeHTML(name)}</h3>
-
-        <div class="info">
-            <span>Host Star</span>
-            <span>${escapeHTML(p.hostname || "Unknown")}</span>
-        </div>
-
-        <div class="info">
-            <span>Discovered</span>
-            <span>${p.disc_year || "Unknown"}</span>
-        </div>
-
-        <div class="info">
-            <span>Distance</span>
-            <span>${distance}</span>
-        </div>
-
-        <div class="info">
-            <span>Radius</span>
-            <span>${radius}</span>
-        </div>
-
-        <div class="info">
-            <span>Mass</span>
-            <span>${mass}</span>
-        </div>
-
-        <button
-            class="details"
-            onclick="showDetails(${shown})">
-            🔭 Explore Planet
-        </button>
-
-    </div>
-
-    `;
-}
-
-
-/* RENDER */
-
-function renderPlanets(){
-
-    const grid=document.getElementById("planetGrid");
-
-    const end=Math.min(
-        shown+PAGE_SIZE,
-        planets.length
-    );
-
-    for(let i=shown;i<end;i++){
-
-        grid.innerHTML += planetCard(planets[i]);
-
-        shown++;
-    }
-
-    document.getElementById("moreBtn").style.display =
-        shown < planets.length ? "block" : "none";
-}
-
-
-/* LOAD MORE */
-
-function loadMore(){
-
-    renderPlanets();
+  document.getElementById("noResult").style.display=
+    found===0 ? "block" : "none";
 
 }
 
+</script>
 
-/* SEARCH */
-
-function searchPlanets(){
-
-    const query=
-        document.getElementById("search")
-        .value
-        .toLowerCase()
-        .trim();
-
-    const grid=document.getElementById("planetGrid");
-
-    if(!query){
-
-        grid.innerHTML="";
-        shown=0;
-        renderPlanets();
-        return;
-    }
-
-    const results=planets.filter(p=>
-        (p.pl_name || "").toLowerCase().includes(query) ||
-        (p.hostname || "").toLowerCase().includes(query)
-    );
-
-    grid.innerHTML="";
-
-    if(results.length===0){
-
-        grid.innerHTML=`
-            <div class="error">
-                🔎 No planet found.
-            </div>
-        `;
-
-        return;
-    }
-
-    results.slice(0,60).forEach((p,index)=>{
-
-        const old=shown;
-
-        shown=index;
-
-        grid.innerHTML += planetCard(p);
-
-        shown=old;
-
-    });
-
-}
-
-
-/* DETAILS POPUP */
-
-function showDetails(index){
-
-    const p=planets[index];
-
-    if(!p) return;
-
-    document.getElementById("popupTitle").textContent =
-        "🪐 "+p.pl_name;
-
-    document.getElementById("popupContent").innerHTML=`
-
-        <p>
-        <b>Host Star:</b> ${escapeHTML(p.hostname || "Unknown")}
-        </p>
-
-        <p>
-        <b>Discovery year:</b> ${p.disc_year || "Unknown"}
-        </p>
-
-        <p>
-        <b>Discovery method:</b>
-        ${escapeHTML(p.discoverymethod || "Unknown")}
-        </p>
-
-        <p>
-        <b>Orbital period:</b>
-        ${p.pl_orbper ?
-        Number(p.pl_orbper).toFixed(2)+" days":
-        "Unknown"}
-        </p>
-
-        <p>
-        <b>Planet radius:</b>
-        ${p.pl_rade ?
-        Number(p.pl_rade).toFixed(2)+" Earth radii":
-        "Unknown"}
-        </p>
-
-        <p>
-        <b>Planet mass:</b>
-        ${p.pl_bmasse ?
-        Number(p.pl_bmasse).toFixed(2)+" Earth masses":
-        "Unknown"}
-        </p>
-
-        <p>
-        <b>Distance from Earth:</b>
-        ${p.sy_dist ?
-        Number(p.sy_dist).toFixed(2)+" parsecs":
-        "Unknown"}
-        </p>
-
-    `;
-
-    document.getElementById("popupBg").style.display="flex";
-}
-
-
-function closePopup(){
-
-    document.getElementById("popupBg").style.display="none";
-
-}
-
-
-/* SECURITY */
-
-function escapeHTML(value){
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-
-}
-
-
-/* START */
-
-loadPlanets();
-
-</script></body>
+</body>
 </html>
