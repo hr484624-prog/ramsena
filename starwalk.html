@@ -5,550 +5,469 @@
 <meta name="viewport"
       content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>GyanSetu Star Walk</title>
+<title>GyanSetu • Sky Map</title>
 
 <style>
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    font-family:Arial,sans-serif;
-    color:white;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  font-family:Arial,Helvetica,sans-serif;
+  color:white;
 }
 
-#space{
-    position:fixed;
-    inset:0;
-    background:
-      radial-gradient(circle at 50% 48%,#101f50 0,#050b20 38%,#01030c 75%,#000 100%);
+#sky{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  background:
+    radial-gradient(circle at 50% 45%,#08142d,#01030a 70%,#000);
 }
 
-canvas{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-}
-
-/* MILKY WAY */
-
-.milky{
-    position:absolute;
-    width:160%;
-    height:48%;
-    left:-30%;
-    top:28%;
-    transform:rotate(-22deg);
-    background:
-      radial-gradient(
-        ellipse,
-        rgba(180,210,255,.16),
-        rgba(100,140,220,.08) 35%,
-        transparent 72%
-      );
-    filter:blur(25px);
-    pointer-events:none;
-}
-
-/* TOP */
+/* TOP BAR */
 
 .top{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    height:70px;
-    z-index:20;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:12px 14px;
-    background:linear-gradient(
-        180deg,
-        rgba(0,0,0,.78),
-        transparent
-    );
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:10;
+  padding:15px 14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:linear-gradient(
+    180deg,
+    rgba(0,0,0,.78),
+    rgba(0,0,0,0)
+  );
 }
 
-.logo{
-    font-size:21px;
-    font-weight:900;
-    text-shadow:0 2px 8px #000;
+.back,
+.tool{
+  width:42px;
+  height:42px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  background:rgba(8,15,30,.72);
+  backdrop-filter:blur(12px);
+  color:white;
+  font-size:19px;
+  cursor:pointer;
 }
-
-.logo span{
-    color:#4db7ff;
-}
-
-.topRight{
-    display:flex;
-    gap:7px;
-}
-
-.round{
-    width:43px;
-    height:43px;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,.22);
-    background:rgba(5,15,38,.72);
-    color:white;
-    font-size:19px;
-    backdrop-filter:blur(10px);
-}
-
-/* SEARCH */
 
 .search{
-    position:fixed;
-    z-index:20;
-    top:76px;
-    left:50%;
-    transform:translateX(-50%);
-    width:calc(100% - 28px);
-    max-width:520px;
-    height:48px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:0 15px;
-    border:1px solid rgba(255,255,255,.2);
-    border-radius:16px;
-    background:rgba(4,12,32,.72);
-    backdrop-filter:blur(14px);
+  flex:1;
+  height:42px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px;
+  background:rgba(8,15,30,.72);
+  backdrop-filter:blur(12px);
+  color:white;
+  outline:none;
+  padding:0 14px;
+  font-size:14px;
 }
 
-.search input{
-    width:100%;
-    border:0;
-    outline:0;
-    color:white;
-    background:transparent;
-    font-size:15px;
+.search::placeholder{
+  color:#94a3b8;
 }
 
-.search input::placeholder{
-    color:#9baed0;
+/* TITLE */
+
+.title{
+  position:fixed;
+  top:78px;
+  left:16px;
+  z-index:8;
+  pointer-events:none;
 }
 
-/* DIRECTION */
-
-.direction{
-    position:fixed;
-    z-index:15;
-    top:140px;
-    left:50%;
-    transform:translateX(-50%);
-    color:#bcd8ff;
-    font-size:12px;
-    padding:7px 12px;
-    border-radius:20px;
-    background:rgba(0,0,0,.35);
-    backdrop-filter:blur(8px);
+.title h1{
+  font-size:20px;
+  text-shadow:0 2px 12px #000;
 }
 
-/* CROSSHAIR */
-
-.crosshair{
-    position:fixed;
-    z-index:10;
-    left:50%;
-    top:50%;
-    width:70px;
-    height:70px;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
+.title p{
+  margin-top:3px;
+  font-size:11px;
+  color:#a5b4fc;
 }
 
-.crosshair:before,
-.crosshair:after{
-    content:"";
-    position:absolute;
-    background:rgba(255,255,255,.45);
-}
-
-.crosshair:before{
-    width:1px;
-    height:70px;
-    left:34px;
-}
-
-.crosshair:after{
-    width:70px;
-    height:1px;
-    top:34px;
-}
-
-.crossDot{
-    position:absolute;
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:#fff;
-    left:32px;
-    top:32px;
-}
-
-/* BOTTOM */
-
-.bottom{
-    position:fixed;
-    z-index:25;
-    bottom:0;
-    left:0;
-    right:0;
-    height:82px;
-    display:flex;
-    align-items:center;
-    justify-content:space-around;
-    background:rgba(1,5,18,.9);
-    border-top:1px solid rgba(255,255,255,.12);
-    backdrop-filter:blur(15px);
-}
-
-.bottom button{
-    border:0;
-    background:transparent;
-    color:#9eb1cf;
-    font-size:11px;
-    min-width:60px;
-}
-
-.bottom button div{
-    font-size:23px;
-    margin-bottom:4px;
-}
-
-/* OBJECT LABEL */
-
-.label{
-    position:absolute;
-    z-index:8;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
-    text-align:center;
-    white-space:nowrap;
-    text-shadow:
-        0 1px 4px #000,
-        0 0 8px #000;
-}
-
-.label .dot{
-    width:var(--size);
-    height:var(--size);
-    margin:auto;
-    border-radius:50%;
-    background:var(--glow);
-    box-shadow:
-        0 0 8px var(--glow),
-        0 0 20px var(--glow);
-}
-
-.label .name{
-    margin-top:6px;
-    font-size:11px;
-    color:#dbeafe;
-}
-
-/* CONSTELLATION */
-
-.constellation{
-    position:absolute;
-    height:1px;
-    background:rgba(100,180,255,.35);
-    transform-origin:0 50%;
-    pointer-events:none;
-    z-index:3;
-}
-
-/* POPUP */
-
-.popupBg{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:none;
-    align-items:flex-end;
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(5px);
-}
-
-.popup{
-    width:100%;
-    max-width:520px;
-    margin:auto;
-    background:
-      linear-gradient(145deg,#0b1838,#020617);
-    border:1px solid rgba(100,190,255,.25);
-    border-radius:25px 25px 0 0;
-    padding:22px;
-    box-shadow:0 -10px 50px rgba(0,0,0,.6);
-}
-
-.popupTop{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.popup h2{
-    color:#7dd3fc;
-}
-
-.close{
-    width:38px;
-    height:38px;
-    border:0;
-    border-radius:50%;
-    background:rgba(255,255,255,.1);
-    color:white;
-    font-size:18px;
-}
-
-.popup p{
-    color:#cbd5e1;
-    line-height:1.65;
-    font-size:14px;
-    margin-top:12px;
-}
-
-.popup button.action{
-    width:100%;
-    margin-top:18px;
-    padding:13px;
-    border:0;
-    border-radius:13px;
-    color:white;
-    background:#1769e0;
-    font-weight:bold;
-}
-
-/* TIME */
-
-.timeBox{
-    position:fixed;
-    z-index:15;
-    left:15px;
-    bottom:98px;
-    padding:10px 13px;
-    border-radius:13px;
-    background:rgba(3,10,28,.72);
-    border:1px solid rgba(255,255,255,.13);
-    font-size:11px;
-    color:#b9c9e4;
-}
+/* COMPASS */
 
 .compass{
-    position:fixed;
-    z-index:15;
-    right:15px;
-    bottom:98px;
-    width:55px;
-    height:55px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    border:1px solid rgba(255,255,255,.2);
-    background:rgba(3,10,28,.72);
-    font-size:24px;
+  position:fixed;
+  top:78px;
+  right:15px;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(5,10,22,.62);
+  backdrop-filter:blur(10px);
+  z-index:8;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+  box-shadow:0 0 25px #000;
 }
 
-/* MODE */
-
-.mode{
-    position:fixed;
-    z-index:30;
-    right:14px;
-    top:76px;
+#heading{
+  position:absolute;
+  bottom:-15px;
+  font-size:9px;
+  color:#cbd5e1;
 }
 
-.mode button{
-    border:1px solid rgba(255,255,255,.2);
-    border-radius:12px;
-    background:rgba(5,15,40,.72);
-    color:white;
-    padding:10px;
+/* LABELS */
+
+.object-label{
+  position:fixed;
+  z-index:9;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  white-space:nowrap;
+  text-align:center;
+  text-shadow:0 2px 5px #000;
 }
 
-/* RESPONSIVE */
+.object-label .name{
+  font-size:11px;
+  font-weight:bold;
+}
 
-@media(min-width:700px){
-    .bottom{
-        left:50%;
-        right:auto;
-        width:520px;
-        transform:translateX(-50%);
-        border-radius:22px 22px 0 0;
-    }
+.object-label .type{
+  font-size:8px;
+  color:#94a3b8;
+  margin-top:2px;
+}
+
+/* CONTROLS */
+
+.controls{
+  position:fixed;
+  right:15px;
+  bottom:105px;
+  z-index:15;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+
+.control{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(7,12,25,.75);
+  backdrop-filter:blur(12px);
+  color:white;
+  font-size:18px;
+}
+
+/* BOTTOM BAR */
+
+.bottom{
+  position:fixed;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  z-index:20;
+  height:67px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:22px;
+  background:rgba(6,11,23,.82);
+  backdrop-filter:blur(18px);
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+}
+
+.nav{
+  border:0;
+  background:none;
+  color:#94a3b8;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+  font-size:10px;
+}
+
+.nav span{
+  font-size:20px;
+}
+
+.nav.active{
+  color:white;
+}
+
+/* INFO PANEL */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(5px);
+}
+
+.panel{
+  width:100%;
+  max-width:500px;
+  margin:auto;
+  padding:22px 20px 28px;
+  border-radius:28px 28px 0 0;
+  background:#0a1224;
+  border-top:1px solid #334155;
+  box-shadow:0 -20px 70px #000;
+  animation:up .25s ease;
+}
+
+@keyframes up{
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
+}
+
+.panel-icon{
+  font-size:48px;
+}
+
+.panel h2{
+  margin-top:8px;
+  font-size:24px;
+}
+
+.panel .category{
+  color:#818cf8;
+  font-size:11px;
+  margin-top:4px;
+}
+
+.panel p{
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.6;
+  margin:15px 0 20px;
+}
+
+.panel button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:15px;
+  background:#2563eb;
+  color:white;
+  font-weight:bold;
+}
+
+/* SEARCH RESULTS */
+
+.results{
+  position:fixed;
+  top:65px;
+  left:66px;
+  right:66px;
+  max-height:260px;
+  overflow:auto;
+  z-index:30;
+  display:none;
+  border:1px solid #334155;
+  border-radius:15px;
+  background:rgba(5,10,22,.96);
+  backdrop-filter:blur(15px);
+}
+
+.result{
+  padding:13px;
+  border-bottom:1px solid #1e293b;
+  font-size:13px;
+}
+
+.result:last-child{
+  border-bottom:0;
+}
+
+.result small{
+  display:block;
+  color:#64748b;
+  margin-top:3px;
+}
+
+/* TOAST */
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:90px;
+  transform:translateX(-50%);
+  z-index:100;
+  padding:10px 15px;
+  border-radius:14px;
+  background:#111827;
+  border:1px solid #334155;
+  color:#e2e8f0;
+  font-size:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+}
+
+.toast.show{
+  opacity:1;
 }
 </style>
 </head>
 
 <body>
 
-<div id="space">
-
-    <div class="milky"></div>
-
-    <canvas id="skyCanvas"></canvas>
-
-</div>
+<canvas id="sky"></canvas>
 
 <!-- TOP -->
-
 <div class="top">
 
-    <div class="logo">
-        Gyan<span>Setu</span> 🌌
-    </div>
+  <button class="back" onclick="goBack()">‹</button>
 
-    <div class="topRight">
+  <input
+    id="search"
+    class="search"
+    placeholder="Search stars, planets..."
+    autocomplete="off"
+    oninput="searchObjects()"
+  >
 
-        <button class="round"
-                onclick="goHome()">
-            🏠
-        </button>
-
-        <button class="round"
-                onclick="enableSensors()">
-            🧭
-        </button>
-
-    </div>
+  <button class="tool" onclick="toggleLabels()">✦</button>
 
 </div>
 
-<!-- SEARCH -->
+<div class="results" id="results"></div>
 
-<div class="search">
+<div class="title">
+  <h1>Sky Map 🌌</h1>
+  <p id="dateText">GyanSetu Space</p>
+</div>
 
-    <span>🔎</span>
+<div class="compass">
+  🧭
+  <span id="heading">N</span>
+</div>
 
-    <input
-        id="search"
-        placeholder="Search stars, planets, constellations..."
-        autocomplete="off">
+
+<!-- SIDE CONTROLS -->
+
+<div class="controls">
+
+  <button class="control" onclick="zoomIn()">＋</button>
+
+  <button class="control" onclick="resetView()">⌾</button>
+
+  <button class="control" onclick="zoomOut()">−</button>
+
+  <button class="control" onclick="requestMotion()">📱</button>
+
+  <button class="control" onclick="toggleFullscreen()">⛶</button>
 
 </div>
 
-<div class="direction" id="direction">
-    ↑ SKY VIEW
-</div>
-
-<div class="crosshair">
-    <div class="crossDot"></div>
-</div>
-
-<div class="mode">
-
-    <button onclick="toggleLabels()">
-        ✨ Labels
-    </button>
-
-</div>
-
-<div class="timeBox" id="time">
-    Loading sky...
-</div>
-
-<div class="compass" id="compass">
-    🧭
-</div>
 
 <!-- BOTTOM -->
 
 <div class="bottom">
 
-    <button onclick="setSkyMode('stars')">
-        <div>⭐</div>
-        Stars
-    </button>
+  <button class="nav active" onclick="setMode('stars')">
+    <span>⭐</span>
+    Stars
+  </button>
 
-    <button onclick="setSkyMode('planets')">
-        <div>🪐</div>
-        Planets
-    </button>
+  <button class="nav" onclick="setMode('planets')">
+    <span>🪐</span>
+    Planets
+  </button>
 
-    <button onclick="showSkyInfo()">
-        <div>🌌</div>
-        Sky
-    </button>
+  <button class="nav" onclick="setMode('moon')">
+    <span>🌙</span>
+    Moon
+  </button>
 
-    <button onclick="enableSensors()">
-        <div>🧭</div>
-        AR View
-    </button>
+  <button class="nav" onclick="setMode('all')">
+    <span>🌌</span>
+    All
+  </button>
 
 </div>
 
-<!-- POPUP -->
 
-<div class="popupBg" id="popupBg">
+<!-- INFO -->
 
-    <div class="popup">
+<div class="overlay" id="overlay">
 
-        <div class="popupTop">
+  <div class="panel">
 
-            <h2 id="popupTitle">
-                Object
-            </h2>
+    <div class="panel-icon" id="infoIcon">⭐</div>
 
-            <button
-                class="close"
-                onclick="closePopup()">
-                ✕
-            </button>
+    <h2 id="infoName">Sirius</h2>
 
-        </div>
-
-        <div id="popupContent"></div>
-
-        <button
-            class="action"
-            onclick="closePopup()">
-            Continue Exploring 🌌
-        </button>
-
+    <div class="category" id="infoType">
+      Star
     </div>
 
+    <p id="infoText"></p>
+
+    <button onclick="closeInfo()">
+      Close
+    </button>
+
+  </div>
+
 </div>
+
+
+<div class="toast" id="toast"></div>
+
 
 <script>
 
-/* =====================================
+/* =========================
    CANVAS
-===================================== */
+========================= */
 
-const canvas =
-    document.getElementById("skyCanvas");
-
-const ctx =
-    canvas.getContext("2d");
+const canvas=document.getElementById("sky");
+const ctx=canvas.getContext("2d");
 
 let W=innerWidth;
 let H=innerHeight;
 
 function resize(){
 
-    W=canvas.width=innerWidth*devicePixelRatio;
-    H=canvas.height=innerHeight*devicePixelRatio;
+  W=canvas.width=innerWidth*devicePixelRatio;
+  H=canvas.height=innerHeight*devicePixelRatio;
 
-    canvas.style.width=innerWidth+"px";
-    canvas.style.height=innerHeight+"px";
+  canvas.style.width=innerWidth+"px";
+  canvas.style.height=innerHeight+"px";
 
-    ctx.setTransform(
-        devicePixelRatio,
-        0,0,
-        devicePixelRatio,
-        0,0
-    );
+  ctx.setTransform(
+    devicePixelRatio,
+    0,
+    0,
+    devicePixelRatio,
+    0,
+    0
+  );
+
 }
 
 resize();
@@ -556,820 +475,739 @@ resize();
 addEventListener("resize",resize);
 
 
-/* =====================================
-   REALISTIC STAR FIELD
-===================================== */
+/* =========================
+   STARS
+========================= */
 
-let stars=[];
+const stars=[];
 
-function createStars(){
+function randomStars(){
 
-    stars=[];
+  stars.length=0;
 
-    for(let i=0;i<1000;i++){
+  for(let i=0;i<320;i++){
 
-        stars.push({
+    stars.push({
 
-            x:Math.random()*W/devicePixelRatio,
+      x:Math.random(),
+      y:Math.random(),
 
-            y:Math.random()*H/devicePixelRatio,
+      r:
+        Math.random()<.85
+        ? Math.random()*1.4+.25
+        : Math.random()*2.1+.8,
 
-            r:
-                Math.random()<.92
-                ? Math.random()*1.3+.2
-                : Math.random()*2.2+.8,
+      a:Math.random()*.65+.25,
 
-            alpha:
-                Math.random()*.75+.25,
+      tw:Math.random()*Math.PI*2
 
-            twinkle:
-                Math.random()*Math.PI*2,
+    });
 
-            speed:
-                Math.random()*.02+.005
-
-        });
-
-    }
+  }
 
 }
 
-createStars();
+randomStars();
 
 
-/* =====================================
-   NAMED STARS
-===================================== */
+/* =========================
+   NAMED OBJECTS
+========================= */
 
-const namedStars=[
+const objects=[
 
-    {
-        name:"Sirius",
-        ra:6.752,
-        dec:-16.716,
-        color:"#ffffff",
-        size:4,
-        info:"Sirius is the brightest star in Earth's night sky."
-    },
+  {
+    name:"Sirius",
+    type:"Star",
+    icon:"⭐",
+    x:.22,
+    y:.62,
+    size:5,
+    text:"Sirius is the brightest star in Earth's night sky as seen with the unaided eye."
+  },
 
-    {
-        name:"Betelgeuse",
-        ra:5.919,
-        dec:7.407,
-        color:"#ffb38a",
-        size:3.5,
-        info:"Betelgeuse is a red supergiant in the constellation Orion."
-    },
+  {
+    name:"Vega",
+    type:"Star",
+    icon:"✨",
+    x:.74,
+    y:.27,
+    size:4,
+    text:"Vega is one of the brightest stars visible in the northern sky."
+  },
 
-    {
-        name:"Rigel",
-        ra:5.242,
-        dec:-8.202,
-        color:"#b8d9ff",
-        size:3.2,
-        info:"Rigel is a bright blue supergiant in Orion."
-    },
+  {
+    name:"Polaris",
+    type:"Star",
+    icon:"🌟",
+    x:.84,
+    y:.18,
+    size:4,
+    text:"Polaris is commonly called the North Star because it lies close to the north celestial pole."
+  },
 
-    {
-        name:"Vega",
-        ra:18.615,
-        dec:38.784,
-        color:"#dce9ff",
-        size:3.5,
-        info:"Vega is one of the brightest stars in the northern sky."
-    },
+  {
+    name:"Betelgeuse",
+    type:"Star",
+    icon:"🔴",
+    x:.39,
+    y:.31,
+    size:5,
+    text:"Betelgeuse is a red supergiant star in the constellation Orion."
+  },
 
-    {
-        name:"Polaris",
-        ra:2.530,
-        dec:89.264,
-        color:"#fff5dc",
-        size:3,
-        info:"Polaris is commonly known as the North Star."
-    },
+  {
+    name:"Rigel",
+    type:"Star",
+    icon:"🔵",
+    x:.48,
+    y:.39,
+    size:4,
+    text:"Rigel is a bright blue supergiant star in the constellation Orion."
+  },
 
-    {
-        name:"Aldebaran",
-        ra:4.599,
-        dec:16.509,
-        color:"#ffbd85",
-        size:3,
-        info:"Aldebaran is the bright star of Taurus."
-    },
+  {
+    name:"Aldebaran",
+    type:"Star",
+    icon:"🟠",
+    x:.56,
+    y:.48,
+    size:4,
+    text:"Aldebaran is a giant star in the constellation Taurus."
+  },
 
-    {
-        name:"Antares",
-        ra:16.490,
-        dec:-26.432,
-        color:"#ff9870",
-        size:3.5,
-        info:"Antares is a red supergiant in Scorpius."
-    },
+  {
+    name:"Mars",
+    type:"Planet",
+    icon:"🔴",
+    x:.68,
+    y:.62,
+    size:7,
+    text:"Mars is the fourth planet from the Sun and is known as the Red Planet."
+  },
 
-    {
-        name:"Procyon",
-        ra:7.655,
-        dec:5.225,
-        color:"#fffbe9",
-        size:3,
-        info:"Procyon is one of the brightest stars in the night sky."
-    }
+  {
+    name:"Jupiter",
+    type:"Planet",
+    icon:"🟠",
+    x:.33,
+    y:.72,
+    size:9,
+    text:"Jupiter is the largest planet in our Solar System."
+  },
 
-];
+  {
+    name:"Saturn",
+    type:"Planet",
+    icon:"🪐",
+    x:.78,
+    y:.76,
+    size:8,
+    text:"Saturn is a gas giant famous for its spectacular ring system."
+  },
 
+  {
+    name:"Venus",
+    type:"Planet",
+    icon:"♀️",
+    x:.17,
+    y:.35,
+    size:6,
+    text:"Venus is the second planet from the Sun and the hottest planet in our Solar System."
+  },
 
-/* =====================================
-   PLANETS
-===================================== */
-
-const planets=[
-
-    {
-        name:"Mercury",
-        color:"#d8d8d8",
-        size:5,
-        description:
-        "Mercury is the smallest planet and the closest planet to the Sun."
-    },
-
-    {
-        name:"Venus",
-        color:"#ffd77d",
-        size:6,
-        description:
-        "Venus is the second planet from the Sun and has a thick atmosphere."
-    },
-
-    {
-        name:"Mars",
-        color:"#ff7357",
-        size:6,
-        description:
-        "Mars is the fourth planet from the Sun and is known as the Red Planet."
-    },
-
-    {
-        name:"Jupiter",
-        color:"#e8bd91",
-        size:9,
-        description:
-        "Jupiter is the largest planet in our Solar System."
-    },
-
-    {
-        name:"Saturn",
-        color:"#efd08c",
-        size:8,
-        description:
-        "Saturn is famous for its spectacular ring system."
-    }
+  {
+    name:"Moon",
+    type:"Moon",
+    icon:"🌙",
+    x:.56,
+    y:.76,
+    size:8,
+    text:"The Moon is Earth's natural satellite."
+  }
 
 ];
 
 
-/* =====================================
-   CAMERA VIEW
-===================================== */
+/* =========================
+   STATE
+========================= */
 
-let yaw=0;
-let pitch=0;
+let mode="all";
+let labels=true;
+
+let offsetX=0;
+let offsetY=0;
+let zoom=1;
 
 let dragging=false;
 let lastX=0;
 let lastY=0;
 
-canvas.addEventListener(
-    "touchstart",
-    e=>{
 
-        dragging=true;
-
-        lastX=e.touches[0].clientX;
-        lastY=e.touches[0].clientY;
-
-    },
-    {passive:true}
-);
-
-canvas.addEventListener(
-    "touchmove",
-    e=>{
-
-        if(!dragging)return;
-
-        const x=e.touches[0].clientX;
-        const y=e.touches[0].clientY;
-
-        yaw+=(x-lastX)*.25;
-        pitch+=(y-lastY)*.18;
-
-        pitch=Math.max(
-            -75,
-            Math.min(75,pitch)
-        );
-
-        lastX=x;
-        lastY=y;
-
-    },
-    {passive:true}
-);
-
-canvas.addEventListener(
-    "touchend",
-    ()=>{
-        dragging=false;
-    }
-);
-
-
-/* MOUSE */
-
-canvas.addEventListener(
-    "mousedown",
-    e=>{
-
-        dragging=true;
-
-        lastX=e.clientX;
-        lastY=e.clientY;
-
-    }
-);
-
-canvas.addEventListener(
-    "mousemove",
-    e=>{
-
-        if(!dragging)return;
-
-        yaw+=(e.clientX-lastX)*.25;
-        pitch+=(e.clientY-lastY)*.18;
-
-        pitch=Math.max(
-            -75,
-            Math.min(75,pitch)
-        );
-
-        lastX=e.clientX;
-        lastY=e.clientY;
-
-    }
-);
-
-addEventListener(
-    "mouseup",
-    ()=>{
-        dragging=false;
-    }
-);
-
-
-/* =====================================
-   DRAW SKY
-===================================== */
+/* =========================
+   DRAW
+========================= */
 
 function draw(){
 
-    ctx.clearRect(
-        0,0,
-        innerWidth,
-        innerHeight
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+
+  drawBackground();
+
+  drawStars();
+
+  drawObjects();
+
+  requestAnimationFrame(draw);
+
+}
+
+
+function drawBackground(){
+
+  const g=ctx.createRadialGradient(
+    innerWidth*.5,
+    innerHeight*.45,
+    10,
+    innerWidth*.5,
+    innerHeight*.45,
+    Math.max(innerWidth,innerHeight)
+  );
+
+  g.addColorStop(0,"#08152f");
+  g.addColorStop(.55,"#020713");
+  g.addColorStop(1,"#000");
+
+  ctx.fillStyle=g;
+  ctx.fillRect(0,0,innerWidth,innerHeight);
+
+}
+
+
+function drawStars(){
+
+  for(const s of stars){
+
+    let x=
+      s.x*innerWidth*zoom+
+      offsetX;
+
+    let y=
+      s.y*innerHeight*zoom+
+      offsetY;
+
+    x=((x%innerWidth)+innerWidth)%innerWidth;
+    y=((y%innerHeight)+innerHeight)%innerHeight;
+
+    const alpha=
+      s.a+
+      Math.sin(Date.now()/700+s.tw)*.15;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      s.r,
+      0,
+      Math.PI*2
     );
 
-    const cx=innerWidth/2;
-    const cy=innerHeight/2;
+    ctx.fillStyle=
+      `rgba(255,255,255,${alpha})`;
 
-    for(const s of stars){
+    ctx.fill();
 
-        s.twinkle+=s.speed;
+  }
 
-        const a =
-            s.alpha+
-            Math.sin(s.twinkle)*.18;
+}
 
-        let x=s.x+yaw*.35;
-        let y=s.y+pitch*.25;
 
-        x=((x%innerWidth)+innerWidth)%innerWidth;
+function allowed(obj){
 
-        y=((y%innerHeight)+innerHeight)%innerHeight;
+  if(mode==="all") return true;
 
-        ctx.beginPath();
+  if(mode==="stars")
+    return obj.type==="Star";
 
-        ctx.globalAlpha=Math.max(.05,a);
+  if(mode==="planets")
+    return obj.type==="Planet";
 
-        ctx.fillStyle="#ffffff";
+  if(mode==="moon")
+    return obj.type==="Moon";
 
-        ctx.arc(
-            x,
-            y,
-            s.r,
-            0,
-            Math.PI*2
-        );
+  return true;
 
-        ctx.fill();
+}
+
+
+function drawObjects(){
+
+  document
+    .querySelectorAll(".object-label")
+    .forEach(e=>e.remove());
+
+  objects.forEach((obj,index)=>{
+
+    if(!allowed(obj)) return;
+
+    let x=
+      obj.x*innerWidth*zoom+
+      offsetX;
+
+    let y=
+      obj.y*innerHeight*zoom+
+      offsetY;
+
+    x=((x%innerWidth)+innerWidth)%innerWidth;
+    y=((y%innerHeight)+innerHeight)%innerHeight;
+
+    /* glow */
+
+    const glow=ctx.createRadialGradient(
+      x,y,0,
+      x,y,obj.size*5
+    );
+
+    glow.addColorStop(0,"rgba(255,255,255,.8)");
+    glow.addColorStop(1,"rgba(255,255,255,0)");
+
+    ctx.fillStyle=glow;
+
+    ctx.beginPath();
+    ctx.arc(x,y,obj.size*5,0,Math.PI*2);
+    ctx.fill();
+
+    /* object */
+
+    ctx.beginPath();
+    ctx.arc(x,y,obj.size,0,Math.PI*2);
+
+    ctx.fillStyle=
+      obj.type==="Planet"
+      ? "#f8fafc"
+      : "#ffffff";
+
+    ctx.fill();
+
+    /* clickable area */
+
+    if(labels){
+
+      const el=document.createElement("div");
+
+      el.className="object-label";
+
+      el.style.left=x+"px";
+      el.style.top=(y+obj.size+15)+"px";
+
+      el.innerHTML=`
+        <div class="name">${obj.icon} ${obj.name}</div>
+        <div class="type">${obj.type}</div>
+      `;
+
+      el.onclick=()=>showInfo(obj);
+
+      document.body.appendChild(el);
 
     }
 
-    ctx.globalAlpha=1;
-
-    drawNamedStars();
-
-    requestAnimationFrame(draw);
-
-}
-
-draw();
-
-
-/* =====================================
-   NAMED STAR POSITION
-===================================== */
-
-function starPosition(star){
-
-    /*
-      Educational sky projection.
-      RA is converted into horizontal position.
-      Dec is converted into vertical position.
-    */
-
-    const x =
-        (
-            star.ra/24*innerWidth
-            - yaw*2
-        );
-
-    const y =
-        innerHeight/2
-        -
-        (
-            star.dec/90*
-            innerHeight*.42
-        )
-        +
-        pitch*2;
-
-    return {
-
-        x:((x%innerWidth)+innerWidth)%innerWidth,
-
-        y:Math.max(
-            90,
-            Math.min(
-                innerHeight-100,
-                y
-            )
-        )
-
-    };
+  });
 
 }
 
 
-function drawNamedStars(){
+/* =========================
+   TOUCH / DRAG
+========================= */
 
-    for(const star of namedStars){
+function startDrag(x,y){
 
-        const p=
-            starPosition(star);
+  dragging=true;
+  lastX=x;
+  lastY=y;
 
-        ctx.beginPath();
+}
 
-        ctx.fillStyle=
-            star.color;
+function moveDrag(x,y){
 
-        ctx.shadowBlur=14;
+  if(!dragging)return;
 
-        ctx.shadowColor=
-            star.color;
+  offsetX+=x-lastX;
+  offsetY+=y-lastY;
 
-        ctx.arc(
-            p.x,
-            p.y,
-            star.size,
-            0,
-            Math.PI*2
-        );
+  lastX=x;
+  lastY=y;
 
-        ctx.fill();
+}
 
-        ctx.shadowBlur=0;
+function endDrag(){
 
-    }
+  dragging=false;
 
 }
 
 
-/* =====================================
-   CONSTELLATION LINES
-===================================== */
+canvas.addEventListener("touchstart",e=>{
 
-const constellationLines=[
+  const t=e.touches[0];
 
-    ["Betelgeuse","Bell"],
-    ["Bell","Rigel"]
+  startDrag(t.clientX,t.clientY);
 
-];
+},{passive:true});
 
 
-function drawConstellations(){
+canvas.addEventListener("touchmove",e=>{
 
-    /* visual constellation connections */
+  const t=e.touches[0];
+
+  moveDrag(t.clientX,t.clientY);
+
+},{passive:true});
+
+
+canvas.addEventListener("touchend",endDrag);
+
+
+canvas.addEventListener("mousedown",e=>{
+  startDrag(e.clientX,e.clientY);
+});
+
+canvas.addEventListener("mousemove",e=>{
+  moveDrag(e.clientX,e.clientY);
+});
+
+canvas.addEventListener("mouseup",endDrag);
+
+canvas.addEventListener("mouseleave",endDrag);
+
+
+/* =========================
+   ZOOM
+========================= */
+
+function zoomIn(){
+
+  zoom=Math.min(2.4,zoom+.15);
+
+  toast("Zoom in 🔭");
+
+}
+
+function zoomOut(){
+
+  zoom=Math.max(.65,zoom-.15);
+
+  toast("Zoom out");
+
+}
+
+function resetView(){
+
+  zoom=1;
+  offsetX=0;
+  offsetY=0;
+
+  toast("Sky view reset");
 
 }
 
 
-/* =====================================
-   OBJECT OVERLAY
-===================================== */
+/* =========================
+   MODE
+========================= */
 
-const overlayObjects=[];
+function setMode(newMode){
 
-function createPlanetLabels(){
+  mode=newMode;
 
-    planets.forEach(
-        (planet,index)=>{
+  document
+    .querySelectorAll(".nav")
+    .forEach(n=>n.classList.remove("active"));
 
-            const el=
-                document.createElement("div");
+  event.currentTarget.classList.add("active");
 
-            el.className="label";
-
-            el.style.setProperty(
-                "--size",
-                planet.size+"px"
-            );
-
-            el.style.setProperty(
-                "--glow",
-                planet.color
-            );
-
-            el.innerHTML=`
-
-                <div class="dot"></div>
-
-                <div class="name">
-                    ${planet.name}
-                </div>
-
-            `;
-
-            el.onclick=()=>{
-
-                showObject(
-                    planet.name,
-                    planet.description
-                );
-
-            };
-
-            document
-                .getElementById("space")
-                .appendChild(el);
-
-            overlayObjects.push({
-                el,
-                index
-            });
-
-        }
-    );
-
-}
-
-createPlanetLabels();
-
-
-function updatePlanetLabels(){
-
-    overlayObjects.forEach(
-        item=>{
-
-            const planet=
-                planets[item.index];
-
-            /*
-              Spread planets around sky.
-              This gives a natural moving sky-map
-              layout while keeping them visible.
-            */
-
-            const angle=
-                (
-                    item.index*67+
-                    Date.now()/70000
-                )%360;
-
-            const radius=
-                28+
-                item.index*5;
-
-            const x=
-                50+
-                Math.cos(
-                    angle*Math.PI/180
-                )*radius;
-
-            const y=
-                46+
-                Math.sin(
-                    angle*Math.PI/180
-                )*22;
-
-            item.el.style.left=
-                x+"%";
-
-            item.el.style.top=
-                y+"%";
-
-        }
-    );
-
-    requestAnimationFrame(
-        updatePlanetLabels
-    );
-
-}
-
-updatePlanetLabels();
-
-
-/* =====================================
-   POPUP
-===================================== */
-
-function showObject(name,description){
-
-    document
-        .getElementById("popupTitle")
-        .textContent=name;
-
-    document
-        .getElementById("popupContent")
-        .innerHTML=`
-
-        <p>
-        ${description}
-        </p>
-
-        <p>
-        🌌 Object shown in the GyanSetu
-        interactive sky.
-        </p>
-
-        `;
-
-    document
-        .getElementById("popupBg")
-        .style.display="flex";
+  toast(
+    newMode==="all"
+    ? "Showing all objects"
+    : "Showing "+newMode
+  );
 
 }
 
 
-function closePopup(){
-
-    document
-        .getElementById("popupBg")
-        .style.display="none";
-
-}
-
-
-/* =====================================
-   SEARCH
-===================================== */
-
-document
-.getElementById("search")
-.addEventListener(
-    "input",
-    function(){
-
-        const q=
-            this.value
-            .trim()
-            .toLowerCase();
-
-        overlayObjects.forEach(
-            item=>{
-
-                const name=
-                    planets[item.index]
-                    .name
-                    .toLowerCase();
-
-                item.el.style.opacity=
-                    !q ||
-                    name.includes(q)
-                    ? "1"
-                    : ".08";
-
-            }
-        );
-
-        namedStars.forEach(
-            star=>{
-
-                /* named star visibility
-                   is handled through canvas */
-
-            }
-        );
-
-    }
-);
-
-
-/* =====================================
-   LABEL TOGGLE
-===================================== */
-
-let labels=true;
+/* =========================
+   LABELS
+========================= */
 
 function toggleLabels(){
 
-    labels=!labels;
+  labels=!labels;
 
-    overlayObjects.forEach(
-        item=>{
+  toast(
+    labels
+    ? "Labels ON"
+    : "Labels OFF"
+  );
 
-            item.el.style.display=
-                labels
-                ? "block"
-                : "none";
+}
 
-        }
+
+/* =========================
+   INFO
+========================= */
+
+function showInfo(obj){
+
+  document.getElementById("infoIcon")
+    .textContent=obj.icon;
+
+  document.getElementById("infoName")
+    .textContent=obj.name;
+
+  document.getElementById("infoType")
+    .textContent=obj.type;
+
+  document.getElementById("infoText")
+    .textContent=obj.text;
+
+  document.getElementById("overlay")
+    .style.display="flex";
+
+}
+
+
+function closeInfo(){
+
+  document.getElementById("overlay")
+    .style.display="none";
+
+}
+
+
+document.getElementById("overlay")
+.addEventListener("click",e=>{
+
+  if(e.target.id==="overlay")
+    closeInfo();
+
+});
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchObjects(){
+
+  const q=
+    document
+    .getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
+
+  const results=
+    document.getElementById("results");
+
+  results.innerHTML="";
+
+  if(!q){
+
+    results.style.display="none";
+    return;
+
+  }
+
+  const found=
+    objects.filter(o=>
+      o.name.toLowerCase().includes(q) ||
+      o.type.toLowerCase().includes(q)
     );
 
+  if(found.length===0){
+
+    results.innerHTML=
+      `<div class="result">No object found</div>`;
+
+  }else{
+
+    found.forEach(obj=>{
+
+      const div=document.createElement("div");
+
+      div.className="result";
+
+      div.innerHTML=`
+        ${obj.icon} ${obj.name}
+        <small>${obj.type}</small>
+      `;
+
+      div.onclick=()=>{
+
+        results.style.display="none";
+
+        document.getElementById("search").value=
+          obj.name;
+
+        showInfo(obj);
+
+      };
+
+      results.appendChild(div);
+
+    });
+
+  }
+
+  results.style.display="block";
+
 }
 
 
-/* =====================================
-   SKY MODE
-===================================== */
-
-function setSkyMode(mode){
-
-    if(mode==="planets"){
-
-        overlayObjects.forEach(
-            item=>{
-                item.el.style.display="block";
-            }
-        );
-
-    }
-
-    else{
-
-        overlayObjects.forEach(
-            item=>{
-                item.el.style.display=
-                    labels
-                    ? "block"
-                    : "none";
-            }
-        );
-
-    }
-
-}
-
-
-/* =====================================
+/* =========================
    DEVICE ORIENTATION
-===================================== */
+========================= */
 
-function enableSensors(){
+function requestMotion(){
 
-    if(
-        typeof DeviceOrientationEvent!=="undefined" &&
-        typeof DeviceOrientationEvent.requestPermission==="function"
-    ){
+  if(
+    typeof DeviceOrientationEvent!=="undefined" &&
+    typeof DeviceOrientationEvent.requestPermission==="function"
+  ){
 
-        DeviceOrientationEvent
-        .requestPermission()
-        .then(
-            permission=>{
+    DeviceOrientationEvent
+      .requestPermission()
+      .then(response=>{
 
-                if(permission==="granted"){
+        if(response==="granted"){
 
-                    window.addEventListener(
-                        "deviceorientation",
-                        handleOrientation,
-                        true
-                    );
-
-                }
-
-            }
-        )
-        .catch(
-            console.log
-        );
-
-    }
-
-    else{
-
-        window.addEventListener(
+          window.addEventListener(
             "deviceorientation",
-            handleOrientation,
-            true
-        );
+            handleOrientation
+          );
 
-    }
+          toast("Sky orientation enabled 🧭");
+
+        }
+
+      })
+      .catch(()=>{
+        toast("Motion permission was not granted");
+      });
+
+  }else{
+
+    window.addEventListener(
+      "deviceorientation",
+      handleOrientation
+    );
+
+    toast("Sky orientation enabled 🧭");
+
+  }
 
 }
 
 
 function handleOrientation(event){
 
-    let heading=
-        event.webkitCompassHeading;
+  if(event.alpha==null)return;
 
-    if(
-        heading===undefined ||
-        heading===null
-    ){
+  const heading=
+    Math.round(event.alpha);
 
-        heading=
-            event.alpha||0;
-
-    }
-
-    yaw=
-        heading*.6;
-
-    pitch=
-        (event.beta||0)-45;
-
-    document
-        .getElementById("compass")
-        .style.transform=
-        `rotate(${-heading}deg)`;
-
-    document
-        .getElementById("direction")
-        .textContent=
-        "🧭 "+Math.round(heading)+"°";
+  document.getElementById("heading")
+    .textContent=heading+"°";
 
 }
 
 
-/* =====================================
-   SKY INFO
-===================================== */
+/* =========================
+   FULLSCREEN
+========================= */
 
-function showSkyInfo(){
+function toggleFullscreen(){
 
-    showObject(
-        "GyanSetu Star Walk",
-        "Explore stars, planets and constellations in an interactive educational sky map. Drag the sky with your finger or enable your phone's orientation sensors."
-    );
+  if(!document.fullscreenElement){
 
-}
+    document.documentElement
+      .requestFullscreen?.();
 
+  }else{
 
-/* =====================================
-   HOME
-===================================== */
+    document.exitFullscreen?.();
 
-function goHome(){
-
-    window.location.href=
-        "home.html";
+  }
 
 }
 
 
-/* =====================================
-   CLOCK
-===================================== */
+/* =========================
+   BACK
+========================= */
 
-function updateClock(){
+function goBack(){
 
-    const now=
-        new Date();
-
-    document
-        .getElementById("time")
-        .textContent=
-        "🌍 Local Sky • "+
-        now.toLocaleTimeString();
+  window.location.href="discover-space.html";
 
 }
 
-updateClock();
 
-setInterval(
-    updateClock,
-    1000
-);
+/* =========================
+   TOAST
+========================= */
+
+let toastTimer;
+
+function toast(message){
+
+  const el=
+    document.getElementById("toast");
+
+  el.textContent=message;
+
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+
+    el.classList.remove("show");
+
+  },1500);
+
+}
+
+
+/* =========================
+   DATE
+========================= */
+
+function updateDate(){
+
+  const d=new Date();
+
+  document.getElementById("dateText")
+    .textContent=
+      d.toLocaleDateString(
+        "en-IN",
+        {
+          day:"numeric",
+          month:"short",
+          year:"numeric"
+        }
+      )+" • GyanSetu Space";
+
+}
+
+updateDate();
+
+
+/* START */
+
+draw();
 
 </script>
 
