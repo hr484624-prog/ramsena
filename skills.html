@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>SkillHub</title>
+<title>GyanSetu - Skills</title>
 
 <style>
 
@@ -32,10 +32,35 @@ header{
     border-bottom:1px solid #ddd;
 }
 
+.logo-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:14px;
+}
+
 .logo{
     font-size:27px;
     font-weight:800;
-    margin-bottom:14px;
+}
+
+/* COLLEGE BUTTON */
+
+.college-btn{
+    border:none;
+    background:linear-gradient(135deg,#1769e0,#4ca8ff);
+    color:#fff;
+    padding:10px 13px;
+    border-radius:13px;
+    font-size:13px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(23,105,224,.25);
+}
+
+.college-btn:active{
+    transform:scale(.95);
 }
 
 /* SEARCH */
@@ -64,6 +89,11 @@ header{
     gap:9px;
     overflow-x:auto;
     padding:14px;
+    scrollbar-width:none;
+}
+
+.categories::-webkit-scrollbar{
+    display:none;
 }
 
 .category{
@@ -145,6 +175,7 @@ header{
     border-radius:12px;
     margin-bottom:15px;
     cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
 .card{
@@ -213,53 +244,7 @@ header{
     font-size:13px;
 }
 
-/* COLLEGE */
-
-.collegeBox{
-    margin-top:30px;
-}
-
-.collegeSearch{
-    background:#fff;
-    padding:12px;
-    border-radius:15px;
-    margin:0 15px 14px;
-}
-
-.collegeSearch input{
-    width:100%;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    outline:none;
-    font-size:15px;
-}
-
-.college{
-    background:#fff;
-    border-radius:17px;
-    padding:16px;
-    margin:0 15px 10px;
-    box-shadow:0 2px 8px rgba(0,0,0,.04);
-}
-
-.college h3{
-    margin-bottom:8px;
-}
-
-.college p{
-    color:#666;
-    font-size:14px;
-    line-height:1.5;
-    margin-top:5px;
-}
-
-.empty{
-    grid-column:1/-1;
-    text-align:center;
-    padding:35px;
-    color:#777;
-}
+/* LANGUAGE */
 
 .lang-title{
     font-size:16px;
@@ -272,6 +257,26 @@ header{
     background:#ddd;
     margin:18px 0;
 }
+
+/* TOP DETAIL */
+
+.detail-icon{
+    font-size:48px;
+    margin-bottom:10px;
+}
+
+.detail-category{
+    display:inline-block;
+    background:#eef4ff;
+    color:#1769e0;
+    padding:7px 11px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+/* RESPONSIVE */
 
 @media(min-width:700px){
 
@@ -286,6 +291,12 @@ header{
         max-width:1100px;
         margin:auto;
     }
+
+    .categories{
+        max-width:1100px;
+        margin:auto;
+    }
+
 }
 
 </style>
@@ -300,9 +311,26 @@ HEADER
 
 <header>
 
-    <div class="logo">
-        🚀 SkillHub
+    <div class="logo-row">
+
+        <div class="logo">
+            🚀 SkillHub
+        </div>
+
+        <!-- COLLEGES BUTTON -->
+
+        <button
+            class="college-btn"
+            onclick="goColleges()">
+
+            🎓 Colleges
+
+        </button>
+
     </div>
+
+
+    <!-- SEARCH -->
 
     <div class="search">
 
@@ -312,6 +340,7 @@ HEADER
             id="skillSearch"
             type="text"
             placeholder="Search skill / स्किल खोजें..."
+            autocomplete="off"
             oninput="searchSkills()">
 
     </div>
@@ -325,37 +354,34 @@ HOME
 
 <div id="home">
 
-    <div class="categories" id="categories"></div>
+    <!-- CATEGORIES -->
+
+    <div
+        class="categories"
+        id="categories">
+    </div>
+
+
+    <!-- TITLE -->
 
     <div class="title">
         Explore Skills / स्किल्स देखें
     </div>
 
-    <div class="count" id="count"></div>
 
-    <div class="skills" id="skills"></div>
+    <!-- COUNT -->
+
+    <div
+        class="count"
+        id="count">
+    </div>
 
 
-    <!-- COLLEGE SEARCH -->
+    <!-- SKILLS -->
 
-    <div class="collegeBox">
-
-        <div class="title">
-            🎓 Search Colleges / कॉलेज खोजें
-        </div>
-
-        <div class="collegeSearch">
-
-            <input
-                id="collegeSearch"
-                type="text"
-                placeholder="College, city, state or course..."
-                oninput="searchColleges()">
-
-        </div>
-
-        <div id="colleges"></div>
-
+    <div
+        class="skills"
+        id="skills">
     </div>
 
 </div>
@@ -365,7 +391,9 @@ HOME
 SKILL DETAIL PAGE
 ===================================================== -->
 
-<div class="page" id="detailPage">
+<div
+    class="page"
+    id="detailPage">
 
     <div
         class="back"
@@ -374,6 +402,7 @@ SKILL DETAIL PAGE
         ← Back / वापस
 
     </div>
+
 
     <div id="detail"></div>
 
@@ -586,14 +615,14 @@ const rawSkills = [
 SKILL OBJECTS
 ===================================================== */
 
-const skills=rawSkills.map((x,i)=>({
+const skills = rawSkills.map((x,i)=>({
 
-id:i,
-name:x[0],
-icon:x[1],
-category:x[2],
-english:x[3],
-hindi:x[4]
+    id:i,
+    name:x[0],
+    icon:x[1],
+    category:x[2],
+    english:x[3],
+    hindi:x[4]
 
 }));
 
@@ -697,7 +726,7 @@ Career:[
 
 
 /* =====================================================
-ROADMAP GENERATOR
+ROADMAP
 ===================================================== */
 
 function getRoadmap(skill){
@@ -806,6 +835,7 @@ function getRoadmap(skill){
     };
 
     return common[skill.category] || common.Career;
+
 }
 
 
@@ -886,11 +916,17 @@ function displaySkills(list){
     if(list.length===0){
 
         box.innerHTML=
-        `<div class="empty">
+        `<div style="
+            grid-column:1/-1;
+            text-align:center;
+            padding:35px;
+            color:#777;
+        ">
             🔎 No skill found / कोई स्किल नहीं मिली
         </div>`;
 
         return;
+
     }
 
     list.forEach(skill=>{
@@ -1051,8 +1087,12 @@ function openSkill(skill){
 
     <div class="card">
 
-        <div class="icon">
+        <div class="detail-icon">
             ${skill.icon}
+        </div>
+
+        <div class="detail-category">
+            ${skill.category}
         </div>
 
         <h1>
@@ -1195,26 +1235,28 @@ function openSkill(skill){
     </div>
 
 
-    <!-- COLLEGES -->
+    <!-- COLLEGE LINK -->
 
     <div class="card">
 
         <h2>
-            🏫 Where can you study?
-            / कहाँ पढ़ सकते हैं?
+            🎓 Colleges / कॉलेज
         </h2>
 
         <p>
-            Search the college section below to find institutions
-            and courses related to your interest.
+            इस skill से जुड़े colleges और courses देखने के लिए
+            Colleges section खोलें।
         </p>
 
-        <div class="divider"></div>
+        <br>
 
-        <p>
-            नीचे college search में college, city, state या course
-            का नाम search करके institutions देख सकते हैं।
-        </p>
+        <button
+            class="college-btn"
+            onclick="goColleges()">
+
+            🎓 Find Colleges / कॉलेज खोजें
+
+        </button>
 
     </div>
 
@@ -1226,7 +1268,7 @@ function openSkill(skill){
 
 
 /* =====================================================
-HINDI ROADMAP TEXT
+HINDI ROADMAP
 ===================================================== */
 
 function getHindiStep(step){
@@ -1307,7 +1349,8 @@ function getHindiStep(step){
 
     };
 
-    return hindi[step] || "इस step को practice करके अपनी skill मजबूत करें।";
+    return hindi[step] ||
+        "इस step को practice करके अपनी skill मजबूत करें।";
 
 }
 
@@ -1328,241 +1371,12 @@ function goHome(){
 
 
 /* =====================================================
-COLLEGES
+COLLEGES PAGE
 ===================================================== */
 
-const colleges=[
+function goColleges(){
 
-[
-"Indian Institute of Technology Bombay",
-"Mumbai",
-"Maharashtra",
-"Engineering, Technology, Computer Science"
-],
-
-[
-"Savitribai Phule Pune University",
-"Pune",
-"Maharashtra",
-"Science, Arts, Commerce, Computer Science"
-],
-
-[
-"University of Mumbai",
-"Mumbai",
-"Maharashtra",
-"Arts, Science, Commerce, Management"
-],
-
-[
-"Indian Institute of Science",
-"Bengaluru",
-"Karnataka",
-"Science, Research, Technology"
-],
-
-[
-"University of Delhi",
-"Delhi",
-"Delhi",
-"Arts, Science, Commerce, Computer Science"
-],
-
-[
-"Indian Institute of Technology Delhi",
-"New Delhi",
-"Delhi",
-"Engineering, Technology, Computer Science"
-],
-
-[
-"Indian Institute of Technology Madras",
-"Chennai",
-"Tamil Nadu",
-"Engineering, Technology, Science"
-],
-
-[
-"Indian Institute of Technology Kanpur",
-"Kanpur",
-"Uttar Pradesh",
-"Engineering, Science, Technology"
-],
-
-[
-"Indian Institute of Technology Kharagpur",
-"Kharagpur",
-"West Bengal",
-"Engineering, Technology, Science"
-],
-
-[
-"Indian Institute of Technology Hyderabad",
-"Hyderabad",
-"Telangana",
-"Engineering, Technology, Science"
-],
-
-[
-"National Institute of Design",
-"Ahmedabad",
-"Gujarat",
-"Design, Industrial Design"
-],
-
-[
-"Film and Television Institute of India",
-"Pune",
-"Maharashtra",
-"Film, Television, Acting, Editing"
-],
-
-[
-"National Institute of Fashion Technology",
-"New Delhi",
-"Delhi",
-"Fashion Design, Fashion Technology"
-],
-
-[
-"Indian Institute of Management Ahmedabad",
-"Ahmedabad",
-"Gujarat",
-"Management, Business"
-],
-
-[
-"Indian Institute of Management Bangalore",
-"Bengaluru",
-"Karnataka",
-"Management, Business"
-],
-
-[
-"Tata Institute of Social Sciences",
-"Mumbai",
-"Maharashtra",
-"Social Sciences, Management"
-],
-
-[
-"Vellore Institute of Technology",
-"Vellore",
-"Tamil Nadu",
-"Engineering, Technology"
-],
-
-[
-"Christ University",
-"Bengaluru",
-"Karnataka",
-"Management, Science, Arts, Commerce"
-],
-
-[
-"Symbiosis International University",
-"Pune",
-"Maharashtra",
-"Management, Law, Design, Media"
-],
-
-[
-"MIT World Peace University",
-"Pune",
-"Maharashtra",
-"Engineering, Design, Management"
-],
-
-[
-"SRM Institute of Science and Technology",
-"Chennai",
-"Tamil Nadu",
-"Engineering, Technology, Science"
-],
-
-[
-"Jawaharlal Nehru University",
-"New Delhi",
-"Delhi",
-"Science, Arts, Social Sciences"
-]
-
-];
-
-
-/* =====================================================
-DISPLAY COLLEGES
-===================================================== */
-
-function displayColleges(list){
-
-    const box=document.getElementById("colleges");
-
-    box.innerHTML="";
-
-    if(list.length===0){
-
-        box.innerHTML=`
-        <div class="college">
-            🔎 No college found / कोई कॉलेज नहीं मिला
-        </div>`;
-
-        return;
-
-    }
-
-    list.forEach(c=>{
-
-        box.innerHTML+=`
-
-        <div class="college">
-
-            <h3>
-                🎓 ${c[0]}
-            </h3>
-
-            <p>
-                📍 ${c[1]}, ${c[2]}
-            </p>
-
-            <p>
-                📚 ${c[3]}
-            </p>
-
-        </div>
-
-        `;
-
-    });
-
-}
-
-
-/* =====================================================
-COLLEGE SEARCH
-===================================================== */
-
-function searchColleges(){
-
-    const q=document
-    .getElementById("collegeSearch")
-    .value
-    .toLowerCase()
-    .trim();
-
-    const result=colleges.filter(c=>
-
-        c[0].toLowerCase().includes(q) ||
-
-        c[1].toLowerCase().includes(q) ||
-
-        c[2].toLowerCase().includes(q) ||
-
-        c[3].toLowerCase().includes(q)
-
-    );
-
-    displayColleges(result);
+    window.location.href="colleges.html";
 
 }
 
@@ -1574,8 +1388,6 @@ START
 createCategories();
 
 displaySkills(skills);
-
-displayColleges(colleges);
 
 </script>
 
