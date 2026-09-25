@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>SkillHub</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f8;
+    color:#111;
+    padding-bottom:40px;
+}
+
+/* HEADER */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:#fff;
+    padding:16px;
+    border-bottom:1px solid #ddd;
+}
+
+.logo{
+    font-size:27px;
+    font-weight:800;
+    margin-bottom:14px;
+}
+
+/* SEARCH */
+
+.search{
+    display:flex;
+    align-items:center;
+    background:#f1f3f5;
+    border-radius:14px;
+    padding:0 14px;
+}
+
+.search input{
+    width:100%;
+    border:0;
+    outline:0;
+    background:transparent;
+    padding:14px 10px;
+    font-size:16px;
+}
+
+/* CATEGORY */
+
+.categories{
+    display:flex;
+    gap:9px;
+    overflow-x:auto;
+    padding:14px;
+}
+
+.category{
+    white-space:nowrap;
+    background:#fff;
+    border:1px solid #ddd;
+    padding:9px 14px;
+    border-radius:25px;
+    cursor:pointer;
+}
+
+.category.active{
+    background:#111;
+    color:#fff;
+}
+
+/* TITLE */
+
+.title{
+    font-size:22px;
+    font-weight:800;
+    padding:6px 16px 12px;
+}
+
+.count{
+    padding:0 16px 12px;
+    color:#777;
+    font-size:14px;
+}
+
+/* SKILLS */
+
+.skills{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    padding:0 14px;
+}
+
+.skill{
+    background:#fff;
+    border-radius:18px;
+    padding:17px 14px;
+    min-height:125px;
+    box-shadow:0 3px 12px rgba(0,0,0,.06);
+    cursor:pointer;
+    transition:.15s;
+}
+
+.skill:active{
+    transform:scale(.96);
+}
+
+.icon{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.skill h3{
+    font-size:16px;
+    margin-bottom:6px;
+}
+
+.skill small{
+    color:#777;
+}
+
+/* DETAIL */
+
+.page{
+    display:none;
+    padding:16px;
+}
+
+.back{
+    display:inline-block;
+    background:#fff;
+    padding:10px 15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    cursor:pointer;
+}
+
+.card{
+    background:#fff;
+    padding:20px;
+    border-radius:20px;
+    margin-bottom:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.05);
+}
+
+.card h1{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.card h2{
+    font-size:20px;
+    margin-bottom:12px;
+}
+
+.card h3{
+    font-size:17px;
+    margin-bottom:7px;
+}
+
+.card p{
+    color:#444;
+    line-height:1.65;
+}
+
+/* ROADMAP */
+
+.step{
+    display:flex;
+    gap:12px;
+    margin:12px 0;
+    padding:13px;
+    background:#f5f6f8;
+    border-radius:13px;
+}
+
+.step-number{
+    min-width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#111;
+    color:white;
+    border-radius:50%;
+    font-weight:bold;
+}
+
+.step-text{
+    line-height:1.5;
+}
+
+/* TAGS */
+
+.tag{
+    display:inline-block;
+    margin:5px 5px 5px 0;
+    padding:9px 12px;
+    border-radius:20px;
+    background:#f0f2f5;
+    font-size:13px;
+}
+
+/* COLLEGE */
+
+.collegeBox{
+    margin-top:30px;
+}
+
+.collegeSearch{
+    background:#fff;
+    padding:12px;
+    border-radius:15px;
+    margin:0 15px 14px;
+}
+
+.collegeSearch input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    outline:none;
+    font-size:15px;
+}
+
+.college{
+    background:#fff;
+    border-radius:17px;
+    padding:16px;
+    margin:0 15px 10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.college h3{
+    margin-bottom:8px;
+}
+
+.college p{
+    color:#666;
+    font-size:14px;
+    line-height:1.5;
+    margin-top:5px;
+}
+
+.empty{
+    grid-column:1/-1;
+    text-align:center;
+    padding:35px;
+    color:#777;
+}
+
+.lang-title{
+    font-size:16px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.divider{
+    height:1px;
+    background:#ddd;
+    margin:18px 0;
+}
+
+@media(min-width:700px){
+
+    .skills{
+        grid-template-columns:repeat(4,1fr);
+        max-width:1100px;
+        margin:auto;
+    }
+
+    .title,
+    .count{
+        max-width:1100px;
+        margin:auto;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- =====================================================
+HEADER
+===================================================== -->
+
+<header>
+
+    <div class="logo">
+        🚀 SkillHub
+    </div>
+
+    <div class="search">
+
+        <span>🔎</span>
+
+        <input
+            id="skillSearch"
+            type="text"
+            placeholder="Search skill / स्किल खोजें..."
+            oninput="searchSkills()">
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+HOME
+===================================================== -->
+
+<div id="home">
+
+    <div class="categories" id="categories"></div>
+
+    <div class="title">
+        Explore Skills / स्किल्स देखें
+    </div>
+
+    <div class="count" id="count"></div>
+
+    <div class="skills" id="skills"></div>
+
+
+    <!-- COLLEGE SEARCH -->
+
+    <div class="collegeBox">
+
+        <div class="title">
+            🎓 Search Colleges / कॉलेज खोजें
+        </div>
+
+        <div class="collegeSearch">
+
+            <input
+                id="collegeSearch"
+                type="text"
+                placeholder="College, city, state or course..."
+                oninput="searchColleges()">
+
+        </div>
+
+        <div id="colleges"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+SKILL DETAIL PAGE
+===================================================== -->
+
+<div class="page" id="detailPage">
+
+    <div
+        class="back"
+        onclick="goHome()">
+
+        ← Back / वापस
+
+    </div>
+
+    <div id="detail"></div>
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+SKILLS
+===================================================== */
+
+const rawSkills = [
+
+["App Development","📱","Technology","Creating mobile applications.","मोबाइल एप्लिकेशन बनाना।"],
+["Web Development","🌐","Technology","Creating websites and web applications.","वेबसाइट और वेब एप्लिकेशन बनाना।"],
+["Frontend Development","🖥️","Technology","Building the visible part of websites.","वेबसाइट का दिखाई देने वाला हिस्सा बनाना।"],
+["Backend Development","⚙️","Technology","Building servers and application logic.","सर्वर और एप्लिकेशन लॉजिक बनाना।"],
+["Full Stack Development","💻","Technology","Working with frontend and backend.","Frontend और Backend दोनों सीखना।"],
+["Game Development","🎮","Technology","Creating digital games.","डिजिटल गेम बनाना।"],
+["AI Development","🤖","Technology","Building AI-powered applications.","AI आधारित एप्लिकेशन बनाना।"],
+["Machine Learning","🧠","Technology","Teaching computers using data.","डेटा की मदद से कंप्यूटर को सीखाना।"],
+["Data Science","📊","Technology","Working with data and insights.","डेटा से जानकारी और insights निकालना।"],
+["Data Analytics","📈","Technology","Analyzing data for decisions.","निर्णय लेने के लिए डेटा का analysis करना।"],
+["Cybersecurity","🔐","Technology","Protecting digital systems.","डिजिटल सिस्टम को सुरक्षित रखना।"],
+["Cloud Computing","☁️","Technology","Working with cloud infrastructure.","Cloud infrastructure के साथ काम करना।"],
+["Database Management","🗄️","Technology","Managing stored data.","डेटा को व्यवस्थित और manage करना।"],
+["Software Testing","🧪","Technology","Testing software quality.","Software की quality और bugs check करना।"],
+["UI Design","🎨","Technology","Designing digital interfaces.","Digital interface design करना।"],
+["UX Design","✨","Technology","Improving user experience.","User experience बेहतर बनाना।"],
+["Blockchain","⛓️","Technology","Working with blockchain systems.","Blockchain technology पर काम करना।"],
+["Robotics","🤖","Technology","Designing and programming robots.","Robot बनाना और program करना।"],
+["IoT","📡","Technology","Connecting physical devices.","Physical devices को internet से connect करना।"],
+["AR Development","🥽","Technology","Creating augmented reality.","Augmented Reality experiences बनाना।"],
+["VR Development","🕶️","Technology","Creating virtual reality.","Virtual Reality experiences बनाना।"],
+["Automation","⚡","Technology","Automating repetitive tasks.","बार-बार होने वाले काम automate करना।"],
+["Programming","👨‍💻","Technology","Writing computer programs.","Computer programs लिखना।"],
+
+["Agriculture","🌾","Agriculture","Growing crops scientifically.","वैज्ञानिक तरीके से फसल उगाना।"],
+["Organic Farming","🌱","Agriculture","Organic farming practices.","जैविक खेती की तकनीक सीखना।"],
+["Agribusiness","💼","Agriculture","Business related to agriculture.","कृषि से जुड़ा business करना।"],
+["Horticulture","🌻","Agriculture","Growing fruits, vegetables and plants.","फल, सब्जियां और पौधे उगाना।"],
+["Floriculture","🌷","Agriculture","Growing flowers.","फूलों की खेती करना।"],
+["Fruit Farming","🍎","Agriculture","Managing fruit crops.","फलों की खेती और management।"],
+["Vegetable Farming","🥕","Agriculture","Producing vegetables.","सब्जियों की खेती करना।"],
+["Dairy Farming","🐄","Agriculture","Managing dairy animals.","दूध देने वाले पशुओं का management।"],
+["Poultry Farming","🐔","Agriculture","Raising poultry.","मुर्गी पालन करना।"],
+["Goat Farming","🐐","Agriculture","Managing goat farming.","बकरी पालन करना।"],
+["Fish Farming","🐟","Agriculture","Raising fish.","मछली पालन करना।"],
+["Beekeeping","🐝","Agriculture","Managing honeybee colonies.","मधुमक्खी पालन करना।"],
+["Mushroom Farming","🍄","Agriculture","Growing mushrooms.","मशरूम की खेती करना।"],
+["Hydroponics","💧","Agriculture","Growing plants without traditional soil.","बिना पारंपरिक मिट्टी के पौधे उगाना।"],
+["Aquaponics","🐠","Agriculture","Combining fish and plant production.","मछली और पौधों की संयुक्त प्रणाली।"],
+["Agricultural Machinery","🚜","Agriculture","Using farm machines.","कृषि मशीनों का उपयोग करना।"],
+["Soil Science","🌍","Agriculture","Understanding soil.","मिट्टी को समझना और manage करना।"],
+["Irrigation Management","💦","Agriculture","Managing farm water.","खेती के पानी का management।"],
+["Farm Management","📋","Agriculture","Planning farm operations.","फार्म के कामों की planning करना।"],
+["Precision Agriculture","🛰️","Agriculture","Using technology in farming.","खेती में technology और data का उपयोग।"],
+
+["Video Editing","🎬","Creative","Editing videos.","वीडियो edit करना।"],
+["Photo Editing","📸","Creative","Editing photographs.","फोटो edit करना।"],
+["Graphic Design","🎨","Creative","Creating visual designs.","Visual designs बनाना।"],
+["Photography","📷","Creative","Creating photographs.","Photography सीखना।"],
+["Animation","🎞️","Creative","Creating animated content.","Animation बनाना।"],
+["2D Animation","✏️","Creative","Creating two-dimensional animation.","2D animation बनाना।"],
+["3D Animation","🧊","Creative","Creating three-dimensional animation.","3D animation बनाना।"],
+["3D Modelling","🧱","Creative","Creating 3D objects.","3D objects बनाना।"],
+["Motion Graphics","✨","Creative","Creating animated graphics.","Animated graphics बनाना।"],
+["Illustration","🖌️","Creative","Creating illustrations.","Illustrations बनाना।"],
+["Digital Art","🖼️","Creative","Creating digital artwork.","Digital artwork बनाना।"],
+["Drawing","✏️","Creative","Creating drawings.","Drawing skill विकसित करना।"],
+["Painting","🎨","Creative","Creating paintings.","Painting सीखना।"],
+["Calligraphy","✍️","Creative","Artistic handwriting.","सुंदर और artistic handwriting सीखना।"],
+["Interior Design","🏠","Creative","Designing interiors.","घर और spaces का interior design करना।"],
+["Fashion Design","👗","Creative","Designing clothes.","कपड़ों का design करना।"],
+["Jewellery Design","💎","Creative","Designing jewellery.","Jewellery design करना।"],
+["Music Production","🎵","Creative","Creating and producing music.","Music create और produce करना।"],
+["Sound Design","🔊","Creative","Creating sounds for media.","Media के लिए sound बनाना।"],
+["Singing","🎤","Creative","Developing vocal skills.","गायन की skill विकसित करना।"],
+["Instrumental Music","🎸","Creative","Playing musical instruments.","वाद्य यंत्र बजाना सीखना।"],
+["Film Making","🎥","Creative","Creating films.","Film बनाना।"],
+["Screenwriting","📝","Creative","Writing film scripts.","Film scripts लिखना।"],
+["Acting","🎭","Creative","Performing characters.","Acting सीखना।"],
+["Dance","💃","Creative","Developing dance skills.","Dance skill विकसित करना।"],
+["Content Creation","📱","Creative","Creating digital content.","Digital content बनाना।"],
+
+["Cricket","🏏","Sports","Developing cricket skills.","क्रिकेट की skill विकसित करना।"],
+["Football","⚽","Sports","Developing football skills.","फुटबॉल की skill विकसित करना।"],
+["Basketball","🏀","Sports","Developing basketball skills.","बास्केटबॉल सीखना।"],
+["Volleyball","🏐","Sports","Developing volleyball skills.","वॉलीबॉल सीखना।"],
+["Badminton","🏸","Sports","Developing badminton skills.","बैडमिंटन सीखना।"],
+["Tennis","🎾","Sports","Developing tennis skills.","टेनिस सीखना।"],
+["Table Tennis","🏓","Sports","Developing table tennis skills.","टेबल टेनिस सीखना।"],
+["Hockey","🏑","Sports","Developing hockey skills.","हॉकी सीखना।"],
+["Athletics","🏃","Sports","Running, jumping and throwing disciplines.","दौड़, कूद और throwing disciplines।"],
+["Swimming","🏊","Sports","Learning swimming techniques.","तैराकी की techniques सीखना।"],
+["Gymnastics","🤸","Sports","Developing movement skills.","Movement और gymnastics skills।"],
+["Boxing","🥊","Sports","Learning boxing techniques.","Boxing techniques सीखना।"],
+["Wrestling","🤼","Sports","Learning wrestling techniques.","Wrestling techniques सीखना।"],
+["Archery","🏹","Sports","Developing archery skills.","Archery की skill विकसित करना।"],
+["Chess","♟️","Sports","Developing strategic thinking.","रणनीतिक सोच विकसित करना।"],
+["Skating","⛸️","Sports","Developing skating skills.","Skating सीखना।"],
+["Cycling","🚴","Sports","Developing cycling skills.","Cycling skill विकसित करना।"],
+["Yoga","🧘","Sports","Learning yoga practices.","Yoga की practices सीखना।"],
+["Martial Arts","🥋","Sports","Learning structured martial arts.","Martial arts की structured training।"],
+["Kabaddi","🤼","Sports","Developing kabaddi skills.","कबड्डी की skill विकसित करना।"],
+["Golf","⛳","Sports","Learning golf skills.","Golf सीखना।"],
+["Sports Coaching","🏆","Sports","Learning sports coaching.","Sports coaching सीखना।"],
+
+["Entrepreneurship","🚀","Business","Building and managing a business idea.","Business idea को विकसित और manage करना।"],
+["Business Management","💼","Business","Managing business operations.","Business operations manage करना।"],
+["Digital Marketing","📢","Business","Marketing through digital platforms.","Digital platforms पर marketing करना।"],
+["Social Media Management","📱","Business","Managing social media accounts.","Social media accounts manage करना।"],
+["SEO","🔎","Business","Improving search visibility.","Search engine visibility improve करना।"],
+["Content Marketing","📝","Business","Marketing through useful content.","Useful content के जरिए marketing करना।"],
+["Sales","🤝","Business","Selling products and services.","Products और services sell करना।"],
+["Customer Service","☎️","Business","Helping customers.","Customers की मदद करना।"],
+["Brand Management","🏷️","Business","Managing a brand.","Brand को manage करना।"],
+["E-Commerce","🛒","Business","Selling online.","Online products/services sell करना।"],
+["Market Research","🔍","Business","Studying markets and customers.","Market और customers को study करना।"],
+["Business Analytics","📊","Business","Analyzing business data.","Business data analyze करना।"],
+["Project Management","📋","Business","Planning projects.","Projects plan और manage करना।"],
+["Accounting","🧾","Business","Managing financial records.","Financial records manage करना।"],
+["Personal Finance","💰","Business","Managing personal money.","अपने पैसे का responsible management।"],
+["Leadership","👑","Business","Guiding teams.","Team को guide करना।"],
+["Negotiation","🤝","Business","Reaching agreements.","Agreement तक पहुंचने की skill।"],
+["Advertising","📺","Business","Promoting products and services.","Products और services promote करना।"],
+["Freelancing","💻","Business","Working independently for clients.","Clients के लिए independent काम करना।"],
+["Personal Branding","⭐","Business","Building professional identity.","Professional identity बनाना।"],
+
+["Cooking","🍳","Practical","Preparing food.","खाना बनाना सीखना।"],
+["Baking","🍰","Practical","Preparing baked foods.","Cake, bread और baked foods बनाना।"],
+["Tailoring","🧵","Practical","Making and altering clothes.","कपड़े सिलना और alter करना।"],
+["Carpentry","🪵","Practical","Working with wood.","लकड़ी के साथ काम करना।"],
+["Electrical Work","⚡","Practical","Working with electrical systems safely.","Electrical systems के साथ सुरक्षित तरीके से काम करना।"],
+["Plumbing","🔧","Practical","Installing and maintaining plumbing.","Plumbing systems install और maintain करना।"],
+["Welding","🔥","Practical","Joining metal components.","Metal components को join करना।"],
+["Automobile Repair","🚗","Practical","Repairing vehicles.","Vehicles की repair और maintenance।"],
+["AC Repair","❄️","Practical","Maintaining air conditioners.","Air conditioner की maintenance और repair।"],
+["Mobile Repair","📱","Practical","Repairing mobile devices.","Mobile devices repair करना।"],
+["Computer Repair","🖥️","Practical","Repairing computers.","Computers repair करना।"],
+["CCTV Installation","📹","Practical","Installing CCTV systems.","CCTV systems install करना।"],
+["Solar Installation","☀️","Practical","Installing solar systems.","Solar systems install करना।"],
+["Drone Operation","🚁","Practical","Operating drones safely.","Drone को नियमों और safety के अनुसार operate करना।"],
+["3D Printing","🖨️","Practical","Creating objects with 3D printers.","3D printer से objects बनाना।"],
+["Woodworking","🪚","Practical","Creating wooden objects.","लकड़ी की वस्तुएं बनाना।"],
+["Pottery","🏺","Practical","Creating clay objects.","मिट्टी से वस्तुएं बनाना।"],
+["Makeup Artistry","💄","Practical","Professional makeup techniques.","Professional makeup techniques सीखना।"],
+["Hair Styling","💇","Practical","Hair cutting and styling.","Hair cutting और styling सीखना।"],
+["Gardening","🌱","Practical","Growing and maintaining plants.","पौधे उगाना और maintain करना।"],
+
+["English Speaking","🇬🇧","Communication","Improving spoken English.","Spoken English improve करना।"],
+["Public Speaking","🎤","Communication","Speaking before audiences.","Audience के सामने बोलना।"],
+["Presentation Skills","📊","Communication","Presenting information clearly.","Information को clearly present करना।"],
+["Storytelling","📖","Communication","Communicating through stories.","Stories के जरिए ideas communicate करना।"],
+["Writing","✍️","Communication","Writing clearly.","Clearly लिखना सीखना।"],
+["Interview Skills","💼","Communication","Preparing for interviews.","Interview की preparation करना।"],
+["Debate","🗣️","Communication","Structured argument and discussion.","Structured argument और discussion सीखना।"],
+["Team Communication","👥","Communication","Communicating within teams.","Team में effective communication करना।"],
+
+["YouTube Creation","▶️","Media","Creating YouTube content.","YouTube content बनाना।"],
+["Instagram Content","📸","Media","Creating social media content.","Social media content बनाना।"],
+["Reels Creation","🎬","Media","Creating short videos.","Short videos/Reels बनाना।"],
+["Thumbnail Design","🖼️","Media","Designing thumbnails.","Video thumbnails बनाना।"],
+["Video Production","🎥","Media","Planning and producing videos.","Video plan, shoot और produce करना।"],
+["Live Streaming","🔴","Media","Broadcasting live content.","Live content broadcast करना।"],
+["Podcast Production","🎙️","Media","Creating podcasts.","Podcast बनाना।"],
+["Script Writing","📝","Media","Writing scripts.","Scripts लिखना।"],
+["News Reporting","📰","Media","Reporting news information.","News information report करना।"],
+
+["Biotechnology","🧬","Science","Applying biology to technology.","Biology को technology में apply करना।"],
+["Environmental Science","🌍","Science","Studying environment.","Environment का study करना।"],
+["Marine Science","🌊","Science","Studying marine environments.","Marine environments का study करना।"],
+["Food Science","🥗","Science","Studying food science.","Food properties और processing का study।"],
+["Forensic Science","🔬","Science","Applying science to investigations.","Investigations में scientific methods apply करना।"],
+["Astronomy","🔭","Science","Studying the universe.","Universe का study करना।"],
+["Geology","🪨","Science","Studying Earth and rocks.","Earth और rocks का study करना।"],
+["Meteorology","🌦️","Science","Studying weather.","Weather और atmosphere का study करना।"],
+["Laboratory Skills","🧪","Science","Learning laboratory practices.","Laboratory practices सीखना।"],
+
+["Product Design","📦","Design","Designing products.","Products design करना।"],
+["Industrial Design","🏭","Design","Designing manufactured products.","Manufactured products design करना।"],
+["Furniture Design","🪑","Design","Designing furniture.","Furniture design करना।"],
+["Architecture","🏛️","Design","Designing buildings and spaces.","Buildings और spaces design करना।"],
+["Landscape Design","🌳","Design","Designing outdoor spaces.","Outdoor spaces design करना।"],
+["Game Art","🎮","Design","Creating visual game assets.","Games के visual assets बनाना।"],
+["Character Design","🧑‍🎨","Design","Designing characters.","Characters design करना।"],
+["Logo Design","🔷","Design","Creating logos.","Logos बनाना।"],
+["Typography","🔤","Design","Working with type and lettering.","Typography और lettering सीखना।"],
+["Packaging Design","📦","Design","Designing product packaging.","Product packaging design करना।"],
+
+["Teaching","👨‍🏫","Career","Helping people learn.","दूसरों को सिखाना।"],
+["Training & Coaching","🏆","Career","Helping people develop skills.","लोगों की skills develop करने में मदद करना।"],
+["Event Management","🎪","Career","Planning and managing events.","Events plan और manage करना।"],
+["Travel Planning","✈️","Career","Planning travel experiences.","Travel plans बनाना।"],
+["Tourism Management","🌍","Career","Managing tourism services.","Tourism services manage करना।"],
+["Hotel Management","🏨","Career","Managing hospitality operations.","Hotel और hospitality operations manage करना।"],
+["Aviation Services","✈️","Career","Working in aviation services.","Aviation service क्षेत्र में skills विकसित करना।"],
+["Logistics","🚚","Career","Managing movement of goods.","Goods की movement manage करना।"],
+["Supply Chain Management","📦","Career","Managing product flow.","Products और materials का flow manage करना।"],
+["Human Resources","👥","Career","Managing people processes.","People-related organizational processes manage करना।"],
+["Technical Writing","📘","Career","Writing technical documentation.","Technical documentation लिखना।"],
+["Research & Development","🔬","Career","Developing new products or knowledge.","नई technology, products या knowledge develop करना।"]
+
+];
+
+
+/* =====================================================
+SKILL OBJECTS
+===================================================== */
+
+const skills=rawSkills.map((x,i)=>({
+
+id:i,
+name:x[0],
+icon:x[1],
+category:x[2],
+english:x[3],
+hindi:x[4]
+
+}));
+
+
+/* =====================================================
+COURSES
+===================================================== */
+
+const courseMap={
+
+Technology:[
+"B.Tech / B.E.",
+"BCA",
+"B.Sc Computer Science",
+"B.Sc IT",
+"Computer Science Diploma",
+"Technology Certifications"
+],
+
+Agriculture:[
+"B.Sc Agriculture",
+"B.Sc Horticulture",
+"Diploma in Agriculture",
+"Agriculture Polytechnic",
+"Agri Technology Programs"
+],
+
+Creative:[
+"B.Des",
+"BFA",
+"Animation / VFX Courses",
+"Film & Media Courses",
+"Design Diploma"
+],
+
+Sports:[
+"B.P.Ed",
+"B.Sc Sports",
+"Sports Coaching",
+"Sports Management",
+"Professional Sports Training"
+],
+
+Business:[
+"BBA",
+"BMS",
+"B.Com",
+"Management Programs",
+"Business Certifications"
+],
+
+Practical:[
+"ITI",
+"Polytechnic Diploma",
+"Vocational Training",
+"Skill Development Programs",
+"Technical Certifications"
+],
+
+Communication:[
+"BA",
+"Mass Communication",
+"Journalism",
+"Communication Programs",
+"Language Courses"
+],
+
+Media:[
+"Mass Communication",
+"Film & Television",
+"Media Studies",
+"Digital Media Programs",
+"Content Creation Courses"
+],
+
+Science:[
+"B.Sc",
+"Integrated M.Sc",
+"Science Diploma",
+"Research Programs",
+"Laboratory Programs"
+],
+
+Design:[
+"B.Des",
+"B.Arch",
+"BFA",
+"Design Diploma",
+"Design Certifications"
+],
+
+Career:[
+"BA / BBA / B.Com",
+"Professional Certifications",
+"Vocational Programs",
+"Management Programs",
+"Specialized Diplomas"
+]
+
+};
+
+
+/* =====================================================
+ROADMAP GENERATOR
+===================================================== */
+
+function getRoadmap(skill){
+
+    const common={
+
+    Technology:[
+        ["Basics","Learn computer fundamentals and the basic concepts of the skill."],
+        ["Tools","Learn the main software, programming languages or tools used in the field."],
+        ["Practice","Build small projects and practice regularly."],
+        ["Projects","Create 3–5 practical projects."],
+        ["Portfolio","Prepare a portfolio showing your work."],
+        ["Advanced","Learn advanced concepts and specialize."]
+    ],
+
+    Agriculture:[
+        ["Basics","Learn basic agriculture, crops, soil and farming concepts."],
+        ["Practical Training","Visit farms or training centers and observe real practices."],
+        ["Techniques","Learn the techniques used in the selected agriculture field."],
+        ["Practice","Work on small practical activities or projects."],
+        ["Business","Learn basic farm planning, costing and marketing where relevant."],
+        ["Advanced","Explore specialization and modern agriculture technology."]
+    ],
+
+    Creative:[
+        ["Basics","Learn the fundamentals of the creative field."],
+        ["Tools","Learn the important software and equipment."],
+        ["Practice","Practice regularly and recreate simple projects for learning."],
+        ["Projects","Create original projects."],
+        ["Portfolio","Build a portfolio of your best work."],
+        ["Professional","Learn client work, communication and professional workflow."]
+    ],
+
+    Sports:[
+        ["Basics","Learn rules, basic techniques and fundamentals."],
+        ["Training","Practice regularly with proper coaching."],
+        ["Fitness","Develop appropriate fitness and sport-specific conditioning."],
+        ["Competition","Participate in suitable practice matches or competitions."],
+        ["Performance","Track performance and improve weak areas."],
+        ["Advanced","Explore competitive, coaching or sports-management pathways."]
+    ],
+
+    Business:[
+        ["Basics","Learn the basic concepts of business and markets."],
+        ["Research","Understand customers and market needs."],
+        ["Practice","Work on small business exercises or projects."],
+        ["Execution","Apply the skill to a real project."],
+        ["Experience","Build practical experience."],
+        ["Advanced","Develop specialization and professional skills."]
+    ],
+
+    Practical:[
+        ["Basics","Learn the fundamentals and safety rules."],
+        ["Training","Take structured vocational or practical training."],
+        ["Tools","Learn to use the required tools correctly."],
+        ["Practice","Practice under proper supervision."],
+        ["Projects","Complete practical projects."],
+        ["Professional","Build experience and explore certification or employment."]
+    ],
+
+    Communication:[
+        ["Basics","Learn the fundamentals of clear communication."],
+        ["Practice","Practice speaking, writing and listening regularly."],
+        ["Vocabulary","Build useful vocabulary and expressions."],
+        ["Presentation","Practice presenting ideas clearly."],
+        ["Feedback","Record practice and improve using feedback."],
+        ["Advanced","Develop professional communication skills."]
+    ],
+
+    Media:[
+        ["Basics","Learn media fundamentals and storytelling."],
+        ["Tools","Learn camera, audio and editing tools as required."],
+        ["Practice","Create small pieces of content."],
+        ["Projects","Produce complete content projects."],
+        ["Portfolio","Create a portfolio or showreel."],
+        ["Professional","Learn publishing, collaboration and production workflow."]
+    ],
+
+    Science:[
+        ["Basics","Learn foundational science concepts."],
+        ["Study","Study relevant theory systematically."],
+        ["Laboratory","Learn appropriate laboratory or practical methods."],
+        ["Experiments","Perform suitable supervised experiments or projects."],
+        ["Research","Learn how to read and document scientific information."],
+        ["Advanced","Explore higher education and specialized research."]
+    ],
+
+    Design:[
+        ["Basics","Learn design principles and fundamentals."],
+        ["Tools","Learn relevant design software and tools."],
+        ["Practice","Practice layouts, concepts and visual problem solving."],
+        ["Projects","Create original design projects."],
+        ["Portfolio","Build a professional portfolio."],
+        ["Advanced","Develop a specialization."]
+    ],
+
+    Career:[
+        ["Basics","Understand the fundamentals of the career field."],
+        ["Education","Choose suitable education or training."],
+        ["Practice","Develop practical experience."],
+        ["Communication","Improve professional communication."],
+        ["Experience","Build projects, internships or supervised experience where appropriate."],
+        ["Career","Explore suitable jobs, further education or entrepreneurship."]
+    ]
+
+    };
+
+    return common[skill.category] || common.Career;
+}
+
+
+/* =====================================================
+CATEGORIES
+===================================================== */
+
+const categories=[
+
+"All",
+"Technology",
+"Agriculture",
+"Creative",
+"Sports",
+"Business",
+"Practical",
+"Communication",
+"Media",
+"Science",
+"Design",
+"Career"
+
+];
+
+let currentCategory="All";
+
+
+function createCategories(){
+
+    const box=document.getElementById("categories");
+
+    categories.forEach(cat=>{
+
+        const button=document.createElement("div");
+
+        button.className="category";
+
+        if(cat==="All"){
+            button.classList.add("active");
+        }
+
+        button.innerText=cat;
+
+        button.onclick=()=>{
+
+            currentCategory=cat;
+
+            document
+            .querySelectorAll(".category")
+            .forEach(x=>x.classList.remove("active"));
+
+            button.classList.add("active");
+
+            searchSkills();
+
+        };
+
+        box.appendChild(button);
+
+    });
+
+}
+
+
+/* =====================================================
+DISPLAY SKILLS
+===================================================== */
+
+function displaySkills(list){
+
+    const box=document.getElementById("skills");
+
+    box.innerHTML="";
+
+    document.getElementById("count").innerText=
+        list.length+" skills available / स्किल्स उपलब्ध";
+
+    if(list.length===0){
+
+        box.innerHTML=
+        `<div class="empty">
+            🔎 No skill found / कोई स्किल नहीं मिली
+        </div>`;
+
+        return;
+    }
+
+    list.forEach(skill=>{
+
+        const card=document.createElement("div");
+
+        card.className="skill";
+
+        card.innerHTML=`
+
+            <div class="icon">
+                ${skill.icon}
+            </div>
+
+            <h3>
+                ${skill.name}
+            </h3>
+
+            <small>
+                ${skill.category}
+            </small>
+
+        `;
+
+        card.onclick=()=>openSkill(skill);
+
+        box.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+SEARCH
+===================================================== */
+
+function searchSkills(){
+
+    const q=document
+    .getElementById("skillSearch")
+    .value
+    .toLowerCase()
+    .trim();
+
+    const result=skills.filter(skill=>{
+
+        const searchMatch=
+
+            skill.name
+            .toLowerCase()
+            .includes(q)
+
+            ||
+
+            skill.category
+            .toLowerCase()
+            .includes(q)
+
+            ||
+
+            skill.english
+            .toLowerCase()
+            .includes(q)
+
+            ||
+
+            skill.hindi
+            .toLowerCase()
+            .includes(q);
+
+        const categoryMatch=
+
+            currentCategory==="All" ||
+            skill.category===currentCategory;
+
+        return searchMatch && categoryMatch;
+
+    });
+
+    displaySkills(result);
+
+}
+
+
+/* =====================================================
+OPEN SKILL
+===================================================== */
+
+function openSkill(skill){
+
+    document.getElementById("home").style.display="none";
+
+    document.getElementById("detailPage").style.display="block";
+
+    const courses=
+        courseMap[skill.category] || [];
+
+    const roadmap=
+        getRoadmap(skill);
+
+
+    let courseHTML="";
+
+    courses.forEach(course=>{
+
+        courseHTML+=`
+            <span class="tag">
+                🎓 ${course}
+            </span>
+        `;
+
+    });
+
+
+    let roadmapHTML="";
+
+    roadmap.forEach((step,index)=>{
+
+        roadmapHTML+=`
+
+        <div class="step">
+
+            <div class="step-number">
+                ${index+1}
+            </div>
+
+            <div class="step-text">
+
+                <b>
+                    ${step[0]}
+                </b>
+
+                <br>
+
+                <span>
+                    🇬🇧 ${step[1]}
+                </span>
+
+                <br>
+
+                <span>
+                    🇮🇳 ${getHindiStep(step[0])}
+                </span>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("detail").innerHTML=`
+
+    <!-- BASIC -->
+
+    <div class="card">
+
+        <div class="icon">
+            ${skill.icon}
+        </div>
+
+        <h1>
+            ${skill.name}
+        </h1>
+
+        <p>
+            ${skill.english}
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+            ${skill.hindi}
+        </p>
+
+    </div>
+
+
+    <!-- WHAT TO DO -->
+
+    <div class="card">
+
+        <h2>
+            🧭 What to do? / क्या करना होगा?
+        </h2>
+
+        ${roadmapHTML}
+
+    </div>
+
+
+    <!-- LEARN -->
+
+    <div class="card">
+
+        <h2>
+            📚 What should you learn?
+        </h2>
+
+        <div class="lang-title">
+            🇬🇧 English
+        </div>
+
+        <p>
+            Start with fundamentals, learn the important tools,
+            practice regularly, complete projects and gradually
+            move toward advanced concepts.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="lang-title">
+            🇮🇳 हिंदी
+        </div>
+
+        <p>
+            पहले basics सीखें, जरूरी tools सीखें, नियमित practice
+            करें, practical projects बनाएं और धीरे-धीरे advanced
+            concepts की तरफ बढ़ें।
+        </p>
+
+    </div>
+
+
+    <!-- COURSES -->
+
+    <div class="card">
+
+        <h2>
+            🎓 Courses / कोर्स
+        </h2>
+
+        ${courseHTML}
+
+    </div>
+
+
+    <!-- PRACTICE -->
+
+    <div class="card">
+
+        <h2>
+            🛠️ Practice / अभ्यास
+        </h2>
+
+        <div class="lang-title">
+            🇬🇧 English
+        </div>
+
+        <p>
+            Practice the skill regularly, create small projects,
+            learn from mistakes and keep a record of your work.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="lang-title">
+            🇮🇳 हिंदी
+        </div>
+
+        <p>
+            नियमित अभ्यास करें, छोटे projects बनाएं, अपनी गलतियों
+            से सीखें और अपने काम का portfolio तैयार करें।
+        </p>
+
+    </div>
+
+
+    <!-- CAREER -->
+
+    <div class="card">
+
+        <h2>
+            💼 Career / करियर
+        </h2>
+
+        <div class="lang-title">
+            🇬🇧 English
+        </div>
+
+        <p>
+            Depending on the skill, possible paths can include
+            employment, freelancing, entrepreneurship, higher
+            education, coaching or specialized professional work.
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="lang-title">
+            🇮🇳 हिंदी
+        </div>
+
+        <p>
+            Skill के अनुसार job, freelancing, business,
+            higher education, coaching या specialized
+            professional work जैसे रास्ते हो सकते हैं।
+        </p>
+
+    </div>
+
+
+    <!-- COLLEGES -->
+
+    <div class="card">
+
+        <h2>
+            🏫 Where can you study?
+            / कहाँ पढ़ सकते हैं?
+        </h2>
+
+        <p>
+            Search the college section below to find institutions
+            and courses related to your interest.
+        </p>
+
+        <div class="divider"></div>
+
+        <p>
+            नीचे college search में college, city, state या course
+            का नाम search करके institutions देख सकते हैं।
+        </p>
+
+    </div>
+
+    `;
+
+    window.scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+HINDI ROADMAP TEXT
+===================================================== */
+
+function getHindiStep(step){
+
+    const hindi={
+
+        "Basics":
+        "बुनियादी concepts और fundamentals सीखें।",
+
+        "Tools":
+        "इस field में इस्तेमाल होने वाले जरूरी tools सीखें।",
+
+        "Practice":
+        "नियमित अभ्यास करें और छोटे projects बनाएं।",
+
+        "Projects":
+        "Practical projects बनाकर अपने skills को मजबूत करें।",
+
+        "Portfolio":
+        "अपने अच्छे काम का portfolio तैयार करें।",
+
+        "Advanced":
+        "Advanced concepts सीखें और specialization चुनें।",
+
+        "Practical Training":
+        "Practical training लें और वास्तविक काम को समझें।",
+
+        "Techniques":
+        "इस field की जरूरी techniques सीखें।",
+
+        "Business":
+        "Business planning, costing और marketing की basic जानकारी लें।",
+
+        "Training":
+        "सही guidance के साथ नियमित training करें।",
+
+        "Fitness":
+        "अपने sport के अनुसार उचित fitness और conditioning विकसित करें।",
+
+        "Competition":
+        "उचित practice matches या competitions में भाग लें।",
+
+        "Performance":
+        "अपनी performance को track करके कमजोर areas पर काम करें।",
+
+        "Research":
+        "Research information पढ़ना और document करना सीखें।",
+
+        "Study":
+        "Relevant theory को systematic तरीके से पढ़ें।",
+
+        "Laboratory":
+        "उचित laboratory और practical methods सीखें।",
+
+        "Experiments":
+        "Supervision के अंतर्गत suitable experiments या projects करें।",
+
+        "Education":
+        "अपने field के अनुसार suitable education या training चुनें।",
+
+        "Communication":
+        "Professional communication बेहतर करें।",
+
+        "Experience":
+        "Projects, internships या supervised practical experience प्राप्त करें।",
+
+        "Career":
+        "Job, further education या entrepreneurship के options explore करें।",
+
+        "Execution":
+        "Skill को real project में apply करें।",
+
+        "Professional":
+        "Professional workflow और client communication सीखें।",
+
+        "Specialization":
+        "अपने interest के अनुसार specialization चुनें।"
+
+    };
+
+    return hindi[step] || "इस step को practice करके अपनी skill मजबूत करें।";
+
+}
+
+
+/* =====================================================
+BACK
+===================================================== */
+
+function goHome(){
+
+    document.getElementById("detailPage").style.display="none";
+
+    document.getElementById("home").style.display="block";
+
+    window.scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+COLLEGES
+===================================================== */
+
+const colleges=[
+
+[
+"Indian Institute of Technology Bombay",
+"Mumbai",
+"Maharashtra",
+"Engineering, Technology, Computer Science"
+],
+
+[
+"Savitribai Phule Pune University",
+"Pune",
+"Maharashtra",
+"Science, Arts, Commerce, Computer Science"
+],
+
+[
+"University of Mumbai",
+"Mumbai",
+"Maharashtra",
+"Arts, Science, Commerce, Management"
+],
+
+[
+"Indian Institute of Science",
+"Bengaluru",
+"Karnataka",
+"Science, Research, Technology"
+],
+
+[
+"University of Delhi",
+"Delhi",
+"Delhi",
+"Arts, Science, Commerce, Computer Science"
+],
+
+[
+"Indian Institute of Technology Delhi",
+"New Delhi",
+"Delhi",
+"Engineering, Technology, Computer Science"
+],
+
+[
+"Indian Institute of Technology Madras",
+"Chennai",
+"Tamil Nadu",
+"Engineering, Technology, Science"
+],
+
+[
+"Indian Institute of Technology Kanpur",
+"Kanpur",
+"Uttar Pradesh",
+"Engineering, Science, Technology"
+],
+
+[
+"Indian Institute of Technology Kharagpur",
+"Kharagpur",
+"West Bengal",
+"Engineering, Technology, Science"
+],
+
+[
+"Indian Institute of Technology Hyderabad",
+"Hyderabad",
+"Telangana",
+"Engineering, Technology, Science"
+],
+
+[
+"National Institute of Design",
+"Ahmedabad",
+"Gujarat",
+"Design, Industrial Design"
+],
+
+[
+"Film and Television Institute of India",
+"Pune",
+"Maharashtra",
+"Film, Television, Acting, Editing"
+],
+
+[
+"National Institute of Fashion Technology",
+"New Delhi",
+"Delhi",
+"Fashion Design, Fashion Technology"
+],
+
+[
+"Indian Institute of Management Ahmedabad",
+"Ahmedabad",
+"Gujarat",
+"Management, Business"
+],
+
+[
+"Indian Institute of Management Bangalore",
+"Bengaluru",
+"Karnataka",
+"Management, Business"
+],
+
+[
+"Tata Institute of Social Sciences",
+"Mumbai",
+"Maharashtra",
+"Social Sciences, Management"
+],
+
+[
+"Vellore Institute of Technology",
+"Vellore",
+"Tamil Nadu",
+"Engineering, Technology"
+],
+
+[
+"Christ University",
+"Bengaluru",
+"Karnataka",
+"Management, Science, Arts, Commerce"
+],
+
+[
+"Symbiosis International University",
+"Pune",
+"Maharashtra",
+"Management, Law, Design, Media"
+],
+
+[
+"MIT World Peace University",
+"Pune",
+"Maharashtra",
+"Engineering, Design, Management"
+],
+
+[
+"SRM Institute of Science and Technology",
+"Chennai",
+"Tamil Nadu",
+"Engineering, Technology, Science"
+],
+
+[
+"Jawaharlal Nehru University",
+"New Delhi",
+"Delhi",
+"Science, Arts, Social Sciences"
+]
+
+];
+
+
+/* =====================================================
+DISPLAY COLLEGES
+===================================================== */
+
+function displayColleges(list){
+
+    const box=document.getElementById("colleges");
+
+    box.innerHTML="";
+
+    if(list.length===0){
+
+        box.innerHTML=`
+        <div class="college">
+            🔎 No college found / कोई कॉलेज नहीं मिला
+        </div>`;
+
+        return;
+
+    }
+
+    list.forEach(c=>{
+
+        box.innerHTML+=`
+
+        <div class="college">
+
+            <h3>
+                🎓 ${c[0]}
+            </h3>
+
+            <p>
+                📍 ${c[1]}, ${c[2]}
+            </p>
+
+            <p>
+                📚 ${c[3]}
+            </p>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+COLLEGE SEARCH
+===================================================== */
+
+function searchColleges(){
+
+    const q=document
+    .getElementById("collegeSearch")
+    .value
+    .toLowerCase()
+    .trim();
+
+    const result=colleges.filter(c=>
+
+        c[0].toLowerCase().includes(q) ||
+
+        c[1].toLowerCase().includes(q) ||
+
+        c[2].toLowerCase().includes(q) ||
+
+        c[3].toLowerCase().includes(q)
+
+    );
+
+    displayColleges(result);
+
+}
+
+
+/* =====================================================
+START
+===================================================== */
+
+createCategories();
+
+displaySkills(skills);
+
+displayColleges(colleges);
+
+</script>
+
+</body>
+</html>
