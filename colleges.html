@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - College Search</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:
+  linear-gradient(
+    180deg,
+    #eef6ff,
+    #ffffff
+  );
+  color:#102a56;
+  min-height:100vh;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:35px;
+}
+
+
+/* HEADER */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+
+  background:rgba(255,255,255,.97);
+
+  padding:16px;
+
+  border-bottom:1px solid #dceaff;
+
+  box-shadow:
+  0 5px 20px rgba(23,105,224,.08);
+}
+
+.header-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.back{
+  width:42px;
+  height:42px;
+
+  border:none;
+  border-radius:13px;
+
+  background:#edf6ff;
+  color:#1769e0;
+
+  font-size:22px;
+
+  cursor:pointer;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:900;
+  color:#123a78;
+}
+
+.logo span{
+  color:#1769e0;
+}
+
+.subtitle{
+  font-size:11px;
+  color:#8191a8;
+  margin-top:3px;
+}
+
+
+/* HERO */
+
+.hero{
+  margin:17px 16px;
+
+  padding:21px;
+
+  border-radius:23px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #0d4da8,
+    #1769e0,
+    #45a6ff
+  );
+
+  color:white;
+
+  box-shadow:
+  0 10px 28px
+  rgba(23,105,224,.22);
+}
+
+.hero h1{
+  font-size:23px;
+}
+
+.hero p{
+  margin-top:7px;
+  font-size:12px;
+  line-height:1.5;
+  opacity:.9;
+}
+
+
+/* STEP BOX */
+
+.steps{
+  margin:0 16px 18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:5px;
+}
+
+.step{
+  flex:1;
+  text-align:center;
+}
+
+.step-circle{
+  width:34px;
+  height:34px;
+
+  margin:auto;
+
+  border-radius:50%;
+
+  background:#dcecff;
+
+  color:#6c82a1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:13px;
+  font-weight:bold;
+}
+
+.step.active .step-circle{
+  background:#1769e0;
+  color:white;
+}
+
+.step-text{
+  margin-top:5px;
+  font-size:9px;
+  color:#7387a5;
+}
+
+.step-line{
+  height:2px;
+  flex:1;
+  background:#dcecff;
+}
+
+
+/* SEARCH */
+
+.search{
+  margin:0 16px 16px;
+
+  background:white;
+
+  border:1px solid #dceaff;
+
+  border-radius:17px;
+
+  padding:13px 15px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  box-shadow:
+  0 5px 18px
+  rgba(23,105,224,.07);
+}
+
+.search span{
+  font-size:19px;
+}
+
+.search input{
+  width:100%;
+  border:none;
+  outline:none;
+
+  font-size:14px;
+
+  color:#18345f;
+}
+
+
+/* SECTION */
+
+.section{
+  padding:0 16px;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+
+/* SELECT */
+
+.select-box{
+  background:white;
+
+  border:1px solid #dceaff;
+
+  border-radius:17px;
+
+  padding:15px;
+
+  margin-bottom:12px;
+
+  box-shadow:
+  0 5px 18px
+  rgba(23,105,224,.06);
+}
+
+.select-label{
+  font-size:11px;
+  color:#7184a1;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+select{
+  width:100%;
+
+  border:1px solid #dceaff;
+
+  border-radius:12px;
+
+  padding:13px;
+
+  background:#fafdff;
+
+  color:#173d76;
+
+  font-size:14px;
+
+  outline:none;
+}
+
+select:disabled{
+  opacity:.55;
+}
+
+
+/* COLLEGE AREA */
+
+.college-header{
+  margin-top:20px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+}
+
+.college-header h2{
+  font-size:18px;
+}
+
+.count{
+  font-size:11px;
+  color:#1769e0;
+  font-weight:bold;
+}
+
+
+/* CARD */
+
+.college-card{
+  margin-top:12px;
+
+  padding:16px;
+
+  background:white;
+
+  border:1px solid #e0ecfb;
+
+  border-radius:19px;
+
+  box-shadow:
+  0 6px 20px
+  rgba(23,105,224,.07);
+
+  cursor:pointer;
+
+  transition:.18s;
+}
+
+.college-card:active{
+  transform:scale(.98);
+}
+
+.college-top{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.college-icon{
+  width:48px;
+  height:48px;
+
+  flex-shrink:0;
+
+  border-radius:14px;
+
+  background:
+  linear-gradient(
+    135deg,
+    #1769e0,
+    #55aaff
+  );
+
+  color:white;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:22px;
+}
+
+.college-name{
+  font-size:15px;
+  font-weight:800;
+  color:#173d76;
+  line-height:1.35;
+}
+
+.college-location{
+  margin-top:5px;
+
+  font-size:11px;
+
+  color:#8191a8;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+
+  margin-top:12px;
+}
+
+.tag{
+  background:#edf6ff;
+
+  color:#1769e0;
+
+  padding:6px 8px;
+
+  border-radius:8px;
+
+  font-size:10px;
+
+  font-weight:bold;
+}
+
+
+/* EMPTY */
+
+.empty{
+  margin-top:14px;
+
+  padding:25px 15px;
+
+  background:white;
+
+  border:1px solid #e0ecfb;
+
+  border-radius:18px;
+
+  text-align:center;
+
+  color:#8191a8;
+
+  font-size:13px;
+
+  line-height:1.6;
+}
+
+
+/* DETAILS */
+
+.details{
+  display:none;
+
+  margin-top:15px;
+
+  padding:18px;
+
+  background:white;
+
+  border:1px solid #dceaff;
+
+  border-radius:20px;
+
+  box-shadow:
+  0 7px 22px
+  rgba(23,105,224,.08);
+}
+
+.details.show{
+  display:block;
+}
+
+.details h2{
+  font-size:19px;
+  color:#173d76;
+}
+
+.detail-line{
+  margin-top:11px;
+
+  font-size:12px;
+
+  color:#617695;
+
+  line-height:1.5;
+}
+
+.detail-line b{
+  color:#173d76;
+}
+
+.close-details{
+  margin-top:15px;
+
+  width:100%;
+
+  border:none;
+
+  padding:12px;
+
+  border-radius:12px;
+
+  background:#1769e0;
+
+  color:white;
+
+  font-weight:bold;
+}
+
+
+/* RESPONSIVE */
+
+@media(max-width:360px){
+
+  .hero h1{
+    font-size:20px;
+  }
+
+  .section-title{
+    font-size:17px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+  <div class="header-row">
+
+    <button
+      class="back"
+      onclick="history.back()"
+    >
+      ←
+    </button>
+
+    <div>
+
+      <div class="logo">
+        Gyan<span>Setu</span>
+      </div>
+
+      <div class="subtitle">
+        College Finder
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- HERO -->
+
+<div class="hero">
+
+  <h1>
+    🎓 Find Your College
+  </h1>
+
+  <p>
+    First select your State,
+    then District and finally
+    explore colleges in that district.
+  </p>
+
+</div>
+
+
+<!-- STEPS -->
+
+<div class="steps">
+
+  <div class="step active">
+
+    <div class="step-circle">
+      1
+    </div>
+
+    <div class="step-text">
+      State
+    </div>
+
+  </div>
+
+
+  <div class="step-line"></div>
+
+
+  <div class="step">
+
+    <div class="step-circle">
+      2
+    </div>
+
+    <div class="step-text">
+      District
+    </div>
+
+  </div>
+
+
+  <div class="step-line"></div>
+
+
+  <div class="step">
+
+    <div class="step-circle">
+      3
+    </div>
+
+    <div class="step-text">
+      College
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div class="search">
+
+  <span>🔎</span>
+
+  <input
+    id="collegeSearch"
+    type="text"
+    placeholder="Search college..."
+  >
+
+</div>
+
+
+<!-- SELECTION -->
+
+<div class="section">
+
+  <div class="section-title">
+    📍 Select Location
+  </div>
+
+
+  <!-- STATE -->
+
+  <div class="select-box">
+
+    <div class="select-label">
+      🇮🇳 STATE / UNION TERRITORY
+    </div>
+
+    <select id="stateSelect">
+
+      <option value="">
+        Select State
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- DISTRICT -->
+
+  <div class="select-box">
+
+    <div class="select-label">
+      📍 DISTRICT
+    </div>
+
+    <select
+      id="districtSelect"
+      disabled
+    >
+
+      <option value="">
+        Select District
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- COLLEGE -->
+
+  <div class="college-header">
+
+    <h2>
+      🎓 Colleges
+    </h2>
+
+    <div
+      class="count"
+      id="collegeCount"
+    >
+      0 Colleges
+    </div>
+
+  </div>
+
+
+  <div id="collegeList">
+
+    <div class="empty">
+
+      👆 First select a State
+      and District.
+
+      <br><br>
+
+      Then colleges available
+      in that district will appear here.
+
+    </div>
+
+  </div>
+
+
+  <!-- DETAILS -->
+
+  <div
+    class="details"
+    id="collegeDetails"
+  >
+
+    <h2 id="detailName">
+      College Name
+    </h2>
+
+    <div
+      class="detail-line"
+      id="detailLocation"
+    ></div>
+
+    <div
+      class="detail-line"
+      id="detailType"
+    ></div>
+
+    <div
+      class="detail-line"
+      id="detailCourses"
+    ></div>
+
+    <div
+      class="detail-line"
+      id="detailUniversity"
+    ></div>
+
+    <button
+      class="close-details"
+      onclick="closeDetails()"
+    >
+      Close
+    </button>
+
+  </div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   STATES
+===================================================== */
+
+const states = {
+
+  "Andhra Pradesh": [
+    "Anantapur",
+    "Chittoor",
+    "Guntur",
+    "Krishna",
+    "Kurnool",
+    "Nellore",
+    "Prakasam",
+    "Visakhapatnam"
+  ],
+
+  "Arunachal Pradesh": [
+    "Anjaw",
+    "Changlang",
+    "East Kameng",
+    "East Siang",
+    "Lohit",
+    "Papum Pare",
+    "Tawang",
+    "West Kameng"
+  ],
+
+  "Assam": [
+    "Baksa",
+    "Barpeta",
+    "Cachar",
+    "Dibrugarh",
+    "Kamrup",
+    "Kamrup Metropolitan",
+    "Jorhat",
+    "Nagaon"
+  ],
+
+  "Bihar": [
+    "Araria",
+    "Begusarai",
+    "Bhagalpur",
+    "Gaya",
+    "Muzaffarpur",
+    "Patna",
+    "Purnia",
+    "Vaishali"
+  ],
+
+  "Chhattisgarh": [
+    "Balod",
+    "Bilaspur",
+    "Durg",
+    "Korba",
+    "Raipur",
+    "Rajnandgaon"
+  ],
+
+  "Goa": [
+    "North Goa",
+    "South Goa"
+  ],
+
+  "Gujarat": [
+    "Ahmedabad",
+    "Amreli",
+    "Anand",
+    "Bharuch",
+    "Bhavnagar",
+    "Jamnagar",
+    "Junagadh",
+    "Kutch",
+    "Mehsana",
+    "Rajkot",
+    "Surat",
+    "Vadodara"
+  ],
+
+  "Haryana": [
+    "Ambala",
+    "Faridabad",
+    "Gurugram",
+    "Hisar",
+    "Karnal",
+    "Panipat",
+    "Rohtak",
+    "Sonipat"
+  ],
+
+  "Himachal Pradesh": [
+    "Bilaspur",
+    "Chamba",
+    "Hamirpur",
+    "Kangra",
+    "Kullu",
+    "Mandi",
+    "Shimla",
+    "Solan"
+  ],
+
+  "Jharkhand": [
+    "Bokaro",
+    "Dhanbad",
+    "Dumka",
+    "East Singhbhum",
+    "Hazaribagh",
+    "Ranchi"
+  ],
+
+  "Karnataka": [
+    "Bengaluru Urban",
+    "Belagavi",
+    "Dharwad",
+    "Dakshina Kannada",
+    "Mysuru",
+    "Shivamogga",
+    "Tumakuru",
+    "Udupi"
+  ],
+
+  "Kerala": [
+    "Alappuzha",
+    "Ernakulam",
+    "Idukki",
+    "Kannur",
+    "Kollam",
+    "Kottayam",
+    "Kozhikode",
+    "Thiruvananthapuram"
+  ],
+
+  "Madhya Pradesh": [
+    "Bhopal",
+    "Indore",
+    "Jabalpur",
+    "Gwalior",
+    "Ujjain",
+    "Sagar"
+  ],
+
+  "Maharashtra": [
+    "Ahmednagar",
+    "Akola",
+    "Amravati",
+    "Aurangabad",
+    "Beed",
+    "Bhandara",
+    "Buldhana",
+    "Chandrapur",
+    "Dhule",
+    "Gadchiroli",
+    "Gondia",
+    "Jalgaon",
+    "Jalna",
+    "Kolhapur",
+    "Latur",
+    "Mumbai City",
+    "Mumbai Suburban",
+    "Nagpur",
+    "Nanded",
+    "Nandurbar",
+    "Nashik",
+    "Osmanabad",
+    "Palghar",
+    "Parbhani",
+    "Pune",
+    "Raigad",
+    "Ratnagiri",
+    "Sangli",
+    "Satara",
+    "Sindhudurg",
+    "Solapur",
+    "Thane",
+    "Wardha",
+    "Washim",
+    "Yavatmal"
+  ],
+
+  "Manipur": [
+    "Bishnupur",
+    "Chandel",
+    "Imphal East",
+    "Imphal West",
+    "Senapati",
+    "Thoubal"
+  ],
+
+  "Meghalaya": [
+    "East Khasi Hills",
+    "West Garo Hills",
+    "Ri-Bhoi"
+  ],
+
+  "Mizoram": [
+    "Aizawl",
+    "Champhai",
+    "Kolasib",
+    "Lunglei"
+  ],
+
+  "Nagaland": [
+    "Dimapur",
+    "Kohima",
+    "Mokokchung",
+    "Mon"
+  ],
+
+  "Odisha": [
+    "Angul",
+    "Balasore",
+    "Cuttack",
+    "Ganjam",
+    "Khordha",
+    "Mayurbhanj",
+    "Puri",
+    "Sambalpur"
+  ],
+
+  "Punjab": [
+    "Amritsar",
+    "Bathinda",
+    "Jalandhar",
+    "Ludhiana",
+    "Patiala",
+    "Sangrur"
+  ],
+
+  "Rajasthan": [
+    "Ajmer",
+    "Alwar",
+    "Bikaner",
+    "Jaipur",
+    "Jodhpur",
+    "Kota",
+    "Udaipur"
+  ],
+
+  "Sikkim": [
+    "East Sikkim",
+    "North Sikkim",
+    "South Sikkim",
+    "West Sikkim"
+  ],
+
+  "Tamil Nadu": [
+    "Chennai",
+    "Coimbatore",
+    "Madurai",
+    "Salem",
+    "Thanjavur",
+    "Tiruchirappalli",
+    "Tirunelveli",
+    "Vellore"
+  ],
+
+  "Telangana": [
+    "Adilabad",
+    "Hyderabad",
+    "Karimnagar",
+    "Khammam",
+    "Nalgonda",
+    "Nizamabad",
+    "Rangareddy",
+    "Warangal"
+  ],
+
+  "Tripura": [
+    "Dhalai",
+    "Gomati",
+    "North Tripura",
+    "South Tripura",
+    "West Tripura"
+  ],
+
+  "Uttar Pradesh": [
+    "Agra",
+    "Aligarh",
+    "Allahabad",
+    "Bareilly",
+    "Ghaziabad",
+    "Gorakhpur",
+    "Kanpur Nagar",
+    "Lucknow",
+    "Meerut",
+    "Varanasi"
+  ],
+
+  "Uttarakhand": [
+    "Almora",
+    "Dehradun",
+    "Haridwar",
+    "Nainital",
+    "Pauri Garhwal",
+    "Udham Singh Nagar"
+  ],
+
+  "West Bengal": [
+    "Darjeeling",
+    "Hooghly",
+    "Howrah",
+    "Kolkata",
+    "Malda",
+    "Murshidabad",
+    "Nadia",
+    "North 24 Parganas"
+  ],
+
+  "Delhi": [
+    "Central Delhi",
+    "East Delhi",
+    "New Delhi",
+    "North Delhi",
+    "South Delhi",
+    "West Delhi"
+  ]
+
+};
+
+
+/* =====================================================
+   COLLEGE DATA
+===================================================== */
+
+const colleges = [
+
+  {
+    state:"Maharashtra",
+    district:"Jalgaon",
+    name:"Godavari College",
+    type:"Private",
+    courses:"Engineering, Technology, Management",
+    university:"Kavayitri Bahinabai Chaudhari North Maharashtra University"
+  },
+
+  {
+    state:"Maharashtra",
+    district:"Jalgaon",
+    name:"North Maharashtra College",
+    type:"College",
+    courses:"Arts, Commerce, Science",
+    university:"KBC North Maharashtra University"
+  },
+
+  {
+    state:"Maharashtra",
+    district:"Pune",
+    name:"College of Engineering Pune",
+    type:"Government",
+    courses:"Engineering and Technology",
+    university:"Autonomous"
+  },
+
+  {
+    state:"Maharashtra",
+    district:"Pune",
+    name:"Fergusson College",
+    type:"Autonomous",
+    courses:"Arts, Science, Computer Science",
+    university:"Savitribai Phule Pune University"
+  },
+
+  {
+    state:"Maharashtra",
+    district:"Nagpur",
+    name:"Rashtrasant Tukadoji Maharaj Nagpur University",
+    type:"University",
+    courses:"Arts, Science, Commerce, Technology",
+    university:"Autonomous University"
+  },
+
+  {
+    state:"Gujarat",
+    district:"Ahmedabad",
+    name:"Ahmedabad College",
+    type:"Private",
+    courses:"Commerce, Management, Computer",
+    university:"Gujarat University"
+  },
+
+  {
+    state:"Karnataka",
+    district:"Bengaluru Urban",
+    name:"Bengaluru Engineering College",
+    type:"Engineering",
+    courses:"Engineering and Technology",
+    university:"Bengaluru University"
+  },
+
+  {
+    state:"Delhi",
+    district:"New Delhi",
+    name:"Delhi College",
+    type:"Government",
+    courses:"Arts, Science, Commerce",
+    university:"University of Delhi"
+  }
+
+];
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const stateSelect =
+  document.getElementById("stateSelect");
+
+const districtSelect =
+  document.getElementById("districtSelect");
+
+const collegeList =
+  document.getElementById("collegeList");
+
+const collegeCount =
+  document.getElementById("collegeCount");
+
+const searchInput =
+  document.getElementById("collegeSearch");
+
+
+/* =====================================================
+   LOAD STATES
+===================================================== */
+
+Object.keys(states)
+  .sort()
+  .forEach(function(state){
+
+    const option =
+      document.createElement("option");
+
+    option.value = state;
+    option.textContent = state;
+
+    stateSelect.appendChild(option);
+
+  });
+
+
+/* =====================================================
+   STATE CHANGE
+===================================================== */
+
+stateSelect.addEventListener(
+  "change",
+  function(){
+
+    const state =
+      this.value;
+
+    districtSelect.innerHTML =
+      '<option value="">Select District</option>';
+
+    districtSelect.disabled =
+      true;
+
+    collegeList.innerHTML =
+      `<div class="empty">
+        👆 Select a District
+        to see colleges.
+      </div>`;
+
+    collegeCount.textContent =
+      "0 Colleges";
+
+    updateSteps(2);
+
+
+    if(!state){
+
+      updateSteps(1);
+
+      return;
+
+    }
+
+
+    states[state]
+      .sort()
+      .forEach(function(district){
+
+        const option =
+          document.createElement("option");
+
+        option.value = district;
+        option.textContent = district;
+
+        districtSelect.appendChild(option);
+
+      });
+
+
+    districtSelect.disabled =
+      false;
+
+  }
+);
+
+
+/* =====================================================
+   DISTRICT CHANGE
+===================================================== */
+
+districtSelect.addEventListener(
+  "change",
+  function(){
+
+    const district =
+      this.value;
+
+    const state =
+      stateSelect.value;
+
+
+    if(!district){
+
+      collegeList.innerHTML =
+        `<div class="empty">
+          👆 Select a District.
+        </div>`;
+
+      collegeCount.textContent =
+        "0 Colleges";
+
+      updateSteps(2);
+
+      return;
+
+    }
+
+
+    updateSteps(3);
+
+    showColleges(
+      state,
+      district
+    );
+
+  }
+);
+
+
+/* =====================================================
+   SHOW COLLEGES
+===================================================== */
+
+function showColleges(
+  state,
+  district
+){
+
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
+
+
+  let results =
+    colleges.filter(function(college){
+
+      return(
+        college.state === state &&
+        college.district === district
+      );
+
+    });
+
+
+  if(search){
+
+    results =
+      results.filter(function(college){
+
+        return(
+          college.name
+            .toLowerCase()
+            .includes(search)
+        );
+
+      });
+
+  }
+
+
+  collegeList.innerHTML = "";
+
+  collegeCount.textContent =
+    results.length +
+    " College" +
+    (results.length !== 1 ? "s" : "");
+
+
+  if(results.length === 0){
+
+    collegeList.innerHTML =
+      `<div class="empty">
+
+        😕 या district साठी
+        सध्या college data उपलब्ध नाही.
+
+        <br><br>
+
+        पुढे database जोडल्यावर
+        येथे पूर्ण list येईल.
+
+      </div>`;
+
+    return;
+
+  }
+
+
+  results.forEach(function(college){
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "college-card";
+
+
+    card.innerHTML = `
+
+      <div class="college-top">
+
+        <div class="college-icon">
+          🎓
+        </div>
+
+        <div>
+
+          <div class="college-name">
+            ${college.name}
+          </div>
+
+          <div class="college-location">
+            📍 ${college.district},
+            ${college.state}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="tags">
+
+        <div class="tag">
+          ${college.type}
+        </div>
+
+        <div class="tag">
+          🎓 College
+        </div>
+
+      </div>
+
+    `;
+
+
+    card.onclick =
+      function(){
+
+        openDetails(college);
+
+      };
+
+
+    collegeList.appendChild(card);
+
+  });
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+searchInput.addEventListener(
+  "input",
+  function(){
+
+    const state =
+      stateSelect.value;
+
+    const district =
+      districtSelect.value;
+
+
+    if(state && district){
+
+      showColleges(
+        state,
+        district
+      );
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   DETAILS
+===================================================== */
+
+function openDetails(college){
+
+  document.getElementById(
+    "detailName"
+  ).textContent =
+    college.name;
+
+
+  document.getElementById(
+    "detailLocation"
+  ).innerHTML =
+    "<b>📍 Location:</b> " +
+    college.district +
+    ", " +
+    college.state;
+
+
+  document.getElementById(
+    "detailType"
+  ).innerHTML =
+    "<b>🏫 Type:</b> " +
+    college.type;
+
+
+  document.getElementById(
+    "detailCourses"
+  ).innerHTML =
+    "<b>📚 Courses:</b> " +
+    college.courses;
+
+
+  document.getElementById(
+    "detailUniversity"
+  ).innerHTML =
+    "<b>🎓 University:</b> " +
+    college.university;
+
+
+  document.getElementById(
+    "collegeDetails"
+  ).classList.add("show");
+
+
+  document.getElementById(
+    "collegeDetails"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function closeDetails(){
+
+  document.getElementById(
+    "collegeDetails"
+  ).classList.remove("show");
+
+}
+
+
+/* =====================================================
+   STEPS
+===================================================== */
+
+function updateSteps(active){
+
+  const steps =
+    document.querySelectorAll(".step");
+
+
+  steps.forEach(function(step,index){
+
+    if(index < active){
+
+      step.classList.add("active");
+
+    }
+    else{
+
+      step.classList.remove("active");
+
+    }
+
+  });
+
+}
+
+</script>
+
+</body>
+
+</html>
