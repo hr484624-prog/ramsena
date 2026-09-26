@@ -1,1683 +1,1096 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>GyanSetu - College Search</title>
+<title>GyanSetu AI College Finder</title>
 
 <style>
-
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body{
-  font-family:Arial,sans-serif;
-  background:linear-gradient(180deg,#eef6ff,#ffffff);
-  color:#102a56;
-  min-height:100vh;
-}
-
-.app{
-  width:100%;
-  max-width:430px;
-  margin:auto;
-  min-height:100vh;
-  padding-bottom:35px;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f5f7fb;
+    color:#172033;
 }
 
 /* HEADER */
-
 .header{
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:rgba(255,255,255,.97);
-  padding:16px;
-  border-bottom:1px solid #dceaff;
-  box-shadow:0 5px 20px rgba(23,105,224,.08);
-}
-
-.header-row{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.back{
-  width:42px;
-  height:42px;
-  border:none;
-  border-radius:13px;
-  background:#edf6ff;
-  color:#1769e0;
-  font-size:22px;
-  cursor:pointer;
+    background:#ffffff;
+    border-bottom:1px solid #e5e7eb;
+    padding:15px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
 }
 
 .logo{
-  font-size:21px;
-  font-weight:900;
-  color:#123a78;
+    font-size:27px;
+    font-weight:800;
+    color:#2563eb;
 }
 
 .logo span{
-  color:#1769e0;
+    color:#111827;
 }
 
-.subtitle{
-  font-size:11px;
-  color:#8191a8;
-  margin-top:3px;
+.ai-badge{
+    background:#eef4ff;
+    color:#2563eb;
+    padding:7px 12px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* MAIN */
+.container{
+    width:min(1000px,92%);
+    margin:auto;
 }
 
 /* HERO */
-
 .hero{
-  margin:17px 16px;
-  padding:21px;
-  border-radius:23px;
-  background:linear-gradient(135deg,#0d4da8,#1769e0,#45a6ff);
-  color:white;
-  box-shadow:0 10px 28px rgba(23,105,224,.22);
+    text-align:center;
+    padding:45px 10px 30px;
 }
 
 .hero h1{
-  font-size:23px;
+    font-size:35px;
+    margin-bottom:12px;
+}
+
+.hero h1 span{
+    color:#2563eb;
 }
 
 .hero p{
-  margin-top:7px;
-  font-size:12px;
-  line-height:1.5;
-  opacity:.9;
+    color:#667085;
+    font-size:16px;
+    line-height:1.6;
 }
 
-/* STEPS */
-
-.steps{
-  margin:0 16px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:5px;
+/* FORM CARD */
+.form-card{
+    background:white;
+    border:1px solid #e4e7ec;
+    border-radius:18px;
+    padding:25px;
+    box-shadow:0 8px 30px rgba(16,24,40,.07);
 }
 
-.step{
-  flex:1;
-  text-align:center;
+.form-title{
+    font-size:21px;
+    font-weight:700;
+    margin-bottom:5px;
 }
 
-.step-circle{
-  width:34px;
-  height:34px;
-  margin:auto;
-  border-radius:50%;
-  background:#dcecff;
-  color:#6c82a1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  font-weight:bold;
+.form-subtitle{
+    color:#667085;
+    font-size:14px;
+    margin-bottom:22px;
 }
 
-.step.active .step-circle{
-  background:#1769e0;
-  color:white;
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:17px;
 }
 
-.step-text{
-  margin-top:5px;
-  font-size:9px;
-  color:#7387a5;
+.field{
+    display:flex;
+    flex-direction:column;
 }
 
-.step-line{
-  height:2px;
-  flex:1;
-  background:#dcecff;
+.field.full{
+    grid-column:1 / -1;
 }
 
-/* SEARCH */
-
-.search{
-  margin:0 16px 16px;
-  background:white;
-  border:1px solid #dceaff;
-  border-radius:17px;
-  padding:13px 15px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  box-shadow:0 5px 18px rgba(23,105,224,.07);
+.field label{
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:7px;
 }
 
-.search span{
-  font-size:19px;
+.field select,
+.field input{
+    height:46px;
+    border:1px solid #d0d5dd;
+    border-radius:10px;
+    padding:0 13px;
+    font-size:15px;
+    background:white;
 }
 
-.search input{
-  width:100%;
-  border:none;
-  outline:none;
-  font-size:14px;
-  color:#18345f;
+.field select:focus,
+.field input:focus{
+    outline:2px solid rgba(37,99,235,.15);
+    border-color:#2563eb;
 }
 
-/* SECTION */
-
-.section{
-  padding:0 16px;
+/* BUTTON */
+.find-btn{
+    width:100%;
+    height:50px;
+    border:0;
+    border-radius:11px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:22px;
 }
 
-.section-title{
-  font-size:18px;
-  font-weight:800;
-  margin-bottom:12px;
+.find-btn:hover{
+    background:#1d4ed8;
 }
 
-/* SELECT */
-
-.select-box{
-  background:white;
-  border:1px solid #dceaff;
-  border-radius:17px;
-  padding:15px;
-  margin-bottom:12px;
-  box-shadow:0 5px 18px rgba(23,105,224,.06);
+/* AI LOADING */
+.loading{
+    display:none;
+    margin-top:20px;
+    background:#eef4ff;
+    border:1px solid #dbe7ff;
+    border-radius:14px;
+    padding:20px;
+    text-align:center;
 }
 
-.select-label{
-  font-size:11px;
-  color:#7184a1;
-  font-weight:bold;
-  margin-bottom:7px;
+.spinner{
+    width:28px;
+    height:28px;
+    border:3px solid #dbe7ff;
+    border-top-color:#2563eb;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:0 auto 10px;
 }
 
-select{
-  width:100%;
-  border:1px solid #dceaff;
-  border-radius:12px;
-  padding:13px;
-  background:#fafdff;
-  color:#173d76;
-  font-size:14px;
-  outline:none;
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
 }
 
-select:disabled{
-  opacity:.55;
+/* RESULTS */
+.results{
+    display:none;
+    margin-top:30px;
 }
 
-/* COLLEGE HEADER */
-
-.college-header{
-  margin-top:20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+.profile-box{
+    background:#111827;
+    color:white;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:18px;
 }
 
-.college-header h2{
-  font-size:18px;
+.profile-box h2{
+    font-size:18px;
+    margin-bottom:10px;
+}
+
+.profile-info{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.profile-tag{
+    background:#263244;
+    border-radius:20px;
+    padding:7px 11px;
+    font-size:13px;
+}
+
+/* RESULT HEADER */
+.result-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.result-header h2{
+    font-size:21px;
 }
 
 .count{
-  font-size:11px;
-  color:#1769e0;
-  font-weight:bold;
+    color:#667085;
+    font-size:14px;
 }
 
-/* CARD */
+/* COLLEGE */
+.college-list{
+    display:grid;
+    gap:15px;
+}
 
 .college-card{
-  margin-top:12px;
-  padding:16px;
-  background:white;
-  border:1px solid #e0ecfb;
-  border-radius:19px;
-  box-shadow:0 6px 20px rgba(23,105,224,.07);
-  cursor:pointer;
-  transition:.18s;
+    background:white;
+    border:1px solid #e4e7ec;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 5px 18px rgba(16,24,40,.05);
 }
 
-.college-card:active{
-  transform:scale(.98);
+.college-card h3{
+    font-size:18px;
+    line-height:1.4;
+    margin-bottom:14px;
 }
 
-.college-top{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
+.details{
+    display:grid;
+    gap:8px;
 }
 
-.college-icon{
-  width:48px;
-  height:48px;
-  flex-shrink:0;
-  border-radius:14px;
-  background:linear-gradient(135deg,#1769e0,#55aaff);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
+.detail{
+    display:flex;
+    gap:8px;
+    font-size:14px;
 }
 
-.college-name{
-  font-size:15px;
-  font-weight:800;
-  color:#173d76;
-  line-height:1.35;
+.detail-label{
+    color:#667085;
+    min-width:115px;
 }
 
-.college-location{
-  margin-top:5px;
-  font-size:11px;
-  color:#8191a8;
+.detail-value{
+    font-weight:600;
 }
 
-.tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:12px;
+.actions{
+    display:flex;
+    gap:9px;
+    margin-top:17px;
 }
 
-.tag{
-  background:#edf6ff;
-  color:#1769e0;
-  padding:6px 8px;
-  border-radius:8px;
-  font-size:10px;
-  font-weight:bold;
+.action-btn{
+    flex:1;
+    height:40px;
+    border-radius:9px;
+    border:1px solid #d0d5dd;
+    background:white;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.action-btn.copy{
+    background:#2563eb;
+    color:white;
+    border-color:#2563eb;
+}
+
+.action-btn:hover{
+    opacity:.9;
 }
 
 /* EMPTY */
-
 .empty{
-  margin-top:14px;
-  padding:25px 15px;
-  background:white;
-  border:1px solid #e0ecfb;
-  border-radius:18px;
-  text-align:center;
-  color:#8191a8;
-  font-size:13px;
-  line-height:1.6;
+    background:white;
+    border:1px solid #e4e7ec;
+    border-radius:15px;
+    padding:35px;
+    text-align:center;
+    color:#667085;
 }
 
-/* LOADING */
-
-.loading{
-  margin-top:14px;
-  padding:25px 15px;
-  background:white;
-  border:1px solid #e0ecfb;
-  border-radius:18px;
-  text-align:center;
-  color:#1769e0;
-  font-size:13px;
+/* FOOTER */
+footer{
+    text-align:center;
+    color:#667085;
+    font-size:13px;
+    padding:35px 10px;
 }
 
-/* DETAILS */
+/* MOBILE */
+@media(max-width:650px){
 
-.details{
-  display:none;
-  margin-top:15px;
-  padding:18px;
-  background:white;
-  border:1px solid #dceaff;
-  border-radius:20px;
-  box-shadow:0 7px 22px rgba(23,105,224,.08);
+    .header{
+        padding:13px 4%;
+    }
+
+    .logo{
+        font-size:24px;
+    }
+
+    .hero{
+        padding-top:30px;
+    }
+
+    .hero h1{
+        font-size:27px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .field.full{
+        grid-column:auto;
+    }
+
+    .form-card{
+        padding:18px;
+    }
+
+    .result-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:5px;
+    }
+
+    .actions{
+        flex-direction:column;
+    }
 }
-
-.details.show{
-  display:block;
-}
-
-.details h2{
-  font-size:19px;
-  color:#173d76;
-  line-height:1.4;
-}
-
-.detail-line{
-  margin-top:11px;
-  font-size:12px;
-  color:#617695;
-  line-height:1.5;
-  word-break:break-word;
-}
-
-.detail-line b{
-  color:#173d76;
-}
-
-.website-btn{
-  display:block;
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  background:#1769e0;
-  color:white;
-  text-decoration:none;
-  text-align:center;
-  font-size:13px;
-  font-weight:bold;
-}
-
-.close-details{
-  margin-top:10px;
-  width:100%;
-  border:none;
-  padding:12px;
-  border-radius:12px;
-  background:#edf6ff;
-  color:#1769e0;
-  font-weight:bold;
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<div class="app">
-
-
 <!-- HEADER -->
+<header class="header">
 
-<div class="header">
-
-  <div class="header-row">
-
-    <button
-      class="back"
-      onclick="history.back()"
-    >
-      ←
-    </button>
-
-    <div>
-
-      <div class="logo">
+    <div class="logo">
         Gyan<span>Setu</span>
-      </div>
-
-      <div class="subtitle">
-        College Finder
-      </div>
-
     </div>
 
-  </div>
-
-</div>
-
-
-<!-- HERO -->
-
-<div class="hero">
-
-  <h1>
-    🎓 Find Your College
-  </h1>
-
-  <p>
-    Select your State, then District
-    and explore all colleges available
-    in that district.
-  </p>
-
-</div>
-
-
-<!-- STEPS -->
-
-<div class="steps">
-
-  <div class="step active">
-
-    <div class="step-circle">
-      1
+    <div class="ai-badge">
+        🤖 AI College Finder
     </div>
 
-    <div class="step-text">
-      State
-    </div>
-
-  </div>
+</header>
 
 
-  <div class="step-line"></div>
+<main class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <h1>
+            Find Your <span>Perfect College</span>
+        </h1>
+
+        <p>
+            तुमची माहिती भरा आणि GyanSetu AI
+            तुमच्यासाठी योग्य colleges शोधेल.
+        </p>
+
+    </section>
 
 
-  <div class="step">
+    <!-- FORM -->
+    <section class="form-card">
 
-    <div class="step-circle">
-      2
-    </div>
+        <div class="form-title">
+            🎓 Student Profile
+        </div>
 
-    <div class="step-text">
-      District
-    </div>
-
-  </div>
-
-
-  <div class="step-line"></div>
+        <div class="form-subtitle">
+            तुमच्याबद्दल थोडी माहिती द्या.
+        </div>
 
 
-  <div class="step">
+        <div class="form-grid">
 
-    <div class="step-circle">
-      3
-    </div>
+            <!-- STANDARD -->
+            <div class="field">
 
-    <div class="step-text">
-      College
-    </div>
+                <label>Standard / Education Level</label>
 
-  </div>
+                <select id="standard">
 
-</div>
+                    <option value="">
+                        Select Standard
+                    </option>
 
+                    <option>10th</option>
+                    <option>12th</option>
+                    <option>Diploma</option>
+                    <option>Undergraduate</option>
+                    <option>Postgraduate</option>
+                    <option>Other</option>
 
-<!-- SEARCH -->
+                </select>
 
-<div class="search">
-
-  <span>
-    🔎
-  </span>
-
-  <input
-    id="collegeSearch"
-    type="text"
-    placeholder="Search college, AISHE code, university..."
-    autocomplete="off"
-  >
-
-</div>
+            </div>
 
 
-<!-- LOCATION -->
+            <!-- SCHOOL -->
+            <div class="field">
 
-<div class="section">
+                <label>School / College Type</label>
 
+                <select id="school">
 
-  <div class="section-title">
-    📍 Select Location
-  </div>
+                    <option value="">
+                        Select
+                    </option>
 
+                    <option>School</option>
+                    <option>Junior College</option>
+                    <option>Degree College</option>
+                    <option>University</option>
+                    <option>Institute</option>
+                    <option>Other</option>
 
-  <!-- STATE -->
+                </select>
 
-  <div class="select-box">
-
-    <div class="select-label">
-      🇮🇳 STATE / UNION TERRITORY
-    </div>
-
-    <select id="stateSelect">
-
-      <option value="">
-        Select State
-      </option>
-
-    </select>
-
-  </div>
+            </div>
 
 
-  <!-- DISTRICT -->
+            <!-- FIELD -->
+            <div class="field">
 
-  <div class="select-box">
+                <label>Field / Stream</label>
 
-    <div class="select-label">
-      📍 DISTRICT
-    </div>
+                <select id="field">
 
-    <select
-      id="districtSelect"
-      disabled
+                    <option value="">
+                        Select Field
+                    </option>
+
+                    <option>Science</option>
+                    <option>Commerce</option>
+                    <option>Arts</option>
+                    <option>Engineering</option>
+                    <option>Medical</option>
+                    <option>Pharmacy</option>
+                    <option>Law</option>
+                    <option>Management</option>
+                    <option>Computer Science</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- MEDIUM -->
+            <div class="field">
+
+                <label>Medium</label>
+
+                <select id="medium">
+
+                    <option value="">
+                        Select Medium
+                    </option>
+
+                    <option>Marathi</option>
+                    <option>Hindi</option>
+                    <option>English</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- AGE -->
+            <div class="field">
+
+                <label>Age</label>
+
+                <input
+                    id="age"
+                    type="number"
+                    min="10"
+                    max="100"
+                    placeholder="Enter your age"
+                >
+
+            </div>
+
+
+            <!-- STATE -->
+            <div class="field">
+
+                <label>State</label>
+
+                <select id="state">
+
+                    <option value="">
+                        Select State
+                    </option>
+
+                    <option>Maharashtra</option>
+                    <option>Gujarat</option>
+                    <option>Madhya Pradesh</option>
+                    <option>Goa</option>
+                    <option>Karnataka</option>
+                    <option>Telangana</option>
+                    <option>Andhra Pradesh</option>
+                    <option>Delhi</option>
+                    <option>Uttar Pradesh</option>
+                    <option>Rajasthan</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- DISTRICT -->
+            <div class="field full">
+
+                <label>District</label>
+
+                <select id="district">
+
+                    <option value="">
+                        First select State
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="find-btn"
+            onclick="findColleges()"
+        >
+            🔍 Find My Colleges
+        </button>
+
+
+        <!-- LOADING -->
+        <div
+            class="loading"
+            id="loading"
+        >
+
+            <div class="spinner"></div>
+
+            <strong>
+                🤖 GyanSetu AI is researching...
+            </strong>
+
+            <p style="margin-top:7px;color:#667085;font-size:13px;">
+                तुमची माहिती analyze करून colleges शोधत आहोत.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- RESULTS -->
+    <section
+        class="results"
+        id="results"
     >
 
-      <option value="">
-        Select District
-      </option>
+        <!-- PROFILE -->
+        <div class="profile-box">
 
-    </select>
+            <h2>
+                👤 Your Profile
+            </h2>
 
-  </div>
+            <div
+                class="profile-info"
+                id="profileInfo"
+            ></div>
 
-
-  <!-- COLLEGE HEADER -->
-
-  <div class="college-header">
-
-    <h2>
-      🎓 Colleges
-    </h2>
-
-    <div
-      class="count"
-      id="collegeCount"
-    >
-      0 Colleges
-    </div>
-
-  </div>
+        </div>
 
 
-  <!-- COLLEGE LIST -->
+        <!-- RESULT HEADER -->
+        <div class="result-header">
 
-  <div id="collegeList">
+            <h2>
+                🏫 Colleges in Your District
+            </h2>
 
-    <div class="loading">
-      ⏳ Loading college data...
-    </div>
+            <div
+                class="count"
+                id="collegeCount"
+            >
+            </div>
 
-  </div>
-
-
-  <!-- DETAILS -->
-
-  <div
-    class="details"
-    id="collegeDetails"
-  >
-
-    <h2 id="detailName">
-      College Name
-    </h2>
+        </div>
 
 
-    <div
-      class="detail-line"
-      id="detailAishe"
-    ></div>
+        <!-- COLLEGE LIST -->
+        <div
+            class="college-list"
+            id="collegeList"
+        ></div>
+
+    </section>
+
+</main>
 
 
-    <div
-      class="detail-line"
-      id="detailLocation"
-    ></div>
+<footer>
 
+    © <span id="year"></span> GyanSetu
+    • AI College Discovery
 
-    <div
-      class="detail-line"
-      id="detailType"
-    ></div>
-
-
-    <div
-      class="detail-line"
-      id="detailManagement"
-    ></div>
-
-
-    <div
-      class="detail-line"
-      id="detailEstablished"
-    ></div>
-
-
-    <div
-      class="detail-line"
-      id="detailUniversity"
-    ></div>
-
-
-    <div
-      class="detail-line"
-      id="detailUniversityType"
-    ></div>
-
-
-    <div
-      class="detail-line"
-      id="detailUniversityCode"
-    ></div>
-
-
-    <a
-      id="detailWebsite"
-      class="website-btn"
-      href="#"
-      target="_blank"
-      rel="noopener noreferrer"
-      style="display:none;"
-    >
-      🌐 Visit College Website
-    </a>
-
-
-    <button
-      class="close-details"
-      onclick="closeDetails()"
-    >
-      Close
-    </button>
-
-  </div>
-
-
-</div>
-
-
-</div>
+</footer>
 
 
 <script>
 
-/* =====================================================
-   DATA
-===================================================== */
+/* --------------------------------
+   DISTRICTS
+-------------------------------- */
 
-let colleges = [];
+const districts = {
 
-let selectedState = "";
+    Maharashtra: [
+        "Pune",
+        "Mumbai City",
+        "Mumbai Suburban",
+        "Nashik",
+        "Nagpur",
+        "Nanded",
+        "Aurangabad",
+        "Kolhapur",
+        "Satara",
+        "Sangli",
+        "Solapur",
+        "Ahmednagar",
+        "Thane",
+        "Raigad",
+        "Ratnagiri",
+        "Sindhudurg",
+        "Jalgaon",
+        "Dhule",
+        "Amravati",
+        "Akola",
+        "Latur",
+        "Beed",
+        "Osmanabad"
+    ],
 
-let selectedDistrict = "";
+    Gujarat: [
+        "Ahmedabad",
+        "Surat",
+        "Vadodara",
+        "Rajkot",
+        "Gandhinagar"
+    ],
+
+    Karnataka: [
+        "Bengaluru Urban",
+        "Mysuru",
+        "Belagavi",
+        "Mangaluru",
+        "Hubballi"
+    ],
+
+    Goa: [
+        "North Goa",
+        "South Goa"
+    ],
+
+    Delhi: [
+        "Central Delhi",
+        "East Delhi",
+        "New Delhi",
+        "North Delhi",
+        "South Delhi",
+        "West Delhi"
+    ],
+
+    "Uttar Pradesh": [
+        "Lucknow",
+        "Kanpur Nagar",
+        "Varanasi",
+        "Agra",
+        "Prayagraj",
+        "Noida",
+        "Ghaziabad"
+    ],
+
+    Rajasthan: [
+        "Jaipur",
+        "Jodhpur",
+        "Udaipur",
+        "Kota",
+        "Ajmer"
+    ]
+
+};
 
 
-/* ELEMENTS */
+/* --------------------------------
+   STATE CHANGE
+-------------------------------- */
 
-const stateSelect =
-  document.getElementById(
-    "stateSelect"
-  );
+document
+.getElementById("state")
+.addEventListener("change", function(){
 
-const districtSelect =
-  document.getElementById(
-    "districtSelect"
-  );
+    const state = this.value;
 
-const collegeList =
-  document.getElementById(
-    "collegeList"
-  );
+    const district =
+        document.getElementById("district");
 
-const collegeCount =
-  document.getElementById(
-    "collegeCount"
-  );
+    district.innerHTML =
+        '<option value="">Select District</option>';
 
-const searchInput =
-  document.getElementById(
-    "collegeSearch"
-  );
+    if(districts[state]){
 
+        districts[state].forEach(function(item){
 
-/* =====================================================
-   LOAD JSON
-===================================================== */
+            const option =
+                document.createElement("option");
 
-async function loadCollegeData(){
+            option.value = item;
+            option.textContent = item;
 
-  try{
+            district.appendChild(option);
 
-    const response =
-      await fetch(
-        "colleges-data.json",
-        {
-          cache:"no-store"
-        }
-      );
-
-
-    if(!response.ok){
-
-      throw new Error(
-        "JSON file not found"
-      );
+        });
 
     }
 
-
-    const data =
-      await response.json();
+});
 
 
-    if(Array.isArray(data)){
+/* --------------------------------
+   FIND COLLEGES
+-------------------------------- */
 
-      colleges = data;
+function findColleges(){
 
-    }
-    else if(
-      data &&
-      Array.isArray(data.colleges)
+    const standard =
+        document.getElementById("standard").value;
+
+    const school =
+        document.getElementById("school").value;
+
+    const field =
+        document.getElementById("field").value;
+
+    const medium =
+        document.getElementById("medium").value;
+
+    const age =
+        document.getElementById("age").value;
+
+    const state =
+        document.getElementById("state").value;
+
+    const district =
+        document.getElementById("district").value;
+
+
+    /* BASIC VALIDATION */
+
+    if(
+        !standard ||
+        !field ||
+        !age ||
+        !state ||
+        !district
     ){
 
-      colleges =
-        data.colleges;
+        alert(
+            "कृपया Standard, Field, Age, State आणि District भरा."
+        );
+
+        return;
+
+    }
+
+
+    /* SHOW LOADING */
+
+    document.getElementById("loading")
+        .style.display = "block";
+
+
+    document.getElementById("results")
+        .style.display = "none";
+
+
+    /*
+       सध्या demo research.
+       पुढे इथे Supabase + AI जोडणार आहोत.
+    */
+
+    setTimeout(function(){
+
+        document.getElementById("loading")
+            .style.display = "none";
+
+
+        showResults({
+
+            standard,
+            school,
+            field,
+            medium,
+            age,
+            state,
+            district
+
+        });
+
+    },1500);
+
+}
+
+
+/* --------------------------------
+   SHOW RESULTS
+-------------------------------- */
+
+function showResults(profile){
+
+    const results =
+        document.getElementById("results");
+
+    results.style.display = "block";
+
+
+    /* PROFILE */
+
+    document.getElementById("profileInfo")
+        .innerHTML = `
+
+        <span class="profile-tag">
+            ${profile.standard}
+        </span>
+
+        <span class="profile-tag">
+            ${profile.field}
+        </span>
+
+        <span class="profile-tag">
+            ${profile.medium || "Medium not selected"}
+        </span>
+
+        <span class="profile-tag">
+            Age ${profile.age}
+        </span>
+
+        <span class="profile-tag">
+            ${profile.state}
+        </span>
+
+        <span class="profile-tag">
+            ${profile.district}
+        </span>
+
+    `;
+
+
+    /*
+       DEMO COLLEGES
+
+       पुढे ही माहिती
+       Supabase database मधून येईल.
+    */
+
+    const demoColleges = [
+
+        {
+            name:"Demo College of Arts & Science",
+            type:"Degree College",
+            university:"Demo University",
+            year:"1995",
+            location:`${profile.district}, ${profile.state}`
+        },
+
+        {
+            name:"Demo Institute of Technology",
+            type:"Institute",
+            university:"State Technical University",
+            year:"2005",
+            location:`${profile.district}, ${profile.state}`
+        },
+
+        {
+            name:"Demo College of Commerce",
+            type:"Degree College",
+            university:"State University",
+            year:"1988",
+            location:`${profile.district}, ${profile.state}`
+        }
+
+    ];
+
+
+    document.getElementById("collegeCount")
+        .textContent =
+        `${demoColleges.length} colleges found`;
+
+
+    const list =
+        document.getElementById("collegeList");
+
+    list.innerHTML = "";
+
+
+    demoColleges.forEach(function(college){
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "college-card";
+
+
+        card.innerHTML = `
+
+            <h3>
+                ${college.name}
+            </h3>
+
+            <div class="details">
+
+                <div class="detail">
+                    <span class="detail-label">
+                        College Type
+                    </span>
+
+                    <span class="detail-value">
+                        ${college.type}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="detail-label">
+                        University
+                    </span>
+
+                    <span class="detail-value">
+                        ${college.university}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="detail-label">
+                        Established
+                    </span>
+
+                    <span class="detail-value">
+                        ${college.year}
+                    </span>
+                </div>
+
+
+                <div class="detail">
+                    <span class="detail-label">
+                        Location
+                    </span>
+
+                    <span class="detail-value">
+                        ${college.location}
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button
+                    class="action-btn copy"
+                    onclick="copyName('${college.name.replace(/'/g,"\\'")}')"
+                >
+                    📋 Copy Name
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    onclick="shareCollege('${college.name.replace(/'/g,"\\'")}')"
+                >
+                    ↗ Share
+                </button>
+
+            </div>
+
+        `;
+
+
+        list.appendChild(card);
+
+    });
+
+
+    results.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* --------------------------------
+   COPY
+-------------------------------- */
+
+function copyName(name){
+
+    navigator.clipboard
+        .writeText(name)
+        .then(function(){
+
+            alert(
+                "College name copied!"
+            );
+
+        });
+
+}
+
+
+/* --------------------------------
+   SHARE
+-------------------------------- */
+
+function shareCollege(name){
+
+    if(navigator.share){
+
+        navigator.share({
+
+            title:name,
+
+            text:
+            "Check this college on GyanSetu: "
+            + name
+
+        });
 
     }
     else{
 
-      throw new Error(
-        "Invalid JSON"
-      );
+        copyName(name);
 
     }
-
-
-    /* Remove empty records */
-
-    colleges =
-      colleges.filter(
-        college =>
-          college &&
-          String(
-            college["Name"] || ""
-          ).trim() !== ""
-      );
-
-
-    console.log(
-      "Total colleges:",
-      colleges.length
-    );
-
-
-    loadStates();
-
-
-    collegeList.innerHTML = `
-      <div class="empty">
-
-        👆 Select a State
-        to start.
-
-        <br><br>
-
-        <b>
-          ${formatNumber(colleges.length)}
-        </b>
-        colleges loaded.
-
-      </div>
-    `;
-
-
-    collegeCount.textContent =
-      formatNumber(
-        colleges.length
-      ) +
-      " Colleges";
-
-  }
-  catch(error){
-
-    console.error(error);
-
-
-    collegeList.innerHTML = `
-      <div class="empty">
-
-        ❌ Data could not be loaded.
-
-        <br><br>
-
-        Make sure
-        <b>colleges-data.json</b>
-        is in the same folder
-        as this HTML file.
-
-      </div>
-    `;
-
-
-    collegeCount.textContent =
-      "Data Error";
-
-  }
 
 }
 
 
-/* =====================================================
-   VALUE
-===================================================== */
-
-function getValue(
-  college,
-  key
-){
-
-  if(
-    college[key] !== undefined &&
-    college[key] !== null
-  ){
-
-    const value =
-      String(
-        college[key]
-      ).trim();
-
-
-    if(
-      value !== "" &&
-      value !== "-"
-    ){
-
-      return value;
-
-    }
-
-  }
-
-
-  return "-";
-
-}
-
-
-/* =====================================================
-   STATES
-===================================================== */
-
-function loadStates(){
-
-  stateSelect.innerHTML = `
-    <option value="">
-      Select State
-    </option>
-  `;
-
-
-  const states =
-    new Set();
-
-
-  colleges.forEach(
-    college => {
-
-      const state =
-        getValue(
-          college,
-          "State"
-        );
-
-
-      if(state !== "-"){
-
-        states.add(
-          state
-        );
-
-      }
-
-    }
-  );
-
-
-  Array.from(states)
-    .sort(
-      (a,b) =>
-        a.localeCompare(
-          b,
-          "en",
-          {
-            sensitivity:"base"
-          }
-        )
-    )
-    .forEach(
-      state => {
-
-        const option =
-          document.createElement(
-            "option"
-          );
-
-
-        option.value =
-          state;
-
-
-        option.textContent =
-          state;
-
-
-        stateSelect.appendChild(
-          option
-        );
-
-      }
-    );
-
-}
-
-
-/* =====================================================
-   STATE CHANGE
-===================================================== */
-
-stateSelect.addEventListener(
-  "change",
-  function(){
-
-    selectedState =
-      this.value;
-
-
-    selectedDistrict =
-      "";
-
-
-    districtSelect.innerHTML = `
-      <option value="">
-        Select District
-      </option>
-    `;
-
-
-    districtSelect.disabled =
-      true;
-
-
-    if(!selectedState){
-
-      collegeList.innerHTML = `
-        <div class="empty">
-          👆 Select a State.
-        </div>
-      `;
-
-      collegeCount.textContent =
-        "0 Colleges";
-
-      return;
-
-    }
-
-
-    loadDistricts(
-      selectedState
-    );
-
-
-    collegeList.innerHTML = `
-      <div class="empty">
-        👆 Now select a District.
-      </div>
-    `;
-
-
-    collegeCount.textContent =
-      "0 Colleges";
-
-  }
-);
-
-
-/* =====================================================
-   DISTRICTS
-===================================================== */
-
-function loadDistricts(
-  state
-){
-
-  const districts =
-    new Set();
-
-
-  colleges.forEach(
-    college => {
-
-      if(
-        getValue(
-          college,
-          "State"
-        ) === state
-      ){
-
-        const district =
-          getValue(
-            college,
-            "District"
-          );
-
-
-        if(
-          district !== "-"
-        ){
-
-          districts.add(
-            district
-          );
-
-        }
-
-      }
-
-    }
-  );
-
-
-  Array.from(districts)
-    .sort(
-      (a,b) =>
-        a.localeCompare(
-          b,
-          "en",
-          {
-            sensitivity:"base"
-          }
-        )
-    )
-    .forEach(
-      district => {
-
-        const option =
-          document.createElement(
-            "option"
-          );
-
-
-        option.value =
-          district;
-
-
-        option.textContent =
-          district;
-
-
-        districtSelect.appendChild(
-          option
-        );
-
-      }
-    );
-
-
-  districtSelect.disabled =
-    false;
-
-}
-
-
-/* =====================================================
-   DISTRICT CHANGE
-===================================================== */
-
-districtSelect.addEventListener(
-  "change",
-  function(){
-
-    selectedDistrict =
-      this.value;
-
-
-    if(!selectedDistrict){
-
-      collegeList.innerHTML = `
-        <div class="empty">
-          👆 Select a District.
-        </div>
-      `;
-
-
-      collegeCount.textContent =
-        "0 Colleges";
-
-
-      return;
-
-    }
-
-
-    showColleges();
-
-  }
-);
-
-
-/* =====================================================
-   SHOW ALL COLLEGES
-===================================================== */
-
-function showColleges(){
-
-  const search =
-    searchInput.value
-      .trim()
-      .toLowerCase();
-
-
-  let results =
-    colleges.filter(
-      college => {
-
-        return(
-
-          getValue(
-            college,
-            "State"
-          ) === selectedState
-
-          &&
-
-          getValue(
-            college,
-            "District"
-          ) === selectedDistrict
-
-        );
-
-      }
-    );
-
-
-  /* SEARCH */
-
-  if(search){
-
-    results =
-      results.filter(
-        college => {
-
-          const text = [
-
-            getValue(
-              college,
-              "Name"
-            ),
-
-            getValue(
-              college,
-              "Aishe Code"
-            ),
-
-            getValue(
-              college,
-              "University Name"
-            ),
-
-            getValue(
-              college,
-              "College Type"
-            ),
-
-            getValue(
-              college,
-              "Manegement"
-            )
-
-          ]
-          .join(" ")
-          .toLowerCase();
-
-
-          return text.includes(
-            search
-          );
-
-        }
-      );
-
-  }
-
-
-  collegeList.innerHTML = "";
-
-
-  collegeCount.textContent =
-    formatNumber(
-      results.length
-    ) +
-    (
-      results.length === 1
-      ? " College"
-      : " Colleges"
-    );
-
-
-  if(
-    results.length === 0
-  ){
-
-    collegeList.innerHTML = `
-      <div class="empty">
-
-        😕 No college found.
-
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  /*
-    IMPORTANT:
-
-    ALL colleges are rendered.
-    There is NO 20 limit.
-  */
-
-  results.forEach(
-    college => {
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-
-      card.className =
-        "college-card";
-
-
-      card.innerHTML = `
-
-        <div class="college-top">
-
-          <div class="college-icon">
-            🎓
-          </div>
-
-          <div>
-
-            <div class="college-name">
-
-              ${escapeHTML(
-                getValue(
-                  college,
-                  "Name"
-                )
-              )}
-
-            </div>
-
-
-            <div class="college-location">
-
-              📍
-              ${escapeHTML(
-                getValue(
-                  college,
-                  "District"
-                )
-              )},
-              ${escapeHTML(
-                getValue(
-                  college,
-                  "State"
-                )
-              )}
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="tags">
-
-          <div class="tag">
-
-            ${escapeHTML(
-              getValue(
-                college,
-                "College Type"
-              )
-            )}
-
-          </div>
-
-
-          <div class="tag">
-
-            ${escapeHTML(
-              getValue(
-                college,
-                "Manegement"
-              )
-            )}
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      card.onclick =
-        function(){
-
-          openDetails(
-            college
-          );
-
-        };
-
-
-      collegeList.appendChild(
-        card
-      );
-
-    }
-  );
-
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-searchInput.addEventListener(
-  "input",
-  function(){
-
-    if(
-      selectedState &&
-      selectedDistrict
-    ){
-
-      showColleges();
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   DETAILS
-===================================================== */
-
-function openDetails(
-  college
-){
-
-  document.getElementById(
-    "detailName"
-  ).textContent =
-    getValue(
-      college,
-      "Name"
-    );
-
-
-  document.getElementById(
-    "detailAishe"
-  ).innerHTML =
-    "<b>🔢 AISHE Code:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "Aishe Code"
-      )
-    );
-
-
-  document.getElementById(
-    "detailLocation"
-  ).innerHTML =
-    "<b>📍 Location:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "Location"
-      )
-    ) +
-    "<br>" +
-    escapeHTML(
-      getValue(
-        college,
-        "District"
-      )
-    ) +
-    ", " +
-    escapeHTML(
-      getValue(
-        college,
-        "State"
-      )
-    );
-
-
-  document.getElementById(
-    "detailType"
-  ).innerHTML =
-    "<b>🏫 College Type:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "College Type"
-      )
-    );
-
-
-  document.getElementById(
-    "detailManagement"
-  ).innerHTML =
-    "<b>🏢 Management:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "Manegement"
-      )
-    );
-
-
-  document.getElementById(
-    "detailEstablished"
-  ).innerHTML =
-    "<b>📅 Established:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "Year Of Establishment"
-      )
-    );
-
-
-  document.getElementById(
-    "detailUniversity"
-  ).innerHTML =
-    "<b>🎓 University:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "University Name"
-      )
-    );
-
-
-  document.getElementById(
-    "detailUniversityType"
-  ).innerHTML =
-    "<b>🏛 University Type:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "University Type"
-      )
-    );
-
-
-  document.getElementById(
-    "detailUniversityCode"
-  ).innerHTML =
-    "<b>🔢 University AISHE Code:</b> " +
-    escapeHTML(
-      getValue(
-        college,
-        "University Aishe Code"
-      )
-    );
-
-
-  /* WEBSITE */
-
-  const website =
-    getValue(
-      college,
-      "Website"
-    );
-
-
-  const websiteButton =
-    document.getElementById(
-      "detailWebsite"
-    );
-
-
-  if(
-    website !== "-"
-  ){
-
-    let url =
-      website;
-
-
-    if(
-      !url.startsWith(
-        "http://"
-      ) &&
-      !url.startsWith(
-        "https://"
-      )
-    ){
-
-      url =
-        "https://" + url;
-
-    }
-
-
-    websiteButton.href =
-      url;
-
-
-    websiteButton.style.display =
-      "block";
-
-  }
-  else{
-
-    websiteButton.style.display =
-      "none";
-
-  }
-
-
-  document.getElementById(
-    "collegeDetails"
-  ).classList.add(
-    "show"
-  );
-
-
-  document.getElementById(
-    "collegeDetails"
-  ).scrollIntoView({
-    behavior:"smooth"
-  });
-
-}
-
-
-/* =====================================================
-   CLOSE DETAILS
-===================================================== */
-
-function closeDetails(){
-
-  document.getElementById(
-    "collegeDetails"
-  ).classList.remove(
-    "show"
-  );
-
-}
-
-
-/* =====================================================
-   NUMBER FORMAT
-===================================================== */
-
-function formatNumber(
-  number
-){
-
-  return Number(
-    number
-  ).toLocaleString(
-    "en-IN"
-  );
-
-}
-
-
-/* =====================================================
-   HTML ESCAPE
-===================================================== */
-
-function escapeHTML(
-  value
-){
-
-  return String(
-    value ?? ""
-  )
-
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-
-  .replace(
-    /</g,
-    "&lt;"
-  )
-
-  .replace(
-    />/g,
-    "&gt;"
-  )
-
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-
-  .replace(
-    /'/g,
-    "&#039;"
-  );
-
-}
-
-
-/* =====================================================
-   START
-===================================================== */
-
-loadCollegeData();
+/* YEAR */
+
+document.getElementById("year")
+    .textContent =
+    new Date().getFullYear();
 
 </script>
 
