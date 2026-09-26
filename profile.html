@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>GyanSetu - Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Information - GyanSetu</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -16,77 +16,101 @@
 }
 
 body{
-  background:#eef5ff;
-  color:#172554;
+  background:#f4f6f9;
+  color:#222;
   min-height:100vh;
+  padding-bottom:75px;
 }
 
-.app{
-  width:100%;
-  max-width:430px;
-  margin:auto;
-  min-height:100vh;
-  background:#eef5ff;
-  padding-bottom:85px;
+body.dark{
+  background:#121212;
+  color:#eee;
 }
 
-/* HEADER */
 .header{
-  height:58px;
-  background:#fff;
+  height:60px;
+  background:#ffffff;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 14px;
-  border-bottom:1px solid #dbe7f5;
+  padding:0 12px;
   position:sticky;
   top:0;
-  z-index:50;
+  z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.dark .header{
+  background:#1e1e1e;
 }
 
 .header-title{
-  font-size:20px;
-  font-weight:800;
+  font-size:19px;
+  font-weight:bold;
+  flex:1;
+  text-align:center;
 }
 
 .header-btn{
+  width:42px;
+  height:42px;
   border:none;
-  background:#eef5ff;
-  color:#1769e0;
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  font-size:21px;
+  background:transparent;
+  font-size:26px;
   cursor:pointer;
+  border-radius:50%;
 }
 
-/* INFORMATION CARD */
-.info-card{
-  margin:16px 14px;
-  background:#fff;
+.header-btn:hover{
+  background:#eee;
+}
+
+.dark .header-btn:hover{
+  background:#333;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:18px 14px;
+}
+
+.profile-card{
+  background:white;
   border-radius:18px;
-  padding:20px 16px;
-  box-shadow:0 5px 20px rgba(23,105,224,.08);
+  padding:20px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.profile-heading{
+.dark .profile-card{
+  background:#1e1e1e;
+}
+
+.profile-top{
   text-align:center;
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 .avatar{
-  width:92px;
-  height:92px;
-  margin:auto;
+  width:95px;
+  height:95px;
   border-radius:50%;
-  background:#1769e0;
-  color:#fff;
+  background:#1976d2;
+  color:white;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:42px;
+  margin:auto;
+  font-size:38px;
+  font-weight:bold;
   overflow:hidden;
-  border:4px solid #dcecff;
+  cursor:pointer;
 }
 
 .avatar img{
@@ -95,963 +119,771 @@ body{
   object-fit:cover;
 }
 
-.change-photo{
-  border:none;
-  background:transparent;
-  color:#1769e0;
+.display-name{
+  font-size:22px;
   font-weight:bold;
-  font-size:12px;
-  margin-top:8px;
-  cursor:pointer;
+  margin-top:12px;
 }
 
-.profile-heading h2{
-  margin-top:10px;
-  font-size:21px;
-}
-
-.profile-heading p{
-  color:#64748b;
-  font-size:12px;
+.email{
+  color:#777;
+  font-size:14px;
   margin-top:4px;
 }
 
-.info-title{
-  font-size:17px;
-  font-weight:900;
-  margin:18px 0 12px;
+.dark .email{
+  color:#aaa;
+}
+
+.info-section{
+  margin-top:15px;
 }
 
 .info-row{
-  background:#f7faff;
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:9px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:13px 0;
+  border-bottom:1px solid #eee;
+}
+
+.dark .info-row{
+  border-bottom:1px solid #333;
 }
 
 .info-label{
-  font-size:11px;
-  color:#64748b;
-  margin-bottom:4px;
+  color:#777;
+  font-size:14px;
+}
+
+.dark .info-label{
+  color:#aaa;
 }
 
 .info-value{
-  font-size:14px;
-  font-weight:700;
+  text-align:right;
+  font-weight:500;
+  max-width:60%;
   word-break:break-word;
 }
 
 .edit-btn{
   width:100%;
-  height:45px;
+  margin-top:20px;
+  padding:13px;
   border:none;
-  border-radius:11px;
-  background:#1769e0;
-  color:#fff;
-  font-weight:800;
-  font-size:14px;
-  margin-top:7px;
+  border-radius:12px;
+  background:#1976d2;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
   cursor:pointer;
 }
 
-/* BOTTOM NAV */
 .bottom-nav{
   position:fixed;
-  left:50%;
-  transform:translateX(-50%);
   bottom:0;
-  width:100%;
-  max-width:430px;
+  left:0;
+  right:0;
   height:65px;
-  background:#fff;
-  border-top:1px solid #dbe7f5;
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -2px 10px rgba(0,0,0,.1);
   z-index:100;
+}
+
+.dark .bottom-nav{
+  background:#1e1e1e;
 }
 
 .nav-item{
   border:none;
-  background:transparent;
-  color:#64748b;
-  font-size:11px;
+  background:none;
+  font-size:12px;
+  color:#777;
   cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
 }
 
-.nav-item span{
-  display:block;
-  font-size:21px;
-  margin-bottom:2px;
+.nav-icon{
+  font-size:22px;
 }
 
 .nav-item.active{
-  color:#1769e0;
-  font-weight:bold;
+  color:#1976d2;
 }
 
 /* MODAL */
+
 .modal{
+  display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.45);
-  display:none;
+  background:rgba(0,0,0,.55);
+  z-index:500;
   align-items:flex-end;
   justify-content:center;
-  z-index:200;
 }
 
-.modal.show{
-  display:flex;
-}
-
-.box{
+.modal-box{
   width:100%;
-  max-width:430px;
-  max-height:90vh;
-  overflow-y:auto;
-  background:#fff;
+  max-width:600px;
+  background:white;
   border-radius:22px 22px 0 0;
   padding:20px;
-  animation:up .2s ease;
+  max-height:90vh;
+  overflow:auto;
 }
 
-@keyframes up{
-  from{
-    transform:translateY(100px);
-    opacity:0;
-  }
-  to{
-    transform:translateY(0);
-    opacity:1;
-  }
+.dark .modal-box{
+  background:#1e1e1e;
 }
 
-.box-title{
-  font-size:19px;
-  font-weight:900;
-  margin-bottom:7px;
+.modal-title{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:18px;
 }
 
-.box-subtitle{
-  color:#64748b;
-  font-size:12px;
-  line-height:1.5;
-  margin-bottom:15px;
+.form-group{
+  margin-bottom:14px;
 }
 
-.input{
+.form-group label{
+  display:block;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
   width:100%;
-  min-height:43px;
-  border:1px solid #d6e2f0;
+  padding:12px;
+  border:1px solid #ccc;
   border-radius:10px;
-  padding:10px 12px;
-  outline:none;
-  background:#f9fbff;
-  color:#172554;
-  margin-bottom:10px;
+  font-size:15px;
+  background:white;
+  color:#222;
 }
 
-.input:focus{
-  border-color:#1769e0;
+.dark .form-group input,
+.dark .form-group select,
+.dark .form-group textarea{
+  background:#2a2a2a;
+  color:white;
+  border-color:#444;
 }
 
-.buttons{
+.modal-buttons{
   display:flex;
-  gap:8px;
-  margin-top:12px;
+  gap:10px;
+  margin-top:18px;
 }
 
-.btn{
+.modal-buttons button{
   flex:1;
-  min-height:43px;
+  padding:12px;
   border:none;
   border-radius:10px;
-  font-weight:800;
+  font-size:15px;
   cursor:pointer;
 }
 
-.primary{
-  background:#1769e0;
-  color:#fff;
+.cancel-btn{
+  background:#ddd;
+  color:#222;
 }
 
-.cancel{
-  background:#eef5ff;
-  color:#1769e0;
-}
-
-.danger{
-  background:#ef4444;
-  color:#fff;
+.save-btn{
+  background:#1976d2;
+  color:white;
 }
 
 /* MENU */
+
 .menu-item{
   width:100%;
-  min-height:48px;
+  padding:15px 5px;
   border:none;
-  background:#fff;
+  background:transparent;
   text-align:left;
-  padding:12px 4px;
-  font-size:15px;
-  color:#172554;
-  border-bottom:1px solid #edf2f7;
+  font-size:16px;
   cursor:pointer;
+  border-bottom:1px solid #eee;
+}
+
+.dark .menu-item{
+  border-bottom-color:#333;
+  color:white;
 }
 
 .menu-item:last-child{
   border-bottom:none;
 }
 
-/* PHOTO */
-.photo-preview{
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  margin:10px auto 15px;
-  background:#1769e0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-  font-size:50px;
-  overflow:hidden;
-  border:5px solid #dcecff;
+.menu-item:hover{
+  background:#f5f5f5;
 }
 
-.photo-preview img{
+.dark .menu-item:hover{
+  background:#292929;
+}
+
+.close-btn{
   width:100%;
-  height:100%;
-  object-fit:cover;
+  margin-top:12px;
+  padding:12px;
+  border:none;
+  border-radius:10px;
+  background:#1976d2;
+  color:white;
+  font-size:15px;
 }
 
 /* TOAST */
+
 .toast{
   position:fixed;
   left:50%;
-  bottom:82px;
-  transform:translateX(-50%) translateY(20px);
-  background:#172b4d;
-  color:#fff;
-  padding:11px 16px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:bold;
-  opacity:0;
-  pointer-events:none;
-  transition:.25s;
-  z-index:500;
-  max-width:90%;
-  text-align:center;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-}
-
-/* DARK MODE */
-body.dark{
-  background:#0f172a;
-  color:#e5edff;
-}
-
-body.dark .app{
-  background:#0f172a;
-}
-
-body.dark .header,
-body.dark .info-card,
-body.dark .bottom-nav,
-body.dark .box{
-  background:#172033;
-  color:#e5edff;
-}
-
-body.dark .header{
-  border-color:#26344c;
-}
-
-body.dark .header-btn{
-  background:#22324e;
-}
-
-body.dark .info-row{
-  background:#1e2a40;
-}
-
-body.dark .info-label,
-body.dark .profile-heading p,
-body.dark .box-subtitle{
-  color:#94a3b8;
-}
-
-body.dark .menu-item{
-  background:#172033;
-  color:#e5edff;
-  border-color:#26344c;
-}
-
-body.dark .input{
-  background:#111827;
-  border-color:#334155;
-  color:#e5edff;
-}
-
-body.dark .cancel{
-  background:#22324e;
-}
-
-body.dark .toast{
-  background:#fff;
-  color:#172b4d;
+  bottom:85px;
+  transform:translateX(-50%);
+  background:#222;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  display:none;
+  z-index:1000;
+  font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-
-<!-- HEADER -->
 <header class="header">
+
   <button class="header-btn" onclick="goHome()">←</button>
 
   <div class="header-title">My Information</div>
 
-  <button class="header-btn" onclick="openMenu()">⋯</button>
+  <div class="header-actions">
+
+    <!-- USERS BUTTON -->
+    <button
+      class="header-btn"
+      onclick="goUsers()"
+      title="Users">
+      👥
+    </button>
+
+    <!-- THREE DOT MENU -->
+    <button
+      class="header-btn"
+      onclick="openMenu()"
+      title="Menu">
+      ⋯
+    </button>
+
+  </div>
+
 </header>
 
 
-<!-- INFORMATION -->
-<section class="info-card">
+<main class="container">
 
-  <div class="profile-heading">
+  <div class="profile-card">
 
-    <div class="avatar" id="mainAvatar">👤</div>
+    <div class="profile-top">
 
-    <button class="change-photo" onclick="openPhotoModal()">
-      📷 Profile Photo बदला
+      <div class="avatar" id="avatar" onclick="openPhotoModal()">
+        <span id="avatarLetter">G</span>
+      </div>
+
+      <div class="display-name" id="displayName">
+        User
+      </div>
+
+      <div class="email" id="displayEmail">
+        -
+      </div>
+
+    </div>
+
+
+    <div class="info-section">
+
+      <div class="info-row">
+        <span class="info-label">Full Name</span>
+        <span class="info-value" id="fullName">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Date of Birth</span>
+        <span class="info-value" id="dob">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">School / College</span>
+        <span class="info-value" id="school">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Class</span>
+        <span class="info-value" id="className">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Medium</span>
+        <span class="info-value" id="medium">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">City / Village</span>
+        <span class="info-value" id="city">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Career Goal</span>
+        <span class="info-value" id="career">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Mobile</span>
+        <span class="info-value" id="mobile">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">Email</span>
+        <span class="info-value" id="email">-</span>
+      </div>
+
+      <div class="info-row">
+        <span class="info-label">GyanSetu ID</span>
+        <span class="info-value" id="gyanId">-</span>
+      </div>
+
+    </div>
+
+    <button class="edit-btn" onclick="openEditModal()">
+      ✏️ Edit Information
     </button>
 
-    <h2 id="displayName">Student</h2>
-
-    <p id="displayEmail">Email उपलब्ध नाही</p>
-
   </div>
 
-
-  <div class="info-title">
-    👤 Personal Information
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">🧑 Full Name</div>
-    <div class="info-value" id="infoName">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">🎂 Date of Birth</div>
-    <div class="info-value" id="infoDob">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">🏫 School / College</div>
-    <div class="info-value" id="infoSchool">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">📚 Class</div>
-    <div class="info-value" id="infoClass">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">📖 Medium</div>
-    <div class="info-value" id="infoMedium">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">📍 City / Village</div>
-    <div class="info-value" id="infoCity">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">🎯 Career Goal</div>
-    <div class="info-value" id="infoGoal">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">📱 Mobile Number</div>
-    <div class="info-value" id="infoMobile">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">✉️ Email</div>
-    <div class="info-value" id="infoEmail">Not added</div>
-  </div>
-
-
-  <div class="info-row">
-    <div class="info-label">🆔 GyanSetu ID</div>
-    <div class="info-value" id="infoId">Generating...</div>
-  </div>
-
-
-  <button class="edit-btn" onclick="openEditInfo()">
-    ✏️ Edit My Information
-  </button>
-
-</section>
-
-</div>
+</main>
 
 
 <!-- BOTTOM NAV -->
+
 <nav class="bottom-nav">
 
   <button class="nav-item" onclick="goHome()">
-    <span>🏠</span>
+    <span class="nav-icon">🏠</span>
     Home
   </button>
 
   <button class="nav-item" onclick="goLearn()">
-    <span>📚</span>
+    <span class="nav-icon">📚</span>
     Learn
   </button>
 
   <button class="nav-item" onclick="goCreate()">
-    <span>➕</span>
+    <span class="nav-icon">➕</span>
     Create
   </button>
 
   <button class="nav-item" onclick="goLeaderboard()">
-    <span>🔍</span>
+    <span class="nav-icon">🏆</span>
     Search
   </button>
 
   <button class="nav-item active">
-    <span>👤</span>
+    <span class="nav-icon">👤</span>
     Profile
   </button>
 
 </nav>
 
 
-<!-- EDIT INFORMATION -->
+<!-- EDIT MODAL -->
+
 <div class="modal" id="editModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      ✏️ Edit My Information
+    <div class="modal-title">
+      Edit Information
     </div>
 
-    <div class="box-subtitle">
-      तुमची माहिती भरा. Save केल्यानंतर ती account मध्ये save राहील.
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="editFullName">
     </div>
 
+    <div class="form-group">
+      <label>Date of Birth</label>
+      <input type="date" id="editDob">
+    </div>
 
-    <input class="input" id="nameInput"
-           placeholder="🧑 Full Name">
+    <div class="form-group">
+      <label>School / College</label>
+      <input type="text" id="editSchool">
+    </div>
 
+    <div class="form-group">
+      <label>Class</label>
+      <input type="text" id="editClass">
+    </div>
 
-    <label style="font-size:12px;font-weight:bold;">
-      🎂 Date of Birth
-    </label>
+    <div class="form-group">
+      <label>Medium</label>
+      <input type="text" id="editMedium">
+    </div>
 
-    <input class="input" id="dobInput"
-           type="date"
-           style="margin-top:6px;">
+    <div class="form-group">
+      <label>City / Village</label>
+      <input type="text" id="editCity">
+    </div>
 
+    <div class="form-group">
+      <label>Career Goal</label>
+      <input type="text" id="editCareer">
+    </div>
 
-    <input class="input" id="schoolInput"
-           placeholder="🏫 School / College">
+    <div class="form-group">
+      <label>Mobile</label>
+      <input type="tel" id="editMobile">
+    </div>
 
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="editEmail">
+    </div>
 
-    <input class="input" id="classInput"
-           placeholder="📚 Class">
-
-
-    <input class="input" id="mediumInput"
-           placeholder="📖 Medium">
-
-
-    <input class="input" id="cityInput"
-           placeholder="📍 City / Village">
-
-
-    <input class="input" id="goalInput"
-           placeholder="🎯 Career Goal">
-
-
-    <input class="input" id="mobileInput"
-           type="tel"
-           placeholder="📱 Mobile Number">
-
-
-    <input class="input" id="emailInput"
-           type="email"
-           placeholder="✉️ Email">
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('editModal')">
+    <div class="modal-buttons">
+      <button class="cancel-btn" onclick="closeModal('editModal')">
         Cancel
       </button>
 
-      <button class="btn primary"
-              onclick="saveInformation()">
-        💾 Save
+      <button class="save-btn" onclick="saveInformation()">
+        Save
       </button>
-
     </div>
 
   </div>
+
 </div>
 
 
 <!-- PHOTO MODAL -->
+
 <div class="modal" id="photoModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      📷 Profile Photo
+    <div class="modal-title">
+      Profile Photo
     </div>
 
-    <div class="box-subtitle">
-      तुमचा profile photo निवडा.
+    <div class="form-group">
+      <input
+        type="file"
+        id="photoInput"
+        accept="image/*"
+        onchange="changePhoto(event)">
     </div>
 
-
-    <div class="photo-preview" id="photoPreview">
-      👤
-    </div>
-
-
-    <input type="file"
-           id="photoInput"
-           accept="image/*"
-           style="display:none"
-           onchange="previewPhoto(event)">
-
-
-    <button class="btn primary"
-            style="width:100%;"
-            onclick="document.getElementById('photoInput').click()">
-      📁 Gallery मधून फोटो निवडा
-    </button>
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('photoModal')">
-        Cancel
-      </button>
-
-      <button class="btn primary"
-              onclick="saveProfilePhoto()">
-        Save Photo
-      </button>
-
-    </div>
-
-
-    <button class="menu-item"
-            style="margin-top:10px;color:#dc2626;"
-            onclick="removeProfilePhoto()">
-      🗑️ Remove Profile Photo
+    <button
+      class="close-btn"
+      onclick="closeModal('photoModal')">
+      Close
     </button>
 
   </div>
+
 </div>
 
 
-<!-- MENU -->
+<!-- MENU MODAL -->
+
 <div class="modal" id="menuModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      ⚙️ Menu
+    <div class="modal-title">
+      Menu
     </div>
 
+    <button class="menu-item" onclick="openSettings()">
+      ⚙️ Account Settings
+    </button>
 
-    <div style="margin-top:12px;">
+    <button class="menu-item" onclick="openNotifications()">
+      🔔 Notifications
+    </button>
 
-      <button class="menu-item"
-              onclick="openAccountSettings()">
-        👤 Account Settings
-      </button>
+    <button class="menu-item" onclick="openPrivacy()">
+      🔒 Privacy
+    </button>
 
+    <button class="menu-item" onclick="openNotes()">
+      📝 Private Notes
+    </button>
 
-      <button class="menu-item"
-              onclick="openNotifications()">
-        🔔 Notifications
-      </button>
+    <button class="menu-item" onclick="openAbout()">
+      ℹ️ About GyanSetu
+    </button>
 
+    <button class="menu-item" onclick="openHelp()">
+      ❓ Help
+    </button>
 
-      <button class="menu-item"
-              onclick="toggleDarkMode()">
-        🌙 Dark Mode
-      </button>
+    <button class="menu-item" onclick="openReset()">
+      🔄 Reset
+    </button>
 
-
-      <button class="menu-item"
-              onclick="openPrivacy()">
-        🔐 Privacy
-      </button>
-
-
-      <button class="menu-item"
-              onclick="openAbout()">
-        ℹ️ About GyanSetu
-      </button>
-
-
-      <button class="menu-item"
-              onclick="openHelp()">
-        💬 Help & Feedback
-      </button>
-
-
-      <button class="menu-item"
-              onclick="openReset()">
-        ⚠️ Reset App Data
-      </button>
-
-    </div>
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('menuModal')">
-        Close
-      </button>
-
-    </div>
+    <button
+      class="close-btn"
+      onclick="closeModal('menuModal')">
+      Close
+    </button>
 
   </div>
+
 </div>
 
 
-<!-- ACCOUNT SETTINGS -->
-<div class="modal" id="accountModal">
+<!-- SETTINGS MODAL -->
 
-  <div class="box">
+<div class="modal" id="settingsModal">
 
-    <div class="box-title">
-      👤 Account Settings
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Account Settings
     </div>
 
-    <div class="box-subtitle">
-      तुमच्या GyanSetu account ची माहिती.
-    </div>
-
-
-    <input class="input"
-           id="accountName"
-           placeholder="Username">
-
-
-    <button class="menu-item"
-            onclick="addAccount()">
-      ➕ Add another account
+    <button class="menu-item" onclick="toggleDarkMode()">
+      🌙 Toggle Dark Mode
     </button>
 
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('accountModal')">
-        Close
-      </button>
-
-      <button class="btn primary"
-              onclick="saveAccountSettings()">
-        Save
-      </button>
-
-    </div>
+    <button
+      class="close-btn"
+      onclick="closeModal('settingsModal')">
+      Close
+    </button>
 
   </div>
+
 </div>
 
 
 <!-- NOTIFICATIONS -->
-<div class="modal" id="notificationModal">
 
-  <div class="box">
+<div class="modal" id="notificationsModal">
 
-    <div class="box-title">
-      🔔 Learning Reminder
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Notifications
     </div>
 
-    <div class="box-subtitle">
-      रोज अभ्यासाची आठवण ठेवण्यासाठी reminder set करा.
-    </div>
+    <p style="margin-bottom:15px;">
+      Notification settings are available here.
+    </p>
 
-
-    <label style="font-size:13px;font-weight:bold;">
-      ⏰ Reminder Time
-    </label>
-
-
-    <input class="input"
-           id="reminderTime"
-           type="time"
-           style="margin-top:7px;">
-
-
-    <button class="btn primary"
-            style="width:100%;"
-            onclick="saveReminder()">
-      Save Reminder
+    <button
+      class="close-btn"
+      onclick="closeModal('notificationsModal')">
+      Close
     </button>
 
-
-    <div id="reminderStatus"
-         style="margin-top:12px;font-size:12px;color:#64748b;">
-    </div>
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('notificationModal')">
-        Close
-      </button>
-
-    </div>
-
   </div>
+
 </div>
 
 
 <!-- PRIVACY -->
-<div class="modal" id="privacyCodeModal">
 
-  <div class="box">
+<div class="modal" id="privacyModal">
 
-    <div class="box-title">
-      🔐 Privacy
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Privacy
     </div>
 
-    <div class="box-subtitle">
-      Private Notes उघडण्यासाठी privacy code टाका.
-    </div>
+    <p style="margin-bottom:15px;">
+      Your profile information is stored securely with your account.
+    </p>
 
-
-    <input class="input"
-           id="privacyCode"
-           type="password"
-           placeholder="Enter privacy code">
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('privacyCodeModal')">
-        Cancel
-      </button>
-
-      <button class="btn primary"
-              onclick="checkPrivacyCode()">
-        Continue
-      </button>
-
-    </div>
+    <button
+      class="close-btn"
+      onclick="closeModal('privacyModal')">
+      Close
+    </button>
 
   </div>
+
 </div>
 
 
-<!-- PRIVATE NOTES -->
+<!-- NOTES -->
+
 <div class="modal" id="notesModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      🔒 Private Notes
+    <div class="modal-title">
+      Private Notes
     </div>
 
-    <div class="box-subtitle">
-      ही notes फक्त तुमच्या device वर save होतील.
+    <div class="form-group">
+      <textarea
+        id="privateNotes"
+        rows="7"
+        placeholder="Write your private notes..."></textarea>
     </div>
 
+    <button
+      class="save-btn"
+      style="width:100%;"
+      onclick="saveNotes()">
+      Save Notes
+    </button>
 
-    <textarea class="input"
-              id="privateNotes"
-              style="height:180px;resize:none;"
-              placeholder="तुमच्या private notes येथे लिहा..."></textarea>
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('notesModal')">
-        Close
-      </button>
-
-      <button class="btn primary"
-              onclick="savePrivateNotes()">
-        Save
-      </button>
-
-    </div>
+    <button
+      class="close-btn"
+      onclick="closeModal('notesModal')">
+      Close
+    </button>
 
   </div>
+
 </div>
 
 
 <!-- ABOUT -->
+
 <div class="modal" id="aboutModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      📚 About GyanSetu
+    <div class="modal-title">
+      About GyanSetu
     </div>
 
+    <p style="line-height:1.6;">
+      GyanSetu is an educational platform designed to
+      connect students with learning resources,
+      colleges, users and educational opportunities.
+    </p>
 
-    <div class="box-subtitle"
-         style="font-size:14px;line-height:1.7;">
-
-      आम्ही हा app मुलांच्या भविष्य साठी तयार केला आहे.
-
-      <br><br>
-
-      GyanSetu चा उद्देश विद्यार्थ्यांना शिक्षण,
-      अभ्यास, प्रश्नमंजुषा आणि learning activities
-      एका सोप्या platform वर उपलब्ध करून देणे हा आहे.
-
-      <br><br>
-
-      📚 शिका
-      <br>
-      🧠 समजा
-      <br>
-      📝 सराव करा
-      <br>
-      🏆 पुढे चला
-
-    </div>
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('aboutModal')">
-        Close
-      </button>
-
-    </div>
+    <button
+      class="close-btn"
+      onclick="closeModal('aboutModal')">
+      Close
+    </button>
 
   </div>
+
 </div>
 
 
 <!-- HELP -->
+
 <div class="modal" id="helpModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      💬 Help & Feedback
+    <div class="modal-title">
+      Help
     </div>
 
-    <div class="box-subtitle">
-      GyanSetu बद्दल तुमचा feedback लिहा.
-    </div>
+    <p style="line-height:1.6;">
+      If you need help, please check the relevant
+      section of GyanSetu or contact support.
+    </p>
 
-
-    <textarea class="input"
-              id="feedbackText"
-              style="height:140px;resize:none;"
-              placeholder="तुमचा feedback..."></textarea>
-
-
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('helpModal')">
-        Close
-      </button>
-
-      <button class="btn primary"
-              onclick="sendFeedback()">
-        Send
-      </button>
-
-    </div>
+    <button
+      class="close-btn"
+      onclick="closeModal('helpModal')">
+      Close
+    </button>
 
   </div>
+
 </div>
 
 
 <!-- RESET -->
+
 <div class="modal" id="resetModal">
 
-  <div class="box">
+  <div class="modal-box">
 
-    <div class="box-title">
-      ⚠️ Reset App Data?
+    <div class="modal-title">
+      Reset Information
     </div>
 
-    <div class="box-subtitle">
-      Local profile data, notes आणि settings
-      या device मधून delete होतील.
-      <br><br>
-      Supabase account delete होणार नाही.
-    </div>
+    <p style="line-height:1.6;margin-bottom:15px;">
+      Are you sure you want to reset your saved profile
+      information from this device?
+    </p>
 
+    <div class="modal-buttons">
 
-    <div class="buttons">
-
-      <button class="btn cancel"
-              onclick="closeModal('resetModal')">
+      <button
+        class="cancel-btn"
+        onclick="closeModal('resetModal')">
         Cancel
       </button>
 
-      <button class="btn danger"
-              onclick="resetAppData()">
+      <button
+        class="save-btn"
+        onclick="resetInformation()">
         Reset
       </button>
 
     </div>
 
   </div>
+
 </div>
 
 
-<!-- TOAST -->
-<div id="toast" class="toast"></div>
+<div class="toast" id="toast"></div>
 
 
 <script>
 
-/* SUPABASE */
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://eqglttfffhvoyvrclzse.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
 const supabaseClient =
 supabase.createClient(
-  "https://eqglttfffhvoyvrclzse.supabase.co",
-  "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb"
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
 
-/* NAVIGATION */
+/* =========================
+   NAVIGATION
+========================= */
+
 function goHome(){
   window.location.href="home.html";
 }
@@ -1069,596 +901,275 @@ function goLeaderboard(){
 }
 
 
-/* MODALS */
+/* =========================
+   USERS PAGE
+========================= */
+
+function goUsers(){
+
+  window.location.href="users.html";
+
+}
+
+
+/* =========================
+   MODALS
+========================= */
+
 function openModal(id){
-  const el=document.getElementById(id);
-  if(el) el.classList.add("show");
+  document.getElementById(id).style.display="flex";
 }
 
 function closeModal(id){
-  const el=document.getElementById(id);
-  if(el) el.classList.remove("show");
+  document.getElementById(id).style.display="none";
 }
 
-
-/* TOAST */
-function showToast(message){
-
-  const toast=document.getElementById("toast");
-
-  toast.textContent=message;
-  toast.classList.add("show");
-
-  clearTimeout(window.toastTimer);
-
-  window.toastTimer=setTimeout(()=>{
-    toast.classList.remove("show");
-  },2200);
+function openMenu(){
+  openModal("menuModal");
 }
 
+function openEditModal(){
 
-/* CURRENT USER */
-async function getCurrentUser(){
+  document.getElementById("editFullName").value =
+    localStorage.getItem("fullName") || "";
 
-  try{
+  document.getElementById("editDob").value =
+    localStorage.getItem("dob") || "";
 
-    const {data,error}=
-      await supabaseClient.auth.getUser();
+  document.getElementById("editSchool").value =
+    localStorage.getItem("school") || "";
 
-    if(error){
-      console.error(error);
-      return null;
-    }
+  document.getElementById("editClass").value =
+    localStorage.getItem("className") || "";
 
-    return data?.user || null;
+  document.getElementById("editMedium").value =
+    localStorage.getItem("medium") || "";
 
-  }catch(error){
+  document.getElementById("editCity").value =
+    localStorage.getItem("city") || "";
 
-    console.error(error);
-    return null;
+  document.getElementById("editCareer").value =
+    localStorage.getItem("career") || "";
 
-  }
+  document.getElementById("editMobile").value =
+    localStorage.getItem("mobile") || "";
+
+  document.getElementById("editEmail").value =
+    localStorage.getItem("email") || "";
+
+  openModal("editModal");
 }
-
-
-/* PROFILE DATA */
-
-const INFO_KEY="gyansetu_personal_information";
-
-
-function getLocalInfo(){
-
-  try{
-
-    return JSON.parse(
-      localStorage.getItem(INFO_KEY)
-    ) || {};
-
-  }catch(e){
-
-    return {};
-
-  }
-}
-
-
-function saveLocalInfo(info){
-
-  localStorage.setItem(
-    INFO_KEY,
-    JSON.stringify(info)
-  );
-
-}
-
-
-/* PROFILE PHOTO */
-
-function getProfilePhoto(){
-
-  return localStorage.getItem(
-    "gyansetu_profile_photo"
-  ) || "";
-
-}
-
-
-function applyProfilePhoto(){
-
-  const avatar=
-    document.getElementById("mainAvatar");
-
-  const photo=
-    getProfilePhoto();
-
-  if(photo){
-
-    avatar.innerHTML=
-      `<img src="${photo}" alt="Profile Photo">`;
-
-  }else{
-
-    avatar.innerHTML="👤";
-
-  }
-
-}
-
 
 function openPhotoModal(){
-
-  const photo=
-    getProfilePhoto();
-
-  const preview=
-    document.getElementById("photoPreview");
-
-  if(photo){
-
-    preview.innerHTML=
-      `<img src="${photo}" alt="Preview">`;
-
-  }else{
-
-    preview.innerHTML="👤";
-
-  }
-
-  document.getElementById(
-    "photoInput"
-  ).value="";
-
   openModal("photoModal");
+}
 
+function openSettings(){
+  closeModal("menuModal");
+  openModal("settingsModal");
+}
+
+function openNotifications(){
+  closeModal("menuModal");
+  openModal("notificationsModal");
+}
+
+function openPrivacy(){
+  closeModal("menuModal");
+  openModal("privacyModal");
+}
+
+function openNotes(){
+
+  closeModal("menuModal");
+
+  document.getElementById("privateNotes").value =
+    localStorage.getItem("privateNotes") || "";
+
+  openModal("notesModal");
+}
+
+function openAbout(){
+  closeModal("menuModal");
+  openModal("aboutModal");
+}
+
+function openHelp(){
+  closeModal("menuModal");
+  openModal("helpModal");
+}
+
+function openReset(){
+  closeModal("menuModal");
+  openModal("resetModal");
 }
 
 
-function previewPhoto(event){
-
-  const file=
-    event.target.files?.[0];
-
-  if(!file) return;
-
-  if(!file.type.startsWith("image/")){
-
-    showToast("फक्त image निवडा.");
-
-    return;
-
-  }
-
-  const reader=new FileReader();
-
-  reader.onload=function(e){
-
-    document.getElementById(
-      "photoPreview"
-    ).innerHTML=
-      `<img src="${e.target.result}" alt="Preview">`;
-
-    window.pendingPhotoData=
-      e.target.result;
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-
-function saveProfilePhoto(){
-
-  const data=
-    window.pendingPhotoData ||
-    getProfilePhoto();
-
-  if(!data){
-
-    showToast("आधी फोटो निवडा.");
-
-    return;
-
-  }
-
-  try{
-
-    localStorage.setItem(
-      "gyansetu_profile_photo",
-      data
-    );
-
-  }catch(error){
-
-    showToast(
-      "फोटो save झाला नाही. छोटा फोटो वापरा."
-    );
-
-    return;
-
-  }
-
-  applyProfilePhoto();
-
-  closeModal("photoModal");
-
-  window.pendingPhotoData=null;
-
-  showToast("Profile Photo saved ✓");
-
-}
-
-
-function removeProfilePhoto(){
-
-  localStorage.removeItem(
-    "gyansetu_profile_photo"
-  );
-
-  window.pendingPhotoData=null;
-
-  applyProfilePhoto();
-
-  closeModal("photoModal");
-
-  showToast("Profile Photo removed.");
-
-}
-
-
-/* GYANSETU ID */
-
-function generateGyanSetuId(user){
-
-  if(user?.id){
-
-    return "GS-" +
-      user.id.replace(/-/g,"")
-      .substring(0,8)
-      .toUpperCase();
-
-  }
-
-  let id=
-    localStorage.getItem(
-      "gyansetu_id"
-    );
-
-  if(!id){
-
-    id="GS-"+Math.floor(
-      10000+Math.random()*90000
-    );
-
-    localStorage.setItem(
-      "gyansetu_id",
-      id
-    );
-
-  }
-
-  return id;
-
-}
-
-
-/* LOAD INFORMATION */
+/* =========================
+   PROFILE LOAD
+========================= */
 
 async function loadInformation(){
 
-  const user=
-    await getCurrentUser();
+  const {
+    data,
+    error
+  } = await supabaseClient.auth.getUser();
 
-  const local=
-    getLocalInfo();
+  let user = data?.user;
 
-  let meta={};
+  let metadata = user?.user_metadata || {};
 
-  if(user?.user_metadata){
+  let username =
+    metadata.username ||
+    localStorage.getItem("username") ||
+    "User";
 
-    meta=user.user_metadata;
+  let email =
+    user?.email ||
+    localStorage.getItem("email") ||
+    "-";
+
+  document.getElementById("displayName").textContent =
+    username;
+
+  document.getElementById("displayEmail").textContent =
+    email;
+
+
+  document.getElementById("fullName").textContent =
+    localStorage.getItem("fullName") || "-";
+
+  document.getElementById("dob").textContent =
+    localStorage.getItem("dob") || "-";
+
+  document.getElementById("school").textContent =
+    localStorage.getItem("school") || "-";
+
+  document.getElementById("className").textContent =
+    localStorage.getItem("className") || "-";
+
+  document.getElementById("medium").textContent =
+    localStorage.getItem("medium") || "-";
+
+  document.getElementById("city").textContent =
+    localStorage.getItem("city") || "-";
+
+  document.getElementById("career").textContent =
+    localStorage.getItem("career") || "-";
+
+  document.getElementById("mobile").textContent =
+    localStorage.getItem("mobile") || "-";
+
+  document.getElementById("email").textContent =
+    email;
+
+  document.getElementById("gyanId").textContent =
+    user?.id || "-";
+
+
+  updateAvatar(username);
+
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+
+function updateAvatar(username){
+
+  const photo =
+    localStorage.getItem("profilePhoto");
+
+  const avatar =
+    document.getElementById("avatar");
+
+  if(photo){
+
+    avatar.innerHTML =
+      `<img src="${photo}" alt="Profile">`;
+
+  }else{
+
+    let letter =
+      username
+      ? username.charAt(0).toUpperCase()
+      : "G";
+
+    avatar.innerHTML =
+      `<span>${letter}</span>`;
 
   }
 
-  const info={
-
-    name:
-      meta.full_name ||
-      local.name ||
-      user?.email?.split("@")[0] ||
-      "Student",
-
-    dob:
-      meta.date_of_birth ||
-      local.dob ||
-      "",
-
-    school:
-      meta.school_college ||
-      local.school ||
-      "",
-
-    studentClass:
-      meta.student_class ||
-      local.studentClass ||
-      "",
-
-    medium:
-      meta.medium ||
-      local.medium ||
-      "",
-
-    city:
-      meta.city_village ||
-      local.city ||
-      "",
-
-    goal:
-      meta.career_goal ||
-      local.goal ||
-      "",
-
-    mobile:
-      meta.mobile_number ||
-      local.mobile ||
-      "",
-
-    email:
-      user?.email ||
-      local.email ||
-      ""
-
-  };
-
-
-  document.getElementById(
-    "displayName"
-  ).textContent=
-    info.name || "Student";
-
-
-  document.getElementById(
-    "displayEmail"
-  ).textContent=
-    info.email || "Email उपलब्ध नाही";
-
-
-  document.getElementById(
-    "infoName"
-  ).textContent=
-    info.name || "Not added";
-
-
-  document.getElementById(
-    "infoDob"
-  ).textContent=
-    info.dob || "Not added";
-
-
-  document.getElementById(
-    "infoSchool"
-  ).textContent=
-    info.school || "Not added";
-
-
-  document.getElementById(
-    "infoClass"
-  ).textContent=
-    info.studentClass || "Not added";
-
-
-  document.getElementById(
-    "infoMedium"
-  ).textContent=
-    info.medium || "Not added";
-
-
-  document.getElementById(
-    "infoCity"
-  ).textContent=
-    info.city || "Not added";
-
-
-  document.getElementById(
-    "infoGoal"
-  ).textContent=
-    info.goal || "Not added";
-
-
-  document.getElementById(
-    "infoMobile"
-  ).textContent=
-    info.mobile || "Not added";
-
-
-  document.getElementById(
-    "infoEmail"
-  ).textContent=
-    info.email || "Not added";
-
-
-  document.getElementById(
-    "infoId"
-  ).textContent=
-    generateGyanSetuId(user);
-
-
-  applyProfilePhoto();
-
 }
 
 
-/* EDIT INFORMATION */
-
-async function openEditInfo(){
-
-  const user=
-    await getCurrentUser();
-
-  const local=
-    getLocalInfo();
-
-  const meta=
-    user?.user_metadata || {};
-
-
-  document.getElementById("nameInput").value=
-    meta.full_name ||
-    local.name ||
-    "";
-
-  document.getElementById("dobInput").value=
-    meta.date_of_birth ||
-    local.dob ||
-    "";
-
-  document.getElementById("schoolInput").value=
-    meta.school_college ||
-    local.school ||
-    "";
-
-  document.getElementById("classInput").value=
-    meta.student_class ||
-    local.studentClass ||
-    "";
-
-  document.getElementById("mediumInput").value=
-    meta.medium ||
-    local.medium ||
-    "";
-
-  document.getElementById("cityInput").value=
-    meta.city_village ||
-    local.city ||
-    "";
-
-  document.getElementById("goalInput").value=
-    meta.career_goal ||
-    local.goal ||
-    "";
-
-  document.getElementById("mobileInput").value=
-    meta.mobile_number ||
-    local.mobile ||
-    "";
-
-  document.getElementById("emailInput").value=
-    user?.email ||
-    local.email ||
-    "";
-
-  openModal("editModal");
-
-}
-
-
-/* SAVE INFORMATION */
+/* =========================
+   SAVE INFORMATION
+========================= */
 
 async function saveInformation(){
 
-  const user=
-    await getCurrentUser();
+  const fullName =
+    document.getElementById("editFullName").value.trim();
+
+  const dob =
+    document.getElementById("editDob").value;
+
+  const school =
+    document.getElementById("editSchool").value.trim();
+
+  const className =
+    document.getElementById("editClass").value.trim();
+
+  const medium =
+    document.getElementById("editMedium").value.trim();
+
+  const city =
+    document.getElementById("editCity").value.trim();
+
+  const career =
+    document.getElementById("editCareer").value.trim();
+
+  const mobile =
+    document.getElementById("editMobile").value.trim();
+
+  const email =
+    document.getElementById("editEmail").value.trim();
 
 
-  const info={
-
-    name:
-      document.getElementById(
-        "nameInput"
-      ).value.trim(),
-
-    dob:
-      document.getElementById(
-        "dobInput"
-      ).value,
-
-    school:
-      document.getElementById(
-        "schoolInput"
-      ).value.trim(),
-
-    studentClass:
-      document.getElementById(
-        "classInput"
-      ).value.trim(),
-
-    medium:
-      document.getElementById(
-        "mediumInput"
-      ).value.trim(),
-
-    city:
-      document.getElementById(
-        "cityInput"
-      ).value.trim(),
-
-    goal:
-      document.getElementById(
-        "goalInput"
-      ).value.trim(),
-
-    mobile:
-      document.getElementById(
-        "mobileInput"
-      ).value.trim(),
-
-    email:
-      document.getElementById(
-        "emailInput"
-      ).value.trim()
-
-  };
+  localStorage.setItem("fullName",fullName);
+  localStorage.setItem("dob",dob);
+  localStorage.setItem("school",school);
+  localStorage.setItem("className",className);
+  localStorage.setItem("medium",medium);
+  localStorage.setItem("city",city);
+  localStorage.setItem("career",career);
+  localStorage.setItem("mobile",mobile);
+  localStorage.setItem("email",email);
 
 
-  if(!info.name){
+  const {
+    data
+  } = await supabaseClient.auth.getUser();
 
-    showToast("Full Name टाका.");
+  if(data?.user){
 
-    return;
-
-  }
-
-
-  /* LOCAL BACKUP */
-  saveLocalInfo(info);
-
-
-  /* SUPABASE ACCOUNT METADATA */
-  if(user){
-
-    const {
-      error
-    }=
     await supabaseClient.auth.updateUser({
 
       data:{
-        full_name:info.name,
-        date_of_birth:info.dob,
-        school_college:info.school,
-        student_class:info.studentClass,
-        medium:info.medium,
-        city_village:info.city,
-        career_goal:info.goal,
-        mobile_number:info.mobile
+        full_name:fullName,
+        dob:dob,
+        school:school,
+        class_name:className,
+        medium:medium,
+        city:city,
+        career_goal:career,
+        mobile:mobile
       }
 
     });
-
-
-    if(error){
-
-      console.error(
-        "Metadata save error:",
-        error
-      );
-
-      /*
-       Local backup is already saved,
-       so information will still remain
-       on this device.
-      */
-
-    }
 
   }
 
@@ -1667,462 +1178,195 @@ async function saveInformation(){
 
   await loadInformation();
 
-  showToast("Information saved ✓");
+  showToast("Information saved successfully");
+
 
 }
 
 
-/* MENU */
+/* =========================
+   PROFILE PHOTO
+========================= */
 
-function openMenu(){
-  openModal("menuModal");
-}
+function changePhoto(event){
 
+  const file =
+    event.target.files[0];
 
-/* ACCOUNT SETTINGS */
+  if(!file) return;
 
-async function openAccountSettings(){
+  const reader =
+    new FileReader();
 
-  closeModal("menuModal");
+  reader.onload=function(e){
 
-  const user=
-    await getCurrentUser();
+    localStorage.setItem(
+      "profilePhoto",
+      e.target.result
+    );
 
-  const local=
-    getLocalInfo();
+    updateAvatar(
+      document.getElementById("displayName").textContent
+    );
 
-  const name=
-    user?.user_metadata?.full_name ||
-    local.name ||
-    "student";
+    closeModal("photoModal");
 
-  document.getElementById(
-    "accountName"
-  ).value=name;
+    showToast("Profile photo updated");
 
-  openModal("accountModal");
+  };
 
-}
-
-
-async function saveAccountSettings(){
-
-  const name=
-    document.getElementById(
-      "accountName"
-    ).value.trim();
-
-
-  if(!name){
-
-    showToast("Username टाका.");
-
-    return;
-
-  }
-
-
-  localStorage.setItem(
-    "gyansetu_username",
-    name
-  );
-
-
-  const user=
-    await getCurrentUser();
-
-
-  if(user){
-
-    await supabaseClient.auth.updateUser({
-
-      data:{
-        username:name
-      }
-
-    });
-
-  }
-
-
-  closeModal("accountModal");
-
-  showToast("Account updated ✓");
+  reader.readAsDataURL(file);
 
 }
 
 
-function addAccount(){
-
-  showToast(
-    "नवीन account साठी Login / Sign Up वापरा."
-  );
-
-}
-
-
-/* DARK MODE */
-
-function loadDarkMode(){
-
-  const dark=
-    localStorage.getItem(
-      "gyansetu_dark_mode"
-    )==="true";
-
-  document.body.classList.toggle(
-    "dark",
-    dark
-  );
-
-}
-
+/* =========================
+   DARK MODE
+========================= */
 
 function toggleDarkMode(){
 
-  const enabled=
-    !document.body.classList.contains(
-      "dark"
-    );
-
-  document.body.classList.toggle(
-    "dark",
-    enabled
-  );
+  document.body.classList.toggle("dark");
 
   localStorage.setItem(
-    "gyansetu_dark_mode",
-    enabled
+    "darkMode",
+    document.body.classList.contains("dark")
   );
-
-  closeModal("menuModal");
 
   showToast(
-    enabled
-    ? "Dark Mode ON 🌙"
-    : "Dark Mode OFF ☀️"
+    document.body.classList.contains("dark")
+    ? "Dark mode enabled"
+    : "Dark mode disabled"
   );
 
 }
 
 
-/* NOTIFICATIONS */
+/* =========================
+   NOTES
+========================= */
 
-function openNotifications(){
+function saveNotes(){
 
-  closeModal("menuModal");
-
-  const time=
-    localStorage.getItem(
-      "gyansetu_reminder"
-    );
-
-
-  document.getElementById(
-    "reminderTime"
-  ).value=time || "";
-
-
-  document.getElementById(
-    "reminderStatus"
-  ).textContent=
-    time
-    ? "Reminder set: "+time
-    : "अजून reminder set केलेले नाही.";
-
-
-  openModal("notificationModal");
-
-}
-
-
-function saveReminder(){
-
-  const time=
-    document.getElementById(
-      "reminderTime"
-    ).value;
-
-
-  if(!time){
-
-    showToast("Time निवडा.");
-
-    return;
-
-  }
-
+  const notes =
+    document.getElementById("privateNotes").value;
 
   localStorage.setItem(
-    "gyansetu_reminder",
-    time
-  );
-
-
-  document.getElementById(
-    "reminderStatus"
-  ).textContent=
-    "Reminder saved: "+time;
-
-
-  showToast("Reminder saved ⏰");
-
-}
-
-
-/* PRIVACY */
-
-function openPrivacy(){
-
-  closeModal("menuModal");
-
-  document.getElementById(
-    "privacyCode"
-  ).value="";
-
-  openModal("privacyCodeModal");
-
-}
-
-
-function checkPrivacyCode(){
-
-  const code=
-    document.getElementById(
-      "privacyCode"
-    ).value;
-
-
-  let saved=
-    localStorage.getItem(
-      "gyansetu_privacy_code"
-    );
-
-
-  if(!saved){
-
-    saved="1234";
-
-    localStorage.setItem(
-      "gyansetu_privacy_code",
-      saved
-    );
-
-  }
-
-
-  if(code!==saved){
-
-    showToast("Wrong privacy code.");
-
-    return;
-
-  }
-
-
-  closeModal("privacyCodeModal");
-
-
-  document.getElementById(
-    "privateNotes"
-  ).value=
-    localStorage.getItem(
-      "gyansetu_private_notes"
-    ) || "";
-
-
-  openModal("notesModal");
-
-}
-
-
-function savePrivateNotes(){
-
-  const notes=
-    document.getElementById(
-      "privateNotes"
-    ).value;
-
-
-  localStorage.setItem(
-    "gyansetu_private_notes",
+    "privateNotes",
     notes
   );
 
-
   closeModal("notesModal");
 
-  showToast("Private notes saved 🔒");
+  showToast("Notes saved");
 
 }
 
 
-/* ABOUT */
+/* =========================
+   RESET
+========================= */
 
-function openAbout(){
+function resetInformation(){
 
-  closeModal("menuModal");
-
-  openModal("aboutModal");
-
-}
-
-
-/* HELP */
-
-function openHelp(){
-
-  closeModal("menuModal");
-
-  document.getElementById(
-    "feedbackText"
-  ).value="";
-
-  openModal("helpModal");
-
-}
-
-
-function sendFeedback(){
-
-  const text=
-    document.getElementById(
-      "feedbackText"
-    ).value.trim();
-
-
-  if(!text){
-
-    showToast("Feedback लिहा.");
-
-    return;
-
-  }
-
-
-  localStorage.setItem(
-    "gyansetu_last_feedback",
-    text
-  );
-
-
-  closeModal("helpModal");
-
-  showToast("Feedback saved ✓");
-
-}
-
-
-/* RESET */
-
-function openReset(){
-
-  closeModal("menuModal");
-
-  openModal("resetModal");
-
-}
-
-
-function resetAppData(){
-
-  /*
-   * Account authentication ठेवतो.
-   * फक्त app-local data reset होईल.
-   */
-
-  const keepKeys=[
-    "gyansetu_username"
+  const keys = [
+    "fullName",
+    "dob",
+    "school",
+    "className",
+    "medium",
+    "city",
+    "career",
+    "mobile",
+    "email",
+    "profilePhoto",
+    "privateNotes"
   ];
 
-
-  const keys=[];
-
-
-  for(
-    let i=0;
-    i<localStorage.length;
-    i++
-  ){
-
-    keys.push(
-      localStorage.key(i)
-    );
-
-  }
-
-
-  keys.forEach(key=>{
-
-    if(!keepKeys.includes(key)){
-
-      localStorage.removeItem(key);
-
-    }
-
+  keys.forEach(function(key){
+    localStorage.removeItem(key);
   });
-
 
   closeModal("resetModal");
 
-  showToast("App data reset झाले.");
+  loadInformation();
 
-  setTimeout(()=>{
-
-    location.reload();
-
-  },700);
+  showToast("Information reset");
 
 }
 
 
-/* INIT */
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.textContent = message;
+
+  toast.style.display="block";
+
+  setTimeout(function(){
+
+    toast.style.display="none";
+
+  },2500);
+
+}
+
+
+/* =========================
+   INIT
+========================= */
 
 async function initProfile(){
 
-  loadDarkMode();
+  const darkMode =
+    localStorage.getItem("darkMode");
+
+  if(darkMode === "true"){
+    document.body.classList.add("dark");
+  }
 
   await loadInformation();
 
 }
 
 
-initProfile();
-
-
-/* REFRESH WHEN RETURNING */
+/* =========================
+   PAGE EVENTS
+========================= */
 
 window.addEventListener(
   "pageshow",
-  ()=>{
-
-    applyProfilePhoto();
+  function(){
     loadInformation();
+  }
+);
+
+window.addEventListener(
+  "click",
+  function(event){
+
+    const modals =
+      document.querySelectorAll(".modal");
+
+    modals.forEach(function(modal){
+
+      if(event.target === modal){
+        modal.style.display="none";
+      }
+
+    });
 
   }
 );
 
 
-/* BACKGROUND CLICK */
-
-document
-  .querySelectorAll(".modal")
-  .forEach(modal=>{
-
-    modal.addEventListener(
-      "click",
-      function(event){
-
-        if(event.target===modal){
-
-          modal.classList.remove("show");
-
-        }
-
-      }
-    );
-
-  });
+initProfile();
 
 </script>
 
