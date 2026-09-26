@@ -803,13 +803,82 @@ function getReceiverName(){
 
 
 /* =========================
+   MARK MESSAGES AS READ
+========================= */
+
+async function markMessagesAsRead(){
+
+  if(
+    !currentUser ||
+    !receiverId
+  ){
+
+    return;
+
+  }
+
+
+  /*
+     फक्त receiver म्हणून मिळालेले
+     unread messages read करायचे.
+
+     म्हणजे:
+
+     sender_id = ज्या user सोबत chat आहे
+     receiver_id = सध्याचा logged-in user
+  */
+
+  const {
+    error
+  } =
+  await supabaseClient
+    .from("Messages")
+    .update({
+      is_read:true
+    })
+    .eq(
+      "sender_id",
+      receiverId
+    )
+    .eq(
+      "receiver_id",
+      currentUser.id
+    )
+    .eq(
+      "is_read",
+      false
+    );
+
+
+  if(error){
+
+    console.error(
+      "Mark messages as read error:",
+      error
+    );
+
+    return;
+
+  }
+
+
+  console.log(
+    "Unread messages marked as read."
+  );
+
+}
+
+
+/* =========================
    LOAD CHAT
 ========================= */
 
 async function loadMessages(){
 
-  if(!currentUser ||
-     !receiverId){
+  if(
+    !currentUser ||
+    !receiverId
+  ){
 
     return;
 
@@ -827,7 +896,7 @@ async function loadMessages(){
   await supabaseClient
     .from("Messages")
     .select(
-      "id, sender_id, receiver_id, message, created_at"
+      "id, sender_id, receiver_id, message, created_at, is_read"
     )
     .eq(
       "sender_id",
@@ -860,7 +929,7 @@ async function loadMessages(){
   await supabaseClient
     .from("Messages")
     .select(
-      "id, sender_id, receiver_id, message, created_at"
+      "id, sender_id, receiver_id, message, created_at, is_read"
     )
     .eq(
       "sender_id",
@@ -980,6 +1049,12 @@ function displayMessages(messageList){
           ? "sent"
           : "received"
         );
+
+
+      row.setAttribute(
+        "data-message-id",
+        msg.id
+      );
 
 
       const bubble =
@@ -1128,7 +1203,6 @@ async function sendMessage(){
   sendBtn.disabled =
     true;
 
-
   input.disabled =
     true;
 
@@ -1152,7 +1226,10 @@ async function sendMessage(){
         receiverId,
 
       message:
-        text
+        text,
+
+      is_read:
+        false
 
     })
     .select()
@@ -1323,6 +1400,22 @@ function addMessageToChat(msg){
   );
 
 
+  /*
+     जर नवीन message receiver कडून आला
+     आणि आपण chat मध्ये आहोत,
+     तर लगेच read करायचा.
+  */
+
+  if(
+    msg.sender_id === receiverId &&
+    msg.receiver_id === currentUser.id
+  ){
+
+    markMessagesAsRead();
+
+  }
+
+
   scrollToBottom();
 
 }
@@ -1334,8 +1427,10 @@ function addMessageToChat(msg){
 
 function setupRealtime(){
 
-  if(!currentUser ||
-     !receiverId){
+  if(
+    !currentUser ||
+    !receiverId
+  ){
 
     return;
 
@@ -1350,6 +1445,7 @@ function setupRealtime(){
         "-" +
         receiverId
       )
+
       .on(
         "postgres_changes",
         {
@@ -1357,6 +1453,7 @@ function setupRealtime(){
           schema:"public",
           table:"Messages"
         },
+
         function(payload){
 
           const msg =
@@ -1397,7 +1494,9 @@ function setupRealtime(){
           }
 
         }
+
       )
+
       .subscribe(
         function(status){
 
@@ -1553,6 +1652,15 @@ async function startChat(){
     "receiverStatus"
   ).textContent =
     "GyanSetu User";
+
+
+  /*
+     IMPORTANT:
+     CHAT OPEN होताच unread messages
+     read करा.
+  */
+
+  await markMessagesAsRead();
 
 
   /*
