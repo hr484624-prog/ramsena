@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>GyanSetu AI College Finder</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
+
 *{
     box-sizing:border-box;
     margin:0;
@@ -20,13 +24,14 @@ body{
 }
 
 /* HEADER */
-.header{
-    background:#ffffff;
+
+header{
+    background:white;
     border-bottom:1px solid #e5e7eb;
     padding:15px 5%;
     display:flex;
-    justify-content:space-between;
     align-items:center;
+    justify-content:space-between;
     position:sticky;
     top:0;
     z-index:100;
@@ -45,27 +50,29 @@ body{
 .ai-badge{
     background:#eef4ff;
     color:#2563eb;
-    padding:7px 12px;
+    padding:8px 13px;
     border-radius:20px;
     font-size:13px;
-    font-weight:600;
+    font-weight:700;
 }
 
-/* MAIN */
+/* CONTAINER */
+
 .container{
-    width:min(1000px,92%);
+    width:min(1050px,92%);
     margin:auto;
 }
 
 /* HERO */
+
 .hero{
     text-align:center;
-    padding:45px 10px 30px;
+    padding:42px 10px 28px;
 }
 
 .hero h1{
     font-size:35px;
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
 .hero h1 span{
@@ -74,44 +81,40 @@ body{
 
 .hero p{
     color:#667085;
-    font-size:16px;
     line-height:1.6;
 }
 
-/* FORM CARD */
+/* FORM */
+
 .form-card{
     background:white;
     border:1px solid #e4e7ec;
     border-radius:18px;
-    padding:25px;
+    padding:24px;
     box-shadow:0 8px 30px rgba(16,24,40,.07);
 }
 
 .form-title{
     font-size:21px;
     font-weight:700;
-    margin-bottom:5px;
 }
 
 .form-subtitle{
     color:#667085;
     font-size:14px;
+    margin-top:5px;
     margin-bottom:22px;
 }
 
 .form-grid{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:17px;
+    gap:16px;
 }
 
 .field{
     display:flex;
     flex-direction:column;
-}
-
-.field.full{
-    grid-column:1 / -1;
 }
 
 .field label{
@@ -120,23 +123,29 @@ body{
     margin-bottom:7px;
 }
 
-.field select,
-.field input{
+.field input,
+.field select{
+    width:100%;
     height:46px;
     border:1px solid #d0d5dd;
     border-radius:10px;
     padding:0 13px;
-    font-size:15px;
     background:white;
+    font-size:15px;
 }
 
-.field select:focus,
-.field input:focus{
+.field input:focus,
+.field select:focus{
     outline:2px solid rgba(37,99,235,.15);
     border-color:#2563eb;
 }
 
+.full{
+    grid-column:1 / -1;
+}
+
 /* BUTTON */
+
 .find-btn{
     width:100%;
     height:50px;
@@ -154,15 +163,16 @@ body{
     background:#1d4ed8;
 }
 
-/* AI LOADING */
+/* LOADING */
+
 .loading{
     display:none;
-    margin-top:20px;
-    background:#eef4ff;
-    border:1px solid #dbe7ff;
-    border-radius:14px;
-    padding:20px;
+    margin-top:18px;
+    padding:18px;
     text-align:center;
+    background:#eef4ff;
+    border-radius:13px;
+    color:#2563eb;
 }
 
 .spinner{
@@ -181,39 +191,63 @@ body{
     }
 }
 
+/* STATUS */
+
+.status{
+    display:none;
+    margin-top:15px;
+    padding:13px;
+    border-radius:10px;
+    font-size:14px;
+}
+
+.status.success{
+    display:block;
+    background:#ecfdf3;
+    color:#027a48;
+}
+
+.status.error{
+    display:block;
+    background:#fef3f2;
+    color:#b42318;
+}
+
 /* RESULTS */
+
 .results{
     display:none;
     margin-top:30px;
 }
 
-.profile-box{
+.profile{
     background:#111827;
     color:white;
     border-radius:16px;
     padding:20px;
-    margin-bottom:18px;
+    margin-bottom:20px;
 }
 
-.profile-box h2{
-    font-size:18px;
-    margin-bottom:10px;
+.profile h2{
+    font-size:19px;
+    margin-bottom:12px;
 }
 
-.profile-info{
+.tags{
     display:flex;
     flex-wrap:wrap;
     gap:8px;
 }
 
-.profile-tag{
-    background:#263244;
+.tag{
+    background:#273244;
     border-radius:20px;
     padding:7px 11px;
     font-size:13px;
 }
 
 /* RESULT HEADER */
+
 .result-header{
     display:flex;
     justify-content:space-between;
@@ -230,7 +264,8 @@ body{
     font-size:14px;
 }
 
-/* COLLEGE */
+/* COLLEGE CARD */
+
 .college-list{
     display:grid;
     gap:15px;
@@ -252,7 +287,7 @@ body{
 
 .details{
     display:grid;
-    gap:8px;
+    gap:9px;
 }
 
 .detail{
@@ -261,13 +296,14 @@ body{
     font-size:14px;
 }
 
-.detail-label{
+.label{
+    min-width:125px;
     color:#667085;
-    min-width:115px;
 }
 
-.detail-value{
+.value{
     font-weight:600;
+    word-break:break-word;
 }
 
 .actions{
@@ -279,14 +315,14 @@ body{
 .action-btn{
     flex:1;
     height:40px;
-    border-radius:9px;
     border:1px solid #d0d5dd;
+    border-radius:9px;
     background:white;
     cursor:pointer;
     font-weight:600;
 }
 
-.action-btn.copy{
+.copy-btn{
     background:#2563eb;
     color:white;
     border-color:#2563eb;
@@ -297,16 +333,18 @@ body{
 }
 
 /* EMPTY */
+
 .empty{
     background:white;
     border:1px solid #e4e7ec;
     border-radius:15px;
-    padding:35px;
+    padding:40px 20px;
     text-align:center;
     color:#667085;
 }
 
 /* FOOTER */
+
 footer{
     text-align:center;
     color:#667085;
@@ -315,14 +353,20 @@ footer{
 }
 
 /* MOBILE */
+
 @media(max-width:650px){
 
-    .header{
+    header{
         padding:13px 4%;
     }
 
     .logo{
         font-size:24px;
+    }
+
+    .ai-badge{
+        font-size:11px;
+        padding:6px 9px;
     }
 
     .hero{
@@ -333,35 +377,39 @@ footer{
         font-size:27px;
     }
 
+    .form-card{
+        padding:18px;
+    }
+
     .form-grid{
         grid-template-columns:1fr;
     }
 
-    .field.full{
+    .full{
         grid-column:auto;
-    }
-
-    .form-card{
-        padding:18px;
     }
 
     .result-header{
         flex-direction:column;
         align-items:flex-start;
-        gap:5px;
+        gap:6px;
     }
 
     .actions{
         flex-direction:column;
     }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
-<!-- HEADER -->
-<header class="header">
+
+<header>
 
     <div class="logo">
         Gyan<span>Setu</span>
@@ -376,264 +424,297 @@ footer{
 
 <main class="container">
 
-    <!-- HERO -->
-    <section class="hero">
 
-        <h1>
-            Find Your <span>Perfect College</span>
-        </h1>
+<section class="hero">
 
-        <p>
-            तुमची माहिती भरा आणि GyanSetu AI
-            तुमच्यासाठी योग्य colleges शोधेल.
-        </p>
+    <h1>
+        Find Your <span>Perfect College</span>
+    </h1>
 
-    </section>
+    <p>
+        तुमची माहिती भरा आणि GyanSetu तुमच्यासाठी
+        योग्य colleges शोधेल.
+    </p>
 
-
-    <!-- FORM -->
-    <section class="form-card">
-
-        <div class="form-title">
-            🎓 Student Profile
-        </div>
-
-        <div class="form-subtitle">
-            तुमच्याबद्दल थोडी माहिती द्या.
-        </div>
+</section>
 
 
-        <div class="form-grid">
 
-            <!-- STANDARD -->
-            <div class="field">
+<!-- PROFILE FORM -->
 
-                <label>Standard / Education Level</label>
+<section class="form-card">
 
-                <select id="standard">
+    <div class="form-title">
+        🎓 Student Profile
+    </div>
 
-                    <option value="">
-                        Select Standard
-                    </option>
-
-                    <option>10th</option>
-                    <option>12th</option>
-                    <option>Diploma</option>
-                    <option>Undergraduate</option>
-                    <option>Postgraduate</option>
-                    <option>Other</option>
-
-                </select>
-
-            </div>
+    <div class="form-subtitle">
+        तुमच्याबद्दल माहिती द्या.
+    </div>
 
 
-            <!-- SCHOOL -->
-            <div class="field">
-
-                <label>School / College Type</label>
-
-                <select id="school">
-
-                    <option value="">
-                        Select
-                    </option>
-
-                    <option>School</option>
-                    <option>Junior College</option>
-                    <option>Degree College</option>
-                    <option>University</option>
-                    <option>Institute</option>
-                    <option>Other</option>
-
-                </select>
-
-            </div>
+    <div class="form-grid">
 
 
-            <!-- FIELD -->
-            <div class="field">
+        <!-- STANDARD -->
 
-                <label>Field / Stream</label>
+        <div class="field">
 
-                <select id="field">
+            <label>
+                Standard / Education Level
+            </label>
 
-                    <option value="">
-                        Select Field
-                    </option>
+            <select id="standard">
 
-                    <option>Science</option>
-                    <option>Commerce</option>
-                    <option>Arts</option>
-                    <option>Engineering</option>
-                    <option>Medical</option>
-                    <option>Pharmacy</option>
-                    <option>Law</option>
-                    <option>Management</option>
-                    <option>Computer Science</option>
-                    <option>Other</option>
+                <option value="">
+                    Select Standard
+                </option>
 
-                </select>
+                <option>10th</option>
+                <option>12th</option>
+                <option>Diploma</option>
+                <option>Undergraduate</option>
+                <option>Postgraduate</option>
+                <option>Other</option>
 
-            </div>
-
-
-            <!-- MEDIUM -->
-            <div class="field">
-
-                <label>Medium</label>
-
-                <select id="medium">
-
-                    <option value="">
-                        Select Medium
-                    </option>
-
-                    <option>Marathi</option>
-                    <option>Hindi</option>
-                    <option>English</option>
-                    <option>Other</option>
-
-                </select>
-
-            </div>
-
-
-            <!-- AGE -->
-            <div class="field">
-
-                <label>Age</label>
-
-                <input
-                    id="age"
-                    type="number"
-                    min="10"
-                    max="100"
-                    placeholder="Enter your age"
-                >
-
-            </div>
-
-
-            <!-- STATE -->
-            <div class="field">
-
-                <label>State</label>
-
-                <select id="state">
-
-                    <option value="">
-                        Select State
-                    </option>
-
-                    <option>Maharashtra</option>
-                    <option>Gujarat</option>
-                    <option>Madhya Pradesh</option>
-                    <option>Goa</option>
-                    <option>Karnataka</option>
-                    <option>Telangana</option>
-                    <option>Andhra Pradesh</option>
-                    <option>Delhi</option>
-                    <option>Uttar Pradesh</option>
-                    <option>Rajasthan</option>
-                    <option>Other</option>
-
-                </select>
-
-            </div>
-
-
-            <!-- DISTRICT -->
-            <div class="field full">
-
-                <label>District</label>
-
-                <select id="district">
-
-                    <option value="">
-                        First select State
-                    </option>
-
-                </select>
-
-            </div>
+            </select>
 
         </div>
 
 
-        <button
-            class="find-btn"
-            onclick="findColleges()"
-        >
-            🔍 Find My Colleges
-        </button>
+        <!-- SCHOOL -->
 
+        <div class="field">
 
-        <!-- LOADING -->
-        <div
-            class="loading"
-            id="loading"
-        >
+            <label>
+                School / College Type
+            </label>
 
-            <div class="spinner"></div>
+            <select id="school">
 
-            <strong>
-                🤖 GyanSetu AI is researching...
-            </strong>
+                <option value="">
+                    Select
+                </option>
 
-            <p style="margin-top:7px;color:#667085;font-size:13px;">
-                तुमची माहिती analyze करून colleges शोधत आहोत.
-            </p>
+                <option>School</option>
+                <option>Junior College</option>
+                <option>Degree College</option>
+                <option>University</option>
+                <option>Institute</option>
+                <option>Other</option>
+
+            </select>
 
         </div>
 
-    </section>
+
+        <!-- FIELD -->
+
+        <div class="field">
+
+            <label>
+                Field / Stream
+            </label>
+
+            <select id="field">
+
+                <option value="">
+                    Select Field
+                </option>
+
+                <option>Science</option>
+                <option>Commerce</option>
+                <option>Arts</option>
+                <option>Engineering</option>
+                <option>Medical</option>
+                <option>Pharmacy</option>
+                <option>Law</option>
+                <option>Management</option>
+                <option>Computer Science</option>
+                <option>Other</option>
+
+            </select>
+
+        </div>
 
 
-    <!-- RESULTS -->
-    <section
-        class="results"
-        id="results"
+        <!-- MEDIUM -->
+
+        <div class="field">
+
+            <label>
+                Medium
+            </label>
+
+            <select id="medium">
+
+                <option value="">
+                    Select Medium
+                </option>
+
+                <option>Marathi</option>
+                <option>Hindi</option>
+                <option>English</option>
+                <option>Other</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- AGE -->
+
+        <div class="field">
+
+            <label>
+                Age
+            </label>
+
+            <input
+                id="age"
+                type="number"
+                min="10"
+                max="100"
+                placeholder="Enter Age"
+            >
+
+        </div>
+
+
+        <!-- STATE -->
+
+        <div class="field">
+
+            <label>
+                State
+            </label>
+
+            <select id="state">
+
+                <option value="">
+                    Select State
+                </option>
+
+                <option>Maharashtra</option>
+                <option>Gujarat</option>
+                <option>Madhya Pradesh</option>
+                <option>Goa</option>
+                <option>Karnataka</option>
+                <option>Telangana</option>
+                <option>Andhra Pradesh</option>
+                <option>Delhi</option>
+                <option>Uttar Pradesh</option>
+                <option>Rajasthan</option>
+
+            </select>
+
+        </div>
+
+
+        <!-- DISTRICT -->
+
+        <div class="field full">
+
+            <label>
+                District
+            </label>
+
+            <select id="district">
+
+                <option value="">
+                    Select State First
+                </option>
+
+            </select>
+
+        </div>
+
+
+    </div>
+
+
+    <button
+        class="find-btn"
+        onclick="findColleges()"
+    >
+        🔍 Find My Colleges
+    </button>
+
+
+    <div
+        class="loading"
+        id="loading"
     >
 
-        <!-- PROFILE -->
-        <div class="profile-box">
+        <div class="spinner"></div>
 
-            <h2>
-                👤 Your Profile
-            </h2>
+        <strong>
+            🤖 GyanSetu is researching colleges...
+        </strong>
 
-            <div
-                class="profile-info"
-                id="profileInfo"
-            ></div>
+        <p style="margin-top:7px;font-size:13px;color:#667085;">
+            Database मधून colleges शोधत आहोत.
+        </p>
 
-        </div>
+    </div>
 
 
-        <!-- RESULT HEADER -->
-        <div class="result-header">
-
-            <h2>
-                🏫 Colleges in Your District
-            </h2>
-
-            <div
-                class="count"
-                id="collegeCount"
-            >
-            </div>
-
-        </div>
+    <div
+        id="status"
+        class="status"
+    ></div>
 
 
-        <!-- COLLEGE LIST -->
+</section>
+
+
+
+<!-- RESULTS -->
+
+<section
+    class="results"
+    id="results"
+>
+
+
+    <div class="profile">
+
+        <h2>
+            👤 Your Profile
+        </h2>
+
         <div
-            class="college-list"
-            id="collegeList"
+            class="tags"
+            id="profileTags"
         ></div>
 
-    </section>
+    </div>
+
+
+
+    <div class="result-header">
+
+        <h2>
+            🏫 Colleges
+        </h2>
+
+        <div
+            class="count"
+            id="collegeCount"
+        >
+        </div>
+
+    </div>
+
+
+    <div
+        class="college-list"
+        id="collegeList"
+    ></div>
+
+
+</section>
+
 
 </main>
 
@@ -646,62 +727,113 @@ footer{
 </footer>
 
 
+
 <script>
 
-/* --------------------------------
-   DISTRICTS
--------------------------------- */
+/* =====================================================
+   1. SUPABASE CONNECTION
+===================================================== */
+
+
+/*
+   IMPORTANT:
+
+   खालील दोन values मध्ये
+   तुझ्या Supabase dashboard मधील values टाक.
+
+   Project Settings → API
+*/
+
+
+const SUPABASE_URL =
+"YOUR_SUPABASE_PROJECT_URL";
+
+
+const SUPABASE_KEY =
+"YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
+
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+
+/* =====================================================
+   2. DISTRICTS
+===================================================== */
+
 
 const districts = {
 
-    Maharashtra: [
-        "Pune",
+    Maharashtra:[
+        "Ahmednagar",
+        "Akola",
+        "Amravati",
+        "Aurangabad",
+        "Beed",
+        "Bhandara",
+        "Buldhana",
+        "Chandrapur",
+        "Dhule",
+        "Gadchiroli",
+        "Gondia",
+        "Hingoli",
+        "Jalgaon",
+        "Jalna",
+        "Kolhapur",
+        "Latur",
         "Mumbai City",
         "Mumbai Suburban",
-        "Nashik",
         "Nagpur",
         "Nanded",
-        "Aurangabad",
-        "Kolhapur",
-        "Satara",
-        "Sangli",
-        "Solapur",
-        "Ahmednagar",
-        "Thane",
+        "Nandurbar",
+        "Nashik",
+        "Osmanabad",
+        "Palghar",
+        "Parbhani",
+        "Pune",
         "Raigad",
         "Ratnagiri",
+        "Sangli",
+        "Satara",
         "Sindhudurg",
-        "Jalgaon",
-        "Dhule",
-        "Amravati",
-        "Akola",
-        "Latur",
-        "Beed",
-        "Osmanabad"
+        "Solapur",
+        "Thane",
+        "Wardha",
+        "Washim",
+        "Yavatmal"
     ],
 
-    Gujarat: [
+    Gujarat:[
         "Ahmedabad",
         "Surat",
         "Vadodara",
         "Rajkot",
-        "Gandhinagar"
+        "Gandhinagar",
+        "Bhavnagar",
+        "Anand",
+        "Bharuch"
     ],
 
-    Karnataka: [
+    Karnataka:[
         "Bengaluru Urban",
         "Mysuru",
         "Belagavi",
         "Mangaluru",
-        "Hubballi"
+        "Hubballi",
+        "Dharwad",
+        "Tumakuru"
     ],
 
-    Goa: [
+    Goa:[
         "North Goa",
         "South Goa"
     ],
 
-    Delhi: [
+    Delhi:[
         "Central Delhi",
         "East Delhi",
         "New Delhi",
@@ -710,91 +842,151 @@ const districts = {
         "West Delhi"
     ],
 
-    "Uttar Pradesh": [
+    "Uttar Pradesh":[
         "Lucknow",
         "Kanpur Nagar",
         "Varanasi",
         "Agra",
         "Prayagraj",
-        "Noida",
-        "Ghaziabad"
+        "Ghaziabad",
+        "Gautam Buddha Nagar"
     ],
 
-    Rajasthan: [
+    Rajasthan:[
         "Jaipur",
         "Jodhpur",
         "Udaipur",
         "Kota",
         "Ajmer"
+    ],
+
+    "Madhya Pradesh":[
+        "Bhopal",
+        "Indore",
+        "Jabalpur",
+        "Gwalior",
+        "Ujjain"
+    ],
+
+    Telangana:[
+        "Hyderabad",
+        "Warangal",
+        "Karimnagar",
+        "Nizamabad"
+    ],
+
+    "Andhra Pradesh":[
+        "Visakhapatnam",
+        "Vijayawada",
+        "Guntur",
+        "Tirupati",
+        "Kurnool"
     ]
 
 };
 
 
-/* --------------------------------
-   STATE CHANGE
--------------------------------- */
+
+/* =====================================================
+   3. STATE → DISTRICT
+===================================================== */
+
 
 document
 .getElementById("state")
-.addEventListener("change", function(){
+.addEventListener(
+    "change",
+    function(){
 
-    const state = this.value;
+        const state =
+            this.value;
 
-    const district =
-        document.getElementById("district");
+        const district =
+            document.getElementById(
+                "district"
+            );
 
-    district.innerHTML =
+
+        district.innerHTML =
         '<option value="">Select District</option>';
 
-    if(districts[state]){
 
-        districts[state].forEach(function(item){
+        if(
+            districts[state]
+        ){
 
-            const option =
-                document.createElement("option");
+            districts[state].forEach(
+                function(name){
 
-            option.value = item;
-            option.textContent = item;
+                    const option =
+                    document.createElement(
+                        "option"
+                    );
 
-            district.appendChild(option);
+                    option.value =
+                        name;
 
-        });
+                    option.textContent =
+                        name;
+
+                    district.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+        }
 
     }
+);
 
-});
 
 
-/* --------------------------------
-   FIND COLLEGES
--------------------------------- */
+/* =====================================================
+   4. FIND COLLEGES
+===================================================== */
 
-function findColleges(){
+
+async function findColleges(){
 
     const standard =
-        document.getElementById("standard").value;
+        document.getElementById(
+            "standard"
+        ).value;
 
     const school =
-        document.getElementById("school").value;
+        document.getElementById(
+            "school"
+        ).value;
 
     const field =
-        document.getElementById("field").value;
+        document.getElementById(
+            "field"
+        ).value;
 
     const medium =
-        document.getElementById("medium").value;
+        document.getElementById(
+            "medium"
+        ).value;
 
     const age =
-        document.getElementById("age").value;
+        document.getElementById(
+            "age"
+        ).value;
 
     const state =
-        document.getElementById("state").value;
+        document.getElementById(
+            "state"
+        ).value;
 
     const district =
-        document.getElementById("district").value;
+        document.getElementById(
+            "district"
+        ).value;
 
 
-    /* BASIC VALIDATION */
+    /* VALIDATION */
 
     if(
         !standard ||
@@ -813,223 +1005,229 @@ function findColleges(){
     }
 
 
-    /* SHOW LOADING */
+    /* LOADING */
 
-    document.getElementById("loading")
-        .style.display = "block";
+    document.getElementById(
+        "loading"
+    ).style.display =
+        "block";
 
 
-    document.getElementById("results")
-        .style.display = "none";
+    document.getElementById(
+        "status"
+    ).className =
+        "status";
+
+
+    document.getElementById(
+        "results"
+    ).style.display =
+        "none";
 
 
     /*
-       सध्या demo research.
-       पुढे इथे Supabase + AI जोडणार आहोत.
+       SUPABASE QUERY
+
+       District + State वरून
+       colleges शोधले जातील.
     */
 
-    setTimeout(function(){
 
-        document.getElementById("loading")
-            .style.display = "none";
-
-
-        showResults({
-
-            standard,
-            school,
-            field,
-            medium,
-            age,
-            state,
-            district
-
-        });
-
-    },1500);
-
-}
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("colleges")
+        .select("*")
+        .eq("state",state)
+        .eq("district",district)
+        .order("name");
 
 
-/* --------------------------------
-   SHOW RESULTS
--------------------------------- */
+    document.getElementById(
+        "loading"
+    ).style.display =
+        "none";
 
-function showResults(profile){
 
-    const results =
-        document.getElementById("results");
+    /* ERROR */
 
-    results.style.display = "block";
+    if(error){
+
+        console.error(error);
+
+        showStatus(
+            "Supabase connection/query error: "
+            + error.message,
+            "error"
+        );
+
+        return;
+
+    }
 
 
     /* PROFILE */
 
-    document.getElementById("profileInfo")
-        .innerHTML = `
-
-        <span class="profile-tag">
-            ${profile.standard}
-        </span>
-
-        <span class="profile-tag">
-            ${profile.field}
-        </span>
-
-        <span class="profile-tag">
-            ${profile.medium || "Medium not selected"}
-        </span>
-
-        <span class="profile-tag">
-            Age ${profile.age}
-        </span>
-
-        <span class="profile-tag">
-            ${profile.state}
-        </span>
-
-        <span class="profile-tag">
-            ${profile.district}
-        </span>
-
-    `;
+    showProfile({
+        standard,
+        school,
+        field,
+        medium,
+        age,
+        state,
+        district
+    });
 
 
-    /*
-       DEMO COLLEGES
+    /* RESULTS */
 
-       पुढे ही माहिती
-       Supabase database मधून येईल.
-    */
+    showCollegeResults(
+        data || []
+    );
 
-    const demoColleges = [
+}
 
-        {
-            name:"Demo College of Arts & Science",
-            type:"Degree College",
-            university:"Demo University",
-            year:"1995",
-            location:`${profile.district}, ${profile.state}`
-        },
 
-        {
-            name:"Demo Institute of Technology",
-            type:"Institute",
-            university:"State Technical University",
-            year:"2005",
-            location:`${profile.district}, ${profile.state}`
-        },
 
-        {
-            name:"Demo College of Commerce",
-            type:"Degree College",
-            university:"State University",
-            year:"1988",
-            location:`${profile.district}, ${profile.state}`
-        }
+/* =====================================================
+   5. PROFILE
+===================================================== */
+
+
+function showProfile(profile){
+
+    const tags =
+        document.getElementById(
+            "profileTags"
+        );
+
+
+    tags.innerHTML = "";
+
+
+    const values = [
+
+        profile.standard,
+
+        profile.school,
+
+        profile.field,
+
+        profile.medium,
+
+        "Age " + profile.age,
+
+        profile.state,
+
+        profile.district
 
     ];
 
 
-    document.getElementById("collegeCount")
-        .textContent =
-        `${demoColleges.length} colleges found`;
+    values.forEach(
+        function(value){
+
+            if(!value)
+                return;
+
+
+            const tag =
+                document.createElement(
+                    "span"
+                );
+
+            tag.className =
+                "tag";
+
+            tag.textContent =
+                value;
+
+            tags.appendChild(
+                tag
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   6. COLLEGE RESULTS
+===================================================== */
+
+
+function showCollegeResults(
+    colleges
+){
+
+    const results =
+        document.getElementById(
+            "results"
+        );
+
+
+    results.style.display =
+        "block";
+
+
+    document.getElementById(
+        "collegeCount"
+    ).textContent =
+        colleges.length.toLocaleString(
+            "en-IN"
+        )
+        + " colleges found";
 
 
     const list =
-        document.getElementById("collegeList");
+        document.getElementById(
+            "collegeList"
+        );
+
 
     list.innerHTML = "";
 
 
-    demoColleges.forEach(function(college){
+    if(
+        colleges.length === 0
+    ){
 
-        const card =
-            document.createElement("div");
+        list.innerHTML = `
 
-        card.className =
-            "college-card";
+            <div class="empty">
 
+                <h3>
+                    😕 No colleges found
+                </h3>
 
-        card.innerHTML = `
-
-            <h3>
-                ${college.name}
-            </h3>
-
-            <div class="details">
-
-                <div class="detail">
-                    <span class="detail-label">
-                        College Type
-                    </span>
-
-                    <span class="detail-value">
-                        ${college.type}
-                    </span>
-                </div>
-
-
-                <div class="detail">
-                    <span class="detail-label">
-                        University
-                    </span>
-
-                    <span class="detail-value">
-                        ${college.university}
-                    </span>
-                </div>
-
-
-                <div class="detail">
-                    <span class="detail-label">
-                        Established
-                    </span>
-
-                    <span class="detail-value">
-                        ${college.year}
-                    </span>
-                </div>
-
-
-                <div class="detail">
-                    <span class="detail-label">
-                        Location
-                    </span>
-
-                    <span class="detail-value">
-                        ${college.location}
-                    </span>
-                </div>
-
-            </div>
-
-
-            <div class="actions">
-
-                <button
-                    class="action-btn copy"
-                    onclick="copyName('${college.name.replace(/'/g,"\\'")}')"
-                >
-                    📋 Copy Name
-                </button>
-
-
-                <button
-                    class="action-btn"
-                    onclick="shareCollege('${college.name.replace(/'/g,"\\'")}')"
-                >
-                    ↗ Share
-                </button>
+                <p style="margin-top:8px;">
+                    या State आणि District साठी
+                    सध्या database मध्ये college data नाही.
+                </p>
 
             </div>
 
         `;
 
+        return;
 
-        list.appendChild(card);
+    }
 
-    });
+
+    colleges.forEach(
+        function(college){
+
+            createCollegeCard(
+                college,
+                list
+            );
+
+        }
+    );
 
 
     results.scrollIntoView({
@@ -1039,60 +1237,366 @@ function showResults(profile){
 }
 
 
-/* --------------------------------
-   COPY
--------------------------------- */
 
-function copyName(name){
+/* =====================================================
+   7. COLLEGE CARD
+===================================================== */
 
-    navigator.clipboard
-        .writeText(name)
-        .then(function(){
 
-            alert(
-                "College name copied!"
+function createCollegeCard(
+    college,
+    list
+){
+
+    const card =
+        document.createElement(
+            "div"
+        );
+
+
+    card.className =
+        "college-card";
+
+
+    const name =
+        college.name ||
+        "Unnamed College";
+
+
+    const type =
+        college.college_type ||
+        "Not Available";
+
+
+    const university =
+        college.university ||
+        "Not Available";
+
+
+    const year =
+        college.establishment_year ||
+        "Not Available";
+
+
+    const location =
+        college.location ||
+        "Not Available";
+
+
+    card.innerHTML = `
+
+        <h3>
+            ${escapeHTML(name)}
+        </h3>
+
+
+        <div class="details">
+
+
+            <div class="detail">
+
+                <span class="label">
+                    State
+                </span>
+
+                <span class="value">
+                    ${escapeHTML(
+                        college.state || "-"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    District
+                </span>
+
+                <span class="value">
+                    ${escapeHTML(
+                        college.district || "-"
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    College Type
+                </span>
+
+                <span class="value">
+                    ${escapeHTML(type)}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    University
+                </span>
+
+                <span class="value">
+                    ${escapeHTML(university)}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Established
+                </span>
+
+                <span class="value">
+                    ${escapeHTML(
+                        String(year)
+                    )}
+                </span>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span class="label">
+                    Location
+                </span>
+
+                <span class="value">
+                    ${escapeHTML(location)}
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="actions">
+
+            <button
+                class="action-btn copy-btn"
+                type="button"
+            >
+                📋 Copy Name
+            </button>
+
+
+            <button
+                class="action-btn share-btn"
+                type="button"
+            >
+                ↗ Share
+            </button>
+
+        </div>
+
+    `;
+
+
+    /* COPY */
+
+    card
+    .querySelector(".copy-btn")
+    .addEventListener(
+        "click",
+        function(){
+
+            copyName(
+                name
             );
 
-        });
+        }
+    );
+
+
+    /* SHARE */
+
+    card
+    .querySelector(".share-btn")
+    .addEventListener(
+        "click",
+        function(){
+
+            shareCollege(
+                name
+            );
+
+        }
+    );
+
+
+    list.appendChild(
+        card
+    );
 
 }
 
 
-/* --------------------------------
-   SHARE
--------------------------------- */
 
-function shareCollege(name){
+/* =====================================================
+   8. COPY
+===================================================== */
 
-    if(navigator.share){
 
-        navigator.share({
+async function copyName(
+    name
+){
 
-            title:name,
+    try{
 
-            text:
-            "Check this college on GyanSetu: "
-            + name
+        await navigator.clipboard
+            .writeText(name);
 
-        });
+
+        showStatus(
+            "College name copied!",
+            "success"
+        );
+
+    }
+    catch{
+
+        alert(
+            "Copy failed."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   9. SHARE
+===================================================== */
+
+
+async function shareCollege(
+    name
+){
+
+    const text =
+        "Check this college on GyanSetu: "
+        + name;
+
+
+    if(
+        navigator.share
+    ){
+
+        try{
+
+            await navigator.share({
+
+                title:name,
+
+                text:text
+
+            });
+
+        }
+        catch{
+
+            /* user cancelled */
+
+        }
 
     }
     else{
 
-        copyName(name);
+        copyName(
+            text
+        );
 
     }
 
 }
 
 
-/* YEAR */
 
-document.getElementById("year")
-    .textContent =
+/* =====================================================
+   10. STATUS
+===================================================== */
+
+
+function showStatus(
+    message,
+    type
+){
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    status.textContent =
+        message;
+
+
+    status.className =
+        "status "
+        + type;
+
+}
+
+
+
+/* =====================================================
+   11. HTML SECURITY
+===================================================== */
+
+
+function escapeHTML(
+    value
+){
+
+    return String(
+        value ?? ""
+    )
+    .replace(
+        /[&<>"']/g,
+        function(char){
+
+            return {
+
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+
+            }[char];
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   12. YEAR
+===================================================== */
+
+
+document.getElementById(
+    "year"
+).textContent =
     new Date().getFullYear();
 
+
 </script>
+
 
 </body>
 </html>
