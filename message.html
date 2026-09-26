@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Messages - GyanSetu</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
+<!DOCTYPE html><html lang="en">
+<head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Messages - GyanSetu</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 
 *{
   box-sizing:border-box;
@@ -114,7 +105,7 @@ body.dark{
 
 
 /* =========================
-   DATE / EMPTY
+   EMPTY
 ========================= */
 
 .empty-chat{
@@ -186,6 +177,39 @@ body.dark{
   box-shadow:none;
 }
 
+
+/* =========================
+   PHOTO MESSAGE
+========================= */
+
+.photo-message-bubble{
+  padding:5px !important;
+  overflow:hidden;
+}
+
+.chat-photo{
+  display:block;
+  width:100%;
+  max-width:280px;
+  max-height:360px;
+  object-fit:cover;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.photo-time{
+  display:block;
+  font-size:10px;
+  margin:4px 5px 2px;
+  opacity:.7;
+  text-align:right;
+}
+
+
+/* =========================
+   TIME
+========================= */
+
 .message-time{
   display:block;
   font-size:10px;
@@ -241,6 +265,49 @@ body.dark{
   color:#fff;
 }
 
+
+/* =========================
+   PHOTO BUTTON
+========================= */
+
+.photo-btn{
+  width:48px;
+  height:48px;
+  border:none;
+  border-radius:50%;
+  background:#eeeeee;
+  color:#333;
+  font-size:22px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.photo-btn:hover{
+  background:#ddd;
+}
+
+.photo-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.dark .photo-btn{
+  background:#333;
+  color:#fff;
+}
+
+.dark .photo-btn:hover{
+  background:#444;
+}
+
+
+/* =========================
+   SEND BUTTON
+========================= */
+
 .send-btn{
   width:48px;
   height:48px;
@@ -253,6 +320,7 @@ body.dark{
   display:flex;
   align-items:center;
   justify-content:center;
+  flex-shrink:0;
 }
 
 .send-btn:hover{
@@ -262,6 +330,64 @@ body.dark{
 .send-btn:disabled{
   background:#aaa;
   cursor:not-allowed;
+}
+
+
+/* =========================
+   HIDDEN FILE INPUT
+========================= */
+
+#photoInput{
+  display:none;
+}
+
+
+/* =========================
+   PHOTO UPLOAD OVERLAY
+========================= */
+
+.upload-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:200;
+}
+
+.upload-box{
+  width:280px;
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+  text-align:center;
+  box-shadow:0 5px 30px rgba(0,0,0,.3);
+}
+
+.dark .upload-box{
+  background:#242424;
+  color:#fff;
+}
+
+.upload-icon{
+  font-size:45px;
+  margin-bottom:12px;
+}
+
+.upload-title{
+  font-size:17px;
+  font-weight:bold;
+}
+
+.upload-text{
+  font-size:13px;
+  color:#777;
+  margin-top:7px;
+}
+
+.dark .upload-text{
+  color:#aaa;
 }
 
 
@@ -347,10 +473,47 @@ body.dark{
   padding:11px 17px;
   border-radius:10px;
   display:none;
-  z-index:100;
+  z-index:300;
   font-size:14px;
   max-width:90%;
   text-align:center;
+}
+
+
+/* =========================
+   IMAGE VIEWER
+========================= */
+
+.image-viewer{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.92);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:500;
+  padding:20px;
+}
+
+.image-viewer img{
+  max-width:100%;
+  max-height:90vh;
+  object-fit:contain;
+  border-radius:8px;
+}
+
+.close-image{
+  position:absolute;
+  top:15px;
+  right:15px;
+  width:45px;
+  height:45px;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  font-size:28px;
+  cursor:pointer;
 }
 
 
@@ -368,164 +531,155 @@ body.dark{
     font-size:17px;
   }
 
+  .chat-photo{
+    max-width:250px;
+    max-height:320px;
+  }
+
 }
 
-</style>
-
-</head>
-
-
-<body>
-
-
-<!-- =========================
+</style></head><body><!-- =========================
      HEADER
-========================= -->
+========================= --><header class="header"><button
+class="back-btn"
+onclick="goBack()">
 
-<header class="header">
+←
 
-  <button
-    class="back-btn"
-    onclick="goBack()">
+  </button>  <div class="receiver-info"><div
+  class="receiver-name"
+  id="receiverName">
 
-    ←
+  Loading...
 
-  </button>
+</div>
 
+<div
+  class="receiver-status"
+  id="receiverStatus">
 
-  <div class="receiver-info">
+  GyanSetu User
 
-    <div
-      class="receiver-name"
-      id="receiverName">
+</div>
 
-      Loading...
-
-    </div>
-
-    <div
-      class="receiver-status"
-      id="receiverStatus">
-
-      GyanSetu User
-
-    </div>
-
-  </div>
-
-</header>
-
-
-
-<!-- =========================
+  </div></header><!-- =========================
      CHAT AREA
-========================= -->
-
-<div
+========================= --><div
   class="chat-area"
-  id="chatArea">
-
-  <div
+  id="chatArea">  <div
     class="messages"
-    id="messages">
+    id="messages"><div
+  class="loading"
+  id="loading">
 
-    <div
-      class="loading"
-      id="loading">
-
-      ⏳<br><br>
-      Loading messages...
-
-    </div>
-
-  </div>
+  ⏳<br><br>
+  Loading messages...
 
 </div>
 
-
-
-<!-- =========================
+  </div></div><!-- =========================
      ERROR SCREEN
-========================= -->
-
-<div
+========================= --><div
   class="error-screen"
-  id="errorScreen">
+  id="errorScreen">  <div class="error-box"><div class="error-icon">
+  😕
+</div>
 
-  <div class="error-box">
+<div class="error-title">
+  Unable to open chat
+</div>
 
-    <div class="error-icon">
-      😕
-    </div>
+<div
+  class="error-text"
+  id="errorText">
 
-    <div class="error-title">
-      Unable to open chat
-    </div>
-
-    <div
-      class="error-text"
-      id="errorText">
-
-      Something went wrong.
-
-    </div>
-
-    <button
-      class="back-users-btn"
-      onclick="goBack()">
-
-      ← Back
-
-    </button>
-
-  </div>
+  Something went wrong.
 
 </div>
 
+<button
+  class="back-users-btn"
+  onclick="goBack()">
 
+  ← Back
 
-<!-- =========================
+</button>
+
+  </div></div><!-- =========================
      INPUT
-========================= -->
-
-<div
+========================= --><div
   class="input-area"
-  id="inputArea">
+  id="inputArea">  <!-- PHOTO BUTTON --><button
+class="photo-btn"
+id="photoBtn"
+onclick="openPhotoPicker()"
+title="Send photo">
 
-  <input
-    type="text"
-    id="messageInput"
-    class="message-input"
-    placeholder="Type a message..."
-    autocomplete="off"
-  >
+📷
 
+  </button>  <!-- HIDDEN FILE INPUT --><input
+type="file"
+id="photoInput"
+accept="image/*"
+capture="environment"
 
-  <button
-    class="send-btn"
-    id="sendBtn"
-    onclick="sendMessage()">
+«»
 
-    ➤
+<input
+type="text"
+id="messageInput"
+class="message-input"
+placeholder="Type a message..."
+autocomplete="off"
 
-  </button>
+«»
 
+<button
+class="send-btn"
+id="sendBtn"
+onclick="sendMessage()">
+
+➤
+
+  </button></div><!-- =========================
+     UPLOAD OVERLAY
+========================= --><div
+  class="upload-overlay"
+  id="uploadOverlay">  <div class="upload-box"><div class="upload-icon">
+  📷
 </div>
 
+<div class="upload-title">
+  Sending photo...
+</div>
 
+<div class="upload-text">
+  Please wait
+</div>
 
-<!-- =========================
+  </div></div><!-- =========================
+     IMAGE VIEWER
+========================= --><div
+  class="image-viewer"
+  id="imageViewer"
+  onclick="closeImageViewer()"><button
+class="close-image"
+onclick="event.stopPropagation();closeImageViewer()">
+
+×
+
+  </button><img
+id="viewerImage"
+src=""
+alt="Photo"
+onclick="event.stopPropagation()">
+
+</div><!-- =========================
      TOAST
-========================= -->
-
-<div
+========================= --><div
   class="toast"
   id="toast">
-</div>
-
-
-
-<script>
+</div><script>
 
 /* =========================
    SUPABASE
@@ -818,16 +972,6 @@ async function markMessagesAsRead(){
   }
 
 
-  /*
-     फक्त receiver म्हणून मिळालेले
-     unread messages read करायचे.
-
-     म्हणजे:
-
-     sender_id = ज्या user सोबत chat आहे
-     receiver_id = सध्याचा logged-in user
-  */
-
   const {
     error
   } =
@@ -885,10 +1029,6 @@ async function loadMessages(){
   }
 
 
-  /*
-     SENT MESSAGES
-  */
-
   const {
     data: sentMessages,
     error: sentError
@@ -917,10 +1057,6 @@ async function loadMessages(){
 
   }
 
-
-  /*
-     RECEIVED MESSAGES
-  */
 
   const {
     data: receivedMessages,
@@ -957,10 +1093,6 @@ async function loadMessages(){
   ];
 
 
-  /*
-     SORT BY TIME
-  */
-
   allMessages.sort(
     function(a,b){
 
@@ -977,6 +1109,33 @@ async function loadMessages(){
 
   displayMessages(
     allMessages
+  );
+
+}
+
+
+/* =========================
+   CHECK PHOTO MESSAGE
+========================= */
+
+function isPhotoMessage(message){
+
+  return (
+    typeof message === "string" &&
+    message.startsWith("PHOTO:")
+  );
+
+}
+
+
+/* =========================
+   GET PHOTO URL
+========================= */
+
+function getPhotoUrl(message){
+
+  return message.substring(
+    6
   );
 
 }
@@ -1031,74 +1190,9 @@ function displayMessages(messageList){
   messageList.forEach(
     function(msg){
 
-      const isSent =
-        msg.sender_id ===
-        currentUser.id;
-
-
-      const row =
-        document.createElement(
-          "div"
-        );
-
-
-      row.className =
-        "message-row " +
-        (
-          isSent
-          ? "sent"
-          : "received"
-        );
-
-
-      row.setAttribute(
-        "data-message-id",
-        msg.id
-      );
-
-
-      const bubble =
-        document.createElement(
-          "div"
-        );
-
-
-      bubble.className =
-        "message-bubble";
-
-
-      const safeMessage =
-        escapeHtml(
-          msg.message
-        );
-
-
-      const time =
-        formatTime(
-          msg.created_at
-        );
-
-
-      bubble.innerHTML = `
-
-        <span>
-          ${safeMessage}
-        </span>
-
-        <span class="message-time">
-          ${time}
-        </span>
-
-      `;
-
-
-      row.appendChild(
-        bubble
-      );
-
-
-      messagesContainer.appendChild(
-        row
+      createMessageElement(
+        msg,
+        messagesContainer
       );
 
     }
@@ -1106,6 +1200,175 @@ function displayMessages(messageList){
 
 
   scrollToBottom();
+
+}
+
+
+/* =========================
+   CREATE MESSAGE ELEMENT
+========================= */
+
+function createMessageElement(
+  msg,
+  container
+){
+
+  const isSent =
+    msg.sender_id ===
+    currentUser.id;
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+
+  row.className =
+    "message-row " +
+    (
+      isSent
+      ? "sent"
+      : "received"
+    );
+
+
+  row.setAttribute(
+    "data-message-id",
+    msg.id
+  );
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+  bubble.className =
+    "message-bubble";
+
+
+  /*
+     PHOTO MESSAGE
+  */
+
+  if(
+    isPhotoMessage(
+      msg.message
+    )
+  ){
+
+    bubble.classList.add(
+      "photo-message-bubble"
+    );
+
+
+    const photoUrl =
+      getPhotoUrl(
+        msg.message
+      );
+
+
+    const image =
+      document.createElement(
+        "img"
+      );
+
+
+    image.className =
+      "chat-photo";
+
+
+    image.src =
+      photoUrl;
+
+
+    image.alt =
+      "Photo";
+
+
+    image.loading =
+      "lazy";
+
+
+    image.onclick =
+      function(){
+
+        openImageViewer(
+          photoUrl
+        );
+
+      };
+
+
+    const time =
+      document.createElement(
+        "span"
+      );
+
+
+    time.className =
+      "photo-time";
+
+
+    time.textContent =
+      formatTime(
+        msg.created_at
+      );
+
+
+    bubble.appendChild(
+      image
+    );
+
+    bubble.appendChild(
+      time
+    );
+
+  }
+
+  /*
+     TEXT MESSAGE
+  */
+
+  else{
+
+    const safeMessage =
+      escapeHtml(
+        msg.message
+      );
+
+
+    const time =
+      formatTime(
+        msg.created_at
+      );
+
+
+    bubble.innerHTML = `
+
+      <span>
+        ${safeMessage}
+      </span>
+
+      <span class="message-time">
+        ${time}
+      </span>
+
+    `;
+
+  }
+
+
+  row.appendChild(
+    bubble
+  );
+
+
+  container.appendChild(
+    row
+  );
 
 }
 
@@ -1136,7 +1399,7 @@ function scrollToBottom(){
 
 
 /* =========================
-   SEND MESSAGE
+   SEND TEXT MESSAGE
 ========================= */
 
 async function sendMessage(){
@@ -1178,10 +1441,6 @@ async function sendMessage(){
   }
 
 
-  /*
-     PREVENT SELF MESSAGE
-  */
-
   if(
     currentUser.id ===
     receiverId
@@ -1196,20 +1455,12 @@ async function sendMessage(){
   }
 
 
-  /*
-     DISABLE BUTTON
-  */
-
   sendBtn.disabled =
     true;
 
   input.disabled =
     true;
 
-
-  /*
-     INSERT MESSAGE
-  */
 
   const {
     data,
@@ -1236,10 +1487,6 @@ async function sendMessage(){
     .single();
 
 
-  /*
-     ENABLE INPUT
-  */
-
   sendBtn.disabled =
     false;
 
@@ -1264,17 +1511,9 @@ async function sendMessage(){
   }
 
 
-  /*
-     CLEAR INPUT
-  */
-
   input.value =
     "";
 
-
-  /*
-     DISPLAY MESSAGE
-  */
 
   addMessageToChat(
     data
@@ -1282,6 +1521,358 @@ async function sendMessage(){
 
 
   input.focus();
+
+}
+
+
+/* =========================
+   OPEN PHOTO PICKER
+========================= */
+
+function openPhotoPicker(){
+
+  if(
+    !currentUser ||
+    !receiverId
+  ){
+
+    showToast(
+      "Chat is not available."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    currentUser.id ===
+    receiverId
+  ){
+
+    showToast(
+      "You cannot message yourself."
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "photoInput"
+    )
+    .click();
+
+}
+
+
+/* =========================
+   PHOTO SELECTED
+========================= */
+
+document
+  .getElementById(
+    "photoInput"
+  )
+  .addEventListener(
+    "change",
+    async function(event){
+
+      const file =
+        event.target.files &&
+        event.target.files[0];
+
+
+      if(!file){
+
+        return;
+
+      }
+
+
+      await sendPhoto(
+        file
+      );
+
+
+      event.target.value =
+        "";
+
+    }
+  );
+
+
+/* =========================
+   SEND PHOTO
+========================= */
+
+async function sendPhoto(file){
+
+  if(
+    !currentUser ||
+    !receiverId
+  ){
+
+    showToast(
+      "Chat is not available."
+    );
+
+    return;
+
+  }
+
+
+  /*
+     ONLY IMAGE
+  */
+
+  if(
+    !file.type.startsWith(
+      "image/"
+    )
+  ){
+
+    showToast(
+      "फक्त image select करा."
+    );
+
+    return;
+
+  }
+
+
+  /*
+     MAX 10 MB
+  */
+
+  if(
+    file.size >
+    10 * 1024 * 1024
+  ){
+
+    showToast(
+      "Photo 10 MB पेक्षा कमी असावा."
+    );
+
+    return;
+
+  }
+
+
+  const photoBtn =
+    document.getElementById(
+      "photoBtn"
+    );
+
+  const sendBtn =
+    document.getElementById(
+      "sendBtn"
+    );
+
+  const input =
+    document.getElementById(
+      "messageInput"
+    );
+
+  const overlay =
+    document.getElementById(
+      "uploadOverlay"
+    );
+
+
+  photoBtn.disabled =
+    true;
+
+  sendBtn.disabled =
+    true;
+
+  input.disabled =
+    true;
+
+  overlay.style.display =
+    "flex";
+
+
+  try{
+
+    /*
+       UNIQUE FILE NAME
+    */
+
+    const extension =
+      file.name
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+
+    const fileName =
+      Date.now() +
+      "-" +
+      Math.random()
+        .toString(36)
+        .substring(2,10) +
+      "." +
+      extension;
+
+
+    const filePath =
+      currentUser.id +
+      "/" +
+      fileName;
+
+
+    /*
+       UPLOAD TO SUPABASE STORAGE
+    */
+
+    const {
+      error: uploadError
+    } =
+    await supabaseClient
+      .storage
+      .from("chat-images")
+      .upload(
+        filePath,
+        file,
+        {
+          cacheControl:"3600",
+          upsert:false,
+          contentType:file.type
+        }
+      );
+
+
+    if(uploadError){
+
+      console.error(
+        "Photo upload error:",
+        uploadError
+      );
+
+      showToast(
+        "Photo upload झाला नाही."
+      );
+
+      return;
+
+    }
+
+
+    /*
+       GET PUBLIC URL
+    */
+
+    const {
+      data: publicData
+    } =
+    supabaseClient
+      .storage
+      .from("chat-images")
+      .getPublicUrl(
+        filePath
+      );
+
+
+    const photoUrl =
+      publicData.publicUrl;
+
+
+    /*
+       SAVE PHOTO URL IN MESSAGE
+    */
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("Messages")
+      .insert({
+
+        sender_id:
+          currentUser.id,
+
+        receiver_id:
+          receiverId,
+
+        message:
+          "PHOTO:" +
+          photoUrl,
+
+        is_read:
+          false
+
+      })
+      .select()
+      .single();
+
+
+    if(error){
+
+      console.error(
+        "Photo message error:",
+        error
+      );
+
+
+      showToast(
+        "Photo message send झाला नाही."
+      );
+
+      return;
+
+    }
+
+
+    /*
+       SHOW PHOTO
+    */
+
+    addMessageToChat(
+      data
+    );
+
+
+    showToast(
+      "Photo sent ✓"
+    );
+
+  }
+
+  catch(error){
+
+    console.error(
+      "Send photo error:",
+      error
+    );
+
+
+    showToast(
+      "Photo send करताना error आला."
+    );
+
+  }
+
+  finally{
+
+    overlay.style.display =
+      "none";
+
+    photoBtn.disabled =
+      false;
+
+    sendBtn.disabled =
+      false;
+
+    input.disabled =
+      false;
+
+    input.focus();
+
+  }
 
 }
 
@@ -1304,10 +1895,6 @@ function addMessageToChat(msg){
       "messages"
     );
 
-
-  /*
-     REMOVE EMPTY MESSAGE
-  */
 
   const empty =
     messagesContainer.querySelector(
@@ -1341,69 +1928,14 @@ function addMessageToChat(msg){
   }
 
 
-  const isSent =
-    msg.sender_id ===
-    currentUser.id;
-
-
-  const row =
-    document.createElement(
-      "div"
-    );
-
-
-  row.className =
-    "message-row " +
-    (
-      isSent
-      ? "sent"
-      : "received"
-    );
-
-
-  row.setAttribute(
-    "data-message-id",
-    msg.id
-  );
-
-
-  const bubble =
-    document.createElement(
-      "div"
-    );
-
-
-  bubble.className =
-    "message-bubble";
-
-
-  bubble.innerHTML = `
-
-    <span>
-      ${escapeHtml(msg.message)}
-    </span>
-
-    <span class="message-time">
-      ${formatTime(msg.created_at)}
-    </span>
-
-  `;
-
-
-  row.appendChild(
-    bubble
-  );
-
-
-  messagesContainer.appendChild(
-    row
+  createMessageElement(
+    msg,
+    messagesContainer
   );
 
 
   /*
-     जर नवीन message receiver कडून आला
-     आणि आपण chat मध्ये आहोत,
-     तर लगेच read करायचा.
+     RECEIVED MESSAGE
   */
 
   if(
@@ -1417,6 +1949,55 @@ function addMessageToChat(msg){
 
 
   scrollToBottom();
+
+}
+
+
+/* =========================
+   IMAGE VIEWER
+========================= */
+
+function openImageViewer(url){
+
+  const viewer =
+    document.getElementById(
+      "imageViewer"
+    );
+
+  const image =
+    document.getElementById(
+      "viewerImage"
+    );
+
+
+  image.src =
+    url;
+
+
+  viewer.style.display =
+    "flex";
+
+}
+
+
+function closeImageViewer(){
+
+  const viewer =
+    document.getElementById(
+      "imageViewer"
+    );
+
+  const image =
+    document.getElementById(
+      "viewerImage"
+    );
+
+
+  viewer.style.display =
+    "none";
+
+  image.src =
+    "";
 
 }
 
@@ -1459,10 +2040,6 @@ function setupRealtime(){
           const msg =
             payload.new;
 
-
-          /*
-             ONLY THIS CHAT
-          */
 
           const isThisChat =
 
@@ -1567,10 +2144,6 @@ async function startChat(){
   loadDarkMode();
 
 
-  /*
-     CHECK RECEIVER ID
-  */
-
   if(!receiverId){
 
     showError(
@@ -1581,10 +2154,6 @@ async function startChat(){
 
   }
 
-
-  /*
-     CURRENT USER
-  */
 
   currentUser =
     await getCurrentUser();
@@ -1601,10 +2170,6 @@ async function startChat(){
   }
 
 
-  /*
-     PREVENT SELF CHAT
-  */
-
   if(
     currentUser.id ===
     receiverId
@@ -1618,10 +2183,6 @@ async function startChat(){
 
   }
 
-
-  /*
-     LOAD RECEIVER
-  */
 
   receiverProfile =
     await loadReceiver();
@@ -1638,10 +2199,6 @@ async function startChat(){
   }
 
 
-  /*
-     SHOW NAME
-  */
-
   document.getElementById(
     "receiverName"
   ).textContent =
@@ -1654,32 +2211,14 @@ async function startChat(){
     "GyanSetu User";
 
 
-  /*
-     IMPORTANT:
-     CHAT OPEN होताच unread messages
-     read करा.
-  */
-
   await markMessagesAsRead();
 
-
-  /*
-     LOAD MESSAGES
-  */
 
   await loadMessages();
 
 
-  /*
-     REALTIME
-  */
-
   setupRealtime();
 
-
-  /*
-     FOCUS INPUT
-  */
 
   document.getElementById(
     "messageInput"
@@ -1694,7 +2233,5 @@ async function startChat(){
 
 startChat();
 
-</script>
-
-</body>
+</script></body>
 </html>
