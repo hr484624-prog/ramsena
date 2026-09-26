@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>User Profile - GyanSetu</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f4f6f9;
+  color:#222;
+  min-height:100vh;
+}
+
+body.dark{
+  background:#121212;
+  color:#eee;
+}
+
+.header{
+  height:60px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 10px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+.dark .header{
+  background:#1e1e1e;
+}
+
+.back-btn{
+  width:42px;
+  height:42px;
+  border:none;
+  background:transparent;
+  font-size:28px;
+  cursor:pointer;
+  border-radius:50%;
+}
+
+.back-btn:hover{
+  background:#eee;
+}
+
+.dark .back-btn:hover{
+  background:#333;
+}
+
+.header-title{
+  flex:1;
+  text-align:center;
+  font-size:19px;
+  font-weight:bold;
+  margin-right:42px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:18px 14px 30px;
+}
+
+.profile-card{
+  background:white;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.dark .profile-card{
+  background:#1e1e1e;
+}
+
+.profile-top{
+  text-align:center;
+  padding-bottom:20px;
+}
+
+.avatar{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:#1976d2;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto;
+  font-size:40px;
+  font-weight:bold;
+}
+
+.username{
+  font-size:23px;
+  font-weight:bold;
+  margin-top:13px;
+}
+
+.email-top{
+  color:#777;
+  font-size:14px;
+  margin-top:5px;
+  word-break:break-word;
+}
+
+.dark .email-top{
+  color:#aaa;
+}
+
+.message-btn{
+  width:100%;
+  padding:14px;
+  margin:8px 0 20px;
+  border:none;
+  border-radius:12px;
+  background:#1976d2;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.message-btn:hover{
+  background:#1565c0;
+}
+
+.info-section{
+  margin-top:5px;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.info-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+
+.dark .info-row{
+  border-bottom:1px solid #333;
+}
+
+.info-label{
+  color:#777;
+  font-size:14px;
+  flex-shrink:0;
+}
+
+.dark .info-label{
+  color:#aaa;
+}
+
+.info-value{
+  text-align:right;
+  font-weight:500;
+  max-width:62%;
+  word-break:break-word;
+}
+
+.loading{
+  text-align:center;
+  padding:40px 20px;
+  color:#777;
+}
+
+.dark .loading{
+  color:#aaa;
+}
+
+.error-box{
+  text-align:center;
+  padding:30px 15px;
+}
+
+.error-icon{
+  font-size:50px;
+  margin-bottom:12px;
+}
+
+.error-title{
+  font-size:20px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.error-text{
+  color:#777;
+  line-height:1.5;
+}
+
+.dark .error-text{
+  color:#aaa;
+}
+
+.back-home-btn{
+  width:100%;
+  margin-top:18px;
+  padding:13px;
+  border:none;
+  border-radius:11px;
+  background:#1976d2;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:25px;
+  transform:translateX(-50%);
+  background:#222;
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  display:none;
+  z-index:1000;
+  font-size:14px;
+  max-width:90%;
+  text-align:center;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+  <button
+    class="back-btn"
+    onclick="goBack()">
+    ←
+  </button>
+
+  <div class="header-title">
+    User Profile
+  </div>
+
+</header>
+
+
+<main class="container">
+
+  <div
+    class="profile-card"
+    id="profileCard">
+
+    <div class="loading" id="loading">
+
+      <div style="font-size:35px;margin-bottom:10px;">
+        ⏳
+      </div>
+
+      Loading profile...
+
+    </div>
+
+
+    <div
+      id="profileContent"
+      style="display:none;">
+
+      <div class="profile-top">
+
+        <div
+          class="avatar"
+          id="avatar">
+          U
+        </div>
+
+        <div
+          class="username"
+          id="username">
+          User
+        </div>
+
+        <div
+          class="email-top"
+          id="topEmail">
+          -
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE BUTTON -->
+
+      <button
+        class="message-btn"
+        id="messageBtn"
+        onclick="openMessage()">
+
+        💬 Message
+
+      </button>
+
+
+      <div class="info-section">
+
+        <div class="section-title">
+          Personal Information
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Full Name
+          </span>
+
+          <span
+            class="info-value"
+            id="fullName">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Date of Birth
+          </span>
+
+          <span
+            class="info-value"
+            id="dob">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            School / College
+          </span>
+
+          <span
+            class="info-value"
+            id="school">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Class
+          </span>
+
+          <span
+            class="info-value"
+            id="className">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Medium
+          </span>
+
+          <span
+            class="info-value"
+            id="medium">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            City / Village
+          </span>
+
+          <span
+            class="info-value"
+            id="city">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Career Goal
+          </span>
+
+          <span
+            class="info-value"
+            id="career">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Mobile
+          </span>
+
+          <span
+            class="info-value"
+            id="mobile">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            Email
+          </span>
+
+          <span
+            class="info-value"
+            id="email">
+            -
+          </span>
+
+        </div>
+
+
+        <div class="info-row">
+
+          <span class="info-label">
+            GyanSetu ID
+          </span>
+
+          <span
+            class="info-value"
+            id="gyanId">
+            -
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ERROR -->
+
+    <div
+      id="errorContent"
+      style="display:none;">
+
+      <div class="error-box">
+
+        <div class="error-icon">
+          😕
+        </div>
+
+        <div class="error-title">
+          User not found
+        </div>
+
+        <div
+          class="error-text"
+          id="errorText">
+          This user profile does not exist.
+        </div>
+
+        <button
+          class="back-home-btn"
+          onclick="goBack()">
+
+          ← Back to Users
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+"https://eqglttfffhvoyvrclzse.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+   GET USER ID
+========================= */
+
+const params =
+new URLSearchParams(
+  window.location.search
+);
+
+const userId =
+params.get("id");
+
+
+/* =========================
+   PROFILE DATA
+========================= */
+
+let selectedUser = null;
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function goBack(){
+
+  window.location.href =
+    "users.html";
+
+}
+
+
+function openMessage(){
+
+  if(!selectedUser){
+
+    showToast(
+      "User information not available"
+    );
+
+    return;
+
+  }
+
+
+  window.location.href =
+    "message.html?id=" +
+    encodeURIComponent(
+      selectedUser.id
+    );
+
+}
+
+
+/* =========================
+   HELPERS
+========================= */
+
+function showValue(value){
+
+  if(
+    value === null ||
+    value === undefined ||
+    String(value).trim() === ""
+  ){
+
+    return "-";
+
+  }
+
+  return value;
+
+}
+
+
+/* =========================
+   LOAD USER PROFILE
+========================= */
+
+async function loadUserProfile(){
+
+  if(!userId){
+
+    showError(
+      "User ID is missing."
+    );
+
+    return;
+
+  }
+
+
+  /* =========================
+     CURRENT USER
+  ========================= */
+
+  const {
+    data: authData
+  } = await supabaseClient.auth.getUser();
+
+
+  const currentUser =
+    authData?.user;
+
+
+  /* =========================
+     GET SELECTED PROFILE
+  ========================= */
+
+  const {
+    data: profile,
+    error
+  } = await supabaseClient
+    .from("Profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+
+
+  if(error){
+
+    console.error(
+      "Profile error:",
+      error
+    );
+
+    showError(
+      "Unable to load this profile."
+    );
+
+    return;
+
+  }
+
+
+  if(!profile){
+
+    showError(
+      "This user does not exist in GyanSetu."
+    );
+
+    return;
+
+  }
+
+
+  selectedUser =
+    profile;
+
+
+  /* =========================
+     USERNAME
+  ========================= */
+
+  const username =
+    profile.username ||
+    "User";
+
+
+  document.getElementById(
+    "username"
+  ).textContent =
+    username;
+
+
+  /* =========================
+     EMAIL
+  ========================= */
+
+  const email =
+    profile.email ||
+    "-";
+
+
+  document.getElementById(
+    "topEmail"
+  ).textContent =
+    email;
+
+
+  document.getElementById(
+    "email"
+  ).textContent =
+    showValue(email);
+
+
+  /* =========================
+     AVATAR
+  ========================= */
+
+  const avatarLetter =
+    username
+      .charAt(0)
+      .toUpperCase();
+
+
+  document.getElementById(
+    "avatar"
+  ).textContent =
+    avatarLetter;
+
+
+  /* =========================
+     PROFILE INFORMATION
+  ========================= */
+
+  document.getElementById(
+    "fullName"
+  ).textContent =
+    showValue(
+      profile.full_name
+    );
+
+
+  document.getElementById(
+    "dob"
+  ).textContent =
+    showValue(
+      profile.dob
+    );
+
+
+  document.getElementById(
+    "school"
+  ).textContent =
+    showValue(
+      profile.school
+    );
+
+
+  document.getElementById(
+    "className"
+  ).textContent =
+    showValue(
+      profile.class_name
+    );
+
+
+  document.getElementById(
+    "medium"
+  ).textContent =
+    showValue(
+      profile.medium
+    );
+
+
+  document.getElementById(
+    "city"
+  ).textContent =
+    showValue(
+      profile.city
+    );
+
+
+  document.getElementById(
+    "career"
+  ).textContent =
+    showValue(
+      profile.career_goal
+    );
+
+
+  document.getElementById(
+    "mobile"
+  ).textContent =
+    showValue(
+      profile.mobile
+    );
+
+
+  document.getElementById(
+    "gyanId"
+  ).textContent =
+    showValue(
+      profile.id
+    );
+
+
+  /* =========================
+     OWN PROFILE
+  ========================= */
+
+  if(
+    currentUser &&
+    currentUser.id === profile.id
+  ){
+
+    const messageBtn =
+      document.getElementById(
+        "messageBtn"
+      );
+
+    messageBtn.style.display =
+      "none";
+
+  }
+
+
+  /* =========================
+     SHOW PROFILE
+  ========================= */
+
+  document.getElementById(
+    "loading"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "profileContent"
+  ).style.display =
+    "block";
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+function showError(message){
+
+  document.getElementById(
+    "loading"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "profileContent"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "errorContent"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "errorText"
+  ).textContent =
+    message;
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+function showToast(message){
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.style.display =
+    "block";
+
+
+  setTimeout(
+    function(){
+
+      toast.style.display =
+        "none";
+
+    },
+    2500
+  );
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function loadDarkMode(){
+
+  const darkMode =
+    localStorage.getItem(
+      "darkMode"
+    );
+
+
+  if(darkMode === "true"){
+
+    document.body.classList.add(
+      "dark"
+    );
+
+  }
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadDarkMode();
+
+loadUserProfile();
+
+</script>
+
+</body>
+</html>
