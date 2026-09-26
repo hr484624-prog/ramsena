@@ -70,6 +70,7 @@
       gap: 13px;
       box-shadow: 0 2px 7px rgba(0,0,0,0.06);
       cursor: pointer;
+      position: relative;
     }
 
     .avatar {
@@ -86,12 +87,16 @@
 
     .user-info {
       min-width: 0;
+      flex: 1;
     }
 
     .username {
       font-size: 17px;
       font-weight: bold;
       margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .email {
@@ -100,6 +105,32 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    /* 🔵 Unread message dot */
+    .unread-dot {
+      width: 10px;
+      height: 10px;
+      background: #1877f2;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 2px white;
+    }
+
+    .unread-badge {
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 12px;
+      background: #1877f2;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
     }
 
     .loading,
@@ -129,53 +160,125 @@
 <body>
 
   <div class="header">
+
     <button class="back" onclick="goBack()">‹</button>
 
     <div class="title">GyanSetu Users</div>
 
     <button class="refresh" onclick="loadUsers()">↻</button>
+
   </div>
 
+
   <div class="search-box">
+
     <input
       type="text"
       id="searchInput"
       placeholder="Search user..."
       oninput="searchUsers()"
     >
+
   </div>
+
 
   <div id="usersList">
-    <div class="loading">Users loading...</div>
+
+    <div class="loading">
+      Users loading...
+    </div>
+
   </div>
 
+
   <script>
-    const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
+
+    const SUPABASE_URL =
+      "https://eqglttfffhvoyvrclzse.supabase.co";
 
     const SUPABASE_KEY =
       "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
 
-    const supabaseClient = supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+
+    const supabaseClient =
+      supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
 
     let allUsers = [];
 
+    let currentUser = null;
+
+    let unreadMessages = {};
+
+
+    // ==========================================
+    // GET CURRENT LOGGED-IN USER
+    // ==========================================
+
+    async function getCurrentUser() {
+
+      const {
+        data,
+        error
+      } =
+      await supabaseClient.auth.getUser();
+
+      if (error) {
+
+        console.error(
+          "Current user error:",
+          error
+        );
+
+        return null;
+      }
+
+      currentUser = data.user;
+
+      return currentUser;
+    }
+
+
+    // ==========================================
+    // LOAD USERS
+    // ==========================================
+
     async function loadUsers() {
 
-      const usersList = document.getElementById("usersList");
+      const usersList =
+        document.getElementById("usersList");
+
 
       usersList.innerHTML =
         '<div class="loading">Users loading...</div>';
 
+
+      // Current user मिळवा
+      if (!currentUser) {
+
+        await getCurrentUser();
+
+      }
+
+
+      // ------------------------------------------
+      // LOAD PROFILES
+      // ------------------------------------------
+
       const {
         data: users,
         error
-      } = await supabaseClient
+      } =
+      await supabaseClient
         .from("Profiles")
         .select("*")
-        .order("username", { ascending: true });
+        .order("username", {
+          ascending: true
+        });
+
 
       if (error) {
 
@@ -183,76 +286,217 @@
 
         usersList.innerHTML = `
           <div class="error">
-            Users load झाले नाहीत.<br><br>
-            ${error.message}
+
+            Users load झाले नाहीत.
+
+            <br><br>
+
+            ${escapeHTML(error.message)}
+
           </div>
         `;
 
         return;
       }
 
+
       allUsers = users || [];
 
+
+      // ------------------------------------------
+      // LOAD UNREAD MESSAGES
+      // ------------------------------------------
+
+      await loadUnreadMessages();
+
+
       displayUsers(allUsers);
+
     }
 
 
+    // ==========================================
+    // LOAD UNREAD MESSAGES
+    // ==========================================
+
+    async function loadUnreadMessages() {
+
+      unreadMessages = {};
+
+
+      if (!currentUser) {
+
+        return;
+
+      }
+
+
+      const {
+        data: messages,
+        error
+      } =
+      await supabaseClient
+        .from("Messages")
+        .select("id, sender_id, receiver_id, is_read, created_at")
+        .eq("receiver_id", currentUser.id)
+        .eq("is_read", false);
+
+
+      if (error) {
+
+        console.error(
+          "Unread messages error:",
+          error
+        );
+
+        return;
+      }
+
+
+      (messages || []).forEach(message => {
+
+        const senderId =
+          message.sender_id;
+
+
+        if (!unreadMessages[senderId]) {
+
+          unreadMessages[senderId] = 0;
+
+        }
+
+
+        unreadMessages[senderId]++;
+
+      });
+
+    }
+
+
+    // ==========================================
+    // DISPLAY USERS
+    // ==========================================
+
     function displayUsers(users) {
 
-      const usersList = document.getElementById("usersList");
+      const usersList =
+        document.getElementById("usersList");
+
 
       if (!users || users.length === 0) {
 
         usersList.innerHTML = `
           <div class="empty">
+
             सध्या कोणताही user उपलब्ध नाही.
+
           </div>
         `;
 
         return;
       }
 
-      usersList.innerHTML = users.map(user => {
 
-        const username =
-          user.username || "Unknown User";
+      usersList.innerHTML =
+        users.map(user => {
 
-        const email =
-          user.email || "";
+          const username =
+            user.username ||
+            "Unknown User";
 
-        const firstLetter =
-          username.charAt(0).toUpperCase();
 
-        return `
-          <div
-            class="user-card"
-            onclick="openUser('${user.id}')"
-          >
+          const email =
+            user.email ||
+            "";
 
-            <div class="avatar">
-              ${firstLetter}
-            </div>
 
-            <div class="user-info">
+          const firstLetter =
+            username
+              .charAt(0)
+              .toUpperCase();
 
-              <div class="username">
-                ${escapeHTML(username)}
+
+          const unreadCount =
+            unreadMessages[user.id] || 0;
+
+
+          const unreadHTML =
+            unreadCount > 0
+
+            ? `
+                <span
+                  class="unread-dot"
+                  title="${unreadCount} unread message${unreadCount > 1 ? 's' : ''}"
+                ></span>
+              `
+
+            : "";
+
+
+          const badgeHTML =
+            unreadCount > 1
+
+            ? `
+                <span class="unread-badge">
+                  ${unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              `
+
+            : "";
+
+
+          return `
+
+            <div
+              class="user-card"
+              onclick="openUser('${escapeHTML(user.id)}')"
+            >
+
+              <div class="avatar">
+                ${escapeHTML(firstLetter)}
               </div>
 
-              ${
-                email
-                ? `<div class="email">${escapeHTML(email)}</div>`
-                : ""
-              }
+
+              <div class="user-info">
+
+                <div class="username">
+
+                  ${escapeHTML(username)}
+
+                  ${unreadHTML}
+
+                </div>
+
+
+                ${
+                  email
+
+                  ? `
+                    <div class="email">
+                      ${escapeHTML(email)}
+                    </div>
+                  `
+
+                  : ""
+                }
+
+              </div>
+
+
+              ${badgeHTML}
 
             </div>
 
-          </div>
-        `;
+          `;
 
-      }).join("");
+        }).join("");
+
     }
 
+
+    // ==========================================
+    // SEARCH USERS
+    // ==========================================
 
     function searchUsers() {
 
@@ -263,21 +507,28 @@
           .toLowerCase()
           .trim();
 
+
       if (!search) {
 
         displayUsers(allUsers);
 
         return;
+
       }
+
 
       const filtered =
         allUsers.filter(user => {
 
           const username =
-            (user.username || "").toLowerCase();
+            (user.username || "")
+              .toLowerCase();
+
 
           const email =
-            (user.email || "").toLowerCase();
+            (user.email || "")
+              .toLowerCase();
+
 
           return (
             username.includes(search) ||
@@ -286,38 +537,234 @@
 
         });
 
+
       displayUsers(filtered);
+
     }
 
 
-    function openUser(id) {
+    // ==========================================
+    // OPEN USER
+    // ==========================================
+
+    async function openUser(id) {
 
       if (!id) return;
+
+
+      /*
+        User उघडताना त्या user कडून आलेले
+        unread messages read करण्याचा प्रयत्न.
+
+        त्यामुळे user/profile/chat उघडल्यानंतर
+        users page वर परत आल्यावर dot गायब होईल.
+      */
+
+      if (currentUser) {
+
+        const {
+          error
+        } =
+        await supabaseClient
+          .from("Messages")
+          .update({
+            is_read: true
+          })
+          .eq("sender_id", id)
+          .eq("receiver_id", currentUser.id)
+          .eq("is_read", false);
+
+
+        if (error) {
+
+          console.error(
+            "Read update error:",
+            error
+          );
+
+        }
+
+      }
+
 
       window.location.href =
         "user-profile.html?id=" +
         encodeURIComponent(id);
+
     }
 
+
+    // ==========================================
+    // REALTIME NEW MESSAGE LISTENER
+    // ==========================================
+
+    function startRealtime() {
+
+      if (!currentUser) {
+
+        return;
+
+      }
+
+
+      supabaseClient
+        .channel(
+          "users-unread-messages-" +
+          currentUser.id
+        )
+
+        .on(
+          "postgres_changes",
+          {
+            event: "INSERT",
+            schema: "public",
+            table: "Messages",
+            filter:
+              "receiver_id=eq." +
+              currentUser.id
+          },
+
+          async function(payload) {
+
+            console.log(
+              "New message received:",
+              payload.new
+            );
+
+
+            const senderId =
+              payload.new.sender_id;
+
+
+            if (!unreadMessages[senderId]) {
+
+              unreadMessages[senderId] = 0;
+
+            }
+
+
+            unreadMessages[senderId]++;
+
+
+            displayUsers(
+              getFilteredUsers()
+            );
+
+          }
+        )
+
+        .subscribe();
+
+    }
+
+
+    // ==========================================
+    // CURRENT SEARCH FILTER
+    // ==========================================
+
+    function getFilteredUsers() {
+
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase()
+          .trim();
+
+
+      if (!search) {
+
+        return allUsers;
+
+      }
+
+
+      return allUsers.filter(user => {
+
+        const username =
+          (user.username || "")
+            .toLowerCase();
+
+
+        const email =
+          (user.email || "")
+            .toLowerCase();
+
+
+        return (
+          username.includes(search) ||
+          email.includes(search)
+        );
+
+      });
+
+    }
+
+
+    // ==========================================
+    // BACK
+    // ==========================================
 
     function goBack() {
 
       window.history.back();
+
     }
 
+
+    // ==========================================
+    // ESCAPE HTML
+    // ==========================================
 
     function escapeHTML(text) {
 
       return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+
+        .replace(
+          /</g,
+          "&lt;"
+        )
+
+        .replace(
+          />/g,
+          "&gt;"
+        )
+
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+
+        .replace(
+          /'/g,
+          "&#039;"
+        );
+
     }
 
 
-    loadUsers();
+    // ==========================================
+    // START
+    // ==========================================
+
+    async function startPage() {
+
+      await getCurrentUser();
+
+      await loadUsers();
+
+      startRealtime();
+
+    }
+
+
+    startPage();
+
   </script>
 
 </body>
