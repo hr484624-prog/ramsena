@@ -1,2013 +1,1469 @@
 <!DOCTYPE html><html lang="en">
-<head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Messages - GyanSetu</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
-
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages - GYANSETU</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
 body{
-  background:#f4f6f9;
-  color:#222;
-  height:100vh;
-  overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    height:100vh;
+    overflow:hidden;
 }
 
 body.dark{
-  background:#121212;
-  color:#fff;
+    background:#111827;
+    color:white;
 }
 
+.app{
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+}
 
 /* HEADER */
-
 .header{
-  height:60px;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  padding:0 10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
-  position:relative;
-  z-index:10;
-}
-
-.dark .header{
-  background:#1e1e1e;
+    height:60px;
+    background:#2563eb;
+    color:white;
+    display:flex;
+    align-items:center;
+    padding:0 15px;
+    gap:12px;
+    flex-shrink:0;
 }
 
 .back-btn{
-  width:42px;
-  height:42px;
-  border:none;
-  background:transparent;
-  border-radius:50%;
-  font-size:28px;
-  cursor:pointer;
-}
-
-.back-btn:hover{
-  background:#eee;
-}
-
-.dark .back-btn:hover{
-  background:#333;
+    border:none;
+    background:transparent;
+    color:white;
+    font-size:27px;
+    cursor:pointer;
 }
 
 .receiver-info{
-  flex:1;
-  margin-left:8px;
-  min-width:0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+}
+
+.receiver-avatar{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    background:white;
+    color:#2563eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    font-size:17px;
+    overflow:hidden;
+}
+
+.receiver-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
 .receiver-name{
-  font-size:18px;
-  font-weight:bold;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+    font-size:17px;
+    font-weight:bold;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
-
-.receiver-status{
-  font-size:12px;
-  color:#777;
-  margin-top:3px;
-}
-
-.dark .receiver-status{
-  color:#aaa;
-}
-
 
 /* CHAT */
-
 .chat-area{
-  position:absolute;
-  top:60px;
-  bottom:72px;
-  left:0;
-  right:0;
-  overflow-y:auto;
-  padding:15px 12px;
+    flex:1;
+    overflow-y:auto;
+    padding:15px;
+    padding-bottom:10px;
 }
 
-.messages{
-  max-width:700px;
-  margin:auto;
+.empty{
+    text-align:center;
+    color:#777;
+    margin-top:40px;
 }
 
-.empty-chat{
-  text-align:center;
-  color:#777;
-  padding-top:35vh;
-  font-size:15px;
+body.dark .empty{
+    color:#aaa;
 }
-
-.dark .empty-chat{
-  color:#aaa;
-}
-
-.empty-icon{
-  font-size:45px;
-  margin-bottom:10px;
-}
-
-
-/* MESSAGE ROW */
 
 .message-row{
-  display:flex;
-  width:100%;
-  margin-bottom:9px;
+    display:flex;
+    margin-bottom:10px;
 }
 
 .message-row.sent{
-  justify-content:flex-end;
+    justify-content:flex-end;
 }
 
 .message-row.received{
-  justify-content:flex-start;
+    justify-content:flex-start;
 }
 
-
-/* MESSAGE BUBBLE */
-
 .message-bubble{
-  max-width:78%;
-  padding:10px 13px;
-  border-radius:16px;
-  font-size:15px;
-  line-height:1.4;
-  word-break:break-word;
-  position:relative;
+    max-width:78%;
+    padding:9px 12px;
+    border-radius:15px;
+    word-wrap:break-word;
+    white-space:pre-wrap;
 }
 
 .sent .message-bubble{
-  background:#1976d2;
-  color:white;
-  border-bottom-right-radius:4px;
+    background:#2563eb;
+    color:white;
+    border-bottom-right-radius:4px;
 }
 
 .received .message-bubble{
-  background:#fff;
-  color:#222;
-  border-bottom-left-radius:4px;
-  box-shadow:0 1px 4px rgba(0,0,0,.12);
+    background:white;
+    color:#222;
+    border-bottom-left-radius:4px;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);
 }
 
-.dark .received .message-bubble{
-  background:#262626;
-  color:#fff;
-  box-shadow:none;
+body.dark .received .message-bubble{
+    background:#1f2937;
+    color:white;
 }
 
 .message-time{
-  display:block;
-  font-size:10px;
-  margin-top:4px;
-  opacity:.7;
-  text-align:right;
-}
-
-
-/* PHOTO */
-
-.photo-bubble{
-  padding:5px !important;
-  overflow:hidden;
+    font-size:10px;
+    opacity:.65;
+    margin-top:4px;
+    text-align:right;
 }
 
 .chat-photo{
-  display:block;
-  width:280px;
-  max-width:100%;
-  max-height:360px;
-  object-fit:cover;
-  border-radius:12px;
-  cursor:pointer;
+    display:block;
+    max-width:240px;
+    max-height:320px;
+    width:auto;
+    height:auto;
+    border-radius:12px;
+    cursor:pointer;
+    object-fit:cover;
 }
 
-.photo-time{
-  display:block;
-  font-size:10px;
-  margin:4px 5px 2px;
-  opacity:.7;
-  text-align:right;
-}
-
-
-/* INPUT */
-
+/* INPUT AREA */
 .input-area{
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  height:72px;
-  background:#fff;
-  border-top:1px solid #ddd;
-  display:flex;
-  align-items:center;
-  padding:9px 10px;
-  gap:8px;
-  z-index:10;
+    background:white;
+    border-top:1px solid #ddd;
+    padding:8px;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-shrink:0;
 }
 
-.dark .input-area{
-  background:#1e1e1e;
-  border-top:1px solid #333;
+body.dark .input-area{
+    background:#1f2937;
+    border-top-color:#374151;
 }
 
 .message-input{
-  flex:1;
-  height:48px;
-  border:1px solid #ddd;
-  border-radius:24px;
-  padding:0 17px;
-  outline:none;
-  font-size:15px;
-  background:#f5f5f5;
-  color:#222;
-  min-width:0;
+    flex:1;
+    border:1px solid #ccc;
+    border-radius:22px;
+    padding:11px 14px;
+    font-size:15px;
+    outline:none;
+    background:white;
 }
 
-.message-input:focus{
-  border-color:#1976d2;
+body.dark .message-input{
+    background:#111827;
+    color:white;
+    border-color:#4b5563;
 }
 
-.dark .message-input{
-  background:#292929;
-  border-color:#444;
-  color:#fff;
+.photo-btn,
+.send-btn{
+    width:43px;
+    height:43px;
+    border:none;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
 }
-
-
-/* PHOTO BUTTON */
 
 .photo-btn{
-  width:48px;
-  height:48px;
-  border:none;
-  border-radius:50%;
-  background:#eeeeee;
-  color:#333;
-  font-size:22px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
+    background:#e5e7eb;
+    font-size:21px;
 }
-
-.photo-btn:hover{
-  background:#ddd;
-}
-
-.photo-btn:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
-
-.dark .photo-btn{
-  background:#333;
-  color:#fff;
-}
-
-#photoInput{
-  display:none;
-}
-
-
-/* SEND */
 
 .send-btn{
-  width:48px;
-  height:48px;
-  border:none;
-  border-radius:50%;
-  background:#1976d2;
-  color:white;
-  font-size:20px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
+    background:#2563eb;
+    color:white;
+    font-size:19px;
 }
 
-.send-btn:hover{
-  background:#1565c0;
+body.dark .photo-btn{
+    background:#374151;
+    color:white;
 }
 
-.send-btn:disabled{
-  background:#aaa;
-  cursor:not-allowed;
+/* PHOTO POPUP */
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:1000;
 }
 
-
-/* UPLOAD */
-
-.upload-overlay{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.55);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:200;
+.modal.show{
+    display:flex;
 }
 
-.upload-box{
-  width:280px;
-  background:#fff;
-  border-radius:18px;
-  padding:25px;
-  text-align:center;
-  box-shadow:0 5px 30px rgba(0,0,0,.3);
+.photo-menu{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:22px 22px 0 0;
+    padding:18px;
+    animation:slideUp .2s ease;
 }
 
-.dark .upload-box{
-  background:#242424;
-  color:#fff;
+body.dark .photo-menu{
+    background:#1f2937;
+    color:white;
 }
 
-.upload-icon{
-  font-size:45px;
-  margin-bottom:12px;
+@keyframes slideUp{
+    from{
+        transform:translateY(100%);
+    }
+    to{
+        transform:translateY(0);
+    }
 }
 
-.upload-title{
-  font-size:17px;
-  font-weight:bold;
+.photo-menu-title{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:18px;
 }
 
-.upload-text{
-  font-size:13px;
-  color:#777;
-  margin-top:7px;
+.photo-option{
+    width:100%;
+    border:none;
+    padding:14px;
+    margin-bottom:10px;
+    border-radius:13px;
+    font-size:16px;
+    cursor:pointer;
+    text-align:left;
+    background:#f3f4f6;
 }
 
-.dark .upload-text{
-  color:#aaa;
+body.dark .photo-option{
+    background:#374151;
+    color:white;
 }
 
+.photo-option span{
+    margin-right:10px;
+    font-size:21px;
+}
+
+.cancel-option{
+    background:#fee2e2;
+    color:#b91c1c;
+}
 
 /* IMAGE VIEWER */
-
 .image-viewer{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.92);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:500;
-  padding:20px;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.95);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:2000;
+}
+
+.image-viewer.show{
+    display:flex;
 }
 
 .image-viewer img{
-  max-width:100%;
-  max-height:90vh;
-  object-fit:contain;
-  border-radius:8px;
+    max-width:95%;
+    max-height:90%;
+    object-fit:contain;
 }
 
 .close-image{
-  position:absolute;
-  top:15px;
-  right:15px;
-  width:45px;
-  height:45px;
-  border:none;
-  border-radius:50%;
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  font-size:28px;
-  cursor:pointer;
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:rgba(255,255,255,.15);
+    color:white;
+    font-size:25px;
+    cursor:pointer;
 }
 
-
-/* LOADING */
-
-.loading{
-  text-align:center;
-  padding-top:35vh;
-  color:#777;
+/* UPLOAD LOADING */
+.upload-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:3000;
 }
 
-.dark .loading{
-  color:#aaa;
+.upload-overlay.show{
+    display:flex;
 }
 
+.upload-box{
+    background:white;
+    padding:25px 30px;
+    border-radius:15px;
+    text-align:center;
+}
+
+body.dark .upload-box{
+    background:#1f2937;
+    color:white;
+}
+
+.loader{
+    width:35px;
+    height:35px;
+    border:4px solid #ddd;
+    border-top-color:#2563eb;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    margin:0 auto 12px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* TOAST */
+.toast{
+    position:fixed;
+    bottom:80px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#222;
+    color:white;
+    padding:11px 18px;
+    border-radius:20px;
+    display:none;
+    z-index:4000;
+    font-size:14px;
+}
+
+.toast.show{
+    display:block;
+}
 
 /* ERROR */
-
 .error-screen{
-  position:absolute;
-  top:60px;
-  bottom:0;
-  left:0;
-  right:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:20px;
+    display:none;
+    height:100vh;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:15px;
+    text-align:center;
+    padding:20px;
 }
 
-.error-box{
-  max-width:400px;
+.error-screen button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
 }
+</style></head><body><div class="app" id="app"><!-- HEADER -->
+<div class="header">
 
-.error-icon{
-  font-size:55px;
-  margin-bottom:12px;
-}
+    <button class="back-btn" onclick="goBack()">‹</button>
 
-.error-title{
-  font-size:21px;
-  font-weight:bold;
-  margin-bottom:8px;
-}
+    <div class="receiver-info">
 
-.error-text{
-  color:#777;
-  line-height:1.5;
-}
+        <div class="receiver-avatar" id="receiverAvatar">
+            ?
+        </div>
 
-.dark .error-text{
-  color:#aaa;
-}
+        <div class="receiver-name" id="receiverName">
+            Loading...
+        </div>
 
-.back-users-btn{
-  margin-top:18px;
-  border:none;
-  background:#1976d2;
-  color:#fff;
-  padding:12px 20px;
-  border-radius:10px;
-  font-size:15px;
-  cursor:pointer;
+    </div>
+
+</div>
+
+
+<!-- CHAT -->
+<div class="chat-area" id="chatArea">
+    <div class="empty">
+        Loading messages...
+    </div>
+</div>
+
+
+<!-- INPUT -->
+<div class="input-area">
+
+    <button
+        class="photo-btn"
+        onclick="openPhotoMenu()"
+        title="Send photo">
+        📷
+    </button>
+
+    <input
+        type="text"
+        id="messageInput"
+        class="message-input"
+        placeholder="Type a message..."
+        autocomplete="off"
+    >
+
+    <button
+        class="send-btn"
+        onclick="sendMessage()">
+        ➤
+    </button>
+
+</div>
+
+</div><!-- PHOTO MENU --><div class="modal" id="photoModal" onclick="closePhotoMenu(event)"><div class="photo-menu" onclick="event.stopPropagation()">
+
+    <div class="photo-menu-title">
+        Send Photo
+    </div>
+
+    <button
+        class="photo-option"
+        onclick="openCamera()">
+        <span>📷</span>
+        Camera
+    </button>
+
+    <button
+        class="photo-option"
+        onclick="openGallery()">
+        <span>🖼️</span>
+        Gallery
+    </button>
+
+    <button
+        class="photo-option cancel-option"
+        onclick="closePhotoMenu()">
+        <span>❌</span>
+        Cancel
+    </button>
+
+</div>
+
+</div><!-- CAMERA INPUT --><input
+type="file"
+id="cameraInput"
+accept="image/*"
+capture="environment"
+style="display:none;"
+
+«»
+
+<!-- GALLERY INPUT --><input
+type="file"
+id="galleryInput"
+accept="image/*"
+style="display:none;"
+
+«»
+
+<!-- IMAGE VIEWER --><div class="image-viewer" id="imageViewer"><button
+    class="close-image"
+    onclick="closeImageViewer()">
+    ×
+</button>
+
+<img
+    id="viewerImage"
+    src=""
+    alt="Photo"
+>
+
+</div><!-- UPLOAD --><div class="upload-overlay" id="uploadOverlay"><div class="upload-box">
+
+    <div class="loader"></div>
+
+    <div>
+        Sending photo...
+    </div>
+
+</div>
+
+</div><!-- TOAST --><div class="toast" id="toast"></div><!-- ERROR --><div class="error-screen" id="errorScreen"><h2>Something went wrong</h2>
+
+<p id="errorText">
+    Please try again.
+</p>
+
+<button onclick="goBack()">
+    Go Back
+</button>
+
+</div><script>
+
+const SUPABASE_URL =
+    "https://eqglttfffhvoyvrclzse.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+let currentUser = null;
+let receiverId = null;
+let receiverProfile = null;
+let realtimeChannel = null;
+
+
+/* URL */
+const urlParams =
+    new URLSearchParams(window.location.search);
+
+receiverId =
+    urlParams.get("id");
+
+
+/* DARK MODE */
+if(localStorage.getItem("darkMode") === "true"){
+    document.body.classList.add("dark");
 }
 
 
 /* TOAST */
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:90px;
-  transform:translateX(-50%);
-  background:#222;
-  color:#fff;
-  padding:11px 17px;
-  border-radius:10px;
-  display:none;
-  z-index:600;
-  font-size:14px;
-  max-width:90%;
-  text-align:center;
-}
-
-
-/* MOBILE */
-
-@media(max-width:500px){
-
-  .message-bubble{
-    max-width:84%;
-  }
-
-  .receiver-name{
-    font-size:17px;
-  }
-
-  .chat-photo{
-    width:250px;
-    max-height:320px;
-  }
-
-}
-
-</style></head><body><!-- HEADER --><header class="header"><button
-class="back-btn"
-onclick="goBack()">
-
-←
-
-  </button>  <div class="receiver-info"><div
-  class="receiver-name"
-  id="receiverName">
-
-  Loading...
-
-</div>
-
-<div
-  class="receiver-status"
-  id="receiverStatus">
-
-  GyanSetu User
-
-</div>
-
-  </div></header><!-- CHAT --><div
-  class="chat-area"
-  id="chatArea">  <div
-    class="messages"
-    id="messages"><div
-  class="loading">
-
-  ⏳<br><br>
-  Loading messages...
-
-</div>
-
-  </div></div><!-- ERROR --><div
-  class="error-screen"
-  id="errorScreen">  <div class="error-box"><div class="error-icon">
-  😕
-</div>
-
-<div class="error-title">
-  Unable to open chat
-</div>
-
-<div
-  class="error-text"
-  id="errorText">
-
-  Something went wrong.
-
-</div>
-
-<button
-  class="back-users-btn"
-  onclick="goBack()">
-
-  ← Back
-
-</button>
-
-  </div></div><!-- INPUT --><div
-  class="input-area"
-  id="inputArea">  <!-- PHOTO --><button
-class="photo-btn"
-id="photoBtn"
-onclick="openPhotoPicker()"
-title="Send photo">
-
-📷
-
-  </button><input
-type="file"
-id="photoInput"
-accept="image/*"
-capture="environment"
-
-«»
-
-  <!-- TEXT --><input
-type="text"
-id="messageInput"
-class="message-input"
-placeholder="Type a message..."
-autocomplete="off"
-
-«»
-
-  <!-- SEND --><button
-class="send-btn"
-id="sendBtn"
-onclick="sendMessage()">
-
-➤
-
-  </button></div><!-- UPLOAD --><div
-  class="upload-overlay"
-  id="uploadOverlay">  <div class="upload-box"><div class="upload-icon">
-  📷
-</div>
-
-<div class="upload-title">
-  Sending photo...
-</div>
-
-<div class="upload-text">
-  Please wait
-</div>
-
-  </div></div><!-- IMAGE VIEWER --><div
-  class="image-viewer"
-  id="imageViewer"
-  onclick="closeImageViewer()"><button
-class="close-image"
-onclick="event.stopPropagation();closeImageViewer()">
-
-×
-
-  </button><img
-id="viewerImage"
-src=""
-alt="Photo"
-onclick="event.stopPropagation()">
-
-</div><!-- TOAST --><div
-  class="toast"
-  id="toast">
-</div><script>
-
-/* =========================
-   SUPABASE
-========================= */
-
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-/* =========================
-   VARIABLES
-========================= */
-
-const params =
-new URLSearchParams(
-  window.location.search
-);
-
-const receiverId =
-params.get("id");
-
-let currentUser = null;
-
-let receiverProfile = null;
-
-let realtimeChannel = null;
-
-
-/* =========================
-   BACK
-========================= */
-
-function goBack(){
-
-  if(receiverId){
-
-    window.location.href =
-      "user-profile.html?id=" +
-      encodeURIComponent(receiverId);
-
-  }else{
-
-    window.location.href =
-      "users.html";
-
-  }
-
-}
-
-
-/* =========================
-   DARK MODE
-========================= */
-
-function loadDarkMode(){
-
-  if(
-    localStorage.getItem("darkMode") === "true"
-  ){
-
-    document.body.classList.add("dark");
-
-  }
-
-}
-
-
-/* =========================
-   TOAST
-========================= */
-
 function showToast(message){
 
-  const toast =
-    document.getElementById("toast");
+    const toast =
+        document.getElementById("toast");
 
-  toast.textContent =
-    message;
+    toast.textContent = message;
 
-  toast.style.display =
-    "block";
+    toast.classList.add("show");
 
-  setTimeout(
-    function(){
-
-      toast.style.display =
-        "none";
-
-    },
-    2500
-  );
-
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2500);
 }
 
 
-/* =========================
-   ERROR
-========================= */
-
+/* ERROR */
 function showError(message){
 
-  document.getElementById(
-    "chatArea"
-  ).style.display =
-    "none";
+    document.getElementById("app").style.display =
+        "none";
 
-  document.getElementById(
-    "inputArea"
-  ).style.display =
-    "none";
+    document.getElementById("errorScreen").style.display =
+        "flex";
 
-  document.getElementById(
-    "errorScreen"
-  ).style.display =
-    "flex";
-
-  document.getElementById(
-    "errorText"
-  ).textContent =
-    message;
-
+    document.getElementById("errorText").textContent =
+        message;
 }
 
 
-/* =========================
-   TIME
-========================= */
+/* BACK */
+function goBack(){
 
-function formatTime(dateString){
-
-  return new Date(
-    dateString
-  ).toLocaleTimeString(
-    [],
-    {
-      hour:"2-digit",
-      minute:"2-digit"
-    }
-  );
-
+    window.location.href =
+        "user-profile.html?id=" +
+        encodeURIComponent(receiverId);
 }
 
 
-/* =========================
-   ESCAPE
-========================= */
-
-function escapeHtml(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text;
-
-  return div.innerHTML;
-
-}
-
-
-/* =========================
-   CURRENT USER
-========================= */
-
+/* GET CURRENT USER */
 async function getCurrentUser(){
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.auth.getUser();
+    const { data, error } =
+        await supabaseClient.auth.getUser();
 
-  if(error){
+    if(error || !data.user){
 
-    console.error(
-      "Auth error:",
-      error
-    );
+        showError(
+            "Please login again."
+        );
 
-    return null;
+        return null;
+    }
 
-  }
-
-  return data?.user || null;
-
+    return data.user;
 }
 
 
-/* =========================
-   RECEIVER
-========================= */
-
+/* LOAD RECEIVER */
 async function loadReceiver(){
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("Profiles")
-    .select(
-      "id, username, full_name, email"
-    )
-    .eq(
-      "id",
-      receiverId
-    )
-    .maybeSingle();
+    const { data, error } =
+        await supabaseClient
+        .from("Profiles")
+        .select("*")
+        .eq("id", receiverId)
+        .single();
 
-  if(error){
+    if(error || !data){
 
-    console.error(
-      "Receiver error:",
-      error
-    );
+        showError(
+            "User profile could not be loaded."
+        );
 
-    return null;
+        return false;
+    }
 
-  }
+    receiverProfile = data;
 
-  return data;
+    const name =
+        data.full_name ||
+        data.username ||
+        "User";
 
+    document.getElementById(
+        "receiverName"
+    ).textContent = name;
+
+    const avatar =
+        document.getElementById(
+            "receiverAvatar"
+        );
+
+    avatar.textContent =
+        name.charAt(0).toUpperCase();
+
+    return true;
 }
 
 
-function getReceiverName(){
-
-  if(!receiverProfile){
-
-    return "User";
-
-  }
-
-  return (
-    receiverProfile.full_name ||
-    receiverProfile.username ||
-    "User"
-  );
-
-}
-
-
-/* =========================
-   MARK READ
-========================= */
-
+/* MARK READ */
 async function markMessagesAsRead(){
 
-  if(
-    !currentUser ||
-    !receiverId
-  ){
-
-    return;
-
-  }
-
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("Messages")
-    .update({
-      is_read:true
-    })
-    .eq(
-      "sender_id",
-      receiverId
-    )
-    .eq(
-      "receiver_id",
-      currentUser.id
-    )
-    .eq(
-      "is_read",
-      false
-    );
-
-  if(error){
-
-    console.error(
-      "Mark read error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================
-   LOAD MESSAGES
-========================= */
-
-async function loadMessages(){
-
-  if(
-    !currentUser ||
-    !receiverId
-  ){
-
-    return;
-
-  }
-
-  const {
-    data: sentMessages,
-    error: sentError
-  } =
-  await supabaseClient
-    .from("Messages")
-    .select(
-      "id,sender_id,receiver_id,message,created_at,is_read"
-    )
-    .eq(
-      "sender_id",
-      currentUser.id
-    )
-    .eq(
-      "receiver_id",
-      receiverId
-    );
-
-  if(sentError){
-
-    console.error(
-      "Sent messages error:",
-      sentError
-    );
-
-  }
-
-
-  const {
-    data: receivedMessages,
-    error: receivedError
-  } =
-  await supabaseClient
-    .from("Messages")
-    .select(
-      "id,sender_id,receiver_id,message,created_at,is_read"
-    )
-    .eq(
-      "sender_id",
-      receiverId
-    )
-    .eq(
-      "receiver_id",
-      currentUser.id
-    );
-
-  if(receivedError){
-
-    console.error(
-      "Received messages error:",
-      receivedError
-    );
-
-  }
-
-
-  const allMessages = [
-
-    ...(sentMessages || []),
-
-    ...(receivedMessages || [])
-
-  ];
-
-
-  allMessages.sort(
-    function(a,b){
-
-      return new Date(a.created_at) -
-             new Date(b.created_at);
-
+    if(!currentUser || !receiverId){
+        return;
     }
-  );
 
-
-  displayMessages(
-    allMessages
-  );
+    await supabaseClient
+        .from("Messages")
+        .update({
+            is_read:false
+        })
+        .eq("sender_id", receiverId)
+        .eq("receiver_id", currentUser.id)
+        .eq("is_read", false);
 
 }
 
 
-/* =========================
-   PHOTO CHECK
-========================= */
+/*
+   NOTE:
+   Above update is intentionally NOT used to
+   mark messages read because the correct
+   receiver-side policy requires receiver_id.
+   Actual mark-read function below.
+*/
 
+async function markMessagesRead(){
+
+    if(!currentUser || !receiverId){
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+        .from("Messages")
+        .update({
+            is_read:true
+        })
+        .eq("sender_id", receiverId)
+        .eq("receiver_id", currentUser.id)
+        .eq("is_read", false);
+
+    if(error){
+        console.log(
+            "Read update error:",
+            error
+        );
+    }
+}
+
+
+/* PHOTO CHECK */
 function isPhotoMessage(message){
 
-  return (
-    typeof message === "string" &&
-    message.startsWith("PHOTO:")
-  );
-
+    return (
+        typeof message === "string" &&
+        message.startsWith("PHOTO:")
+    );
 }
 
 
+/* PHOTO URL */
 function getPhotoUrl(message){
 
-  return message.substring(6);
-
+    return message.substring(6);
 }
 
 
-/* =========================
-   DISPLAY
-========================= */
+/* FORMAT TIME */
+function formatTime(dateString){
 
-function displayMessages(messageList){
+    const date =
+        new Date(dateString);
 
-  const container =
-    document.getElementById("messages");
-
-  container.innerHTML = "";
-
-
-  if(
-    !messageList ||
-    messageList.length === 0
-  ){
-
-    container.innerHTML = `
-
-      <div class="empty-chat">
-
-        <div class="empty-icon">
-          💬
-        </div>
-
-        <div>
-          No messages yet
-        </div>
-
-        <div style="margin-top:5px;">
-          Start the conversation!
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour:"2-digit",
+            minute:"2-digit"
+        }
+    );
+}
 
 
-  messageList.forEach(
-    function(msg){
+/* CREATE MESSAGE */
+function createMessageElement(message){
 
-      createMessageElement(
-        msg,
-        container
-      );
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "message-row " +
+        (
+            message.sender_id === currentUser.id
+                ? "sent"
+                : "received"
+        );
+
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "message-bubble";
+
+
+    /* PHOTO */
+    if(isPhotoMessage(message.message)){
+
+        const image =
+            document.createElement("img");
+
+        image.className =
+            "chat-photo";
+
+        image.src =
+            getPhotoUrl(message.message);
+
+        image.alt =
+            "Photo";
+
+        image.loading =
+            "lazy";
+
+        image.onclick = function(){
+
+            openImageViewer(
+                image.src
+            );
+
+        };
+
+        bubble.appendChild(image);
 
     }
-  );
 
+    /* TEXT */
+    else{
 
-  scrollToBottom();
-
-}
-
-
-/* =========================
-   CREATE MESSAGE
-========================= */
-
-function createMessageElement(
-  msg,
-  container
-){
-
-  const isSent =
-    msg.sender_id ===
-    currentUser.id;
-
-
-  const row =
-    document.createElement("div");
-
-  row.className =
-    "message-row " +
-    (
-      isSent
-      ? "sent"
-      : "received"
-    );
-
-  row.setAttribute(
-    "data-message-id",
-    msg.id
-  );
-
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "message-bubble";
-
-
-  /* PHOTO */
-
-  if(
-    isPhotoMessage(
-      msg.message
-    )
-  ){
-
-    bubble.classList.add(
-      "photo-bubble"
-    );
-
-
-    const url =
-      getPhotoUrl(
-        msg.message
-      );
-
-
-    const img =
-      document.createElement("img");
-
-    img.className =
-      "chat-photo";
-
-    img.src =
-      url;
-
-    img.alt =
-      "Photo";
-
-    img.loading =
-      "lazy";
-
-    img.onclick =
-      function(){
-
-        openImageViewer(url);
-
-      };
+        bubble.textContent =
+            message.message;
+    }
 
 
     const time =
-      document.createElement("span");
+        document.createElement("div");
 
     time.className =
-      "photo-time";
+        "message-time";
 
     time.textContent =
-      formatTime(
-        msg.created_at
-      );
-
-
-    bubble.appendChild(img);
+        formatTime(message.created_at);
 
     bubble.appendChild(time);
 
-  }
+    row.appendChild(bubble);
 
-  /* TEXT */
-
-  else{
-
-    bubble.innerHTML = `
-
-      <span>
-        ${escapeHtml(msg.message)}
-      </span>
-
-      <span class="message-time">
-        ${formatTime(msg.created_at)}
-      </span>
-
-    `;
-
-  }
-
-
-  row.appendChild(
-    bubble
-  );
-
-  container.appendChild(
-    row
-  );
-
+    return row;
 }
 
 
-/* =========================
-   SCROLL
-========================= */
+/* LOAD MESSAGES */
+async function loadMessages(){
 
-function scrollToBottom(){
-
-  const chatArea =
-    document.getElementById(
-      "chatArea"
-    );
-
-  setTimeout(
-    function(){
-
-      chatArea.scrollTop =
-        chatArea.scrollHeight;
-
-    },
-    50
-  );
-
-}
-
-
-/* =========================
-   SEND TEXT
-========================= */
-
-async function sendMessage(){
-
-  if(
-    !currentUser ||
-    !receiverId
-  ){
-
-    showToast(
-      "Chat is not available."
-    );
-
-    return;
-
-  }
-
-
-  const input =
-    document.getElementById(
-      "messageInput"
-    );
-
-  const sendBtn =
-    document.getElementById(
-      "sendBtn"
-    );
-
-
-  const text =
-    input.value.trim();
-
-
-  if(!text){
-
-    return;
-
-  }
-
-
-  if(
-    currentUser.id ===
-    receiverId
-  ){
-
-    showToast(
-      "You cannot message yourself."
-    );
-
-    return;
-
-  }
-
-
-  sendBtn.disabled =
-    true;
-
-  input.disabled =
-    true;
-
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("Messages")
-    .insert({
-
-      sender_id:
-        currentUser.id,
-
-      receiver_id:
-        receiverId,
-
-      message:
-        text,
-
-      is_read:
-        false
-
-    })
-    .select()
-    .single();
-
-
-  sendBtn.disabled =
-    false;
-
-  input.disabled =
-    false;
-
-
-  if(error){
-
-    console.error(
-      "Send message error:",
-      error
-    );
-
-    showToast(
-      "Message send झाला नाही."
-    );
-
-    return;
-
-  }
-
-
-  input.value =
-    "";
-
-
-  addMessageToChat(
-    data
-  );
-
-
-  input.focus();
-
-}
-
-
-/* =========================
-   OPEN PHOTO
-========================= */
-
-function openPhotoPicker(){
-
-  if(
-    !currentUser ||
-    !receiverId
-  ){
-
-    showToast(
-      "Chat is not available."
-    );
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "photoInput"
-    )
-    .click();
-
-}
-
-
-/* =========================
-   PHOTO INPUT
-========================= */
-
-document
-  .getElementById(
-    "photoInput"
-  )
-  .addEventListener(
-    "change",
-    async function(event){
-
-      const file =
-        event.target.files &&
-        event.target.files[0];
-
-
-      if(!file){
-
+    if(!currentUser || !receiverId){
         return;
-
-      }
-
-
-      await sendPhoto(
-        file
-      );
-
-
-      event.target.value =
-        "";
-
-    }
-  );
-
-
-/* =========================
-   SEND PHOTO
-========================= */
-
-async function sendPhoto(file){
-
-  if(
-    !currentUser ||
-    !receiverId
-  ){
-
-    return;
-
-  }
-
-
-  if(
-    !file.type.startsWith("image/")
-  ){
-
-    showToast(
-      "फक्त photo select करा."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    file.size >
-    10 * 1024 * 1024
-  ){
-
-    showToast(
-      "Photo 10 MB पेक्षा कमी असावा."
-    );
-
-    return;
-
-  }
-
-
-  const photoBtn =
-    document.getElementById(
-      "photoBtn"
-    );
-
-  const sendBtn =
-    document.getElementById(
-      "sendBtn"
-    );
-
-  const input =
-    document.getElementById(
-      "messageInput"
-    );
-
-  const overlay =
-    document.getElementById(
-      "uploadOverlay"
-    );
-
-
-  photoBtn.disabled =
-    true;
-
-  sendBtn.disabled =
-    true;
-
-  input.disabled =
-    true;
-
-  overlay.style.display =
-    "flex";
-
-
-  try{
-
-    const extension =
-      file.name
-        .split(".")
-        .pop()
-        .toLowerCase();
-
-
-    const fileName =
-      Date.now() +
-      "-" +
-      Math.random()
-        .toString(36)
-        .substring(2,10) +
-      "." +
-      extension;
-
-
-    const filePath =
-      currentUser.id +
-      "/" +
-      fileName;
-
-
-    /* UPLOAD */
-
-    const {
-      error: uploadError
-    } =
-    await supabaseClient
-      .storage
-      .from("chat-images")
-      .upload(
-        filePath,
-        file,
-        {
-          cacheControl:"3600",
-          upsert:false,
-          contentType:file.type
-        }
-      );
-
-
-    if(uploadError){
-
-      console.error(
-        "Upload error:",
-        uploadError
-      );
-
-      showToast(
-        "Photo upload झाला नाही."
-      );
-
-      return;
-
     }
 
-
-    /* PUBLIC URL */
-
-    const {
-      data: publicData
-    } =
-    supabaseClient
-      .storage
-      .from("chat-images")
-      .getPublicUrl(
-        filePath
-      );
-
-
-    const photoUrl =
-      publicData.publicUrl;
-
-
-    /* SAVE MESSAGE */
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("Messages")
-      .insert({
-
-        sender_id:
-          currentUser.id,
-
-        receiver_id:
-          receiverId,
-
-        message:
-          "PHOTO:" +
-          photoUrl,
-
-        is_read:
-          false
-
-      })
-      .select()
-      .single();
+    const { data, error } =
+        await supabaseClient
+        .from("Messages")
+        .select(
+            "id, sender_id, receiver_id, message, created_at, is_read"
+        )
+        .or(
+            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`
+        )
+        .order(
+            "created_at",
+            {
+                ascending:true
+            }
+        );
 
 
     if(error){
 
-      console.error(
-        "Photo message error:",
-        error
-      );
+        console.error(error);
 
-      showToast(
-        "Photo message send झाला नाही."
-      );
+        showError(
+            "Messages could not be loaded."
+        );
 
-      return;
-
+        return;
     }
 
 
-    addMessageToChat(
-      data
-    );
+    displayMessages(data || []);
+}
 
 
-    showToast(
-      "Photo sent ✓"
-    );
+/* DISPLAY */
+function displayMessages(messages){
 
-  }
+    const chatArea =
+        document.getElementById(
+            "chatArea"
+        );
 
-  catch(error){
+    chatArea.innerHTML = "";
 
-    console.error(
-      "Photo send error:",
-      error
-    );
 
-    showToast(
-      "Photo send करताना error आला."
-    );
+    if(messages.length === 0){
 
-  }
+        chatArea.innerHTML =
+            '<div class="empty">No messages yet. Start chatting!</div>';
 
-  finally{
+        return;
+    }
 
-    overlay.style.display =
-      "none";
 
-    photoBtn.disabled =
-      false;
+    messages.forEach(message => {
 
-    sendBtn.disabled =
-      false;
+        chatArea.appendChild(
+            createMessageElement(message)
+        );
 
-    input.disabled =
-      false;
+    });
 
-    input.focus();
 
-  }
+    scrollToBottom();
+}
+
+
+/* SCROLL */
+function scrollToBottom(){
+
+    const chatArea =
+        document.getElementById(
+            "chatArea"
+        );
+
+    setTimeout(() => {
+
+        chatArea.scrollTop =
+            chatArea.scrollHeight;
+
+    },50);
+}
+
+
+/* SEND TEXT */
+async function sendMessage(){
+
+    const input =
+        document.getElementById(
+            "messageInput"
+        );
+
+    const text =
+        input.value.trim();
+
+
+    if(!text){
+        return;
+    }
+
+
+    if(!currentUser || !receiverId){
+        return;
+    }
+
+
+    input.value = "";
+
+
+    const { error } =
+        await supabaseClient
+        .from("Messages")
+        .insert({
+
+            sender_id:
+                currentUser.id,
+
+            receiver_id:
+                receiverId,
+
+            message:
+                text,
+
+            is_read:
+                false
+
+        });
+
+
+    if(error){
+
+        console.error(error);
+
+        showToast(
+            "Message send failed."
+        );
+
+        input.value = text;
+
+        return;
+    }
 
 }
 
 
-/* =========================
-   ADD MESSAGE
-========================= */
+/* PHOTO POPUP */
+function openPhotoMenu(){
 
-function addMessageToChat(msg){
-
-  if(!msg){
-
-    return;
-
-  }
-
-
-  const container =
-    document.getElementById(
-      "messages"
-    );
-
-
-  const empty =
-    container.querySelector(
-      ".empty-chat"
-    );
-
-
-  if(empty){
-
-    empty.remove();
-
-  }
-
-
-  const existing =
-    document.querySelector(
-      '[data-message-id="' +
-      msg.id +
-      '"]'
-    );
-
-
-  if(existing){
-
-    return;
-
-  }
-
-
-  createMessageElement(
-    msg,
-    container
-  );
-
-
-  if(
-    msg.sender_id === receiverId &&
-    msg.receiver_id === currentUser.id
-  ){
-
-    markMessagesAsRead();
-
-  }
-
-
-  scrollToBottom();
+    document
+        .getElementById("photoModal")
+        .classList.add("show");
 
 }
 
 
-/* =========================
-   IMAGE VIEWER
-========================= */
+function closePhotoMenu(event){
 
+    if(
+        event &&
+        event.target !==
+        document.getElementById("photoModal")
+    ){
+        return;
+    }
+
+    document
+        .getElementById("photoModal")
+        .classList.remove("show");
+
+}
+
+
+/* CAMERA */
+function openCamera(){
+
+    closePhotoMenu();
+
+    document
+        .getElementById("cameraInput")
+        .click();
+
+}
+
+
+/* GALLERY */
+function openGallery(){
+
+    closePhotoMenu();
+
+    document
+        .getElementById("galleryInput")
+        .click();
+
+}
+
+
+/* CAMERA CHANGE */
+document
+    .getElementById("cameraInput")
+    .addEventListener(
+        "change",
+        function(event){
+
+            const file =
+                event.target.files[0];
+
+            if(file){
+                sendPhoto(file);
+            }
+
+            event.target.value = "";
+
+        }
+    );
+
+
+/* GALLERY CHANGE */
+document
+    .getElementById("galleryInput")
+    .addEventListener(
+        "change",
+        function(event){
+
+            const file =
+                event.target.files[0];
+
+            if(file){
+                sendPhoto(file);
+            }
+
+            event.target.value = "";
+
+        }
+    );
+
+
+/* SEND PHOTO */
+async function sendPhoto(file){
+
+    if(!file){
+        return;
+    }
+
+
+    if(!file.type.startsWith("image/")){
+
+        showToast(
+            "Please select an image."
+        );
+
+        return;
+    }
+
+
+    /* MAX 10 MB */
+    if(file.size > 10 * 1024 * 1024){
+
+        showToast(
+            "Photo must be smaller than 10 MB."
+        );
+
+        return;
+    }
+
+
+    if(!currentUser || !receiverId){
+        return;
+    }
+
+
+    document
+        .getElementById("uploadOverlay")
+        .classList.add("show");
+
+
+    try{
+
+        const extension =
+            file.name
+            .split(".")
+            .pop()
+            .toLowerCase() || "jpg";
+
+
+        const filePath =
+            currentUser.id +
+            "/" +
+            Date.now() +
+            "-" +
+            Math.random()
+                .toString(36)
+                .substring(2,8) +
+            "." +
+            extension;
+
+
+        /* UPLOAD */
+        const { error: uploadError } =
+            await supabaseClient
+            .storage
+            .from("chat-images")
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl:"3600",
+                    upsert:false
+                }
+            );
+
+
+        if(uploadError){
+
+            console.error(
+                uploadError
+            );
+
+            throw uploadError;
+        }
+
+
+        /* PUBLIC URL */
+        const { data:urlData } =
+            supabaseClient
+            .storage
+            .from("chat-images")
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const photoUrl =
+            urlData.publicUrl;
+
+
+        /* MESSAGE */
+        const { error:messageError } =
+            await supabaseClient
+            .from("Messages")
+            .insert({
+
+                sender_id:
+                    currentUser.id,
+
+                receiver_id:
+                    receiverId,
+
+                message:
+                    "PHOTO:" + photoUrl,
+
+                is_read:
+                    false
+
+            });
+
+
+        if(messageError){
+
+            console.error(
+                messageError
+            );
+
+            throw messageError;
+        }
+
+
+        showToast(
+            "Photo sent successfully."
+        );
+
+    }
+    catch(error){
+
+        console.error(
+            "Photo send error:",
+            error
+        );
+
+        showToast(
+            "Photo send failed."
+        );
+
+    }
+    finally{
+
+        document
+            .getElementById(
+                "uploadOverlay"
+            )
+            .classList.remove("show");
+
+    }
+
+}
+
+
+/* IMAGE VIEWER */
 function openImageViewer(url){
 
-  document.getElementById(
-    "viewerImage"
-  ).src =
-    url;
+    document
+        .getElementById("viewerImage")
+        .src = url;
 
-  document.getElementById(
-    "imageViewer"
-  ).style.display =
-    "flex";
+    document
+        .getElementById("imageViewer")
+        .classList.add("show");
 
 }
 
 
 function closeImageViewer(){
 
-  document.getElementById(
-    "imageViewer"
-  ).style.display =
-    "none";
+    document
+        .getElementById("imageViewer")
+        .classList.remove("show");
 
-  document.getElementById(
-    "viewerImage"
-  ).src =
-    "";
+    document
+        .getElementById("viewerImage")
+        .src = "";
 
 }
 
 
-/* =========================
-   REALTIME
-========================= */
-
+/* REALTIME */
 function setupRealtime(){
-
-  if(
-    !currentUser ||
-    !receiverId
-  ){
-
-    return;
-
-  }
-
-
-  realtimeChannel =
-    supabaseClient
-      .channel(
-        "chat-" +
-        currentUser.id +
-        "-" +
-        receiverId
-      )
-
-      .on(
-        "postgres_changes",
-        {
-          event:"INSERT",
-          schema:"public",
-          table:"Messages"
-        },
-
-        function(payload){
-
-          const msg =
-            payload.new;
-
-
-          const isThisChat =
-
-            (
-              msg.sender_id ===
-              currentUser.id &&
-
-              msg.receiver_id ===
-              receiverId
-            )
-
-            ||
-
-            (
-              msg.sender_id ===
-              receiverId &&
-
-              msg.receiver_id ===
-              currentUser.id
-            );
-
-
-          if(isThisChat){
-
-            addMessageToChat(
-              msg
-            );
-
-          }
-
-        }
-
-      )
-
-      .subscribe(
-        function(status){
-
-          console.log(
-            "Realtime status:",
-            status
-          );
-
-        }
-      );
-
-}
-
-
-/* =========================
-   CLEAN REALTIME
-========================= */
-
-window.addEventListener(
-  "beforeunload",
-  function(){
 
     if(realtimeChannel){
 
-      supabaseClient.removeChannel(
-        realtimeChannel
-      );
+        supabaseClient
+            .removeChannel(
+                realtimeChannel
+            );
 
     }
 
-  }
-);
+
+    realtimeChannel =
+        supabaseClient
+        .channel(
+            "chat-" +
+            currentUser.id +
+            "-" +
+            receiverId
+        )
+        .on(
+            "postgres_changes",
+            {
+                event:"INSERT",
+                schema:"public",
+                table:"Messages"
+            },
+            payload => {
+
+                const message =
+                    payload.new;
 
 
-/* =========================
-   ENTER SEND
-========================= */
-
-document
-  .getElementById(
-    "messageInput"
-  )
-  .addEventListener(
-    "keydown",
-    function(event){
-
-      if(
-        event.key === "Enter" &&
-        !event.shiftKey
-      ){
-
-        event.preventDefault();
-
-        sendMessage();
-
-      }
-
-    }
-  );
+                const isThisChat =
+                    (
+                        message.sender_id ===
+                        currentUser.id &&
+                        message.receiver_id ===
+                        receiverId
+                    )
+                    ||
+                    (
+                        message.sender_id ===
+                        receiverId &&
+                        message.receiver_id ===
+                        currentUser.id
+                    );
 
 
-/* =========================
-   START CHAT
-========================= */
-
-async function startChat(){
-
-  loadDarkMode();
+                if(!isThisChat){
+                    return;
+                }
 
 
-  if(!receiverId){
-
-    showError(
-      "Receiver user ID is missing."
-    );
-
-    return;
-
-  }
+                const chatArea =
+                    document.getElementById(
+                        "chatArea"
+                    );
 
 
-  currentUser =
-    await getCurrentUser();
+                const empty =
+                    chatArea.querySelector(
+                        ".empty"
+                    );
+
+                if(empty){
+                    empty.remove();
+                }
 
 
-  if(!currentUser){
-
-    showError(
-      "Please login to use messages."
-    );
-
-    return;
-
-  }
+                chatArea.appendChild(
+                    createMessageElement(
+                        message
+                    )
+                );
 
 
-  if(
-    currentUser.id ===
-    receiverId
-  ){
-
-    showError(
-      "You cannot message yourself."
-    );
-
-    return;
-
-  }
+                scrollToBottom();
 
 
-  receiverProfile =
-    await loadReceiver();
+                /* RECEIVED MESSAGE */
+                if(
+                    message.receiver_id ===
+                    currentUser.id
+                ){
 
+                    markMessagesRead();
 
-  if(!receiverProfile){
+                }
 
-    showError(
-      "This user does not exist."
-    );
-
-    return;
-
-  }
-
-
-  document.getElementById(
-    "receiverName"
-  ).textContent =
-    getReceiverName();
-
-
-  document.getElementById(
-    "receiverStatus"
-  ).textContent =
-    "GyanSetu User";
-
-
-  await markMessagesAsRead();
-
-  await loadMessages();
-
-  setupRealtime();
-
-
-  document.getElementById(
-    "messageInput"
-  ).focus();
+            }
+        )
+        .subscribe();
 
 }
 
 
-/* RUN */
+/* ENTER TO SEND */
+document
+    .getElementById("messageInput")
+    .addEventListener(
+        "keydown",
+        function(event){
 
+            if(
+                event.key === "Enter" &&
+                !event.shiftKey
+            ){
+
+                event.preventDefault();
+
+                sendMessage();
+
+            }
+
+        }
+    );
+
+
+/* START CHAT */
+async function startChat(){
+
+    if(!receiverId){
+
+        showError(
+            "User not selected."
+        );
+
+        return;
+    }
+
+
+    currentUser =
+        await getCurrentUser();
+
+
+    if(!currentUser){
+        return;
+    }
+
+
+    if(
+        currentUser.id ===
+        receiverId
+    ){
+
+        showError(
+            "You cannot message yourself."
+        );
+
+        return;
+    }
+
+
+    const receiverLoaded =
+        await loadReceiver();
+
+
+    if(!receiverLoaded){
+        return;
+    }
+
+
+    await markMessagesRead();
+
+    await loadMessages();
+
+    setupRealtime();
+
+
+    document
+        .getElementById(
+            "messageInput"
+        )
+        .focus();
+
+}
+
+
+/* START */
 startChat();
+
+
+/* CLOSE IMAGE BY BACKDROP */
+document
+    .getElementById("imageViewer")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target ===
+                this
+            ){
+                closeImageViewer();
+            }
+
+        }
+    );
 
 </script></body>
 </html>
