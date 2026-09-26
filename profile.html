@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -305,6 +306,11 @@ body.dark{
   color:white;
 }
 
+.delete-btn{
+  background:#d32f2f;
+  color:white;
+}
+
 .menu-item{
   width:100%;
   padding:15px 5px;
@@ -333,6 +339,11 @@ body.dark{
   background:#292929;
 }
 
+.danger-item{
+  color:#d32f2f !important;
+  font-weight:bold;
+}
+
 .close-btn{
   width:100%;
   margin-top:12px;
@@ -342,6 +353,104 @@ body.dark{
   background:#1976d2;
   color:white;
   font-size:15px;
+}
+
+.account-list{
+  max-height:300px;
+  overflow:auto;
+}
+
+.account-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:13px 5px;
+  border:none;
+  border-bottom:1px solid #eee;
+  background:transparent;
+  text-align:left;
+  cursor:pointer;
+}
+
+.dark .account-item{
+  border-bottom-color:#333;
+  color:white;
+}
+
+.account-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#1976d2;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.account-details{
+  flex:1;
+  min-width:0;
+}
+
+.account-name{
+  font-weight:bold;
+  font-size:15px;
+}
+
+.account-email{
+  color:#777;
+  font-size:13px;
+  margin-top:3px;
+  word-break:break-word;
+}
+
+.dark .account-email{
+  color:#aaa;
+}
+
+.no-accounts{
+  text-align:center;
+  color:#777;
+  padding:25px 10px;
+  line-height:1.5;
+}
+
+.dark .no-accounts{
+  color:#aaa;
+}
+
+.warning-box{
+  background:#fff3cd;
+  color:#664d03;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:15px;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.dark .warning-box{
+  background:#3b320d;
+  color:#ffe69c;
+}
+
+.danger-warning{
+  background:#ffebee;
+  color:#b71c1c;
+  padding:13px;
+  border-radius:10px;
+  margin-bottom:15px;
+  font-size:14px;
+  line-height:1.5;
+}
+
+.dark .danger-warning{
+  background:#3b1518;
+  color:#ffb3b3;
 }
 
 .toast{
@@ -356,6 +465,8 @@ body.dark{
   display:none;
   z-index:1000;
   font-size:14px;
+  max-width:90%;
+  text-align:center;
 }
 
 </style>
@@ -367,7 +478,9 @@ body.dark{
 
   <button class="header-btn" onclick="goHome()">←</button>
 
-  <div class="header-title">My Information</div>
+  <div class="header-title">
+    My Information
+  </div>
 
   <div class="header-actions">
 
@@ -677,6 +790,16 @@ body.dark{
       🔄 Reset
     </button>
 
+    <!-- DELETE ACCOUNT -->
+
+    <button
+      class="menu-item danger-item"
+      onclick="openDeleteAccounts()">
+
+      🗑️ Delete Account
+
+    </button>
+
     <button
       class="close-btn"
       onclick="closeModal('menuModal')">
@@ -891,14 +1014,181 @@ body.dark{
 </div>
 
 
+<!-- DELETE ACCOUNT : ACCOUNT LIST -->
+
+<div class="modal" id="deleteAccountsModal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Delete Account
+    </div>
+
+    <div class="danger-warning">
+
+      ⚠️ Account delete केल्यावर त्या account ची
+      GyanSetu profile आणि account permanently delete
+      होईल. ही action पूर्ववत करता येणार नाही.
+
+    </div>
+
+    <p style="margin-bottom:14px;line-height:1.5;">
+
+      या device/browser वर GyanSetu मध्ये वापरलेली
+      accounts निवडा:
+
+    </p>
+
+    <div
+      class="account-list"
+      id="accountList">
+
+    </div>
+
+    <button
+      class="close-btn"
+      onclick="closeModal('deleteAccountsModal')">
+
+      Cancel
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- DELETE CONFIRMATION -->
+
+<div class="modal" id="deleteConfirmModal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Confirm Account Deletion
+    </div>
+
+    <div class="danger-warning">
+
+      ⚠️ हा account permanently delete होणार आहे.
+
+      Profile information, account access आणि
+      संबंधित GyanSetu data delete केला जाईल.
+
+    </div>
+
+    <p
+      id="deleteAccountName"
+      style="font-weight:bold;margin-bottom:5px;">
+      -
+    </p>
+
+    <p
+      id="deleteAccountEmail"
+      style="color:#777;margin-bottom:15px;word-break:break-word;">
+      -
+    </p>
+
+    <div class="modal-buttons">
+
+      <button
+        class="cancel-btn"
+        onclick="closeModal('deleteConfirmModal')">
+
+        Cancel
+
+      </button>
+
+      <button
+        class="delete-btn"
+        onclick="openPasswordModal()">
+
+        Continue
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PASSWORD -->
+
+<div class="modal" id="deletePasswordModal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Enter Password
+    </div>
+
+    <div class="warning-box">
+
+      🔐 Security साठी selected account चा password
+      enter करावा लागेल.
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        Password
+      </label>
+
+      <input
+        type="password"
+        id="deletePassword"
+        placeholder="Enter account password"
+        autocomplete="current-password">
+
+    </div>
+
+    <div
+      id="deletePasswordError"
+      style="
+        display:none;
+        color:#d32f2f;
+        font-size:14px;
+        margin-top:8px;
+      ">
+    </div>
+
+    <div class="modal-buttons">
+
+      <button
+        class="cancel-btn"
+        onclick="closeModal('deletePasswordModal')">
+
+        Cancel
+
+      </button>
+
+      <button
+        class="delete-btn"
+        id="finalDeleteBtn"
+        onclick="verifyAndDeleteAccount()">
+
+        🗑️ Delete Account
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <div class="toast" id="toast"></div>
 
 
 <script>
 
-/* =========================
+/* =====================================================
    SUPABASE
-========================= */
+===================================================== */
 
 const SUPABASE_URL =
 "https://eqglttfffhvoyvrclzse.supabase.co";
@@ -913,34 +1203,56 @@ supabase.createClient(
 );
 
 
-/* =========================
+/* =====================================================
+   SELECTED DELETE ACCOUNT
+===================================================== */
+
+let selectedDeleteAccount = null;
+
+
+/* =====================================================
    NAVIGATION
-========================= */
+===================================================== */
 
 function goHome(){
-  window.location.href="home.html";
+
+  window.location.href =
+    "home.html";
+
 }
 
 function goLearn(){
-  window.location.href="learn.html";
+
+  window.location.href =
+    "learn.html";
+
 }
 
 function goCreate(){
-  window.location.href="create.html";
+
+  window.location.href =
+    "create.html";
+
 }
 
 function goLeaderboard(){
-  window.location.href="leaderboard.html";
+
+  window.location.href =
+    "leaderboard.html";
+
 }
 
 function goUsers(){
-  window.location.href="users.html";
+
+  window.location.href =
+    "users.html";
+
 }
 
 
-/* =========================
+/* =====================================================
    MODALS
-========================= */
+===================================================== */
 
 function openModal(id){
 
@@ -948,10 +1260,14 @@ function openModal(id){
     document.getElementById(id);
 
   if(modal){
-    modal.style.display="flex";
+
+    modal.style.display =
+      "flex";
+
   }
 
 }
+
 
 function closeModal(id){
 
@@ -959,160 +1275,269 @@ function closeModal(id){
     document.getElementById(id);
 
   if(modal){
-    modal.style.display="none";
+
+    modal.style.display =
+      "none";
+
   }
 
 }
 
+
 function openMenu(){
-  openModal("menuModal");
+
+  openModal(
+    "menuModal"
+  );
+
 }
 
 
-/* =========================
+/* =====================================================
    EDIT MODAL
-========================= */
+===================================================== */
 
 function openEditModal(){
 
-  document.getElementById("editFullName").value =
-    localStorage.getItem("fullName") || "";
+  document.getElementById(
+    "editFullName"
+  ).value =
+    localStorage.getItem(
+      "fullName"
+    ) || "";
 
-  document.getElementById("editDob").value =
-    localStorage.getItem("dob") || "";
 
-  document.getElementById("editSchool").value =
-    localStorage.getItem("school") || "";
+  document.getElementById(
+    "editDob"
+  ).value =
+    localStorage.getItem(
+      "dob"
+    ) || "";
 
-  document.getElementById("editClass").value =
-    localStorage.getItem("className") || "";
 
-  document.getElementById("editMedium").value =
-    localStorage.getItem("medium") || "";
+  document.getElementById(
+    "editSchool"
+  ).value =
+    localStorage.getItem(
+      "school"
+    ) || "";
 
-  document.getElementById("editCity").value =
-    localStorage.getItem("city") || "";
 
-  document.getElementById("editCareer").value =
-    localStorage.getItem("career") || "";
+  document.getElementById(
+    "editClass"
+  ).value =
+    localStorage.getItem(
+      "className"
+    ) || "";
 
-  document.getElementById("editMobile").value =
-    localStorage.getItem("mobile") || "";
 
-  document.getElementById("editEmail").value =
-    localStorage.getItem("email") || "";
+  document.getElementById(
+    "editMedium"
+  ).value =
+    localStorage.getItem(
+      "medium"
+    ) || "";
 
-  openModal("editModal");
+
+  document.getElementById(
+    "editCity"
+  ).value =
+    localStorage.getItem(
+      "city"
+    ) || "";
+
+
+  document.getElementById(
+    "editCareer"
+  ).value =
+    localStorage.getItem(
+      "career"
+    ) || "";
+
+
+  document.getElementById(
+    "editMobile"
+  ).value =
+    localStorage.getItem(
+      "mobile"
+    ) || "";
+
+
+  document.getElementById(
+    "editEmail"
+  ).value =
+    localStorage.getItem(
+      "email"
+    ) || "";
+
+
+  openModal(
+    "editModal"
+  );
 
 }
+
 
 function openPhotoModal(){
-  openModal("photoModal");
+
+  openModal(
+    "photoModal"
+  );
+
 }
 
 
-/* =========================
+/* =====================================================
    MENU FUNCTIONS
-========================= */
+===================================================== */
 
 function openSettings(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  openModal("settingsModal");
+  openModal(
+    "settingsModal"
+  );
 
 }
+
 
 function openNotifications(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  openModal("notificationsModal");
+  openModal(
+    "notificationsModal"
+  );
 
 }
+
 
 function openPrivacy(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  openModal("privacyModal");
+  openModal(
+    "privacyModal"
+  );
 
 }
+
 
 function openNotes(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  document.getElementById("privateNotes").value =
-    localStorage.getItem("privateNotes") || "";
 
-  openModal("notesModal");
+  document.getElementById(
+    "privateNotes"
+  ).value =
+    localStorage.getItem(
+      "privateNotes"
+    ) || "";
+
+
+  openModal(
+    "notesModal"
+  );
 
 }
+
 
 function openAbout(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  openModal("aboutModal");
+  openModal(
+    "aboutModal"
+  );
 
 }
+
 
 function openHelp(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  openModal("helpModal");
+  openModal(
+    "helpModal"
+  );
 
 }
+
 
 function openReset(){
 
-  closeModal("menuModal");
+  closeModal(
+    "menuModal"
+  );
 
-  openModal("resetModal");
+  openModal(
+    "resetModal"
+  );
 
 }
 
 
-/* =========================
+/* =====================================================
    LOAD PROFILE
-========================= */
+===================================================== */
 
 async function loadInformation(){
 
   const {
     data,
     error
-  } = await supabaseClient.auth.getUser();
+  } =
+  await supabaseClient.auth.getUser();
+
 
   const user =
     data?.user;
 
+
   if(!user){
 
-    document.getElementById("displayName").textContent =
+    document.getElementById(
+      "displayName"
+    ).textContent =
       "User";
 
-    document.getElementById("displayEmail").textContent =
+
+    document.getElementById(
+      "displayEmail"
+    ).textContent =
       "-";
+
 
     return;
 
   }
 
 
-  /* =========================
-     GET PROFILE FROM DATABASE
-  ========================= */
-
   const {
     data: profile,
     error: profileError
-  } = await supabaseClient
+  } =
+  await supabaseClient
     .from("Profiles")
     .select("*")
-    .eq("id", user.id)
+    .eq(
+      "id",
+      user.id
+    )
     .maybeSingle();
 
 
@@ -1133,126 +1558,901 @@ async function loadInformation(){
   const username =
     profile?.username ||
     metadata.username ||
-    localStorage.getItem("username") ||
+    localStorage.getItem(
+      "username"
+    ) ||
     "User";
 
 
   const email =
     profile?.email ||
     user.email ||
-    localStorage.getItem("email") ||
+    localStorage.getItem(
+      "email"
+    ) ||
     "-";
 
 
-  document.getElementById("displayName").textContent =
+  document.getElementById(
+    "displayName"
+  ).textContent =
     username;
 
-  document.getElementById("displayEmail").textContent =
+
+  document.getElementById(
+    "displayEmail"
+  ).textContent =
     email;
 
 
   const fullName =
     profile?.full_name ??
-    localStorage.getItem("fullName") ??
+    localStorage.getItem(
+      "fullName"
+    ) ??
     "";
+
 
   const dob =
     profile?.dob ??
-    localStorage.getItem("dob") ??
+    localStorage.getItem(
+      "dob"
+    ) ??
     "";
+
 
   const school =
     profile?.school ??
-    localStorage.getItem("school") ??
+    localStorage.getItem(
+      "school"
+    ) ??
     "";
+
 
   const className =
     profile?.class_name ??
-    localStorage.getItem("className") ??
+    localStorage.getItem(
+      "className"
+    ) ??
     "";
+
 
   const medium =
     profile?.medium ??
-    localStorage.getItem("medium") ??
+    localStorage.getItem(
+      "medium"
+    ) ??
     "";
+
 
   const city =
     profile?.city ??
-    localStorage.getItem("city") ??
+    localStorage.getItem(
+      "city"
+    ) ??
     "";
+
 
   const career =
     profile?.career_goal ??
-    localStorage.getItem("career") ??
+    localStorage.getItem(
+      "career"
+    ) ??
     "";
+
 
   const mobile =
     profile?.mobile ??
-    localStorage.getItem("mobile") ??
+    localStorage.getItem(
+      "mobile"
+    ) ??
     "";
 
 
-  document.getElementById("fullName").textContent =
+  document.getElementById(
+    "fullName"
+  ).textContent =
     fullName || "-";
 
-  document.getElementById("dob").textContent =
+
+  document.getElementById(
+    "dob"
+  ).textContent =
     dob || "-";
 
-  document.getElementById("school").textContent =
+
+  document.getElementById(
+    "school"
+  ).textContent =
     school || "-";
 
-  document.getElementById("className").textContent =
+
+  document.getElementById(
+    "className"
+  ).textContent =
     className || "-";
 
-  document.getElementById("medium").textContent =
+
+  document.getElementById(
+    "medium"
+  ).textContent =
     medium || "-";
 
-  document.getElementById("city").textContent =
+
+  document.getElementById(
+    "city"
+  ).textContent =
     city || "-";
 
-  document.getElementById("career").textContent =
+
+  document.getElementById(
+    "career"
+  ).textContent =
     career || "-";
 
-  document.getElementById("mobile").textContent =
+
+  document.getElementById(
+    "mobile"
+  ).textContent =
     mobile || "-";
 
-  document.getElementById("email").textContent =
+
+  document.getElementById(
+    "email"
+  ).textContent =
     email || "-";
 
-  document.getElementById("gyanId").textContent =
+
+  document.getElementById(
+    "gyanId"
+  ).textContent =
     user.id || "-";
 
 
-  /* Keep localStorage synced */
+  localStorage.setItem(
+    "username",
+    username
+  );
 
-  localStorage.setItem("username", username);
-  localStorage.setItem("email", email);
-  localStorage.setItem("fullName", fullName);
-  localStorage.setItem("dob", dob);
-  localStorage.setItem("school", school);
-  localStorage.setItem("className", className);
-  localStorage.setItem("medium", medium);
-  localStorage.setItem("city", city);
-  localStorage.setItem("career", career);
-  localStorage.setItem("mobile", mobile);
+  localStorage.setItem(
+    "email",
+    email
+  );
+
+  localStorage.setItem(
+    "fullName",
+    fullName
+  );
+
+  localStorage.setItem(
+    "dob",
+    dob
+  );
+
+  localStorage.setItem(
+    "school",
+    school
+  );
+
+  localStorage.setItem(
+    "className",
+    className
+  );
+
+  localStorage.setItem(
+    "medium",
+    medium
+  );
+
+  localStorage.setItem(
+    "city",
+    city
+  );
+
+  localStorage.setItem(
+    "career",
+    career
+  );
+
+  localStorage.setItem(
+    "mobile",
+    mobile
+  );
 
 
-  updateAvatar(username);
+  /*
+     Register this account on this browser/device.
+     This allows Delete Account screen to show
+     accounts previously used on this browser.
+  */
+
+  registerLocalAccount({
+    id:user.id,
+    username:username,
+    email:email
+  });
+
+
+  updateAvatar(
+    username
+  );
 
 }
 
 
-/* =========================
+/* =====================================================
+   LOCAL ACCOUNT REGISTRY
+===================================================== */
+
+function getLocalAccounts(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "gyansetuAccounts"
+      );
+
+
+    if(!saved){
+
+      return [];
+
+    }
+
+
+    const accounts =
+      JSON.parse(
+        saved
+      );
+
+
+    if(!Array.isArray(accounts)){
+
+      return [];
+
+    }
+
+
+    return accounts;
+
+  }catch(error){
+
+    console.error(
+      "Account registry error:",
+      error
+    );
+
+    return [];
+
+  }
+
+}
+
+
+function registerLocalAccount(account){
+
+  if(
+    !account ||
+    !account.email
+  ){
+
+    return;
+
+  }
+
+
+  let accounts =
+    getLocalAccounts();
+
+
+  const existingIndex =
+    accounts.findIndex(
+      function(item){
+
+        return item.email
+          .toLowerCase() ===
+          account.email
+            .toLowerCase();
+
+      }
+    );
+
+
+  if(existingIndex >= 0){
+
+    accounts[
+      existingIndex
+    ] = account;
+
+  }else{
+
+    accounts.push(
+      account
+    );
+
+  }
+
+
+  localStorage.setItem(
+    "gyansetuAccounts",
+    JSON.stringify(
+      accounts
+    )
+  );
+
+}
+
+
+/* =====================================================
+   DELETE ACCOUNT SCREEN
+===================================================== */
+
+function openDeleteAccounts(){
+
+  closeModal(
+    "menuModal"
+  );
+
+
+  selectedDeleteAccount =
+    null;
+
+
+  renderDeleteAccounts();
+
+
+  openModal(
+    "deleteAccountsModal"
+  );
+
+}
+
+
+/* =====================================================
+   SHOW ACCOUNTS
+===================================================== */
+
+function renderDeleteAccounts(){
+
+  const container =
+    document.getElementById(
+      "accountList"
+    );
+
+
+  container.innerHTML =
+    "";
+
+
+  const accounts =
+    getLocalAccounts();
+
+
+  if(accounts.length === 0){
+
+    container.innerHTML = `
+
+      <div class="no-accounts">
+
+        <div style="font-size:40px;">
+          👤
+        </div>
+
+        <div style="margin-top:10px;">
+          या browser/device वर अजून
+          GyanSetu account record सापडला नाही.
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  accounts.forEach(
+    function(account){
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.className =
+        "account-item";
+
+
+      const letter =
+        (
+          account.username ||
+          account.email ||
+          "U"
+        )
+        .charAt(0)
+        .toUpperCase();
+
+
+      button.innerHTML = `
+
+        <div class="account-avatar">
+          ${escapeHtml(letter)}
+        </div>
+
+        <div class="account-details">
+
+          <div class="account-name">
+            ${escapeHtml(
+              account.username ||
+              "GyanSetu User"
+            )}
+          </div>
+
+          <div class="account-email">
+            ${escapeHtml(
+              account.email
+            )}
+          </div>
+
+        </div>
+
+        <div style="font-size:20px;">
+          ›
+        </div>
+
+      `;
+
+
+      button.onclick =
+        function(){
+
+          selectDeleteAccount(
+            account
+          );
+
+        };
+
+
+      container.appendChild(
+        button
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   SELECT ACCOUNT
+===================================================== */
+
+function selectDeleteAccount(account){
+
+  selectedDeleteAccount =
+    account;
+
+
+  closeModal(
+    "deleteAccountsModal"
+  );
+
+
+  document.getElementById(
+    "deleteAccountName"
+  ).textContent =
+    account.username ||
+    "GyanSetu User";
+
+
+  document.getElementById(
+    "deleteAccountEmail"
+  ).textContent =
+    account.email;
+
+
+  openModal(
+    "deleteConfirmModal"
+  );
+
+}
+
+
+/* =====================================================
+   OPEN PASSWORD
+===================================================== */
+
+function openPasswordModal(){
+
+  closeModal(
+    "deleteConfirmModal"
+  );
+
+
+  document.getElementById(
+    "deletePassword"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "deletePasswordError"
+  ).style.display =
+    "none";
+
+
+  openModal(
+    "deletePasswordModal"
+  );
+
+
+  setTimeout(
+    function(){
+
+      document.getElementById(
+        "deletePassword"
+      ).focus();
+
+    },
+    200
+  );
+
+}
+
+
+/* =====================================================
+   VERIFY PASSWORD + DELETE
+===================================================== */
+
+async function verifyAndDeleteAccount(){
+
+  if(!selectedDeleteAccount){
+
+    showToast(
+      "Please select an account."
+    );
+
+    return;
+
+  }
+
+
+  const password =
+    document.getElementById(
+      "deletePassword"
+    ).value;
+
+
+  const errorBox =
+    document.getElementById(
+      "deletePasswordError"
+    );
+
+
+  const deleteButton =
+    document.getElementById(
+      "finalDeleteBtn"
+    );
+
+
+  if(!password){
+
+    errorBox.textContent =
+      "Password enter करा.";
+
+    errorBox.style.display =
+      "block";
+
+    return;
+
+  }
+
+
+  deleteButton.disabled =
+    true;
+
+  deleteButton.textContent =
+    "Checking...";
+
+
+  /*
+     First verify password.
+
+     IMPORTANT:
+     signInWithPassword creates/signs into
+     the selected account session.
+  */
+
+  const {
+    data: loginData,
+    error: loginError
+  } =
+  await supabaseClient.auth.signInWithPassword({
+
+    email:
+      selectedDeleteAccount.email,
+
+    password:
+      password
+
+  });
+
+
+  if(loginError){
+
+    console.error(
+      "Password verification error:",
+      loginError
+    );
+
+
+    errorBox.textContent =
+      "Password चुकीचा आहे किंवा account login करता आला नाही.";
+
+
+    errorBox.style.display =
+      "block";
+
+
+    deleteButton.disabled =
+      false;
+
+    deleteButton.textContent =
+      "🗑️ Delete Account";
+
+
+    return;
+
+  }
+
+
+  const verifiedUser =
+    loginData?.user;
+
+
+  if(
+    !verifiedUser ||
+    verifiedUser.id !==
+    selectedDeleteAccount.id
+  ){
+
+    errorBox.textContent =
+      "Account verification failed.";
+
+
+    errorBox.style.display =
+      "block";
+
+
+    deleteButton.disabled =
+      false;
+
+    deleteButton.textContent =
+      "🗑️ Delete Account";
+
+
+    return;
+
+  }
+
+
+  /*
+     Password verified.
+
+     Now call secure backend function.
+  */
+
+  deleteButton.textContent =
+    "Deleting...";
+
+
+  const {
+    data: deleteData,
+    error: deleteError
+  } =
+  await supabaseClient.functions.invoke(
+    "delete-account",
+    {
+      body:{
+        user_id:
+          selectedDeleteAccount.id
+      }
+    }
+  );
+
+
+  if(deleteError){
+
+    console.error(
+      "Delete function error:",
+      deleteError
+    );
+
+
+    errorBox.textContent =
+      "Account delete करता आला नाही. Backend delete function setup केले आहे का ते तपासा.";
+
+
+    errorBox.style.display =
+      "block";
+
+
+    deleteButton.disabled =
+      false;
+
+    deleteButton.textContent =
+      "🗑️ Delete Account";
+
+
+    return;
+
+  }
+
+
+  if(
+    deleteData &&
+    deleteData.success === false
+  ){
+
+    errorBox.textContent =
+      deleteData.message ||
+      "Account delete failed.";
+
+
+    errorBox.style.display =
+      "block";
+
+
+    deleteButton.disabled =
+      false;
+
+    deleteButton.textContent =
+      "🗑️ Delete Account";
+
+
+    return;
+
+  }
+
+
+  /*
+     Remove local account record
+  */
+
+  removeLocalAccount(
+    selectedDeleteAccount.email
+  );
+
+
+  /*
+     Remove local profile data
+  */
+
+  clearLocalProfileData();
+
+
+  /*
+     Sign out
+  */
+
+  await supabaseClient.auth.signOut();
+
+
+  closeModal(
+    "deletePasswordModal"
+  );
+
+
+  showToast(
+    "Account permanently deleted."
+  );
+
+
+  /*
+     Redirect to login after deletion
+  */
+
+  setTimeout(
+    function(){
+
+      window.location.href =
+        "username.html";
+
+    },
+    1500
+  );
+
+}
+
+
+/* =====================================================
+   REMOVE LOCAL ACCOUNT
+===================================================== */
+
+function removeLocalAccount(email){
+
+  let accounts =
+    getLocalAccounts();
+
+
+  accounts =
+    accounts.filter(
+      function(account){
+
+        return account.email
+          .toLowerCase() !==
+          email.toLowerCase();
+
+      }
+    );
+
+
+  localStorage.setItem(
+    "gyansetuAccounts",
+    JSON.stringify(
+      accounts
+    )
+  );
+
+}
+
+
+/* =====================================================
+   CLEAR LOCAL PROFILE
+===================================================== */
+
+function clearLocalProfileData(){
+
+  const keys = [
+
+    "username",
+    "email",
+    "fullName",
+    "dob",
+    "school",
+    "className",
+    "medium",
+    "city",
+    "career",
+    "mobile",
+    "profilePhoto",
+    "privateNotes"
+
+  ];
+
+
+  keys.forEach(
+    function(key){
+
+      localStorage.removeItem(
+        key
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
    AVATAR
-========================= */
+===================================================== */
 
 function updateAvatar(username){
 
   const photo =
-    localStorage.getItem("profilePhoto");
+    localStorage.getItem(
+      "profilePhoto"
+    );
+
 
   const avatar =
-    document.getElementById("avatar");
+    document.getElementById(
+      "avatar"
+    );
 
 
   if(photo){
@@ -1264,8 +2464,11 @@ function updateAvatar(username){
 
     const letter =
       username
-      ? username.charAt(0).toUpperCase()
+      ? username
+          .charAt(0)
+          .toUpperCase()
       : "G";
+
 
     avatar.innerHTML =
       `<span>${letter}</span>`;
@@ -1275,48 +2478,72 @@ function updateAvatar(username){
 }
 
 
-/* =========================
+/* =====================================================
    SAVE INFORMATION
-========================= */
+===================================================== */
 
 async function saveInformation(){
 
   const fullName =
-    document.getElementById("editFullName").value.trim();
+    document.getElementById(
+      "editFullName"
+    ).value.trim();
+
 
   const dob =
-    document.getElementById("editDob").value;
+    document.getElementById(
+      "editDob"
+    ).value;
+
 
   const school =
-    document.getElementById("editSchool").value.trim();
+    document.getElementById(
+      "editSchool"
+    ).value.trim();
+
 
   const className =
-    document.getElementById("editClass").value.trim();
+    document.getElementById(
+      "editClass"
+    ).value.trim();
+
 
   const medium =
-    document.getElementById("editMedium").value.trim();
+    document.getElementById(
+      "editMedium"
+    ).value.trim();
+
 
   const city =
-    document.getElementById("editCity").value.trim();
+    document.getElementById(
+      "editCity"
+    ).value.trim();
+
 
   const career =
-    document.getElementById("editCareer").value.trim();
+    document.getElementById(
+      "editCareer"
+    ).value.trim();
+
 
   const mobile =
-    document.getElementById("editMobile").value.trim();
+    document.getElementById(
+      "editMobile"
+    ).value.trim();
+
 
   const email =
-    document.getElementById("editEmail").value.trim();
+    document.getElementById(
+      "editEmail"
+    ).value.trim();
 
-
-  /* =========================
-     GET CURRENT USER
-  ========================= */
 
   const {
     data,
     error: userError
-  } = await supabaseClient.auth.getUser();
+  } =
+  await supabaseClient.auth.getUser();
+
 
   const user =
     data?.user;
@@ -1324,16 +2551,14 @@ async function saveInformation(){
 
   if(userError || !user){
 
-    showToast("Please login first");
+    showToast(
+      "Please login first"
+    );
 
     return;
 
   }
 
-
-  /* =========================
-     SAVE LOCAL DATA
-  ========================= */
 
   localStorage.setItem(
     "fullName",
@@ -1381,28 +2606,45 @@ async function saveInformation(){
   );
 
 
-  /* =========================
-     SAVE TO PROFILES
-  ========================= */
-
   const {
     error: profileError
-  } = await supabaseClient
+  } =
+  await supabaseClient
     .from("Profiles")
     .update({
 
-      full_name: fullName,
-      dob: dob || null,
-      school: school,
-      class_name: className,
-      medium: medium,
-      city: city,
-      career_goal: career,
-      mobile: mobile,
-      email: email
+      full_name:
+        fullName,
+
+      dob:
+        dob || null,
+
+      school:
+        school,
+
+      class_name:
+        className,
+
+      medium:
+        medium,
+
+      city:
+        city,
+
+      career_goal:
+        career,
+
+      mobile:
+        mobile,
+
+      email:
+        email
 
     })
-    .eq("id", user.id);
+    .eq(
+      "id",
+      user.id
+    );
 
 
   if(profileError){
@@ -1412,52 +2654,57 @@ async function saveInformation(){
       profileError
     );
 
+
     showToast(
       "Database save failed"
     );
+
 
     return;
 
   }
 
 
-  /* =========================
-     SAVE AUTH METADATA
-  ========================= */
+  await supabaseClient.auth.updateUser({
 
-  const {
-    error: metadataError
-  } = await supabaseClient.auth.updateUser({
+    data:{
 
-    data: {
+      full_name:
+        fullName,
 
-      full_name: fullName,
-      dob: dob,
-      school: school,
-      class_name: className,
-      medium: medium,
-      city: city,
-      career_goal: career,
-      mobile: mobile
+      dob:
+        dob,
+
+      school:
+        school,
+
+      class_name:
+        className,
+
+      medium:
+        medium,
+
+      city:
+        city,
+
+      career_goal:
+        career,
+
+      mobile:
+        mobile
 
     }
 
   });
 
 
-  if(metadataError){
+  closeModal(
+    "editModal"
+  );
 
-    console.error(
-      "Metadata update error:",
-      metadataError
-    );
-
-  }
-
-
-  closeModal("editModal");
 
   await loadInformation();
+
 
   showToast(
     "Information saved successfully"
@@ -1466,17 +2713,20 @@ async function saveInformation(){
 }
 
 
-/* =========================
-   PROFILE PHOTO
-========================= */
+/* =====================================================
+   PHOTO
+===================================================== */
 
 function changePhoto(event){
 
   const file =
     event.target.files[0];
 
+
   if(!file){
+
     return;
+
   }
 
 
@@ -1500,7 +2750,10 @@ function changePhoto(event){
       );
 
 
-      closeModal("photoModal");
+      closeModal(
+        "photoModal"
+      );
+
 
       showToast(
         "Profile photo updated"
@@ -1509,14 +2762,16 @@ function changePhoto(event){
     };
 
 
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(
+    file
+  );
 
 }
 
 
-/* =========================
+/* =====================================================
    DARK MODE
-========================= */
+===================================================== */
 
 function toggleDarkMode(){
 
@@ -1527,12 +2782,16 @@ function toggleDarkMode(){
 
   localStorage.setItem(
     "darkMode",
-    document.body.classList.contains("dark")
+    document.body.classList.contains(
+      "dark"
+    )
   );
 
 
   showToast(
-    document.body.classList.contains("dark")
+    document.body.classList.contains(
+      "dark"
+    )
     ? "Dark mode enabled"
     : "Dark mode disabled"
   );
@@ -1540,9 +2799,9 @@ function toggleDarkMode(){
 }
 
 
-/* =========================
+/* =====================================================
    NOTES
-========================= */
+===================================================== */
 
 function saveNotes(){
 
@@ -1558,7 +2817,10 @@ function saveNotes(){
   );
 
 
-  closeModal("notesModal");
+  closeModal(
+    "notesModal"
+  );
+
 
   showToast(
     "Notes saved"
@@ -1567,9 +2829,9 @@ function saveNotes(){
 }
 
 
-/* =========================
+/* =====================================================
    RESET
-========================= */
+===================================================== */
 
 async function resetInformation(){
 
@@ -1593,7 +2855,9 @@ async function resetInformation(){
   keys.forEach(
     function(key){
 
-      localStorage.removeItem(key);
+      localStorage.removeItem(
+        key
+      );
 
     }
   );
@@ -1601,7 +2865,8 @@ async function resetInformation(){
 
   const {
     data
-  } = await supabaseClient.auth.getUser();
+  } =
+  await supabaseClient.auth.getUser();
 
 
   const user =
@@ -1614,25 +2879,49 @@ async function resetInformation(){
       .from("Profiles")
       .update({
 
-        full_name:null,
-        dob:null,
-        school:null,
-        class_name:null,
-        medium:null,
-        city:null,
-        career_goal:null,
-        mobile:null,
-        email:user.email || null
+        full_name:
+          null,
+
+        dob:
+          null,
+
+        school:
+          null,
+
+        class_name:
+          null,
+
+        medium:
+          null,
+
+        city:
+          null,
+
+        career_goal:
+          null,
+
+        mobile:
+          null,
+
+        email:
+          user.email || null
 
       })
-      .eq("id",user.id);
+      .eq(
+        "id",
+        user.id
+      );
 
   }
 
 
-  closeModal("resetModal");
+  closeModal(
+    "resetModal"
+  );
+
 
   await loadInformation();
+
 
   showToast(
     "Information reset"
@@ -1641,14 +2930,37 @@ async function resetInformation(){
 }
 
 
-/* =========================
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(text){
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.textContent =
+    text ?? "";
+
+
+  return div.innerHTML;
+
+}
+
+
+/* =====================================================
    TOAST
-========================= */
+===================================================== */
 
 function showToast(message){
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
 
   toast.textContent =
@@ -1672,9 +2984,9 @@ function showToast(message){
 }
 
 
-/* =========================
+/* =====================================================
    INIT
-========================= */
+===================================================== */
 
 async function initProfile(){
 
@@ -1698,9 +3010,9 @@ async function initProfile(){
 }
 
 
-/* =========================
+/* =====================================================
    PAGE EVENTS
-========================= */
+===================================================== */
 
 window.addEventListener(
   "pageshow",
@@ -1739,9 +3051,9 @@ window.addEventListener(
 );
 
 
-/* =========================
+/* =====================================================
    START
-========================= */
+===================================================== */
 
 initProfile();
 
