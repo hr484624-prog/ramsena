@@ -1,0 +1,2141 @@
+<!DOCTYPE html>
+<html lang="mr">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>GyanSetu - Users</title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      font-family:
+        Arial,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          145deg,
+          #ffffff,
+          #eef6ff,
+          #d9ecff
+        );
+
+      color: #17324d;
+
+    }
+
+
+    /* =========================
+       MAIN APP
+    ========================= */
+
+    .app {
+
+      width: 100%;
+
+      max-width: 650px;
+
+      margin: auto;
+
+      min-height: 100vh;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 0 35px
+        rgba(21, 101, 192, 0.12);
+
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+
+      position: sticky;
+
+      top: 0;
+
+      z-index: 20;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1976d2,
+          #0d47a1
+        );
+
+      color: white;
+
+      padding:
+        18px
+        16px
+        16px;
+
+      box-shadow:
+        0 5px 18px
+        rgba(13, 71, 161, 0.20);
+
+    }
+
+
+    .header-title {
+
+      font-size: 24px;
+
+      font-weight: 800;
+
+      margin-bottom: 13px;
+
+    }
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-box {
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      background: white;
+
+      border-radius: 13px;
+
+      padding:
+        0
+        13px;
+
+    }
+
+
+    .search-icon {
+
+      font-size: 19px;
+
+      color: #1976d2;
+
+    }
+
+
+    #searchInput {
+
+      width: 100%;
+
+      border: none;
+
+      outline: none;
+
+      padding: 14px 4px;
+
+      font-size: 16px;
+
+      background: transparent;
+
+      color: #17324d;
+
+    }
+
+
+    /* =========================
+       CONTENT
+    ========================= */
+
+    .content {
+
+      padding: 16px;
+
+    }
+
+
+    .section-title {
+
+      font-size: 18px;
+
+      font-weight: 800;
+
+      margin:
+        4px
+        0
+        5px;
+
+    }
+
+
+    .section-subtitle {
+
+      color: #777;
+
+      font-size: 13px;
+
+      margin-bottom: 15px;
+
+    }
+
+
+    /* =========================
+       USER LIST
+    ========================= */
+
+    .user-list {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+    }
+
+
+    .user-card {
+
+      width: 100%;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 13px;
+
+      padding: 13px;
+
+      border:
+        1px solid
+        #dce9f7;
+
+      border-radius: 16px;
+
+      background:
+        #f8fbff;
+
+      cursor: pointer;
+
+      text-align: left;
+
+      transition:
+        transform .15s,
+        box-shadow .15s;
+
+    }
+
+
+    .user-card:active {
+
+      transform:
+        scale(.98);
+
+    }
+
+
+    .user-avatar {
+
+      width: 48px;
+
+      height: 48px;
+
+      flex-shrink: 0;
+
+      border-radius: 50%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e3f2fd,
+          #bbdefb
+        );
+
+      color: #1565c0;
+
+      font-size: 22px;
+
+      font-weight: bold;
+
+    }
+
+
+    .user-info {
+
+      flex: 1;
+
+      min-width: 0;
+
+    }
+
+
+    .user-name {
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+      color: #17324d;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+    }
+
+
+    .user-email {
+
+      margin-top: 4px;
+
+      font-size: 12px;
+
+      color: #777;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
+
+    }
+
+
+    .user-arrow {
+
+      font-size: 22px;
+
+      color: #1976d2;
+
+    }
+
+
+    /* =========================
+       EMPTY / LOADING
+    ========================= */
+
+    .center-message {
+
+      text-align: center;
+
+      padding: 45px 20px;
+
+      color: #777;
+
+      line-height: 1.6;
+
+    }
+
+
+    .loading {
+
+      font-size: 16px;
+
+      color: #1976d2;
+
+    }
+
+
+    .empty-icon {
+
+      font-size: 45px;
+
+      margin-bottom: 10px;
+
+    }
+
+
+    /* =========================
+       PROFILE
+    ========================= */
+
+    #profileView {
+
+      display: none;
+
+      padding: 16px;
+
+    }
+
+
+    .back-button {
+
+      border: none;
+
+      background: #eef5ff;
+
+      color: #1565c0;
+
+      padding:
+        10px
+        14px;
+
+      border-radius: 11px;
+
+      font-size: 14px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      margin-bottom: 18px;
+
+    }
+
+
+    .profile-card {
+
+      background: white;
+
+      border:
+        1px solid
+        #dce9f7;
+
+      border-radius: 22px;
+
+      padding: 22px 17px;
+
+      box-shadow:
+        0 10px 30px
+        rgba(21, 101, 192, 0.10);
+
+    }
+
+
+    .profile-top {
+
+      text-align: center;
+
+      padding-bottom: 20px;
+
+      border-bottom:
+        1px solid
+        #e5edf6;
+
+    }
+
+
+    .big-avatar {
+
+      width: 88px;
+
+      height: 88px;
+
+      margin:
+        0 auto
+        12px;
+
+      border-radius: 50%;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1976d2,
+          #0d47a1
+        );
+
+      color: white;
+
+      font-size: 36px;
+
+      font-weight: bold;
+
+    }
+
+
+    .profile-name {
+
+      font-size: 23px;
+
+      font-weight: 800;
+
+      color: #17324d;
+
+      word-break: break-word;
+
+    }
+
+
+    .profile-email {
+
+      margin-top: 5px;
+
+      color: #777;
+
+      font-size: 13px;
+
+      word-break: break-word;
+
+    }
+
+
+    /* =========================
+       PROFILE DETAILS
+    ========================= */
+
+    .details {
+
+      padding-top: 15px;
+
+    }
+
+
+    .detail-row {
+
+      padding:
+        12px
+        0;
+
+      border-bottom:
+        1px solid
+        #edf2f7;
+
+    }
+
+
+    .detail-label {
+
+      font-size: 12px;
+
+      color: #78909c;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .detail-value {
+
+      font-size: 15px;
+
+      color: #17324d;
+
+      font-weight: 600;
+
+      word-break: break-word;
+
+      white-space: pre-wrap;
+
+    }
+
+
+    /* =========================
+       MESSAGE BUTTON
+    ========================= */
+
+    .message-button {
+
+      width: 100%;
+
+      margin-top: 20px;
+
+      padding: 15px;
+
+      border: none;
+
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #1976d2,
+          #0d47a1
+        );
+
+      color: white;
+
+      font-size: 17px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 18px
+        rgba(21, 101, 192, 0.22);
+
+    }
+
+
+    .message-button:active {
+
+      transform:
+        scale(.98);
+
+    }
+
+
+    /* =========================
+       MESSAGE BOX
+    ========================= */
+
+    #messageBox {
+
+      display: none;
+
+      margin-top: 18px;
+
+      padding: 16px;
+
+      background: #f7fbff;
+
+      border:
+        1px solid
+        #dce9f7;
+
+      border-radius: 17px;
+
+    }
+
+
+    .message-title {
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+      margin-bottom: 10px;
+
+      color: #17324d;
+
+    }
+
+
+    #messageText {
+
+      width: 100%;
+
+      min-height: 105px;
+
+      resize: vertical;
+
+      padding: 13px;
+
+      border:
+        2px solid
+        #d9e7f5;
+
+      border-radius: 12px;
+
+      outline: none;
+
+      font-family: Arial, sans-serif;
+
+      font-size: 15px;
+
+    }
+
+
+    #messageText:focus {
+
+      border-color: #1976d2;
+
+    }
+
+
+    .send-button {
+
+      width: 100%;
+
+      margin-top: 10px;
+
+      padding: 13px;
+
+      border: none;
+
+      border-radius: 12px;
+
+      background: #00a86b;
+
+      color: white;
+
+      font-size: 16px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+
+    .cancel-message {
+
+      width: 100%;
+
+      margin-top: 8px;
+
+      padding: 11px;
+
+      border: none;
+
+      border-radius: 11px;
+
+      background: #edf2f7;
+
+      color: #455a64;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    #statusMessage {
+
+      display: none;
+
+      margin:
+        12px
+        0;
+
+      padding: 12px;
+
+      border-radius: 11px;
+
+      text-align: center;
+
+      font-size: 13px;
+
+    }
+
+
+    .success {
+
+      display: block !important;
+
+      background: #e8f5e9;
+
+      color: #2e7d32;
+
+      border:
+        1px solid
+        #a5d6a7;
+
+    }
+
+
+    .error {
+
+      display: block !important;
+
+      background: #ffebee;
+
+      color: #c62828;
+
+      border:
+        1px solid
+        #ef9a9a;
+
+    }
+
+
+    @media (min-width: 651px) {
+
+      body {
+
+        padding: 20px;
+
+      }
+
+      .app {
+
+        border-radius: 22px;
+
+        overflow: hidden;
+
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
+  <div
+    class="header"
+    id="mainHeader"
+  >
+
+    <div class="header-title">
+      👥 GyanSetu Users
+    </div>
+
+
+    <div class="search-box">
+
+      <span class="search-icon">
+        🔍
+      </span>
+
+      <input
+        type="search"
+        id="searchInput"
+        placeholder="Username शोधा..."
+        autocomplete="off"
+      >
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       USER LIST
+  ========================= -->
+
+  <div
+    class="content"
+    id="usersView"
+  >
+
+    <div class="section-title">
+      GyanSetu Users
+    </div>
+
+    <div
+      class="section-subtitle"
+      id="userCount"
+    >
+      Users load होत आहेत...
+    </div>
+
+
+    <div
+      id="statusMessage"
+    ></div>
+
+
+    <div
+      class="user-list"
+      id="userList"
+    >
+
+      <div class="center-message">
+
+        <div class="loading">
+          ⏳ Users load होत आहेत...
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       PROFILE VIEW
+  ========================= -->
+
+  <div
+    id="profileView"
+  >
+
+    <button
+      class="back-button"
+      onclick="showUsers()"
+    >
+      ← Users कडे परत
+    </button>
+
+
+    <div
+      class="profile-card"
+      id="profileCard"
+    >
+
+      <!-- Profile generated by JS -->
+
+    </div>
+
+
+    <!-- MESSAGE BOX -->
+
+    <div
+      id="messageBox"
+    >
+
+      <div class="message-title">
+        💬 Message पाठवा
+      </div>
+
+
+      <textarea
+        id="messageText"
+        placeholder="तुमचा message लिहा..."
+        maxlength="2000"
+      ></textarea>
+
+
+      <button
+        class="send-button"
+        id="sendButton"
+        onclick="sendMessage()"
+      >
+        📤 Send Message
+      </button>
+
+
+      <button
+        class="cancel-message"
+        onclick="closeMessageBox()"
+      >
+        Cancel
+      </button>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const supabaseClient =
+  supabase.createClient(
+
+    "https://eqglttfffhvoyvrclzse.supabase.co",
+
+    "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb",
+
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+
+  );
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let allUsers = [];
+
+let selectedUser = null;
+
+let currentUser = null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const userList =
+  document.getElementById(
+    "userList"
+  );
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+const usersView =
+  document.getElementById(
+    "usersView"
+  );
+
+const profileView =
+  document.getElementById(
+    "profileView"
+  );
+
+const mainHeader =
+  document.getElementById(
+    "mainHeader"
+  );
+
+const userCount =
+  document.getElementById(
+    "userCount"
+  );
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+  div.textContent =
+    value ?? "";
+
+  return div.innerHTML;
+
+}
+
+
+/* =====================================================
+   GET INITIAL
+===================================================== */
+
+function getInitial(name) {
+
+  if (!name) {
+
+    return "?";
+
+  }
+
+  return name
+    .trim()
+    .charAt(0)
+    .toUpperCase();
+
+}
+
+
+/* =====================================================
+   LOAD CURRENT USER
+===================================================== */
+
+async function loadCurrentUser() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (error) {
+
+      console.error(
+        "CURRENT USER ERROR:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    if (data && data.user) {
+
+      currentUser =
+        data.user;
+
+    }
+
+  }
+
+  catch(error) {
+
+    console.error(
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   LOAD USERS
+===================================================== */
+
+async function loadUsers() {
+
+  userList.innerHTML = `
+
+    <div class="center-message">
+
+      <div class="loading">
+        ⏳ Users load होत आहेत...
+      </div>
+
+    </div>
+
+  `;
+
+
+  try {
+
+    /*
+      Profiles table मधील सर्व columns
+      घेतले जात आहेत.
+
+      त्यामुळे भविष्यात तू
+      full_name, bio, city, education
+      इ. columns add केले तर तेही
+      profile मध्ये दाखवता येतील.
+    */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("Profiles")
+        .select("*")
+        .order(
+          "username",
+          {
+            ascending: true
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    allUsers =
+      data || [];
+
+
+    /*
+      Current user स्वतःच्या list मध्ये
+      दिसू शकतो.
+
+      जर तुला स्वतःला list मधून
+      काढायचे असेल तर खालील code वापर.
+    */
+
+    /*
+    allUsers =
+      allUsers.filter(
+        user =>
+          user.id !== currentUser?.id
+      );
+    */
+
+
+    renderUsers(
+      allUsers
+    );
+
+  }
+
+  catch(error) {
+
+    console.error(
+      "USERS LOAD ERROR:",
+      error
+    );
+
+
+    userList.innerHTML = `
+
+      <div class="center-message">
+
+        <div class="empty-icon">
+          ⚠️
+        </div>
+
+        Users load करता आले नाहीत.
+
+        <br><br>
+
+        <small>
+          ${escapeHTML(
+            error.message ||
+            "Unknown error"
+          )}
+        </small>
+
+      </div>
+
+    `;
+
+    userCount.innerText =
+      "Users load झाले नाहीत.";
+
+  }
+
+}
+
+
+/* =====================================================
+   RENDER USERS
+===================================================== */
+
+function renderUsers(users) {
+
+  userList.innerHTML = "";
+
+
+  if (!users || users.length === 0) {
+
+    userList.innerHTML = `
+
+      <div class="center-message">
+
+        <div class="empty-icon">
+          👥
+        </div>
+
+        कोणतेही Users सापडले नाहीत.
+
+      </div>
+
+    `;
+
+    userCount.innerText =
+      "0 Users";
+
+    return;
+
+  }
+
+
+  userCount.innerText =
+    users.length +
+    (
+      users.length === 1
+        ? " User"
+        : " Users"
+    );
+
+
+  users.forEach(
+    function(user) {
+
+      const username =
+        user.username ||
+        user.full_name ||
+        "GyanSetu User";
+
+
+      /*
+        Email Profiles table मध्ये
+        नसल्यास दाखवणार नाही.
+      */
+
+      const email =
+        user.email ||
+        "";
+
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+
+      card.className =
+        "user-card";
+
+
+      card.onclick =
+        function() {
+
+          openProfile(
+            user
+          );
+
+        };
+
+
+      card.innerHTML = `
+
+        <div class="user-avatar">
+
+          ${escapeHTML(
+            getInitial(
+              username
+            )
+          )}
+
+        </div>
+
+
+        <div class="user-info">
+
+          <div class="user-name">
+
+            ${escapeHTML(
+              username
+            )}
+
+          </div>
+
+
+          ${
+            email
+              ? `
+                <div class="user-email">
+                  ${escapeHTML(
+                    email
+                  )}
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+
+
+        <div class="user-arrow">
+          ›
+        </div>
+
+      `;
+
+
+      userList.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   SEARCH USERS
+===================================================== */
+
+searchInput.addEventListener(
+  "input",
+  function() {
+
+    const search =
+      this.value
+        .trim()
+        .toLowerCase();
+
+
+    if (!search) {
+
+      renderUsers(
+        allUsers
+      );
+
+      return;
+
+    }
+
+
+    const filtered =
+      allUsers.filter(
+        function(user) {
+
+          const username =
+            String(
+              user.username || ""
+            )
+            .toLowerCase();
+
+
+          const name =
+            String(
+              user.full_name || ""
+            )
+            .toLowerCase();
+
+
+          const email =
+            String(
+              user.email || ""
+            )
+            .toLowerCase();
+
+
+          return (
+
+            username.includes(
+              search
+            )
+
+            ||
+
+            name.includes(
+              search
+            )
+
+            ||
+
+            email.includes(
+              search
+            )
+
+          );
+
+        }
+      );
+
+
+    renderUsers(
+      filtered
+    );
+
+  }
+);
+
+
+/* =====================================================
+   OPEN PROFILE
+===================================================== */
+
+function openProfile(user) {
+
+  selectedUser =
+    user;
+
+
+  usersView.style.display =
+    "none";
+
+  mainHeader.style.display =
+    "none";
+
+  profileView.style.display =
+    "block";
+
+
+  renderProfile(
+    user
+  );
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* =====================================================
+   RENDER PROFILE
+===================================================== */
+
+function renderProfile(user) {
+
+  const username =
+    user.username ||
+    user.full_name ||
+    "GyanSetu User";
+
+
+  const email =
+    user.email ||
+    "";
+
+
+  let detailsHTML =
+    "";
+
+
+  /*
+    हे fields जर Profiles table मध्ये
+    असतील तर आपोआप दाखवले जातील.
+  */
+
+  const fieldNames = [
+
+    {
+      key: "full_name",
+      label: "पूर्ण नाव"
+    },
+
+    {
+      key: "username",
+      label: "Username"
+    },
+
+    {
+      key: "email",
+      label: "Email"
+    },
+
+    {
+      key: "phone",
+      label: "Mobile"
+    },
+
+    {
+      key: "city",
+      label: "City"
+    },
+
+    {
+      key: "district",
+      label: "District"
+    },
+
+    {
+      key: "state",
+      label: "State"
+    },
+
+    {
+      key: "education",
+      label: "Education"
+    },
+
+    {
+      key: "bio",
+      label: "Bio"
+    }
+
+  ];
+
+
+  fieldNames.forEach(
+    function(field) {
+
+      if (
+        user[field.key] !==
+        undefined
+
+        &&
+
+        user[field.key] !==
+        null
+
+        &&
+
+        String(
+          user[field.key]
+        ).trim() !== ""
+
+      ) {
+
+        detailsHTML += `
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              ${escapeHTML(
+                field.label
+              )}
+            </div>
+
+            <div class="detail-value">
+              ${escapeHTML(
+                String(
+                  user[field.key]
+                )
+              )}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+
+    }
+  );
+
+
+  /*
+    जर वरील predefined fields
+    नसतील तर Profiles मधील इतर
+    columns सुद्धा दाखवू शकतो.
+  */
+
+  const hiddenFields = [
+
+    "id",
+    "created_at",
+    "updated_at",
+    "password"
+
+  ];
+
+
+  Object.keys(user).forEach(
+    function(key) {
+
+      if (
+        hiddenFields.includes(
+          key
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      const alreadyShown =
+        fieldNames.some(
+          function(field) {
+
+            return (
+              field.key === key
+            );
+
+          }
+        );
+
+
+      if (
+        alreadyShown
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        user[key] === null
+        ||
+        user[key] === undefined
+        ||
+        String(
+          user[key]
+        ).trim() === ""
+      ) {
+
+        return;
+
+      }
+
+
+      detailsHTML += `
+
+        <div class="detail-row">
+
+          <div class="detail-label">
+
+            ${escapeHTML(
+              formatLabel(
+                key
+              )
+            )}
+
+          </div>
+
+
+          <div class="detail-value">
+
+            ${escapeHTML(
+              String(
+                user[key]
+              )
+            )}
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+  );
+
+
+  /*
+    जर काहीच extra information नसेल
+  */
+
+  if (!detailsHTML) {
+
+    detailsHTML = `
+
+      <div class="detail-row">
+
+        <div class="detail-label">
+          Profile
+        </div>
+
+        <div class="detail-value">
+          या User ने अजून अतिरिक्त माहिती भरलेली नाही.
+        </div>
+
+      </div>
+
+    `;
+
+  }
+
+
+  /*
+    स्वतःच्या profile ला message button
+    दाखवायचा नाही.
+  */
+
+  const isOwnProfile =
+    currentUser &&
+    user.id ===
+    currentUser.id;
+
+
+  const messageButton =
+    isOwnProfile
+
+      ? ""
+
+      : `
+
+        <button
+          class="message-button"
+          onclick="openMessageBox()"
+        >
+          💬 Message करा
+        </button>
+
+      `;
+
+
+  document.getElementById(
+    "profileCard"
+  ).innerHTML = `
+
+    <div class="profile-top">
+
+      <div class="big-avatar">
+
+        ${escapeHTML(
+          getInitial(
+            username
+          )
+        )}
+
+      </div>
+
+
+      <div class="profile-name">
+
+        ${escapeHTML(
+          username
+        )}
+
+      </div>
+
+
+      ${
+        email
+          ? `
+            <div class="profile-email">
+              ${escapeHTML(
+                email
+              )}
+            </div>
+          `
+          : ""
+      }
+
+    </div>
+
+
+    <div class="details">
+
+      ${detailsHTML}
+
+    </div>
+
+
+    ${messageButton}
+
+  `;
+
+}
+
+
+/* =====================================================
+   FORMAT FIELD NAME
+===================================================== */
+
+function formatLabel(key) {
+
+  return key
+
+    .replace(
+      /_/g,
+      " "
+    )
+
+    .replace(
+      /\b\w/g,
+      function(letter) {
+
+        return letter.toUpperCase();
+
+      }
+    );
+
+}
+
+
+/* =====================================================
+   BACK TO USERS
+===================================================== */
+
+function showUsers() {
+
+  selectedUser =
+    null;
+
+
+  closeMessageBox();
+
+
+  profileView.style.display =
+    "none";
+
+  usersView.style.display =
+    "block";
+
+  mainHeader.style.display =
+    "block";
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+}
+
+
+/* =====================================================
+   OPEN MESSAGE
+===================================================== */
+
+function openMessageBox() {
+
+  if (!selectedUser) {
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "messageBox"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "messageText"
+  ).value =
+    "";
+
+
+  document.getElementById(
+    "messageText"
+  ).focus();
+
+}
+
+
+/* =====================================================
+   CLOSE MESSAGE
+===================================================== */
+
+function closeMessageBox() {
+
+  document.getElementById(
+    "messageBox"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "messageText"
+  ).value =
+    "";
+
+}
+
+
+/* =====================================================
+   SEND MESSAGE
+===================================================== */
+
+async function sendMessage() {
+
+  if (!currentUser) {
+
+    showStatus(
+      "आधी Login करा.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if (!selectedUser) {
+
+    return;
+
+  }
+
+
+  const text =
+    document.getElementById(
+      "messageText"
+    )
+    .value
+    .trim();
+
+
+  if (!text) {
+
+    showStatus(
+      "कृपया Message लिहा.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  if (
+    selectedUser.id ===
+    currentUser.id
+  ) {
+
+    showStatus(
+      "तुम्ही स्वतःला Message करू शकत नाही.",
+      false
+    );
+
+    return;
+
+  }
+
+
+  const button =
+    document.getElementById(
+      "sendButton"
+    );
+
+
+  button.disabled =
+    true;
+
+  button.innerText =
+    "Sending...";
+
+
+  try {
+
+    /*
+      IMPORTANT:
+
+      Supabase मध्ये "messages"
+      नावाची table असणे आवश्यक आहे.
+
+      Columns:
+      sender_id
+      receiver_id
+      message
+      created_at
+    */
+
+
+    const {
+      error
+    } =
+      await supabaseClient
+        .from("messages")
+        .insert({
+
+          sender_id:
+            currentUser.id,
+
+          receiver_id:
+            selectedUser.id,
+
+          message:
+            text
+
+        });
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    document.getElementById(
+      "messageText"
+    ).value =
+      "";
+
+
+    showStatus(
+      "✅ Message पाठवला.",
+      true
+    );
+
+
+    closeMessageBox();
+
+  }
+
+  catch(error) {
+
+    console.error(
+      "MESSAGE ERROR:",
+      error
+    );
+
+
+    showStatus(
+
+      "❌ Message पाठवता आला नाही. Supabase मध्ये messages table आणि RLS setup तपासा.",
+
+      false
+
+    );
+
+  }
+
+
+  button.disabled =
+    false;
+
+  button.innerText =
+    "📤 Send Message";
+
+}
+
+
+/* =====================================================
+   STATUS MESSAGE
+===================================================== */
+
+function showStatus(
+  text,
+  success
+) {
+
+  const box =
+    document.getElementById(
+      "statusMessage"
+    );
+
+
+  box.innerText =
+    text;
+
+
+  box.className =
+    success
+      ? "success"
+      : "error";
+
+
+  box.style.display =
+    "block";
+
+
+  setTimeout(
+    function() {
+
+      box.style.display =
+        "none";
+
+    },
+    3500
+  );
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+async function startPage() {
+
+  await loadCurrentUser();
+
+  await loadUsers();
+
+}
+
+
+/* =====================================================
+   START PAGE
+===================================================== */
+
+startPage();
+
+
+</script>
+
+</body>
+
+</html>
