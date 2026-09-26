@@ -311,11 +311,6 @@ body.dark{
   color:white;
 }
 
-.delete-btn:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
-
 .menu-item{
   width:100%;
   padding:15px 5px;
@@ -458,21 +453,18 @@ body.dark{
   color:#ffb3b3;
 }
 
-.forgot-password{
-  display:block;
+.forgot-btn{
   width:100%;
-  margin-top:12px;
-  padding:10px;
   border:none;
   background:transparent;
   color:#1976d2;
+  padding:12px 5px;
   font-size:14px;
-  font-weight:bold;
   cursor:pointer;
   text-align:center;
 }
 
-.dark .forgot-password{
+.dark .forgot-btn{
   color:#64b5f6;
 }
 
@@ -654,7 +646,7 @@ body.dark{
 </nav>
 
 
-<!-- EDIT MODAL -->
+<!-- EDIT -->
 
 <div class="modal" id="editModal">
 
@@ -730,7 +722,7 @@ body.dark{
 </div>
 
 
-<!-- PHOTO MODAL -->
+<!-- PHOTO -->
 
 <div class="modal" id="photoModal">
 
@@ -761,7 +753,7 @@ body.dark{
 </div>
 
 
-<!-- MENU MODAL -->
+<!-- MENU -->
 
 <div class="modal" id="menuModal">
 
@@ -814,11 +806,15 @@ body.dark{
     </button>
 
     <button
+      class="menu-item"
+      onclick="openAddAccount()">
+      ➕ Add Account
+    </button>
+
+    <button
       class="menu-item danger-item"
       onclick="openDeleteAccounts()">
-
       🗑️ Delete Account
-
     </button>
 
     <button
@@ -1035,7 +1031,52 @@ body.dark{
 </div>
 
 
-<!-- DELETE ACCOUNT : ACCOUNT LIST -->
+<!-- ADD ACCOUNT -->
+
+<div class="modal" id="addAccountModal">
+
+  <div class="modal-box">
+
+    <div class="modal-title">
+      Add Account
+    </div>
+
+    <div class="warning-box">
+
+      ➕ दुसऱ्या GyanSetu account ने login करण्यासाठी
+      सध्याच्या account मधून सुरक्षितपणे sign out केले जाईल.
+
+    </div>
+
+    <p style="line-height:1.6;margin-bottom:15px;">
+
+      पुढच्या screen वर existing account ने login करू शकतो
+      किंवा नवीन account तयार करू शकतो.
+
+    </p>
+
+    <div class="modal-buttons">
+
+      <button
+        class="cancel-btn"
+        onclick="closeModal('addAccountModal')">
+        Cancel
+      </button>
+
+      <button
+        class="save-btn"
+        onclick="continueAddAccount()">
+        Continue
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- DELETE ACCOUNT LIST -->
 
 <div class="modal" id="deleteAccountsModal">
 
@@ -1055,8 +1096,8 @@ body.dark{
 
     <p style="margin-bottom:14px;line-height:1.5;">
 
-      या device/browser वर GyanSetu मध्ये वापरलेली
-      accounts निवडा:
+      या browser/device वर GyanSetu मध्ये वापरलेली
+      accounts:
 
     </p>
 
@@ -1068,9 +1109,7 @@ body.dark{
     <button
       class="close-btn"
       onclick="closeModal('deleteAccountsModal')">
-
       Cancel
-
     </button>
 
   </div>
@@ -1078,7 +1117,7 @@ body.dark{
 </div>
 
 
-<!-- DELETE CONFIRMATION -->
+<!-- DELETE CONFIRM -->
 
 <div class="modal" id="deleteConfirmModal">
 
@@ -1092,8 +1131,8 @@ body.dark{
 
       ⚠️ हा account permanently delete होणार आहे.
 
-      Profile information, account access आणि
-      संबंधित GyanSetu data delete केला जाईल.
+      Profile information आणि account access
+      delete केला जाईल.
 
     </div>
 
@@ -1114,17 +1153,13 @@ body.dark{
       <button
         class="cancel-btn"
         onclick="closeModal('deleteConfirmModal')">
-
         Cancel
-
       </button>
 
       <button
         class="delete-btn"
         onclick="openPasswordModal()">
-
         Continue
-
       </button>
 
     </div>
@@ -1134,7 +1169,7 @@ body.dark{
 </div>
 
 
-<!-- DELETE PASSWORD -->
+<!-- PASSWORD -->
 
 <div class="modal" id="deletePasswordModal">
 
@@ -1153,9 +1188,7 @@ body.dark{
 
     <div class="form-group">
 
-      <label>
-        Password
-      </label>
+      <label>Password</label>
 
       <input
         type="password"
@@ -1164,6 +1197,14 @@ body.dark{
         autocomplete="current-password">
 
     </div>
+
+    <button
+      class="forgot-btn"
+      onclick="forgotPassword()">
+
+      🔑 Forgot Password?
+
+    </button>
 
     <div
       id="deletePasswordError"
@@ -1175,178 +1216,22 @@ body.dark{
       ">
     </div>
 
-    <button
-      class="forgot-password"
-      onclick="forgotDeletePassword()">
-
-      🔑 Forgot Password?
-
-    </button>
-
     <div class="modal-buttons">
 
       <button
         class="cancel-btn"
         onclick="closeModal('deletePasswordModal')">
-
         Cancel
-
       </button>
 
       <button
         class="delete-btn"
         id="finalDeleteBtn"
         onclick="verifyAndDeleteAccount()">
-
         🗑️ Delete Account
-
       </button>
 
     </div>
-
-  </div>
-
-</div>
-
-
-<!-- FORGOT PASSWORD EMAIL -->
-
-<div class="modal" id="forgotPasswordModal">
-
-  <div class="modal-box">
-
-    <div class="modal-title">
-      Reset Password
-    </div>
-
-    <div class="warning-box">
-
-      📧 आम्ही selected account च्या email वर
-      password reset link पाठवू.
-
-    </div>
-
-    <p
-      id="forgotPasswordEmail"
-      style="
-        font-weight:bold;
-        word-break:break-word;
-        margin-bottom:15px;
-      ">
-      -
-    </p>
-
-    <div
-      id="forgotPasswordError"
-      style="
-        display:none;
-        color:#d32f2f;
-        font-size:14px;
-        margin-bottom:10px;
-      ">
-    </div>
-
-    <div
-      id="forgotPasswordSuccess"
-      style="
-        display:none;
-        color:#2e7d32;
-        font-size:14px;
-        margin-bottom:10px;
-      ">
-    </div>
-
-    <div class="modal-buttons">
-
-      <button
-        class="cancel-btn"
-        onclick="closeModal('forgotPasswordModal')">
-
-        Cancel
-
-      </button>
-
-      <button
-        class="save-btn"
-        id="sendResetBtn"
-        onclick="sendPasswordReset()">
-
-        📧 Send Reset Link
-
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- NEW PASSWORD AFTER EMAIL LINK -->
-
-<div class="modal" id="newPasswordModal">
-
-  <div class="modal-box">
-
-    <div class="modal-title">
-      Set New Password
-    </div>
-
-    <div class="warning-box">
-
-      🔐 तुमचा नवीन password तयार करा.
-
-      Password किमान 6 characters असावा.
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-        New Password
-      </label>
-
-      <input
-        type="password"
-        id="newPassword"
-        placeholder="Enter new password"
-        autocomplete="new-password">
-
-    </div>
-
-    <div class="form-group">
-
-      <label>
-        Confirm New Password
-      </label>
-
-      <input
-        type="password"
-        id="confirmNewPassword"
-        placeholder="Confirm new password"
-        autocomplete="new-password">
-
-    </div>
-
-    <div
-      id="newPasswordError"
-      style="
-        display:none;
-        color:#d32f2f;
-        font-size:14px;
-        margin-bottom:10px;
-      ">
-    </div>
-
-    <button
-      class="save-btn"
-      id="updatePasswordBtn"
-      style="width:100%;"
-      onclick="updateNewPassword()">
-
-      🔐 Update Password
-
-    </button>
 
   </div>
 
@@ -1376,7 +1261,7 @@ supabase.createClient(
 
 
 /* =====================================================
-   SELECTED DELETE ACCOUNT
+   SELECTED ACCOUNT
 ===================================================== */
 
 let selectedDeleteAccount = null;
@@ -1443,7 +1328,7 @@ function openMenu(){
 
 
 /* =====================================================
-   EDIT MODAL
+   EDIT
 ===================================================== */
 
 function openEditModal(){
@@ -1488,7 +1373,7 @@ function openPhotoModal(){
 
 
 /* =====================================================
-   MENU FUNCTIONS
+   MENU
 ===================================================== */
 
 function openSettings(){
@@ -1552,6 +1437,43 @@ function openReset(){
 
 
 /* =====================================================
+   ADD ACCOUNT
+===================================================== */
+
+function openAddAccount(){
+
+  closeModal("menuModal");
+
+  openModal("addAccountModal");
+
+}
+
+
+async function continueAddAccount(){
+
+  closeModal("addAccountModal");
+
+  const {
+    error
+  } =
+  await supabaseClient.auth.signOut();
+
+  if(error){
+
+    console.error(
+      "Sign out error:",
+      error
+    );
+
+  }
+
+  window.location.href =
+    "username.html";
+
+}
+
+
+/* =====================================================
    LOAD PROFILE
 ===================================================== */
 
@@ -1563,10 +1485,12 @@ async function loadInformation(){
   } =
   await supabaseClient.auth.getUser();
 
+  if(error){
+    console.error(error);
+  }
 
   const user =
     data?.user;
-
 
   if(!user){
 
@@ -1623,7 +1547,6 @@ async function loadInformation(){
   document.getElementById("displayName").textContent =
     username;
 
-
   document.getElementById("displayEmail").textContent =
     email;
 
@@ -1633,42 +1556,35 @@ async function loadInformation(){
     localStorage.getItem("fullName") ??
     "";
 
-
   const dob =
     profile?.dob ??
     localStorage.getItem("dob") ??
     "";
-
 
   const school =
     profile?.school ??
     localStorage.getItem("school") ??
     "";
 
-
   const className =
     profile?.class_name ??
     localStorage.getItem("className") ??
     "";
-
 
   const medium =
     profile?.medium ??
     localStorage.getItem("medium") ??
     "";
 
-
   const city =
     profile?.city ??
     localStorage.getItem("city") ??
     "";
 
-
   const career =
     profile?.career_goal ??
     localStorage.getItem("career") ??
     "";
-
 
   const mobile =
     profile?.mobile ??
@@ -1679,38 +1595,29 @@ async function loadInformation(){
   document.getElementById("fullName").textContent =
     fullName || "-";
 
-
   document.getElementById("dob").textContent =
     dob || "-";
-
 
   document.getElementById("school").textContent =
     school || "-";
 
-
   document.getElementById("className").textContent =
     className || "-";
-
 
   document.getElementById("medium").textContent =
     medium || "-";
 
-
   document.getElementById("city").textContent =
     city || "-";
-
 
   document.getElementById("career").textContent =
     career || "-";
 
-
   document.getElementById("mobile").textContent =
     mobile || "-";
 
-
   document.getElementById("email").textContent =
     email || "-";
-
 
   document.getElementById("gyanId").textContent =
     user.id || "-";
@@ -1751,22 +1658,20 @@ function getLocalAccounts(){
   try{
 
     const saved =
-      localStorage.getItem("gyansetuAccounts");
-
+      localStorage.getItem(
+        "gyansetuAccounts"
+      );
 
     if(!saved){
       return [];
     }
 
-
     const accounts =
       JSON.parse(saved);
-
 
     if(!Array.isArray(accounts)){
       return [];
     }
-
 
     return accounts;
 
@@ -1798,25 +1703,29 @@ function registerLocalAccount(account){
     getLocalAccounts();
 
 
-  const existingIndex =
+  const index =
     accounts.findIndex(
       function(item){
 
-        return item.email.toLowerCase() ===
-          account.email.toLowerCase();
+        return String(item.email)
+          .toLowerCase() ===
+          String(account.email)
+          .toLowerCase();
 
       }
     );
 
 
-  if(existingIndex >= 0){
+  if(index >= 0){
 
-    accounts[existingIndex] =
+    accounts[index] =
       account;
 
   }else{
 
-    accounts.push(account);
+    accounts.push(
+      account
+    );
 
   }
 
@@ -1830,14 +1739,15 @@ function registerLocalAccount(account){
 
 
 /* =====================================================
-   DELETE ACCOUNT SCREEN
+   DELETE ACCOUNT LIST
 ===================================================== */
 
 function openDeleteAccounts(){
 
   closeModal("menuModal");
 
-  selectedDeleteAccount = null;
+  selectedDeleteAccount =
+    null;
 
   renderDeleteAccounts();
 
@@ -1846,17 +1756,15 @@ function openDeleteAccounts(){
 }
 
 
-/* =====================================================
-   SHOW ACCOUNTS
-===================================================== */
-
 function renderDeleteAccounts(){
 
   const container =
-    document.getElementById("accountList");
+    document.getElementById(
+      "accountList"
+    );
 
-
-  container.innerHTML = "";
+  container.innerHTML =
+    "";
 
 
   const accounts =
@@ -1892,7 +1800,6 @@ function renderDeleteAccounts(){
 
       const button =
         document.createElement("button");
-
 
       button.className =
         "account-item";
@@ -1941,12 +1848,16 @@ function renderDeleteAccounts(){
       button.onclick =
         function(){
 
-          selectDeleteAccount(account);
+          selectDeleteAccount(
+            account
+          );
 
         };
 
 
-      container.appendChild(button);
+      container.appendChild(
+        button
+      );
 
     }
   );
@@ -1964,7 +1875,9 @@ function selectDeleteAccount(account){
     account;
 
 
-  closeModal("deleteAccountsModal");
+  closeModal(
+    "deleteAccountsModal"
+  );
 
 
   document.getElementById(
@@ -1980,31 +1893,39 @@ function selectDeleteAccount(account){
     account.email;
 
 
-  openModal("deleteConfirmModal");
+  openModal(
+    "deleteConfirmModal"
+  );
 
 }
 
 
 /* =====================================================
-   OPEN PASSWORD
+   PASSWORD MODAL
 ===================================================== */
 
 function openPasswordModal(){
 
-  closeModal("deleteConfirmModal");
+  closeModal(
+    "deleteConfirmModal"
+  );
 
 
   document.getElementById(
     "deletePassword"
-  ).value = "";
+  ).value =
+    "";
 
 
   document.getElementById(
     "deletePasswordError"
-  ).style.display = "none";
+  ).style.display =
+    "none";
 
 
-  openModal("deletePasswordModal");
+  openModal(
+    "deletePasswordModal"
+  );
 
 
   setTimeout(
@@ -2016,6 +1937,78 @@ function openPasswordModal(){
 
     },
     200
+  );
+
+}
+
+
+/* =====================================================
+   FORGOT PASSWORD
+===================================================== */
+
+async function forgotPassword(){
+
+  if(!selectedDeleteAccount){
+
+    showToast(
+      "Account select करा."
+    );
+
+    return;
+
+  }
+
+
+  const email =
+    selectedDeleteAccount.email;
+
+
+  if(!email){
+
+    showToast(
+      "या account साठी email उपलब्ध नाही."
+    );
+
+    return;
+
+  }
+
+
+  const redirectUrl =
+    window.location.origin +
+    "/username.html";
+
+
+  const {
+    error
+  } =
+  await supabaseClient.auth.resetPasswordForEmail(
+    email,
+    {
+      redirectTo:redirectUrl
+    }
+  );
+
+
+  if(error){
+
+    console.error(
+      "Password reset error:",
+      error
+    );
+
+
+    showToast(
+      "Password reset email पाठवता आला नाही."
+    );
+
+    return;
+
+  }
+
+
+  showToast(
+    "Password reset link email वर पाठवला आहे."
   );
 
 }
@@ -2076,9 +2069,14 @@ async function verifyAndDeleteAccount(){
     "Checking...";
 
 
+  /*
+    Password verification.
+    This also signs in as the selected account.
+  */
+
   const {
-    data: loginData,
-    error: loginError
+    data:loginData,
+    error:loginError
   } =
   await supabaseClient.auth.signInWithPassword({
 
@@ -2100,7 +2098,7 @@ async function verifyAndDeleteAccount(){
 
 
     errorBox.textContent =
-      "Password चुकीचा आहे किंवा account login करता आला नाही.";
+      "Password चुकीचा आहे. Forgot Password वापरा.";
 
 
     errorBox.style.display =
@@ -2112,7 +2110,6 @@ async function verifyAndDeleteAccount(){
 
     deleteButton.textContent =
       "🗑️ Delete Account";
-
 
     return;
 
@@ -2132,7 +2129,6 @@ async function verifyAndDeleteAccount(){
     errorBox.textContent =
       "Account verification failed.";
 
-
     errorBox.style.display =
       "block";
 
@@ -2143,26 +2139,30 @@ async function verifyAndDeleteAccount(){
     deleteButton.textContent =
       "🗑️ Delete Account";
 
-
     return;
 
   }
 
+
+  /*
+    Password verified.
+    Call secure Edge Function.
+  */
 
   deleteButton.textContent =
     "Deleting...";
 
 
   const {
-    data: deleteData,
-    error: deleteError
+    data:deleteData,
+    error:deleteError
   } =
   await supabaseClient.functions.invoke(
     "delete-account",
     {
       body:{
         user_id:
-          selectedDeleteAccount.id
+          verifiedUser.id
       }
     }
   );
@@ -2177,8 +2177,7 @@ async function verifyAndDeleteAccount(){
 
 
     errorBox.textContent =
-      "Account delete करता आला नाही. कृपया पुन्हा प्रयत्न करा.";
-
+      "Account delete करता आला नाही.";
 
     errorBox.style.display =
       "block";
@@ -2189,7 +2188,6 @@ async function verifyAndDeleteAccount(){
 
     deleteButton.textContent =
       "🗑️ Delete Account";
-
 
     return;
 
@@ -2206,7 +2204,6 @@ async function verifyAndDeleteAccount(){
       deleteData.message ||
       "Account delete failed.";
 
-
     errorBox.style.display =
       "block";
 
@@ -2217,19 +2214,30 @@ async function verifyAndDeleteAccount(){
     deleteButton.textContent =
       "🗑️ Delete Account";
 
-
     return;
 
   }
 
+
+  /*
+    Remove account from local registry.
+  */
 
   removeLocalAccount(
     selectedDeleteAccount.email
   );
 
 
+  /*
+    Clear local profile data.
+  */
+
   clearLocalProfileData();
 
+
+  /*
+    Sign out.
+  */
 
   await supabaseClient.auth.signOut();
 
@@ -2244,6 +2252,10 @@ async function verifyAndDeleteAccount(){
   );
 
 
+  selectedDeleteAccount =
+    null;
+
+
   setTimeout(
     function(){
 
@@ -2252,377 +2264,6 @@ async function verifyAndDeleteAccount(){
 
     },
     1500
-  );
-
-}
-
-
-/* =====================================================
-   FORGOT PASSWORD
-===================================================== */
-
-function forgotDeletePassword(){
-
-  if(!selectedDeleteAccount){
-
-    showToast(
-      "Please select an account first."
-    );
-
-    return;
-
-  }
-
-
-  closeModal(
-    "deletePasswordModal"
-  );
-
-
-  document.getElementById(
-    "forgotPasswordEmail"
-  ).textContent =
-    selectedDeleteAccount.email;
-
-
-  document.getElementById(
-    "forgotPasswordError"
-  ).style.display =
-    "none";
-
-
-  document.getElementById(
-    "forgotPasswordSuccess"
-  ).style.display =
-    "none";
-
-
-  openModal(
-    "forgotPasswordModal"
-  );
-
-}
-
-
-/* =====================================================
-   SEND PASSWORD RESET EMAIL
-===================================================== */
-
-async function sendPasswordReset(){
-
-  if(!selectedDeleteAccount){
-
-    showToast(
-      "Please select an account."
-    );
-
-    return;
-
-  }
-
-
-  const button =
-    document.getElementById(
-      "sendResetBtn"
-    );
-
-
-  const errorBox =
-    document.getElementById(
-      "forgotPasswordError"
-    );
-
-
-  const successBox =
-    document.getElementById(
-      "forgotPasswordSuccess"
-    );
-
-
-  errorBox.style.display =
-    "none";
-
-  successBox.style.display =
-    "none";
-
-
-  button.disabled =
-    true;
-
-  button.textContent =
-    "Sending...";
-
-
-  /*
-     Password reset link will return to this
-     same profile.html page.
-
-     Supabase will then send PASSWORD_RECOVERY
-     event and we will show the New Password modal.
-  */
-
-  const redirectUrl =
-    window.location.origin +
-    window.location.pathname;
-
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.resetPasswordForEmail(
-
-    selectedDeleteAccount.email,
-
-    {
-      redirectTo:
-        redirectUrl
-    }
-
-  );
-
-
-  if(error){
-
-    console.error(
-      "Password reset error:",
-      error
-    );
-
-
-    errorBox.textContent =
-      "Password reset email पाठवता आला नाही. Email आणि Supabase Auth URL settings तपासा.";
-
-    errorBox.style.display =
-      "block";
-
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "📧 Send Reset Link";
-
-
-    return;
-
-  }
-
-
-  successBox.textContent =
-    "Reset link तुमच्या email वर पाठवला आहे. Email उघडा आणि नवीन password तयार करा.";
-
-  successBox.style.display =
-    "block";
-
-
-  button.disabled =
-    false;
-
-  button.textContent =
-    "📧 Send Reset Link";
-
-}
-
-
-/* =====================================================
-   PASSWORD RECOVERY EVENT
-===================================================== */
-
-supabaseClient.auth.onAuthStateChange(
-  async function(event){
-
-    if(event === "PASSWORD_RECOVERY"){
-
-      closeModal("forgotPasswordModal");
-
-      closeModal("deletePasswordModal");
-
-      closeModal("deleteConfirmModal");
-
-      closeModal("deleteAccountsModal");
-
-      document.getElementById(
-        "newPassword"
-      ).value = "";
-
-      document.getElementById(
-        "confirmNewPassword"
-      ).value = "";
-
-      document.getElementById(
-        "newPasswordError"
-      ).style.display = "none";
-
-      openModal(
-        "newPasswordModal"
-      );
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   UPDATE NEW PASSWORD
-===================================================== */
-
-async function updateNewPassword(){
-
-  const newPassword =
-    document.getElementById(
-      "newPassword"
-    ).value;
-
-
-  const confirmPassword =
-    document.getElementById(
-      "confirmNewPassword"
-    ).value;
-
-
-  const errorBox =
-    document.getElementById(
-      "newPasswordError"
-    );
-
-
-  const button =
-    document.getElementById(
-      "updatePasswordBtn"
-    );
-
-
-  errorBox.style.display =
-    "none";
-
-
-  if(!newPassword){
-
-    errorBox.textContent =
-      "New password enter करा.";
-
-    errorBox.style.display =
-      "block";
-
-    return;
-
-  }
-
-
-  if(newPassword.length < 6){
-
-    errorBox.textContent =
-      "Password किमान 6 characters असावा.";
-
-    errorBox.style.display =
-      "block";
-
-    return;
-
-  }
-
-
-  if(newPassword !== confirmPassword){
-
-    errorBox.textContent =
-      "दोन्ही passwords समान नाहीत.";
-
-    errorBox.style.display =
-      "block";
-
-    return;
-
-  }
-
-
-  button.disabled =
-    true;
-
-  button.textContent =
-    "Updating...";
-
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.updateUser({
-
-    password:
-      newPassword
-
-  });
-
-
-  if(error){
-
-    console.error(
-      "Password update error:",
-      error
-    );
-
-
-    errorBox.textContent =
-      "Password update करता आला नाही. Reset link पुन्हा वापरून पहा.";
-
-    errorBox.style.display =
-      "block";
-
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "🔐 Update Password";
-
-
-    return;
-
-  }
-
-
-  button.disabled =
-    false;
-
-  button.textContent =
-    "🔐 Update Password";
-
-
-  closeModal(
-    "newPasswordModal"
-  );
-
-
-  showToast(
-    "Password successfully changed."
-  );
-
-
-  /*
-     After password reset, the user is authenticated
-     with the selected account.
-
-     We reopen the Delete Account password screen
-     so they can continue deleting the account.
-  */
-
-  setTimeout(
-    function(){
-
-      if(selectedDeleteAccount){
-
-        openModal(
-          "deletePasswordModal"
-        );
-
-        document.getElementById(
-          "deletePassword"
-        ).focus();
-
-      }
-
-    },
-    700
   );
 
 }
@@ -2642,8 +2283,10 @@ function removeLocalAccount(email){
     accounts.filter(
       function(account){
 
-        return account.email.toLowerCase() !==
-          email.toLowerCase();
+        return String(account.email)
+          .toLowerCase() !==
+          String(email)
+          .toLowerCase();
 
       }
     );
@@ -2719,7 +2362,9 @@ function updateAvatar(username){
 
     const letter =
       username
-      ? username.charAt(0).toUpperCase()
+      ? username
+        .charAt(0)
+        .toUpperCase()
       : "G";
 
 
@@ -2793,7 +2438,7 @@ async function saveInformation(){
 
   const {
     data,
-    error: userError
+    error:userError
   } =
   await supabaseClient.auth.getUser();
 
@@ -2813,50 +2458,68 @@ async function saveInformation(){
   }
 
 
-  localStorage.setItem("fullName",fullName);
-  localStorage.setItem("dob",dob);
-  localStorage.setItem("school",school);
-  localStorage.setItem("className",className);
-  localStorage.setItem("medium",medium);
-  localStorage.setItem("city",city);
-  localStorage.setItem("career",career);
-  localStorage.setItem("mobile",mobile);
-  localStorage.setItem("email",email);
+  localStorage.setItem(
+    "fullName",
+    fullName
+  );
+
+  localStorage.setItem(
+    "dob",
+    dob
+  );
+
+  localStorage.setItem(
+    "school",
+    school
+  );
+
+  localStorage.setItem(
+    "className",
+    className
+  );
+
+  localStorage.setItem(
+    "medium",
+    medium
+  );
+
+  localStorage.setItem(
+    "city",
+    city
+  );
+
+  localStorage.setItem(
+    "career",
+    career
+  );
+
+  localStorage.setItem(
+    "mobile",
+    mobile
+  );
+
+  localStorage.setItem(
+    "email",
+    email
+  );
 
 
   const {
-    error: profileError
+    error:profileError
   } =
   await supabaseClient
     .from("Profiles")
     .update({
 
-      full_name:
-        fullName,
-
-      dob:
-        dob || null,
-
-      school:
-        school,
-
-      class_name:
-        className,
-
-      medium:
-        medium,
-
-      city:
-        city,
-
-      career_goal:
-        career,
-
-      mobile:
-        mobile,
-
-      email:
-        email
+      full_name:fullName,
+      dob:dob || null,
+      school:school,
+      class_name:className,
+      medium:medium,
+      city:city,
+      career_goal:career,
+      mobile:mobile,
+      email:email
 
     })
     .eq(
@@ -2877,7 +2540,6 @@ async function saveInformation(){
       "Database save failed"
     );
 
-
     return;
 
   }
@@ -2887,29 +2549,14 @@ async function saveInformation(){
 
     data:{
 
-      full_name:
-        fullName,
-
-      dob:
-        dob,
-
-      school:
-        school,
-
-      class_name:
-        className,
-
-      medium:
-        medium,
-
-      city:
-        city,
-
-      career_goal:
-        career,
-
-      mobile:
-        mobile
+      full_name:fullName,
+      dob:dob,
+      school:school,
+      class_name:className,
+      medium:medium,
+      city:city,
+      career_goal:career,
+      mobile:mobile
 
     }
 
@@ -2962,7 +2609,9 @@ function changePhoto(event){
       );
 
 
-      closeModal("photoModal");
+      closeModal(
+        "photoModal"
+      );
 
 
       showToast(
@@ -2983,17 +2632,23 @@ function changePhoto(event){
 
 function toggleDarkMode(){
 
-  document.body.classList.toggle("dark");
+  document.body.classList.toggle(
+    "dark"
+  );
 
 
   localStorage.setItem(
     "darkMode",
-    document.body.classList.contains("dark")
+    document.body.classList.contains(
+      "dark"
+    )
   );
 
 
   showToast(
-    document.body.classList.contains("dark")
+    document.body.classList.contains(
+      "dark"
+    )
     ? "Dark mode enabled"
     : "Dark mode disabled"
   );
@@ -3019,7 +2674,9 @@ function saveNotes(){
   );
 
 
-  closeModal("notesModal");
+  closeModal(
+    "notesModal"
+  );
 
 
   showToast(
@@ -3077,32 +2734,15 @@ async function resetInformation(){
       .from("Profiles")
       .update({
 
-        full_name:
-          null,
-
-        dob:
-          null,
-
-        school:
-          null,
-
-        class_name:
-          null,
-
-        medium:
-          null,
-
-        city:
-          null,
-
-        career_goal:
-          null,
-
-        mobile:
-          null,
-
-        email:
-          user.email || null
+        full_name:null,
+        dob:null,
+        school:null,
+        class_name:null,
+        medium:null,
+        city:null,
+        career_goal:null,
+        mobile:null,
+        email:user.email || null
 
       })
       .eq(
@@ -3113,7 +2753,9 @@ async function resetInformation(){
   }
 
 
-  closeModal("resetModal");
+  closeModal(
+    "resetModal"
+  );
 
 
   await loadInformation();
@@ -3135,10 +2777,8 @@ function escapeHtml(text){
   const div =
     document.createElement("div");
 
-
   div.textContent =
     text ?? "";
-
 
   return div.innerHTML;
 
@@ -3152,7 +2792,9 @@ function escapeHtml(text){
 function showToast(message){
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
 
   toast.textContent =
@@ -3170,7 +2812,7 @@ function showToast(message){
         "none";
 
     },
-    2500
+    3000
   );
 
 }
@@ -3183,12 +2825,16 @@ function showToast(message){
 async function initProfile(){
 
   const darkMode =
-    localStorage.getItem("darkMode");
+    localStorage.getItem(
+      "darkMode"
+    );
 
 
   if(darkMode === "true"){
 
-    document.body.classList.add("dark");
+    document.body.classList.add(
+      "dark"
+    );
 
   }
 
@@ -3217,7 +2863,9 @@ window.addEventListener(
   function(event){
 
     const modals =
-      document.querySelectorAll(".modal");
+      document.querySelectorAll(
+        ".modal"
+      );
 
 
     modals.forEach(
