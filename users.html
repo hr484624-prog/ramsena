@@ -1,620 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Users - GyanSetu</title>
+  <title>GyanSetu - Users</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<style>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+    }
 
-body{
-  background:#f4f6f9;
-  color:#222;
-  padding-bottom:20px;
-}
+    .header {
+      background: white;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-body.dark{
-  background:#121212;
-  color:#fff;
-}
+    .back {
+      border: none;
+      background: none;
+      font-size: 25px;
+      cursor: pointer;
+    }
 
+    .title {
+      font-size: 21px;
+      font-weight: bold;
+    }
 
-/* HEADER */
+    .search-box {
+      padding: 15px;
+    }
 
-.header{
-  height:60px;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  padding:0 12px;
-  position:sticky;
-  top:0;
-  z-index:100;
-  box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
+    .search-box input {
+      width: 100%;
+      padding: 13px 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
 
-.dark .header{
-  background:#1e1e1e;
-}
+    #usersList {
+      padding: 0 15px 20px;
+    }
 
-.back-btn{
-  width:42px;
-  height:42px;
-  border:none;
-  background:transparent;
-  font-size:27px;
-  cursor:pointer;
-  border-radius:50%;
-}
+    .user-card {
+      background: white;
+      padding: 14px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.06);
+      cursor: pointer;
+    }
 
-.back-btn:hover{
-  background:#eee;
-}
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #e8f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
 
-.dark .back-btn:hover{
-  background:#333;
-}
+    .user-info {
+      min-width: 0;
+    }
 
-.header-title{
-  flex:1;
-  text-align:center;
-  font-size:20px;
-  font-weight:bold;
-  margin-right:42px;
-}
+    .username {
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
 
+    .email {
+      font-size: 13px;
+      color: #777;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-/* CONTAINER */
+    .loading,
+    .empty,
+    .error {
+      text-align: center;
+      padding: 40px 20px;
+      color: #777;
+    }
 
-.container{
-  max-width:600px;
-  margin:auto;
-  padding:15px;
-}
+    .error {
+      color: #d93025;
+    }
 
-
-/* SEARCH */
-
-.search-box{
-  background:#fff;
-  border-radius:14px;
-  padding:10px 14px;
-  display:flex;
-  align-items:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-  margin-bottom:15px;
-}
-
-.dark .search-box{
-  background:#1e1e1e;
-}
-
-.search-icon{
-  font-size:20px;
-  margin-right:8px;
-}
-
-.search-box input{
-  border:none;
-  outline:none;
-  width:100%;
-  background:transparent;
-  font-size:16px;
-  color:#222;
-}
-
-.dark .search-box input{
-  color:#fff;
-}
-
-
-/* USER LIST */
-
-.users-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.user-card{
-  background:#fff;
-  border-radius:15px;
-  padding:13px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  cursor:pointer;
-  box-shadow:0 2px 8px rgba(0,0,0,.07);
-  transition:.15s;
-}
-
-.user-card:active{
-  transform:scale(.98);
-}
-
-.dark .user-card{
-  background:#1e1e1e;
-}
-
-.user-avatar{
-  width:52px;
-  height:52px;
-  min-width:52px;
-  border-radius:50%;
-  background:#1976d2;
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  font-weight:bold;
-}
-
-.user-info{
-  flex:1;
-  min-width:0;
-}
-
-.username{
-  font-size:17px;
-  font-weight:bold;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.user-email{
-  font-size:13px;
-  color:#777;
-  margin-top:4px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.dark .user-email{
-  color:#aaa;
-}
-
-.arrow{
-  font-size:22px;
-  color:#888;
-}
-
-
-/* STATUS */
-
-.status{
-  text-align:center;
-  padding:35px 15px;
-  color:#777;
-  font-size:15px;
-}
-
-.dark .status{
-  color:#aaa;
-}
-
-
-/* REFRESH */
-
-.refresh-btn{
-  width:100%;
-  border:none;
-  background:#1976d2;
-  color:white;
-  padding:13px;
-  border-radius:12px;
-  font-size:15px;
-  font-weight:bold;
-  margin-bottom:15px;
-  cursor:pointer;
-}
-
-</style>
+    .refresh {
+      margin-left: auto;
+      border: none;
+      background: #f1f3f5;
+      padding: 9px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+    }
+  </style>
 </head>
 
 <body>
 
+  <div class="header">
+    <button class="back" onclick="goBack()">‹</button>
 
-<!-- HEADER -->
+    <div class="title">GyanSetu Users</div>
 
-<header class="header">
-
-  <button class="back-btn" onclick="goBack()">
-    ←
-  </button>
-
-  <div class="header-title">
-    Users
+    <button class="refresh" onclick="loadUsers()">↻</button>
   </div>
 
-</header>
-
-
-<main class="container">
-
-
-  <!-- SEARCH -->
-
   <div class="search-box">
-
-    <span class="search-icon">
-      🔍
-    </span>
-
     <input
       type="text"
       id="searchInput"
-      placeholder="Search users..."
+      placeholder="Search user..."
       oninput="searchUsers()"
     >
-
   </div>
 
-
-  <!-- REFRESH -->
-
-  <button
-    class="refresh-btn"
-    onclick="loadUsers()">
-
-    🔄 Refresh Users
-
-  </button>
-
-
-  <!-- USERS -->
-
-  <div
-    class="users-list"
-    id="usersList">
-
-    <div class="status">
-      Users loading...
-    </div>
-
+  <div id="usersList">
+    <div class="loading">Users loading...</div>
   </div>
 
+  <script>
+    const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
 
-</main>
+    const SUPABASE_KEY =
+      "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
 
+    const supabaseClient = supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
-<script>
+    let allUsers = [];
 
-/* =====================================
-   SUPABASE
-===================================== */
+    async function loadUsers() {
 
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
+      const usersList = document.getElementById("usersList");
 
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+      usersList.innerHTML =
+        '<div class="loading">Users loading...</div>';
 
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-/* =====================================
-   VARIABLES
-===================================== */
-
-let allUsers = [];
-
-
-/* =====================================
-   BACK
-===================================== */
-
-function goBack(){
-
-  window.location.href="profile.html";
-
-}
-
-
-/* =====================================
-   LOAD USERS
-===================================== */
-
-async function loadUsers(){
-
-  const usersList =
-    document.getElementById("usersList");
-
-  usersList.innerHTML = `
-    <div class="status">
-      Users loading...
-    </div>
-  `;
-
-
-  try{
-
-    /*
-      Profiles table मधून
-      सर्व registered users घेणे
-    */
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("Profiles")
-      .select("*")
-      .order("username", {
-        ascending:true
-      });
-
-
-    if(error){
-
-      console.error(
-        "Users loading error:",
+      const {
+        data: users,
         error
-      );
+      } = await supabaseClient
+        .from("Profiles")
+        .select("*")
+        .order("username", { ascending: true });
 
-      usersList.innerHTML = `
-        <div class="status">
-          Users load होत नाहीत.<br><br>
-          ${error.message}
-        </div>
-      `;
+      if (error) {
 
-      return;
+        console.error(error);
+
+        usersList.innerHTML = `
+          <div class="error">
+            Users load झाले नाहीत.<br><br>
+            ${error.message}
+          </div>
+        `;
+
+        return;
+      }
+
+      allUsers = users || [];
+
+      displayUsers(allUsers);
     }
 
 
-    allUsers = data || [];
+    function displayUsers(users) {
 
+      const usersList = document.getElementById("usersList");
 
-    if(allUsers.length === 0){
+      if (!users || users.length === 0) {
 
-      usersList.innerHTML = `
-        <div class="status">
-          सध्या एकही user नाही.
-        </div>
-      `;
+        usersList.innerHTML = `
+          <div class="empty">
+            सध्या कोणताही user उपलब्ध नाही.
+          </div>
+        `;
 
-      return;
+        return;
+      }
+
+      usersList.innerHTML = users.map(user => {
+
+        const username =
+          user.username || "Unknown User";
+
+        const email =
+          user.email || "";
+
+        const firstLetter =
+          username.charAt(0).toUpperCase();
+
+        return `
+          <div
+            class="user-card"
+            onclick="openUser('${user.id}')"
+          >
+
+            <div class="avatar">
+              ${firstLetter}
+            </div>
+
+            <div class="user-info">
+
+              <div class="username">
+                ${escapeHTML(username)}
+              </div>
+
+              ${
+                email
+                ? `<div class="email">${escapeHTML(email)}</div>`
+                : ""
+              }
+
+            </div>
+
+          </div>
+        `;
+
+      }).join("");
     }
 
 
-    displayUsers(allUsers);
+    function searchUsers() {
 
+      const search =
+        document
+          .getElementById("searchInput")
+          .value
+          .toLowerCase()
+          .trim();
 
-  }catch(error){
+      if (!search) {
 
-    console.error(error);
+        displayUsers(allUsers);
 
-    usersList.innerHTML = `
-      <div class="status">
-        Users load करताना error आला.
-      </div>
-    `;
+        return;
+      }
 
-  }
+      const filtered =
+        allUsers.filter(user => {
 
-}
+          const username =
+            (user.username || "").toLowerCase();
 
+          const email =
+            (user.email || "").toLowerCase();
 
-/* =====================================
-   DISPLAY USERS
-===================================== */
+          return (
+            username.includes(search) ||
+            email.includes(search)
+          );
 
-function displayUsers(users){
+        });
 
-  const usersList =
-    document.getElementById("usersList");
+      displayUsers(filtered);
+    }
 
 
-  if(!users || users.length === 0){
+    function openUser(id) {
 
-    usersList.innerHTML = `
-      <div class="status">
-        User सापडला नाही.
-      </div>
-    `;
+      if (!id) return;
 
-    return;
-  }
+      window.location.href =
+        "user-profile.html?id=" +
+        encodeURIComponent(id);
+    }
 
 
-  usersList.innerHTML = "";
+    function goBack() {
 
+      window.history.back();
+    }
 
-  users.forEach(function(user){
 
-    const username =
-      user.username ||
-      "User";
+    function escapeHTML(text) {
 
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-    const firstLetter =
-      username
-      .charAt(0)
-      .toUpperCase();
 
-
-    const email =
-      user.email ||
-      "";
-
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "user-card";
-
-
-    card.onclick = function(){
-
-      openUserProfile(user.id);
-
-    };
-
-
-    card.innerHTML = `
-
-      <div class="user-avatar">
-        ${escapeHtml(firstLetter)}
-      </div>
-
-      <div class="user-info">
-
-        <div class="username">
-          ${escapeHtml(username)}
-        </div>
-
-        ${
-          email
-          ?
-          `<div class="user-email">
-             ${escapeHtml(email)}
-           </div>`
-          :
-          ""
-        }
-
-      </div>
-
-      <div class="arrow">
-        ›
-      </div>
-
-    `;
-
-
-    usersList.appendChild(card);
-
-  });
-
-}
-
-
-/* =====================================
-   SEARCH USERS
-===================================== */
-
-function searchUsers(){
-
-  const search =
-    document
-      .getElementById("searchInput")
-      .value
-      .toLowerCase()
-      .trim();
-
-
-  if(!search){
-
-    displayUsers(allUsers);
-
-    return;
-  }
-
-
-  const filtered =
-    allUsers.filter(function(user){
-
-      const username =
-        (user.username || "")
-        .toLowerCase();
-
-      const email =
-        (user.email || "")
-        .toLowerCase();
-
-
-      return (
-        username.includes(search) ||
-        email.includes(search)
-      );
-
-    });
-
-
-  displayUsers(filtered);
-
-}
-
-
-/* =====================================
-   OPEN USER PROFILE
-===================================== */
-
-function openUserProfile(userId){
-
-  /*
-    User ID पुढच्या profile page ला
-    URL मधून पाठवला आहे.
-  */
-
-  window.location.href =
-    "user-profile.html?id=" +
-    encodeURIComponent(userId);
-
-}
-
-
-/* =====================================
-   HTML SECURITY
-===================================== */
-
-function escapeHtml(value){
-
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* =====================================
-   DARK MODE
-===================================== */
-
-function loadDarkMode(){
-
-  if(
-    localStorage.getItem("darkMode")
-    === "true"
-  ){
-
-    document.body.classList.add("dark");
-
-  }
-
-}
-
-
-/* =====================================
-   START
-===================================== */
-
-loadDarkMode();
-
-loadUsers();
-
-</script>
+    loadUsers();
+  </script>
 
 </body>
 </html>
