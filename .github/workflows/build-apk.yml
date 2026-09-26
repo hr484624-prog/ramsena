@@ -10,15 +10,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      ONESIGNAL_DISABLE_LOCATION: true
+
     steps:
+
+      # --------------------------------------------------
+      # 1. Checkout
+      # --------------------------------------------------
 
       - name: Checkout repository
         uses: actions/checkout@v4
+
+
+      # --------------------------------------------------
+      # 2. Node.js
+      # --------------------------------------------------
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+
+      # --------------------------------------------------
+      # 3. Java
+      # --------------------------------------------------
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -26,15 +43,64 @@ jobs:
           distribution: temurin
           java-version: 21
 
-      - name: Install Capacitor
+
+      # --------------------------------------------------
+      # 4. Install Capacitor + OneSignal
+      # --------------------------------------------------
+
+      - name: Install Capacitor and OneSignal
         run: |
           npm init -y
-          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+
+          npm install \
+            @capacitor/core@7 \
+            @capacitor/cli@7 \
+            @capacitor/android@7 \
+            @onesignal/capacitor-plugin@latest
+
+          npm install esbuild
+
+
+      # --------------------------------------------------
+      # 5. Create www folder
+      #
+      # IMPORTANT:
+      # google-services.json is NOT copied to www.
+      # --------------------------------------------------
 
       - name: Create www folder
         run: |
+          rm -rf www
           mkdir -p www
-          cp -r *.html *.css *.js *.json *.png *.jpg *.jpeg *.webp www/ 2>/dev/null || true
+
+          find . -maxdepth 1 -type f \( \
+            -name "*.html" \
+            -o -name "*.css" \
+            -o -name "*.js" \
+            -o -name "*.png" \
+            -o -name "*.jpg" \
+            -o -name "*.jpeg" \
+            -o -name "*.webp" \
+          \) -exec cp {} www/ \;
+
+
+      # --------------------------------------------------
+      # 6. Check Firebase file
+      # --------------------------------------------------
+
+      - name: Check Firebase configuration
+        run: |
+          if [ ! -f "google-services.json" ]; then
+            echo "ERROR: google-services.json not found in repository root."
+            exit 1
+          fi
+
+          echo "Firebase google-services.json found."
+
+
+      # --------------------------------------------------
+      # 7. Create Capacitor config
+      # --------------------------------------------------
 
       - name: Create Capacitor config
         run: |
@@ -49,8 +115,68 @@ jobs:
           }
           EOF
 
+
+      # --------------------------------------------------
+      # 8. Add Android
+      # --------------------------------------------------
+
       - name: Add Android
-        run: npx cap add android
+        run: |
+          npx cap add android
+
+
+      # --------------------------------------------------
+      # 9. Copy Firebase configuration
+      # --------------------------------------------------
+
+      - name: Add Firebase google-services.json
+        run: |
+          cp google-services.json android/app/google-services.json
+
+
+      # --------------------------------------------------
+      # 10. Configure Google Services Gradle plugin
+      # --------------------------------------------------
+
+      - name: Configure Google Services
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          project_gradle = Path("android/build.gradle")
+
+          text = project_gradle.read_text()
+
+          if "com.google.gms:google-services" not in text:
+              text += """
+
+          buildscript {
+              dependencies {
+                  classpath 'com.google.gms:google-services:4.4.4'
+              }
+          }
+          """
+
+          project_gradle.write_text(text)
+
+
+          app_gradle = Path("android/app/build.gradle")
+
+          text = app_gradle.read_text()
+
+          if "com.google.gms.google-services" not in text:
+              text += """
+
+          apply plugin: 'com.google.gms.google-services'
+          """
+
+          app_gradle.write_text(text)
+          PY
+
+
+      # --------------------------------------------------
+      # 11. Android permissions
+      # --------------------------------------------------
 
       - name: Add Android permissions
         run: |
@@ -74,28 +200,35 @@ jobs:
               "android.permission.VIBRATE"
           ]
 
-          permission_text = "\n".join(
-              f'    <uses-permission android:name="{p}" />'
-              for p in permissions
-          )
+          for permission in permissions:
 
-          if "android.permission.CAMERA" not in text:
-              match = re.search(
-                  r'(<manifest\b[^>]*>)',
-                  text
-              )
+              if permission not in text:
 
-              if match:
-                  text = (
-                      text[:match.end()]
-                      + "\n"
-                      + permission_text
-                      + "\n"
-                      + text[match.end():]
+                  match = re.search(
+                      r'(<manifest\b[^>]*>)',
+                      text
                   )
+
+                  if match:
+
+                      permission_line = (
+                          f'\n    <uses-permission '
+                          f'android:name="{permission}" />'
+                      )
+
+                      text = (
+                          text[:match.end()]
+                          + permission_line
+                          + text[match.end():]
+                      )
 
           manifest.write_text(text)
           PY
+
+
+      # --------------------------------------------------
+      # 12. Configure WebView camera + microphone
+      # --------------------------------------------------
 
       - name: Configure WebView camera microphone
         run: |
@@ -156,10 +289,13 @@ jobs:
                                       ) == PackageManager.PERMISSION_GRANTED;
 
                                   if (camera && microphone) {
+
                                       request.grant(
                                           request.getResources()
                                       );
+
                                   } else {
+
                                       request.deny();
                                   }
                               });
@@ -167,6 +303,7 @@ jobs:
                       }
                   );
               }
+
 
               private void requestMediaPermissions() {
 
@@ -195,6 +332,7 @@ jobs:
                   }
               }
 
+
               @Override
               public void onRequestPermissionsResult(
                   int requestCode,
@@ -222,9 +360,197 @@ jobs:
           }
           EOF
 
+
+      # --------------------------------------------------
+      # 13. Create OneSignal bridge initialization
+      # --------------------------------------------------
+
+      - name: Create OneSignal initialization
+        run: |
+          mkdir -p onesignal
+
+          cat > onesignal/onesignal-init.js <<'EOF'
+          import OneSignal from "@onesignal/capacitor-plugin";
+          import { createClient } from "@supabase/supabase-js";
+
+          const SUPABASE_URL =
+            "https://eqglttfffhvoyvrclzse.supabase.co";
+
+          const SUPABASE_KEY =
+            "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
+          const ONESIGNAL_APP_ID =
+            "b09e5ecd-3f5e-4030-8ddf-96a8f1645e6e";
+
+          const supabaseClient =
+            createClient(
+              SUPABASE_URL,
+              SUPABASE_KEY
+            );
+
+
+          async function initOneSignal() {
+
+              try {
+
+                  await OneSignal.initialize({
+                      appId: ONESIGNAL_APP_ID
+                  });
+
+                  console.log(
+                      "OneSignal initialized"
+                  );
+
+
+                  const permission =
+                      await OneSignal.Notifications.hasPermission();
+
+                  if (!permission) {
+
+                      await OneSignal.Notifications.requestPermission(
+                          true
+                      );
+                  }
+
+
+                  const {
+                      data: {
+                          session
+                      }
+                  } =
+                      await supabaseClient.auth.getSession();
+
+
+                  if (session?.user?.id) {
+
+                      await OneSignal.login(
+                          session.user.id
+                      );
+
+                      console.log(
+                          "OneSignal user linked:",
+                          session.user.id
+                      );
+                  }
+
+
+                  supabaseClient.auth.onAuthStateChange(
+                      async (event, session) => {
+
+                          try {
+
+                              if (
+                                  session?.user?.id
+                              ) {
+
+                                  await OneSignal.login(
+                                      session.user.id
+                                  );
+
+                                  console.log(
+                                      "OneSignal login:",
+                                      session.user.id
+                                  );
+
+                              } else {
+
+                                  await OneSignal.logout();
+
+                                  console.log(
+                                      "OneSignal logout"
+                                  );
+                              }
+
+                          } catch (error) {
+
+                              console.error(
+                                  "OneSignal auth sync error:",
+                                  error
+                              );
+                          }
+                      }
+                  );
+
+
+              } catch (error) {
+
+                  console.error(
+                      "OneSignal initialization error:",
+                      error
+                  );
+              }
+          }
+
+
+          initOneSignal();
+          EOF
+
+
+      # --------------------------------------------------
+      # 14. Create Supabase + OneSignal bundle
+      # --------------------------------------------------
+
+      - name: Build OneSignal JavaScript bundle
+        run: |
+          npx esbuild onesignal/onesignal-init.js \
+            --bundle \
+            --format=esm \
+            --platform=browser \
+            --outfile=www/onesignal-init.bundle.js
+
+
+      # --------------------------------------------------
+      # 15. Add OneSignal script to every HTML page
+      # --------------------------------------------------
+
+      - name: Inject OneSignal into HTML pages
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          for html in Path("www").glob("*.html"):
+
+              text = html.read_text(
+                  encoding="utf-8"
+              )
+
+              script = (
+                  '\n<script type="module" '
+                  'src="onesignal-init.bundle.js"></script>\n'
+              )
+
+              if "onesignal-init.bundle.js" not in text:
+
+                  if "</body>" in text:
+
+                      text = text.replace(
+                          "</body>",
+                          script + "</body>"
+                      )
+
+                  else:
+
+                      text += script
+
+                  html.write_text(
+                      text,
+                      encoding="utf-8"
+                  )
+          PY
+
+
+      # --------------------------------------------------
+      # 16. Sync Capacitor
+      # --------------------------------------------------
+
       - name: Sync Capacitor
         run: |
           npx cap sync android
+
+
+      # --------------------------------------------------
+      # 17. Build APK
+      # --------------------------------------------------
 
       - name: Build APK
         run: |
@@ -232,9 +558,20 @@ jobs:
           chmod +x gradlew
           ./gradlew assembleDebug
 
+
+      # --------------------------------------------------
+      # 18. Check APK
+      # --------------------------------------------------
+
       - name: Check APK
         run: |
-          ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+          ls -lh \
+            android/app/build/outputs/apk/debug/app-debug.apk
+
+
+      # --------------------------------------------------
+      # 19. Upload APK
+      # --------------------------------------------------
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
