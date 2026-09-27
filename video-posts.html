@@ -1,263 +1,747 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<html lang="mr">
 
-<title>Video Posts - GyanSetu</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Video Posts</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
 
+html,
 body{
   margin:0;
+  padding:0;
+  background:
+    linear-gradient(
+      145deg,
+      #050505,
+      #10152b,
+      #24102d,
+      #050505
+    );
+  color:white;
   font-family:Arial,sans-serif;
-  background:#f5f7fb;
-  color:#111;
+  min-height:100%;
 }
+
+body{
+  min-height:100vh;
+}
+
+
+/* =========================
+   HEADER
+========================= */
 
 .header{
-  background:#ffffff;
-  padding:15px 18px;
+
   position:sticky;
   top:0;
-  z-index:10;
-  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  z-index:50;
+
+  height:65px;
+
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
+
+  padding:0 15px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #050505,
+      #111a3a,
+      #250c27
+    );
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.12);
+
+  box-shadow:
+    0 5px 25px
+    rgba(0,0,0,.45);
 }
+
 
 .logo{
-  font-size:23px;
-  font-weight:bold;
-  color:#2563eb;
+
+  font-size:22px;
+
+  font-weight:900;
+
+  background:
+    linear-gradient(
+      90deg,
+      #2196f3,
+      #e91e63,
+      #ff4081
+    );
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:
+    transparent;
 }
+
 
 .uploadBtn{
-  background:#2563eb;
-  color:white;
+
   border:0;
-  border-radius:10px;
+
   padding:10px 15px;
+
+  border-radius:12px;
+
+  color:white;
+
   font-weight:bold;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1976ff,
+      #e91e63
+    );
+
+  box-shadow:
+    0 5px 18px
+    rgba(233,30,99,.28);
+
   cursor:pointer;
 }
+
+.uploadBtn:active{
+  transform:scale(.96);
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
 
 .container{
+
+  width:100%;
+
   max-width:650px;
+
   margin:auto;
-  padding:15px;
+
+  padding:
+    15px
+    12px
+    40px;
 }
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+
+  text-align:center;
+
+  padding:50px 15px;
+
+  color:#bbb;
+
+  font-size:15px;
+}
+
+
+/* =========================
+   POST
+========================= */
 
 .post{
-  background:white;
-  border-radius:16px;
-  margin-bottom:20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #101010,
+      #121a32,
+      #1c1020
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,.09);
+
+  border-radius:20px;
+
   overflow:hidden;
-  box-shadow:0 3px 15px rgba(0,0,0,.08);
+
+  margin-bottom:22px;
+
+  box-shadow:
+    0 12px 35px
+    rgba(0,0,0,.45);
 }
+
+
+/* =========================
+   USER HEADER
+========================= */
 
 .user{
-  padding:14px;
-  font-weight:bold;
+
+  min-height:64px;
+
   display:flex;
+
   align-items:center;
+
   gap:10px;
+
+  padding:12px 13px;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.07);
 }
+
 
 .avatar{
-  width:38px;
-  height:38px;
+
+  width:42px;
+
+  height:42px;
+
+  flex-shrink:0;
+
   border-radius:50%;
-  background:#2563eb;
-  color:white;
+
   display:flex;
-  justify-content:center;
+
   align-items:center;
+
+  justify-content:center;
+
   font-weight:bold;
+
+  font-size:17px;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1976ff,
+      #e91e63
+    );
+
+  box-shadow:
+    0 4px 15px
+    rgba(233,30,99,.25);
 }
+
+
+.userInfo{
+
+  flex:1;
+
+  min-width:0;
+}
+
+
+.username{
+
+  color:white;
+
+  font-size:15px;
+
+  font-weight:bold;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+
+.userLabel{
+
+  margin-top:3px;
+
+  color:#999;
+
+  font-size:11px;
+}
+
+
+/* =========================
+   MESSAGE BUTTON
+========================= */
+
+.messageBtn{
+
+  border:0;
+
+  padding:
+    8px
+    11px;
+
+  border-radius:10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2196f3,
+      #1565c0
+    );
+
+  color:white;
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+
+  white-space:nowrap;
+
+  box-shadow:
+    0 4px 12px
+    rgba(33,150,243,.25);
+}
+
+.messageBtn:active{
+  transform:scale(.95);
+}
+
+
+/* =========================
+   VIDEO
+========================= */
 
 .video{
+
   width:100%;
-  max-height:600px;
-  background:#000;
+
   display:block;
+
+  background:#000;
+
+  max-height:650px;
+
+  object-fit:contain;
 }
+
+
+/* =========================
+   ACTIONS
+========================= */
 
 .actions{
+
   display:flex;
-  gap:20px;
+
+  align-items:center;
+
+  gap:18px;
+
   padding:12px 14px;
-  border-bottom:1px solid #eee;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.07);
 }
+
 
 .action{
+
   border:0;
-  background:none;
+
+  background:transparent;
+
+  color:white;
+
   font-size:16px;
+
   cursor:pointer;
+
+  padding:5px 0;
 }
 
-.commentBox{
-  padding:12px 14px;
-}
 
-.comments{
-  max-height:180px;
-  overflow-y:auto;
-  margin-bottom:10px;
-}
+.action span{
 
-.comment{
-  margin-bottom:8px;
+  margin-left:4px;
+
+  color:#ddd;
+
   font-size:14px;
 }
 
+
+.action:active{
+  transform:scale(.94);
+}
+
+
+/* =========================
+   COMMENTS
+========================= */
+
+.commentBox{
+
+  padding:12px 14px 15px;
+}
+
+
+.comments{
+
+  max-height:190px;
+
+  overflow-y:auto;
+
+  margin-bottom:10px;
+}
+
+
+.comment{
+
+  padding:8px 0;
+
+  font-size:14px;
+
+  color:#ddd;
+
+  line-height:1.4;
+
+  border-bottom:
+    1px solid
+    rgba(255,255,255,.04);
+}
+
+
 .comment b{
+
+  color:#64b5f6;
+
   margin-right:5px;
 }
 
+
 .commentInput{
+
   width:100%;
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:10px;
+
+  padding:11px 13px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.14);
+
+  border-radius:12px;
+
   outline:none;
+
+  background:#080808;
+
+  color:white;
+
+  font-size:14px;
 }
 
-.empty{
-  text-align:center;
-  padding:50px 20px;
+
+.commentInput:focus{
+
+  border-color:#e91e63;
+
+  box-shadow:
+    0 0 0 2px
+    rgba(233,30,99,.12);
+}
+
+
+.commentInput::placeholder{
   color:#777;
 }
 
-#fileInput{
-  display:none;
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+
+  text-align:center;
+
+  padding:65px 20px;
+
+  color:#aaa;
+
+  background:
+    rgba(255,255,255,.03);
+
+  border-radius:18px;
 }
 
-.loading{
-  text-align:center;
-  padding:30px;
-}
+
+/* =========================
+   MODAL
+========================= */
 
 .modal{
+
   display:none;
+
   position:fixed;
+
   inset:0;
-  background:rgba(0,0,0,.65);
+
   z-index:100;
-  justify-content:center;
+
+  background:
+    rgba(0,0,0,.82);
+
   align-items:center;
-  padding:20px;
+
+  justify-content:center;
+
+  padding:18px;
 }
+
 
 .modalBox{
-  background:white;
+
   width:100%;
+
   max-width:430px;
-  border-radius:18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #111,
+      #111a34,
+      #250d21
+    );
+
+  border:
+    1px solid
+    rgba(255,255,255,.12);
+
+  border-radius:20px;
+
   padding:20px;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0,0,0,.65);
 }
+
 
 .modalBox h2{
-  margin-top:0;
+
+  margin:
+    0
+    0
+    8px;
+
+  font-size:21px;
 }
+
+
+#fileName{
+
+  color:#aaa;
+
+  font-size:13px;
+
+  word-break:break-word;
+}
+
 
 .preview{
+
   width:100%;
-  max-height:300px;
+
+  max-height:320px;
+
   margin-top:15px;
-  border-radius:12px;
+
+  border-radius:14px;
+
   background:#000;
+
+  display:none;
 }
+
 
 .modalActions{
+
   display:flex;
+
   gap:10px;
-  margin-top:15px;
+
+  margin-top:16px;
 }
+
 
 .modalActions button{
+
   flex:1;
-  padding:12px;
+
+  padding:13px;
+
   border:0;
-  border-radius:10px;
-  cursor:pointer;
+
+  border-radius:12px;
+
   font-weight:bold;
+
+  cursor:pointer;
 }
+
 
 .cancel{
-  background:#eee;
-}
 
-.postNow{
-  background:#2563eb;
+  background:#222;
+
   color:white;
 }
+
+
+.postNow{
+
+  background:
+    linear-gradient(
+      135deg,
+      #1976ff,
+      #e91e63
+    );
+
+  color:white;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:430px){
+
+  .container{
+    padding:10px 7px 30px;
+  }
+
+  .post{
+    border-radius:16px;
+  }
+
+  .messageBtn{
+    padding:8px 9px;
+    font-size:11px;
+  }
+
+}
+
 </style>
+
 </head>
+
 
 <body>
 
-<header class="header">
-  <div class="logo">GyanSetu</div>
 
-  <button class="uploadBtn" onclick="openUpload()">
+<header class="header">
+
+  <div class="logo">
+    📚 GyanSetu
+  </div>
+
+  <button
+    class="uploadBtn"
+    onclick="openUpload()">
+
     ＋ Post Video
+
   </button>
+
 </header>
 
-<div class="container">
 
-  <div id="loading" class="loading">
+<main class="container">
+
+  <div
+    id="loading"
+    class="loading">
+
     Videos loading...
+
   </div>
 
   <div id="posts"></div>
 
-</div>
+</main>
+
 
 <input
   type="file"
   id="fileInput"
   accept="video/*"
+  style="display:none"
   onchange="fileSelected(event)"
 >
 
-<!-- Upload Modal -->
 
-<div class="modal" id="uploadModal">
+<!-- =========================
+     UPLOAD MODAL
+========================= -->
+
+<div
+  class="modal"
+  id="uploadModal">
 
   <div class="modalBox">
 
-    <h2>Post Video</h2>
+    <h2>
+      🎥 Post Video
+    </h2>
 
-    <p id="fileName">Select a video</p>
+    <p id="fileName">
+      Video निवडा
+    </p>
 
     <video
       id="preview"
       class="preview"
       controls
-      style="display:none"
-    ></video>
+      playsinline>
+    </video>
 
     <div class="modalActions">
 
       <button
         class="cancel"
         onclick="closeUpload()">
+
         Cancel
+
       </button>
 
       <button
         class="postNow"
         onclick="uploadVideo()">
-        Post
+
+        Post Video
+
       </button>
 
     </div>
@@ -266,20 +750,31 @@ body{
 
 </div>
 
+
 <script>
+
+
+/* =========================
+   SUPABASE
+========================= */
 
 const supabaseClient =
 supabase.createClient(
+
   "https://eqglttfffhvoyvrclzse.supabase.co",
+
   "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb"
+
 );
 
+
 let currentUser = null;
+
 let selectedFile = null;
 
 
 /* =========================
-   CHECK LOGIN
+   CHECK USER
 ========================= */
 
 async function checkUser(){
@@ -288,20 +783,30 @@ async function checkUser(){
     data:{
       user
     }
-  } = await supabaseClient.auth.getUser();
+  } =
+  await supabaseClient
+  .auth
+  .getUser();
+
 
   if(!user){
 
-    alert("Please login first.");
+    alert(
+      "Please login to GyanSetu first."
+    );
 
-    window.location.href="account.html";
+    window.location.href =
+      "account.html";
 
     return false;
+
   }
 
-  currentUser=user;
+
+  currentUser = user;
 
   return true;
+
 }
 
 
@@ -311,91 +816,157 @@ async function checkUser(){
 
 async function openUpload(){
 
-  if(!await checkUser()) return;
+  if(
+    !await checkUser()
+  ){
+    return;
+  }
 
-  document.getElementById("fileInput").click();
+
+  document
+  .getElementById("fileInput")
+  .click();
+
 }
 
 
 /* =========================
-   FILE SELECTED
+   FILE SELECT
 ========================= */
 
 function fileSelected(event){
 
-  selectedFile=event.target.files[0];
+  selectedFile =
+    event.target.files[0];
 
-  if(!selectedFile) return;
 
-  document.getElementById("uploadModal").style.display="flex";
+  if(!selectedFile){
+    return;
+  }
 
-  document.getElementById("fileName").innerText=
+
+  document
+  .getElementById("uploadModal")
+  .style.display =
+    "flex";
+
+
+  document
+  .getElementById("fileName")
+  .innerText =
     selectedFile.name;
 
-  const preview=
-    document.getElementById("preview");
 
-  preview.src=
-    URL.createObjectURL(selectedFile);
+  const preview =
+    document
+    .getElementById("preview");
 
-  preview.style.display="block";
+
+  preview.src =
+    URL.createObjectURL(
+      selectedFile
+    );
+
+
+  preview.style.display =
+    "block";
+
 }
 
 
 /* =========================
-   CLOSE
+   CLOSE MODAL
 ========================= */
 
 function closeUpload(){
 
-  document.getElementById("uploadModal").style.display="none";
+  document
+  .getElementById("uploadModal")
+  .style.display =
+    "none";
 
-  document.getElementById("fileInput").value="";
 
-  selectedFile=null;
+  document
+  .getElementById("fileInput")
+  .value =
+    "";
+
+
+  selectedFile = null;
+
+
+  const preview =
+    document
+    .getElementById("preview");
+
+
+  preview.pause();
+
+  preview.removeAttribute("src");
+
+  preview.load();
+
 }
 
 
 /* =========================
-   UPLOAD VIDEO
+   UPLOAD
 ========================= */
 
 async function uploadVideo(){
 
   if(!selectedFile){
 
-    alert("Please select a video.");
+    alert(
+      "कृपया Video निवडा."
+    );
 
     return;
+
   }
+
 
   if(!currentUser){
 
-    if(!await checkUser()) return;
+    if(
+      !await checkUser()
+    ){
+      return;
+    }
+
   }
 
-  const postBtn=
-    document.querySelector(".postNow");
 
-  postBtn.disabled=true;
+  const button =
+    document
+    .querySelector(".postNow");
 
-  postBtn.innerText="Uploading...";
+
+  button.disabled = true;
+
+  button.innerText =
+    "Uploading...";
+
 
   try{
 
-    const extension=
-      selectedFile.name.split(".").pop();
+    const extension =
+      selectedFile.name
+      .split(".")
+      .pop();
 
-    const filePath=
+
+    const filePath =
       currentUser.id +
       "/" +
       Date.now() +
       "." +
       extension;
 
-    /*
-      Upload to private storage
-    */
+
+    /* =====================
+       STORAGE UPLOAD
+    ===================== */
 
     const {
       error:uploadError
@@ -404,21 +975,30 @@ async function uploadVideo(){
     .storage
     .from("videos")
     .upload(
+
       filePath,
+
       selectedFile,
+
       {
-        contentType:selectedFile.type,
+        contentType:
+          selectedFile.type,
+
         upsert:false
+
       }
+
     );
 
-    if(uploadError)
+
+    if(uploadError){
       throw uploadError;
+    }
 
 
-    /*
-      Create database post
-    */
+    /* =====================
+       DATABASE POST
+    ===================== */
 
     const {
       error:dbError
@@ -427,41 +1007,53 @@ async function uploadVideo(){
     .from("video_posts")
     .insert({
 
-      user_id:currentUser.id,
+      user_id:
+        currentUser.id,
 
-      video_path:filePath,
+      video_path:
+        filePath,
 
-      status:"pending"
+      status:
+        "pending"
 
     });
 
-    if(dbError)
+
+    if(dbError){
       throw dbError;
+    }
 
 
     closeUpload();
 
+
     alert(
-      "Video uploaded successfully.\n\nAI moderation is checking your video."
+      "✅ Video upload झाले!\n\nAI moderation तपासणी सुरू आहे."
     );
+
 
     loadPosts();
 
   }
+
   catch(error){
 
     console.error(error);
 
+
     alert(
-      "Upload failed:\n"+
+      "❌ Upload failed\n\n" +
       error.message
     );
 
   }
 
-  postBtn.disabled=false;
 
-  postBtn.innerText="Post";
+  button.disabled = false;
+
+  button.innerText =
+    "Post Video";
+
 }
 
 
@@ -471,15 +1063,22 @@ async function uploadVideo(){
 
 async function loadPosts(){
 
-  const posts=
-    document.getElementById("posts");
+  const posts =
+    document
+    .getElementById("posts");
 
-  const loading=
-    document.getElementById("loading");
 
-  loading.style.display="block";
+  const loading =
+    document
+    .getElementById("loading");
 
-  posts.innerHTML="";
+
+  loading.style.display =
+    "block";
+
+
+  posts.innerHTML =
+    "";
 
 
   const {
@@ -489,37 +1088,61 @@ async function loadPosts(){
   await supabaseClient
   .from("video_posts")
   .select("*")
-  .eq("status","approved")
-  .order("created_at",{ascending:false});
+  .eq(
+    "status",
+    "approved"
+  )
+  .order(
+    "created_at",
+    {
+      ascending:false
+    }
+  );
 
 
   if(error){
 
     console.error(error);
 
-    loading.innerText=
-      "Unable to load videos.";
+    loading.innerText =
+      "Videos load करता आले नाहीत.";
 
     return;
+
   }
 
 
-  loading.style.display="none";
+  loading.style.display =
+    "none";
 
 
-  if(!data || data.length===0){
+  if(
+    !data ||
+    data.length === 0
+  ){
 
-    posts.innerHTML=`
+    posts.innerHTML = `
+
       <div class="empty">
-        No videos yet.
+
+        🎥 अजून कोणताही video नाही.
+
+        <br><br>
+
+        पहिला video तुम्ही post करा!
+
       </div>
+
     `;
 
     return;
+
   }
 
 
-  for(const post of data){
+  for(
+    const post of data
+  ){
 
     await createPost(post);
 
@@ -535,56 +1158,81 @@ async function loadPosts(){
 async function createPost(post){
 
   const {
-    data:{
-      publicUrl
-    }
+    data:urlData
   } =
   await supabaseClient
   .storage
   .from("videos")
   .createSignedUrl(
+
     post.video_path,
+
     3600
+
   );
 
 
-  if(!publicUrl) return;
+  if(
+    !urlData ||
+    !urlData.signedUrl
+  ){
+    return;
+  }
 
 
-  /*
-    Get username
-  */
+  const videoUrl =
+    urlData.signedUrl;
+
+
+  /* =====================
+     PROFILE
+  ===================== */
 
   const {
     data:profile
   } =
   await supabaseClient
   .from("Profiles")
-  .select("username")
-  .eq("id",post.user_id)
+  .select(
+    "username"
+  )
+  .eq(
+    "id",
+    post.user_id
+  )
   .maybeSingle();
 
 
-  const username=
-    profile?.username || "GyanSetu User";
+  const username =
+    profile?.username ||
+    "GyanSetu User";
 
 
-  /*
-    Like count
-  */
+  /* =====================
+     LIKES
+  ===================== */
 
   const {
     count:likeCount
   } =
   await supabaseClient
   .from("video_likes")
-  .select("*",{count:"exact",head:true})
-  .eq("post_id",post.id);
+  .select(
+    "*",
+    {
+      count:"exact",
+      head:true
+    }
+  )
+  .eq(
+    "post_id",
+    post.id
+  );
 
 
-  /*
-    User liked?
-  */
+  /* =====================
+     MY LIKE
+  ===================== */
 
   const {
     data:myLike
@@ -592,14 +1240,20 @@ async function createPost(post){
   await supabaseClient
   .from("video_likes")
   .select("id")
-  .eq("post_id",post.id)
-  .eq("user_id",currentUser.id)
+  .eq(
+    "post_id",
+    post.id
+  )
+  .eq(
+    "user_id",
+    currentUser.id
+  )
   .maybeSingle();
 
 
-  /*
-    Comments
-  */
+  /* =====================
+     COMMENTS
+  ===================== */
 
   const {
     data:comments
@@ -607,49 +1261,125 @@ async function createPost(post){
   await supabaseClient
   .from("video_comments")
   .select("*")
-  .eq("post_id",post.id)
-  .order("created_at",{ascending:true});
+  .eq(
+    "post_id",
+    post.id
+  )
+  .order(
+    "created_at",
+    {
+      ascending:true
+    }
+  );
 
 
-  let commentsHTML="";
+  let commentsHTML = "";
 
-  for(const comment of comments || []){
+
+  for(
+    const comment of
+    comments || []
+  ){
 
     const {
       data:commentProfile
     } =
     await supabaseClient
     .from("Profiles")
-    .select("username")
-    .eq("id",comment.user_id)
+    .select(
+      "username"
+    )
+    .eq(
+      "id",
+      comment.user_id
+    )
     .maybeSingle();
 
-    const commentUsername=
-      commentProfile?.username || "User";
+
+    const commentUsername =
+      commentProfile?.username ||
+      "User";
 
 
     commentsHTML += `
+
       <div class="comment">
-        <b>${escapeHTML(commentUsername)}</b>
-        ${escapeHTML(comment.comment)}
+
+        <b>
+          ${escapeHTML(
+            commentUsername
+          )}
+        </b>
+
+        ${escapeHTML(
+          comment.comment
+        )}
+
       </div>
+
     `;
+
   }
 
 
-  const postHTML=document.createElement("div");
+  /* =====================
+     POST ELEMENT
+  ===================== */
 
-  postHTML.className="post";
+  const postElement =
+    document.createElement(
+      "article"
+    );
 
-  postHTML.innerHTML=`
+
+  postElement.className =
+    "post";
+
+
+  postElement.innerHTML = `
 
     <div class="user">
 
       <div class="avatar">
-        ${escapeHTML(username.charAt(0).toUpperCase())}
+
+        ${escapeHTML(
+          username
+          .charAt(0)
+          .toUpperCase()
+        )}
+
       </div>
 
-      ${escapeHTML(username)}
+
+      <div class="userInfo">
+
+        <div class="username">
+
+          ${escapeHTML(
+            username
+          )}
+
+        </div>
+
+        <div class="userLabel">
+          GyanSetu Member
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE BUTTON -->
+
+      <button
+        class="messageBtn"
+        onclick="openMessage(
+          '${escapeJS(post.user_id)}',
+          '${escapeJS(username)}'
+        )">
+
+        💬 Message
+
+      </button>
 
     </div>
 
@@ -658,17 +1388,25 @@ async function createPost(post){
       class="video"
       controls
       playsinline
-      src="${publicUrl}"
-    ></video>
+      preload="metadata"
+      src="${videoUrl}">
+    </video>
 
 
     <div class="actions">
 
       <button
         class="action"
-        onclick="toggleLike('${post.id}',this)">
+        onclick="toggleLike(
+          '${post.id}',
+          this
+        )">
 
-        ${myLike ? "❤️" : "🤍"}
+        ${
+          myLike
+          ? "❤️"
+          : "🤍"
+        }
 
         <span>
           ${likeCount || 0}
@@ -679,7 +1417,9 @@ async function createPost(post){
 
       <button
         class="action"
-        onclick="focusComment('${post.id}')">
+        onclick="focusComment(
+          '${post.id}'
+        )">
 
         💬
 
@@ -706,8 +1446,13 @@ async function createPost(post){
       <input
         class="commentInput"
         id="input-${post.id}"
-        placeholder="Write a comment..."
-        onkeydown="commentKey(event,'${post.id}')"
+        placeholder="Comment लिहा..."
+        onkeydown="
+          commentKey(
+            event,
+            '${post.id}'
+          )
+        "
       >
 
     </div>
@@ -716,8 +1461,60 @@ async function createPost(post){
 
 
   document
-    .getElementById("posts")
-    .appendChild(postHTML);
+  .getElementById("posts")
+  .appendChild(
+    postElement
+  );
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function openMessage(
+  userId,
+  username
+){
+
+  /*
+    स्वतःलाच message करू नये
+  */
+
+  if(
+    userId ===
+    currentUser.id
+  ){
+
+    alert(
+      "तुम्ही स्वतःलाच Message करू शकत नाही."
+    );
+
+    return;
+
+  }
+
+
+  /*
+    message.html ला
+    दुसऱ्या user ची माहिती पाठवतो
+  */
+
+  const url =
+    "message.html" +
+    "?user_id=" +
+    encodeURIComponent(
+      userId
+    ) +
+    "&username=" +
+    encodeURIComponent(
+      username
+    );
+
+
+  window.location.href =
+    url;
 
 }
 
@@ -726,7 +1523,10 @@ async function createPost(post){
    LIKE
 ========================= */
 
-async function toggleLike(postId,button){
+async function toggleLike(
+  postId,
+  button
+){
 
   const {
     data:existing
@@ -734,8 +1534,14 @@ async function toggleLike(postId,button){
   await supabaseClient
   .from("video_likes")
   .select("id")
-  .eq("post_id",postId)
-  .eq("user_id",currentUser.id)
+  .eq(
+    "post_id",
+    postId
+  )
+  .eq(
+    "user_id",
+    currentUser.id
+  )
   .maybeSingle();
 
 
@@ -744,7 +1550,10 @@ async function toggleLike(postId,button){
     await supabaseClient
     .from("video_likes")
     .delete()
-    .eq("id",existing.id);
+    .eq(
+      "id",
+      existing.id
+    );
 
   }
   else{
@@ -753,9 +1562,11 @@ async function toggleLike(postId,button){
     .from("video_likes")
     .insert({
 
-      post_id:postId,
+      post_id:
+        postId,
 
-      user_id:currentUser.id
+      user_id:
+        currentUser.id
 
     });
 
@@ -768,21 +1579,27 @@ async function toggleLike(postId,button){
 
 
 /* =========================
-   COMMENT
+   ADD COMMENT
 ========================= */
 
-async function addComment(postId){
+async function addComment(
+  postId
+){
 
-  const input=
-    document.getElementById(
-      "input-"+postId
+  const input =
+    document
+    .getElementById(
+      "input-" + postId
     );
 
-  const text=
+
+  const text =
     input.value.trim();
 
 
-  if(!text) return;
+  if(!text){
+    return;
+  }
 
 
   const {
@@ -792,24 +1609,30 @@ async function addComment(postId){
   .from("video_comments")
   .insert({
 
-    post_id:postId,
+    post_id:
+      postId,
 
-    user_id:currentUser.id,
+    user_id:
+      currentUser.id,
 
-    comment:text
+    comment:
+      text
 
   });
 
 
   if(error){
 
-    alert(error.message);
+    alert(
+      error.message
+    );
 
     return;
+
   }
 
 
-  input.value="";
+  input.value = "";
 
   loadPosts();
 
@@ -820,13 +1643,21 @@ async function addComment(postId){
    ENTER COMMENT
 ========================= */
 
-function commentKey(event,postId){
+function commentKey(
+  event,
+  postId
+){
 
-  if(event.key==="Enter"){
+  if(
+    event.key ===
+    "Enter"
+  ){
 
     event.preventDefault();
 
-    addComment(postId);
+    addComment(
+      postId
+    );
 
   }
 
@@ -837,32 +1668,84 @@ function commentKey(event,postId){
    FOCUS COMMENT
 ========================= */
 
-function focusComment(postId){
+function focusComment(
+  postId
+){
 
-  document
-    .getElementById("input-"+postId)
-    .focus();
+  const input =
+    document.getElementById(
+      "input-" + postId
+    );
+
+
+  if(input){
+
+    input.focus();
+
+  }
 
 }
 
 
 /* =========================
-   HTML SECURITY
+   SECURITY
 ========================= */
 
 function escapeHTML(text){
 
-  return String(text)
+  return String(text || "")
 
-    .replace(/&/g,"&amp;")
+    .replace(
+      /&/g,
+      "&amp;"
+    )
 
-    .replace(/</g,"&lt;")
+    .replace(
+      /</g,
+      "&lt;"
+    )
 
-    .replace(/>/g,"&gt;")
+    .replace(
+      />/g,
+      "&gt;"
+    )
 
-    .replace(/"/g,"&quot;")
+    .replace(
+      /"/g,
+      "&quot;"
+    )
 
-    .replace(/'/g,"&#039;");
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeJS(text){
+
+  return String(text || "")
+
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    )
+
+    .replace(
+      /\n/g,
+      "\\n"
+    )
+
+    .replace(
+      /\r/g,
+      "\\r"
+    );
 
 }
 
@@ -871,11 +1754,15 @@ function escapeHTML(text){
    START
 ========================= */
 
-(async()=>{
+(async function(){
 
-  if(await checkUser()){
+  const logged =
+    await checkUser();
 
-    loadPosts();
+
+  if(logged){
+
+    await loadPosts();
 
   }
 
@@ -884,4 +1771,5 @@ function escapeHTML(text){
 </script>
 
 </body>
+
 </html>
