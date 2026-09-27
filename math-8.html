@@ -7,264 +7,280 @@
 <title>GyanSetu AI Study</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #172033;
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
 }
 
-header {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
-    color: white;
-    padding: 22px 16px;
-    text-align: center;
+.header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:18px;
+    text-align:center;
 }
 
-header h1 {
-    font-size: 28px;
-    margin-bottom: 6px;
+.header h1{
+    margin:0;
+    font-size:25px;
 }
 
-header p {
-    font-size: 14px;
-    opacity: 0.9;
+.header p{
+    margin:6px 0 0;
 }
 
-.container {
-    max-width: 1000px;
-    margin: auto;
-    padding: 20px 15px 40px;
+.container{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
 }
 
-.hero {
-    background: white;
-    border-radius: 18px;
-    padding: 22px;
-    margin-bottom: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+.section-title{
+    margin-top:10px;
 }
 
-.hero h2 {
-    color: #4f46e5;
-    margin-bottom: 8px;
+.topics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
 }
 
-.hero p {
-    color: #555;
-    line-height: 1.6;
+.topic{
+    background:white;
+    padding:18px;
+    border-radius:15px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    cursor:pointer;
+    transition:.2s;
 }
 
-.section-title {
-    margin: 20px 0 12px;
-    font-size: 21px;
+.topic:hover{
+    transform:translateY(-3px);
 }
 
-.topics {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 14px;
+.topic h3{
+    margin:0 0 8px;
 }
 
-.topic-card {
-    background: white;
-    border-radius: 15px;
-    padding: 18px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
-    transition: 0.2s;
+.topic p{
+    margin:0;
+    color:#64748b;
 }
 
-.topic-card:hover {
-    border-color: #6366f1;
-    transform: translateY(-2px);
+/* AI TEACHER */
+
+.teacher-box{
+    display:none;
+    margin-top:25px;
+    background:#111827;
+    border-radius:20px;
+    overflow:hidden;
+    color:white;
 }
 
-.topic-number {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #6366f1;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    margin-bottom: 10px;
+.teacher-screen{
+    min-height:420px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    background:
+      radial-gradient(circle at center,#334155,#0f172a);
 }
 
-.topic-card h3 {
-    font-size: 17px;
-    margin-bottom: 7px;
+/* AI SIR */
+
+.teacher{
+    text-align:center;
 }
 
-.topic-card p {
-    color: #666;
-    font-size: 13px;
-    line-height: 1.5;
+.head{
+    width:170px;
+    height:170px;
+    background:#f5c9a5;
+    border-radius:50%;
+    margin:auto;
+    position:relative;
+    border:5px solid #fff;
 }
 
-.lesson-box {
-    display: none;
-    background: white;
-    border-radius: 18px;
-    margin-top: 25px;
-    padding: 22px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+.hair{
+    position:absolute;
+    width:125px;
+    height:65px;
+    background:#1e293b;
+    border-radius:70px 70px 20px 20px;
+    top:-15px;
+    left:18px;
 }
 
-.lesson-header {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-    margin-bottom: 18px;
+.eye{
+    width:14px;
+    height:14px;
+    background:#111;
+    border-radius:50%;
+    position:absolute;
+    top:70px;
 }
 
-.lesson-header h2 {
-    color: #4f46e5;
+.eye.left{
+    left:45px;
 }
 
-.teacher {
-    color: #666;
-    margin-top: 5px;
-    font-size: 14px;
+.eye.right{
+    right:45px;
 }
 
-.loading {
-    display: none;
-    text-align: center;
-    padding: 25px;
+.mouth{
+    width:55px;
+    height:12px;
+    background:#8b3a3a;
+    border-radius:20px;
+    position:absolute;
+    left:53px;
+    top:115px;
+    transition:.08s;
 }
 
-.loader {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #ddd;
-    border-top-color: #4f46e5;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: auto auto 12px;
+.body{
+    width:210px;
+    height:170px;
+    background:#2563eb;
+    border-radius:80px 80px 20px 20px;
+    margin:-5px auto 0;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+.name{
+    margin-top:10px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.speaking .mouth{
+    height:28px;
+    animation:talk .18s infinite alternate;
+}
+
+@keyframes talk{
+    from{
+        height:8px;
+    }
+    to{
+        height:30px;
     }
 }
 
-.lesson-content {
-    line-height: 1.8;
-    white-space: pre-wrap;
-    font-size: 15px;
+.status{
+    position:absolute;
+    bottom:15px;
+    left:15px;
+    right:15px;
+    background:rgba(0,0,0,.5);
+    padding:10px;
+    border-radius:10px;
+    text-align:center;
 }
 
-.ask-box {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+.controls{
+    padding:15px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
-.ask-box h3 {
-    margin-bottom: 10px;
+button{
+    border:0;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-textarea {
-    width: 100%;
-    min-height: 100px;
-    resize: vertical;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 13px;
-    font-family: inherit;
-    font-size: 15px;
-    outline: none;
+.start{
+    background:#22c55e;
+    color:white;
 }
 
-textarea:focus {
-    border-color: #6366f1;
+.stop{
+    background:#ef4444;
+    color:white;
 }
 
-.controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: wrap;
+.lesson{
+    background:white;
+    color:#172033;
+    padding:20px;
+    line-height:1.7;
+    border-radius:15px;
+    margin-top:15px;
 }
 
-button {
-    border: none;
-    border-radius: 10px;
-    padding: 12px 18px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: bold;
+.ask{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
 }
 
-.ask-btn {
-    background: #4f46e5;
-    color: white;
+.ask input{
+    flex:1;
+    padding:13px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
 }
 
-.voice-btn {
-    background: #16a34a;
-    color: white;
+.ask button{
+    background:#7c3aed;
+    color:white;
 }
 
-.stop-btn {
-    background: #dc2626;
-    color: white;
+.loading{
+    text-align:center;
+    padding:20px;
+    color:#64748b;
 }
 
-.back-btn {
-    background: #eee;
-    color: #333;
-    margin-bottom: 15px;
-}
+@media(max-width:600px){
 
-.answer-box {
-    display: none;
-    margin-top: 15px;
-    background: #f5f3ff;
-    border-left: 4px solid #6366f1;
-    padding: 15px;
-    border-radius: 10px;
-    line-height: 1.7;
-    white-space: pre-wrap;
-}
-
-.error {
-    background: #fee2e2;
-    color: #991b1b;
-    padding: 12px;
-    border-radius: 10px;
-    margin-top: 15px;
-    display: none;
-}
-
-@media(max-width:600px) {
-    header h1 {
-        font-size: 23px;
+    .teacher-screen{
+        min-height:350px;
     }
 
-    .container {
-        padding: 15px 10px 30px;
+    .head{
+        width:135px;
+        height:135px;
     }
 
-    .hero {
-        padding: 18px;
+    .hair{
+        width:100px;
+        height:50px;
+        left:13px;
     }
 
-    .topics {
-        grid-template-columns: 1fr;
+    .eye{
+        top:58px;
     }
 
-    .lesson-box {
-        padding: 17px;
+    .eye.left{
+        left:35px;
+    }
+
+    .eye.right{
+        right:35px;
+    }
+
+    .mouth{
+        left:40px;
+        top:95px;
+    }
+
+    .body{
+        width:170px;
+        height:130px;
     }
 }
 </style>
@@ -272,84 +288,78 @@ button {
 
 <body>
 
-<header>
+<div class="header">
     <h1>🤖 GyanSetu AI Study</h1>
-    <p>Class 10 Mathematics • Learn with AI Sir</p>
-</header>
+    <p>Class 10 Mathematics — AI Sir</p>
+</div>
 
 <div class="container">
 
-    <div class="hero">
-        <h2>👨‍🏫 Welcome to AI Study</h2>
-        <p>
-            Select a Class 10 Mathematics topic.
-            GyanSetu AI Sir will explain the topic step-by-step
-            using simple language.
-        </p>
-    </div>
-
-    <h2 class="section-title">📚 Class 10 Mathematics</h2>
+    <h2 class="section-title">📚 Select Topic</h2>
 
     <div id="topics" class="topics">
-        <div style="text-align:center;">
-            Loading topics...
-        </div>
+        <div class="loading">Loading topics...</div>
     </div>
 
-    <div id="lessonBox" class="lesson-box">
+    <div id="teacherBox" class="teacher-box">
 
-        <button class="back-btn" onclick="closeLesson()">
-            ← Back to Topics
-        </button>
+        <div class="teacher-screen">
 
-        <div class="lesson-header">
-            <h2 id="lessonTitle">AI Lesson</h2>
-            <div class="teacher">
-                👨‍🏫 GyanSetu AI Sir
+            <div id="teacher" class="teacher">
+
+                <div class="head">
+
+                    <div class="hair"></div>
+
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+
+                    <div id="mouth" class="mouth"></div>
+
+                </div>
+
+                <div class="body"></div>
+
+                <div class="name">
+                    👨‍🏫 GyanSetu AI Sir
+                </div>
+
             </div>
-        </div>
 
-        <div id="loading" class="loading">
-            <div class="loader"></div>
-            <p>AI Sir lesson तयार करत आहेत...</p>
-        </div>
+            <div id="status" class="status">
+                Ready to teach
+            </div>
 
-        <div id="lessonContent" class="lesson-content"></div>
+        </div>
 
         <div class="controls">
-            <button class="voice-btn" onclick="speakLesson()">
-                🔊 Listen
+
+            <button class="start" onclick="startLesson()">
+                ▶️ Start AI Sir
             </button>
 
-            <button class="stop-btn" onclick="stopSpeaking()">
-                ⏹ Stop Voice
+            <button class="stop" onclick="stopLesson()">
+                ⏹ Stop
             </button>
+
         </div>
 
-        <div class="ask-box">
+        <div id="lesson" class="lesson">
+            Topic select करा.
+        </div>
 
-            <h3>💬 AI Sir ला प्रश्न विचारा</h3>
+        <div class="ask">
 
-            <textarea
+            <input
                 id="question"
-                placeholder="उदा. Quadratic Equation चा formula समजावून सांगा..."
-            ></textarea>
+                placeholder="AI Sir ला प्रश्न विचारा..."
+            >
 
-            <div class="controls">
-
-                <button
-                    class="ask-btn"
-                    onclick="askAI()">
-                    🤖 Ask AI Sir
-                </button>
-
-            </div>
-
-            <div id="answerBox" class="answer-box"></div>
+            <button onclick="askAI()">
+                Ask
+            </button>
 
         </div>
-
-        <div id="errorBox" class="error"></div>
 
     </div>
 
@@ -357,334 +367,316 @@ button {
 
 <script>
 
-const API_BASE =
-    "https://gyan-setu-ai-study-backend.vercel.app";
+const API =
+"https://gyan-setu-ai-study-backend.vercel.app";
 
-let currentTopic = "";
-let currentLesson = "";
+let selectedTopic = null;
+let currentText = "";
+let speech = null;
 
 
-// =====================================
-// LOAD TOPICS
-// =====================================
+/* LOAD TOPICS */
 
-async function loadTopics() {
+async function loadTopics(){
 
-    const topicsContainer =
-        document.getElementById("topics");
+    const box = document.getElementById("topics");
 
-    try {
+    try{
 
-        const response = await fetch(
-            API_BASE + "/api/maths/topics"
-        );
+        const response =
+            await fetch(API + "/api/maths/topics");
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
-        if (!data.success) {
-            throw new Error("Topics load failed");
-        }
-
-        topicsContainer.innerHTML = "";
+        box.innerHTML = "";
 
         data.topics.forEach(topic => {
 
-            const card =
+            const div =
                 document.createElement("div");
 
-            card.className = "topic-card";
+            div.className = "topic";
 
-            card.innerHTML = `
-                <div class="topic-number">
-                    ${topic.id}
-                </div>
-
-                <h3>${escapeHTML(topic.title)}</h3>
-
-                <p>
-                    ${escapeHTML(topic.description)}
-                </p>
+            div.innerHTML = `
+                <h3>${topic.id}. ${topic.title}</h3>
+                <p>${topic.description}</p>
             `;
 
-            card.onclick = () => {
-                openTopic(topic);
-            };
+            div.onclick = () => selectTopic(topic);
 
-            topicsContainer.appendChild(card);
+            box.appendChild(div);
 
         });
 
-    } catch (error) {
+    }catch(error){
 
-        topicsContainer.innerHTML = `
-            <div class="error" style="display:block;">
-                Topics load होत नाहीत.
-                Backend connection तपासा.
-            </div>
-        `;
+        box.innerHTML =
+            "<p>Topics load झाले नाहीत.</p>";
 
         console.error(error);
+
     }
+
 }
 
 
-// =====================================
-// OPEN TOPIC
-// =====================================
+/* SELECT TOPIC */
 
-async function openTopic(topic) {
+function selectTopic(topic){
 
-    currentTopic = topic.title;
+    selectedTopic = topic;
 
-    const lessonBox =
-        document.getElementById("lessonBox");
+    document.getElementById("teacherBox").style.display =
+        "block";
 
-    const lessonTitle =
-        document.getElementById("lessonTitle");
+    document.getElementById("lesson").innerHTML =
+        "⏳ AI Sir lesson तयार करत आहे...";
 
-    const lessonContent =
-        document.getElementById("lessonContent");
-
-    const loading =
-        document.getElementById("loading");
-
-    const errorBox =
-        document.getElementById("errorBox");
-
-    lessonBox.style.display = "block";
-
-    lessonTitle.textContent =
-        topic.title;
-
-    lessonContent.innerHTML = "";
-
-    errorBox.style.display = "none";
-
-    loading.style.display = "block";
+    document.getElementById("status").innerText =
+        "AI Sir is preparing the lesson...";
 
     window.scrollTo({
-        top: lessonBox.offsetTop - 15,
-        behavior: "smooth"
+        top:document.getElementById("teacherBox").offsetTop,
+        behavior:"smooth"
     });
 
-    try {
+    generateLesson();
 
-        const response = await fetch(
-            API_BASE + "/api/ai/lesson",
-            {
-                method: "POST",
+}
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
+
+/* GENERATE LESSON */
+
+async function generateLesson(){
+
+    try{
+
+        const response =
+            await fetch(API + "/api/ai/lesson",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
                 },
 
-                body: JSON.stringify({
-                    topic: topic.title,
-                    language: "Marathi + English"
+                body:JSON.stringify({
+
+                    topic:selectedTopic.title,
+                    language:"Marathi"
+
                 })
-            }
-        );
 
-        const data = await response.json();
+            });
 
-        if (!response.ok || !data.success) {
+        const data =
+            await response.json();
 
-            throw new Error(
-                data.error ||
-                "AI lesson generation failed"
-            );
+        if(!data.success){
+
+            throw new Error("Lesson failed");
+
         }
 
-        currentLesson = data.lesson;
+        currentText =
+            data.lesson || data.content || "";
 
-        lessonContent.textContent =
-            data.lesson;
+        document.getElementById("lesson").innerHTML =
+            formatText(currentText);
 
-    } catch (error) {
+        document.getElementById("status").innerText =
+            "Lesson ready — Start AI Sir";
+
+    }catch(error){
+
+        document.getElementById("lesson").innerHTML =
+            "❌ Lesson तयार करताना error आला.";
 
         console.error(error);
 
-        errorBox.textContent =
-            "AI lesson तयार करताना error आला: " +
-            error.message;
-
-        errorBox.style.display = "block";
-
-    } finally {
-
-        loading.style.display = "none";
     }
+
 }
 
 
-// =====================================
-// ASK AI
-// =====================================
+/* FORMAT */
 
-async function askAI() {
+function formatText(text){
 
-    const question =
-        document.getElementById("question")
-        .value
-        .trim();
+    return text
+        .replace(/\n/g,"<br>")
+        .replace(/\*\*(.*?)\*\*/g,"<strong>$1</strong>");
 
-    const answerBox =
-        document.getElementById("answerBox");
-
-    const errorBox =
-        document.getElementById("errorBox");
-
-    if (!question) {
-
-        alert("कृपया प्रश्न लिहा.");
-
-        return;
-    }
-
-    answerBox.style.display = "block";
-
-    answerBox.textContent =
-        "🤖 AI Sir विचार करत आहेत...";
-
-    errorBox.style.display = "none";
-
-    try {
-
-        const response = await fetch(
-            API_BASE + "/api/ai/ask",
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
-
-                body: JSON.stringify({
-                    question: question,
-                    topic: currentTopic,
-                    language: "Marathi + English"
-                })
-            }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-
-            throw new Error(
-                data.error ||
-                "AI answer failed"
-            );
-        }
-
-        answerBox.textContent =
-            "👨‍🏫 AI Sir:\n\n" +
-            data.answer;
-
-    } catch (error) {
-
-        answerBox.textContent = "";
-
-        errorBox.textContent =
-            "Answer मिळवताना error आला: " +
-            error.message;
-
-        errorBox.style.display = "block";
-    }
 }
 
 
-// =====================================
-// TEXT TO SPEECH
-// =====================================
+/* START AI SIR */
 
-function speakLesson() {
+function startLesson(){
 
-    if (!currentLesson) {
+    if(!currentText){
 
-        alert("आधी एखादा topic open करा.");
+        alert("पहिले topic select करा.");
 
         return;
+
     }
 
-    if (!("speechSynthesis" in window)) {
+    stopLesson();
 
-        alert(
-            "तुमच्या browser मध्ये voice support उपलब्ध नाही."
-        );
+    const teacher =
+        document.getElementById("teacher");
 
-        return;
-    }
+    const status =
+        document.getElementById("status");
 
-    stopSpeaking();
+    teacher.classList.add("speaking");
 
-    const speech =
+    status.innerText =
+        "🎙️ AI Sir शिकवत आहेत...";
+
+    speech =
         new SpeechSynthesisUtterance(
-            currentLesson
+            cleanText(currentText)
         );
+
+    speech.lang = "mr-IN";
 
     speech.rate = 0.9;
+
     speech.pitch = 1;
 
-    speech.lang = "en-IN";
+    speech.onend = () => {
 
-    window.speechSynthesis.speak(
-        speech
-    );
+        teacher.classList.remove("speaking");
+
+        status.innerText =
+            "✅ Lesson completed";
+
+    };
+
+    speech.onerror = () => {
+
+        teacher.classList.remove("speaking");
+
+        status.innerText =
+            "Speech unavailable";
+
+    };
+
+    window.speechSynthesis.speak(speech);
+
 }
 
 
-function stopSpeaking() {
+/* STOP */
 
-    if ("speechSynthesis" in window) {
-        window.speechSynthesis.cancel();
-    }
+function stopLesson(){
+
+    window.speechSynthesis.cancel();
+
+    document
+        .getElementById("teacher")
+        .classList.remove("speaking");
+
+    document.getElementById("status").innerText =
+        "⏹ AI Sir stopped";
+
 }
 
 
-// =====================================
-// CLOSE LESSON
-// =====================================
+/* REMOVE HTML */
 
-function closeLesson() {
-
-    stopSpeaking();
-
-    document.getElementById(
-        "lessonBox"
-    ).style.display = "none";
-
-    document.getElementById(
-        "answerBox"
-    ).style.display = "none";
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
-
-
-// =====================================
-// SECURITY HELPER
-// =====================================
-
-function escapeHTML(text) {
+function cleanText(text){
 
     const div =
         document.createElement("div");
 
-    div.textContent = text;
+    div.innerHTML = text;
 
-    return div.innerHTML;
+    return div.innerText;
+
 }
 
 
-// =====================================
-// START
-// =====================================
+/* ASK AI */
+
+async function askAI(){
+
+    const input =
+        document.getElementById("question");
+
+    const question =
+        input.value.trim();
+
+    if(!question){
+
+        alert("प्रश्न लिहा.");
+
+        return;
+
+    }
+
+    const lesson =
+        document.getElementById("lesson");
+
+    lesson.innerHTML =
+        "⏳ AI Sir उत्तर तयार करत आहेत...";
+
+    try{
+
+        const response =
+            await fetch(API + "/api/ai/ask",{
+
+                method:"POST",
+
+                headers:{
+                    "Content-Type":"application/json"
+                },
+
+                body:JSON.stringify({
+
+                    question:question,
+
+                    topic:selectedTopic
+                        ? selectedTopic.title
+                        : "Class 10 Mathematics",
+
+                    language:"Marathi"
+
+                })
+
+            });
+
+        const data =
+            await response.json();
+
+        const answer =
+            data.answer ||
+            data.response ||
+            data.message ||
+            data.content ||
+            "उत्तर मिळाले नाही.";
+
+        currentText = answer;
+
+        lesson.innerHTML =
+            formatText(answer);
+
+        input.value = "";
+
+    }catch(error){
+
+        lesson.innerHTML =
+            "❌ AI Sir उत्तर देऊ शकले नाहीत.";
+
+        console.error(error);
+
+    }
+
+}
+
 
 loadTopics();
 
