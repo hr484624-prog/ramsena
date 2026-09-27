@@ -1,51 +1,1288 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GyanSetu - Class 6th</title>
+
+<title>GyanSetu AI Study - Class 6</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f7f8fc;color:#18264d}
-.page{width:100%;max-width:430px;min-height:100vh;margin:auto}
-.header{background:white;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.header-row{display:flex;align-items:center;gap:15px}
-.back{font-size:30px;cursor:pointer}
-.class-title{font-size:24px;font-weight:800}
-.pdf-area{margin:20px 16px;height:650px;background:white;border:2px dashed #ddd;border-radius:22px;display:flex;align-items:center;justify-content:center;text-align:center}
-.pdf-placeholder{color:#999;padding:20px}
-.pdf-icon{font-size:50px;margin-bottom:15px}
-.pdf-placeholder h3{color:#18264d;font-size:18px}
-.pdf-placeholder p{margin-top:8px;font-size:13px;line-height:1.5}
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#eef2ff,#f8fafc);
+    color:#111827;
+}
+
+header{
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    padding:25px 15px;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+header p{
+    font-size:15px;
+    opacity:.95;
+}
+
+.container{
+    max-width:900px;
+    margin:auto;
+    padding:20px 15px 40px;
+}
+
+.lesson-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+}
+
+.lesson-card{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    cursor:pointer;
+    transition:.2s;
+    border:1px solid #e5e7eb;
+}
+
+.lesson-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 25px rgba(79,70,229,.18);
+}
+
+.lesson-number{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#eef2ff;
+    color:#4f46e5;
+    border-radius:50%;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.lesson-card h3{
+    font-size:18px;
+    margin-bottom:7px;
+}
+
+.lesson-card p{
+    color:#6b7280;
+    font-size:13px;
+}
+
+/* NAME POPUP */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.popup{
+    width:100%;
+    max-width:430px;
+    background:white;
+    border-radius:22px;
+    padding:25px;
+    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    animation:popup .25s ease;
+}
+
+@keyframes popup{
+    from{
+        transform:scale(.9);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+.popup h2{
+    margin-bottom:8px;
+}
+
+.popup p{
+    color:#6b7280;
+    margin-bottom:18px;
+}
+
+.popup input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    outline:none;
+    font-size:16px;
+    margin-bottom:18px;
+}
+
+.popup input:focus{
+    border-color:#6366f1;
+}
+
+.popup-buttons{
+    display:flex;
+    gap:10px;
+}
+
+.popup-buttons button{
+    flex:1;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#e5e7eb;
+    color:#111827;
+}
+
+.start-btn{
+    background:#4f46e5;
+    color:white;
+}
+
+/* FULL SCREEN CLASS */
+
+.class-screen{
+    position:fixed;
+    inset:0;
+    background:#f8fafc;
+    z-index:2000;
+    display:none;
+    flex-direction:column;
+}
+
+.class-header{
+    min-height:65px;
+    background:linear-gradient(135deg,#4f46e5,#7c3aed);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 15px;
+}
+
+.class-title{
+    font-weight:bold;
+    font-size:16px;
+    max-width:calc(100% - 60px);
+}
+
+.close-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:50%;
+    background:#ef4444;
+    color:white;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.class-body{
+    flex:1;
+    overflow-y:auto;
+    padding:20px;
+}
+
+.ai-area{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.ai-sir{
+    width:150px;
+    height:150px;
+    margin:0 auto 15px;
+    position:relative;
+    animation:float 2.5s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-8px);
+    }
+}
+
+.head{
+    position:absolute;
+    width:105px;
+    height:105px;
+    border-radius:50%;
+    background:#ffd6b3;
+    left:22px;
+    top:5px;
+    border:4px solid #312e81;
+}
+
+.hair{
+    position:absolute;
+    width:90px;
+    height:45px;
+    background:#111827;
+    border-radius:50px 50px 15px 15px;
+    left:7px;
+    top:-4px;
+}
+
+.eye{
+    position:absolute;
+    width:10px;
+    height:10px;
+    background:#111827;
+    border-radius:50%;
+    top:45px;
+}
+
+.eye.left{
+    left:28px;
+}
+
+.eye.right{
+    right:28px;
+}
+
+.nose{
+    position:absolute;
+    width:7px;
+    height:12px;
+    border-left:2px solid #b77955;
+    left:49px;
+    top:52px;
+}
+
+.mouth{
+    position:absolute;
+    width:32px;
+    height:7px;
+    border-bottom:4px solid #dc2626;
+    border-radius:50%;
+    left:34px;
+    top:72px;
+}
+
+.ai-speaking .mouth{
+    height:20px;
+    background:#991b1b;
+    border-radius:50%;
+    animation:talk .18s infinite alternate;
+}
+
+@keyframes talk{
+    from{
+        transform:scaleY(.5);
+    }
+    to{
+        transform:scaleY(1);
+    }
+}
+
+.body{
+    position:absolute;
+    width:125px;
+    height:70px;
+    background:#4f46e5;
+    border-radius:45px 45px 15px 15px;
+    bottom:0;
+    left:12px;
+}
+
+.tie{
+    position:absolute;
+    width:0;
+    height:0;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-top:35px solid #ef4444;
+    left:50px;
+    top:10px;
+}
+
+.ai-status{
+    color:#4f46e5;
+    font-weight:bold;
+    min-height:22px;
+}
+
+.lesson-content{
+    background:white;
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
+    margin-bottom:18px;
+    line-height:1.7;
+}
+
+.lesson-content h2{
+    color:#4f46e5;
+    margin-bottom:12px;
+}
+
+.lesson-content p{
+    margin-bottom:10px;
+}
+
+.loading{
+    text-align:center;
+    color:#6b7280;
+    padding:25px;
+}
+
+.controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+}
+
+.controls button{
+    border:none;
+    padding:12px 18px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.speak-btn{
+    background:#4f46e5;
+    color:white;
+}
+
+.stop-btn{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.question-box{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.07);
+}
+
+.question-box h3{
+    margin-bottom:12px;
+}
+
+.question-row{
+    display:flex;
+    gap:10px;
+}
+
+.question-row input{
+    flex:1;
+    padding:13px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    outline:none;
+    font-size:15px;
+}
+
+.question-row button{
+    padding:13px 18px;
+    background:#16a34a;
+    color:white;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.answer{
+    margin-top:15px;
+    padding:15px;
+    background:#f0fdf4;
+    border-left:4px solid #16a34a;
+    border-radius:10px;
+    line-height:1.6;
+    display:none;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .class-body{
+        padding:14px;
+    }
+
+    .lesson-grid{
+        grid-template-columns:1fr;
+    }
+
+    .question-row{
+        flex-direction:column;
+    }
+
+    .question-row button{
+        width:100%;
+    }
+}
 </style>
 </head>
 
 <body>
-<div class="page">
 
-<div class="header">
-<div class="header-row">
-<div class="back" onclick="goBack()">‹</div>
-<div class="class-title">Class 6th</div>
-</div>
-</div>
+<header>
+    <h1>🤖 GyanSetu AI Study</h1>
+    <p>Class 6 Mathematics • Learn with AI Sir</p>
+</header>
 
-<div class="pdf-area">
-<div class="pdf-placeholder">
-<div class="pdf-icon">📚</div>
-<h3>Study Material</h3>
-<p>इथे नंतर Class 6th चा PDF जोडता येईल.</p>
-</div>
-</div>
+<div class="container">
+
+    <div class="lesson-grid" id="lessonGrid"></div>
 
 </div>
+
+
+<!-- NAME POPUP -->
+
+<div class="overlay" id="nameOverlay">
+
+    <div class="popup">
+
+        <h2>👨‍🏫 Start Your Class</h2>
+
+        <p id="selectedLessonText">
+            Enter your name to learn with AI Sir.
+        </p>
+
+        <input
+            type="text"
+            id="studentName"
+            placeholder="Your name (optional)"
+            maxlength="40"
+        >
+
+        <div class="popup-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="closeNamePopup()"
+            >
+                Cancel
+            </button>
+
+            <button
+                class="start-btn"
+                onclick="startClass()"
+            >
+                Start Class
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FULL SCREEN CLASS -->
+
+<div class="class-screen" id="classScreen">
+
+    <div class="class-header">
+
+        <div class="class-title" id="classTitle">
+            Class 6 Mathematics
+        </div>
+
+        <button
+            class="close-btn"
+            onclick="closeClass()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="class-body">
+
+        <div class="ai-area">
+
+            <div class="ai-sir" id="aiSir">
+
+                <div class="head">
+
+                    <div class="hair"></div>
+
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+
+                    <div class="nose"></div>
+
+                    <div class="mouth"></div>
+
+                </div>
+
+                <div class="body">
+                    <div class="tie"></div>
+                </div>
+
+            </div>
+
+            <div
+                class="ai-status"
+                id="aiStatus"
+            >
+                AI Sir is ready 👨‍🏫
+            </div>
+
+        </div>
+
+
+        <div
+            class="lesson-content"
+            id="lessonContent"
+        >
+
+            <div class="loading">
+                📚 AI Sir is preparing your lesson...
+            </div>
+
+        </div>
+
+
+        <div class="controls">
+
+            <button
+                class="speak-btn"
+                onclick="speakLesson()"
+            >
+                🔊 Start / Replay
+            </button>
+
+            <button
+                class="stop-btn"
+                onclick="stopSpeaking()"
+            >
+                ⏹ Stop
+            </button>
+
+        </div>
+
+
+        <div class="question-box">
+
+            <h3>❓ Ask AI Sir</h3>
+
+            <div class="question-row">
+
+                <input
+                    type="text"
+                    id="questionInput"
+                    placeholder="तुमचा प्रश्न लिहा..."
+                    onkeydown="if(event.key==='Enter') askAI()"
+                >
+
+                <button onclick="askAI()">
+                    Ask
+                </button>
+
+            </div>
+
+            <div
+                class="answer"
+                id="answerBox"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
-function goBack(){
-window.location.href="learn.html";
+
+const API =
+"https://gyan-setu-ai-study-backend.vercel.app";
+
+
+const topics = [
+
+    {
+        id:1,
+        title:"Knowing Our Numbers",
+        icon:"🔢"
+    },
+
+    {
+        id:2,
+        title:"Whole Numbers",
+        icon:"🔢"
+    },
+
+    {
+        id:3,
+        title:"Playing with Numbers",
+        icon:"🎲"
+    },
+
+    {
+        id:4,
+        title:"Basic Geometrical Ideas",
+        icon:"📐"
+    },
+
+    {
+        id:5,
+        title:"Understanding Elementary Shapes",
+        icon:"📏"
+    },
+
+    {
+        id:6,
+        title:"Integers",
+        icon:"➕"
+    },
+
+    {
+        id:7,
+        title:"Fractions",
+        icon:"🍕"
+    },
+
+    {
+        id:8,
+        title:"Decimals",
+        icon:"🔢"
+    },
+
+    {
+        id:9,
+        title:"Data Handling",
+        icon:"📊"
+    },
+
+    {
+        id:10,
+        title:"Mensuration",
+        icon:"📐"
+    },
+
+    {
+        id:11,
+        title:"Algebra",
+        icon:"𝑥"
+    },
+
+    {
+        id:12,
+        title:"Ratio and Proportion",
+        icon:"⚖️"
+    },
+
+    {
+        id:13,
+        title:"Symmetry",
+        icon:"🪞"
+    },
+
+    {
+        id:14,
+        title:"Practical Geometry",
+        icon:"📐"
+    }
+
+];
+
+
+let selectedTopic = null;
+let studentName = "";
+
+
+/* SHOW LESSONS */
+
+function renderTopics(){
+
+    const grid =
+        document.getElementById("lessonGrid");
+
+    grid.innerHTML = "";
+
+    topics.forEach((topic,index)=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "lesson-card";
+
+        card.onclick = () =>
+            openNamePopup(topic);
+
+        card.innerHTML = `
+
+            <div class="lesson-number">
+                ${topic.icon}
+            </div>
+
+            <h3>
+                ${index+1}. ${topic.title}
+            </h3>
+
+            <p>
+                Learn ${topic.title}
+                with AI Sir 👨‍🏫
+            </p>
+
+        `;
+
+        grid.appendChild(card);
+
+    });
+
 }
+
+
+/* NAME POPUP */
+
+function openNamePopup(topic){
+
+    selectedTopic = topic;
+
+    document.getElementById(
+        "selectedLessonText"
+    ).innerHTML =
+        `You are starting:
+        <b>${topic.title}</b><br>
+        Enter your name (optional).`;
+
+    document.getElementById(
+        "studentName"
+    ).value = "";
+
+    document.getElementById(
+        "nameOverlay"
+    ).style.display = "flex";
+
+}
+
+
+function closeNamePopup(){
+
+    document.getElementById(
+        "nameOverlay"
+    ).style.display = "none";
+
+}
+
+
+/* START CLASS */
+
+async function startClass(){
+
+    if(!selectedTopic) return;
+
+    studentName =
+        document.getElementById(
+            "studentName"
+        ).value.trim();
+
+    closeNamePopup();
+
+    document.getElementById(
+        "classScreen"
+    ).style.display = "flex";
+
+    document.getElementById(
+        "classTitle"
+    ).textContent =
+        "Class 6 Mathematics • " +
+        selectedTopic.title;
+
+    document.getElementById(
+        "lessonContent"
+    ).innerHTML = `
+        <div class="loading">
+            🤖 AI Sir is preparing
+            <b>${selectedTopic.title}</b>...
+        </div>
+    `;
+
+    document.getElementById(
+        "aiStatus"
+    ).textContent =
+        "AI Sir is preparing your class...";
+
+    await generateLesson();
+
+}
+
+
+/* GENERATE LESSON */
+
+async function generateLesson(){
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/lesson",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        topic:
+                            "Class 6 Mathematics - " +
+                            selectedTopic.title,
+
+                        language:"Marathi"
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "AI lesson failed"
+            );
+
+        }
+
+
+        let lesson =
+            data.lesson ||
+            data.answer ||
+            data.content ||
+            data.message ||
+            "";
+
+
+        if(typeof lesson !== "string"){
+
+            lesson =
+                JSON.stringify(
+                    lesson,
+                    null,
+                    2
+                );
+
+        }
+
+
+        document.getElementById(
+            "lessonContent"
+        ).innerHTML = `
+
+            <h2>
+                📚 ${selectedTopic.title}
+            </h2>
+
+            <p>
+                ${formatText(lesson)}
+            </p>
+
+        `;
+
+
+        document.getElementById(
+            "aiStatus"
+        ).textContent =
+            studentName
+            ? `नमस्कार ${studentName}! 👋 AI Sir तयार आहे.`
+            : "नमस्कार! 👋 AI Sir तयार आहे.";
+
+
+        speakText(
+            getGreeting() +
+            " " +
+            cleanForSpeech(lesson)
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById(
+            "lessonContent"
+        ).innerHTML = `
+
+            <h2>⚠️ काहीतरी चूक झाली</h2>
+
+            <p>
+                Lesson load करता आला नाही.
+                कृपया पुन्हा प्रयत्न करा.
+            </p>
+
+            <p>
+                ${escapeHTML(error.message)}
+            </p>
+
+        `;
+
+        document.getElementById(
+            "aiStatus"
+        ).textContent =
+            "AI Sir could not load the lesson.";
+
+    }
+
+}
+
+
+/* ASK AI */
+
+async function askAI(){
+
+    const input =
+        document.getElementById(
+            "questionInput"
+        );
+
+    const question =
+        input.value.trim();
+
+    if(!question) return;
+
+    const answerBox =
+        document.getElementById(
+            "answerBox"
+        );
+
+    answerBox.style.display =
+        "block";
+
+    answerBox.innerHTML =
+        "🤖 AI Sir विचार करत आहे...";
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/ask",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        question:question,
+
+                        topic:
+                            "Class 6 Mathematics - " +
+                            selectedTopic.title,
+
+                        language:"Marathi"
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "AI answer failed"
+            );
+
+        }
+
+
+        let answer =
+            data.answer ||
+            data.response ||
+            data.content ||
+            data.message ||
+            "";
+
+
+        if(typeof answer !== "string"){
+
+            answer =
+                JSON.stringify(
+                    answer
+                );
+
+        }
+
+
+        answerBox.innerHTML =
+            `<b>👨‍🏫 AI Sir:</b><br><br>
+             ${formatText(answer)}`;
+
+
+        speakText(
+            (studentName
+                ? studentName + ", "
+                : "") +
+            cleanForSpeech(answer)
+        );
+
+
+        input.value = "";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        answerBox.innerHTML =
+            "❌ उत्तर मिळाले नाही. पुन्हा प्रयत्न करा.";
+
+    }
+
+}
+
+
+/* SPEAK LESSON */
+
+function speakLesson(){
+
+    const content =
+        document.getElementById(
+            "lessonContent"
+        ).innerText;
+
+    if(!content) return;
+
+    speakText(
+        getGreeting() +
+        " " +
+        cleanForSpeech(content)
+    );
+
+}
+
+
+/* GREETING */
+
+function getGreeting(){
+
+    if(studentName){
+
+        return `
+            नमस्कार ${studentName}.
+            मी तुमचा AI Sir आहे.
+            चला आजचा Class 6 Mathematics
+            चा धडा शिकूया.
+        `;
+
+    }
+
+    return `
+        नमस्कार.
+        मी तुमचा AI Sir आहे.
+        चला आजचा Class 6 Mathematics
+        चा धडा शिकूया.
+    `;
+
+}
+
+
+/* SPEECH */
+
+function speakText(text){
+
+    if(!("speechSynthesis" in window)){
+
+        alert(
+            "तुमच्या browser मध्ये voice support नाही."
+        );
+
+        return;
+
+    }
+
+    window.speechSynthesis.cancel();
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.lang = "mr-IN";
+
+    utterance.rate = 0.9;
+
+    utterance.pitch = 1;
+
+    utterance.volume = 1;
+
+
+    utterance.onstart = function(){
+
+        document.getElementById(
+            "aiSir"
+        ).classList.add(
+            "ai-speaking"
+        );
+
+        document.getElementById(
+            "aiStatus"
+        ).textContent =
+            "🔊 AI Sir बोलत आहे...";
+
+    };
+
+
+    utterance.onend = function(){
+
+        document.getElementById(
+            "aiSir"
+        ).classList.remove(
+            "ai-speaking"
+        );
+
+        document.getElementById(
+            "aiStatus"
+        ).textContent =
+            studentName
+            ? `Class चालू आहे, ${studentName} 👨‍🏫`
+            : "Class चालू आहे 👨‍🏫";
+
+    };
+
+
+    utterance.onerror = function(){
+
+        document.getElementById(
+            "aiSir"
+        ).classList.remove(
+            "ai-speaking"
+        );
+
+    };
+
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+
+}
+
+
+/* STOP */
+
+function stopSpeaking(){
+
+    window.speechSynthesis.cancel();
+
+    document.getElementById(
+        "aiSir"
+    ).classList.remove(
+        "ai-speaking"
+    );
+
+    document.getElementById(
+        "aiStatus"
+    ).textContent =
+        "⏹ AI Sir stopped.";
+
+}
+
+
+/* CLOSE CLASS */
+
+function closeClass(){
+
+    stopSpeaking();
+
+    document.getElementById(
+        "classScreen"
+    ).style.display = "none";
+
+    selectedTopic = null;
+
+}
+
+
+/* TEXT FORMAT */
+
+function formatText(text){
+
+    return escapeHTML(text)
+        .replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+        .replace(/\n/g,"<br>");
+
+}
+
+
+function cleanForSpeech(text){
+
+    return text
+        .replace(/\*\*/g,"")
+        .replace(/[#*_`]/g,"")
+        .replace(/<[^>]*>/g," ")
+        .replace(/\s+/g," ")
+        .trim();
+
+}
+
+
+function escapeHTML(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* INITIALIZE */
+
+renderTopics();
+
 </script>
 
 </body>
-  </html>
+</html>
