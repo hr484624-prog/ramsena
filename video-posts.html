@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Video Posts - GyanSetu</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f5f7fb;
+  color:#111;
+}
+
+.header{
+  background:#ffffff;
+  padding:15px 18px;
+  position:sticky;
+  top:0;
+  z-index:10;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:bold;
+  color:#2563eb;
+}
+
+.uploadBtn{
+  background:#2563eb;
+  color:white;
+  border:0;
+  border-radius:10px;
+  padding:10px 15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.container{
+  max-width:650px;
+  margin:auto;
+  padding:15px;
+}
+
+.post{
+  background:white;
+  border-radius:16px;
+  margin-bottom:20px;
+  overflow:hidden;
+  box-shadow:0 3px 15px rgba(0,0,0,.08);
+}
+
+.user{
+  padding:14px;
+  font-weight:bold;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  background:#2563eb;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+}
+
+.video{
+  width:100%;
+  max-height:600px;
+  background:#000;
+  display:block;
+}
+
+.actions{
+  display:flex;
+  gap:20px;
+  padding:12px 14px;
+  border-bottom:1px solid #eee;
+}
+
+.action{
+  border:0;
+  background:none;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.commentBox{
+  padding:12px 14px;
+}
+
+.comments{
+  max-height:180px;
+  overflow-y:auto;
+  margin-bottom:10px;
+}
+
+.comment{
+  margin-bottom:8px;
+  font-size:14px;
+}
+
+.comment b{
+  margin-right:5px;
+}
+
+.commentInput{
+  width:100%;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:10px;
+  outline:none;
+}
+
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:#777;
+}
+
+#fileInput{
+  display:none;
+}
+
+.loading{
+  text-align:center;
+  padding:30px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:100;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.modalBox{
+  background:white;
+  width:100%;
+  max-width:430px;
+  border-radius:18px;
+  padding:20px;
+}
+
+.modalBox h2{
+  margin-top:0;
+}
+
+.preview{
+  width:100%;
+  max-height:300px;
+  margin-top:15px;
+  border-radius:12px;
+  background:#000;
+}
+
+.modalActions{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.modalActions button{
+  flex:1;
+  padding:12px;
+  border:0;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.cancel{
+  background:#eee;
+}
+
+.postNow{
+  background:#2563eb;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">GyanSetu</div>
+
+  <button class="uploadBtn" onclick="openUpload()">
+    ＋ Post Video
+  </button>
+</header>
+
+<div class="container">
+
+  <div id="loading" class="loading">
+    Videos loading...
+  </div>
+
+  <div id="posts"></div>
+
+</div>
+
+<input
+  type="file"
+  id="fileInput"
+  accept="video/*"
+  onchange="fileSelected(event)"
+>
+
+<!-- Upload Modal -->
+
+<div class="modal" id="uploadModal">
+
+  <div class="modalBox">
+
+    <h2>Post Video</h2>
+
+    <p id="fileName">Select a video</p>
+
+    <video
+      id="preview"
+      class="preview"
+      controls
+      style="display:none"
+    ></video>
+
+    <div class="modalActions">
+
+      <button
+        class="cancel"
+        onclick="closeUpload()">
+        Cancel
+      </button>
+
+      <button
+        class="postNow"
+        onclick="uploadVideo()">
+        Post
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const supabaseClient =
+supabase.createClient(
+  "https://eqglttfffhvoyvrclzse.supabase.co",
+  "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb"
+);
+
+let currentUser = null;
+let selectedFile = null;
+
+
+/* =========================
+   CHECK LOGIN
+========================= */
+
+async function checkUser(){
+
+  const {
+    data:{
+      user
+    }
+  } = await supabaseClient.auth.getUser();
+
+  if(!user){
+
+    alert("Please login first.");
+
+    window.location.href="account.html";
+
+    return false;
+  }
+
+  currentUser=user;
+
+  return true;
+}
+
+
+/* =========================
+   OPEN UPLOAD
+========================= */
+
+async function openUpload(){
+
+  if(!await checkUser()) return;
+
+  document.getElementById("fileInput").click();
+}
+
+
+/* =========================
+   FILE SELECTED
+========================= */
+
+function fileSelected(event){
+
+  selectedFile=event.target.files[0];
+
+  if(!selectedFile) return;
+
+  document.getElementById("uploadModal").style.display="flex";
+
+  document.getElementById("fileName").innerText=
+    selectedFile.name;
+
+  const preview=
+    document.getElementById("preview");
+
+  preview.src=
+    URL.createObjectURL(selectedFile);
+
+  preview.style.display="block";
+}
+
+
+/* =========================
+   CLOSE
+========================= */
+
+function closeUpload(){
+
+  document.getElementById("uploadModal").style.display="none";
+
+  document.getElementById("fileInput").value="";
+
+  selectedFile=null;
+}
+
+
+/* =========================
+   UPLOAD VIDEO
+========================= */
+
+async function uploadVideo(){
+
+  if(!selectedFile){
+
+    alert("Please select a video.");
+
+    return;
+  }
+
+  if(!currentUser){
+
+    if(!await checkUser()) return;
+  }
+
+  const postBtn=
+    document.querySelector(".postNow");
+
+  postBtn.disabled=true;
+
+  postBtn.innerText="Uploading...";
+
+  try{
+
+    const extension=
+      selectedFile.name.split(".").pop();
+
+    const filePath=
+      currentUser.id +
+      "/" +
+      Date.now() +
+      "." +
+      extension;
+
+    /*
+      Upload to private storage
+    */
+
+    const {
+      error:uploadError
+    } =
+    await supabaseClient
+    .storage
+    .from("videos")
+    .upload(
+      filePath,
+      selectedFile,
+      {
+        contentType:selectedFile.type,
+        upsert:false
+      }
+    );
+
+    if(uploadError)
+      throw uploadError;
+
+
+    /*
+      Create database post
+    */
+
+    const {
+      error:dbError
+    } =
+    await supabaseClient
+    .from("video_posts")
+    .insert({
+
+      user_id:currentUser.id,
+
+      video_path:filePath,
+
+      status:"pending"
+
+    });
+
+    if(dbError)
+      throw dbError;
+
+
+    closeUpload();
+
+    alert(
+      "Video uploaded successfully.\n\nAI moderation is checking your video."
+    );
+
+    loadPosts();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    alert(
+      "Upload failed:\n"+
+      error.message
+    );
+
+  }
+
+  postBtn.disabled=false;
+
+  postBtn.innerText="Post";
+}
+
+
+/* =========================
+   LOAD POSTS
+========================= */
+
+async function loadPosts(){
+
+  const posts=
+    document.getElementById("posts");
+
+  const loading=
+    document.getElementById("loading");
+
+  loading.style.display="block";
+
+  posts.innerHTML="";
+
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+  .from("video_posts")
+  .select("*")
+  .eq("status","approved")
+  .order("created_at",{ascending:false});
+
+
+  if(error){
+
+    console.error(error);
+
+    loading.innerText=
+      "Unable to load videos.";
+
+    return;
+  }
+
+
+  loading.style.display="none";
+
+
+  if(!data || data.length===0){
+
+    posts.innerHTML=`
+      <div class="empty">
+        No videos yet.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  for(const post of data){
+
+    await createPost(post);
+
+  }
+
+}
+
+
+/* =========================
+   CREATE POST
+========================= */
+
+async function createPost(post){
+
+  const {
+    data:{
+      publicUrl
+    }
+  } =
+  await supabaseClient
+  .storage
+  .from("videos")
+  .createSignedUrl(
+    post.video_path,
+    3600
+  );
+
+
+  if(!publicUrl) return;
+
+
+  /*
+    Get username
+  */
+
+  const {
+    data:profile
+  } =
+  await supabaseClient
+  .from("Profiles")
+  .select("username")
+  .eq("id",post.user_id)
+  .maybeSingle();
+
+
+  const username=
+    profile?.username || "GyanSetu User";
+
+
+  /*
+    Like count
+  */
+
+  const {
+    count:likeCount
+  } =
+  await supabaseClient
+  .from("video_likes")
+  .select("*",{count:"exact",head:true})
+  .eq("post_id",post.id);
+
+
+  /*
+    User liked?
+  */
+
+  const {
+    data:myLike
+  } =
+  await supabaseClient
+  .from("video_likes")
+  .select("id")
+  .eq("post_id",post.id)
+  .eq("user_id",currentUser.id)
+  .maybeSingle();
+
+
+  /*
+    Comments
+  */
+
+  const {
+    data:comments
+  } =
+  await supabaseClient
+  .from("video_comments")
+  .select("*")
+  .eq("post_id",post.id)
+  .order("created_at",{ascending:true});
+
+
+  let commentsHTML="";
+
+  for(const comment of comments || []){
+
+    const {
+      data:commentProfile
+    } =
+    await supabaseClient
+    .from("Profiles")
+    .select("username")
+    .eq("id",comment.user_id)
+    .maybeSingle();
+
+    const commentUsername=
+      commentProfile?.username || "User";
+
+
+    commentsHTML += `
+      <div class="comment">
+        <b>${escapeHTML(commentUsername)}</b>
+        ${escapeHTML(comment.comment)}
+      </div>
+    `;
+  }
+
+
+  const postHTML=document.createElement("div");
+
+  postHTML.className="post";
+
+  postHTML.innerHTML=`
+
+    <div class="user">
+
+      <div class="avatar">
+        ${escapeHTML(username.charAt(0).toUpperCase())}
+      </div>
+
+      ${escapeHTML(username)}
+
+    </div>
+
+
+    <video
+      class="video"
+      controls
+      playsinline
+      src="${publicUrl}"
+    ></video>
+
+
+    <div class="actions">
+
+      <button
+        class="action"
+        onclick="toggleLike('${post.id}',this)">
+
+        ${myLike ? "❤️" : "🤍"}
+
+        <span>
+          ${likeCount || 0}
+        </span>
+
+      </button>
+
+
+      <button
+        class="action"
+        onclick="focusComment('${post.id}')">
+
+        💬
+
+        <span>
+          ${(comments || []).length}
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <div class="commentBox">
+
+      <div
+        class="comments"
+        id="comments-${post.id}">
+
+        ${commentsHTML}
+
+      </div>
+
+
+      <input
+        class="commentInput"
+        id="input-${post.id}"
+        placeholder="Write a comment..."
+        onkeydown="commentKey(event,'${post.id}')"
+      >
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById("posts")
+    .appendChild(postHTML);
+
+}
+
+
+/* =========================
+   LIKE
+========================= */
+
+async function toggleLike(postId,button){
+
+  const {
+    data:existing
+  } =
+  await supabaseClient
+  .from("video_likes")
+  .select("id")
+  .eq("post_id",postId)
+  .eq("user_id",currentUser.id)
+  .maybeSingle();
+
+
+  if(existing){
+
+    await supabaseClient
+    .from("video_likes")
+    .delete()
+    .eq("id",existing.id);
+
+  }
+  else{
+
+    await supabaseClient
+    .from("video_likes")
+    .insert({
+
+      post_id:postId,
+
+      user_id:currentUser.id
+
+    });
+
+  }
+
+
+  loadPosts();
+
+}
+
+
+/* =========================
+   COMMENT
+========================= */
+
+async function addComment(postId){
+
+  const input=
+    document.getElementById(
+      "input-"+postId
+    );
+
+  const text=
+    input.value.trim();
+
+
+  if(!text) return;
+
+
+  const {
+    error
+  } =
+  await supabaseClient
+  .from("video_comments")
+  .insert({
+
+    post_id:postId,
+
+    user_id:currentUser.id,
+
+    comment:text
+
+  });
+
+
+  if(error){
+
+    alert(error.message);
+
+    return;
+  }
+
+
+  input.value="";
+
+  loadPosts();
+
+}
+
+
+/* =========================
+   ENTER COMMENT
+========================= */
+
+function commentKey(event,postId){
+
+  if(event.key==="Enter"){
+
+    event.preventDefault();
+
+    addComment(postId);
+
+  }
+
+}
+
+
+/* =========================
+   FOCUS COMMENT
+========================= */
+
+function focusComment(postId){
+
+  document
+    .getElementById("input-"+postId)
+    .focus();
+
+}
+
+
+/* =========================
+   HTML SECURITY
+========================= */
+
+function escapeHTML(text){
+
+  return String(text)
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+(async()=>{
+
+  if(await checkUser()){
+
+    loadPosts();
+
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
