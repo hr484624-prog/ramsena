@@ -1,50 +1,1157 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GyanSetu - Class 9th</title>
+
+<title>GyanSetu Class 9 AI Study</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f7f8fc;color:#18264d}
-.page{width:100%;max-width:430px;min-height:100vh;margin:auto}
-.header{background:white;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.header-row{display:flex;align-items:center;gap:15px}
-.back{font-size:30px;cursor:pointer}
-.class-title{font-size:24px;font-weight:800}
-.pdf-area{margin:20px 16px;height:650px;background:white;border:2px dashed #ddd;border-radius:22px;display:flex;align-items:center;justify-content:center;text-align:center}
-.pdf-placeholder{color:#999;padding:20px}
-.pdf-icon{font-size:50px;margin-bottom:15px}
-.pdf-placeholder h3{color:#18264d;font-size:18px}
-.pdf-placeholder p{margin-top:8px;font-size:13px;line-height:1.5}
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#172033;
+}
+
+.header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.header h1{
+    margin:0;
+    font-size:26px;
+}
+
+.header p{
+    margin:7px 0 0;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+
+.title{
+    margin-bottom:18px;
+}
+
+.topics{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:16px;
+}
+
+.topic{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 5px 18px rgba(0,0,0,.08);
+    cursor:pointer;
+    transition:.2s;
+    border:1px solid #e5e7eb;
+}
+
+.topic:hover{
+    transform:translateY(-4px);
+}
+
+.topic-number{
+    color:#2563eb;
+    font-weight:bold;
+    font-size:14px;
+}
+
+.topic h3{
+    margin:8px 0;
+}
+
+.topic p{
+    margin:0;
+    color:#64748b;
+    line-height:1.5;
+}
+
+
+/* POPUP */
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    z-index:1000;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal-box{
+    background:white;
+    width:100%;
+    max-width:430px;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,.3);
+}
+
+.modal-box h2{
+    margin-top:0;
+}
+
+.selected-topic{
+    background:#eff6ff;
+    padding:12px;
+    border-radius:10px;
+    margin:15px 0;
+    color:#1d4ed8;
+    font-weight:bold;
+}
+
+.name-input{
+    width:100%;
+    padding:14px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.name-input:focus{
+    border-color:#2563eb;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+.modal-buttons button{
+    flex:1;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.cancel-btn{
+    background:#e5e7eb;
+}
+
+.start-btn{
+    background:#2563eb;
+    color:white;
+}
+
+
+/* FULL SCREEN CLASS */
+
+.class-screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0f172a;
+    z-index:2000;
+    color:white;
+    overflow:auto;
+}
+
+.class-header{
+    position:sticky;
+    top:0;
+    z-index:10;
+    height:65px;
+    background:rgba(15,23,42,.96);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 15px;
+    border-bottom:1px solid #334155;
+}
+
+.class-title{
+    font-size:18px;
+    font-weight:bold;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.close-btn{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    border:0;
+    background:#ef4444;
+    color:white;
+    font-size:25px;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.class-content{
+    max-width:1000px;
+    margin:auto;
+    padding:20px;
+}
+
+
+/* TEACHER */
+
+.teacher-screen{
+    min-height:400px;
+    border-radius:20px;
+    background:
+      radial-gradient(circle at center,#334155,#020617);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.teacher{
+    text-align:center;
+}
+
+.head{
+    width:170px;
+    height:170px;
+    background:#f5c9a5;
+    border-radius:50%;
+    margin:auto;
+    position:relative;
+    border:5px solid white;
+}
+
+.hair{
+    position:absolute;
+    width:125px;
+    height:65px;
+    background:#1e293b;
+    border-radius:70px 70px 20px 20px;
+    top:-15px;
+    left:18px;
+}
+
+.eye{
+    width:14px;
+    height:14px;
+    background:#111;
+    border-radius:50%;
+    position:absolute;
+    top:70px;
+}
+
+.eye.left{
+    left:45px;
+}
+
+.eye.right{
+    right:45px;
+}
+
+.mouth{
+    width:55px;
+    height:12px;
+    background:#8b3a3a;
+    border-radius:20px;
+    position:absolute;
+    left:53px;
+    top:115px;
+}
+
+.body{
+    width:210px;
+    height:170px;
+    background:#2563eb;
+    border-radius:80px 80px 20px 20px;
+    margin:-5px auto 0;
+}
+
+.teacher-name{
+    margin-top:10px;
+    font-size:21px;
+    font-weight:bold;
+}
+
+.speaking .mouth{
+    animation:talk .18s infinite alternate;
+}
+
+@keyframes talk{
+    from{
+        height:7px;
+    }
+    to{
+        height:30px;
+    }
+}
+
+.status{
+    position:absolute;
+    bottom:15px;
+    left:15px;
+    right:15px;
+    background:rgba(0,0,0,.55);
+    padding:11px;
+    border-radius:10px;
+    text-align:center;
+}
+
+
+/* LESSON */
+
+.lesson-box{
+    background:white;
+    color:#172033;
+    margin-top:18px;
+    padding:20px;
+    border-radius:16px;
+    line-height:1.7;
+}
+
+.lesson-box h2{
+    margin-top:0;
+}
+
+.controls{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.controls button{
+    flex:1;
+    padding:13px;
+    border:0;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.speak-btn{
+    background:#22c55e;
+    color:white;
+}
+
+.stop-btn{
+    background:#ef4444;
+    color:white;
+}
+
+.ask-box{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.ask-box input{
+    flex:1;
+    padding:13px;
+    border-radius:10px;
+    border:0;
+    outline:none;
+}
+
+.ask-box button{
+    padding:13px 20px;
+    border:0;
+    border-radius:10px;
+    background:#7c3aed;
+    color:white;
+    font-weight:bold;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .container{
+        padding:14px;
+    }
+
+    .topics{
+        grid-template-columns:1fr;
+    }
+
+    .teacher-screen{
+        min-height:350px;
+    }
+
+    .head{
+        width:135px;
+        height:135px;
+    }
+
+    .hair{
+        width:100px;
+        height:50px;
+        left:13px;
+    }
+
+    .eye{
+        top:58px;
+    }
+
+    .eye.left{
+        left:35px;
+    }
+
+    .eye.right{
+        right:35px;
+    }
+
+    .mouth{
+        left:40px;
+        top:95px;
+    }
+
+    .body{
+        width:170px;
+        height:130px;
+    }
+
+    .class-title{
+        max-width:75%;
+    }
+
+    .ask-box{
+        flex-direction:column;
+    }
+}
 </style>
 </head>
 
 <body>
-<div class="page">
+
+
+<!-- MAIN PAGE -->
 
 <div class="header">
-<div class="header-row">
-<div class="back" onclick="goBack()">‹</div>
-<div class="class-title">Class 9th</div>
-</div>
+    <h1>🤖 GyanSetu AI Study</h1>
+    <p>Class 9 Mathematics • Learn with AI Sir</p>
 </div>
 
-<div class="pdf-area">
-<div class="pdf-placeholder">
-<div class="pdf-icon">📚</div>
-<h3>Study Material</h3>
-<p>इथे नंतर Class 9th चा PDF जोडता येईल.</p>
-</div>
-</div>
+<div class="container">
+
+    <h2 class="title">📚 Class 9 Mathematics Lessons</h2>
+
+    <div id="topics" class="topics"></div>
 
 </div>
+
+
+<!-- NAME POPUP -->
+
+<div id="nameModal" class="modal">
+
+    <div class="modal-box">
+
+        <h2>👨‍🏫 Start Class</h2>
+
+        <p>
+            AI Sir तुमच्यासोबत Class 9 चा class घेणार आहेत.
+        </p>
+
+        <div id="selectedTopic"
+             class="selected-topic">
+        </div>
+
+        <input
+            id="studentName"
+            class="name-input"
+            type="text"
+            placeholder="तुमचं नाव (Optional)"
+            maxlength="40"
+        >
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="closeModal()">
+                Cancel
+            </button>
+
+            <button
+                class="start-btn"
+                onclick="startClass()">
+                ▶ Start Class
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FULL SCREEN CLASS -->
+
+<div id="classScreen" class="class-screen">
+
+    <div class="class-header">
+
+        <div id="classTitle"
+             class="class-title">
+            Class 9 AI Class
+        </div>
+
+        <button
+            class="close-btn"
+            onclick="closeClass()">
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="class-content">
+
+        <div class="teacher-screen">
+
+            <div id="teacher"
+                 class="teacher">
+
+                <div class="head">
+
+                    <div class="hair"></div>
+
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+
+                    <div class="mouth"></div>
+
+                </div>
+
+                <div class="body"></div>
+
+                <div class="teacher-name">
+                    👨‍🏫 GyanSetu AI Sir
+                </div>
+
+            </div>
+
+            <div id="status"
+                 class="status">
+                Preparing your class...
+            </div>
+
+        </div>
+
+
+        <div id="lesson"
+             class="lesson-box">
+            Lesson तयार होत आहे...
+        </div>
+
+
+        <div class="controls">
+
+            <button
+                class="speak-btn"
+                onclick="startSpeaking()">
+                🔊 Start / Replay
+            </button>
+
+            <button
+                class="stop-btn"
+                onclick="stopSpeaking()">
+                ⏹ Stop
+            </button>
+
+        </div>
+
+
+        <div class="ask-box">
+
+            <input
+                id="question"
+                placeholder="AI Sir ला प्रश्न विचारा..."
+            >
+
+            <button onclick="askAI()">
+                Ask
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
-function goBack(){
-window.location.href="learn.html";
+
+const API =
+"https://gyan-setu-ai-study-backend.vercel.app";
+
+let selectedTopic = null;
+let studentName = "";
+let currentText = "";
+let speech = null;
+
+
+/* CLASS 9 MATHS LESSONS */
+
+const class9Topics = [
+
+    {
+        id:1,
+        title:"Number Systems",
+        description:"Real numbers, irrational numbers and laws of exponents"
+    },
+
+    {
+        id:2,
+        title:"Polynomials",
+        description:"Polynomials, coefficients, zeros and identities"
+    },
+
+    {
+        id:3,
+        title:"Coordinate Geometry",
+        description:"Cartesian plane, coordinates and plotting points"
+    },
+
+    {
+        id:4,
+        title:"Linear Equations in Two Variables",
+        description:"Solutions and graphical representation"
+    },
+
+    {
+        id:5,
+        title:"Introduction to Euclid's Geometry",
+        description:"Euclid's definitions, axioms and postulates"
+    },
+
+    {
+        id:6,
+        title:"Lines and Angles",
+        description:"Lines, angles and their properties"
+    },
+
+    {
+        id:7,
+        title:"Triangles",
+        description:"Congruence of triangles and related properties"
+    },
+
+    {
+        id:8,
+        title:"Quadrilaterals",
+        description:"Properties of parallelograms and quadrilaterals"
+    },
+
+    {
+        id:9,
+        title:"Circles",
+        description:"Circle properties, chords and angles"
+    },
+
+    {
+        id:10,
+        title:"Heron's Formula",
+        description:"Area of triangle using Heron's formula"
+    },
+
+    {
+        id:11,
+        title:"Surface Areas and Volumes",
+        description:"Surface area and volume of 3D shapes"
+    },
+
+    {
+        id:12,
+        title:"Statistics",
+        description:"Collection, presentation and interpretation of data"
+    },
+
+    {
+        id:13,
+        title:"Probability",
+        description:"Basic concepts of probability"
+    }
+
+];
+
+
+/* LOAD TOPICS */
+
+function loadTopics(){
+
+    const box =
+        document.getElementById("topics");
+
+    box.innerHTML = "";
+
+    class9Topics.forEach(topic => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "topic";
+
+        card.innerHTML = `
+
+            <div class="topic-number">
+                LESSON ${topic.id}
+            </div>
+
+            <h3>
+                ${topic.title}
+            </h3>
+
+            <p>
+                ${topic.description}
+            </p>
+
+        `;
+
+        card.onclick = () =>
+            openNamePopup(topic);
+
+        box.appendChild(card);
+
+    });
+
 }
+
+
+/* OPEN POPUP */
+
+function openNamePopup(topic){
+
+    selectedTopic = topic;
+
+    document.getElementById(
+        "selectedTopic"
+    ).innerText =
+        "📘 " + topic.title;
+
+    document.getElementById(
+        "studentName"
+    ).value = "";
+
+    document.getElementById(
+        "nameModal"
+    ).style.display = "flex";
+
+}
+
+
+/* CLOSE POPUP */
+
+function closeModal(){
+
+    document.getElementById(
+        "nameModal"
+    ).style.display = "none";
+
+}
+
+
+/* START CLASS */
+
+async function startClass(){
+
+    if(!selectedTopic){
+        return;
+    }
+
+    studentName =
+        document.getElementById(
+            "studentName"
+        ).value.trim();
+
+    if(!studentName){
+        studentName = "विद्यार्थी";
+    }
+
+    closeModal();
+
+
+    document.getElementById(
+        "classScreen"
+    ).style.display = "block";
+
+    document.body.style.overflow = "hidden";
+
+
+    document.getElementById(
+        "classTitle"
+    ).innerText =
+        "📘 Class 9 • " +
+        selectedTopic.title;
+
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "⏳ AI Sir तुमच्यासाठी class तयार करत आहेत...";
+
+
+    document.getElementById(
+        "lesson"
+    ).innerHTML =
+        "⏳ Lesson तयार होत आहे...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/lesson",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        topic:
+                            "Class 9 Mathematics - "
+                            + selectedTopic.title,
+
+                        language:
+                            "Marathi"
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!data.success){
+            throw new Error(
+                "Lesson generation failed"
+            );
+        }
+
+
+        currentText =
+            data.lesson ||
+            data.content ||
+            data.response ||
+            "";
+
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            formatText(currentText);
+
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "🎓 Class तयार आहे";
+
+
+        setTimeout(() => {
+
+            const greeting =
+                studentName === "विद्यार्थी"
+
+                ? `नमस्कार विद्यार्थी! आज आपण Class 9 Mathematics मधील ${selectedTopic.title} हा धडा शिकणार आहोत. चला class सुरू करूया.`
+
+                : `नमस्कार ${studentName}! आज आपण Class 9 Mathematics मधील ${selectedTopic.title} हा धडा शिकणार आहोत. चला class सुरू करूया.`;
+
+            speakText(greeting);
+
+        },500);
+
+
+    }catch(error){
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            "❌ Lesson तयार करताना error आला.";
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Lesson unavailable";
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* START SPEAKING */
+
+function startSpeaking(){
+
+    if(!currentText){
+        return;
+    }
+
+    stopSpeaking();
+
+    const intro =
+        studentName === "विद्यार्थी"
+
+        ? "चला विद्यार्थी, आजचा Class 9 Mathematics class सुरू करूया."
+
+        : `चला ${studentName}, आजचा Class 9 Mathematics class सुरू करूया.`;
+
+    speakText(
+        intro + " " +
+        cleanText(currentText)
+    );
+
+}
+
+
+/* SPEAK */
+
+function speakText(text){
+
+    window.speechSynthesis.cancel();
+
+    const teacher =
+        document.getElementById("teacher");
+
+    const status =
+        document.getElementById("status");
+
+
+    teacher.classList.add("speaking");
+
+    status.innerText =
+        "🎙️ AI Sir शिकवत आहेत...";
+
+
+    speech =
+        new SpeechSynthesisUtterance(text);
+
+    speech.lang = "mr-IN";
+
+    speech.rate = 0.9;
+
+    speech.pitch = 1;
+
+
+    speech.onend = () => {
+
+        teacher.classList.remove(
+            "speaking"
+        );
+
+        status.innerText =
+            "✅ Class explanation completed";
+
+    };
+
+
+    speech.onerror = () => {
+
+        teacher.classList.remove(
+            "speaking"
+        );
+
+        status.innerText =
+            "Speech unavailable";
+
+    };
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+/* STOP */
+
+function stopSpeaking(){
+
+    window.speechSynthesis.cancel();
+
+    document.getElementById(
+        "teacher"
+    ).classList.remove(
+        "speaking"
+    );
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "⏹ AI Sir stopped";
+
+}
+
+
+/* CLOSE CLASS */
+
+function closeClass(){
+
+    stopSpeaking();
+
+    document.getElementById(
+        "classScreen"
+    ).style.display = "none";
+
+    document.body.style.overflow = "auto";
+
+}
+
+
+/* ASK AI */
+
+async function askAI(){
+
+    const input =
+        document.getElementById(
+            "question"
+        );
+
+    const question =
+        input.value.trim();
+
+    if(!question){
+        return;
+    }
+
+
+    const lesson =
+        document.getElementById(
+            "lesson"
+        );
+
+
+    lesson.innerHTML =
+        "⏳ AI Sir उत्तर तयार करत आहेत...";
+
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/ask",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        question:question,
+
+                        topic:
+                            "Class 9 Mathematics - "
+                            + selectedTopic.title,
+
+                        language:"Marathi"
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const answer =
+            data.answer ||
+            data.response ||
+            data.content ||
+            data.message ||
+            "उत्तर मिळाले नाही.";
+
+
+        currentText = answer;
+
+
+        lesson.innerHTML =
+            formatText(answer);
+
+
+        input.value = "";
+
+
+        speakText(
+
+            studentName === "विद्यार्थी"
+
+            ? answer
+
+            : `${studentName}, ${answer}`
+
+        );
+
+
+    }catch(error){
+
+        lesson.innerHTML =
+            "❌ AI Sir उत्तर देऊ शकले नाहीत.";
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* FORMAT */
+
+function formatText(text){
+
+    return text
+        .replace(/\n/g,"<br>")
+        .replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+}
+
+
+/* CLEAN HTML */
+
+function cleanText(text){
+
+    const div =
+        document.createElement("div");
+
+    div.innerHTML = text;
+
+    return div.innerText;
+
+}
+
+
+/* START */
+
+loadTopics();
+
 </script>
 
 </body>
