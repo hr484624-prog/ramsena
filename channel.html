@@ -44,8 +44,6 @@ button{
   overflow:hidden;
 }
 
-/* HEADER */
-
 .header{
   position:sticky;
   top:0;
@@ -84,8 +82,6 @@ button{
 .section.active{
   display:block;
 }
-
-/* HOME */
 
 .welcome{
   text-align:center;
@@ -149,8 +145,6 @@ button{
   margin-top:5px;
 }
 
-/* TITLES */
-
 .section-title{
   font-size:22px;
   font-weight:800;
@@ -164,8 +158,6 @@ button{
   margin-bottom:18px;
 }
 
-/* CARD */
-
 .card{
   background:linear-gradient(
     145deg,
@@ -178,8 +170,6 @@ button{
   margin-bottom:13px;
   box-shadow:0 12px 30px rgba(0,0,0,.22);
 }
-
-/* INPUT */
 
 label{
   display:block;
@@ -206,8 +196,6 @@ input:focus{
 input::placeholder{
   color:#666;
 }
-
-/* BUTTONS */
 
 .primary{
   width:100%;
@@ -243,8 +231,6 @@ input::placeholder{
   padding:5px 0;
   margin-bottom:10px;
 }
-
-/* CHANNEL */
 
 .channel-head{
   display:flex;
@@ -295,8 +281,6 @@ input::placeholder{
   color:#ff72b5;
 }
 
-/* FOLLOW */
-
 .follow-row{
   display:flex;
   align-items:center;
@@ -327,8 +311,6 @@ input::placeholder{
 .follow-btn:disabled{
   opacity:.55;
 }
-
-/* CHAT */
 
 .chat-wrap{
   display:none;
@@ -459,8 +441,6 @@ input::placeholder{
   font-size:19px;
 }
 
-/* MODAL */
-
 .modal{
   display:none;
   position:fixed;
@@ -507,8 +487,6 @@ input::placeholder{
   display:flex;
   gap:9px;
 }
-
-/* TOAST */
 
 .toast{
   position:fixed;
@@ -608,6 +586,11 @@ input::placeholder{
   line-height:1.6;
 }
 
+.count-loading{
+  color:#777;
+  font-size:11px;
+}
+
 @media(max-width:360px){
   .choice{
     grid-template-columns:1fr;
@@ -631,12 +614,9 @@ input::placeholder{
 
 <main class="main">
 
-<!-- HOME -->
-
 <section class="section active" id="homeSection">
 
   <div class="welcome">
-
     <div class="welcome-icon">💬</div>
 
     <h1>GyanSetu Channels</h1>
@@ -645,7 +625,6 @@ input::placeholder{
       Sir आपला educational channel तयार करू शकतात
       किंवा Student म्हणून उपलब्ध channels join करू शकतात.
     </p>
-
   </div>
 
   <div class="choice">
@@ -668,8 +647,6 @@ input::placeholder{
 
 </section>
 
-
-<!-- CREATE -->
 
 <section class="section" id="createSection">
 
@@ -713,7 +690,7 @@ input::placeholder{
     </button>
 
     <div class="sir-info">
-      💡 Channel password सुरक्षित hash स्वरूपात
+      💡 Channel password SHA-256 hash स्वरूपात
       Supabase मध्ये save केला जातो.
     </div>
 
@@ -723,8 +700,6 @@ input::placeholder{
 
 </section>
 
-
-<!-- STUDENT -->
 
 <section class="section" id="studentSection">
 
@@ -752,8 +727,6 @@ input::placeholder{
 
 </main>
 
-
-<!-- SIR CONFIRM -->
 
 <div class="modal" id="sirConfirmModal">
 
@@ -790,8 +763,6 @@ input::placeholder{
 
 </div>
 
-
-<!-- ADD CHANNEL -->
 
 <div class="modal" id="addChannelModal">
 
@@ -830,8 +801,6 @@ input::placeholder{
 
 </div>
 
-
-<!-- CHAT -->
 
 <div class="chat-wrap" id="chatWrap">
 
@@ -922,8 +891,9 @@ let currentUser = null;
 let currentChannel = null;
 let allChannels = [];
 let currentIsSir = false;
-let followedChannelIds = new Set();
 
+let followedChannelIds =
+new Set();
 
 const $ = id =>
 document.getElementById(id);
@@ -952,7 +922,7 @@ function toast(message,type="success"){
 
 
 /* =====================================================
-   ESCAPE
+   ESCAPE HTML
 ===================================================== */
 
 function escapeHTML(text){
@@ -1020,7 +990,7 @@ async function loadUser(){
       $("headerUser").innerText =
       "Guest";
 
-      loadSavedChannels();
+      await loadSavedChannels();
 
       return;
     }
@@ -1064,7 +1034,7 @@ async function loadUser(){
     $("headerUser").innerText =
     "Guest";
 
-    loadSavedChannels();
+    await loadSavedChannels();
   }
 }
 
@@ -1110,6 +1080,7 @@ function openCreateConfirm(){
   if(currentChannel){
 
     confirmSir();
+
     return;
   }
 
@@ -1247,7 +1218,10 @@ async function createChannel(){
       name,
 
       password_hash:
-      passwordHash
+      passwordHash,
+
+      followers_count:
+      0
 
     })
     .select()
@@ -1306,7 +1280,8 @@ async function createChannel(){
     }
 
     toast(
-      "Channel तयार करता आला नाही.",
+      "Channel तयार करता आला नाही: " +
+      (error.message || ""),
       "error"
     );
 
@@ -1367,6 +1342,7 @@ async function checkMyChannel(){
         "gyansetu_my_channel_id",
         data.id
       );
+
     }
 
   }
@@ -1378,10 +1354,135 @@ async function checkMyChannel(){
 
 
 /* =====================================================
+   GET FOLLOWER COUNT
+===================================================== */
+
+async function getFollowerCount(
+  channelId
+){
+
+  try{
+
+    const {
+      count,
+      error
+    } =
+    await supabaseClient
+    .from("gs_channel_followers")
+    .select(
+      "id",
+      {
+        count:"exact",
+        head:true
+      }
+    )
+    .eq(
+      "channel_id",
+      channelId
+    );
+
+    if(error)
+      throw error;
+
+    return Number(count || 0);
+
+  }
+  catch(error){
+
+    console.error(
+      "GET COUNT ERROR:",
+      error
+    );
+
+    return null;
+  }
+}
+
+
+/* =====================================================
+   REFRESH ALL COUNTS
+===================================================== */
+
+async function refreshAllFollowerCounts(){
+
+  if(!allChannels.length)
+    return;
+
+  const results =
+  await Promise.all(
+    allChannels.map(async channel=>{
+
+      const count =
+      await getFollowerCount(
+        channel.id
+      );
+
+      if(count !== null){
+
+        channel.followers_count =
+        count;
+
+      }
+
+      return channel;
+    })
+  );
+
+  allChannels =
+  results;
+
+}
+
+
+/* =====================================================
+   REFRESH ONE COUNT
+===================================================== */
+
+async function refreshFollowerCount(
+  channelId
+){
+
+  const count =
+  await getFollowerCount(
+    channelId
+  );
+
+  if(count === null)
+    return null;
+
+  const index =
+  allChannels.findIndex(
+    channel =>
+    channel.id === channelId
+  );
+
+  if(index !== -1){
+
+    allChannels[index]
+    .followers_count =
+    count;
+
+  }
+
+  if(
+    currentChannel &&
+    currentChannel.id === channelId
+  ){
+
+    currentChannel.followers_count =
+    count;
+
+  }
+
+  return count;
+}
+
+
+/* =====================================================
    SHOW MY CHANNEL
 ===================================================== */
 
-function showExistingSirChannel(){
+async function showExistingSirChannel(){
 
   $("createCard").style.display =
   "none";
@@ -1398,6 +1499,18 @@ function showExistingSirChannel(){
 
     return;
   }
+
+  const count =
+  await refreshFollowerCount(
+    currentChannel.id
+  );
+
+  const followers =
+  count !== null
+  ? count
+  : Number(
+      currentChannel.followers_count || 0
+    );
 
   const firstLetter =
   (
@@ -1436,7 +1549,7 @@ function showExistingSirChannel(){
           </span>
 
           <span class="badge">
-            👥 ${currentChannel.followers_count || 0}
+            👥 ${followers} followers
           </span>
 
         </div>
@@ -1571,6 +1684,14 @@ async function loadChannels(){
 
     await loadFollowedChannels();
 
+    /*
+      IMPORTANT:
+      Database मधील followers_count वर
+      आता पूर्णपणे depend करत नाही.
+    */
+
+    await refreshAllFollowerCounts();
+
     renderChannels(allChannels);
 
   }
@@ -1639,6 +1760,10 @@ function renderChannels(list){
 }
 
 
+/* =====================================================
+   CHANNEL CARD
+===================================================== */
+
 function channelCard(channel){
 
   const isFollowing =
@@ -1650,6 +1775,11 @@ function channelCard(channel){
   currentUser &&
   channel.owner_id ===
   currentUser.id;
+
+  const count =
+  Number(
+    channel.followers_count || 0
+  );
 
   const firstLetter =
   (
@@ -1688,7 +1818,7 @@ function channelCard(channel){
           </span>
 
           <span class="badge">
-            👥 ${channel.followers_count || 0}
+            👥 ${count}
           </span>
 
         </div>
@@ -1698,7 +1828,9 @@ function channelCard(channel){
       <div class="follow-row">
 
         <div class="follow-count">
-          ${channel.followers_count || 0}
+          <b id="count-${channel.id}">
+            ${count}
+          </b>
           followers
         </div>
 
@@ -1787,6 +1919,30 @@ function filterChannels(){
 
 
 /* =====================================================
+   UPDATE CARD COUNT
+===================================================== */
+
+function updateCountOnScreen(
+  channelId,
+  count
+){
+
+  const countElement =
+  document.getElementById(
+    "count-" + channelId
+  );
+
+  if(countElement){
+
+    countElement.innerText =
+    count;
+
+  }
+
+}
+
+
+/* =====================================================
    FOLLOW / UNFOLLOW
 ===================================================== */
 
@@ -1799,6 +1955,21 @@ async function toggleFollow(
 
     toast(
       "Follow करण्यासाठी Login करा.",
+      "error"
+    );
+
+    return;
+  }
+
+  if(
+    currentUser.id ===
+    allChannels.find(
+      c => c.id === channelId
+    )?.owner_id
+  ){
+
+    toast(
+      "तुमचा स्वतःचा channel follow करता येणार नाही.",
       "error"
     );
 
@@ -1840,6 +2011,21 @@ async function toggleFollow(
         channelId
       );
 
+      const newCount =
+      await refreshFollowerCount(
+        channelId
+      );
+
+      const count =
+      newCount !== null
+      ? newCount
+      : 0;
+
+      updateCountOnScreen(
+        channelId,
+        count
+      );
+
       toast(
         "Channel unfollow केला.",
         "success"
@@ -1852,11 +2038,6 @@ async function toggleFollow(
     ========================= */
 
     else{
-
-      /*
-        आधी check करतो.
-        त्यामुळे duplicate error टाळता येतो.
-      */
 
       const {
         data: existing,
@@ -1878,20 +2059,7 @@ async function toggleFollow(
       if(checkError)
         throw checkError;
 
-      if(existing){
-
-        followedChannelIds.add(
-          channelId
-        );
-
-        toast(
-          "तुम्ही हा channel आधीच follow केला आहे.",
-          "success"
-        );
-
-      }
-
-      else{
+      if(!existing){
 
         const {
           error: insertError
@@ -1910,50 +2078,71 @@ async function toggleFollow(
 
         if(insertError){
 
-          /*
-            Duplicate असेल तर
-            Following मानायचे.
-          */
-
           if(
-            insertError.code ===
+            insertError.code !==
             "23505"
           ){
 
-            followedChannelIds.add(
-              channelId
-            );
-
-          }
-          else{
-
             throw insertError;
           }
-
         }
 
-        followedChannelIds.add(
-          channelId
-        );
-
-        toast(
-          "✅ Channel follow केला.",
-          "success"
-        );
       }
+
+      followedChannelIds.add(
+        channelId
+      );
+
+      const newCount =
+      await refreshFollowerCount(
+        channelId
+      );
+
+      const count =
+      newCount !== null
+      ? newCount
+      : 0;
+
+      updateCountOnScreen(
+        channelId,
+        count
+      );
+
+      toast(
+        "✅ Channel follow केला.",
+        "success"
+      );
     }
 
 
     /*
-      नवीन follower count
-      database मधून मोजतो.
+      IMPORTANT:
+      इथे loadChannels() call केलेला नाही.
+      त्यामुळे local updated count
+      पुन्हा जुन्या database count ने overwrite होत नाही.
     */
 
-    await refreshFollowerCount(
-      channelId
+    const currentCard =
+    allChannels.find(
+      c => c.id === channelId
     );
 
-    await loadChannels();
+    if(currentCard){
+
+      const cards =
+      $("channelsList")
+      .querySelectorAll(".card");
+
+      /*
+        Follow button text refresh करण्यासाठी
+        पूर्ण list render करतो,
+        पण allChannels मध्ये नवीन count आधीच आहे.
+      */
+
+      renderChannels(
+        getFilteredChannelList()
+      );
+    }
 
   }
   catch(error){
@@ -1978,67 +2167,40 @@ async function toggleFollow(
 
 
 /* =====================================================
-   REFRESH FOLLOWER COUNT
+   FILTERED LIST
 ===================================================== */
 
-async function refreshFollowerCount(
-  channelId
-){
+function getFilteredChannelList(){
 
-  try{
+  const search =
+  $("channelSearch")?.value
+  ?.toLowerCase()
+  .trim() || "";
 
-    const {
-      count,
-      error
-    } =
-    await supabaseClient
-    .from("gs_channel_followers")
-    .select(
-      "id",
-      {
-        count:"exact",
-        head:true
-      }
-    )
-    .eq(
-      "channel_id",
-      channelId
+  if(!search)
+    return allChannels;
+
+  return allChannels.filter(channel=>{
+
+    return (
+
+      String(
+        channel.channel_name || ""
+      )
+      .toLowerCase()
+      .includes(search)
+
+      ||
+
+      String(
+        channel.owner_username || ""
+      )
+      .toLowerCase()
+      .includes(search)
+
     );
 
-    if(error){
-
-      console.error(
-        "COUNT ERROR:",
-        error
-      );
-
-      return;
-    }
-
-    /*
-      Local UI count update.
-      gs_channels UPDATE करण्याची गरज नाही.
-    */
-
-    const index =
-    allChannels.findIndex(
-      channel =>
-      channel.id === channelId
-    );
-
-    if(index !== -1){
-
-      allChannels[index]
-      .followers_count =
-      count || 0;
-
-    }
-
-  }
-  catch(error){
-
-    console.error(error);
-  }
+  });
 }
 
 
@@ -2083,6 +2245,15 @@ async function openChannelDetails(
 
     channel =
     data;
+
+    const count =
+    await getFollowerCount(
+      channelId
+    );
+
+    if(count !== null)
+      channel.followers_count =
+      count;
   }
 
   const isSir =
@@ -2120,6 +2291,30 @@ async function openChannelChat(
     currentUser.id
   );
 
+  const freshCount =
+  await getFollowerCount(
+    channel.id
+  );
+
+  if(freshCount !== null){
+
+    currentChannel.followers_count =
+    freshCount;
+
+    const index =
+    allChannels.findIndex(
+      c => c.id === channel.id
+    );
+
+    if(index !== -1){
+
+      allChannels[index]
+      .followers_count =
+      freshCount;
+
+    }
+  }
+
   $("chatChannelName")
   .innerText =
   channel.channel_name;
@@ -2129,7 +2324,10 @@ async function openChannelChat(
   "@" +
   channel.owner_username +
   " • " +
-  (channel.followers_count || 0) +
+  (
+    currentChannel.followers_count ||
+    0
+  ) +
   " followers";
 
   $("chatAvatar")
@@ -2429,6 +2627,7 @@ async function sendMessage(){
   finally{
 
     button.disabled = false;
+
   }
 }
 
@@ -2710,6 +2909,23 @@ async function loadSavedChannels(){
     const channels =
     data || [];
 
+    await Promise.all(
+      channels.map(
+        async channel=>{
+
+          const count =
+          await getFollowerCount(
+            channel.id
+          );
+
+          if(count !== null)
+            channel.followers_count =
+            count;
+
+        }
+      )
+    );
+
     box.innerHTML = `
 
       <div class="saved-title">
@@ -2757,6 +2973,8 @@ async function loadSavedChannels(){
                 @${escapeHTML(
                   channel.owner_username
                 )}
+                •
+                👥 ${channel.followers_count || 0}
 
               </div>
 
@@ -2911,6 +3129,7 @@ document.addEventListener(
 
         closeChat();
       }
+
     }
 
   }
@@ -2941,10 +3160,20 @@ supabaseClient.auth.onAuthStateChange(
       $("headerUser").innerText =
       "@" + username;
 
+      /*
+        Login बदलल्यावर following पुन्हा load
+      */
+
+      await loadFollowedChannels();
+
     }else{
 
       $("headerUser").innerText =
       "Guest";
+
+      followedChannelIds =
+      new Set();
+
     }
 
   }
