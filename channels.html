@@ -9,23 +9,26 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
 }
 
-body{
+html,body{
   margin:0;
-  min-height:100vh;
+  min-height:100%;
   font-family:Arial,sans-serif;
-  background:
-    radial-gradient(circle at top left,#ff4fa3 0,#15152a 32%,#050509 75%);
-  color:white;
+  background:#050509;
+  color:#fff;
 }
 
-button,
-input{
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 10% 0%,#ff4fa3 0,#17152b 28%,#050509 72%);
+}
+
+button,input{
   font-family:inherit;
 }
 
@@ -54,31 +57,22 @@ button{
   position:sticky;
   top:0;
   z-index:20;
-
   height:65px;
   padding:0 16px;
-
   display:flex;
   align-items:center;
   justify-content:space-between;
-
-  background:rgba(8,8,15,.92);
+  background:rgba(8,8,15,.94);
   backdrop-filter:blur(15px);
-
   border-bottom:1px solid rgba(255,255,255,.08);
 }
 
 .logo{
   font-size:21px;
   font-weight:900;
-
-  background:linear-gradient(
-    90deg,
-    #ff4fa3,
-    #6ca8ff
-  );
-
+  background:linear-gradient(90deg,#ff4fa3,#6ca8ff);
   -webkit-background-clip:text;
+  background-clip:text;
   color:transparent;
 }
 
@@ -90,10 +84,18 @@ button{
 /* MAIN */
 
 .main{
-  padding:20px 15px 40px;
+  padding:20px 15px 45px;
 }
 
-/* START SCREEN */
+.section{
+  display:none;
+}
+
+.section.active{
+  display:block;
+}
+
+/* WELCOME */
 
 .welcome{
   text-align:center;
@@ -125,21 +127,16 @@ button{
 
 .choice button{
   min-height:125px;
-
   border:1px solid rgba(255,255,255,.1);
   border-radius:20px;
-
   color:white;
-
   background:
     linear-gradient(
       145deg,
       rgba(255,55,150,.25),
       rgba(45,100,255,.18)
     );
-
-  box-shadow:
-    0 12px 35px rgba(0,0,0,.3);
+  box-shadow:0 12px 35px rgba(0,0,0,.3);
 }
 
 .choice button:active{
@@ -165,15 +162,7 @@ button{
   margin-top:5px;
 }
 
-/* SECTIONS */
-
-.section{
-  display:none;
-}
-
-.section.active{
-  display:block;
-}
+/* TITLES */
 
 .section-title{
   font-size:22px;
@@ -188,7 +177,7 @@ button{
   margin-bottom:18px;
 }
 
-/* CARDS */
+/* CARD */
 
 .card{
   background:
@@ -197,17 +186,11 @@ button{
       rgba(255,255,255,.07),
       rgba(255,255,255,.025)
     );
-
   border:1px solid rgba(255,255,255,.1);
-
   border-radius:20px;
-
   padding:17px;
-
   margin-bottom:13px;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.22);
+  box-shadow:0 12px 30px rgba(0,0,0,.22);
 }
 
 /* INPUT */
@@ -222,66 +205,61 @@ label{
 input{
   width:100%;
   padding:14px;
-
   border-radius:13px;
-
   border:1px solid #34344d;
-
   outline:none;
-
   background:#10101b;
   color:white;
-
   font-size:15px;
 }
 
 input:focus{
   border-color:#ff4fa3;
+  box-shadow:0 0 0 3px rgba(255,79,163,.1);
+}
 
-  box-shadow:
-    0 0 0 3px rgba(255,79,163,.1);
+input::placeholder{
+  color:#666;
 }
 
 /* BUTTONS */
 
 .primary{
   width:100%;
-
   padding:14px;
-
   border:0;
   border-radius:14px;
-
   color:white;
-
   font-size:16px;
   font-weight:bold;
-
   background:
     linear-gradient(
       135deg,
       #ff3f9d,
       #6a63ff
     );
-
   margin-top:17px;
+  box-shadow:0 8px 22px rgba(255,63,157,.22);
+}
 
-  box-shadow:
-    0 8px 22px rgba(255,63,157,.22);
+.primary:active,
+.secondary:active,
+.follow-btn:active,
+.send:active{
+  transform:scale(.98);
+}
+
+.primary:disabled{
+  opacity:.6;
 }
 
 .secondary{
   width:100%;
-
   padding:13px;
-
   border:1px solid #41415d;
   border-radius:13px;
-
   color:#ddd;
-
   background:#11111c;
-
   margin-top:10px;
 }
 
@@ -289,6 +267,21 @@ input:focus{
   background:#27101a;
   border-color:#6e263f;
   color:#ff8fba;
+}
+
+/* BACK */
+
+.back-btn{
+  border:0;
+  background:none;
+  color:#aaa;
+  font-size:14px;
+  padding:5px 0;
+  margin-bottom:10px;
+}
+
+.back-btn:hover{
+  color:white;
 }
 
 /* CHANNEL */
@@ -302,22 +295,19 @@ input:focus{
 .channel-avatar{
   width:52px;
   height:52px;
-
   border-radius:16px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   font-size:25px;
   font-weight:bold;
-
   background:
     linear-gradient(
       135deg,
       #ff3f9d,
       #456dff
     );
+  flex-shrink:0;
 }
 
 .channel-info{
@@ -328,7 +318,6 @@ input:focus{
 .channel-name{
   font-size:17px;
   font-weight:bold;
-
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -342,16 +331,11 @@ input:focus{
 
 .badge{
   display:inline-block;
-
   margin-top:7px;
   margin-right:4px;
-
   padding:4px 8px;
-
   border-radius:20px;
-
   font-size:10px;
-
   background:#21182a;
   color:#ff72b5;
 }
@@ -362,7 +346,6 @@ input:focus{
   display:flex;
   align-items:center;
   gap:10px;
-
   margin-top:14px;
 }
 
@@ -375,13 +358,9 @@ input:focus{
 .follow-btn{
   border:0;
   border-radius:10px;
-
   padding:9px 15px;
-
   color:white;
-
   background:#2764ff;
-
   font-weight:bold;
 }
 
@@ -406,25 +385,24 @@ input:focus{
   display:flex;
   align-items:center;
   gap:10px;
-
   padding:11px;
-
   background:#10101a;
-
   border:1px solid #27273a;
-
   border-radius:13px;
-
   margin-bottom:8px;
 }
 
 .saved-item-info{
   flex:1;
+  min-width:0;
 }
 
 .saved-item-name{
   font-weight:bold;
   font-size:14px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .saved-item-small{
@@ -437,19 +415,16 @@ input:focus{
   background:none;
   border:0;
   color:#ff668f;
-  font-size:18px;
+  font-size:22px;
 }
 
 /* CHAT */
 
 .chat-wrap{
   display:none;
-
   position:fixed;
   inset:0;
-
   z-index:100;
-
   background:#050509;
 }
 
@@ -460,15 +435,11 @@ input:focus{
 
 .chat-header{
   height:65px;
-
   display:flex;
   align-items:center;
   gap:10px;
-
   padding:0 13px;
-
   background:#0c0c15;
-
   border-bottom:1px solid #242436;
 }
 
@@ -476,16 +447,20 @@ input:focus{
   border:0;
   background:none;
   color:white;
-  font-size:27px;
+  font-size:30px;
 }
 
 .chat-title{
   flex:1;
+  min-width:0;
 }
 
 .chat-title-main{
   font-size:16px;
   font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .chat-title-small{
@@ -499,14 +474,13 @@ input:focus{
   height:9px;
   border-radius:50%;
   background:#35df87;
+  flex-shrink:0;
 }
 
 .messages{
   flex:1;
-
   overflow-y:auto;
-
-  padding:15px 12px 85px;
+  padding:15px 12px 90px;
 }
 
 .message{
@@ -521,20 +495,14 @@ input:focus{
 
 .message-bubble{
   display:inline-block;
-
   padding:10px 13px;
-
   border-radius:15px;
-
   background:#171725;
-
   color:#eee;
-
   font-size:14px;
-
   line-height:1.45;
-
   text-align:left;
+  word-break:break-word;
 }
 
 .message.me .message-bubble{
@@ -570,14 +538,10 @@ input:focus{
   bottom:0;
   left:0;
   right:0;
-
   padding:10px;
-
   display:flex;
   gap:8px;
-
   background:#0b0b12;
-
   border-top:1px solid #252536;
 }
 
@@ -587,19 +551,15 @@ input:focus{
 
 .send{
   width:50px;
-
   border:0;
   border-radius:13px;
-
   color:white;
-
   background:
     linear-gradient(
       135deg,
       #ff3f9d,
       #5a63ff
     );
-
   font-size:19px;
 }
 
@@ -607,17 +567,12 @@ input:focus{
 
 .modal{
   display:none;
-
   position:fixed;
   inset:0;
-
   z-index:200;
-
   align-items:center;
   justify-content:center;
-
   padding:20px;
-
   background:rgba(0,0,0,.75);
 }
 
@@ -628,22 +583,18 @@ input:focus{
 .modal-box{
   width:100%;
   max-width:390px;
-
+  max-height:90vh;
+  overflow-y:auto;
   background:
     linear-gradient(
       145deg,
       #171724,
       #09090f
     );
-
   border:1px solid #39394d;
-
   border-radius:23px;
-
   padding:22px;
-
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.6);
+  box-shadow:0 25px 70px rgba(0,0,0,.6);
 }
 
 .modal-icon{
@@ -677,33 +628,20 @@ input:focus{
 
 .toast{
   position:fixed;
-
   left:50%;
   bottom:25px;
-
   transform:translate(-50%,120px);
-
   z-index:500;
-
   width:calc(100% - 30px);
   max-width:430px;
-
   padding:13px 16px;
-
   border-radius:13px;
-
   background:#171724;
-
   border:1px solid #38384c;
-
   color:white;
-
   text-align:center;
-
   font-size:13px;
-
   transition:.3s;
-
   box-shadow:0 15px 40px rgba(0,0,0,.5);
 }
 
@@ -719,7 +657,7 @@ input:focus{
   border-color:#e75b78;
 }
 
-/* EMPTY */
+/* EMPTY / LOADING */
 
 .empty{
   text-align:center;
@@ -732,37 +670,34 @@ input:focus{
   margin-bottom:10px;
 }
 
-/* LOADING */
-
 .loading{
   text-align:center;
   padding:25px;
   color:#888;
 }
 
-/* BACK */
+/* SIR INFO */
 
-.back-btn{
-  border:0;
-  background:none;
+.sir-info{
+  margin-top:15px;
+  padding:12px;
+  border-radius:13px;
+  background:#10101a;
+  border:1px solid #29293b;
   color:#aaa;
-  font-size:14px;
-  padding:5px 0;
-  margin-bottom:10px;
-}
-
-.back-btn:hover{
-  color:white;
+  font-size:12px;
+  line-height:1.6;
 }
 
 @media(max-width:360px){
-
   .choice{
     grid-template-columns:1fr;
   }
 
+  .modal-buttons{
+    flex-direction:column;
+  }
 }
-
 </style>
 </head>
 
@@ -776,25 +711,17 @@ input:focus{
     📚 GyanSetu
   </div>
 
-  <div
-    class="header-user"
-    id="headerUser">
-    User
+  <div class="header-user" id="headerUser">
+    Loading...
   </div>
 
 </header>
 
-
 <main class="main">
 
+<!-- HOME -->
 
-<!-- =========================
-     HOME
-========================= -->
-
-<section
-  class="section active"
-  id="homeSection">
+<section class="section active" id="homeSection">
 
   <div class="welcome">
 
@@ -807,18 +734,15 @@ input:focus{
     </h1>
 
     <p>
-      Sir आपला channel तयार करू शकतात
-      किंवा Student म्हणून उपलब्ध
-      channels join करू शकतात.
+      Sir आपला educational channel तयार करू शकतात
+      किंवा Student म्हणून उपलब्ध channels join करू शकतात.
     </p>
 
   </div>
 
-
   <div class="choice">
 
-    <button
-      onclick="openCreateConfirm()">
+    <button onclick="openCreateConfirm()">
 
       <span class="choice-icon">
         🎓
@@ -834,9 +758,7 @@ input:focus{
 
     </button>
 
-
-    <button
-      onclick="openStudentSection()">
+    <button onclick="openStudentSection()">
 
       <span class="choice-icon">
         👨‍🎓
@@ -854,27 +776,16 @@ input:focus{
 
   </div>
 
-
-  <div
-    class="saved-box"
-    id="savedBox">
-
-  </div>
+  <div class="saved-box" id="savedBox"></div>
 
 </section>
 
 
-<!-- =========================
-     CREATE CHANNEL
-========================= -->
+<!-- CREATE -->
 
-<section
-  class="section"
-  id="createSection">
+<section class="section" id="createSection">
 
-  <button
-    class="back-btn"
-    onclick="goHome()">
+  <button class="back-btn" onclick="goHome()">
     ← Back
   </button>
 
@@ -884,14 +795,10 @@ input:focus{
 
   <div class="sub-title">
     तुमचा educational channel तयार करा.
-    Channel तयार झाल्यावर तो इतर
-    students ना दिसेल.
+    प्रत्येक account ला एक channel तयार करता येईल.
   </div>
 
-
-  <div
-    class="card"
-    id="createCard">
+  <div class="card" id="createCard">
 
     <label>
       Channel Name
@@ -902,7 +809,6 @@ input:focus{
       maxlength="80"
       placeholder="उदा. Hitesh Study Channel"
     >
-
 
     <label>
       Channel Password
@@ -915,36 +821,32 @@ input:focus{
       placeholder="Channel password"
     >
 
-
     <button
       class="primary"
+      id="createChannelButton"
       onclick="createChannel()">
 
       🚀 Create My Channel
 
     </button>
 
+    <div class="sir-info">
+      💡 Channel password सुरक्षित hash स्वरूपात
+      Supabase मध्ये save केला जातो.
+    </div>
+
   </div>
 
-
-  <div
-    id="existingSirChannel">
-  </div>
+  <div id="existingSirChannel"></div>
 
 </section>
 
 
-<!-- =========================
-     STUDENT
-========================= -->
+<!-- STUDENT -->
 
-<section
-  class="section"
-  id="studentSection">
+<section class="section" id="studentSection">
 
-  <button
-    class="back-btn"
-    onclick="goHome()">
+  <button class="back-btn" onclick="goHome()">
     ← Back
   </button>
 
@@ -953,10 +855,9 @@ input:focus{
   </div>
 
   <div class="sub-title">
-    GyanSetu वर उपलब्ध channels शोधा
-    आणि आवडत्या Sir ला follow करा.
+    GyanSetu वर उपलब्ध channels शोधा आणि
+    आवडत्या Sir ला follow करा.
   </div>
-
 
   <input
     id="channelSearch"
@@ -964,30 +865,19 @@ input:focus{
     oninput="filterChannels()"
   >
 
-
   <div
     id="channelsList"
     style="margin-top:15px;">
-
-    <div class="loading">
-      Channels loading...
-    </div>
-
   </div>
 
 </section>
 
-
 </main>
 
 
-<!-- =========================
-     CREATE CONFIRM MODAL
-========================= -->
+<!-- SIR CONFIRM -->
 
-<div
-  class="modal"
-  id="sirConfirmModal">
+<div class="modal" id="sirConfirmModal">
 
   <div class="modal-box">
 
@@ -1001,25 +891,27 @@ input:focus{
 
     <p>
       तुम्ही Sir / Teacher आहात ना?
-      Channel तयार केल्यावर तुम्हाला
-      त्या channel मध्ये messages पोस्ट
-      करण्याची permission मिळेल.
+      Channel तयार केल्यावर तुम्ही त्या channel मध्ये
+      educational posts/messages करू शकता.
     </p>
-
 
     <div class="modal-buttons">
 
       <button
         class="secondary"
         onclick="closeModal()">
+
         नाही
+
       </button>
 
       <button
         class="primary"
         onclick="confirmSir()"
         style="margin-top:0;">
+
         हो, मी Sir आहे
+
       </button>
 
     </div>
@@ -1029,13 +921,9 @@ input:focus{
 </div>
 
 
-<!-- =========================
-     ADD CHANNEL MODAL
-========================= -->
+<!-- ADD CHANNEL -->
 
-<div
-  class="modal"
-  id="addChannelModal">
+<div class="modal" id="addChannelModal">
 
   <div class="modal-box">
 
@@ -1048,10 +936,8 @@ input:focus{
     </h2>
 
     <p>
-      Channel चे नाव आणि password
-      टाका.
+      Sir ने दिलेले Channel Name आणि Password टाका.
     </p>
-
 
     <label>
       Channel Name
@@ -1061,7 +947,6 @@ input:focus{
       id="addChannelName"
       placeholder="Channel name"
     >
-
 
     <label>
       Channel Password
@@ -1073,18 +958,20 @@ input:focus{
       placeholder="Password"
     >
 
-
     <button
       class="primary"
       onclick="addChannel()">
-      ➕ Add Channel
-    </button>
 
+      ➕ Add Channel
+
+    </button>
 
     <button
       class="secondary"
       onclick="closeAddModal()">
+
       Cancel
+
     </button>
 
   </div>
@@ -1092,23 +979,21 @@ input:focus{
 </div>
 
 
-<!-- =========================
-     CHAT
-========================= -->
+<!-- CHAT -->
 
-<div
-  class="chat-wrap"
-  id="chatWrap">
+<div class="chat-wrap" id="chatWrap">
 
   <div class="chat-header">
 
     <button
       class="chat-back"
       onclick="closeChat()">
+
       ‹
+
     </button>
 
-    <div class="channel-avatar">
+    <div class="channel-avatar" id="chatAvatar">
       💬
     </div>
 
@@ -1117,13 +1002,17 @@ input:focus{
       <div
         class="chat-title-main"
         id="chatChannelName">
+
         Channel
+
       </div>
 
       <div
         class="chat-title-small"
         id="chatChannelInfo">
+
         Channel
+
       </div>
 
     </div>
@@ -1131,7 +1020,6 @@ input:focus{
     <div class="online-dot"></div>
 
   </div>
-
 
   <div
     class="messages"
@@ -1142,7 +1030,6 @@ input:focus{
     </div>
 
   </div>
-
 
   <div class="chat-input">
 
@@ -1155,7 +1042,9 @@ input:focus{
     <button
       class="send"
       onclick="sendMessage()">
+
       ➤
+
     </button>
 
   </div>
@@ -1163,10 +1052,7 @@ input:focus{
 </div>
 
 
-<div
-  class="toast"
-  id="toast">
-</div>
+<div class="toast" id="toast"></div>
 
 
 <script>
@@ -1175,13 +1061,16 @@ input:focus{
    SUPABASE
 ===================================================== */
 
+const SUPABASE_URL =
+  "https://eqglttfffhvoyvrclzse.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
 const supabaseClient =
   supabase.createClient(
-
-    "https://eqglttfffhvoyvrclzse.supabase.co",
-
-    "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb",
-
+    SUPABASE_URL,
+    SUPABASE_KEY,
     {
       auth:{
         persistSession:true,
@@ -1189,7 +1078,6 @@ const supabaseClient =
         detectSessionInUrl:true
       }
     }
-
   );
 
 
@@ -1198,16 +1086,14 @@ const supabaseClient =
 ===================================================== */
 
 let currentUser = null;
-
 let currentChannel = null;
-
 let allChannels = [];
-
 let currentIsSir = false;
+let followedChannelIds = new Set();
 
 
 /* =====================================================
-   ELEMENTS
+   SHORT SELECTOR
 ===================================================== */
 
 const $ = id =>
@@ -1227,12 +1113,30 @@ function toast(message,type="success"){
   box.className =
     "toast show " + type;
 
-  setTimeout(()=>{
+  clearTimeout(window.toastTimer);
 
-    box.className = "toast";
+  window.toastTimer =
+    setTimeout(function(){
 
-  },2500);
+      box.className = "toast";
 
+    },3000);
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(text){
+
+  const div =
+    document.createElement("div");
+
+  div.textContent =
+    text ?? "";
+
+  return div.innerHTML;
 }
 
 
@@ -1245,27 +1149,32 @@ async function loadUser(){
   try{
 
     const {
-      data:{
-        user
-      }
+      data,
+      error
     } =
       await supabaseClient
         .auth
         .getUser();
 
+    if(error){
+      console.error(error);
+    }
+
+    const user =
+      data?.user || null;
+
+    currentUser =
+      user;
 
     if(!user){
 
       $("headerUser").innerText =
         "Guest";
 
+      loadSavedChannels();
+
       return;
-
     }
-
-
-    currentUser = user;
-
 
     const username =
       user.user_metadata?.username
@@ -1276,23 +1185,46 @@ async function loadUser(){
       ||
       "User";
 
-
     $("headerUser").innerText =
       "@" + username;
 
+    localStorage.setItem(
+      "gyansetu_username",
+      username
+    );
+
+    localStorage.setItem(
+      "gyansetu_user_id",
+      user.id
+    );
+
+    if(user.email){
+
+      localStorage.setItem(
+        "gyansetu_email",
+        user.email
+      );
+    }
 
     await checkMyChannel();
 
-    loadSavedChannels();
+    await loadFollowedChannels();
+
+    await loadSavedChannels();
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "USER LOAD ERROR:",
+      error
+    );
 
+    $("headerUser").innerText =
+      "Guest";
+
+    loadSavedChannels();
   }
-
 }
 
 
@@ -1303,15 +1235,21 @@ async function loadUser(){
 function goHome(){
 
   closeModal();
+  closeAddModal();
 
-  $("homeSection").classList.add("active");
+  $("homeSection")
+    .classList
+    .add("active");
 
-  $("createSection").classList.remove("active");
+  $("createSection")
+    .classList
+    .remove("active");
 
-  $("studentSection").classList.remove("active");
+  $("studentSection")
+    .classList
+    .remove("active");
 
   loadSavedChannels();
-
 }
 
 
@@ -1325,14 +1263,18 @@ function openCreateConfirm(){
     );
 
     return;
-
   }
 
+  if(currentChannel){
+
+    confirmSir();
+
+    return;
+  }
 
   $("sirConfirmModal")
     .classList
     .add("show");
-
 }
 
 
@@ -1341,7 +1283,6 @@ function closeModal(){
   $("sirConfirmModal")
     .classList
     .remove("show");
-
 }
 
 
@@ -1361,7 +1302,6 @@ function confirmSir(){
     .classList
     .add("active");
 
-
   if(currentChannel){
 
     showExistingSirChannel();
@@ -1371,9 +1311,7 @@ function confirmSir(){
 
     $("createCard").style.display =
       "block";
-
   }
-
 }
 
 
@@ -1391,9 +1329,7 @@ async function createChannel(){
     );
 
     return;
-
   }
-
 
   if(currentChannel){
 
@@ -1405,9 +1341,7 @@ async function createChannel(){
     showExistingSirChannel();
 
     return;
-
   }
-
 
   const name =
     $("channelName")
@@ -1418,7 +1352,6 @@ async function createChannel(){
     $("channelPassword")
       .value;
 
-
   if(name.length < 2){
 
     toast(
@@ -1427,45 +1360,40 @@ async function createChannel(){
     );
 
     return;
-
   }
-
 
   if(password.length < 4){
 
     toast(
-      "Channel password किमान 4 characters असावा.",
+      "Password किमान 4 characters असावा.",
       "error"
     );
 
     return;
-
   }
 
+  const button =
+    $("createChannelButton");
+
+  button.disabled =
+    true;
+
+  button.innerText =
+    "Channel तयार होत आहे...";
 
   try{
 
     const username =
-      currentUser
-        .user_metadata
-        ?.username
-        ||
-        localStorage.getItem(
-          "gyansetu_username"
-        )
-        ||
-        "User";
-
-
-    /*
-      Password plain text मध्ये
-      save करण्याऐवजी येथे Web Crypto
-      वापरून hash तयार केला जातो.
-    */
+      currentUser.user_metadata?.username
+      ||
+      localStorage.getItem(
+        "gyansetu_username"
+      )
+      ||
+      "User";
 
     const passwordHash =
       await hashText(password);
-
 
     const {
       data,
@@ -1474,7 +1402,6 @@ async function createChannel(){
       await supabaseClient
         .from("gs_channels")
         .insert({
-
           owner_id:
             currentUser.id,
 
@@ -1486,62 +1413,65 @@ async function createChannel(){
 
           password_hash:
             passwordHash
-
         })
         .select()
         .single();
 
-
     if(error){
 
-      console.error(error);
+      console.error(
+        "SUPABASE CREATE ERROR:",
+        error
+      );
 
-      if(
-        error.code === "23505"
-      ){
-
-        toast(
-          "तुमचा channel आधीच तयार आहे.",
-          "error"
-        );
+      if(error.code === "23505"){
 
         await checkMyChannel();
 
-        return;
+        if(currentChannel){
 
+          showExistingSirChannel();
+
+          toast(
+            "तुमचा channel आधीपासून आहे.",
+            "error"
+          );
+
+          return;
+        }
       }
 
       throw error;
-
     }
 
+    currentChannel =
+      data;
 
-    currentChannel = data;
-
-    currentIsSir = true;
-
+    currentIsSir =
+      true;
 
     localStorage.setItem(
       "gyansetu_my_channel_id",
       data.id
     );
 
+    $("channelName").value =
+      "";
+
+    $("channelPassword").value =
+      "";
 
     $("createCard").style.display =
       "none";
 
-
     showExistingSirChannel();
-
 
     toast(
       "🎉 तुमचा channel तयार झाला!",
       "success"
     );
 
-
   }
-
   catch(error){
 
     console.error(
@@ -1549,14 +1479,20 @@ async function createChannel(){
       error
     );
 
-
     toast(
-      "Channel तयार करता आला नाही. Supabase table/RLS तपासा.",
+      "Channel तयार करता आला नाही. Supabase RLS/SQL तपासा.",
       "error"
     );
 
   }
+  finally{
 
+    button.disabled =
+      false;
+
+    button.innerText =
+      "🚀 Create My Channel";
+  }
 }
 
 
@@ -1569,9 +1505,7 @@ async function checkMyChannel(){
   if(!currentUser){
 
     return;
-
   }
-
 
   try{
 
@@ -1588,21 +1522,23 @@ async function checkMyChannel(){
         )
         .maybeSingle();
 
-
     if(error){
 
-      console.error(error);
+      console.error(
+        "MY CHANNEL ERROR:",
+        error
+      );
 
       return;
-
     }
-
 
     if(data){
 
-      currentChannel = data;
+      currentChannel =
+        data;
 
-      currentIsSir = true;
+      currentIsSir =
+        true;
 
       localStorage.setItem(
         "gyansetu_my_channel_id",
@@ -1612,18 +1548,15 @@ async function checkMyChannel(){
     }
 
   }
-
   catch(error){
 
     console.error(error);
-
   }
-
 }
 
 
 /* =====================================================
-   EXISTING SIR CHANNEL
+   SIR CHANNEL
 ===================================================== */
 
 function showExistingSirChannel(){
@@ -1631,26 +1564,29 @@ function showExistingSirChannel(){
   $("createCard").style.display =
     "none";
 
-
   const box =
     $("existingSirChannel");
-
 
   if(!currentChannel){
 
     box.innerHTML = "";
 
-    return;
+    $("createCard").style.display =
+      "block";
 
+    return;
   }
 
-
   const followers =
-    currentChannel
-      .followers_count
-      ||
-      0;
+    currentChannel.followers_count || 0;
 
+  const firstLetter =
+    (
+      currentChannel.channel_name ||
+      "G"
+    )
+      .charAt(0)
+      .toUpperCase();
 
   box.innerHTML = `
 
@@ -1659,11 +1595,7 @@ function showExistingSirChannel(){
       <div class="channel-head">
 
         <div class="channel-avatar">
-          ${escapeHTML(
-            currentChannel.channel_name
-              .charAt(0)
-              .toUpperCase()
-          )}
+          ${escapeHTML(firstLetter)}
         </div>
 
         <div class="channel-info">
@@ -1692,7 +1624,6 @@ function showExistingSirChannel(){
 
       </div>
 
-
       <button
         class="primary"
         onclick="openChannelChat(currentChannel,true)">
@@ -1700,7 +1631,6 @@ function showExistingSirChannel(){
         💬 Open Channel Chat
 
       </button>
-
 
       <button
         class="secondary"
@@ -1711,14 +1641,12 @@ function showExistingSirChannel(){
       </button>
 
     </div>
-
   `;
-
 }
 
 
 /* =====================================================
-   STUDENT SECTION
+   STUDENT
 ===================================================== */
 
 function openStudentSection(){
@@ -1735,9 +1663,61 @@ function openStudentSection(){
     .classList
     .add("active");
 
-
   loadChannels();
+}
 
+
+/* =====================================================
+   LOAD FOLLOWED CHANNELS
+===================================================== */
+
+async function loadFollowedChannels(){
+
+  followedChannelIds =
+    new Set();
+
+  if(!currentUser){
+
+    return;
+  }
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("gs_channel_followers")
+        .select("channel_id")
+        .eq(
+          "user_id",
+          currentUser.id
+        );
+
+    if(error){
+
+      console.error(
+        "FOLLOWED CHANNEL ERROR:",
+        error
+      );
+
+      return;
+    }
+
+    (data || []).forEach(function(item){
+
+      followedChannelIds.add(
+        item.channel_id
+      );
+
+    });
+
+  }
+  catch(error){
+
+    console.error(error);
+  }
 }
 
 
@@ -1750,12 +1730,10 @@ async function loadChannels(){
   const box =
     $("channelsList");
 
-
   box.innerHTML =
     `<div class="loading">
-      Channels loading...
+      ⏳ Channels loading...
     </div>`;
-
 
   try{
 
@@ -1773,27 +1751,30 @@ async function loadChannels(){
           }
         );
 
-
     if(error){
 
       throw error;
-
     }
-
 
     allChannels =
       data || [];
 
+    if(currentUser){
+
+      await loadFollowedChannels();
+    }
 
     renderChannels(
       allChannels
     );
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "LOAD CHANNELS ERROR:",
+      error
+    );
 
     box.innerHTML = `
 
@@ -1805,12 +1786,17 @@ async function loadChannels(){
 
         Channels load झाले नाहीत.
 
+        <button
+          class="secondary"
+          onclick="loadChannels()">
+
+          🔄 Retry
+
+        </button>
+
       </div>
-
     `;
-
   }
-
 }
 
 
@@ -1822,7 +1808,6 @@ function renderChannels(list){
 
   const box =
     $("channelsList");
-
 
   if(!list.length){
 
@@ -1842,19 +1827,34 @@ function renderChannels(list){
     `;
 
     return;
-
   }
 
-
   box.innerHTML =
-    list.map(
-      channelCard
-    ).join("");
-
+    list
+      .map(channelCard)
+      .join("");
 }
 
 
 function channelCard(channel){
+
+  const isFollowing =
+    followedChannelIds.has(
+      channel.id
+    );
+
+  const isOwner =
+    currentUser &&
+    channel.owner_id ===
+    currentUser.id;
+
+  const firstLetter =
+    (
+      channel.channel_name ||
+      "G"
+    )
+      .charAt(0)
+      .toUpperCase();
 
   return `
 
@@ -1864,14 +1864,9 @@ function channelCard(channel){
 
         <div class="channel-avatar">
 
-          ${escapeHTML(
-            channel.channel_name
-              .charAt(0)
-              .toUpperCase()
-          )}
+          ${escapeHTML(firstLetter)}
 
         </div>
-
 
         <div class="channel-info">
 
@@ -1883,7 +1878,6 @@ function channelCard(channel){
 
           </div>
 
-
           <div class="channel-owner">
 
             @${escapeHTML(
@@ -1892,24 +1886,19 @@ function channelCard(channel){
 
           </div>
 
-
           <span class="badge">
             🎓 Educational
           </span>
 
-
           <span class="badge">
 
-            👥 ${
-              channel.followers_count || 0
-            }
+            👥 ${channel.followers_count || 0}
 
           </span>
 
         </div>
 
       </div>
-
 
       <div class="follow-row">
 
@@ -1920,30 +1909,44 @@ function channelCard(channel){
 
         </div>
 
+        ${
+          isOwner
+          ?
+          `<button
+            class="follow-btn following"
+            disabled>
+            Your Channel
+          </button>`
+          :
+          `<button
+            class="follow-btn ${
+              isFollowing
+              ? "following"
+              : ""
+            }"
+            onclick="toggleFollow('${channel.id}',this)">
 
-        <button
-          class="follow-btn"
-          onclick="followChannel('${channel.id}',this)">
+            ${
+              isFollowing
+              ? "✓ Following"
+              : "Follow"
+            }
 
-          Follow
-
-        </button>
+          </button>`
+        }
 
       </div>
-
 
       <button
         class="primary"
         onclick="openChannelDetails('${channel.id}')">
 
-        👀 View Channel
+        💬 Open Channel
 
       </button>
 
     </div>
-
   `;
-
 }
 
 
@@ -1959,34 +1962,40 @@ function filterChannels(){
       .toLowerCase()
       .trim();
 
-
   const filtered =
-    allChannels.filter(
-      channel =>
+    allChannels.filter(function(channel){
 
-        channel.channel_name
+      return (
+
+        String(
+          channel.channel_name || ""
+        )
           .toLowerCase()
           .includes(text)
 
         ||
 
-        channel.owner_username
+        String(
+          channel.owner_username || ""
+        )
           .toLowerCase()
           .includes(text)
 
-    );
+      );
 
+    });
 
-  renderChannels(filtered);
-
+  renderChannels(
+    filtered
+  );
 }
 
 
 /* =====================================================
-   FOLLOW
+   FOLLOW / UNFOLLOW
 ===================================================== */
 
-async function followChannel(
+async function toggleFollow(
   channelId,
   button
 ){
@@ -1999,71 +2008,120 @@ async function followChannel(
     );
 
     return;
-
   }
 
-
-  try{
-
-    const {
-      error
-    } =
-      await supabaseClient
-        .from("gs_channel_followers")
-        .upsert({
-
-          channel_id:
-            channelId,
-
-          user_id:
-            currentUser.id
-
-        });
-
-
-    if(error){
-
-      throw error;
-
-    }
-
-
-    await updateFollowerCount(
+  const isFollowing =
+    followedChannelIds.has(
       channelId
     );
 
+  button.disabled =
+    true;
 
-    button.innerText =
-      "✓ Following";
+  try{
 
-    button.classList.add(
-      "following"
-    );
+    if(isFollowing){
 
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("gs_channel_followers")
+          .delete()
+          .eq(
+            "channel_id",
+            channelId
+          )
+          .eq(
+            "user_id",
+            currentUser.id
+          );
 
-    toast(
-      "Channel follow केला.",
-      "success"
-    );
+      if(error){
+
+        throw error;
+      }
+
+      followedChannelIds.delete(
+        channelId
+      );
+
+      await updateFollowerCount(
+        channelId
+      );
+
+      toast(
+        "Channel unfollow केला.",
+        "success"
+      );
+
+    }
+    else{
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("gs_channel_followers")
+          .upsert(
+            {
+              channel_id:
+                channelId,
+
+              user_id:
+                currentUser.id
+            },
+            {
+              onConflict:
+                "channel_id,user_id"
+            }
+          );
+
+      if(error){
+
+        throw error;
+      }
+
+      followedChannelIds.add(
+        channelId
+      );
+
+      await updateFollowerCount(
+        channelId
+      );
+
+      toast(
+        "✅ Channel follow केला.",
+        "success"
+      );
+    }
+
+    await loadChannels();
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "FOLLOW ERROR:",
+      error
+    );
 
     toast(
-      "Follow करता आले नाही.",
+      "Follow बदलता आला नाही.",
       "error"
     );
 
   }
+  finally{
 
+    button.disabled =
+      false;
+  }
 }
 
 
 /* =====================================================
-   FOLLOWER COUNT
+   UPDATE FOLLOWER COUNT
 ===================================================== */
 
 async function updateFollowerCount(
@@ -2079,7 +2137,7 @@ async function updateFollowerCount(
       await supabaseClient
         .from("gs_channel_followers")
         .select(
-          "*",
+          "id",
           {
             count:"exact",
             head:true
@@ -2090,38 +2148,41 @@ async function updateFollowerCount(
           channelId
         );
 
-
     if(error){
 
       throw error;
-
     }
 
+    const {
+      error:updateError
+    } =
+      await supabaseClient
+        .from("gs_channels")
+        .update({
+          followers_count:
+            count || 0
+        })
+        .eq(
+          "id",
+          channelId
+        );
 
-    await supabaseClient
-      .from("gs_channels")
-      .update({
+    if(updateError){
 
-        followers_count:
-          count || 0
-
-      })
-      .eq(
-        "id",
-        channelId
+      console.error(
+        "COUNT UPDATE ERROR:",
+        updateError
       );
+    }
 
   }
-
   catch(error){
 
     console.error(
       "FOLLOW COUNT ERROR:",
       error
     );
-
   }
-
 }
 
 
@@ -2133,48 +2194,58 @@ async function openChannelDetails(
   channelId
 ){
 
-  const channel =
+  let channel =
     allChannels.find(
       item =>
         item.id === channelId
     );
 
-
   if(!channel){
 
-    return;
+    try{
 
+      const {
+        data,
+        error
+      } =
+        await supabaseClient
+          .from("gs_channels")
+          .select("*")
+          .eq(
+            "id",
+            channelId
+          )
+          .single();
+
+      if(error){
+
+        throw error;
+      }
+
+      channel =
+        data;
+
+    }
+    catch(error){
+
+      toast(
+        "Channel सापडला नाही.",
+        "error"
+      );
+
+      return;
+    }
   }
 
-
-  const followers =
-    channel.followers_count
-    ||
-    0;
-
-
-  const choice =
-    confirmBox(
-      channel
-    );
-
+  const isSir =
+    currentUser &&
+    channel.owner_id ===
+    currentUser.id;
 
   openChannelChat(
     channel,
-    false
+    isSir
   );
-
-}
-
-
-/* =====================================================
-   SIMPLE DETAIL BEFORE CHAT
-===================================================== */
-
-function confirmBox(channel){
-
-  return true;
-
 }
 
 
@@ -2184,8 +2255,13 @@ function confirmBox(channel){
 
 async function openChannelChat(
   channel,
-  isSir
+  isSir=false
 ){
+
+  if(!channel){
+
+    return;
+  }
 
   currentChannel =
     channel;
@@ -2199,30 +2275,38 @@ async function openChannelChat(
       currentUser.id
     );
 
-
   $("chatChannelName")
     .innerText =
-      channel.channel_name;
-
+    channel.channel_name;
 
   $("chatChannelInfo")
     .innerText =
-      "@" +
-      channel.owner_username +
-      " • " +
-      (
-        channel.followers_count || 0
-      ) +
-      " followers";
+    "@" +
+    channel.owner_username +
+    " • " +
+    (channel.followers_count || 0) +
+    " followers";
 
+  $("chatAvatar")
+    .innerText =
+    (
+      channel.channel_name ||
+      "G"
+    )
+      .charAt(0)
+      .toUpperCase();
+
+  $("chatMessage")
+    .placeholder =
+      currentIsSir
+      ? "📢 Sir Post करा..."
+      : "💬 Comment करा...";
 
   $("chatWrap")
     .classList
     .add("active");
 
-
   await loadMessages();
-
 }
 
 
@@ -2235,7 +2319,6 @@ function closeChat(){
   $("chatWrap")
     .classList
     .remove("active");
-
 }
 
 
@@ -2245,15 +2328,18 @@ function closeChat(){
 
 async function loadMessages(){
 
+  if(!currentChannel){
+
+    return;
+  }
+
   const box =
     $("messages");
 
-
   box.innerHTML =
     `<div class="loading">
-      Messages loading...
+      ⏳ Messages loading...
     </div>`;
-
 
   try{
 
@@ -2275,13 +2361,10 @@ async function loadMessages(){
           }
         );
 
-
     if(error){
 
       throw error;
-
     }
-
 
     if(!data || !data.length){
 
@@ -2297,34 +2380,47 @@ async function loadMessages(){
         </div>`;
 
       return;
-
     }
-
 
     box.innerHTML =
       data
-        .map(
-          renderMessage
-        )
+        .map(renderMessage)
         .join("");
 
+    requestAnimationFrame(function(){
 
-    box.scrollTop =
-      box.scrollHeight;
+      box.scrollTop =
+        box.scrollHeight;
+
+    });
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "LOAD MESSAGE ERROR:",
+      error
+    );
 
     box.innerHTML =
       `<div class="empty">
+
+        <div class="empty-icon">
+          ⚠️
+        </div>
+
         Messages load झाले नाहीत.
+
+        <button
+          class="secondary"
+          onclick="loadMessages()">
+
+          🔄 Retry
+
+        </button>
+
       </div>`;
-
   }
-
 }
 
 
@@ -2339,11 +2435,15 @@ function renderMessage(message){
     message.user_id ===
     currentUser.id;
 
+  const type =
+    message.message_type ===
+    "sir_post"
+    ? "📢 Sir"
+    : "💬 Comment";
 
   return `
 
-    <div
-      class="message ${me ? "me" : ""}">
+    <div class="message ${me ? "me" : ""}">
 
       <div class="message-user">
 
@@ -2351,8 +2451,9 @@ function renderMessage(message){
           message.username || "User"
         )}
 
-      </div>
+        • ${type}
 
+      </div>
 
       <div class="message-bubble">
 
@@ -2361,7 +2462,6 @@ function renderMessage(message){
         )}
 
       </div>
-
 
       <div class="message-actions">
 
@@ -2392,9 +2492,7 @@ function renderMessage(message){
       </div>
 
     </div>
-
   `;
-
 }
 
 
@@ -2412,41 +2510,40 @@ async function sendMessage(){
     );
 
     return;
-
   }
 
+  if(!currentChannel){
+
+    return;
+  }
+
+  const input =
+    $("chatMessage");
 
   const text =
-    $("chatMessage")
-      .value
-      .trim();
-
+    input.value.trim();
 
   if(!text){
 
     return;
-
   }
 
+  const username =
+    currentUser.user_metadata?.username
+    ||
+    localStorage.getItem(
+      "gyansetu_username"
+    )
+    ||
+    "User";
 
-  /*
-     Sir = message/post
-     Student = comment
-  */
+  const sendButton =
+    document.querySelector(".send");
+
+  sendButton.disabled =
+    true;
 
   try{
-
-    const username =
-      currentUser
-        .user_metadata
-        ?.username
-        ||
-        localStorage.getItem(
-          "gyansetu_username"
-        )
-        ||
-        "User";
-
 
     const {
       error
@@ -2471,28 +2568,25 @@ async function sendMessage(){
             currentIsSir
               ? "sir_post"
               : "comment"
-
         });
-
 
     if(error){
 
       throw error;
-
     }
 
-
-    $("chatMessage")
-      .value = "";
-
+    input.value =
+      "";
 
     await loadMessages();
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "SEND MESSAGE ERROR:",
+      error
+    );
 
     toast(
       "Message पाठवता आला नाही.",
@@ -2500,7 +2594,11 @@ async function sendMessage(){
     );
 
   }
+  finally{
 
+    sendButton.disabled =
+      false;
+  }
 }
 
 
@@ -2521,9 +2619,7 @@ async function reactMessage(
     );
 
     return;
-
   }
-
 
   try{
 
@@ -2532,26 +2628,27 @@ async function reactMessage(
     } =
       await supabaseClient
         .from("gs_message_reactions")
-        .upsert({
+        .upsert(
+          {
+            message_id:
+              messageId,
 
-          message_id:
-            messageId,
+            user_id:
+              currentUser.id,
 
-          user_id:
-            currentUser.id,
-
-          reaction:
-            reaction
-
-        });
-
+            reaction:
+              reaction
+          },
+          {
+            onConflict:
+              "message_id,user_id"
+          }
+        );
 
     if(error){
 
       throw error;
-
     }
-
 
     toast(
       reaction + " Reacted",
@@ -2559,23 +2656,23 @@ async function reactMessage(
     );
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "REACTION ERROR:",
+      error
+    );
 
     toast(
       "Reaction save झाली नाही.",
       "error"
     );
-
   }
-
 }
 
 
 /* =====================================================
-   ADD CHANNEL
+   ADD CHANNEL MODAL
 ===================================================== */
 
 function openAddChannelModal(){
@@ -2584,6 +2681,11 @@ function openAddChannelModal(){
     .classList
     .add("show");
 
+  setTimeout(function(){
+
+    $("addChannelName").focus();
+
+  },100);
 }
 
 
@@ -2592,23 +2694,24 @@ function closeAddModal(){
   $("addChannelModal")
     .classList
     .remove("show");
-
 }
 
+
+/* =====================================================
+   ADD CHANNEL
+===================================================== */
 
 async function addChannel(){
 
   if(!currentUser){
 
     toast(
-      "Login required.",
+      "Channel add करण्यासाठी Login करा.",
       "error"
     );
 
     return;
-
   }
-
 
   const name =
     $("addChannelName")
@@ -2619,7 +2722,6 @@ async function addChannel(){
     $("addChannelPassword")
       .value;
 
-
   if(!name || !password){
 
     toast(
@@ -2628,15 +2730,12 @@ async function addChannel(){
     );
 
     return;
-
   }
-
 
   try{
 
     const passwordHash =
       await hashText(password);
-
 
     const {
       data,
@@ -2655,13 +2754,10 @@ async function addChannel(){
         )
         .maybeSingle();
 
-
     if(error){
 
       throw error;
-
     }
-
 
     if(!data){
 
@@ -2671,28 +2767,33 @@ async function addChannel(){
       );
 
       return;
-
     }
-
 
     let saved =
       getSavedChannels();
 
-
-    if(
-      !saved.includes(data.id)
-    ){
+    if(!saved.includes(data.id)){
 
       saved.push(data.id);
 
+      localStorage.setItem(
+        "gyansetu_saved_channels",
+        JSON.stringify(saved)
+      );
+
+      toast(
+        "✅ Channel saved झाला.",
+        "success"
+      );
+
     }
+    else{
 
-
-    localStorage.setItem(
-      "gyansetu_saved_channels",
-      JSON.stringify(saved)
-    );
-
+      toast(
+        "हा channel आधीच saved आहे.",
+        "error"
+      );
+    }
 
     closeAddModal();
 
@@ -2702,28 +2803,21 @@ async function addChannel(){
     $("addChannelPassword")
       .value = "";
 
-
-    loadSavedChannels();
-
-
-    toast(
-      "✅ Channel saved झाला.",
-      "success"
-    );
+    await loadSavedChannels();
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "ADD CHANNEL ERROR:",
+      error
+    );
 
     toast(
       "Channel add करता आला नाही.",
       "error"
     );
-
   }
-
 }
 
 
@@ -2745,9 +2839,7 @@ function getSavedChannels(){
   catch(error){
 
     return [];
-
   }
-
 }
 
 
@@ -2756,10 +2848,8 @@ async function loadSavedChannels(){
   const ids =
     getSavedChannels();
 
-
   const box =
     $("savedBox");
-
 
   if(!ids.length){
 
@@ -2769,8 +2859,7 @@ async function loadSavedChannels(){
         class="card"
         style="text-align:center;color:#777;">
 
-        ➕ Add केलेले channels येथे
-        दिसतील.
+        ➕ Add केलेले channels येथे दिसतील.
 
         <button
           class="secondary"
@@ -2785,9 +2874,7 @@ async function loadSavedChannels(){
     `;
 
     return;
-
   }
-
 
   try{
 
@@ -2803,13 +2890,25 @@ async function loadSavedChannels(){
           ids
         );
 
-
     if(error){
 
       throw error;
-
     }
 
+    const channels =
+      data || [];
+
+    if(!channels.length){
+
+      box.innerHTML = `
+        <div class="card"
+             style="text-align:center;color:#777;">
+          Saved channels सापडले नाहीत.
+        </div>
+      `;
+
+      return;
+    }
 
     box.innerHTML = `
 
@@ -2817,54 +2916,62 @@ async function loadSavedChannels(){
         💾 Saved Channels
       </div>
 
-      ${data.map(channel => `
+      ${channels.map(function(channel){
 
-        <div class="saved-item">
+        return `
 
-          <div class="channel-avatar"
-               style="width:40px;height:40px;font-size:18px;">
+          <div class="saved-item">
 
-            ${escapeHTML(
-              channel.channel_name
-                .charAt(0)
-                .toUpperCase()
-            )}
-
-          </div>
-
-          <div class="saved-item-info">
-
-            <div class="saved-item-name">
+            <div
+              class="channel-avatar"
+              style="width:40px;height:40px;font-size:18px;">
 
               ${escapeHTML(
-                channel.channel_name
+                (
+                  channel.channel_name ||
+                  "G"
+                )
+                  .charAt(0)
+                  .toUpperCase()
               )}
 
             </div>
 
-            <div class="saved-item-small">
+            <div
+              class="saved-item-info"
+              onclick="openChannelDetails('${channel.id}')"
+              style="cursor:pointer;">
 
-              @${escapeHTML(
-                channel.owner_username
-              )}
+              <div class="saved-item-name">
+
+                ${escapeHTML(
+                  channel.channel_name
+                )}
+
+              </div>
+
+              <div class="saved-item-small">
+
+                @${escapeHTML(
+                  channel.owner_username
+                )}
+
+              </div>
 
             </div>
+
+            <button
+              class="remove-save"
+              onclick="removeSavedChannel('${channel.id}')">
+
+              ×
+
+            </button>
 
           </div>
+        `;
 
-
-          <button
-            class="remove-save"
-            onclick="removeSavedChannel('${channel.id}')">
-
-            ×
-
-          </button>
-
-        </div>
-
-      `).join("")}
-
+      }).join("")}
 
       <button
         class="secondary"
@@ -2877,13 +2984,20 @@ async function loadSavedChannels(){
     `;
 
   }
-
   catch(error){
 
-    console.error(error);
+    console.error(
+      "SAVED CHANNEL ERROR:",
+      error
+    );
 
+    box.innerHTML = `
+      <div class="card"
+           style="text-align:center;color:#888;">
+        Saved channels load झाले नाहीत.
+      </div>
+    `;
   }
-
 }
 
 
@@ -2892,76 +3006,85 @@ function removeSavedChannel(id){
   let saved =
     getSavedChannels();
 
-
   saved =
     saved.filter(
-      item => item !== id
+      item =>
+        item !== id
     );
-
 
   localStorage.setItem(
     "gyansetu_saved_channels",
     JSON.stringify(saved)
   );
 
-
   loadSavedChannels();
 
+  toast(
+    "Channel saved list मधून काढला.",
+    "success"
+  );
 }
 
 
 /* =====================================================
-   HASH PASSWORD
+   HASH
 ===================================================== */
 
 async function hashText(text){
 
-  const data =
-    new TextEncoder()
-      .encode(text);
+  if(
+    window.crypto &&
+    window.crypto.subtle
+  ){
 
+    const data =
+      new TextEncoder()
+        .encode(text);
 
-  const hash =
-    await crypto.subtle.digest(
-      "SHA-256",
-      data
-    );
+    const hash =
+      await crypto.subtle.digest(
+        "SHA-256",
+        data
+      );
 
+    return Array
+      .from(
+        new Uint8Array(hash)
+      )
+      .map(
+        byte =>
+          byte
+            .toString(16)
+            .padStart(2,"0")
+      )
+      .join("");
+  }
 
-  return Array
-    .from(
-      new Uint8Array(hash)
-    )
-    .map(
-      byte =>
-        byte
-          .toString(16)
-          .padStart(2,"0")
-    )
-    .join("");
+  /* Fallback */
 
+  let hash = 0;
+
+  for(
+    let i = 0;
+    i < text.length;
+    i++
+  ){
+
+    hash =
+      (
+        (hash << 5) -
+        hash +
+        text.charCodeAt(i)
+      ) |
+      0;
+  }
+
+  return String(hash);
 }
 
 
 /* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text ?? "";
-
-  return div.innerHTML;
-
-}
-
-
-/* =====================================================
-   ENTER SEND
+   ENTER TO SEND
 ===================================================== */
 
 $("chatMessage")
@@ -2970,19 +3093,114 @@ $("chatMessage")
     function(event){
 
       if(
-        event.key === "Enter"
-        &&
+        event.key === "Enter" &&
         !event.shiftKey
       ){
 
         event.preventDefault();
 
         sendMessage();
-
       }
-
     }
   );
+
+
+/* =====================================================
+   MODAL OUTSIDE CLICK
+===================================================== */
+
+$("sirConfirmModal")
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        $("sirConfirmModal")
+      ){
+
+        closeModal();
+      }
+    }
+  );
+
+
+$("addChannelModal")
+  .addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        $("addChannelModal")
+      ){
+
+        closeAddModal();
+      }
+    }
+  );
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(event.key === "Escape"){
+
+      closeModal();
+      closeAddModal();
+
+      if(
+        $("chatWrap")
+          .classList
+          .contains("active")
+      ){
+
+        closeChat();
+      }
+    }
+  }
+);
+
+
+/* =====================================================
+   AUTH STATE
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  async function(event,session){
+
+    currentUser =
+      session?.user || null;
+
+    if(currentUser){
+
+      const username =
+        currentUser
+          .user_metadata
+          ?.username
+        ||
+        localStorage.getItem(
+          "gyansetu_username"
+        )
+        ||
+        "User";
+
+      $("headerUser").innerText =
+        "@" + username;
+
+    }
+    else{
+
+      $("headerUser").innerText =
+        "Guest";
+    }
+  }
+);
 
 
 /* =====================================================
