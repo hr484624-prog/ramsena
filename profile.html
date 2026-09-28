@@ -46,6 +46,7 @@ body{
   background:#eef4ff;
   color:#1769d1;
   font-size:24px;
+  cursor:pointer;
 }
 
 .title{
@@ -86,6 +87,7 @@ body{
   font-weight:bold;
   overflow:hidden;
   border:5px solid #edf4ff;
+  cursor:pointer;
 }
 
 .avatar img{
@@ -117,6 +119,7 @@ body{
   font-size:16px;
   font-weight:bold;
   box-shadow:0 8px 20px rgba(120,60,220,.25);
+  cursor:pointer;
 }
 
 .edit-btn{
@@ -128,6 +131,7 @@ body{
   background:#f7faff;
   color:#1769d1;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .info{
@@ -177,6 +181,7 @@ body{
   flex-direction:column;
   align-items:center;
   gap:4px;
+  cursor:pointer;
 }
 
 .nav span{
@@ -224,7 +229,8 @@ label{
   margin-bottom:7px;
 }
 
-input,textarea{
+input,
+textarea{
   width:100%;
   padding:13px;
   border:1px solid #d4deeb;
@@ -248,6 +254,7 @@ textarea{
   color:white;
   font-size:16px;
   font-weight:bold;
+  cursor:pointer;
 }
 
 .cancel{
@@ -257,6 +264,7 @@ textarea{
   border-radius:13px;
   background:#edf0f5;
   margin-top:9px;
+  cursor:pointer;
 }
 
 .progress{
@@ -291,13 +299,17 @@ textarea{
 
 <header class="header">
 
-<button onclick="goHome()">‹</button>
+<button onclick="goHome()">
+  ‹
+</button>
 
 <div class="title">
   👤 My Profile
 </div>
 
-<button onclick="goVideos()">
+<!-- JUNKFILE BUTTON -->
+
+<button onclick="goJunkFile()">
   🛄
 </button>
 
@@ -407,6 +419,8 @@ textarea{
 
 </main>
 
+
+<!-- BOTTOM NAV -->
 
 <nav class="nav">
 
@@ -560,6 +574,8 @@ Profile
 </div>
 
 
+<!-- PROFILE PHOTO -->
+
 <input
   type="file"
   id="photoInput"
@@ -573,6 +589,10 @@ Profile
 
 <script>
 
+/* =========================
+   SUPABASE
+========================= */
+
 const SUPABASE_URL =
 "https://eqglttfffhvoyvrclzse.supabase.co";
 
@@ -585,42 +605,70 @@ supabase.createClient(
   SUPABASE_KEY
 );
 
-let currentUser=null;
+let currentUser = null;
 
 
-/* NAVIGATION */
+/* =========================
+   NAVIGATION
+========================= */
 
 function goHome(){
-  location.href="home.html";
+
+  location.href = "home.html";
+
 }
+
 
 function goLearn(){
-  location.href="learn.html";
+
+  location.href = "learn.html";
+
 }
+
 
 function goVideos(){
-  location.href="video.html";
+
+  location.href = "video.html";
+
 }
 
 
-/* TOAST */
+/* =========================
+   JUNKFILE PAGE
+========================= */
+
+function goJunkFile(){
+
+  location.href = "junkfile.html";
+
+}
+
+
+/* =========================
+   TOAST
+========================= */
 
 function showToast(text){
 
   const toast =
     document.getElementById("toast");
 
-  toast.textContent=text;
+  toast.textContent = text;
+
   toast.classList.add("show");
 
-  setTimeout(()=>{
+  setTimeout(() => {
+
     toast.classList.remove("show");
+
   },2500);
 
 }
 
 
-/* USER */
+/* =========================
+   LOAD PROFILE
+========================= */
 
 async function loadProfile(){
 
@@ -630,23 +678,27 @@ async function loadProfile(){
   } =
   await supabaseClient.auth.getUser();
 
+
   if(error || !data.user){
 
-    location.href="username.html";
+    location.href = "username.html";
+
     return;
+
   }
 
-  currentUser=data.user;
+
+  currentUser = data.user;
 
 
   const {
-    data:profile
+    data: profile
   } =
   await supabaseClient
-  .from("Profiles")
-  .select("*")
-  .eq("id",currentUser.id)
-  .maybeSingle();
+    .from("Profiles")
+    .select("*")
+    .eq("id",currentUser.id)
+    .maybeSingle();
 
 
   const metadata =
@@ -658,17 +710,19 @@ async function loadProfile(){
     metadata.username ||
     "User";
 
+
   const email =
     currentUser.email || "-";
 
 
   document.getElementById(
     "name"
-  ).textContent=username;
+  ).textContent = username;
+
 
   document.getElementById(
     "email"
-  ).textContent=email;
+  ).textContent = email;
 
 
   setText(
@@ -676,40 +730,48 @@ async function loadProfile(){
     profile?.full_name
   );
 
+
   setText(
     "dob",
     profile?.dob
   );
+
 
   setText(
     "school",
     profile?.school
   );
 
+
   setText(
     "className",
     profile?.class_name
   );
+
 
   setText(
     "medium",
     profile?.medium
   );
 
+
   setText(
     "city",
     profile?.city
   );
+
 
   setText(
     "career",
     profile?.career_goal
   );
 
+
   setText(
     "mobile",
     profile?.mobile
   );
+
 
   setText(
     "gyanId",
@@ -722,6 +784,7 @@ async function loadProfile(){
       "profilePhoto"
     );
 
+
   if(photo){
 
     document.getElementById(
@@ -729,17 +792,25 @@ async function loadProfile(){
     ).innerHTML =
       `<img src="${escapeAttr(photo)}">`;
 
-  }else{
+  }
+
+  else{
 
     document.getElementById(
       "avatar"
     ).textContent =
-      username.charAt(0).toUpperCase();
+      username
+        .charAt(0)
+        .toUpperCase();
 
   }
 
 }
 
+
+/* =========================
+   SET TEXT
+========================= */
 
 function setText(id,value){
 
@@ -749,7 +820,9 @@ function setText(id,value){
 }
 
 
-/* VIDEO MODAL */
+/* =========================
+   VIDEO MODAL
+========================= */
 
 function openVideoModal(){
 
@@ -769,12 +842,16 @@ function closeVideoModal(){
 }
 
 
-/* UPLOAD VIDEO */
+/* =========================
+   UPLOAD VIDEO
+========================= */
 
 async function uploadVideo(){
 
   if(!currentUser){
+
     return;
+
   }
 
 
@@ -783,10 +860,12 @@ async function uploadVideo(){
       "videoInput"
     ).files[0];
 
+
   const title =
     document.getElementById(
       "videoTitle"
     ).value.trim();
+
 
   const description =
     document.getElementById(
@@ -801,6 +880,7 @@ async function uploadVideo(){
     );
 
     return;
+
   }
 
 
@@ -811,6 +891,7 @@ async function uploadVideo(){
     );
 
     return;
+
   }
 
 
@@ -821,22 +902,21 @@ async function uploadVideo(){
     );
 
     return;
+
   }
 
 
-  /*
-    100 MB limit.
-    जर तुला मोठे videos हवेत तर
-    Supabase Storage limit वाढव.
-  */
-
-  if(file.size > 100 * 1024 * 1024){
+  if(
+    file.size >
+    100 * 1024 * 1024
+  ){
 
     showToast(
       "Video 100 MB पेक्षा कमी असावा."
     );
 
     return;
+
   }
 
 
@@ -845,24 +925,30 @@ async function uploadVideo(){
       "uploadButton"
     );
 
+
   const progress =
     document.getElementById(
       "uploadProgress"
     );
 
 
-  button.disabled=true;
-  button.textContent="Uploading...";
-  progress.style.display="block";
+  button.disabled = true;
+
+  button.textContent =
+    "Uploading...";
+
+
+  progress.style.display =
+    "block";
 
 
   try{
 
     const extension =
       file.name
-      .split(".")
-      .pop()
-      .toLowerCase() || "mp4";
+        .split(".")
+        .pop()
+        .toLowerCase() || "mp4";
 
 
     const path =
@@ -878,24 +964,26 @@ async function uploadVideo(){
 
 
     const {
-      error:uploadError
+      error: uploadError
     } =
     await supabaseClient
-    .storage
-    .from("videos")
-    .upload(
-      path,
-      file,
-      {
-        cacheControl:"3600",
-        upsert:false,
-        contentType:file.type
-      }
-    );
+      .storage
+      .from("videos")
+      .upload(
+        path,
+        file,
+        {
+          cacheControl:"3600",
+          upsert:false,
+          contentType:file.type
+        }
+      );
 
 
     if(uploadError){
+
       throw uploadError;
+
     }
 
 
@@ -903,9 +991,9 @@ async function uploadVideo(){
       data:urlData
     } =
     supabaseClient
-    .storage
-    .from("videos")
-    .getPublicUrl(path);
+      .storage
+      .from("videos")
+      .getPublicUrl(path);
 
 
     const videoUrl =
@@ -922,29 +1010,31 @@ async function uploadVideo(){
       error:dbError
     } =
     await supabaseClient
-    .from("Videos")
-    .insert({
+      .from("Videos")
+      .insert({
 
-      user_id:
-        currentUser.id,
+        user_id:
+          currentUser.id,
 
-      username:
-        username,
+        username:
+          username,
 
-      title:
-        title,
+        title:
+          title,
 
-      description:
-        description,
+        description:
+          description,
 
-      video_url:
-        videoUrl
+        video_url:
+          videoUrl
 
-    });
+      });
 
 
     if(dbError){
+
       throw dbError;
+
     }
 
 
@@ -955,24 +1045,30 @@ async function uploadVideo(){
 
     document.getElementById(
       "videoInput"
-    ).value="";
+    ).value = "";
+
 
     document.getElementById(
       "videoTitle"
-    ).value="";
+    ).value = "";
+
 
     document.getElementById(
       "videoDescription"
-    ).value="";
+    ).value = "";
 
 
-    setTimeout(()=>{
+    setTimeout(() => {
+
       closeVideoModal();
-      location.href="video.html";
+
+      location.href =
+        "video.html";
+
     },700);
 
-
   }
+
   catch(error){
 
     console.error(
@@ -980,23 +1076,31 @@ async function uploadVideo(){
       error
     );
 
+
     showToast(
       "Video upload failed."
     );
 
   }
+
   finally{
 
-    button.disabled=false;
-    button.textContent="🚀 Post Video";
-    progress.style.display="none";
+    button.disabled = false;
+
+    button.textContent =
+      "🚀 Post Video";
+
+    progress.style.display =
+      "none";
 
   }
 
 }
 
 
-/* EDIT */
+/* =========================
+   EDIT PROFILE
+========================= */
 
 function openEdit(){
 
@@ -1011,6 +1115,7 @@ function openEdit(){
           "fullName"
         ).textContent;
 
+
   document.getElementById(
     "editDob"
   ).value =
@@ -1022,30 +1127,36 @@ function openEdit(){
           "dob"
         ).textContent;
 
+
   document.getElementById(
     "editSchool"
   ).value =
     cleanValue("school");
+
 
   document.getElementById(
     "editClass"
   ).value =
     cleanValue("className");
 
+
   document.getElementById(
     "editMedium"
   ).value =
     cleanValue("medium");
+
 
   document.getElementById(
     "editCity"
   ).value =
     cleanValue("city");
 
+
   document.getElementById(
     "editCareer"
   ).value =
     cleanValue("career");
+
 
   document.getElementById(
     "editMobile"
@@ -1062,10 +1173,15 @@ function openEdit(){
 
 function cleanValue(id){
 
-  const v =
-    document.getElementById(id).textContent;
+  const value =
+    document.getElementById(
+      id
+    ).textContent;
 
-  return v==="-" ? "" : v;
+
+  return value === "-"
+    ? ""
+    : value;
 
 }
 
@@ -1079,16 +1195,20 @@ function closeEdit(){
 }
 
 
-/* SAVE */
+/* =========================
+   SAVE INFORMATION
+========================= */
 
 async function saveInformation(){
 
   if(!currentUser){
+
     return;
+
   }
 
 
-  const data={
+  const data = {
 
     full_name:
       document.getElementById(
@@ -1140,12 +1260,12 @@ async function saveInformation(){
     error
   } =
   await supabaseClient
-  .from("Profiles")
-  .update(data)
-  .eq(
-    "id",
-    currentUser.id
-  );
+    .from("Profiles")
+    .update(data)
+    .eq(
+      "id",
+      currentUser.id
+    );
 
 
   if(error){
@@ -1157,12 +1277,14 @@ async function saveInformation(){
     );
 
     return;
+
   }
 
 
   closeEdit();
 
   await loadProfile();
+
 
   showToast(
     "Information saved."
@@ -1171,31 +1293,40 @@ async function saveInformation(){
 }
 
 
-/* PHOTO */
+/* =========================
+   PROFILE PHOTO
+========================= */
 
 function changePhoto(event){
 
   const file =
     event.target.files[0];
 
+
   if(!file){
+
     return;
+
   }
+
 
   const reader =
     new FileReader();
 
-  reader.onload=function(e){
+
+  reader.onload = function(e){
 
     localStorage.setItem(
       "profilePhoto",
       e.target.result
     );
 
+
     document.getElementById(
       "avatar"
     ).innerHTML =
       `<img src="${escapeAttr(e.target.result)}">`;
+
 
     showToast(
       "Profile photo updated."
@@ -1203,12 +1334,15 @@ function changePhoto(event){
 
   };
 
+
   reader.readAsDataURL(file);
 
 }
 
 
-/* HELPERS */
+/* =========================
+   ESCAPE ATTRIBUTE
+========================= */
 
 function escapeAttr(text){
 
@@ -1221,23 +1355,33 @@ function escapeAttr(text){
 }
 
 
-/* MODAL BACKDROP */
+/* =========================
+   MODAL BACKDROP
+========================= */
 
 document.addEventListener(
   "click",
   function(event){
 
     if(
-      event.target.classList.contains("modal")
+      event.target.classList.contains(
+        "modal"
+      )
     ){
 
-      event.target.classList.remove("show");
+      event.target.classList.remove(
+        "show"
+      );
 
     }
 
   }
 );
 
+
+/* =========================
+   START
+========================= */
 
 loadProfile();
 
