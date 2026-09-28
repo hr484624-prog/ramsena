@@ -23,7 +23,7 @@ html,body{
 
 body{
   background:
-  radial-gradient(circle at 10% 0%,#ff4fa3 0,#17152b 28%,#050509 72%);
+    radial-gradient(circle at 10% 0%,#ff4fa3 0,#17152b 28%,#050509 72%);
 }
 
 button,input{
@@ -586,11 +586,6 @@ input::placeholder{
   line-height:1.6;
 }
 
-.count-loading{
-  color:#777;
-  font-size:11px;
-}
-
 @media(max-width:360px){
   .choice{
     grid-template-columns:1fr;
@@ -647,16 +642,11 @@ input::placeholder{
 
 </section>
 
-
 <section class="section" id="createSection">
 
-  <button class="back-btn" onclick="goHome()">
-    ← Back
-  </button>
+  <button class="back-btn" onclick="goHome()">← Back</button>
 
-  <div class="section-title">
-    🎓 Create Your Channel
-  </div>
+  <div class="section-title">🎓 Create Your Channel</div>
 
   <div class="sub-title">
     तुमचा educational channel तयार करा.
@@ -690,7 +680,7 @@ input::placeholder{
     </button>
 
     <div class="sir-info">
-      💡 Channel password SHA-256 hash स्वरूपात
+      💡 Channel password सुरक्षित hash स्वरूपात
       Supabase मध्ये save केला जातो.
     </div>
 
@@ -700,16 +690,11 @@ input::placeholder{
 
 </section>
 
-
 <section class="section" id="studentSection">
 
-  <button class="back-btn" onclick="goHome()">
-    ← Back
-  </button>
+  <button class="back-btn" onclick="goHome()">← Back</button>
 
-  <div class="section-title">
-    👨‍🎓 Student
-  </div>
+  <div class="section-title">👨‍🎓 Student</div>
 
   <div class="sub-title">
     GyanSetu वर उपलब्ध channels शोधा आणि
@@ -726,7 +711,6 @@ input::placeholder{
 </section>
 
 </main>
-
 
 <div class="modal" id="sirConfirmModal">
 
@@ -763,7 +747,6 @@ input::placeholder{
 
 </div>
 
-
 <div class="modal" id="addChannelModal">
 
   <div class="modal-box">
@@ -778,9 +761,7 @@ input::placeholder{
 
     <label>Channel Name</label>
 
-    <input
-      id="addChannelName"
-      placeholder="Channel name">
+    <input id="addChannelName" placeholder="Channel name">
 
     <label>Channel Password</label>
 
@@ -801,14 +782,11 @@ input::placeholder{
 
 </div>
 
-
 <div class="chat-wrap" id="chatWrap">
 
   <div class="chat-header">
 
-    <button class="chat-back" onclick="closeChat()">
-      ‹
-    </button>
+    <button class="chat-back" onclick="closeChat()">‹</button>
 
     <div class="channel-avatar" id="chatAvatar">
       💬
@@ -843,19 +821,15 @@ input::placeholder{
       maxlength="1000"
       placeholder="Message / Comment...">
 
-    <button class="send" onclick="sendMessage()">
-      ➤
-    </button>
+    <button class="send" onclick="sendMessage()">➤</button>
 
   </div>
 
 </div>
 
-
 <div class="toast" id="toast"></div>
 
 </div>
-
 
 <script>
 
@@ -891,12 +865,9 @@ let currentUser = null;
 let currentChannel = null;
 let allChannels = [];
 let currentIsSir = false;
+let followedChannelIds = new Set();
 
-let followedChannelIds =
-new Set();
-
-const $ = id =>
-document.getElementById(id);
+const $ = id => document.getElementById(id);
 
 
 /* =====================================================
@@ -908,30 +879,25 @@ function toast(message,type="success"){
   const box = $("toast");
 
   box.innerText = message;
-
-  box.className =
-  "toast show " + type;
+  box.className = "toast show " + type;
 
   clearTimeout(window.toastTimer);
 
-  window.toastTimer =
-  setTimeout(()=>{
+  window.toastTimer = setTimeout(()=>{
     box.className = "toast";
   },3000);
 }
 
 
 /* =====================================================
-   ESCAPE HTML
+   ESCAPE
 ===================================================== */
 
 function escapeHTML(text){
 
-  const div =
-  document.createElement("div");
+  const div = document.createElement("div");
 
-  div.textContent =
-  text ?? "";
+  div.textContent = text ?? "";
 
   return div.innerHTML;
 }
@@ -944,20 +910,19 @@ function escapeHTML(text){
 async function hashText(text){
 
   const data =
-  new TextEncoder().encode(text);
+    new TextEncoder().encode(text);
 
   const hash =
-  await crypto.subtle.digest(
-    "SHA-256",
-    data
-  );
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
 
   return Array.from(
     new Uint8Array(hash)
   )
   .map(
-    b =>
-    b.toString(16).padStart(2,"0")
+    b => b.toString(16).padStart(2,"0")
   )
   .join("");
 }
@@ -975,37 +940,32 @@ async function loadUser(){
       data,
       error
     } =
-    await supabaseClient
-    .auth
-    .getUser();
+    await supabaseClient.auth.getUser();
 
     if(error)
       console.error(error);
 
     currentUser =
-    data?.user || null;
+      data?.user || null;
 
     if(!currentUser){
 
-      $("headerUser").innerText =
-      "Guest";
+      $("headerUser").innerText = "Guest";
 
-      await loadSavedChannels();
+      loadSavedChannels();
 
       return;
     }
 
     const username =
-    currentUser.user_metadata?.username
-    ||
-    localStorage.getItem(
-      "gyansetu_username"
-    )
-    ||
-    "User";
+      currentUser.user_metadata?.username
+      ||
+      localStorage.getItem("gyansetu_username")
+      ||
+      "User";
 
     $("headerUser").innerText =
-    "@" + username;
+      "@" + username;
 
     localStorage.setItem(
       "gyansetu_username",
@@ -1026,15 +986,11 @@ async function loadUser(){
   }
   catch(error){
 
-    console.error(
-      "USER ERROR:",
-      error
-    );
+    console.error("USER ERROR:",error);
 
-    $("headerUser").innerText =
-    "Guest";
+    $("headerUser").innerText = "Guest";
 
-    await loadSavedChannels();
+    loadSavedChannels();
   }
 }
 
@@ -1048,21 +1004,16 @@ function goHome(){
   closeModal();
   closeAddModal();
 
-  $("homeSection")
-  .classList.add("active");
-
-  $("createSection")
-  .classList.remove("active");
-
-  $("studentSection")
-  .classList.remove("active");
+  $("homeSection").classList.add("active");
+  $("createSection").classList.remove("active");
+  $("studentSection").classList.remove("active");
 
   loadSavedChannels();
 }
 
 
 /* =====================================================
-   CREATE CONFIRM
+   CREATE
 ===================================================== */
 
 function openCreateConfirm(){
@@ -1080,19 +1031,16 @@ function openCreateConfirm(){
   if(currentChannel){
 
     confirmSir();
-
     return;
   }
 
-  $("sirConfirmModal")
-  .classList.add("show");
+  $("sirConfirmModal").classList.add("show");
 }
 
 
 function closeModal(){
 
-  $("sirConfirmModal")
-  .classList.remove("show");
+  $("sirConfirmModal").classList.remove("show");
 }
 
 
@@ -1100,14 +1048,9 @@ function confirmSir(){
 
   closeModal();
 
-  $("homeSection")
-  .classList.remove("active");
-
-  $("studentSection")
-  .classList.remove("active");
-
-  $("createSection")
-  .classList.add("active");
+  $("homeSection").classList.remove("active");
+  $("studentSection").classList.remove("active");
+  $("createSection").classList.add("active");
 
   if(currentChannel){
 
@@ -1115,8 +1058,7 @@ function confirmSir(){
 
   }else{
 
-    $("createCard").style.display =
-    "block";
+    $("createCard").style.display = "block";
   }
 }
 
@@ -1129,10 +1071,7 @@ async function createChannel(){
 
   if(!currentUser){
 
-    toast(
-      "Login required.",
-      "error"
-    );
+    toast("Login required.","error");
 
     return;
   }
@@ -1150,20 +1089,14 @@ async function createChannel(){
   }
 
   const name =
-  $("channelName")
-  .value
-  .trim();
+    $("channelName").value.trim();
 
   const password =
-  $("channelPassword")
-  .value;
+    $("channelPassword").value;
 
   if(name.length < 2){
 
-    toast(
-      "Channel name टाका.",
-      "error"
-    );
+    toast("Channel name टाका.","error");
 
     return;
   }
@@ -1179,62 +1112,46 @@ async function createChannel(){
   }
 
   const button =
-  $("createChannelButton");
+    $("createChannelButton");
 
   button.disabled = true;
 
   button.innerText =
-  "Channel तयार होत आहे...";
+    "Channel तयार होत आहे...";
 
   try{
 
     const username =
-    currentUser.user_metadata?.username
-    ||
-    localStorage.getItem(
-      "gyansetu_username"
-    )
-    ||
-    "User";
+      currentUser.user_metadata?.username
+      ||
+      localStorage.getItem("gyansetu_username")
+      ||
+      "User";
 
     const passwordHash =
-    await hashText(password);
+      await hashText(password);
 
     const {
       data,
       error
     } =
     await supabaseClient
-    .from("gs_channels")
-    .insert({
-
-      owner_id:
-      currentUser.id,
-
-      owner_username:
-      username,
-
-      channel_name:
-      name,
-
-      password_hash:
-      passwordHash,
-
-      followers_count:
-      0
-
-    })
-    .select()
-    .single();
+      .from("gs_channels")
+      .insert({
+        owner_id:currentUser.id,
+        owner_username:username,
+        channel_name:name,
+        password_hash:passwordHash,
+        followers_count:0
+      })
+      .select()
+      .single();
 
     if(error)
       throw error;
 
-    currentChannel =
-    data;
-
-    currentIsSir =
-    true;
+    currentChannel = data;
+    currentIsSir = true;
 
     localStorage.setItem(
       "gyansetu_my_channel_id",
@@ -1244,8 +1161,7 @@ async function createChannel(){
     $("channelName").value = "";
     $("channelPassword").value = "";
 
-    $("createCard").style.display =
-    "none";
+    $("createCard").style.display = "none";
 
     showExistingSirChannel();
 
@@ -1257,10 +1173,7 @@ async function createChannel(){
   }
   catch(error){
 
-    console.error(
-      "CREATE ERROR:",
-      error
-    );
+    console.error("CREATE ERROR:",error);
 
     if(error.code === "23505"){
 
@@ -1280,8 +1193,7 @@ async function createChannel(){
     }
 
     toast(
-      "Channel तयार करता आला नाही: " +
-      (error.message || ""),
+      "Channel तयार करता आला नाही. Supabase RLS/SQL तपासा.",
       "error"
     );
 
@@ -1291,7 +1203,7 @@ async function createChannel(){
     button.disabled = false;
 
     button.innerText =
-    "🚀 Create My Channel";
+      "🚀 Create My Channel";
   }
 }
 
@@ -1312,13 +1224,13 @@ async function checkMyChannel(){
       error
     } =
     await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .eq(
-      "owner_id",
-      currentUser.id
-    )
-    .maybeSingle();
+      .from("gs_channels")
+      .select("*")
+      .eq(
+        "owner_id",
+        currentUser.id
+      )
+      .maybeSingle();
 
     if(error){
 
@@ -1332,17 +1244,13 @@ async function checkMyChannel(){
 
     if(data){
 
-      currentChannel =
-      data;
-
-      currentIsSir =
-      true;
+      currentChannel = data;
+      currentIsSir = true;
 
       localStorage.setItem(
         "gyansetu_my_channel_id",
         data.id
       );
-
     }
 
   }
@@ -1354,12 +1262,10 @@ async function checkMyChannel(){
 
 
 /* =====================================================
-   GET FOLLOWER COUNT
+   FOLLOWER COUNT — IMPORTANT
 ===================================================== */
 
-async function getFollowerCount(
-  channelId
-){
+async function getFollowerCount(channelId){
 
   try{
 
@@ -1368,100 +1274,55 @@ async function getFollowerCount(
       error
     } =
     await supabaseClient
-    .from("gs_channel_followers")
-    .select(
-      "id",
-      {
-        count:"exact",
-        head:true
-      }
-    )
-    .eq(
-      "channel_id",
-      channelId
-    );
+      .from("gs_channel_followers")
+      .select(
+        "id",
+        {
+          count:"exact",
+          head:true
+        }
+      )
+      .eq(
+        "channel_id",
+        channelId
+      );
 
     if(error)
       throw error;
 
-    return Number(count || 0);
+    return count || 0;
 
   }
   catch(error){
 
     console.error(
-      "GET COUNT ERROR:",
+      "GET FOLLOWER COUNT ERROR:",
       error
     );
 
-    return null;
+    return 0;
   }
 }
 
 
 /* =====================================================
-   REFRESH ALL COUNTS
+   UPDATE ONE CHANNEL COUNT
 ===================================================== */
 
-async function refreshAllFollowerCounts(){
-
-  if(!allChannels.length)
-    return;
-
-  const results =
-  await Promise.all(
-    allChannels.map(async channel=>{
-
-      const count =
-      await getFollowerCount(
-        channel.id
-      );
-
-      if(count !== null){
-
-        channel.followers_count =
-        count;
-
-      }
-
-      return channel;
-    })
-  );
-
-  allChannels =
-  results;
-
-}
-
-
-/* =====================================================
-   REFRESH ONE COUNT
-===================================================== */
-
-async function refreshFollowerCount(
-  channelId
-){
+async function updateChannelCount(channelId){
 
   const count =
-  await getFollowerCount(
-    channelId
-  );
+    await getFollowerCount(channelId);
 
-  if(count === null)
-    return null;
+  const channel =
+    allChannels.find(
+      item => item.id === channelId
+    );
 
-  const index =
-  allChannels.findIndex(
-    channel =>
-    channel.id === channelId
-  );
+  if(channel){
 
-  if(index !== -1){
-
-    allChannels[index]
-    .followers_count =
-    count;
-
+    channel.followers_count =
+      count;
   }
 
   if(
@@ -1470,8 +1331,7 @@ async function refreshFollowerCount(
   ){
 
     currentChannel.followers_count =
-    count;
-
+      count;
   }
 
   return count;
@@ -1484,41 +1344,32 @@ async function refreshFollowerCount(
 
 async function showExistingSirChannel(){
 
-  $("createCard").style.display =
-  "none";
+  $("createCard").style.display = "none";
 
   const box =
-  $("existingSirChannel");
+    $("existingSirChannel");
 
   if(!currentChannel){
 
     box.innerHTML = "";
 
     $("createCard").style.display =
-    "block";
+      "block";
 
     return;
   }
 
   const count =
-  await refreshFollowerCount(
-    currentChannel.id
-  );
-
-  const followers =
-  count !== null
-  ? count
-  : Number(
-      currentChannel.followers_count || 0
+    await updateChannelCount(
+      currentChannel.id
     );
 
   const firstLetter =
-  (
-    currentChannel.channel_name ||
-    "G"
-  )
-  .charAt(0)
-  .toUpperCase();
+    (
+      currentChannel.channel_name || "G"
+    )
+    .charAt(0)
+    .toUpperCase();
 
   box.innerHTML = `
 
@@ -1549,7 +1400,7 @@ async function showExistingSirChannel(){
           </span>
 
           <span class="badge">
-            👥 ${followers} followers
+            👥 ${count}
           </span>
 
         </div>
@@ -1583,14 +1434,9 @@ async function showExistingSirChannel(){
 
 function openStudentSection(){
 
-  $("homeSection")
-  .classList.remove("active");
-
-  $("createSection")
-  .classList.remove("active");
-
-  $("studentSection")
-  .classList.add("active");
+  $("homeSection").classList.remove("active");
+  $("createSection").classList.remove("active");
+  $("studentSection").classList.add("active");
 
   loadChannels();
 }
@@ -1602,8 +1448,7 @@ function openStudentSection(){
 
 async function loadFollowedChannels(){
 
-  followedChannelIds =
-  new Set();
+  followedChannelIds = new Set();
 
   if(!currentUser)
     return;
@@ -1615,12 +1460,12 @@ async function loadFollowedChannels(){
       error
     } =
     await supabaseClient
-    .from("gs_channel_followers")
-    .select("channel_id")
-    .eq(
-      "user_id",
-      currentUser.id
-    );
+      .from("gs_channel_followers")
+      .select("channel_id")
+      .eq(
+        "user_id",
+        currentUser.id
+      );
 
     if(error){
 
@@ -1635,7 +1480,7 @@ async function loadFollowedChannels(){
     (data || []).forEach(item=>{
 
       followedChannelIds.add(
-        item.channel_id
+        String(item.channel_id)
       );
 
     });
@@ -1655,12 +1500,12 @@ async function loadFollowedChannels(){
 async function loadChannels(){
 
   const box =
-  $("channelsList");
+    $("channelsList");
 
   box.innerHTML =
-  `<div class="loading">
-    ⏳ Channels loading...
-  </div>`;
+    `<div class="loading">
+      ⏳ Channels loading...
+    </div>`;
 
   try{
 
@@ -1669,28 +1514,38 @@ async function loadChannels(){
       error
     } =
     await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .order(
-      "created_at",
-      {ascending:false}
-    );
+      .from("gs_channels")
+      .select("*")
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
     if(error)
       throw error;
 
     allChannels =
-    data || [];
-
-    await loadFollowedChannels();
+      data || [];
 
     /*
-      IMPORTANT:
-      Database मधील followers_count वर
-      आता पूर्णपणे depend करत नाही.
+      प्रत्येक channel चा actual count
+      followers table मधून घेणे.
     */
 
-    await refreshAllFollowerCounts();
+    await Promise.all(
+      allChannels.map(
+        async channel=>{
+
+          channel.followers_count =
+            await getFollowerCount(
+              channel.id
+            );
+
+        }
+      )
+    );
+
+    await loadFollowedChannels();
 
     renderChannels(allChannels);
 
@@ -1721,20 +1576,19 @@ async function loadChannels(){
         </button>
 
       </div>
-
     `;
   }
 }
 
 
 /* =====================================================
-   RENDER CHANNELS
+   RENDER
 ===================================================== */
 
 function renderChannels(list){
 
   const box =
-  $("channelsList");
+    $("channelsList");
 
   if(!list.length){
 
@@ -1749,49 +1603,43 @@ function renderChannels(list){
         अजून कोणताही channel तयार झालेला नाही.
 
       </div>
-
     `;
 
     return;
   }
 
   box.innerHTML =
-  list.map(channelCard).join("");
+    list.map(channelCard).join("");
 }
 
-
-/* =====================================================
-   CHANNEL CARD
-===================================================== */
 
 function channelCard(channel){
 
   const isFollowing =
-  followedChannelIds.has(
-    channel.id
-  );
+    followedChannelIds.has(
+      String(channel.id)
+    );
 
   const isOwner =
-  currentUser &&
-  channel.owner_id ===
-  currentUser.id;
-
-  const count =
-  Number(
-    channel.followers_count || 0
-  );
+    currentUser &&
+    String(channel.owner_id) ===
+    String(currentUser.id);
 
   const firstLetter =
-  (
-    channel.channel_name ||
-    "G"
-  )
-  .charAt(0)
-  .toUpperCase();
+    (
+      channel.channel_name || "G"
+    )
+    .charAt(0)
+    .toUpperCase();
+
+  const count =
+    Number(channel.followers_count || 0);
 
   return `
 
-    <div class="card">
+    <div
+      class="card"
+      id="channel-card-${channel.id}">
 
       <div class="channel-head">
 
@@ -1817,7 +1665,8 @@ function channelCard(channel){
             🎓 Educational
           </span>
 
-          <span class="badge">
+          <span class="badge"
+                id="badge-${channel.id}">
             👥 ${count}
           </span>
 
@@ -1827,11 +1676,12 @@ function channelCard(channel){
 
       <div class="follow-row">
 
-        <div class="follow-count">
-          <b id="count-${channel.id}">
-            ${count}
-          </b>
-          followers
+        <div
+          class="follow-count"
+          id="count-${channel.id}">
+
+          ${count} followers
+
         </div>
 
         ${
@@ -1849,9 +1699,7 @@ function channelCard(channel){
 
           `<button
             class="follow-btn ${
-              isFollowing
-              ? "following"
-              : ""
+              isFollowing ? "following" : ""
             }"
             onclick="toggleFollow('${channel.id}',this)">
 
@@ -1886,59 +1734,35 @@ function channelCard(channel){
 function filterChannels(){
 
   const text =
-  $("channelSearch")
-  .value
-  .toLowerCase()
-  .trim();
+    $("channelSearch")
+      .value
+      .toLowerCase()
+      .trim();
 
   const filtered =
-  allChannels.filter(channel=>{
+    allChannels.filter(channel=>{
 
-    return (
+      return (
 
-      String(
-        channel.channel_name || ""
-      )
-      .toLowerCase()
-      .includes(text)
+        String(
+          channel.channel_name || ""
+        )
+        .toLowerCase()
+        .includes(text)
 
-      ||
+        ||
 
-      String(
-        channel.owner_username || ""
-      )
-      .toLowerCase()
-      .includes(text)
+        String(
+          channel.owner_username || ""
+        )
+        .toLowerCase()
+        .includes(text)
 
-    );
+      );
 
-  });
+    });
 
   renderChannels(filtered);
-}
-
-
-/* =====================================================
-   UPDATE CARD COUNT
-===================================================== */
-
-function updateCountOnScreen(
-  channelId,
-  count
-){
-
-  const countElement =
-  document.getElementById(
-    "count-" + channelId
-  );
-
-  if(countElement){
-
-    countElement.innerText =
-    count;
-
-  }
-
 }
 
 
@@ -1961,25 +1785,13 @@ async function toggleFollow(
     return;
   }
 
-  if(
-    currentUser.id ===
-    allChannels.find(
-      c => c.id === channelId
-    )?.owner_id
-  ){
-
-    toast(
-      "तुमचा स्वतःचा channel follow करता येणार नाही.",
-      "error"
-    );
-
-    return;
-  }
+  const id =
+    String(channelId);
 
   button.disabled = true;
 
   const alreadyFollowing =
-  followedChannelIds.has(channelId);
+    followedChannelIds.has(id);
 
   try{
 
@@ -1993,44 +1805,26 @@ async function toggleFollow(
         error
       } =
       await supabaseClient
-      .from("gs_channel_followers")
-      .delete()
-      .eq(
-        "channel_id",
-        channelId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      );
+        .from("gs_channel_followers")
+        .delete()
+        .eq(
+          "channel_id",
+          channelId
+        )
+        .eq(
+          "user_id",
+          currentUser.id
+        );
 
       if(error)
         throw error;
 
-      followedChannelIds.delete(
-        channelId
-      );
-
-      const newCount =
-      await refreshFollowerCount(
-        channelId
-      );
-
-      const count =
-      newCount !== null
-      ? newCount
-      : 0;
-
-      updateCountOnScreen(
-        channelId,
-        count
-      );
+      followedChannelIds.delete(id);
 
       toast(
         "Channel unfollow केला.",
         "success"
       );
-
     }
 
     /* =========================
@@ -2040,21 +1834,21 @@ async function toggleFollow(
     else{
 
       const {
-        data: existing,
-        error: checkError
+        data:existing,
+        error:checkError
       } =
       await supabaseClient
-      .from("gs_channel_followers")
-      .select("id")
-      .eq(
-        "channel_id",
-        channelId
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
+        .from("gs_channel_followers")
+        .select("id")
+        .eq(
+          "channel_id",
+          channelId
+        )
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .maybeSingle();
 
       if(checkError)
         throw checkError;
@@ -2062,51 +1856,28 @@ async function toggleFollow(
       if(!existing){
 
         const {
-          error: insertError
+          error:insertError
         } =
         await supabaseClient
-        .from("gs_channel_followers")
-        .insert({
-
-          channel_id:
-          channelId,
-
-          user_id:
-          currentUser.id
-
-        });
+          .from("gs_channel_followers")
+          .insert({
+            channel_id:channelId,
+            user_id:currentUser.id
+          });
 
         if(insertError){
 
-          if(
-            insertError.code !==
-            "23505"
-          ){
+          /*
+            Duplicate असेल तर
+            Following समजायचे.
+          */
 
+          if(insertError.code !== "23505")
             throw insertError;
-          }
         }
-
       }
 
-      followedChannelIds.add(
-        channelId
-      );
-
-      const newCount =
-      await refreshFollowerCount(
-        channelId
-      );
-
-      const count =
-      newCount !== null
-      ? newCount
-      : 0;
-
-      updateCountOnScreen(
-        channelId,
-        count
-      );
+      followedChannelIds.add(id);
 
       toast(
         "✅ Channel follow केला.",
@@ -2115,33 +1886,108 @@ async function toggleFollow(
     }
 
 
+    /* =========================
+       GET REAL COUNT
+    ========================= */
+
+    const newCount =
+      await getFollowerCount(
+        channelId
+      );
+
     /*
-      IMPORTANT:
-      इथे loadChannels() call केलेला नाही.
-      त्यामुळे local updated count
-      पुन्हा जुन्या database count ने overwrite होत नाही.
+      Local channel update
     */
 
-    const currentCard =
-    allChannels.find(
-      c => c.id === channelId
-    );
-
-    if(currentCard){
-
-      const cards =
-      $("channelsList")
-      .querySelectorAll(".card");
-
-      /*
-        Follow button text refresh करण्यासाठी
-        पूर्ण list render करतो,
-        पण allChannels मध्ये नवीन count आधीच आहे.
-      */
-
-      renderChannels(
-        getFilteredChannelList()
+    const channel =
+      allChannels.find(
+        item =>
+        String(item.id) === id
       );
+
+    if(channel){
+
+      channel.followers_count =
+        newCount;
+    }
+
+
+    /*
+      CURRENT CARD DIRECT UPDATE
+      म्हणजे reload शिवाय count बदलेल.
+    */
+
+    const countElement =
+      document.getElementById(
+        "count-" + channelId
+      );
+
+    if(countElement){
+
+      countElement.innerText =
+        newCount + " followers";
+    }
+
+    const badgeElement =
+      document.getElementById(
+        "badge-" + channelId
+      );
+
+    if(badgeElement){
+
+      badgeElement.innerText =
+        "👥 " + newCount;
+    }
+
+
+    /*
+      Follow button update
+    */
+
+    if(
+      button &&
+      !(
+        currentUser &&
+        channel &&
+        String(channel.owner_id) ===
+        String(currentUser.id)
+      )
+    ){
+
+      if(
+        followedChannelIds.has(id)
+      ){
+
+        button.classList.add(
+          "following"
+        );
+
+        button.innerText =
+          "✓ Following";
+
+      }else{
+
+        button.classList.remove(
+          "following"
+        );
+
+        button.innerText =
+          "Follow";
+      }
+    }
+
+
+    /*
+      Current opened channel count
+    */
+
+    if(
+      currentChannel &&
+      String(currentChannel.id) === id
+    ){
+
+      currentChannel.followers_count =
+        newCount;
     }
 
   }
@@ -2161,46 +2007,7 @@ async function toggleFollow(
   finally{
 
     button.disabled = false;
-
   }
-}
-
-
-/* =====================================================
-   FILTERED LIST
-===================================================== */
-
-function getFilteredChannelList(){
-
-  const search =
-  $("channelSearch")?.value
-  ?.toLowerCase()
-  .trim() || "";
-
-  if(!search)
-    return allChannels;
-
-  return allChannels.filter(channel=>{
-
-    return (
-
-      String(
-        channel.channel_name || ""
-      )
-      .toLowerCase()
-      .includes(search)
-
-      ||
-
-      String(
-        channel.owner_username || ""
-      )
-      .toLowerCase()
-      .includes(search)
-
-    );
-
-  });
 }
 
 
@@ -2208,15 +2015,14 @@ function getFilteredChannelList(){
    CHANNEL DETAILS
 ===================================================== */
 
-async function openChannelDetails(
-  channelId
-){
+async function openChannelDetails(channelId){
 
   let channel =
-  allChannels.find(
-    item =>
-    item.id === channelId
-  );
+    allChannels.find(
+      item =>
+      String(item.id) ===
+      String(channelId)
+    );
 
   if(!channel){
 
@@ -2225,13 +2031,13 @@ async function openChannelDetails(
       error
     } =
     await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .eq(
-      "id",
-      channelId
-    )
-    .single();
+      .from("gs_channels")
+      .select("*")
+      .eq(
+        "id",
+        channelId
+      )
+      .single();
 
     if(error){
 
@@ -2243,23 +2049,22 @@ async function openChannelDetails(
       return;
     }
 
-    channel =
-    data;
-
-    const count =
-    await getFollowerCount(
-      channelId
-    );
-
-    if(count !== null)
-      channel.followers_count =
-      count;
+    channel = data;
   }
 
+  /*
+    Chat उघडण्याआधी actual follower count.
+  */
+
+  channel.followers_count =
+    await getFollowerCount(
+      channel.id
+    );
+
   const isSir =
-  currentUser &&
-  channel.owner_id ===
-  currentUser.id;
+    currentUser &&
+    String(channel.owner_id) ===
+    String(currentUser.id);
 
   openChannelChat(
     channel,
@@ -2280,73 +2085,47 @@ async function openChannelChat(
   if(!channel)
     return;
 
-  currentChannel =
-  channel;
+  currentChannel = channel;
 
   currentIsSir =
-  !!isSir ||
-  (
-    currentUser &&
-    channel.owner_id ===
-    currentUser.id
-  );
-
-  const freshCount =
-  await getFollowerCount(
-    channel.id
-  );
-
-  if(freshCount !== null){
-
-    currentChannel.followers_count =
-    freshCount;
-
-    const index =
-    allChannels.findIndex(
-      c => c.id === channel.id
+    !!isSir ||
+    (
+      currentUser &&
+      String(channel.owner_id) ===
+      String(currentUser.id)
     );
 
-    if(index !== -1){
+  const count =
+    await getFollowerCount(
+      channel.id
+    );
 
-      allChannels[index]
-      .followers_count =
-      freshCount;
+  currentChannel.followers_count =
+    count;
 
-    }
-  }
+  $("chatChannelName").innerText =
+    channel.channel_name;
 
-  $("chatChannelName")
-  .innerText =
-  channel.channel_name;
+  $("chatChannelInfo").innerText =
+    "@" +
+    channel.owner_username +
+    " • " +
+    count +
+    " followers";
 
-  $("chatChannelInfo")
-  .innerText =
-  "@" +
-  channel.owner_username +
-  " • " +
-  (
-    currentChannel.followers_count ||
-    0
-  ) +
-  " followers";
+  $("chatAvatar").innerText =
+    (
+      channel.channel_name || "G"
+    )
+    .charAt(0)
+    .toUpperCase();
 
-  $("chatAvatar")
-  .innerText =
-  (
-    channel.channel_name ||
-    "G"
-  )
-  .charAt(0)
-  .toUpperCase();
+  $("chatMessage").placeholder =
+    currentIsSir
+    ? "📢 Sir Post करा..."
+    : "💬 Comment करा...";
 
-  $("chatMessage")
-  .placeholder =
-  currentIsSir
-  ? "📢 Sir Post करा..."
-  : "💬 Comment करा...";
-
-  $("chatWrap")
-  .classList.add("active");
+  $("chatWrap").classList.add("active");
 
   await loadMessages();
 }
@@ -2359,7 +2138,8 @@ async function openChannelChat(
 function closeChat(){
 
   $("chatWrap")
-  .classList.remove("active");
+    .classList
+    .remove("active");
 }
 
 
@@ -2373,12 +2153,12 @@ async function loadMessages(){
     return;
 
   const box =
-  $("messages");
+    $("messages");
 
   box.innerHTML =
-  `<div class="loading">
-    ⏳ Messages loading...
-  </div>`;
+    `<div class="loading">
+      ⏳ Messages loading...
+    </div>`;
 
   try{
 
@@ -2387,16 +2167,16 @@ async function loadMessages(){
       error
     } =
     await supabaseClient
-    .from("gs_channel_messages")
-    .select("*")
-    .eq(
-      "channel_id",
-      currentChannel.id
-    )
-    .order(
-      "created_at",
-      {ascending:true}
-    );
+      .from("gs_channel_messages")
+      .select("*")
+      .eq(
+        "channel_id",
+        currentChannel.id
+      )
+      .order(
+        "created_at",
+        {ascending:true}
+      );
 
     if(error)
       throw error;
@@ -2414,18 +2194,17 @@ async function loadMessages(){
           अजून messages नाहीत.
 
         </div>
-
       `;
 
       return;
     }
 
     box.innerHTML =
-    data.map(renderMessage).join("");
+      data.map(renderMessage).join("");
 
     requestAnimationFrame(()=>{
       box.scrollTop =
-      box.scrollHeight;
+        box.scrollHeight;
     });
 
   }
@@ -2455,28 +2234,26 @@ async function loadMessages(){
         </button>
 
       </div>
-
     `;
   }
 }
 
 
 /* =====================================================
-   RENDER MESSAGE
+   MESSAGE
 ===================================================== */
 
 function renderMessage(message){
 
   const me =
-  currentUser &&
-  message.user_id ===
-  currentUser.id;
+    currentUser &&
+    String(message.user_id) ===
+    String(currentUser.id);
 
   const type =
-  message.message_type ===
-  "sir_post"
-  ? "📢 Sir"
-  : "💬 Comment";
+    message.message_type === "sir_post"
+    ? "📢 Sir"
+    : "💬 Comment";
 
   return `
 
@@ -2553,25 +2330,23 @@ async function sendMessage(){
     return;
 
   const input =
-  $("chatMessage");
+    $("chatMessage");
 
   const text =
-  input.value.trim();
+    input.value.trim();
 
   if(!text)
     return;
 
   const username =
-  currentUser.user_metadata?.username
-  ||
-  localStorage.getItem(
-    "gyansetu_username"
-  )
-  ||
-  "User";
+    currentUser.user_metadata?.username
+    ||
+    localStorage.getItem("gyansetu_username")
+    ||
+    "User";
 
   const button =
-  document.querySelector(".send");
+    document.querySelector(".send");
 
   button.disabled = true;
 
@@ -2581,27 +2356,26 @@ async function sendMessage(){
       error
     } =
     await supabaseClient
-    .from("gs_channel_messages")
-    .insert({
+      .from("gs_channel_messages")
+      .insert({
 
-      channel_id:
-      currentChannel.id,
+        channel_id:
+          currentChannel.id,
 
-      user_id:
-      currentUser.id,
+        user_id:
+          currentUser.id,
 
-      username:
-      username,
+        username:
+          username,
 
-      message:
-      text,
+        message:
+          text,
 
-      message_type:
-      currentIsSir
-      ? "sir_post"
-      : "comment"
-
-    });
+        message_type:
+          currentIsSir
+          ? "sir_post"
+          : "comment"
+      });
 
     if(error)
       throw error;
@@ -2627,7 +2401,6 @@ async function sendMessage(){
   finally{
 
     button.disabled = false;
-
   }
 }
 
@@ -2657,22 +2430,17 @@ async function reactMessage(
       error
     } =
     await supabaseClient
-    .from("gs_message_reactions")
-    .upsert({
+      .from("gs_message_reactions")
+      .upsert({
 
-      message_id:
-      messageId,
+        message_id:messageId,
+        user_id:currentUser.id,
+        reaction:reaction
 
-      user_id:
-      currentUser.id,
-
-      reaction:
-      reaction
-
-    },{
-      onConflict:
-      "message_id,user_id"
-    });
+      },{
+        onConflict:
+          "message_id,user_id"
+      });
 
     if(error)
       throw error;
@@ -2705,7 +2473,8 @@ async function reactMessage(
 function openAddChannelModal(){
 
   $("addChannelModal")
-  .classList.add("show");
+    .classList
+    .add("show");
 
   setTimeout(()=>{
     $("addChannelName").focus();
@@ -2716,7 +2485,8 @@ function openAddChannelModal(){
 function closeAddModal(){
 
   $("addChannelModal")
-  .classList.remove("show");
+    .classList
+    .remove("show");
 }
 
 
@@ -2733,13 +2503,12 @@ async function addChannel(){
   }
 
   const name =
-  $("addChannelName")
-  .value
-  .trim();
+    $("addChannelName")
+      .value
+      .trim();
 
   const password =
-  $("addChannelPassword")
-  .value;
+    $("addChannelPassword").value;
 
   if(!name || !password){
 
@@ -2754,24 +2523,24 @@ async function addChannel(){
   try{
 
     const hash =
-    await hashText(password);
+      await hashText(password);
 
     const {
       data,
       error
     } =
     await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .eq(
-      "channel_name",
-      name
-    )
-    .eq(
-      "password_hash",
-      hash
-    )
-    .maybeSingle();
+      .from("gs_channels")
+      .select("*")
+      .eq(
+        "channel_name",
+        name
+      )
+      .eq(
+        "password_hash",
+        hash
+      )
+      .maybeSingle();
 
     if(error)
       throw error;
@@ -2787,7 +2556,7 @@ async function addChannel(){
     }
 
     let saved =
-    getSavedChannels();
+      getSavedChannels();
 
     if(!saved.includes(data.id)){
 
@@ -2859,10 +2628,10 @@ function getSavedChannels(){
 async function loadSavedChannels(){
 
   const ids =
-  getSavedChannels();
+    getSavedChannels();
 
   const box =
-  $("savedBox");
+    $("savedBox");
 
   if(!ids.length){
 
@@ -2883,7 +2652,6 @@ async function loadSavedChannels(){
         </button>
 
       </div>
-
     `;
 
     return;
@@ -2896,31 +2664,32 @@ async function loadSavedChannels(){
       error
     } =
     await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .in(
-      "id",
-      ids
-    );
+      .from("gs_channels")
+      .select("*")
+      .in(
+        "id",
+        ids
+      );
 
     if(error)
       throw error;
 
     const channels =
-    data || [];
+      data || [];
+
+    /*
+      Saved channels साठीसुद्धा
+      actual followers count.
+    */
 
     await Promise.all(
       channels.map(
         async channel=>{
 
-          const count =
-          await getFollowerCount(
-            channel.id
-          );
-
-          if(count !== null)
-            channel.followers_count =
-            count;
+          channel.followers_count =
+            await getFollowerCount(
+              channel.id
+            );
 
         }
       )
@@ -2940,9 +2709,9 @@ async function loadSavedChannels(){
             <div
               class="channel-avatar"
               style="
-              width:40px;
-              height:40px;
-              font-size:18px;">
+                width:40px;
+                height:40px;
+                font-size:18px;">
 
               ${escapeHTML(
                 (
@@ -2974,7 +2743,8 @@ async function loadSavedChannels(){
                   channel.owner_username
                 )}
                 •
-                👥 ${channel.followers_count || 0}
+                ${channel.followers_count}
+                followers
 
               </div>
 
@@ -3012,8 +2782,9 @@ async function loadSavedChannels(){
     );
 
     box.innerHTML = `
-      <div class="card"
-           style="text-align:center;color:#888;">
+      <div
+        class="card"
+        style="text-align:center;color:#888;">
 
         Saved channels load झाले नाहीत.
 
@@ -3026,12 +2797,12 @@ async function loadSavedChannels(){
 function removeSavedChannel(id){
 
   let saved =
-  getSavedChannels();
+    getSavedChannels();
 
   saved =
-  saved.filter(
-    item => item !== id
-  );
+    saved.filter(
+      item => item !== id
+    );
 
   localStorage.setItem(
     "gyansetu_saved_channels",
@@ -3071,7 +2842,7 @@ $("chatMessage")
 
 
 /* =====================================================
-   MODAL CLICK
+   MODALS
 ===================================================== */
 
 $("sirConfirmModal")
@@ -3123,13 +2894,12 @@ document.addEventListener(
 
       if(
         $("chatWrap")
-        .classList
-        .contains("active")
+          .classList
+          .contains("active")
       ){
 
         closeChat();
       }
-
     }
 
   }
@@ -3144,36 +2914,26 @@ supabaseClient.auth.onAuthStateChange(
   async(event,session)=>{
 
     currentUser =
-    session?.user || null;
+      session?.user || null;
 
     if(currentUser){
 
       const username =
-      currentUser.user_metadata?.username
-      ||
-      localStorage.getItem(
-        "gyansetu_username"
-      )
-      ||
-      "User";
+        currentUser.user_metadata?.username
+        ||
+        localStorage.getItem(
+          "gyansetu_username"
+        )
+        ||
+        "User";
 
       $("headerUser").innerText =
-      "@" + username;
-
-      /*
-        Login बदलल्यावर following पुन्हा load
-      */
-
-      await loadFollowedChannels();
+        "@" + username;
 
     }else{
 
       $("headerUser").innerText =
-      "Guest";
-
-      followedChannelIds =
-      new Set();
-
+        "Guest";
     }
 
   }
