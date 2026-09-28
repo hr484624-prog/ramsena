@@ -1,886 +1,464 @@
 <!DOCTYPE html>
-<html lang="mr">
-
+<html lang="en">
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>GyanSetu - Video Posts</title>
+<title>Videos - GyanSetu</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
-/* =====================================================
-   RESET
-===================================================== */
-
 *{
   box-sizing:border-box;
-}
-
-html,
-body{
   margin:0;
   padding:0;
-  min-height:100%;
-
-  background:
-    linear-gradient(
-      145deg,
-      #050505,
-      #10152b,
-      #24102d,
-      #050505
-    );
-
-  color:white;
-
-  font-family:
-    Arial,
-    sans-serif;
 }
 
 body{
+  font-family:Arial,sans-serif;
+  background:#050509;
+  color:white;
   min-height:100vh;
+  padding-bottom:75px;
 }
-
-
-/* =====================================================
-   HEADER
-===================================================== */
 
 .header{
-
   position:sticky;
   top:0;
-  z-index:50;
-
-  height:65px;
-
+  z-index:100;
+  height:62px;
   display:flex;
   align-items:center;
-  justify-content:space-between;
-
-  padding:0 15px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #050505,
-      #111a3a,
-      #250c27
-    );
-
-  border-bottom:
-    1px solid rgba(255,255,255,.12);
-
-  box-shadow:
-    0 5px 25px rgba(0,0,0,.45);
+  gap:10px;
+  padding:0 12px;
+  background:rgba(5,5,9,.96);
+  border-bottom:1px solid #252533;
 }
 
+.back{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:#171722;
+  color:white;
+  font-size:25px;
+}
 
 .logo{
-
-  font-size:22px;
-  font-weight:900;
-
-  background:
-    linear-gradient(
-      90deg,
-      #2196f3,
-      #e91e63,
-      #ff4081
-    );
-
+  font-size:21px;
+  font-weight:800;
+  background:linear-gradient(90deg,#ff2bd6,#4d7cff);
   -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+  color:transparent;
 }
 
-
-.uploadBtn{
-
-  border:0;
-
-  padding:10px 15px;
-
-  border-radius:12px;
-
-  color:white;
-
-  font-weight:bold;
-
-  background:
-    linear-gradient(
-      135deg,
-      #1976ff,
-      #e91e63
-    );
-
-  box-shadow:
-    0 5px 18px rgba(233,30,99,.28);
-
-  cursor:pointer;
+.search-box{
+  padding:12px;
+  background:#09090f;
+  position:sticky;
+  top:62px;
+  z-index:90;
 }
 
-
-.uploadBtn:active{
-
-  transform:scale(.96);
-
-}
-
-
-/* =====================================================
-   CONTAINER
-===================================================== */
-
-.container{
-
+.search{
   width:100%;
-
-  max-width:650px;
-
-  margin:auto;
-
-  padding:
-    15px
-    12px
-    40px;
-}
-
-
-.loading{
-
-  text-align:center;
-
-  padding:50px 15px;
-
-  color:#bbb;
-
+  height:45px;
+  border:1px solid #29293a;
+  border-radius:14px;
+  outline:none;
+  background:#15151e;
+  color:white;
+  padding:0 15px;
   font-size:15px;
 }
 
+.search:focus{
+  border-color:#ff2bd6;
+}
 
-/* =====================================================
-   POST
-===================================================== */
+.feed{
+  max-width:650px;
+  margin:auto;
+  padding:10px;
+}
 
-.post{
-
-  background:
-    linear-gradient(
-      145deg,
-      #101010,
-      #121a32,
-      #1c1020
-    );
-
-  border:
-    1px solid rgba(255,255,255,.09);
-
-  border-radius:20px;
-
+.video-card{
+  background:#0e0e16;
+  border:1px solid #222231;
+  border-radius:16px;
   overflow:hidden;
-
-  margin-bottom:22px;
-
-  box-shadow:
-    0 12px 35px rgba(0,0,0,.45);
+  margin-bottom:16px;
+  box-shadow:0 5px 25px rgba(0,0,0,.35);
 }
 
+.thumb{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  background:#111;
+  cursor:pointer;
+  overflow:hidden;
+}
 
-/* =====================================================
-   USER
-===================================================== */
+.thumb video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  pointer-events:none;
+}
 
-.user{
-
-  min-height:64px;
-
+.play{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:rgba(255,43,214,.9);
   display:flex;
-
   align-items:center;
+  justify-content:center;
+  font-size:25px;
+  box-shadow:0 0 25px rgba(255,43,214,.4);
+}
 
-  gap:10px;
+.card-content{
+  padding:12px;
+}
 
-  padding:12px 13px;
+.card-title{
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
 
-  border-bottom:
-    1px solid rgba(255,255,255,.07);
+.card-description{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.card-meta{
+  color:#777;
+  font-size:11px;
+  margin-top:9px;
+}
+
+.empty{
+  text-align:center;
+  padding:60px 20px;
+  color:#777;
+}
+
+.loader{
+  text-align:center;
+  padding:40px;
+  color:#aaa;
+}
+
+.bottom{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:65px;
+  background:#09090f;
+  border-top:1px solid #252533;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:200;
+}
+
+.nav{
+  border:0;
+  background:none;
+  color:#777;
+  font-size:11px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+
+.nav span{
+  font-size:22px;
+}
+
+.nav.active{
+  color:#ff3bd4;
 }
 
 
-.avatar{
+/* PLAYER */
 
+.player-modal{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  background:#000;
+  overflow-y:auto;
+}
+
+.player-modal.show{
+  display:block;
+}
+
+.player-top{
+  height:58px;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  gap:10px;
+  background:#07070b;
+  border-bottom:1px solid #252533;
+  position:sticky;
+  top:0;
+  z-index:5;
+}
+
+.close-player{
   width:42px;
   height:42px;
-
-  flex-shrink:0;
-
+  border:0;
   border-radius:50%;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  font-weight:bold;
-
-  font-size:17px;
-
+  background:#191923;
   color:white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #1976ff,
-      #e91e63
-    );
+  font-size:25px;
 }
 
-
-.userInfo{
-
-  flex:1;
-
-  min-width:0;
-}
-
-
-.username{
-
-  color:white;
-
-  font-size:15px;
-
+.player-title-small{
   font-weight:bold;
-
-  white-space:nowrap;
-
   overflow:hidden;
-
+  white-space:nowrap;
   text-overflow:ellipsis;
 }
 
-
-.userLabel{
-
-  margin-top:3px;
-
-  color:#999;
-
-  font-size:11px;
+.player-wrap{
+  max-width:900px;
+  margin:auto;
 }
 
-
-.messageBtn{
-
-  border:0;
-
-  padding:8px 11px;
-
-  border-radius:10px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #2196f3,
-      #1565c0
-    );
-
-  color:white;
-
-  font-size:12px;
-
-  font-weight:bold;
-
-  cursor:pointer;
-
-  white-space:nowrap;
-}
-
-
-.messageBtn:active{
-
-  transform:scale(.95);
-
-}
-
-
-/* =====================================================
-   VIDEO
-===================================================== */
-
-.video{
-
+.main-video{
   width:100%;
-
+  max-height:70vh;
+  background:#000;
   display:block;
-
-  background:#000;
-
-  max-height:650px;
-
-  object-fit:contain;
 }
 
-
-/* =====================================================
-   ACTIONS
-===================================================== */
-
-.actions{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:18px;
-
-  padding:12px 14px;
-
-  border-bottom:
-    1px solid rgba(255,255,255,.07);
+.player-info{
+  padding:15px;
 }
 
-
-.action{
-
-  border:0;
-
-  background:transparent;
-
-  color:white;
-
-  font-size:16px;
-
-  cursor:pointer;
-
-  padding:5px 0;
+.player-title{
+  font-size:20px;
+  font-weight:bold;
+  line-height:1.35;
 }
 
-
-.action span{
-
-  margin-left:4px;
-
-  color:#ddd;
-
-  font-size:14px;
-}
-
-
-.action:disabled{
-
-  opacity:.5;
-
-}
-
-
-/* =====================================================
-   COMMENTS
-===================================================== */
-
-.commentBox{
-
-  padding:
-    12px
-    14px
-    15px;
-}
-
-
-.comments{
-
-  max-height:190px;
-
-  overflow-y:auto;
-
-  margin-bottom:10px;
-}
-
-
-.comment{
-
-  padding:8px 0;
-
-  font-size:14px;
-
-  color:#ddd;
-
-  line-height:1.4;
-
-  border-bottom:
-    1px solid rgba(255,255,255,.04);
-}
-
-
-.comment b{
-
-  color:#64b5f6;
-
-  margin-right:5px;
-}
-
-
-.commentInput{
-
-  width:100%;
-
-  padding:
-    11px
-    13px;
-
-  border:
-    1px solid rgba(255,255,255,.14);
-
-  border-radius:12px;
-
-  outline:none;
-
-  background:#080808;
-
-  color:white;
-
-  font-size:14px;
-}
-
-
-.commentInput:focus{
-
-  border-color:#e91e63;
-
-  box-shadow:
-    0 0 0 2px rgba(233,30,99,.12);
-}
-
-
-.commentInput::placeholder{
-
-  color:#777;
-
-}
-
-
-/* =====================================================
-   EMPTY
-===================================================== */
-
-.empty{
-
-  text-align:center;
-
-  padding:
-    65px
-    20px;
-
-  color:#aaa;
-
-  background:
-    rgba(255,255,255,.03);
-
-  border-radius:18px;
-}
-
-
-/* =====================================================
-   MODAL
-===================================================== */
-
-.modal{
-
-  display:none;
-
-  position:fixed;
-
-  inset:0;
-
-  z-index:100;
-
-  background:
-    rgba(0,0,0,.82);
-
-  align-items:center;
-
-  justify-content:center;
-
-  padding:18px;
-}
-
-
-.modalBox{
-
-  width:100%;
-
-  max-width:430px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #111,
-      #111a34,
-      #250d21
-    );
-
-  border:
-    1px solid rgba(255,255,255,.12);
-
-  border-radius:20px;
-
-  padding:20px;
-
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.65);
-}
-
-
-.modalBox h2{
-
-  margin:
-    0
-    0
-    8px;
-
-  font-size:21px;
-}
-
-
-#fileName{
-
-  color:#aaa;
-
+.player-user{
+  color:#ff54db;
+  margin-top:7px;
   font-size:13px;
-
-  word-break:break-word;
 }
 
-
-.preview{
-
-  width:100%;
-
-  max-height:320px;
-
-  margin-top:15px;
-
-  border-radius:14px;
-
-  background:#000;
-
-  display:none;
+.player-description{
+  color:#bbb;
+  line-height:1.6;
+  margin-top:12px;
+  white-space:pre-wrap;
 }
 
-
-.modalActions{
-
+.player-actions{
   display:flex;
-
   gap:10px;
-
   margin-top:16px;
 }
 
-
-.modalActions button{
-
-  flex:1;
-
-  padding:13px;
-
-  border:0;
-
+.action-btn{
+  border:1px solid #343445;
+  background:#15151e;
+  color:white;
   border-radius:12px;
-
+  padding:11px 17px;
   font-weight:bold;
-
-  cursor:pointer;
 }
 
+.action-btn.share{
+  background:linear-gradient(135deg,#ff28cf,#416cff);
+  border:0;
+}
 
-.cancel{
+.other-title{
+  font-size:18px;
+  font-weight:bold;
+  padding:15px;
+  border-top:1px solid #252533;
+}
 
-  background:#222;
+.related{
+  padding:0 10px 30px;
+}
 
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:85px;
+  transform:translateX(-50%);
+  background:#20202a;
   color:white;
-}
-
-
-.postNow{
-
-  background:
-    linear-gradient(
-      135deg,
-      #1976ff,
-      #e91e63
-    );
-
-  color:white;
-}
-
-
-.postNow:disabled{
-
-  opacity:.6;
-
-  cursor:not-allowed;
-}
-
-
-/* =====================================================
-   DEBUG
-===================================================== */
-
-.debugBox{
-
+  padding:11px 18px;
+  border-radius:20px;
   display:none;
-
-  margin:10px;
-
-  padding:12px;
-
-  background:#160808;
-
-  border:
-    1px solid #ff4444;
-
-  border-radius:12px;
-
-  color:#ffbaba;
-
-  font-size:12px;
-
-  white-space:pre-wrap;
-
-  word-break:break-word;
+  z-index:3000;
+  font-size:13px;
 }
 
-
-/* =====================================================
-   SESSION STATUS
-===================================================== */
-
-.sessionStatus{
-
-  display:none;
-
-  margin:
-    10px
-    auto;
-
-  max-width:650px;
-
-  padding:
-    9px
-    12px;
-
-  border-radius:10px;
-
-  font-size:12px;
-
-  background:
-    rgba(33,150,243,.08);
-
-  border:
-    1px solid rgba(33,150,243,.2);
-
-  color:#90caf9;
-}
-
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
-@media(max-width:430px){
-
-  .container{
-
-    padding:
-      10px
-      7px
-      30px;
-  }
-
-
-  .post{
-
-    border-radius:16px;
-  }
-
-
-  .messageBtn{
-
-    padding:
-      8px
-      9px;
-
-    font-size:11px;
-  }
-
-
-  .logo{
-
-    font-size:20px;
-  }
-
-
-  .uploadBtn{
-
-    padding:
-      9px
-      11px;
-
-    font-size:12px;
-  }
-
+.toast.show{
+  display:block;
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =====================================================
-     HEADER
-===================================================== -->
-
 <header class="header">
 
+  <button class="back" onclick="goHome()">‹</button>
+
   <div class="logo">
-
-    📚 GyanSetu
-
+    🎬 GyanSetu
   </div>
-
-
-  <button
-    class="uploadBtn"
-    id="uploadButton"
-    onclick="openUpload()">
-
-    ＋ Post Video
-
-  </button>
 
 </header>
 
 
-<!-- =====================================================
-     SESSION STATUS
-===================================================== -->
+<div class="search-box">
 
-<div
-  id="sessionStatus"
-  class="sessionStatus">
-
-  Checking login...
+  <input
+    id="searchInput"
+    class="search"
+    placeholder="🔍 Search videos..."
+    oninput="searchVideos()">
 
 </div>
 
 
-<!-- =====================================================
-     DEBUG
-===================================================== -->
+<main class="feed" id="feed">
 
-<div
-  id="debugBox"
-  class="debugBox">
-</div>
-
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
-<main class="container">
-
-  <div
-    id="loading"
-    class="loading">
-
-    Videos loading...
-
+  <div class="loader">
+    Loading videos...
   </div>
-
-
-  <div id="posts"></div>
 
 </main>
 
 
-<!-- =====================================================
-     FILE INPUT
-===================================================== -->
+<nav class="bottom">
 
-<input
-  type="file"
-  id="fileInput"
-  accept="video/*"
-  style="display:none"
-  onchange="fileSelected(event)"
->
+  <button class="nav" onclick="goHome()">
+    <span>🏠</span>
+    Home
+  </button>
 
+  <button class="nav active">
+    <span>🎬</span>
+    Videos
+  </button>
 
-<!-- =====================================================
-     UPLOAD MODAL
-===================================================== -->
+  <button class="nav" onclick="goCreate()">
+    <span>➕</span>
+    Create
+  </button>
 
-<div
-  class="modal"
-  id="uploadModal">
+  <button class="nav" onclick="goProfile()">
+    <span>👤</span>
+    Profile
+  </button>
 
-  <div class="modalBox">
-
-    <h2>
-
-      🎥 Post Video
-
-    </h2>
+</nav>
 
 
-    <p id="fileName">
+<!-- PLAYER -->
 
-      Video निवडा
+<div class="player-modal" id="playerModal">
 
-    </p>
+  <div class="player-top">
 
+    <button
+      class="close-player"
+      onclick="closePlayer()">
+      ×
+    </button>
+
+    <div
+      class="player-title-small"
+      id="playerSmallTitle">
+    </div>
+
+  </div>
+
+
+  <div class="player-wrap">
 
     <video
-      id="preview"
-      class="preview"
+      id="mainVideo"
+      class="main-video"
       controls
       playsinline>
     </video>
 
 
-    <div class="modalActions">
+    <div class="player-info">
 
-      <button
-        class="cancel"
-        onclick="closeUpload()">
+      <div
+        class="player-title"
+        id="playerTitle">
+      </div>
 
-        Cancel
+      <div
+        class="player-user"
+        id="playerUser">
+      </div>
 
-      </button>
+      <div
+        class="player-description"
+        id="playerDescription">
+      </div>
 
 
-      <button
-        class="postNow"
-        id="postNowButton"
-        onclick="uploadVideo()">
+      <div class="player-actions">
 
-        Post Video
+        <button
+          class="action-btn share"
+          onclick="shareCurrentVideo()">
+          🔗 Share
+        </button>
 
-      </button>
+        <button
+          class="action-btn"
+          onclick="closePlayer()">
+          ↓ Back to videos
+        </button>
 
+      </div>
+
+    </div>
+
+
+    <div class="other-title">
+      More Videos
+    </div>
+
+    <div
+      class="related"
+      id="related">
     </div>
 
   </div>
@@ -888,2059 +466,521 @@ body{
 </div>
 
 
+<div class="toast" id="toast"></div>
+
+
 <script>
 
-/* =====================================================
-   SUPABASE CONFIG
-===================================================== */
-
 const SUPABASE_URL =
-  "https://eqglttfffhvoyvrclzse.supabase.co";
-
+"https://eqglttfffhvoyvrclzse.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-
+"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
 
 const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-
-      auth:{
-
-        persistSession:true,
-
-        autoRefreshToken:true,
-
-        detectSessionInUrl:true
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   GLOBAL VARIABLES
-===================================================== */
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 let currentUser = null;
-
-let selectedFile = null;
-
-
-/* =====================================================
-   DEBUG
-===================================================== */
-
-function showDebug(message){
-
-  const box =
-    document.getElementById(
-      "debugBox"
-    );
+let videos = [];
+let currentVideo = null;
 
 
-  box.style.display =
-    "block";
+/* NAVIGATION */
+
+function goHome(){
+  location.href="home.html";
+}
+
+function goProfile(){
+  location.href="profile.html";
+}
+
+function goCreate(){
+  location.href="create.html";
+}
 
 
-  box.innerText =
-    String(message);
+/* TOAST */
 
+function showToast(text){
+
+  const t =
+    document.getElementById("toast");
+
+  t.textContent=text;
+  t.classList.add("show");
+
+  setTimeout(()=>{
+    t.classList.remove("show");
+  },2200);
+}
+
+
+/* USER */
+
+async function getUser(){
+
+  const {
+    data
+  } =
+  await supabaseClient.auth.getUser();
+
+  currentUser =
+    data?.user || null;
 
 }
 
 
-function clearDebug(){
+/* LOAD VIDEOS */
 
-  const box =
-    document.getElementById(
-      "debugBox"
-    );
+async function loadVideos(){
 
-
-  box.style.display =
-    "none";
-
-
-  box.innerText =
-    "";
-
-}
-
-
-/* =====================================================
-   SESSION STATUS
-===================================================== */
-
-function setSessionStatus(
-  message,
-  show = true
-){
-
-  const box =
-    document.getElementById(
-      "sessionStatus"
-    );
-
-
-  box.innerText =
-    message;
-
-
-  box.style.display =
-    show
-      ? "block"
-      : "none";
-
-}
-
-
-/* =====================================================
-   GET FRESH USER
-===================================================== */
-
-async function getFreshUser(){
-
-  console.log(
-    "================================"
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+  .from("Videos")
+  .select("*")
+  .order(
+    "created_at",
+    {
+      ascending:false
+    }
   );
 
-  console.log(
-    "AUTH CHECK START"
-  );
+  if(error){
 
-  console.log(
-    "================================"
-  );
+    console.error(error);
 
-
-  try{
-
-    /*
-      STEP 1
-      Get current session
-    */
-
-    const {
-      data:sessionData,
-      error:sessionError
-    } =
-    await supabaseClient.auth.getSession();
-
-
-    if(sessionError){
-
-      console.error(
-        "SESSION ERROR:",
-        sessionError
-      );
-
-
-      showDebug(
-        "SESSION ERROR\n\n" +
-        sessionError.message
-      );
-
-
-      currentUser =
-        null;
-
-
-      return null;
-    }
-
-
-    let session =
-      sessionData?.session;
-
-
-    console.log(
-      "SESSION:",
-      session
-    );
-
-
-    /*
-      STEP 2
-      If session exists,
-      refresh it to make sure
-      access token is valid.
-    */
-
-    if(session){
-
-      try{
-
-        const {
-          data:refreshData,
-          error:refreshError
-        } =
-        await supabaseClient
-          .auth
-          .refreshSession();
-
-
-        if(!refreshError &&
-           refreshData?.session){
-
-          session =
-            refreshData.session;
-
-
-          console.log(
-            "SESSION REFRESHED"
-          );
-
-        }
-
-      }
-      catch(refreshCrash){
-
-        console.warn(
-          "Refresh warning:",
-          refreshCrash
-        );
-
-      }
-
-    }
-
-
-    /*
-      STEP 3
-      Get authenticated user
-    */
-
-    const {
-      data:userData,
-      error:userError
-    } =
-    await supabaseClient.auth.getUser();
-
-
-    if(userError){
-
-      console.error(
-        "GET USER ERROR:",
-        userError
-      );
-
-
-      showDebug(
-        "GET USER ERROR\n\n" +
-        userError.message
-      );
-
-
-      currentUser =
-        null;
-
-
-      return null;
-    }
-
-
-    const user =
-      userData?.user;
-
-
-    console.log(
-      "USER:",
-      user
-    );
-
-
-    console.log(
-      "USER ID:",
-      user?.id
-    );
-
-
-    console.log(
-      "USER ROLE:",
-      user?.role
-    );
-
-
-    console.log(
-      "ACCESS TOKEN:",
-      session?.access_token
-        ? "YES"
-        : "NO"
-    );
-
-
-    /*
-      STEP 4
-      No user
-    */
-
-    if(!user){
-
-      currentUser =
-        null;
-
-
-      setSessionStatus(
-        "Not logged in",
-        true
-      );
-
-
-      showDebug(
-        "NO SUPABASE USER FOUND.\n\n" +
-        "Session: " +
-        Boolean(session) +
-        "\n\n" +
-        "Please login again."
-      );
-
-
-      return null;
-    }
-
-
-    /*
-      STEP 5
-      Save current user
-    */
-
-    currentUser =
-      user;
-
-
-    setSessionStatus(
-      "Logged in as: " +
-      (
-        user.user_metadata?.username ||
-        user.email ||
-        "GyanSetu User"
-      ),
-      false
-    );
-
-
-    clearDebug();
-
-
-    console.log(
-      "================================"
-    );
-
-    console.log(
-      "AUTH CHECK SUCCESS"
-    );
-
-    console.log(
-      "USER:",
-      user.id
-    );
-
-    console.log(
-      "ROLE:",
-      user.role
-    );
-
-    console.log(
-      "TOKEN:",
-      session?.access_token
-        ? "YES"
-        : "NO"
-    );
-
-    console.log(
-      "================================"
-    );
-
-
-    return user;
-
-  }
-  catch(error){
-
-    console.error(
-      "AUTH CRASH:",
-      error
-    );
-
-
-    showDebug(
-      "AUTH CRASH\n\n" +
-      String(
-        error?.message ||
-        error
-      )
-    );
-
-
-    currentUser =
-      null;
-
-
-    return null;
-  }
-
-}
-
-
-/* =====================================================
-   CHECK LOGIN
-===================================================== */
-
-async function checkUser(){
-
-  const user =
-    await getFreshUser();
-
-
-  if(!user){
-
-    alert(
-      "Please login to GyanSetu first."
-    );
-
-
-    window.location.href =
-      "account.html";
-
-
-    return false;
-  }
-
-
-  return true;
-
-}
-
-
-/* =====================================================
-   OPEN UPLOAD
-===================================================== */
-
-async function openUpload(){
-
-  const logged =
-    await checkUser();
-
-
-  if(!logged){
+    document.getElementById("feed").innerHTML =
+      `<div class="empty">
+        Videos load झाले नाहीत.
+      </div>`;
 
     return;
-
   }
 
+  videos =
+    data || [];
 
-  document
-    .getElementById(
-      "fileInput"
-    )
-    .click();
+  renderVideos(videos);
 
 }
 
 
-/* =====================================================
-   FILE SELECTED
-===================================================== */
+/* RENDER */
 
-function fileSelected(event){
+function renderVideos(list){
 
-  selectedFile =
-    event.target.files[0];
+  const feed =
+    document.getElementById("feed");
 
+  feed.innerHTML="";
 
-  if(!selectedFile){
+  if(!list.length){
 
-    return;
-
-  }
-
-
-  /*
-    Check video
-  */
-
-  if(
-    !selectedFile.type ||
-    !selectedFile.type.startsWith(
-      "video/"
-    )
-  ){
-
-    alert(
-      "कृपया फक्त video file निवडा."
-    );
-
-
-    event.target.value =
-      "";
-
-
-    selectedFile =
-      null;
-
+    feed.innerHTML =
+      `<div class="empty">
+        🎬 अजून videos post झालेले नाहीत.
+      </div>`;
 
     return;
-
   }
 
 
-  /*
-    Maximum size
-    100 MB
-  */
+  list.forEach(video=>{
 
-  const maxSize =
-    100 * 1024 * 1024;
+    const card =
+      document.createElement("div");
 
+    card.className="video-card";
 
-  if(
-    selectedFile.size >
-    maxSize
-  ){
+    card.innerHTML=`
 
-    alert(
-      "Video size 100 MB पेक्षा जास्त आहे."
-    );
+      <div class="thumb"
+           onclick="openPlayer('${video.id}')">
 
+        <video
+          src="${escapeAttr(video.video_url)}"
+          preload="metadata"
+          muted
+          playsinline>
+        </video>
 
-    event.target.value =
-      "";
-
-
-    selectedFile =
-      null;
-
-
-    return;
-
-  }
-
-
-  /*
-    Open modal
-  */
-
-  document
-    .getElementById(
-      "uploadModal"
-    )
-    .style.display =
-      "flex";
-
-
-  document
-    .getElementById(
-      "fileName"
-    )
-    .innerText =
-      selectedFile.name;
-
-
-  /*
-    Preview
-  */
-
-  const preview =
-    document.getElementById(
-      "preview"
-    );
-
-
-  const oldURL =
-    preview.dataset.objectUrl;
-
-
-  if(oldURL){
-
-    URL.revokeObjectURL(
-      oldURL
-    );
-
-  }
-
-
-  const objectURL =
-    URL.createObjectURL(
-      selectedFile
-    );
-
-
-  preview.dataset.objectUrl =
-    objectURL;
-
-
-  preview.src =
-    objectURL;
-
-
-  preview.style.display =
-    "block";
-
-}
-
-
-/* =====================================================
-   CLOSE UPLOAD
-===================================================== */
-
-function closeUpload(){
-
-  const modal =
-    document.getElementById(
-      "uploadModal"
-    );
-
-
-  modal.style.display =
-    "none";
-
-
-  const fileInput =
-    document.getElementById(
-      "fileInput"
-    );
-
-
-  fileInput.value =
-    "";
-
-
-  selectedFile =
-    null;
-
-
-  const preview =
-    document.getElementById(
-      "preview"
-    );
-
-
-  const objectURL =
-    preview.dataset.objectUrl;
-
-
-  if(objectURL){
-
-    URL.revokeObjectURL(
-      objectURL
-    );
-
-  }
-
-
-  preview.dataset.objectUrl =
-    "";
-
-
-  preview.pause();
-
-
-  preview.removeAttribute(
-    "src"
-  );
-
-
-  preview.load();
-
-}
-
-
-/* =====================================================
-   UPLOAD VIDEO
-===================================================== */
-
-async function uploadVideo(){
-
-  clearDebug();
-
-
-  if(!selectedFile){
-
-    alert(
-      "कृपया Video निवडा."
-    );
-
-
-    return;
-
-  }
-
-
-  /*
-    Get fresh authenticated user
-  */
-
-  const user =
-    await getFreshUser();
-
-
-  if(!user){
-
-    alert(
-      "Supabase login session मिळाली नाही.\n\n" +
-      "कृपया logout करून पुन्हा login करा."
-    );
-
-
-    return;
-
-  }
-
-
-  console.log(
-    "================================"
-  );
-
-  console.log(
-    "UPLOAD START"
-  );
-
-  console.log(
-    "USER ID:",
-    user.id
-  );
-
-  console.log(
-    "USER EMAIL:",
-    user.email
-  );
-
-  console.log(
-    "USER ROLE:",
-    user.role
-  );
-
-  console.log(
-    "================================"
-  );
-
-
-  const button =
-    document.getElementById(
-      "postNowButton"
-    );
-
-
-  button.disabled =
-    true;
-
-
-  button.innerText =
-    "Uploading...";
-
-
-  let uploadedPath =
-    null;
-
-
-  try{
-
-    /*
-      Check extension
-    */
-
-    let extension =
-      selectedFile.name
-        .split(".")
-        .pop()
-        .toLowerCase();
-
-
-    if(
-      !/^[a-z0-9]+$/.test(
-        extension
-      )
-    ){
-
-      extension =
-        "mp4";
-
-    }
-
-
-    /*
-      File path
-    */
-
-    const filePath =
-      user.id +
-      "/" +
-      Date.now() +
-      "_" +
-      Math.random()
-        .toString(36)
-        .substring(2,10) +
-      "." +
-      extension;
-
-
-    uploadedPath =
-      filePath;
-
-
-    console.log(
-      "FILE PATH:",
-      filePath
-    );
-
-
-    /*
-      =================================================
-      STORAGE UPLOAD
-      =================================================
-    */
-
-    console.log(
-      "STEP 1: STORAGE UPLOAD"
-    );
-
-
-    const {
-      data:uploadData,
-      error:uploadError
-    } =
-    await supabaseClient
-      .storage
-      .from("videos")
-      .upload(
-        filePath,
-        selectedFile,
-        {
-
-          contentType:
-            selectedFile.type ||
-            "video/mp4",
-
-          cacheControl:
-            "3600",
-
-          upsert:false
-
-        }
-      );
-
-
-    if(uploadError){
-
-      console.error(
-        "STORAGE ERROR:",
-        uploadError
-      );
-
-
-      throw new Error(
-        "Storage upload failed:\n" +
-        uploadError.message
-      );
-
-    }
-
-
-    console.log(
-      "STORAGE SUCCESS:",
-      uploadData
-    );
-
-
-    /*
-      =================================================
-      DATABASE INSERT
-      =================================================
-    */
-
-    console.log(
-      "STEP 2: DATABASE INSERT"
-    );
-
-
-    /*
-      Get session immediately
-      before DB request.
-    */
-
-    const {
-      data:latestSessionData,
-      error:latestSessionError
-    } =
-    await supabaseClient
-      .auth
-      .getSession();
-
-
-    if(latestSessionError){
-
-      throw new Error(
-        "Session check failed:\n" +
-        latestSessionError.message
-      );
-
-    }
-
-
-    const latestSession =
-      latestSessionData?.session;
-
-
-    console.log(
-      "LATEST SESSION:",
-      latestSession
-    );
-
-
-    console.log(
-      "LATEST TOKEN:",
-      latestSession?.access_token
-        ? "YES"
-        : "NO"
-    );
-
-
-    console.log(
-      "LATEST USER:",
-      latestSession?.user?.id
-    );
-
-
-    if(!latestSession){
-
-      throw new Error(
-        "Active Supabase session नाही."
-      );
-
-    }
-
-
-    /*
-      Database insert
-    */
-
-    const {
-      data:postData,
-      error:dbError
-    } =
-    await supabaseClient
-      .from("video_posts")
-      .insert({
-
-        user_id:
-          user.id,
-
-        video_path:
-          filePath,
-
-        status:
-          "pending"
-
-      })
-      .select()
-      .single();
-
-
-    if(dbError){
-
-      console.error(
-        "DATABASE INSERT ERROR:",
-        dbError
-      );
-
-
-      console.error(
-        "DATABASE MESSAGE:",
-        dbError.message
-      );
-
-
-      console.error(
-        "DATABASE DETAILS:",
-        dbError.details
-      );
-
-
-      console.error(
-        "DATABASE HINT:",
-        dbError.hint
-      );
-
-
-      /*
-        Delete uploaded video
-      */
-
-      if(uploadedPath){
-
-        try{
-
-          const {
-            error:removeError
-          } =
-          await supabaseClient
-            .storage
-            .from("videos")
-            .remove([
-              uploadedPath
-            ]);
-
-
-          console.log(
-            "STORAGE CLEANUP:",
-            removeError
-          );
-
-        }
-        catch(cleanError){
-
-          console.error(
-            "CLEANUP ERROR:",
-            cleanError
-          );
-
-        }
-
-      }
-
-
-      throw new Error(
-        "Database insert failed:\n" +
-        dbError.message
-      );
-
-    }
-
-
-    console.log(
-      "POST CREATED:",
-      postData
-    );
-
-
-    /*
-      Success
-    */
-
-    closeUpload();
-
-
-    alert(
-      "✅ Video upload झाले!\n\n" +
-      "Video moderation तपासणीसाठी pending आहे."
-    );
-
-
-    await loadPosts();
-
-  }
-  catch(error){
-
-    console.error(
-      "FINAL UPLOAD ERROR:",
-      error
-    );
-
-
-    showDebug(
-      "UPLOAD ERROR\n\n" +
-      String(
-        error?.message ||
-        error
-      )
-    );
-
-
-    alert(
-      "❌ Upload failed\n\n" +
-      String(
-        error?.message ||
-        error
-      )
-    );
-
-  }
-  finally{
-
-    button.disabled =
-      false;
-
-
-    button.innerText =
-      "Post Video";
-
-  }
-
-}
-
-
-/* =====================================================
-   LOAD POSTS
-===================================================== */
-
-async function loadPosts(){
-
-  const posts =
-    document.getElementById(
-      "posts"
-    );
-
-
-  const loading =
-    document.getElementById(
-      "loading"
-    );
-
-
-  loading.style.display =
-    "block";
-
-
-  loading.innerText =
-    "Videos loading...";
-
-
-  posts.innerHTML =
-    "";
-
-
-  try{
-
-    const user =
-      await getFreshUser();
-
-
-    if(!user){
-
-      loading.innerText =
-        "Please login first.";
-
-      return;
-
-    }
-
-
-    /*
-      Get approved videos
-    */
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("video_posts")
-      .select("*")
-      .eq(
-        "status",
-        "approved"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-    if(error){
-
-      console.error(
-        "LOAD POSTS ERROR:",
-        error
-      );
-
-
-      loading.innerText =
-        "Videos load करता आले नाहीत.";
-
-
-      showDebug(
-        "LOAD POSTS ERROR\n\n" +
-        error.message
-      );
-
-
-      return;
-
-    }
-
-
-    loading.style.display =
-      "none";
-
-
-    /*
-      No posts
-    */
-
-    if(
-      !data ||
-      data.length === 0
-    ){
-
-      posts.innerHTML = `
-
-        <div class="empty">
-
-          🎥 अजून कोणताही approved video नाही.
-
-          <br><br>
-
-          पहिला video तुम्ही post करा!
-
+        <div class="play">
+          ▶
         </div>
-
-      `;
-
-
-      return;
-
-    }
-
-
-    /*
-      Create posts
-    */
-
-    for(
-      const post of data
-    ){
-
-      await createPost(
-        post
-      );
-
-    }
-
-  }
-  catch(error){
-
-    console.error(
-      "LOAD ERROR:",
-      error
-    );
-
-
-    loading.innerText =
-      "Videos load करता आले नाहीत.";
-
-
-    showDebug(
-      "LOAD ERROR\n\n" +
-      String(
-        error?.message ||
-        error
-      )
-    );
-
-  }
-
-}
-
-
-/* =====================================================
-   CREATE POST
-===================================================== */
-
-async function createPost(post){
-
-  try{
-
-    /*
-      =================================================
-      SIGNED VIDEO URL
-      =================================================
-    */
-
-    const {
-      data:urlData,
-      error:urlError
-    } =
-    await supabaseClient
-      .storage
-      .from("videos")
-      .createSignedUrl(
-        post.video_path,
-        3600
-      );
-
-
-    if(urlError){
-
-      console.error(
-        "SIGNED URL ERROR:",
-        urlError
-      );
-
-
-      return;
-
-    }
-
-
-    if(
-      !urlData ||
-      !urlData.signedUrl
-    ){
-
-      return;
-
-    }
-
-
-    const videoUrl =
-      urlData.signedUrl;
-
-
-    /*
-      =================================================
-      PROFILE
-      =================================================
-    */
-
-    const {
-      data:profile
-    } =
-    await supabaseClient
-      .from("Profiles")
-      .select("username")
-      .eq(
-        "id",
-        post.user_id
-      )
-      .maybeSingle();
-
-
-    const username =
-      profile?.username ||
-      "GyanSetu User";
-
-
-    /*
-      =================================================
-      LIKES COUNT
-      =================================================
-    */
-
-    const {
-      count:likeCount
-    } =
-    await supabaseClient
-      .from("video_likes")
-      .select(
-        "*",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "post_id",
-        post.id
-      );
-
-
-    /*
-      =================================================
-      MY LIKE
-      =================================================
-    */
-
-    const {
-      data:myLike
-    } =
-    await supabaseClient
-      .from("video_likes")
-      .select("id")
-      .eq(
-        "post_id",
-        post.id
-      )
-      .eq(
-        "user_id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-
-    /*
-      =================================================
-      COMMENTS
-      =================================================
-    */
-
-    const {
-      data:comments
-    } =
-    await supabaseClient
-      .from("video_comments")
-      .select("*")
-      .eq(
-        "post_id",
-        post.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:true
-        }
-      );
-
-
-    let commentsHTML =
-      "";
-
-
-    for(
-      const comment of comments || []
-    ){
-
-      const {
-        data:commentProfile
-      } =
-      await supabaseClient
-        .from("Profiles")
-        .select("username")
-        .eq(
-          "id",
-          comment.user_id
-        )
-        .maybeSingle();
-
-
-      const commentUsername =
-        commentProfile?.username ||
-        "User";
-
-
-      commentsHTML += `
-
-        <div class="comment">
-
-          <b>
-
-            ${escapeHTML(
-              commentUsername
-            )}
-
-          </b>
-
-          ${escapeHTML(
-            comment.comment
-          )}
-
-        </div>
-
-      `;
-
-    }
-
-
-    /*
-      =================================================
-      POST ELEMENT
-      =================================================
-    */
-
-    const postElement =
-      document.createElement(
-        "article"
-      );
-
-
-    postElement.className =
-      "post";
-
-
-    postElement.innerHTML = `
-
-      <div class="user">
-
-        <div class="avatar">
-
-          ${escapeHTML(
-            username
-              .charAt(0)
-              .toUpperCase()
-          )}
-
-        </div>
-
-
-        <div class="userInfo">
-
-          <div class="username">
-
-            ${escapeHTML(
-              username
-            )}
-
-          </div>
-
-
-          <div class="userLabel">
-
-            GyanSetu Member
-
-          </div>
-
-        </div>
-
-
-        <button
-          class="messageBtn"
-          onclick="openMessage(
-            '${escapeJS(post.user_id)}',
-            '${escapeJS(username)}'
-          )">
-
-          💬 Message
-
-        </button>
 
       </div>
 
+      <div class="card-content">
 
-      <video
-        class="video"
-        controls
-        playsinline
-        preload="metadata"
-        src="${escapeHTML(videoUrl)}">
-      </video>
-
-
-      <div class="actions">
-
-        <button
-          class="action"
-          onclick="toggleLike(
-            '${escapeJS(post.id)}',
-            this
-          )">
-
-          ${myLike ? "❤️" : "🤍"}
-
-          <span>
-
-            ${likeCount || 0}
-
-          </span>
-
-        </button>
-
-
-        <button
-          class="action"
-          onclick="focusComment(
-            '${escapeJS(post.id)}'
-          )">
-
-          💬
-
-          <span>
-
-            ${(comments || []).length}
-
-          </span>
-
-        </button>
-
-      </div>
-
-
-      <div class="commentBox">
-
-        <div
-          class="comments"
-          id="comments-${escapeHTML(post.id)}">
-
-          ${commentsHTML}
-
+        <div class="card-title">
+          ${escapeHtml(video.title)}
         </div>
 
+        <div class="card-description">
+          ${escapeHtml(video.description || "")}
+        </div>
 
-        <input
-          class="commentInput"
-          id="input-${escapeHTML(post.id)}"
-          placeholder="Comment लिहा..."
-          onkeydown="
-            commentKey(
-              event,
-              '${escapeJS(post.id)}'
-            )
-          "
-        >
+        <div class="card-meta">
+          👤 ${escapeHtml(video.username || "GyanSetu User")}
+          • ${formatDate(video.created_at)}
+        </div>
 
       </div>
 
     `;
 
+    feed.appendChild(card);
 
-    document
-      .getElementById(
-        "posts"
-      )
-      .appendChild(
-        postElement
-      );
-
-  }
-  catch(error){
-
-    console.error(
-      "CREATE POST ERROR:",
-      error
-    );
-
-  }
+  });
 
 }
 
 
-/* =====================================================
-   MESSAGE
-===================================================== */
+/* SEARCH */
 
-function openMessage(
-  userId,
-  username
-){
+function searchVideos(){
+
+  const q =
+    document.getElementById(
+      "searchInput"
+    ).value
+    .trim()
+    .toLowerCase();
+
+  if(!q){
+
+    renderVideos(videos);
+    return;
+
+  }
+
+
+  const filtered =
+    videos.filter(video=>{
+
+      return (
+        String(video.title)
+          .toLowerCase()
+          .includes(q)
+        ||
+        String(video.description || "")
+          .toLowerCase()
+          .includes(q)
+        ||
+        String(video.username || "")
+          .toLowerCase()
+          .includes(q)
+      );
+
+    });
+
+  renderVideos(filtered);
+
+}
+
+
+/* PLAYER */
+
+function openPlayer(id){
+
+  const video =
+    videos.find(
+      v=>v.id===id
+    );
+
+  if(!video){
+    return;
+  }
+
+  currentVideo =
+    video;
+
+  document.getElementById(
+    "playerTitle"
+  ).textContent =
+    video.title;
+
+  document.getElementById(
+    "playerSmallTitle"
+  ).textContent =
+    video.title;
+
+  document.getElementById(
+    "playerUser"
+  ).textContent =
+    "👤 " +
+    (video.username || "GyanSetu User");
+
+  document.getElementById(
+    "playerDescription"
+  ).textContent =
+    video.description || "";
+
+  const main =
+    document.getElementById(
+      "mainVideo"
+    );
+
+  main.src =
+    video.video_url;
+
+  document.getElementById(
+    "playerModal"
+  ).classList.add("show");
+
+  document.body.style.overflow="hidden";
+
+  renderRelated(video.id);
+
+}
+
+
+function closePlayer(){
+
+  const main =
+    document.getElementById(
+      "mainVideo"
+    );
+
+  main.pause();
+  main.removeAttribute("src");
+  main.load();
+
+  document.getElementById(
+    "playerModal"
+  ).classList.remove("show");
+
+  document.body.style.overflow="";
+
+  currentVideo=null;
+
+}
+
+
+/* RELATED */
+
+function renderRelated(currentId){
+
+  const box =
+    document.getElementById(
+      "related"
+    );
+
+  box.innerHTML="";
+
+  videos
+  .filter(v=>v.id!==currentId)
+  .slice(0,8)
+  .forEach(video=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className="video-card";
+
+    div.innerHTML=`
+
+      <div class="thumb"
+           onclick="openPlayer('${video.id}')">
+
+        <video
+          src="${escapeAttr(video.video_url)}"
+          preload="metadata"
+          muted
+          playsinline>
+        </video>
+
+        <div class="play">
+          ▶
+        </div>
+
+      </div>
+
+      <div class="card-content">
+
+        <div class="card-title">
+          ${escapeHtml(video.title)}
+        </div>
+
+        <div class="card-meta">
+          👤 ${escapeHtml(video.username || "User")}
+        </div>
+
+      </div>
+    `;
+
+    box.appendChild(div);
+
+  });
+
+}
+
+
+/* SHARE */
+
+async function shareCurrentVideo(){
+
+  if(!currentVideo){
+    return;
+  }
 
   if(!currentUser){
 
-    alert(
-      "Please login first."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    userId ===
-    currentUser.id
-  ){
-
-    alert(
-      "तुम्ही स्वतःलाच Message करू शकत नाही."
-    );
-
-    return;
-
-  }
-
-
-  const url =
-    "message.html" +
-    "?user_id=" +
-    encodeURIComponent(
-      userId
-    ) +
-    "&username=" +
-    encodeURIComponent(
-      username
-    );
-
-
-  window.location.href =
-    url;
-
-}
-
-
-/* =====================================================
-   LIKE
-===================================================== */
-
-async function toggleLike(
-  postId,
-  button
-){
-
-  const user =
-    await getFreshUser();
-
-
-  if(!user){
-
-    return;
-
-  }
-
-
-  button.disabled =
-    true;
-
-
-  try{
-
-    /*
-      Check existing like
-    */
-
-    const {
-      data:existing,
-      error:checkError
-    } =
-    await supabaseClient
-      .from("video_likes")
-      .select("id")
-      .eq(
-        "post_id",
-        postId
-      )
-      .eq(
-        "user_id",
-        user.id
-      )
-      .maybeSingle();
-
-
-    if(checkError){
-
-      throw checkError;
-
-    }
-
-
-    /*
-      Remove like
-    */
-
-    if(existing){
-
-      const {
-        error
-      } =
-      await supabaseClient
-        .from("video_likes")
-        .delete()
-        .eq(
-          "id",
-          existing.id
-        );
-
-
-      if(error){
-
-        throw error;
-
-      }
-
-    }
-
-
-    /*
-      Add like
-    */
-
-    else{
-
-      const {
-        error
-      } =
-      await supabaseClient
-        .from("video_likes")
-        .insert({
-
-          post_id:
-            postId,
-
-          user_id:
-            user.id
-
-        });
-
-
-      if(error){
-
-        throw error;
-
-      }
-
-    }
-
-
-    await loadPosts();
-
-  }
-  catch(error){
-
-    console.error(
-      "LIKE ERROR:",
-      error
-    );
-
-
-    alert(
-      "Like करता आले नाही:\n\n" +
-      error.message
-    );
-
-  }
-  finally{
-
-    button.disabled =
-      false;
-
-  }
-
-}
-
-
-/* =====================================================
-   ADD COMMENT
-===================================================== */
-
-async function addComment(
-  postId
-){
-
-  const user =
-    await getFreshUser();
-
-
-  if(!user){
-
-    return;
-
-  }
-
-
-  const input =
-    document.getElementById(
-      "input-" + postId
-    );
-
-
-  if(!input){
-
-    return;
-
-  }
-
-
-  const text =
-    input.value.trim();
-
-
-  if(!text){
-
-    return;
-
-  }
-
-
-  /*
-    Comment length
-  */
-
-  if(text.length > 1000){
-
-    alert(
-      "Comment 1000 characters पेक्षा मोठा असू शकत नाही."
-    );
-
+    showToast("Login required");
     return;
 
   }
 
 
   const {
+    data:profiles,
     error
   } =
   await supabaseClient
-    .from("video_comments")
-    .insert({
-
-      post_id:
-        postId,
-
-      user_id:
-        user.id,
-
-      comment:
-        text
-
-    });
+  .from("Profiles")
+  .select("id")
+  .neq(
+    "id",
+    currentUser.id
+  );
 
 
   if(error){
 
-    console.error(
-      "COMMENT ERROR:",
-      error
+    console.error(error);
+
+    showToast(
+      "Users load झाले नाहीत."
     );
-
-
-    alert(
-      "Comment करता आले नाही:\n\n" +
-      error.message
-    );
-
 
     return;
-
   }
 
 
-  input.value =
-    "";
+  if(!profiles || !profiles.length){
 
-
-  await loadPosts();
-
-}
-
-
-/* =====================================================
-   COMMENT ENTER
-===================================================== */
-
-function commentKey(
-  event,
-  postId
-){
-
-  if(
-    event.key ===
-    "Enter"
-  ){
-
-    event.preventDefault();
-
-
-    addComment(
-      postId
+    showToast(
+      "Share करण्यासाठी दुसरे registered users नाहीत."
     );
 
+    return;
   }
 
-}
+
+  const message =
+    "VIDEO:" +
+    currentVideo.id +
+    "|" +
+    currentVideo.title;
 
 
-/* =====================================================
-   FOCUS COMMENT
-===================================================== */
+  const rows =
+    profiles.map(profile=>({
 
-function focusComment(
-  postId
-){
+      sender_id:
+        currentUser.id,
 
-  const input =
-    document.getElementById(
-      "input-" + postId
+      receiver_id:
+        profile.id,
+
+      message:
+        message,
+
+      is_read:false
+
+    }));
+
+
+  const {
+    error:sendError
+  } =
+  await supabaseClient
+  .from("Messages")
+  .insert(rows);
+
+
+  if(sendError){
+
+    console.error(sendError);
+
+    showToast(
+      "Video share करता आला नाही."
     );
 
-
-  if(input){
-
-    input.focus();
-
+    return;
   }
 
-}
 
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHTML(text){
-
-  return String(
-    text ?? ""
-  )
-
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-
-  .replace(
-    /</g,
-    "&lt;"
-  )
-
-  .replace(
-    />/g,
-    "&gt;"
-  )
-
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-
-  .replace(
-    /'/g,
-    "&#039;"
+  showToast(
+    "✅ Video सर्व registered usersना share केला."
   );
 
 }
 
 
-/* =====================================================
-   ESCAPE JS
-===================================================== */
+/* HELPERS */
 
-function escapeJS(text){
+function escapeHtml(text){
 
-  return String(
-    text ?? ""
-  )
+  const div =
+    document.createElement("div");
 
-  .replace(
-    /\\/g,
-    "\\\\"
-  )
+  div.textContent =
+    text ?? "";
 
-  .replace(
-    /'/g,
-    "\\'"
-  )
-
-  .replace(
-    /\n/g,
-    "\\n"
-  )
-
-  .replace(
-    /\r/g,
-    "\\r"
-  );
+  return div.innerHTML;
 
 }
 
+function escapeAttr(text){
 
-/* =====================================================
-   PAGE START
-===================================================== */
+  return String(text || "")
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
 
-(async function(){
+}
 
-  console.log(
-    "🚀 GyanSetu Video Posts Starting..."
-  );
+function formatDate(value){
 
-
-  const logged =
-    await checkUser();
-
-
-  if(logged){
-
-    await loadPosts();
-
+  if(!value){
+    return "";
   }
 
-})();
+  return new Date(value)
+    .toLocaleDateString(
+      [],
+      {
+        day:"numeric",
+        month:"short",
+        year:"numeric"
+      }
+    );
+
+}
+
+
+/* START */
+
+async function start(){
+
+  await getUser();
+
+  await loadVideos();
+
+}
+
+start();
 
 </script>
 
 </body>
-
 </html>
