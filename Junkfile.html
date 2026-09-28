@@ -1,763 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GyanSetu Admin Messages</title>
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>GyanSetu - Users</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 body{
-    background:#080812;
-    color:white;
-    height:100vh;
-    overflow:hidden;
-}
-
-.app{
-    height:100vh;
-    display:flex;
-}
-
-/* =========================
-   USERS PANEL
-========================= */
-
-.users-panel{
-    width:330px;
-    background:#0d0d18;
-    border-right:1px solid #24243d;
-    display:flex;
-    flex-direction:column;
-}
-
-.top-header{
-    padding:20px;
-    background:linear-gradient(
-        135deg,
-        #006eff,
-        #7b2cff,
-        #ff1493
-    );
-}
-
-.top-header h1{
-    font-size:23px;
-    font-weight:800;
-}
-
-.top-header p{
-    margin-top:5px;
-    font-size:12px;
-    opacity:.9;
-}
-
-.search{
-    padding:13px;
-    background:#0b0b14;
-    border-bottom:1px solid #24243d;
-}
-
-.search input{
-    width:100%;
-    height:43px;
-    padding:0 14px;
-    border-radius:12px;
-    border:1px solid #30304c;
-    background:#151525;
-    color:white;
-    outline:none;
-}
-
-.search input::placeholder{
-    color:#8888a5;
-}
-
-.search input:focus{
-    border-color:#ff1493;
-    box-shadow:0 0 12px rgba(255,20,147,.25);
-}
-
-.users{
-    flex:1;
-    overflow-y:auto;
-}
-
-/* USER */
-
-.user{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:14px;
-    cursor:pointer;
-    border-bottom:1px solid #1c1c2d;
-    transition:.2s;
-}
-
-.user:hover{
-    background:#141427;
-}
-
-.user.active{
-    background:linear-gradient(
-        90deg,
-        rgba(0,110,255,.22),
-        rgba(255,20,147,.18)
-    );
-    border-left:3px solid #ff1493;
-}
-
-.avatar{
-    width:46px;
-    height:46px;
-    flex-shrink:0;
-    border-radius:50%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:18px;
-    font-weight:bold;
-    color:white;
-    background:linear-gradient(
-        135deg,
-        #006eff,
-        #ff1493
-    );
-    box-shadow:0 0 15px rgba(255,20,147,.25);
-}
-
-.user-info{
-    min-width:0;
-}
-
-.username{
-    font-size:15px;
-    font-weight:bold;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-}
-
-.user-id{
-    color:#777795;
-    font-size:10px;
-    margin-top:4px;
-}
-
-/* =========================
-   CHAT
-========================= */
-
-.chat-panel{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    min-width:0;
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(0,110,255,.10),
-            transparent 35%
-        ),
-        radial-gradient(
-            circle at bottom left,
-            rgba(255,20,147,.08),
-            transparent 35%
-        ),
-        #080812;
-}
-
-/* CHAT HEADER */
-
-.chat-header{
-    height:72px;
-    padding:12px 18px;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    background:#0e0e1b;
-    border-bottom:1px solid #24243d;
-}
-
-.back-btn{
-    display:none;
-    width:40px;
-    height:40px;
-    border:none;
-    border-radius:10px;
-    background:#17172a;
-    color:#ff1493;
-    font-size:22px;
-    cursor:pointer;
-}
-
-.chat-avatar{
-    width:43px;
-    height:43px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(
-        135deg,
-        #006eff,
-        #ff1493
-    );
-    font-weight:bold;
-}
-
-.chat-name{
-    font-size:16px;
-    font-weight:bold;
-}
-
-.chat-status{
-    margin-top:3px;
-    font-size:11px;
-    color:#00aaff;
-}
-
-/* MESSAGES */
-
-.messages{
-    flex:1;
-    overflow-y:auto;
-    padding:20px;
-    display:flex;
-    flex-direction:column;
-    gap:11px;
-}
-
-.empty{
-    height:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    color:#777795;
-}
-
-.empty h2{
-    color:#ffffff;
-    margin-bottom:8px;
-}
-
-/* MESSAGE */
-
-.message{
-    max-width:75%;
-    padding:11px 14px;
-    border-radius:16px;
-    font-size:14px;
-    line-height:1.45;
-    word-break:break-word;
-}
-
-.message.admin{
-    align-self:flex-end;
-    background:linear-gradient(
-        135deg,
-        #006eff,
-        #5140ff
-    );
-    color:white;
-    border-bottom-right-radius:4px;
-    box-shadow:0 4px 15px rgba(0,110,255,.20);
-}
-
-.message.user{
-    align-self:flex-start;
-    background:#171727;
-    border:1px solid #2a2a43;
-    color:#f1f1f7;
-    border-bottom-left-radius:4px;
-}
-
-.time{
-    margin-top:4px;
-    font-size:9px;
-    opacity:.65;
-}
-
-/* INPUT */
-
-.input-area{
-    display:flex;
-    gap:9px;
-    padding:12px;
-    background:#0e0e1b;
-    border-top:1px solid #24243d;
-}
-
-.input-area textarea{
-    flex:1;
-    resize:none;
-    height:46px;
-    max-height:120px;
-    padding:13px;
-    border-radius:13px;
-    border:1px solid #30304c;
-    background:#151525;
-    color:white;
-    outline:none;
-}
-
-.input-area textarea:focus{
-    border-color:#006eff;
-    box-shadow:0 0 12px rgba(0,110,255,.20);
-}
-
-.send{
-    width:55px;
-    border:none;
-    border-radius:13px;
-    cursor:pointer;
-    color:white;
-    font-size:19px;
-    background:linear-gradient(
-        135deg,
-        #006eff,
-        #ff1493
-    );
-}
-
-.send:disabled{
-    opacity:.45;
-    cursor:not-allowed;
-}
-
-/* LOADING */
-
-.loading{
-    padding:20px;
-    text-align:center;
-    color:#777795;
-}
-
-/* SCROLLBAR */
-
-::-webkit-scrollbar{
-    width:6px;
-}
-
-::-webkit-scrollbar-track{
-    background:#0b0b14;
-}
-
-::-webkit-scrollbar-thumb{
-    background:linear-gradient(
-        #006eff,
-        #ff1493
-    );
-    border-radius:20px;
-}
-
-/* MOBILE */
-
-@media(max-width:700px){
-
-    .users-panel{
-        width:100%;
-    }
-
-    .chat-panel{
-        display:none;
-        width:100%;
-    }
-
-    .app.chat-open .users-panel{
-        display:none;
-    }
-
-    .app.chat-open .chat-panel{
-        display:flex;
-    }
-
-    .back-btn{
-        display:block;
-    }
-
-    .message{
-        max-width:86%;
-    }
-}
-</style>
-</head>
-
-<body>
-
-<div class="app" id="app">
-
-    <!-- USERS -->
-    <div class="users-panel">
-
-        <div class="top-header">
-            <h1>GyanSetu Admin</h1>
-            <p>Admin Messaging Center</p>
-        </div>
-
-        <div class="search">
-            <input
-                type="text"
-                id="search"
-                placeholder="Search users..."
-                autocomplete="off"
-            >
-        </div>
-
-        <div class="users" id="users">
-            <div class="loading">
-                Loading users...
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- CHAT -->
-    <div class="chat-panel">
-
-        <div class="chat-header">
-
-            <button
-                class="back-btn"
-                id="backBtn"
-            >
-                ←
-            </button>
-
-            <div
-                class="chat-avatar"
-                id="chatAvatar"
-            >
-                ?
-            </div>
-
-            <div>
-                <div
-                    class="chat-name"
-                    id="chatName"
-                >
-                    Select a user
-                </div>
-
-                <div
-                    class="chat-status"
-                    id="chatStatus"
-                >
-                    GyanSetu Admin
-                </div>
-            </div>
-
-        </div>
-
-
-        <div
-            class="messages"
-            id="messages"
-        >
-
-            <div class="empty">
-
-                <div>
-                    <h2>GyanSetu Messages</h2>
-                    <p>Select a user to start chatting.</p>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="input-area">
-
-            <textarea
-                id="messageInput"
-                placeholder="Type your message..."
-                disabled
-            ></textarea>
-
-            <button
-                class="send"
-                id="sendBtn"
-                disabled
-            >
-                ➤
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script>
-
-/* =========================
-   SUPABASE
-========================= */
-
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-
-const supabaseClient =
-supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-
-/* =========================
-   VARIABLES
-========================= */
-
-const app =
-document.getElementById("app");
-
-const usersBox =
-document.getElementById("users");
-
-const search =
-document.getElementById("search");
-
-const messagesBox =
-document.getElementById("messages");
-
-const chatName =
-document.getElementById("chatName");
-
-const chatAvatar =
-document.getElementById("chatAvatar");
-
-const chatStatus =
-document.getElementById("chatStatus");
-
-const messageInput =
-document.getElementById("messageInput");
-
-const sendBtn =
-document.getElementById("sendBtn");
-
-const backBtn =
-document.getElementById("backBtn");
-
-let currentUser = null;
-let selectedUser = null;
-let allUsers = [];
-
-
-/* =========================
-   START
-========================= */
-
-init();
-
-
-async function init(){
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .auth
-        .getSession();
-
-    if(
-        error ||
-        !data.session
-    ){
-        blockPage();
-        return;
-    }
-
-    currentUser =
-        data.session.user;
-
-
-    /* ADMIN CHECK */
-
-    const {
-        data:admin,
-        error:adminError
-    } =
-    await supabaseClient
-        .from("admin_users")
-        .select("user_id")
-        .eq(
-            "user_id",
-            currentUser.id
-        )
-        .maybeSingle();
-
-
-    if(
-        adminError ||
-        !admin
-    ){
-        blockPage();
-        return;
-    }
-
-
-    await loadUsers();
-
-    setupRealtime();
+  font-family:Arial,sans-serif;
+  background:#f4f8ff;
+  color:#172033;
+  min-height:100vh;
 }
 
 
 /* =========================
-   BLOCK NON ADMIN
+   HEADER
 ========================= */
 
-function blockPage(){
+.header{
 
-    document.body.innerHTML = "";
+  position:sticky;
+  top:0;
+  z-index:100;
 
-    document.body.style.background =
-        "#080812";
-}
+  height:66px;
 
+  display:flex;
+  align-items:center;
 
-/* =========================
-   LOAD USERS
-========================= */
+  padding:0 15px;
 
-async function loadUsers(){
-
-    usersBox.innerHTML =
-        `<div class="loading">
-            Loading users...
-        </div>`;
-
-
-    const {
-        data,
-        error
-    } =
-    await supabaseClient
-        .from("Profiles")
-        .select("id,username")
-        .neq(
-            "id",
-            currentUser.id
-        )
-        .order(
-            "username"
-        );
-
-
-    if(error){
-
-        console.error(error);
-
-        usersBox.innerHTML =
-            `<div class="loading">
-                Unable to load users.
-            </div>`;
-
-        return;
-    }
-
-
-    allUsers =
-        data || [];
-
-    renderUsers(
-        allUsers
+  background:
+    linear-gradient(
+      135deg,
+      #1565d8,
+      #2563eb
     );
+
+  color:white;
+
+  box-shadow:
+    0 5px 20px
+    rgba(37,99,235,.20);
+
 }
 
+.back{
 
-/* =========================
-   RENDER USERS
-========================= */
+  width:42px;
+  height:42px;
 
-function renderUsers(users){
+  border:0;
+  border-radius:50%;
 
-    usersBox.innerHTML = "";
+  background:
+    rgba(255,255,255,.16);
 
+  color:white;
 
-    if(!users.length){
+  font-size:29px;
 
-        usersBox.innerHTML =
-            `<div class="loading">
-                No users found.
-            </div>`;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-        return;
-    }
+  cursor:pointer;
 
+}
 
-    users.forEach(user => {
+.back:active{
+  transform:scale(.94);
+}
 
-        const div =
-            document.createElement(
-                "div"
-            );
+.header-title{
 
-        div.className =
-            "user";
+  margin-left:12px;
 
-        div.dataset.id =
-            user.id;
+  font-size:20px;
+  font-weight:800;
 
+}
 
-        const name =
-            user.username ||
-            "User";
+.header-subtitle{
 
+  font-size:11px;
 
-        const initial =
-            name
-                .charAt(0)
-                .toUpperCase();
+  opacity:.82;
 
+  margin-top:2px;
 
-        div.innerHTML = `
+}
 
-            <div class="avatar">
-                ${escapeHTML(initial)}
-            </div>
+.header-info{
+  flex:1;
+}
 
-            <div class="user-info">
+.refresh{
 
-                <div class="username">
-                    ${escapeHTML(name)}
-                </div>
+  width:42px;
+  height:42px;
 
-                <div class="user-id">
-                    ${escapeHTML(user.id)}
-                </div>
+  border:0;
+  border-radius:50%;
 
-            </div>
+  background:
+    rgba(255,255,255,.16);
 
-        `;
+  color:white;
 
+  font-size:23px;
 
-        div.addEventListener(
-            "click",
-            () => selectUser(user)
-        );
+  cursor:pointer;
 
+}
 
-        usersBox.appendChild(div);
-
-    });
+.refresh:active{
+  transform:rotate(90deg);
 }
 
 
@@ -765,515 +138,1448 @@ function renderUsers(users){
    SEARCH
 ========================= */
 
-search.addEventListener(
-    "input",
-    () => {
+.search-area{
 
-        const value =
-            search.value
-                .toLowerCase()
-                .trim();
+  padding:15px;
 
+  background:white;
 
-        const filtered =
-            allUsers.filter(
-                user =>
-                    (
-                        user.username ||
-                        ""
-                    )
-                    .toLowerCase()
-                    .includes(value)
-            );
+  border-bottom:
+    1px solid #e4ecf7;
 
+}
 
-        renderUsers(
-            filtered
-        );
-    }
-);
+.search{
 
+  width:100%;
 
-/* =========================
-   SELECT USER
-========================= */
+  padding:14px 17px;
 
-async function selectUser(user){
+  border:
+    1.5px solid #d8e5f5;
 
-    selectedUser =
-        user;
+  border-radius:14px;
 
+  outline:none;
 
-    document
-        .querySelectorAll(".user")
-        .forEach(item => {
+  font-size:15px;
 
-            item.classList.toggle(
-                "active",
-                item.dataset.id ===
-                user.id
-            );
+  background:#f8fbff;
 
-        });
+  color:#172033;
 
+  transition:.2s;
 
-    const name =
-        user.username ||
-        "User";
+}
 
+.search:focus{
 
-    chatName.textContent =
-        name;
+  border-color:#2563eb;
 
+  background:white;
 
-    chatAvatar.textContent =
-        name
-            .charAt(0)
-            .toUpperCase();
+  box-shadow:
+    0 0 0 4px
+    rgba(37,99,235,.08);
 
-
-    chatStatus.textContent =
-        "Messaging";
-
-
-    messageInput.disabled =
-        false;
-
-    sendBtn.disabled =
-        false;
-
-
-    app.classList.add(
-        "chat-open"
-    );
-
-
-    await loadMessages();
 }
 
 
 /* =========================
-   LOAD MESSAGES
+   USERS LIST
 ========================= */
 
-async function loadMessages(){
+#usersList{
 
-    if(!selectedUser)
-        return;
+  padding:10px 14px 25px;
+
+}
+
+.user-card{
+
+  position:relative;
+
+  display:flex;
+  align-items:center;
+
+  gap:13px;
+
+  width:100%;
+
+  padding:13px;
+
+  margin-bottom:10px;
+
+  background:white;
+
+  border:
+    1px solid #e5edf8;
+
+  border-radius:17px;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 4px 14px
+    rgba(30,80,150,.07);
+
+  transition:
+    transform .15s,
+    box-shadow .15s;
+
+}
+
+.user-card:active{
+
+  transform:scale(.985);
+
+  box-shadow:
+    0 2px 7px
+    rgba(30,80,150,.10);
+
+}
 
 
-    messagesBox.innerHTML =
-        `<div class="loading">
-            Loading messages...
-        </div>`;
+/* =========================
+   AVATAR
+========================= */
 
+.avatar-wrap{
+
+  position:relative;
+
+  flex-shrink:0;
+
+}
+
+.avatar{
+
+  width:52px;
+  height:52px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e0efff,
+      #c7dcff
+    );
+
+  color:#1559c7;
+
+  font-size:21px;
+  font-weight:800;
+
+  border:
+    2px solid white;
+
+  box-shadow:
+    0 3px 10px
+    rgba(37,99,235,.15);
+
+}
+
+
+/* Online dot */
+
+.online-dot{
+
+  position:absolute;
+
+  right:1px;
+  bottom:1px;
+
+  width:13px;
+  height:13px;
+
+  border-radius:50%;
+
+  background:#22c55e;
+
+  border:
+    2px solid white;
+
+}
+
+
+/* =========================
+   USER INFO
+========================= */
+
+.user-info{
+
+  flex:1;
+
+  min-width:0;
+
+}
+
+.username-row{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  min-width:0;
+
+}
+
+.username{
+
+  font-size:16px;
+
+  font-weight:800;
+
+  color:#14213d;
+
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+
+}
+
+.email{
+
+  margin-top:5px;
+
+  font-size:12px;
+
+  color:#7a8799;
+
+  overflow:hidden;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+
+}
+
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.right-side{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:7px;
+
+  flex-shrink:0;
+
+}
+
+.unread-dot{
+
+  width:10px;
+  height:10px;
+
+  border-radius:50%;
+
+  background:#2563eb;
+
+  box-shadow:
+    0 0 0 3px
+    #e5efff;
+
+}
+
+.unread-badge{
+
+  min-width:23px;
+  height:23px;
+
+  padding:0 6px;
+
+  border-radius:20px;
+
+  background:#2563eb;
+
+  color:white;
+
+  font-size:11px;
+
+  font-weight:bold;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+}
+
+.arrow{
+
+  color:#a0aec0;
+
+  font-size:22px;
+
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+
+  padding:45px 20px;
+
+  text-align:center;
+
+  color:#728096;
+
+}
+
+.loader{
+
+  width:35px;
+  height:35px;
+
+  margin:0 auto 12px;
+
+  border:
+    3px solid #dce9ff;
+
+  border-top-color:#2563eb;
+
+  border-radius:50%;
+
+  animation:
+    spin .8s linear infinite;
+
+}
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty{
+
+  margin-top:25px;
+
+  padding:35px 20px;
+
+  background:white;
+
+  border-radius:17px;
+
+  text-align:center;
+
+  color:#7b8798;
+
+  border:
+    1px solid #e5edf8;
+
+}
+
+.empty-icon{
+
+  font-size:38px;
+
+  margin-bottom:10px;
+
+}
+
+
+/* =========================
+   ERROR
+========================= */
+
+.error{
+
+  margin-top:20px;
+
+  padding:18px;
+
+  background:#fff5f5;
+
+  border:
+    1px solid #ffd7d7;
+
+  border-radius:15px;
+
+  color:#c62828;
+
+  text-align:center;
+
+  line-height:1.5;
+
+}
+
+
+/* =========================
+   NO SEARCH RESULT
+========================= */
+
+.no-result{
+
+  text-align:center;
+
+  padding:40px 20px;
+
+  color:#7b8798;
+
+}
+
+
+/* =========================
+   SMALL SCREEN
+========================= */
+
+@media(max-width:360px){
+
+  .header-title{
+    font-size:18px;
+  }
+
+  .avatar{
+    width:48px;
+    height:48px;
+  }
+
+  .username{
+    font-size:15px;
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+  <button
+    class="back"
+    onclick="goBack()">
+    ‹
+  </button>
+
+
+  <div class="header-info">
+
+    <div class="header-title">
+      GyanSetu Users
+    </div>
+
+    <div class="header-subtitle">
+      Connect and message
+    </div>
+
+  </div>
+
+
+  <button
+    class="refresh"
+    onclick="loadUsers()"
+    aria-label="Refresh">
+    ↻
+  </button>
+
+</header>
+
+
+<!-- =========================
+     SEARCH
+========================= -->
+
+<div class="search-area">
+
+  <input
+    class="search"
+    id="searchInput"
+    type="text"
+    placeholder="🔍 Search user..."
+    autocomplete="off">
+
+</div>
+
+
+<!-- =========================
+     USERS
+========================= -->
+
+<div id="usersList">
+
+  <div class="loading">
+
+    <div class="loader"></div>
+
+    Users loading...
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+  "https://eqglttfffhvoyvrclzse.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentUser = null;
+
+let allUsers = [];
+
+let unreadMessages = {};
+
+let realtimeChannel = null;
+
+
+/* =====================================================
+   GET CURRENT USER
+===================================================== */
+
+async function getCurrentUser(){
+
+  try{
 
     const {
-        data,
-        error
+      data,
+      error
     } =
-    await supabaseClient
-        .from("Messages")
+      await supabaseClient.auth.getUser();
+
+
+    if(error){
+
+      console.error(
+        "Current user error:",
+        error
+      );
+
+      return null;
+
+    }
+
+
+    currentUser =
+      data?.user || null;
+
+
+    return currentUser;
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+    return null;
+
+  }
+
+}
+
+
+/* =====================================================
+   LOAD USERS
+===================================================== */
+
+async function loadUsers(){
+
+  const usersList =
+    document.getElementById(
+      "usersList"
+    );
+
+
+  usersList.innerHTML = `
+
+    <div class="loading">
+
+      <div class="loader"></div>
+
+      Users loading...
+
+    </div>
+
+  `;
+
+
+  try{
+
+    /*
+      Current user नसेल तर
+      आधी current user मिळवतो.
+    */
+
+    if(!currentUser){
+
+      await getCurrentUser();
+
+    }
+
+
+    if(!currentUser){
+
+      usersList.innerHTML = `
+
+        <div class="error">
+
+          Login required.<br>
+          Please login to view users.
+
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    /* ==========================================
+       PROFILES
+    ========================================== */
+
+    const {
+      data: users,
+      error
+    } =
+      await supabaseClient
+        .from("Profiles")
         .select("*")
-        .or(
-            `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedUser.id}),and(sender_id.eq.${selectedUser.id},receiver_id.eq.${currentUser.id})`
-        )
         .order(
-            "created_at",
-            {
-                ascending:true
-            }
+          "username",
+          {
+            ascending:true
+          }
         );
 
 
     if(error){
 
-        console.error(error);
+      console.error(
+        "Profiles error:",
+        error
+      );
 
-        messagesBox.innerHTML =
-            `<div class="loading">
-                Unable to load messages.
-            </div>`;
+      usersList.innerHTML = `
 
-        return;
+        <div class="error">
+
+          Users load झाले नाहीत.<br><br>
+
+          ${escapeHTML(error.message)}
+
+        </div>
+
+      `;
+
+      return;
+
     }
 
 
-    messagesBox.innerHTML =
-        "";
+    /*
+      स्वतःचा account list मधून
+      remove करतो.
+    */
+
+    allUsers =
+      (users || []).filter(
+        user =>
+          user.id !== currentUser.id
+      );
 
 
-    if(
-        !data ||
-        data.length === 0
-    ){
+    /* ==========================================
+       UNREAD
+    ========================================== */
 
-        messagesBox.innerHTML = `
-            <div class="empty">
-                <div>
-                    <h2>No messages yet</h2>
-                    <p>Start the conversation.</p>
-                </div>
-            </div>
-        `;
-
-        return;
-    }
+    await loadUnreadMessages();
 
 
-    data.forEach(
-        message =>
-            addMessage(
-                message,
-                false
-            )
+    displayUsers(
+      getFilteredUsers()
+    );
+
+  }
+
+  catch(error){
+
+    console.error(
+      "LOAD USERS ERROR:",
+      error
     );
 
 
-    scrollBottom();
+    usersList.innerHTML = `
 
+      <div class="error">
 
-    /* MARK AS READ */
+        Users load करता आले नाहीत.
 
-    await supabaseClient
-        .from("Messages")
-        .update({
-            is_read:true
-        })
-        .eq(
-            "sender_id",
-            selectedUser.id
-        )
-        .eq(
-            "receiver_id",
-            currentUser.id
-        )
-        .eq(
-            "is_read",
-            false
-        );
-}
-
-
-/* =========================
-   ADD MESSAGE
-========================= */
-
-function addMessage(
-    message,
-    scroll=true
-){
-
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    const adminMessage =
-        message.sender_id ===
-        currentUser.id;
-
-
-    div.className =
-        "message " +
-        (
-            adminMessage
-            ? "admin"
-            : "user"
-        );
-
-
-    const time =
-        message.created_at
-        ?
-        new Date(
-            message.created_at
-        ).toLocaleTimeString(
-            [],
-            {
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        )
-        :
-        "";
-
-
-    div.innerHTML = `
-
-        <div>
-            ${escapeHTML(
-                message.message || ""
-            )}
-        </div>
-
-        <div class="time">
-            ${time}
-        </div>
+      </div>
 
     `;
 
+  }
 
-    messagesBox.appendChild(
-        div
-    );
-
-
-    if(scroll)
-        scrollBottom();
 }
 
 
-/* =========================
-   SEND
-========================= */
+/* =====================================================
+   UNREAD MESSAGES
+===================================================== */
 
-async function sendMessage(){
+async function loadUnreadMessages(){
 
-    if(!selectedUser)
-        return;
-
-
-    const text =
-        messageInput.value
-            .trim();
+  unreadMessages = {};
 
 
-    if(!text)
-        return;
+  if(!currentUser){
+
+    return;
+
+  }
 
 
-    sendBtn.disabled =
-        true;
-
+  try{
 
     const {
-        error
+      data: messages,
+      error
     } =
-    await supabaseClient
+      await supabaseClient
         .from("Messages")
-        .insert({
-
-            sender_id:
-                currentUser.id,
-
-            receiver_id:
-                selectedUser.id,
-
-            message:
-                text,
-
-            is_read:false
-
-        });
+        .select(
+          "id,sender_id,receiver_id,is_read"
+        )
+        .eq(
+          "receiver_id",
+          currentUser.id
+        )
+        .eq(
+          "is_read",
+          false
+        );
 
 
     if(error){
 
-        console.error(error);
+      console.error(
+        "Unread messages error:",
+        error
+      );
 
-        sendBtn.disabled =
-            false;
+      return;
 
-        return;
     }
 
 
-    messageInput.value =
-        "";
+    (messages || []).forEach(
+      message => {
 
+        const senderId =
+          message.sender_id;
 
-    sendBtn.disabled =
-        false;
-
-
-    messageInput.focus();
-}
-
-
-/* =========================
-   SEND BUTTON
-========================= */
-
-sendBtn.addEventListener(
-    "click",
-    sendMessage
-);
-
-
-/* =========================
-   ENTER
-========================= */
-
-messageInput.addEventListener(
-    "keydown",
-    event => {
 
         if(
-            event.key === "Enter" &&
-            !event.shiftKey
+          !unreadMessages[senderId]
         ){
 
-            event.preventDefault();
+          unreadMessages[senderId] =
+            0;
 
-            sendMessage();
         }
 
-    }
-);
+
+        unreadMessages[senderId]++;
+
+      }
+    );
+
+  }
+
+  catch(error){
+
+    console.error(error);
+
+  }
+
+}
 
 
-/* =========================
-   BACK MOBILE
-========================= */
+/* =====================================================
+   DISPLAY USERS
+===================================================== */
 
-backBtn.addEventListener(
-    "click",
-    () => {
+function displayUsers(users){
 
-        app.classList.remove(
-            "chat-open"
-        );
-
-        selectedUser =
-            null;
-
-        messageInput.disabled =
-            true;
-
-        sendBtn.disabled =
-            true;
-
-    }
-);
+  const usersList =
+    document.getElementById(
+      "usersList"
+    );
 
 
-/* =========================
-   REALTIME
-========================= */
+  if(!users || !users.length){
 
-function setupRealtime(){
-
-    supabaseClient
-
-        .channel(
-            "admin-message-channel"
+    const search =
+      document
+        .getElementById(
+          "searchInput"
         )
-
-        .on(
-            "postgres_changes",
-            {
-                event:"INSERT",
-                schema:"public",
-                table:"Messages"
-            },
-            payload => {
-
-                const message =
-                    payload.new;
+        .value
+        .trim();
 
 
-                if(!selectedUser)
-                    return;
+    if(search){
+
+      usersList.innerHTML = `
+
+        <div class="no-result">
+
+          🔍<br><br>
+
+          "<b>${escapeHTML(search)}</b>"
+          साठी user सापडला नाही.
+
+        </div>
+
+      `;
+
+    }
+    else{
+
+      usersList.innerHTML = `
+
+        <div class="empty">
+
+          <div class="empty-icon">
+            👥
+          </div>
+
+          सध्या कोणताही user उपलब्ध नाही.
+
+        </div>
+
+      `;
+
+    }
+
+    return;
+
+  }
 
 
-                const sameChat =
-                    (
-                        message.sender_id ===
-                        currentUser.id &&
-                        message.receiver_id ===
-                        selectedUser.id
-                    )
-                    ||
-                    (
-                        message.sender_id ===
-                        selectedUser.id &&
-                        message.receiver_id ===
-                        currentUser.id
-                    );
+  usersList.innerHTML =
+    users
+      .map(
+        user => {
+
+          const username =
+            user.username ||
+            user.full_name ||
+            "GyanSetu User";
 
 
-                if(!sameChat)
-                    return;
+          const email =
+            user.email ||
+            "";
 
 
-                addMessage(
-                    message,
-                    true
-                );
+          const firstLetter =
+            username
+              .charAt(0)
+              .toUpperCase();
 
 
-                if(
-                    message.sender_id ===
-                    selectedUser.id
-                ){
+          const unreadCount =
+            unreadMessages[user.id] ||
+            0;
 
-                    supabaseClient
-                        .from("Messages")
-                        .update({
-                            is_read:true
-                        })
-                        .eq(
-                            "id",
-                            message.id
-                        );
 
+          return `
+
+            <div
+              class="user-card"
+              onclick="openChat('${escapeAttribute(user.id)}')"
+            >
+
+              <div class="avatar-wrap">
+
+                <div class="avatar">
+
+                  ${escapeHTML(
+                    firstLetter
+                  )}
+
+                </div>
+
+              </div>
+
+
+              <div class="user-info">
+
+                <div class="username-row">
+
+                  <div class="username">
+
+                    ${escapeHTML(
+                      username
+                    )}
+
+                  </div>
+
+                </div>
+
+
+                ${
+                  email
+                  ?
+                  `
+                    <div class="email">
+
+                      ${escapeHTML(
+                        email
+                      )}
+
+                    </div>
+                  `
+                  :
+                  `
+                    <div class="email">
+                      GyanSetu member
+                    </div>
+                  `
                 }
 
-            }
-        )
+              </div>
 
-        .subscribe();
+
+              <div class="right-side">
+
+                ${
+                  unreadCount > 0
+                  ?
+                  `
+                    <span
+                      class="unread-dot">
+                    </span>
+
+                    ${
+                      unreadCount > 1
+                      ?
+                      `
+                        <span
+                          class="unread-badge">
+
+                          ${
+                            unreadCount > 99
+                            ? "99+"
+                            : unreadCount
+                          }
+
+                        </span>
+                      `
+                      :
+                      ""
+                    }
+                  `
+                  :
+                  ""
+                }
+
+
+                <span class="arrow">
+                  ›
+                </span>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
 }
 
 
-/* =========================
-   SCROLL
-========================= */
+/* =====================================================
+   SEARCH
+===================================================== */
 
-function scrollBottom(){
+function searchUsers(){
 
-    messagesBox.scrollTop =
-        messagesBox.scrollHeight;
+  displayUsers(
+    getFilteredUsers()
+  );
+
 }
 
 
-/* =========================
-   SECURITY
-========================= */
+function getFilteredUsers(){
 
-function escapeHTML(value){
+  const input =
+    document.getElementById(
+      "searchInput"
+    );
 
-    return String(value)
 
-        .replace(
-            /&/g,
-            "&amp;"
+  const search =
+    input.value
+      .toLowerCase()
+      .trim();
+
+
+  if(!search){
+
+    return allUsers;
+
+  }
+
+
+  return allUsers.filter(
+    user => {
+
+      const username =
+        (
+          user.username ||
+          user.full_name ||
+          ""
         )
+        .toLowerCase();
 
-        .replace(
-            /</g,
-            "&lt;"
+
+      const email =
+        (
+          user.email ||
+          ""
         )
+        .toLowerCase();
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+      return (
+        username.includes(search) ||
+        email.includes(search)
+      );
 
-        .replace(
-            /'/g,
-            "&#039;"
+    }
+  );
+
+}
+
+
+/* =====================================================
+   OPEN CHAT
+===================================================== */
+
+async function openChat(userId){
+
+  if(!userId){
+
+    return;
+
+  }
+
+
+  /*
+    User वर tap केल्यावर
+    त्याच्याकडून आलेले unread
+    messages read करतो.
+  */
+
+  if(currentUser){
+
+    try{
+
+      const {
+        error
+      } =
+        await supabaseClient
+          .from("Messages")
+          .update({
+            is_read:true
+          })
+          .eq(
+            "sender_id",
+            userId
+          )
+          .eq(
+            "receiver_id",
+            currentUser.id
+          )
+          .eq(
+            "is_read",
+            false
+          );
+
+
+      if(error){
+
+        console.error(
+          "Read update error:",
+          error
         );
+
+      }
+
+    }
+
+    catch(error){
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  /*
+    ⭐ DIRECT CHAT ⭐
+
+    Message page चे नाव:
+    message.html
+
+    User ID:
+    ?id=USER_ID
+  */
+
+  window.location.href =
+    "message.html?id=" +
+    encodeURIComponent(userId);
+
 }
+
+
+/* =====================================================
+   REALTIME
+===================================================== */
+
+function startRealtime(){
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  /*
+    जुना channel असेल तर remove
+  */
+
+  if(realtimeChannel){
+
+    supabaseClient.removeChannel(
+      realtimeChannel
+    );
+
+  }
+
+
+  realtimeChannel =
+    supabaseClient
+      .channel(
+        "gyansetu-users-" +
+        currentUser.id
+      )
+
+      .on(
+        "postgres_changes",
+        {
+          event:"INSERT",
+          schema:"public",
+          table:"Messages",
+          filter:
+            "receiver_id=eq." +
+            currentUser.id
+        },
+
+        function(payload){
+
+          const message =
+            payload.new;
+
+
+          const senderId =
+            message.sender_id;
+
+
+          if(
+            !senderId ||
+            senderId === currentUser.id
+          ){
+
+            return;
+
+          }
+
+
+          /*
+            unread count वाढवा
+          */
+
+          if(
+            !unreadMessages[senderId]
+          ){
+
+            unreadMessages[senderId] =
+              0;
+
+          }
+
+
+          unreadMessages[senderId]++;
+
+
+          /*
+            List update
+          */
+
+          displayUsers(
+            getFilteredUsers()
+          );
+
+        }
+
+      )
+
+      .on(
+        "postgres_changes",
+        {
+          event:"INSERT",
+          schema:"public",
+          table:"Profiles"
+        },
+
+        function(){
+
+          /*
+            नवीन user register झाला
+            तर list refresh.
+          */
+
+          loadUsers();
+
+        }
+
+      )
+
+      .subscribe();
+
+}
+
+
+/* =====================================================
+   SEARCH EVENT
+===================================================== */
+
+document
+  .getElementById(
+    "searchInput"
+  )
+  .addEventListener(
+    "input",
+    searchUsers
+  );
+
+
+/* =====================================================
+   ENTER KEY
+===================================================== */
+
+document
+  .getElementById(
+    "searchInput"
+  )
+  .addEventListener(
+    "keydown",
+    function(event){
+
+      if(
+        event.key === "Escape"
+      ){
+
+        event.target.value = "";
+
+        searchUsers();
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   BACK
+===================================================== */
+
+function goBack(){
+
+  if(
+    document.referrer
+  ){
+
+    window.history.back();
+
+  }
+  else{
+
+    window.location.href =
+      "home.html";
+
+  }
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(text){
+
+  return String(
+    text ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   ESCAPE ATTRIBUTE
+===================================================== */
+
+function escapeAttribute(text){
+
+  return String(
+    text ?? ""
+  )
+
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+
+    .replace(
+      /'/g,
+      "\\'"
+    );
+
+}
+
+
+/* =====================================================
+   PAGE START
+===================================================== */
+
+async function startPage(){
+
+  await getCurrentUser();
+
+  if(!currentUser){
+
+    document.getElementById(
+      "usersList"
+    ).innerHTML = `
+
+      <div class="error">
+
+        🔐 Login required.<br><br>
+
+        Please login to view GyanSetu users.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  await loadUsers();
+
+  startRealtime();
+
+}
+
+
+/* START */
+
+startPage();
 
 </script>
 
 </body>
+
 </html>
