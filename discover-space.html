@@ -1,688 +1,390 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>GyanSetu Channels</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>GyanSetu • Discover Space</title>
 
 <style>
-
 *{
   box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html,body{
   margin:0;
-  min-height:100%;
-  font-family:Arial,sans-serif;
-  background:#050509;
-  color:#fff;
+  padding:0;
 }
 
 body{
+  font-family:Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(circle at 10% 0%,#ff4fa3 0,#17152b 28%,#050509 72%);
-}
-
-button,input{
-  font-family:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-button:disabled{
-  cursor:not-allowed;
+    radial-gradient(circle at 20% 10%,#172554 0%,transparent 25%),
+    radial-gradient(circle at 80% 30%,#312e81 0%,transparent 22%),
+    linear-gradient(180deg,#020617,#030712 55%,#000);
+  color:white;
+  min-height:100vh;
 }
 
 .app{
   width:100%;
-  max-width:500px;
+  max-width:430px;
   min-height:100vh;
   margin:auto;
-  background:linear-gradient(180deg,#0b0a14,#050509);
+  padding-bottom:30px;
+}
+
+/* HEADER */
+.header{
+  padding:18px 16px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+  box-shadow:0 0 25px #2563eb55;
+}
+
+.brand h1{
+  font-size:21px;
+}
+
+.brand p{
+  font-size:11px;
+  color:#94a3b8;
+  margin-top:3px;
+}
+
+.home-btn{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:13px;
+  background:#111827;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero{
+  margin:8px 16px 18px;
+  padding:22px 18px;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 80% 20%,#6366f155,transparent 35%),
+    linear-gradient(135deg,#111827,#172554);
+  border:1px solid #334155;
+  overflow:hidden;
+  position:relative;
+}
+
+.hero:before,
+.hero:after{
+  content:"✦";
+  position:absolute;
+  color:white;
+  opacity:.7;
+}
+
+.hero:before{
+  top:18px;
+  right:35px;
+}
+
+.hero:after{
+  bottom:25px;
+  left:35px;
+}
+
+.hero h2{
+  font-size:27px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#cbd5e1;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* SEARCH */
+.search-box{
+  margin:0 16px 18px;
+  position:relative;
+}
+
+.search-box input{
+  width:100%;
+  padding:15px 45px 15px 16px;
+  border-radius:16px;
+  border:1px solid #334155;
+  outline:none;
+  background:#0f172a;
+  color:white;
+  font-size:15px;
+}
+
+.search-box input::placeholder{
+  color:#64748b;
+}
+
+.search-icon{
+  position:absolute;
+  right:15px;
+  top:13px;
+  font-size:21px;
+}
+
+/* STAR WALK BUTTON */
+.starwalk{
+  margin:0 16px 22px;
+  padding:17px;
+  border-radius:19px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  cursor:pointer;
+  box-shadow:0 12px 35px #4f46e544;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.starwalk-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.star-icon{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#ffffff18;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+}
+
+.starwalk h3{
+  font-size:16px;
+}
+
+.starwalk p{
+  font-size:11px;
+  color:#ddd6fe;
+  margin-top:3px;
+}
+
+/* SECTION */
+.section{
+  padding:0 16px;
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.section-title h2{
+  font-size:19px;
+}
+
+.section-title span{
+  font-size:11px;
+  color:#64748b;
+}
+
+/* CARDS */
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.card{
+  min-height:145px;
+  padding:15px;
+  border-radius:19px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  cursor:pointer;
+  transition:.2s;
   position:relative;
   overflow:hidden;
 }
 
-.header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  height:65px;
-  padding:0 16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  background:rgba(8,8,15,.95);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.logo{
-  font-size:21px;
-  font-weight:900;
-  background:linear-gradient(90deg,#ff4fa3,#6ca8ff);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.header-user{
-  font-size:13px;
-  color:#aaa;
-}
-
-.main{
-  padding:20px 15px 45px;
-}
-
-.section{
-  display:none;
-}
-
-.section.active{
-  display:block;
-}
-
-.welcome{
-  text-align:center;
-  padding:25px 10px 15px;
-}
-
-.welcome-icon{
-  font-size:55px;
-}
-
-.welcome h1{
-  margin:8px 0;
-  font-size:29px;
-}
-
-.welcome p{
-  color:#aaa;
-  font-size:14px;
-  line-height:1.6;
-}
-
-.choice{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:25px;
-}
-
-.choice button{
-  min-height:125px;
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:20px;
-  color:white;
-  background:linear-gradient(
-    145deg,
-    rgba(255,55,150,.25),
-    rgba(45,100,255,.18)
-  );
-}
-
-.choice button:active{
+.card:active{
   transform:scale(.97);
 }
 
-.choice-icon{
-  display:block;
-  font-size:34px;
-  margin-bottom:8px;
-}
-
-.choice-title{
-  display:block;
-  font-weight:bold;
-  font-size:16px;
-}
-
-.choice-small{
-  display:block;
-  color:#aaa;
-  font-size:11px;
-  margin-top:5px;
-}
-
-.section-title{
-  font-size:22px;
-  font-weight:800;
-  margin:8px 0 15px;
-}
-
-.sub-title{
-  color:#999;
-  font-size:13px;
-  line-height:1.5;
-  margin-bottom:18px;
-}
-
-.card{
-  background:linear-gradient(
-    145deg,
-    rgba(255,255,255,.07),
-    rgba(255,255,255,.025)
-  );
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:20px;
-  padding:17px;
+.card-icon{
+  font-size:35px;
   margin-bottom:13px;
-  box-shadow:0 12px 30px rgba(0,0,0,.22);
 }
 
-label{
-  display:block;
-  margin:13px 0 7px;
-  font-size:13px;
-  color:#ccc;
-}
-
-input{
-  width:100%;
-  padding:14px;
-  border-radius:13px;
-  border:1px solid #34344d;
-  outline:none;
-  background:#10101b;
-  color:white;
+.card h3{
   font-size:15px;
+  margin-bottom:5px;
 }
 
-input:focus{
-  border-color:#ff4fa3;
-}
-
-input::placeholder{
-  color:#666;
-}
-
-input:disabled{
-  opacity:.65;
-  cursor:not-allowed;
-}
-
-.primary{
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:14px;
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  background:linear-gradient(135deg,#ff3f9d,#6a63ff);
-  margin-top:17px;
-}
-
-.primary:disabled{
-  opacity:.55;
-}
-
-.secondary{
-  width:100%;
-  padding:13px;
-  border:1px solid #41415d;
-  border-radius:13px;
-  color:#ddd;
-  background:#11111c;
-  margin-top:10px;
-}
-
-.back-btn{
-  border:0;
-  background:none;
-  color:#aaa;
-  font-size:15px;
-  padding:5px 0;
-  margin-bottom:10px;
-}
-
-.channel-head{
-  display:flex;
-  align-items:center;
-  gap:13px;
-}
-
-.channel-avatar{
-  width:52px;
-  height:52px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  font-weight:bold;
-  background:linear-gradient(135deg,#ff3f9d,#456dff);
-  flex-shrink:0;
-}
-
-.channel-info{
-  flex:1;
-  min-width:0;
-}
-
-.channel-name{
-  font-size:17px;
-  font-weight:bold;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.channel-owner{
-  color:#999;
-  font-size:12px;
-  margin-top:4px;
-}
-
-.badge{
-  display:inline-block;
-  margin-top:7px;
-  margin-right:4px;
-  padding:4px 8px;
-  border-radius:20px;
-  font-size:10px;
-  background:#21182a;
-  color:#ff72b5;
-}
-
-.follow-row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:14px;
-}
-
-.follow-count{
-  flex:1;
-  color:#aaa;
-  font-size:12px;
-}
-
-.follow-btn{
-  border:0;
-  border-radius:10px;
-  padding:9px 15px;
-  color:white;
-  background:#2764ff;
-  font-weight:bold;
-}
-
-.follow-btn.following{
-  background:#292936;
-  color:#bbb;
-}
-
-.follow-btn:disabled{
-  opacity:.55;
-}
-
-.chat-wrap{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:100;
-  background:#050509;
-}
-
-.chat-wrap.active{
-  display:flex;
-  flex-direction:column;
-}
-
-.chat-header{
-  min-height:65px;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:0 10px;
-  background:#0c0c15;
-  border-bottom:1px solid #242436;
-}
-
-.chat-back{
-  border:0;
-  background:none;
-  color:white;
-  font-size:30px;
-  flex-shrink:0;
-}
-
-.chat-title{
-  flex:1;
-  min-width:0;
-}
-
-.chat-title-main{
-  font-size:16px;
-  font-weight:bold;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.chat-title-small{
-  color:#777;
+.card p{
+  color:#94a3b8;
   font-size:11px;
+  line-height:1.4;
+}
+
+.card .arrow{
+  position:absolute;
+  right:13px;
+  bottom:13px;
+  color:#64748b;
+}
+
+/* OBJECTS */
+.objects{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:8px;
+  margin-bottom:25px;
+}
+
+.objects::-webkit-scrollbar{
+  display:none;
+}
+
+.object{
+  min-width:105px;
+  padding:14px 12px;
+  border-radius:17px;
+  background:#0f172a;
+  border:1px solid #1e293b;
+  cursor:pointer;
+}
+
+.object-icon{
+  font-size:28px;
+  margin-bottom:9px;
+}
+
+.object h4{
+  font-size:13px;
+}
+
+.object p{
+  color:#64748b;
+  font-size:10px;
   margin-top:3px;
 }
 
-.online-dot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:#35df87;
-  flex-shrink:0;
+/* INFO */
+.info{
+  margin:0 16px;
+  padding:17px;
+  border-radius:19px;
+  background:#0b1220;
+  border:1px solid #1e293b;
 }
 
-.comment-toggle{
-  display:none;
-  border:0;
-  border-radius:10px;
-  padding:8px 9px;
-  color:white;
-  font-size:11px;
-  font-weight:bold;
-  flex-shrink:0;
+.info h3{
+  font-size:15px;
+  margin-bottom:8px;
 }
 
-.comment-toggle.on{
-  background:#176b45;
-}
-
-.comment-toggle.off{
-  background:#8b2638;
-}
-
-.messages{
-  flex:1;
-  overflow-y:auto;
-  padding:15px 12px 90px;
-}
-
-.message{
-  margin-bottom:12px;
-  max-width:88%;
-}
-
-.message.me{
-  margin-left:auto;
-  text-align:right;
-}
-
-.message-bubble{
-  display:inline-block;
-  padding:10px 13px;
-  border-radius:15px;
-  background:#171725;
-  color:#eee;
-  font-size:14px;
-  line-height:1.45;
-  text-align:left;
-  word-break:break-word;
-}
-
-.message.me .message-bubble{
-  background:linear-gradient(135deg,#e72d88,#5557d9);
-}
-
-.message-user{
-  font-size:10px;
-  color:#777;
-  margin-bottom:3px;
-}
-
-.react{
-  border:0;
-  background:#15151f;
-  color:#bbb;
-  border-radius:10px;
-  padding:4px 8px;
+.info p{
+  color:#94a3b8;
   font-size:12px;
-  margin-top:4px;
-}
-
-.chat-input{
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:10px;
-  display:flex;
-  gap:8px;
-  background:#0b0b12;
-  border-top:1px solid #252536;
-}
-
-.chat-input input{
-  flex:1;
-}
-
-.send{
-  width:50px;
-  border:0;
-  border-radius:13px;
-  color:white;
-  background:linear-gradient(135deg,#ff3f9d,#5a63ff);
-  font-size:19px;
-}
-
-.send:disabled{
-  opacity:.35;
-}
-
-.comment-off-bar{
-  display:none;
-  position:absolute;
-  bottom:0;
-  left:0;
-  right:0;
-  padding:13px;
-  background:#11111b;
-  border-top:1px solid #29293b;
-  color:#999;
-  text-align:center;
-  font-size:12px;
-}
-
-.comment-off-bar.show{
-  display:block;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:200;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:rgba(0,0,0,.75);
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:390px;
-  max-height:90vh;
-  overflow-y:auto;
-  background:linear-gradient(145deg,#171724,#09090f);
-  border:1px solid #39394d;
-  border-radius:23px;
-  padding:22px;
-}
-
-.modal-icon{
-  font-size:42px;
-  text-align:center;
-}
-
-.modal h2{
-  text-align:center;
-}
-
-.modal p{
-  text-align:center;
-  color:#aaa;
-  font-size:13px;
   line-height:1.6;
 }
 
-.modal-buttons{
-  display:flex;
-  gap:9px;
-}
-
-.toast{
+/* POPUP */
+.overlay{
   position:fixed;
-  left:50%;
-  bottom:25px;
-  transform:translate(-50%,120px);
-  z-index:500;
-  width:calc(100% - 30px);
+  inset:0;
+  background:#000000aa;
+  backdrop-filter:blur(8px);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:100;
+}
+
+.popup{
+  width:100%;
   max-width:430px;
-  padding:13px 16px;
-  border-radius:13px;
-  background:#171724;
-  border:1px solid #38384c;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:28px 28px 0 0;
+  padding:24px 20px 30px;
+  animation:up .25s ease;
+}
+
+@keyframes up{
+  from{
+    transform:translateY(100%);
+  }
+  to{
+    transform:translateY(0);
+  }
+}
+
+.popup-icon{
+  font-size:48px;
+  margin-bottom:12px;
+}
+
+.popup h2{
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.popup small{
+  color:#818cf8;
+}
+
+.popup p{
+  color:#cbd5e1;
+  line-height:1.6;
+  font-size:14px;
+  margin:14px 0 20px;
+}
+
+.close{
+  width:100%;
+  border:none;
+  padding:14px;
+  border-radius:15px;
+  background:#2563eb;
   color:white;
-  text-align:center;
-  font-size:13px;
-  transition:.3s;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
 }
 
-.toast.show{
-  transform:translate(-50%,0);
-}
-
-.toast.success{
-  border-color:#2eaa72;
-}
-
-.toast.error{
-  border-color:#e75b78;
-}
-
-.loading{
+/* NO RESULT */
+.no-result{
+  display:none;
   text-align:center;
   padding:25px;
-  color:#888;
+  color:#64748b;
+  font-size:13px;
 }
-
-.empty{
-  text-align:center;
-  padding:35px 15px;
-  color:#777;
-}
-
-.empty-icon{
-  font-size:40px;
-  margin-bottom:10px;
-}
-
-.saved-title{
-  font-size:15px;
-  font-weight:bold;
-  margin-bottom:10px;
-}
-
-.saved-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px;
-  background:#10101a;
-  border:1px solid #27273a;
-  border-radius:13px;
-  margin-bottom:8px;
-}
-
-.saved-item-info{
-  flex:1;
-  min-width:0;
-}
-
-.saved-item-name{
-  font-weight:bold;
-  font-size:14px;
-}
-
-.saved-item-small{
-  color:#777;
-  font-size:11px;
-  margin-top:3px;
-}
-
-.remove-save{
-  background:none;
-  border:0;
-  color:#ff668f;
-  font-size:22px;
-}
-
-.sir-info{
-  margin-top:15px;
-  padding:12px;
-  border-radius:13px;
-  background:#10101a;
-  border:1px solid #29293b;
-  color:#aaa;
-  font-size:12px;
-  line-height:1.6;
-}
-
-.comment-status{
-  margin-top:12px;
-  padding:11px;
-  border-radius:12px;
-  text-align:center;
-  font-size:12px;
-}
-
-.comment-status.on{
-  background:#123b2b;
-  color:#57e6a1;
-}
-
-.comment-status.off{
-  background:#3d1821;
-  color:#ff819b;
-}
-
-@media(max-width:390px){
-
-  .chat-header{
-    gap:6px;
-  }
-
-  .comment-toggle{
-    padding:7px 6px;
-    font-size:10px;
-  }
-
-}
-
-@media(max-width:360px){
-
-  .choice{
-    grid-template-columns:1fr;
-  }
-
-  .modal-buttons{
-    flex-direction:column;
-  }
-
-}
-
 </style>
 </head>
 
@@ -690,3205 +392,542 @@ input:disabled{
 
 <div class="app">
 
-<header class="header">
+  <header class="header">
 
-  <div class="logo">
-    📚 GyanSetu
-  </div>
-
-  <div class="header-user" id="headerUser">
-    Loading...
-  </div>
-
-</header>
-
-<main class="main">
-
-<!-- =====================================================
-     HOME
-===================================================== -->
-
-<section class="section active" id="homeSection">
-
-  <div class="welcome">
-
-    <div class="welcome-icon">
-      💬
+    <div class="brand">
+      <div class="logo">🌌</div>
+      <div>
+        <h1>GyanSetu</h1>
+        <p>Discover Space</p>
+      </div>
     </div>
 
-    <h1>
-      GyanSetu Channels
-    </h1>
+    <button class="home-btn" onclick="goHome()">⌂</button>
+
+  </header>
+
+
+  <section class="hero">
+
+    <h2>Explore the Universe 🌌</h2>
 
     <p>
-      Sir आपला educational channel तयार करू शकतात
-      किंवा Student म्हणून उपलब्ध channels join करू शकतात.
+      Discover planets, stars, galaxies and amazing objects
+      beyond our Solar System.
     </p>
 
-  </div>
-
-  <div class="choice">
-
-    <button onclick="openCreateConfirm()">
-
-      <span class="choice-icon">
-        🎓
-      </span>
-
-      <span class="choice-title">
-        Create Channel
-      </span>
-
-      <span class="choice-small">
-        Sir / Teacher
-      </span>
-
-    </button>
-
-    <button onclick="openStudentSection()">
-
-      <span class="choice-icon">
-        👨‍🎓
-      </span>
-
-      <span class="choice-title">
-        I am Student
-      </span>
-
-      <span class="choice-small">
-        Channels पाहा
-      </span>
-
-    </button>
-
-  </div>
-
-  <div class="saved-box" id="savedBox"></div>
-
-</section>
+  </section>
 
 
-<!-- =====================================================
-     CREATE
-===================================================== -->
-
-<section class="section" id="createSection">
-
-  <button class="back-btn" onclick="goHome()">
-    ← Back
-  </button>
-
-  <div class="section-title">
-    🎓 Create Your Channel
-  </div>
-
-  <div class="sub-title">
-    तुमचा educational channel तयार करा.
-    प्रत्येक account ला एक channel तयार करता येईल.
-  </div>
-
-  <div class="card" id="createCard">
-
-    <label>
-      Channel Name
-    </label>
+  <div class="search-box">
 
     <input
-      id="channelName"
-      maxlength="80"
-      placeholder="उदा. Hitesh Study Channel">
+      id="search"
+      type="text"
+      placeholder="Search planet, star, galaxy..."
+      oninput="searchSpace()"
+    >
 
-    <label>
-      Channel Password
-    </label>
-
-    <input
-      id="channelPassword"
-      type="password"
-      maxlength="60"
-      placeholder="Channel password">
-
-    <button
-      class="primary"
-      id="createChannelButton"
-      onclick="createChannel()">
-
-      🚀 Create My Channel
-
-    </button>
-
-    <div class="sir-info">
-
-      💡 Channel password सुरक्षित hash स्वरूपात
-      Supabase मध्ये save केला जातो.
-
-    </div>
+    <div class="search-icon">🔎</div>
 
   </div>
 
-  <div id="existingSirChannel"></div>
 
-</section>
+  <!-- STAR WALK -->
+  <div class="starwalk" onclick="openStarWalk()">
 
+    <div class="starwalk-left">
 
-<!-- =====================================================
-     STUDENT
-===================================================== -->
+      <div class="star-icon">🔭</div>
 
-<section class="section" id="studentSection">
-
-  <button class="back-btn" onclick="goHome()">
-    ← Back
-  </button>
-
-  <div class="section-title">
-    👨‍🎓 Student
-  </div>
-
-  <div class="sub-title">
-    GyanSetu वर उपलब्ध channels शोधा आणि
-    आवडत्या Sir ला follow करा.
-  </div>
-
-  <input
-    id="channelSearch"
-    placeholder="🔎 Channel किंवा username search करा..."
-    oninput="filterChannels">
-
-  <div id="channelsList" style="margin-top:15px;"></div>
-
-</section>
-
-</main>
-
-
-<!-- =====================================================
-     SIR CONFIRM
-===================================================== -->
-
-<div class="modal" id="sirConfirmModal">
-
-  <div class="modal-box">
-
-    <div class="modal-icon">
-      🎓
-    </div>
-
-    <h2>
-      Sir Confirmation
-    </h2>
-
-    <p>
-      तुम्ही Sir / Teacher आहात ना?
-      Channel तयार केल्यावर तुम्ही educational
-      posts/messages करू शकता.
-    </p>
-
-    <div class="modal-buttons">
-
-      <button
-        class="secondary"
-        onclick="closeModal()">
-
-        नाही
-
-      </button>
-
-      <button
-        class="primary"
-        onclick="confirmSir()"
-        style="margin-top:0">
-
-        हो, मी Sir आहे
-
-      </button>
+      <div>
+        <h3>Open Sky Map</h3>
+        <p>Explore the night sky</p>
+      </div>
 
     </div>
 
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     ADD CHANNEL
-===================================================== -->
-
-<div class="modal" id="addChannelModal">
-
-  <div class="modal-box">
-
-    <div class="modal-icon">
-      ➕
-    </div>
-
-    <h2>
-      Add Channel
-    </h2>
-
-    <p>
-      Sir ने दिलेले Channel Name आणि Password टाका.
-    </p>
-
-    <label>
-      Channel Name
-    </label>
-
-    <input
-      id="addChannelName"
-      placeholder="Channel name">
-
-    <label>
-      Channel Password
-    </label>
-
-    <input
-      id="addChannelPassword"
-      type="password"
-      placeholder="Password">
-
-    <button
-      class="primary"
-      onclick="addChannel()">
-
-      ➕ Add Channel
-
-    </button>
-
-    <button
-      class="secondary"
-      onclick="closeAddModal()">
-
-      Cancel
-
-    </button>
+    <div>➜</div>
 
   </div>
 
-</div>
 
+  <!-- PLANETS -->
+  <section class="section">
 
-<!-- =====================================================
-     CHAT
-===================================================== -->
-
-<div class="chat-wrap" id="chatWrap">
-
-  <div class="chat-header">
-
-    <button
-      class="chat-back"
-      onclick="closeChat()">
-
-      ‹
-
-    </button>
-
-    <div
-      class="channel-avatar"
-      id="chatAvatar">
-
-      💬
-
+    <div class="section-title">
+      <h2>🪐 Planets</h2>
+      <span>Solar System</span>
     </div>
 
-    <div class="chat-title">
+    <div class="grid">
 
-      <div
-        class="chat-title-main"
-        id="chatChannelName">
+      <div class="card searchable"
+           data-name="mercury"
+           onclick="showInfo(
+           '☿️',
+           'Mercury',
+           'Planet',
+           'Mercury is the closest planet to the Sun. It has a very thin atmosphere and experiences large temperature changes.'
+           )">
 
-        Channel
+        <div class="card-icon">☿️</div>
+        <h3>Mercury</h3>
+        <p>Closest to the Sun</p>
+        <div class="arrow">›</div>
 
       </div>
 
-      <div
-        class="chat-title-small"
-        id="chatChannelInfo">
 
-        Channel
+      <div class="card searchable"
+           data-name="venus"
+           onclick="showInfo(
+           '♀️',
+           'Venus',
+           'Planet',
+           'Venus is the second planet from the Sun. Its thick atmosphere makes it the hottest planet in our Solar System.'
+           )">
+
+        <div class="card-icon">♀️</div>
+        <h3>Venus</h3>
+        <p>Hot and cloudy world</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="earth"
+           onclick="showInfo(
+           '🌍',
+           'Earth',
+           'Planet',
+           'Earth is our home planet and the only world currently known to support life.'
+           )">
+
+        <div class="card-icon">🌍</div>
+        <h3>Earth</h3>
+        <p>Our home planet</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="mars"
+           onclick="showInfo(
+           '🔴',
+           'Mars',
+           'Planet',
+           'Mars is known as the Red Planet. Scientists study it because it preserves evidence of a watery past.'
+           )">
+
+        <div class="card-icon">🔴</div>
+        <h3>Mars</h3>
+        <p>The Red Planet</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="jupiter"
+           onclick="showInfo(
+           '🟠',
+           'Jupiter',
+           'Planet',
+           'Jupiter is the largest planet in our Solar System and is a gas giant with many moons.'
+           )">
+
+        <div class="card-icon">🟠</div>
+        <h3>Jupiter</h3>
+        <p>Largest planet</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="saturn"
+           onclick="showInfo(
+           '🪐',
+           'Saturn',
+           'Planet',
+           'Saturn is famous for its spectacular ring system and is the second-largest planet in our Solar System.'
+           )">
+
+        <div class="card-icon">🪐</div>
+        <h3>Saturn</h3>
+        <p>Planet of rings</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="uranus"
+           onclick="showInfo(
+           '🔵',
+           'Uranus',
+           'Planet',
+           'Uranus is an ice giant with a blue-green appearance and an unusual sideways rotation.'
+           )">
+
+        <div class="card-icon">🔵</div>
+        <h3>Uranus</h3>
+        <p>Ice giant</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="neptune"
+           onclick="showInfo(
+           '🔵',
+           'Neptune',
+           'Planet',
+           'Neptune is the eighth planet from the Sun and one of the most distant major planets in our Solar System.'
+           )">
+
+        <div class="card-icon">🔵</div>
+        <h3>Neptune</h3>
+        <p>Faraway blue world</p>
+        <div class="arrow">›</div>
 
       </div>
 
     </div>
 
-    <!-- SIR COMMENT BUTTON -->
-
-    <button
-      id="commentToggleButton"
-      class="comment-toggle"
-      onclick="toggleComments()">
-
-      💬 Comments
-
-    </button>
-
-    <div class="online-dot"></div>
-
-  </div>
+  </section>
 
 
-  <div
-    class="messages"
-    id="messages">
+  <!-- STARS -->
+  <section class="section">
 
-    <div class="loading">
-      Messages loading...
+    <div class="section-title">
+      <h2>⭐ Famous Stars</h2>
+      <span>Stars</span>
     </div>
 
+    <div class="objects">
+
+      <div class="object searchable"
+           data-name="sirius"
+           onclick="showInfo(
+           '⭐',
+           'Sirius',
+           'Star',
+           'Sirius is the brightest star in Earths night sky as seen with the unaided eye.'
+           )">
+
+        <div class="object-icon">⭐</div>
+        <h4>Sirius</h4>
+        <p>Bright star</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="vega"
+           onclick="showInfo(
+           '✨',
+           'Vega',
+           'Star',
+           'Vega is one of the brightest stars visible in the northern sky.'
+           )">
+
+        <div class="object-icon">✨</div>
+        <h4>Vega</h4>
+        <p>Bright star</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="polaris"
+           onclick="showInfo(
+           '🌟',
+           'Polaris',
+           'Star',
+           'Polaris is commonly called the North Star because it lies close to the north celestial pole.'
+           )">
+
+        <div class="object-icon">🌟</div>
+        <h4>Polaris</h4>
+        <p>North Star</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="betelgeuse"
+           onclick="showInfo(
+           '🔴',
+           'Betelgeuse',
+           'Star',
+           'Betelgeuse is a red supergiant star in the constellation Orion.'
+           )">
+
+        <div class="object-icon">🔴</div>
+        <h4>Betelgeuse</h4>
+        <p>Red supergiant</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- GALAXIES -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>🌌 Galaxies</h2>
+      <span>Deep Space</span>
+    </div>
+
+    <div class="grid">
+
+      <div class="card searchable"
+           data-name="milky way"
+           onclick="showInfo(
+           '🌌',
+           'Milky Way',
+           'Galaxy',
+           'The Milky Way is the galaxy that contains our Solar System.'
+           )">
+
+        <div class="card-icon">🌌</div>
+        <h3>Milky Way</h3>
+        <p>Our galaxy</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+
+      <div class="card searchable"
+           data-name="andromeda"
+           onclick="showInfo(
+           '🌌',
+           'Andromeda',
+           'Galaxy',
+           'The Andromeda Galaxy is a large spiral galaxy relatively close to the Milky Way.'
+           )">
+
+        <div class="card-icon">🌌</div>
+        <h3>Andromeda</h3>
+        <p>Nearby galaxy</p>
+        <div class="arrow">›</div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- OTHER OBJECTS -->
+  <section class="section">
+
+    <div class="section-title">
+      <h2>🚀 Space Objects</h2>
+      <span>Explore</span>
+    </div>
+
+    <div class="objects">
+
+      <div class="object searchable"
+           data-name="moon"
+           onclick="showInfo(
+           '🌕',
+           'Moon',
+           'Natural Satellite',
+           'The Moon is Earths natural satellite and is the brightest object in our night sky after the Sun.'
+           )">
+
+        <div class="object-icon">🌕</div>
+        <h4>Moon</h4>
+        <p>Earth's moon</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="comet"
+           onclick="showInfo(
+           '☄️',
+           'Comet',
+           'Small Solar System Body',
+           'Comets are icy bodies that can develop a glowing coma and tail when they approach the Sun.'
+           )">
+
+        <div class="object-icon">☄️</div>
+        <h4>Comets</h4>
+        <p>Icy objects</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="asteroid"
+           onclick="showInfo(
+           '☄️',
+           'Asteroids',
+           'Small Solar System Bodies',
+           'Asteroids are rocky or metallic objects that orbit the Sun.'
+           )">
+
+        <div class="object-icon">☄️</div>
+        <h4>Asteroids</h4>
+        <p>Rocky bodies</p>
+
+      </div>
+
+
+      <div class="object searchable"
+           data-name="black hole"
+           onclick="showInfo(
+           '⚫',
+           'Black Hole',
+           'Cosmic Object',
+           'A black hole is an object whose gravity is so strong that light cannot escape from within its event horizon.'
+           )">
+
+        <div class="object-icon">⚫</div>
+        <h4>Black Hole</h4>
+        <p>Extreme gravity</p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="no-result" id="noResult">
+    🔭 No space object found.
   </div>
 
 
-  <!-- MESSAGE INPUT -->
+  <div class="info">
 
-  <div
-    class="chat-input"
-    id="chatInputArea">
+    <h3>🧠 Learn while you explore</h3>
 
-    <input
-      id="chatMessage"
-      maxlength="1000"
-      placeholder="Comment बंद आहे..."
-      disabled>
-
-    <button
-      class="send"
-      id="sendButton"
-      onclick="sendMessage()"
-      disabled>
-
-      ➤
-
-    </button>
-
-  </div>
-
-
-  <!-- STUDENT OFF MESSAGE -->
-
-  <div
-    class="comment-off-bar"
-    id="commentOffBar">
-
-    🔒 Sir ने comments बंद केले आहेत.
+    <p>
+      GyanSetu Space is designed to make astronomy easier to explore.
+      Open the Sky Map to look around the stars and discover objects
+      in the night sky.
+    </p>
 
   </div>
 
 </div>
 
 
-<div class="toast" id="toast"></div>
+<!-- POPUP -->
+
+<div class="overlay" id="overlay" onclick="closePopup(event)">
+
+  <div class="popup">
+
+    <div class="popup-icon" id="popupIcon">🌍</div>
+
+    <h2 id="popupTitle">Earth</h2>
+
+    <small id="popupType">Planet</small>
+
+    <p id="popupText"></p>
+
+    <button class="close" onclick="closePopup()">
+      Close
+    </button>
+
+  </div>
 
 </div>
 
 
 <script>
 
-/* =====================================================
-   SUPABASE
-===================================================== */
-
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
-);
-
-
-/* =====================================================
-   GLOBAL
-===================================================== */
-
-let currentUser = null;
-let currentChannel = null;
-let allChannels = [];
-let currentIsSir = false;
-let followedChannelIds = new Set();
-
-
-const $ = id =>
-  document.getElementById(id);
-
-
-/* =====================================================
-   TOAST
-===================================================== */
-
-function toast(
-  message,
-  type="success"
-){
-
-  const box =
-    $("toast");
-
-  box.innerText =
-    message;
-
-  box.className =
-    "toast show " + type;
-
-  clearTimeout(
-    window.toastTimer
-  );
-
-  window.toastTimer =
-    setTimeout(()=>{
-
-      box.className =
-        "toast";
-
-    },3000);
-}
-
-
-/* =====================================================
-   ESCAPE
-===================================================== */
-
-function escapeHTML(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text ?? "";
-
-  return div.innerHTML;
-}
-
-
-/* =====================================================
-   HASH
-===================================================== */
-
-async function hashText(text){
-
-  const data =
-    new TextEncoder().encode(text);
-
-  const hash =
-    await crypto.subtle.digest(
-      "SHA-256",
-      data
-    );
-
-  return Array.from(
-    new Uint8Array(hash)
-  )
-  .map(
-    b =>
-      b.toString(16).padStart(2,"0")
-  )
-  .join("");
-}
-
-
-/* =====================================================
-   USER
-===================================================== */
-
-async function loadUser(){
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.auth.getUser();
-
-    if(error)
-      console.error(error);
-
-    currentUser =
-      data?.user || null;
-
-
-    if(!currentUser){
-
-      $("headerUser").innerText =
-        "Guest";
-
-      loadSavedChannels();
-
-      return;
-    }
-
-
-    const username =
-      currentUser.user_metadata?.username
-      ||
-      localStorage.getItem(
-        "gyansetu_username"
-      )
-      ||
-      "User";
-
-
-    $("headerUser").innerText =
-      "@" + username;
-
-
-    localStorage.setItem(
-      "gyansetu_username",
-      username
-    );
-
-
-    localStorage.setItem(
-      "gyansetu_user_id",
-      currentUser.id
-    );
-
-
-    await checkMyChannel();
-
-    await loadFollowedChannels();
-
-    await loadSavedChannels();
-
-  }
-  catch(error){
-
-    console.error(
-      "USER ERROR:",
-      error
-    );
-
-    $("headerUser").innerText =
-      "Guest";
-
-    loadSavedChannels();
-  }
-}
-
-
-/* =====================================================
-   HOME
-===================================================== */
-
 function goHome(){
-
-  closeModal();
-
-  closeAddModal();
-
-  $("homeSection")
-    .classList
-    .add("active");
-
-  $("createSection")
-    .classList
-    .remove("active");
-
-  $("studentSection")
-    .classList
-    .remove("active");
-
-  loadSavedChannels();
+  window.location.href="home.html";
 }
 
 
-/* =====================================================
-   CREATE CONFIRM
-===================================================== */
-
-function openCreateConfirm(){
-
-  if(!currentUser){
-
-    toast(
-      "आधी GyanSetu Account मध्ये Login करा.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if(currentChannel){
-
-    confirmSir();
-
-    return;
-  }
-
-
-  $("sirConfirmModal")
-    .classList
-    .add("show");
+function openStarWalk(){
+  window.location.href="starwalk.html";
 }
 
 
-function closeModal(){
+function showInfo(icon,title,type,text){
 
-  $("sirConfirmModal")
-    .classList
-    .remove("show");
+  document.getElementById("popupIcon").textContent=icon;
+
+  document.getElementById("popupTitle").textContent=title;
+
+  document.getElementById("popupType").textContent=type;
+
+  document.getElementById("popupText").textContent=text;
+
+  document.getElementById("overlay").style.display="flex";
+
 }
 
 
-function confirmSir(){
-
-  closeModal();
-
-  $("homeSection")
-    .classList
-    .remove("active");
-
-  $("studentSection")
-    .classList
-    .remove("active");
-
-  $("createSection")
-    .classList
-    .add("active");
-
-
-  if(currentChannel){
-
-    showExistingSirChannel();
-
-  }
-  else{
-
-    $("createCard")
-      .style
-      .display = "block";
-  }
-}
-
-
-/* =====================================================
-   CREATE CHANNEL
-===================================================== */
-
-async function createChannel(){
-
-  if(!currentUser){
-
-    toast(
-      "Login required.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if(currentChannel){
-
-    toast(
-      "तुमचा channel आधीच तयार आहे.",
-      "error"
-    );
-
-    showExistingSirChannel();
-
-    return;
-  }
-
-
-  const name =
-    $("channelName")
-      .value
-      .trim();
-
-  const password =
-    $("channelPassword")
-      .value;
-
-
-  if(name.length < 2){
-
-    toast(
-      "Channel name टाका.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if(password.length < 4){
-
-    toast(
-      "Password किमान 4 characters असावा.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const button =
-    $("createChannelButton");
-
-  button.disabled = true;
-
-  button.innerText =
-    "Channel तयार होत आहे...";
-
-
-  try{
-
-    const username =
-      currentUser.user_metadata?.username
-      ||
-      localStorage.getItem(
-        "gyansetu_username"
-      )
-      ||
-      "User";
-
-
-    const passwordHash =
-      await hashText(password);
-
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .insert({
-
-        owner_id:
-          currentUser.id,
-
-        owner_username:
-          username,
-
-        channel_name:
-          name,
-
-        password_hash:
-          passwordHash,
-
-        followers_count:
-          0,
-
-        comments_enabled:
-          true
-
-      })
-      .select()
-      .single();
-
-
-    if(error)
-      throw error;
-
-
-    currentChannel =
-      data;
-
-    currentIsSir =
-      true;
-
-
-    localStorage.setItem(
-      "gyansetu_my_channel_id",
-      data.id
-    );
-
-
-    $("channelName").value =
-      "";
-
-    $("channelPassword").value =
-      "";
-
-
-    $("createCard")
-      .style
-      .display = "none";
-
-
-    showExistingSirChannel();
-
-
-    toast(
-      "🎉 तुमचा channel तयार झाला!",
-      "success"
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      "CREATE ERROR:",
-      error
-    );
-
-
-    if(error.code === "23505"){
-
-      await checkMyChannel();
-
-
-      if(currentChannel){
-
-        showExistingSirChannel();
-
-        toast(
-          "तुमचा channel आधीपासून आहे.",
-          "error"
-        );
-
-        return;
-      }
-    }
-
-
-    toast(
-      "Channel तयार करता आला नाही. Supabase RLS/SQL तपासा.",
-      "error"
-    );
-
-  }
-  finally{
-
-    button.disabled = false;
-
-    button.innerText =
-      "🚀 Create My Channel";
-  }
-}
-
-
-/* =====================================================
-   CHECK MY CHANNEL
-===================================================== */
-
-async function checkMyChannel(){
-
-  if(!currentUser)
-    return;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .select("*")
-      .eq(
-        "owner_id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-
-    if(error){
-
-      console.error(
-        "MY CHANNEL ERROR:",
-        error
-      );
-
-      return;
-    }
-
-
-    if(data){
-
-      currentChannel =
-        data;
-
-      currentIsSir =
-        true;
-
-
-      localStorage.setItem(
-        "gyansetu_my_channel_id",
-        data.id
-      );
-
-    }
-
-  }
-  catch(error){
-
-    console.error(error);
-  }
-}
-
-
-/* =====================================================
-   FOLLOWER COUNT
-===================================================== */
-
-async function getFollowerCount(
-  channelId
-){
-
-  try{
-
-    const {
-      count,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channel_followers")
-      .select(
-        "id",
-        {
-          count:"exact",
-          head:true
-        }
-      )
-      .eq(
-        "channel_id",
-        channelId
-      );
-
-
-    if(error)
-      throw error;
-
-
-    return count || 0;
-
-  }
-  catch(error){
-
-    console.error(
-      "GET FOLLOWER COUNT ERROR:",
-      error
-    );
-
-    return 0;
-  }
-}
-
-
-/* =====================================================
-   UPDATE CHANNEL COUNT
-===================================================== */
-
-async function updateChannelCount(
-  channelId
-){
-
-  const count =
-    await getFollowerCount(
-      channelId
-    );
-
-
-  const channel =
-    allChannels.find(
-      item =>
-        item.id === channelId
-    );
-
-
-  if(channel){
-
-    channel.followers_count =
-      count;
-  }
-
+function closePopup(event){
 
   if(
-    currentChannel &&
-    currentChannel.id === channelId
+    !event ||
+    event.target===document.getElementById("overlay") ||
+    event.target.classList.contains("close")
   ){
 
-    currentChannel.followers_count =
-      count;
+    document.getElementById("overlay").style.display="none";
+
   }
 
-
-  return count;
 }
 
 
-/* =====================================================
-   SHOW MY CHANNEL
-===================================================== */
+function searchSpace(){
 
-async function showExistingSirChannel(){
+  const query=
+    document
+    .getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
 
-  $("createCard")
-    .style
-    .display = "none";
+  const items=
+    document.querySelectorAll(".searchable");
 
+  let found=0;
 
-  const box =
-    $("existingSirChannel");
+  items.forEach(item=>{
 
+    const name=
+      item.dataset.name.toLowerCase();
 
-  if(!currentChannel){
+    if(name.includes(query)){
 
-    box.innerHTML =
-      "";
+      item.style.display="block";
+      found++;
 
-    $("createCard")
-      .style
-      .display = "block";
+    }else{
 
-    return;
-  }
-
-
-  const count =
-    await updateChannelCount(
-      currentChannel.id
-    );
-
-
-  const firstLetter =
-    (
-      currentChannel.channel_name ||
-      "G"
-    )
-    .charAt(0)
-    .toUpperCase();
-
-
-  const commentsEnabled =
-    currentChannel.comments_enabled !== false;
-
-
-  box.innerHTML = `
-
-    <div class="card">
-
-      <div class="channel-head">
-
-        <div class="channel-avatar">
-          ${escapeHTML(firstLetter)}
-        </div>
-
-        <div class="channel-info">
-
-          <div class="channel-name">
-            ${escapeHTML(
-              currentChannel.channel_name
-            )}
-          </div>
-
-          <div class="channel-owner">
-            @${escapeHTML(
-              currentChannel.owner_username
-            )}
-          </div>
-
-          <span class="badge">
-            🎓 Sir Channel
-          </span>
-
-          <span class="badge">
-            👥 ${count}
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="comment-status ${
-          commentsEnabled
-          ? "on"
-          : "off"
-        }">
-
-        ${
-          commentsEnabled
-          ? "🟢 Student Comments ON"
-          : "🔴 Student Comments OFF"
-        }
-
-      </div>
-
-
-      <button
-        class="primary"
-        onclick="openChannelChat(currentChannel,true)">
-
-        💬 Open Channel Chat
-
-      </button>
-
-
-      <button
-        class="secondary"
-        onclick="openAddChannelModal()">
-
-        ➕ Add Channel
-
-      </button>
-
-    </div>
-  `;
-}
-
-
-/* =====================================================
-   STUDENT
-===================================================== */
-
-function openStudentSection(){
-
-  $("homeSection")
-    .classList
-    .remove("active");
-
-  $("createSection")
-    .classList
-    .remove("active");
-
-  $("studentSection")
-    .classList
-    .add("active");
-
-
-  loadChannels();
-}
-
-
-/* =====================================================
-   FOLLOWED
-===================================================== */
-
-async function loadFollowedChannels(){
-
-  followedChannelIds =
-    new Set();
-
-
-  if(!currentUser)
-    return;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channel_followers")
-      .select("channel_id")
-      .eq(
-        "user_id",
-        currentUser.id
-      );
-
-
-    if(error){
-
-      console.error(
-        "FOLLOWED ERROR:",
-        error
-      );
-
-      return;
-    }
-
-
-    (data || [])
-      .forEach(item=>{
-
-        followedChannelIds.add(
-          String(item.channel_id)
-        );
-
-      });
-
-  }
-  catch(error){
-
-    console.error(error);
-  }
-}
-
-
-/* =====================================================
-   LOAD CHANNELS
-===================================================== */
-
-async function loadChannels(){
-
-  const box =
-    $("channelsList");
-
-
-  box.innerHTML =
-    `
-      <div class="loading">
-        ⏳ Channels loading...
-      </div>
-    `;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .select("*")
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-    if(error)
-      throw error;
-
-
-    allChannels =
-      data || [];
-
-
-    await Promise.all(
-
-      allChannels.map(
-        async channel=>{
-
-          channel.followers_count =
-            await getFollowerCount(
-              channel.id
-            );
-
-        }
-      )
-
-    );
-
-
-    await loadFollowedChannels();
-
-
-    renderChannels(
-      allChannels
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      "LOAD CHANNEL ERROR:",
-      error
-    );
-
-
-    box.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          ⚠️
-        </div>
-
-        Channels load झाले नाहीत.
-
-        <button
-          class="secondary"
-          onclick="loadChannels()">
-
-          🔄 Retry
-
-        </button>
-
-      </div>
-
-    `;
-  }
-}
-
-
-/* =====================================================
-   RENDER
-===================================================== */
-
-function renderChannels(list){
-
-  const box =
-    $("channelsList");
-
-
-  if(!list.length){
-
-    box.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          📭
-        </div>
-
-        अजून कोणताही channel तयार झालेला नाही.
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  box.innerHTML =
-    list
-      .map(channelCard)
-      .join("");
-}
-
-
-function channelCard(channel){
-
-  const isFollowing =
-    followedChannelIds.has(
-      String(channel.id)
-    );
-
-
-  const isOwner =
-    currentUser &&
-    String(channel.owner_id) ===
-    String(currentUser.id);
-
-
-  const firstLetter =
-    (
-      channel.channel_name ||
-      "G"
-    )
-    .charAt(0)
-    .toUpperCase();
-
-
-  const count =
-    Number(
-      channel.followers_count || 0
-    );
-
-
-  return `
-
-    <div
-      class="card"
-      id="channel-card-${channel.id}">
-
-      <div class="channel-head">
-
-        <div class="channel-avatar">
-          ${escapeHTML(firstLetter)}
-        </div>
-
-        <div class="channel-info">
-
-          <div class="channel-name">
-            ${escapeHTML(
-              channel.channel_name
-            )}
-          </div>
-
-          <div class="channel-owner">
-            @${escapeHTML(
-              channel.owner_username
-            )}
-          </div>
-
-          <span class="badge">
-            🎓 Educational
-          </span>
-
-          <span
-            class="badge"
-            id="badge-${channel.id}">
-
-            👥 ${count}
-
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <div class="follow-row">
-
-        <div
-          class="follow-count"
-          id="count-${channel.id}">
-
-          ${count} followers
-
-        </div>
-
-
-        ${
-          isOwner
-
-          ?
-
-          `<button
-            class="follow-btn following"
-            disabled>
-
-            Your Channel
-
-          </button>`
-
-          :
-
-          `<button
-            class="follow-btn ${
-              isFollowing
-              ? "following"
-              : ""
-            }"
-            onclick="toggleFollow('${channel.id}',this)">
-
-            ${
-              isFollowing
-              ? "✓ Following"
-              : "Follow"
-            }
-
-          </button>`
-        }
-
-      </div>
-
-
-      <button
-        class="primary"
-        onclick="openChannelDetails('${channel.id}')">
-
-        💬 Open Channel
-
-      </button>
-
-    </div>
-
-  `;
-}
-
-
-/* =====================================================
-   SEARCH
-===================================================== */
-
-function filterChannels(){
-
-  const text =
-    $("channelSearch")
-      .value
-      .toLowerCase()
-      .trim();
-
-
-  const filtered =
-    allChannels.filter(
-      channel=>{
-
-        return (
-
-          String(
-            channel.channel_name || ""
-          )
-          .toLowerCase()
-          .includes(text)
-
-          ||
-
-          String(
-            channel.owner_username || ""
-          )
-          .toLowerCase()
-          .includes(text)
-
-        );
-
-      }
-    );
-
-
-  renderChannels(
-    filtered
-  );
-}
-
-
-/* =====================================================
-   FOLLOW
-===================================================== */
-
-async function toggleFollow(
-  channelId,
-  button
-){
-
-  if(!currentUser){
-
-    toast(
-      "Follow करण्यासाठी Login करा.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const id =
-    String(channelId);
-
-
-  button.disabled =
-    true;
-
-
-  const alreadyFollowing =
-    followedChannelIds.has(id);
-
-
-  try{
-
-    if(alreadyFollowing){
-
-      const {
-        error
-      } =
-      await supabaseClient
-        .from("gs_channel_followers")
-        .delete()
-        .eq(
-          "channel_id",
-          channelId
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        );
-
-
-      if(error)
-        throw error;
-
-
-      followedChannelIds.delete(id);
-
-
-      toast(
-        "Channel unfollow केला.",
-        "success"
-      );
+      item.style.display="none";
 
     }
 
-    else{
-
-      const {
-        data:existing,
-        error:checkError
-      } =
-      await supabaseClient
-        .from("gs_channel_followers")
-        .select("id")
-        .eq(
-          "channel_id",
-          channelId
-        )
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .maybeSingle();
+  });
 
 
-      if(checkError)
-        throw checkError;
+  document.getElementById("noResult").style.display=
+    found===0 ? "block" : "none";
 
-
-      if(!existing){
-
-        const {
-          error:insertError
-        } =
-        await supabaseClient
-          .from("gs_channel_followers")
-          .insert({
-
-            channel_id:
-              channelId,
-
-            user_id:
-              currentUser.id
-
-          });
-
-
-        if(
-          insertError &&
-          insertError.code !== "23505"
-        ){
-
-          throw insertError;
-        }
-      }
-
-
-      followedChannelIds.add(id);
-
-
-      toast(
-        "✅ Channel follow केला.",
-        "success"
-      );
-    }
-
-
-    const newCount =
-      await getFollowerCount(
-        channelId
-      );
-
-
-    const channel =
-      allChannels.find(
-        item =>
-          String(item.id) === id
-      );
-
-
-    if(channel){
-
-      channel.followers_count =
-        newCount;
-    }
-
-
-    const countElement =
-      document.getElementById(
-        "count-" + channelId
-      );
-
-
-    if(countElement){
-
-      countElement.innerText =
-        newCount +
-        " followers";
-    }
-
-
-    const badgeElement =
-      document.getElementById(
-        "badge-" + channelId
-      );
-
-
-    if(badgeElement){
-
-      badgeElement.innerText =
-        "👥 " + newCount;
-    }
-
-
-    if(button){
-
-      if(
-        followedChannelIds.has(id)
-      ){
-
-        button.classList.add(
-          "following"
-        );
-
-        button.innerText =
-          "✓ Following";
-
-      }
-      else{
-
-        button.classList.remove(
-          "following"
-        );
-
-        button.innerText =
-          "Follow";
-      }
-    }
-
-  }
-  catch(error){
-
-    console.error(
-      "FOLLOW ERROR:",
-      error
-    );
-
-
-    toast(
-      "Follow बदलता आला नाही.",
-      "error"
-    );
-
-  }
-  finally{
-
-    button.disabled =
-      false;
-  }
 }
-
-
-/* =====================================================
-   CHANNEL DETAILS
-===================================================== */
-
-async function openChannelDetails(
-  channelId
-){
-
-  let channel =
-    allChannels.find(
-      item =>
-        String(item.id) ===
-        String(channelId)
-    );
-
-
-  if(!channel){
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .select("*")
-      .eq(
-        "id",
-        channelId
-      )
-      .single();
-
-
-    if(error){
-
-      toast(
-        "Channel सापडला नाही.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    channel =
-      data;
-  }
-
-
-  channel.followers_count =
-    await getFollowerCount(
-      channel.id
-    );
-
-
-  const isSir =
-    currentUser &&
-    String(channel.owner_id) ===
-    String(currentUser.id);
-
-
-  openChannelChat(
-    channel,
-    isSir
-  );
-}
-
-
-/* =====================================================
-   OPEN CHAT
-===================================================== */
-
-async function openChannelChat(
-  channel,
-  isSir=false
-){
-
-  if(!channel)
-    return;
-
-
-  currentChannel =
-    channel;
-
-
-  currentIsSir =
-    !!isSir ||
-    (
-      currentUser &&
-      String(channel.owner_id) ===
-      String(currentUser.id)
-    );
-
-
-  const count =
-    await getFollowerCount(
-      channel.id
-    );
-
-
-  currentChannel.followers_count =
-    count;
-
-
-  $("chatChannelName").innerText =
-    channel.channel_name;
-
-
-  $("chatChannelInfo").innerText =
-    "@" +
-    channel.owner_username +
-    " • " +
-    count +
-    " followers";
-
-
-  $("chatAvatar").innerText =
-    (
-      channel.channel_name ||
-      "G"
-    )
-    .charAt(0)
-    .toUpperCase();
-
-
-  $("chatWrap")
-    .classList
-    .add("active");
-
-
-  updateCommentUI();
-
-
-  await loadMessages();
-}
-
-
-/* =====================================================
-   UPDATE COMMENT UI
-===================================================== */
-
-function updateCommentUI(){
-
-  if(!currentChannel)
-    return;
-
-
-  const input =
-    $("chatMessage");
-
-  const sendButton =
-    $("sendButton");
-
-  const toggleButton =
-    $("commentToggleButton");
-
-  const offBar =
-    $("commentOffBar");
-
-
-  const commentsEnabled =
-    currentChannel.comments_enabled !== false;
-
-
-  /* =================================================
-     SIR
-  ================================================= */
-
-  if(currentIsSir){
-
-    toggleButton.style.display =
-      "block";
-
-
-    offBar.classList.remove(
-      "show"
-    );
-
-
-    input.disabled =
-      false;
-
-
-    sendButton.disabled =
-      false;
-
-
-    input.placeholder =
-      "📢 Sir Post करा...";
-
-
-    if(commentsEnabled){
-
-      toggleButton.innerText =
-        "🟢 Comments ON";
-
-      toggleButton.classList
-        .add("on");
-
-      toggleButton.classList
-        .remove("off");
-
-    }
-    else{
-
-      toggleButton.innerText =
-        "🔴 Comments OFF";
-
-      toggleButton.classList
-        .add("off");
-
-      toggleButton.classList
-        .remove("on");
-    }
-
-
-    return;
-  }
-
-
-  /* =================================================
-     STUDENT
-  ================================================= */
-
-  toggleButton.style.display =
-    "none";
-
-
-  if(commentsEnabled){
-
-    input.disabled =
-      false;
-
-    sendButton.disabled =
-      false;
-
-    input.placeholder =
-      "💬 Comment करा...";
-
-    offBar.classList.remove(
-      "show"
-    );
-
-  }
-  else{
-
-    input.disabled =
-      true;
-
-    sendButton.disabled =
-      true;
-
-    input.value =
-      "";
-
-    input.placeholder =
-      "🔒 Comments बंद आहेत";
-
-    offBar.classList.add(
-      "show"
-    );
-  }
-}
-
-
-/* =====================================================
-   TOGGLE COMMENTS
-===================================================== */
-
-async function toggleComments(){
-
-  if(!currentUser){
-
-    toast(
-      "Login required.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if(!currentChannel){
-
-    return;
-  }
-
-
-  const isOwner =
-    String(
-      currentChannel.owner_id
-    ) ===
-    String(
-      currentUser.id
-    );
-
-
-  if(!isOwner){
-
-    toast(
-      "फक्त Sir comments बदलू शकतात.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const newStatus =
-    currentChannel.comments_enabled === false;
-
-
-  const button =
-    $("commentToggleButton");
-
-
-  button.disabled =
-    true;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .update({
-
-        comments_enabled:
-          newStatus
-
-      })
-      .eq(
-        "id",
-        currentChannel.id
-      )
-      .select()
-      .single();
-
-
-    if(error)
-      throw error;
-
-
-    currentChannel =
-      data;
-
-
-    updateCommentUI();
-
-
-    toast(
-      newStatus
-      ? "🟢 Comments ON केले."
-      : "🔴 Comments OFF केले.",
-      "success"
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      "COMMENT TOGGLE ERROR:",
-      error
-    );
-
-
-    toast(
-      "Comments setting बदलता आली नाही.",
-      "error"
-    );
-
-  }
-  finally{
-
-    button.disabled =
-      false;
-  }
-}
-
-
-/* =====================================================
-   CLOSE CHAT
-===================================================== */
-
-function closeChat(){
-
-  $("chatWrap")
-    .classList
-    .remove("active");
-
-  currentChannel =
-    null;
-
-  currentIsSir =
-    false;
-}
-
-
-/* =====================================================
-   LOAD MESSAGES
-===================================================== */
-
-async function loadMessages(){
-
-  if(!currentChannel)
-    return;
-
-
-  const box =
-    $("messages");
-
-
-  box.innerHTML =
-    `
-      <div class="loading">
-        ⏳ Messages loading...
-      </div>
-    `;
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channel_messages")
-      .select("*")
-      .eq(
-        "channel_id",
-        currentChannel.id
-      )
-      .order(
-        "created_at",
-        {
-          ascending:true
-        }
-      );
-
-
-    if(error)
-      throw error;
-
-
-    if(!data || !data.length){
-
-      box.innerHTML = `
-
-        <div class="empty">
-
-          <div class="empty-icon">
-            💬
-          </div>
-
-          अजून messages नाहीत.
-
-        </div>
-
-      `;
-
-      return;
-    }
-
-
-    box.innerHTML =
-      data
-        .map(renderMessage)
-        .join("");
-
-
-    requestAnimationFrame(()=>{
-
-      box.scrollTop =
-        box.scrollHeight;
-
-    });
-
-  }
-  catch(error){
-
-    console.error(
-      "MESSAGE LOAD ERROR:",
-      error
-    );
-
-
-    box.innerHTML = `
-
-      <div class="empty">
-
-        <div class="empty-icon">
-          ⚠️
-        </div>
-
-        Messages load झाले नाहीत.
-
-        <button
-          class="secondary"
-          onclick="loadMessages()">
-
-          🔄 Retry
-
-        </button>
-
-      </div>
-
-    `;
-  }
-}
-
-
-/* =====================================================
-   RENDER MESSAGE
-===================================================== */
-
-function renderMessage(
-  message
-){
-
-  const me =
-    currentUser &&
-    String(message.user_id) ===
-    String(currentUser.id);
-
-
-  const type =
-    message.message_type ===
-    "sir_post"
-
-    ? "📢 Sir"
-
-    : "💬 Comment";
-
-
-  return `
-
-    <div
-      class="message ${
-        me ? "me" : ""
-      }">
-
-      <div class="message-user">
-
-        @${escapeHTML(
-          message.username ||
-          "User"
-        )}
-
-        • ${type}
-
-      </div>
-
-
-      <div class="message-bubble">
-
-        ${escapeHTML(
-          message.message
-        )}
-
-      </div>
-
-
-      <div>
-
-        <button
-          class="react"
-          onclick="reactMessage('${message.id}','❤️')">
-
-          ❤️
-
-        </button>
-
-        <button
-          class="react"
-          onclick="reactMessage('${message.id}','👍')">
-
-          👍
-
-        </button>
-
-        <button
-          class="react"
-          onclick="reactMessage('${message.id}','🔥')">
-
-          🔥
-
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-}
-
-
-/* =====================================================
-   SEND MESSAGE
-===================================================== */
-
-async function sendMessage(){
-
-  if(!currentUser){
-
-    toast(
-      "Message करण्यासाठी Login करा.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  if(!currentChannel)
-    return;
-
-
-  /*
-    STUDENT साठी local check
-  */
-
-  if(
-    !currentIsSir &&
-    currentChannel.comments_enabled === false
-  ){
-
-    toast(
-      "🔒 Sir ने comments बंद केले आहेत.",
-      "error"
-    );
-
-    updateCommentUI();
-
-    return;
-  }
-
-
-  const input =
-    $("chatMessage");
-
-
-  const text =
-    input.value.trim();
-
-
-  if(!text)
-    return;
-
-
-  const username =
-    currentUser.user_metadata?.username
-    ||
-    localStorage.getItem(
-      "gyansetu_username"
-    )
-    ||
-    "User";
-
-
-  const button =
-    $("sendButton");
-
-
-  button.disabled =
-    true;
-
-
-  try{
-
-    /*
-      पुन्हा database मधून status check
-      म्हणजे stale page असला तरी protection राहील.
-    */
-
-    if(!currentIsSir){
-
-      const {
-        data:latestChannel,
-        error:channelError
-      } =
-      await supabaseClient
-        .from("gs_channels")
-        .select(
-          "comments_enabled"
-        )
-        .eq(
-          "id",
-          currentChannel.id
-        )
-        .single();
-
-
-      if(channelError)
-        throw channelError;
-
-
-      if(
-        latestChannel.comments_enabled === false
-      ){
-
-        currentChannel.comments_enabled =
-          false;
-
-        updateCommentUI();
-
-        toast(
-          "🔒 Sir ने comments बंद केले आहेत.",
-          "error"
-        );
-
-        return;
-      }
-    }
-
-
-    const {
-      error
-    } =
-    await supabaseClient
-      .from("gs_channel_messages")
-      .insert({
-
-        channel_id:
-          currentChannel.id,
-
-        user_id:
-          currentUser.id,
-
-        username:
-          username,
-
-        message:
-          text,
-
-        message_type:
-          currentIsSir
-          ? "sir_post"
-          : "comment"
-
-      });
-
-
-    if(error)
-      throw error;
-
-
-    input.value =
-      "";
-
-
-    await loadMessages();
-
-  }
-  catch(error){
-
-    console.error(
-      "SEND MESSAGE ERROR:",
-      error
-    );
-
-
-    toast(
-      "Message पाठवता आला नाही.",
-      "error"
-    );
-
-  }
-  finally{
-
-    /*
-      Sir असल्यास send चालू ठेवणे.
-      Student असल्यास updateCommentUI status ठरवेल.
-    */
-
-    if(currentIsSir){
-
-      button.disabled =
-        false;
-
-    }
-    else{
-
-      updateCommentUI();
-
-    }
-  }
-}
-
-
-/* =====================================================
-   REACTION
-===================================================== */
-
-async function reactMessage(
-  messageId,
-  reaction
-){
-
-  if(!currentUser){
-
-    toast(
-      "Reaction करण्यासाठी Login करा.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  try{
-
-    const {
-      error
-    } =
-    await supabaseClient
-      .from("gs_message_reactions")
-      .upsert({
-
-        message_id:
-          messageId,
-
-        user_id:
-          currentUser.id,
-
-        reaction:
-          reaction
-
-      },{
-        onConflict:
-          "message_id,user_id"
-      });
-
-
-    if(error)
-      throw error;
-
-
-    toast(
-      reaction +
-      " Reacted",
-      "success"
-    );
-
-  }
-  catch(error){
-
-    console.error(
-      "REACTION ERROR:",
-      error
-    );
-
-
-    toast(
-      "Reaction save झाली नाही.",
-      "error"
-    );
-  }
-}
-
-
-/* =====================================================
-   ADD CHANNEL MODAL
-===================================================== */
-
-function openAddChannelModal(){
-
-  $("addChannelModal")
-    .classList
-    .add("show");
-
-
-  setTimeout(()=>{
-
-    $("addChannelName")
-      .focus();
-
-  },100);
-}
-
-
-function closeAddModal(){
-
-  $("addChannelModal")
-    .classList
-    .remove("show");
-}
-
-
-/* =====================================================
-   ADD CHANNEL
-===================================================== */
-
-async function addChannel(){
-
-  if(!currentUser){
-
-    toast(
-      "Channel add करण्यासाठी Login करा.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  const name =
-    $("addChannelName")
-      .value
-      .trim();
-
-
-  const password =
-    $("addChannelPassword")
-      .value;
-
-
-  if(!name || !password){
-
-    toast(
-      "Channel name आणि password टाका.",
-      "error"
-    );
-
-    return;
-  }
-
-
-  try{
-
-    const hash =
-      await hashText(
-        password
-      );
-
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .select("*")
-      .eq(
-        "channel_name",
-        name
-      )
-      .eq(
-        "password_hash",
-        hash
-      )
-      .maybeSingle();
-
-
-    if(error)
-      throw error;
-
-
-    if(!data){
-
-      toast(
-        "Channel name किंवा password चुकीचा आहे.",
-        "error"
-      );
-
-      return;
-    }
-
-
-    let saved =
-      getSavedChannels();
-
-
-    if(
-      !saved.includes(data.id)
-    ){
-
-      saved.push(
-        data.id
-      );
-
-
-      localStorage.setItem(
-        "gyansetu_saved_channels",
-        JSON.stringify(saved)
-      );
-
-
-      toast(
-        "✅ Channel saved झाला.",
-        "success"
-      );
-
-    }
-    else{
-
-      toast(
-        "हा channel आधीच saved आहे.",
-        "error"
-      );
-    }
-
-
-    closeAddModal();
-
-
-    $("addChannelName")
-      .value = "";
-
-
-    $("addChannelPassword")
-      .value = "";
-
-
-    await loadSavedChannels();
-
-  }
-  catch(error){
-
-    console.error(
-      "ADD CHANNEL ERROR:",
-      error
-    );
-
-
-    toast(
-      "Channel add करता आला नाही.",
-      "error"
-    );
-  }
-}
-
-
-/* =====================================================
-   SAVED CHANNELS
-===================================================== */
-
-function getSavedChannels(){
-
-  try{
-
-    return JSON.parse(
-      localStorage.getItem(
-        "gyansetu_saved_channels"
-      )
-    ) || [];
-
-  }
-  catch(e){
-
-    return [];
-  }
-}
-
-
-async function loadSavedChannels(){
-
-  const ids =
-    getSavedChannels();
-
-
-  const box =
-    $("savedBox");
-
-
-  if(!ids.length){
-
-    box.innerHTML = `
-
-      <div
-        class="card"
-        style="
-          text-align:center;
-          color:#777;">
-
-        ➕ Add केलेले channels येथे दिसतील.
-
-        <button
-          class="secondary"
-          onclick="openAddChannelModal()">
-
-          Add Channel
-
-        </button>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("gs_channels")
-      .select("*")
-      .in(
-        "id",
-        ids
-      );
-
-
-    if(error)
-      throw error;
-
-
-    const channels =
-      data || [];
-
-
-    await Promise.all(
-
-      channels.map(
-        async channel=>{
-
-          channel.followers_count =
-            await getFollowerCount(
-              channel.id
-            );
-
-        }
-      )
-
-    );
-
-
-    box.innerHTML = `
-
-      <div class="saved-title">
-        💾 Saved Channels
-      </div>
-
-      ${
-        channels
-          .map(
-            channel=>`
-
-              <div class="saved-item">
-
-                <div
-                  class="channel-avatar"
-                  style="
-                    width:40px;
-                    height:40px;
-                    font-size:18px;">
-
-                  ${escapeHTML(
-                    (
-                      channel.channel_name ||
-                      "G"
-                    )
-                    .charAt(0)
-                    .toUpperCase()
-                  )}
-
-                </div>
-
-
-                <div
-                  class="saved-item-info"
-                  onclick="
-                    openChannelDetails('${channel.id}')
-                  "
-                  style="
-                    cursor:pointer;">
-
-                  <div class="saved-item-name">
-
-                    ${escapeHTML(
-                      channel.channel_name
-                    )}
-
-                  </div>
-
-
-                  <div class="saved-item-small">
-
-                    @${escapeHTML(
-                      channel.owner_username
-                    )}
-
-                    •
-
-                    ${channel.followers_count}
-
-                    followers
-
-                  </div>
-
-                </div>
-
-
-                <button
-                  class="remove-save"
-                  onclick="
-                    removeSavedChannel('${channel.id}')
-                  ">
-
-                  ×
-
-                </button>
-
-              </div>
-
-            `
-          )
-          .join("")
-      }
-
-
-      <button
-        class="secondary"
-        onclick="openAddChannelModal()">
-
-        ➕ Add Another Channel
-
-      </button>
-
-    `;
-
-  }
-  catch(error){
-
-    console.error(
-      "SAVED ERROR:",
-      error
-    );
-
-
-    box.innerHTML = `
-
-      <div
-        class="card"
-        style="
-          text-align:center;
-          color:#888;">
-
-        Saved channels load झाले नाहीत.
-
-      </div>
-
-    `;
-  }
-}
-
-
-function removeSavedChannel(
-  id
-){
-
-  let saved =
-    getSavedChannels();
-
-
-  saved =
-    saved.filter(
-      item =>
-        item !== id
-    );
-
-
-  localStorage.setItem(
-    "gyansetu_saved_channels",
-    JSON.stringify(saved)
-  );
-
-
-  loadSavedChannels();
-
-
-  toast(
-    "Channel saved list मधून काढला.",
-    "success"
-  );
-}
-
-
-/* =====================================================
-   ENTER TO SEND
-===================================================== */
-
-$("chatMessage")
-  .addEventListener(
-    "keydown",
-    event=>{
-
-      if(
-        event.key === "Enter" &&
-        !event.shiftKey
-      ){
-
-        event.preventDefault();
-
-        sendMessage();
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   MODALS
-===================================================== */
-
-$("sirConfirmModal")
-  .addEventListener(
-    "click",
-    event=>{
-
-      if(
-        event.target ===
-        $("sirConfirmModal")
-      ){
-
-        closeModal();
-
-      }
-
-    }
-  );
-
-
-$("addChannelModal")
-  .addEventListener(
-    "click",
-    event=>{
-
-      if(
-        event.target ===
-        $("addChannelModal")
-      ){
-
-        closeAddModal();
-
-      }
-
-    }
-  );
-
-
-/* =====================================================
-   ESC
-===================================================== */
-
-document.addEventListener(
-  "keydown",
-  event=>{
-
-    if(
-      event.key === "Escape"
-    ){
-
-      closeModal();
-
-      closeAddModal();
-
-
-      if(
-        $("chatWrap")
-          .classList
-          .contains("active")
-      ){
-
-        closeChat();
-
-      }
-
-    }
-
-  }
-);
-
-
-/* =====================================================
-   AUTH
-===================================================== */
-
-supabaseClient.auth.onAuthStateChange(
-  async(
-    event,
-    session
-  )=>{
-
-    currentUser =
-      session?.user || null;
-
-
-    if(currentUser){
-
-      const username =
-        currentUser.user_metadata?.username
-        ||
-        localStorage.getItem(
-          "gyansetu_username"
-        )
-        ||
-        "User";
-
-
-      $("headerUser").innerText =
-        "@" + username;
-
-    }
-    else{
-
-      $("headerUser").innerText =
-        "Guest";
-    }
-
-  }
-);
-
-
-/* =====================================================
-   START
-===================================================== */
-
-loadUser();
 
 </script>
 
