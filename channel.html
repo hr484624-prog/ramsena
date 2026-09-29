@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>GyanSetu Channels</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
@@ -32,6 +34,10 @@ button,input{
 
 button{
   cursor:pointer;
+}
+
+button:disabled{
+  cursor:not-allowed;
 }
 
 .app{
@@ -197,6 +203,11 @@ input::placeholder{
   color:#666;
 }
 
+input:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+
 .primary{
   width:100%;
   padding:14px;
@@ -326,11 +337,11 @@ input::placeholder{
 }
 
 .chat-header{
-  height:65px;
+  min-height:65px;
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:0 13px;
+  gap:9px;
+  padding:0 10px;
   background:#0c0c15;
   border-bottom:1px solid #242436;
 }
@@ -340,6 +351,7 @@ input::placeholder{
   background:none;
   color:white;
   font-size:30px;
+  flex-shrink:0;
 }
 
 .chat-title{
@@ -366,6 +378,26 @@ input::placeholder{
   height:9px;
   border-radius:50%;
   background:#35df87;
+  flex-shrink:0;
+}
+
+.comment-toggle{
+  display:none;
+  border:0;
+  border-radius:10px;
+  padding:8px 9px;
+  color:white;
+  font-size:11px;
+  font-weight:bold;
+  flex-shrink:0;
+}
+
+.comment-toggle.on{
+  background:#176b45;
+}
+
+.comment-toggle.off{
+  background:#8b2638;
 }
 
 .messages{
@@ -439,6 +471,28 @@ input::placeholder{
   color:white;
   background:linear-gradient(135deg,#ff3f9d,#5a63ff);
   font-size:19px;
+}
+
+.send:disabled{
+  opacity:.35;
+}
+
+.comment-off-bar{
+  display:none;
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:13px;
+  background:#11111b;
+  border-top:1px solid #29293b;
+  color:#999;
+  text-align:center;
+  font-size:12px;
+}
+
+.comment-off-bar.show{
+  display:block;
 }
 
 .modal{
@@ -586,7 +640,39 @@ input::placeholder{
   line-height:1.6;
 }
 
+.comment-status{
+  margin-top:12px;
+  padding:11px;
+  border-radius:12px;
+  text-align:center;
+  font-size:12px;
+}
+
+.comment-status.on{
+  background:#123b2b;
+  color:#57e6a1;
+}
+
+.comment-status.off{
+  background:#3d1821;
+  color:#ff819b;
+}
+
+@media(max-width:390px){
+
+  .chat-header{
+    gap:6px;
+  }
+
+  .comment-toggle{
+    padding:7px 6px;
+    font-size:10px;
+  }
+
+}
+
 @media(max-width:360px){
+
   .choice{
     grid-template-columns:1fr;
   }
@@ -594,7 +680,9 @@ input::placeholder{
   .modal-buttons{
     flex-direction:column;
   }
+
 }
+
 </style>
 </head>
 
@@ -603,37 +691,74 @@ input::placeholder{
 <div class="app">
 
 <header class="header">
-  <div class="logo">📚 GyanSetu</div>
-  <div class="header-user" id="headerUser">Loading...</div>
+
+  <div class="logo">
+    📚 GyanSetu
+  </div>
+
+  <div class="header-user" id="headerUser">
+    Loading...
+  </div>
+
 </header>
 
 <main class="main">
 
+<!-- =====================================================
+     HOME
+===================================================== -->
+
 <section class="section active" id="homeSection">
 
   <div class="welcome">
-    <div class="welcome-icon">💬</div>
 
-    <h1>GyanSetu Channels</h1>
+    <div class="welcome-icon">
+      💬
+    </div>
+
+    <h1>
+      GyanSetu Channels
+    </h1>
 
     <p>
       Sir आपला educational channel तयार करू शकतात
       किंवा Student म्हणून उपलब्ध channels join करू शकतात.
     </p>
+
   </div>
 
   <div class="choice">
 
     <button onclick="openCreateConfirm()">
-      <span class="choice-icon">🎓</span>
-      <span class="choice-title">Create Channel</span>
-      <span class="choice-small">Sir / Teacher</span>
+
+      <span class="choice-icon">
+        🎓
+      </span>
+
+      <span class="choice-title">
+        Create Channel
+      </span>
+
+      <span class="choice-small">
+        Sir / Teacher
+      </span>
+
     </button>
 
     <button onclick="openStudentSection()">
-      <span class="choice-icon">👨‍🎓</span>
-      <span class="choice-title">I am Student</span>
-      <span class="choice-small">Channels पाहा</span>
+
+      <span class="choice-icon">
+        👨‍🎓
+      </span>
+
+      <span class="choice-title">
+        I am Student
+      </span>
+
+      <span class="choice-small">
+        Channels पाहा
+      </span>
+
     </button>
 
   </div>
@@ -642,11 +767,20 @@ input::placeholder{
 
 </section>
 
+
+<!-- =====================================================
+     CREATE
+===================================================== -->
+
 <section class="section" id="createSection">
 
-  <button class="back-btn" onclick="goHome()">← Back</button>
+  <button class="back-btn" onclick="goHome()">
+    ← Back
+  </button>
 
-  <div class="section-title">🎓 Create Your Channel</div>
+  <div class="section-title">
+    🎓 Create Your Channel
+  </div>
 
   <div class="sub-title">
     तुमचा educational channel तयार करा.
@@ -655,14 +789,18 @@ input::placeholder{
 
   <div class="card" id="createCard">
 
-    <label>Channel Name</label>
+    <label>
+      Channel Name
+    </label>
 
     <input
       id="channelName"
       maxlength="80"
       placeholder="उदा. Hitesh Study Channel">
 
-    <label>Channel Password</label>
+    <label>
+      Channel Password
+    </label>
 
     <input
       id="channelPassword"
@@ -680,8 +818,10 @@ input::placeholder{
     </button>
 
     <div class="sir-info">
+
       💡 Channel password सुरक्षित hash स्वरूपात
       Supabase मध्ये save केला जातो.
+
     </div>
 
   </div>
@@ -690,11 +830,20 @@ input::placeholder{
 
 </section>
 
+
+<!-- =====================================================
+     STUDENT
+===================================================== -->
+
 <section class="section" id="studentSection">
 
-  <button class="back-btn" onclick="goHome()">← Back</button>
+  <button class="back-btn" onclick="goHome()">
+    ← Back
+  </button>
 
-  <div class="section-title">👨‍🎓 Student</div>
+  <div class="section-title">
+    👨‍🎓 Student
+  </div>
 
   <div class="sub-title">
     GyanSetu वर उपलब्ध channels शोधा आणि
@@ -704,7 +853,7 @@ input::placeholder{
   <input
     id="channelSearch"
     placeholder="🔎 Channel किंवा username search करा..."
-    oninput="filterChannels()">
+    oninput="filterChannels">
 
   <div id="channelsList" style="margin-top:15px;"></div>
 
@@ -712,13 +861,22 @@ input::placeholder{
 
 </main>
 
+
+<!-- =====================================================
+     SIR CONFIRM
+===================================================== -->
+
 <div class="modal" id="sirConfirmModal">
 
   <div class="modal-box">
 
-    <div class="modal-icon">🎓</div>
+    <div class="modal-icon">
+      🎓
+    </div>
 
-    <h2>Sir Confirmation</h2>
+    <h2>
+      Sir Confirmation
+    </h2>
 
     <p>
       तुम्ही Sir / Teacher आहात ना?
@@ -728,8 +886,12 @@ input::placeholder{
 
     <div class="modal-buttons">
 
-      <button class="secondary" onclick="closeModal()">
+      <button
+        class="secondary"
+        onclick="closeModal()">
+
         नाही
+
       </button>
 
       <button
@@ -747,89 +909,178 @@ input::placeholder{
 
 </div>
 
+
+<!-- =====================================================
+     ADD CHANNEL
+===================================================== -->
+
 <div class="modal" id="addChannelModal">
 
   <div class="modal-box">
 
-    <div class="modal-icon">➕</div>
+    <div class="modal-icon">
+      ➕
+    </div>
 
-    <h2>Add Channel</h2>
+    <h2>
+      Add Channel
+    </h2>
 
     <p>
       Sir ने दिलेले Channel Name आणि Password टाका.
     </p>
 
-    <label>Channel Name</label>
+    <label>
+      Channel Name
+    </label>
 
-    <input id="addChannelName" placeholder="Channel name">
+    <input
+      id="addChannelName"
+      placeholder="Channel name">
 
-    <label>Channel Password</label>
+    <label>
+      Channel Password
+    </label>
 
     <input
       id="addChannelPassword"
       type="password"
       placeholder="Password">
 
-    <button class="primary" onclick="addChannel()">
+    <button
+      class="primary"
+      onclick="addChannel()">
+
       ➕ Add Channel
+
     </button>
 
-    <button class="secondary" onclick="closeAddModal()">
+    <button
+      class="secondary"
+      onclick="closeAddModal()">
+
       Cancel
+
     </button>
 
   </div>
 
 </div>
+
+
+<!-- =====================================================
+     CHAT
+===================================================== -->
 
 <div class="chat-wrap" id="chatWrap">
 
   <div class="chat-header">
 
-    <button class="chat-back" onclick="closeChat()">‹</button>
+    <button
+      class="chat-back"
+      onclick="closeChat()">
 
-    <div class="channel-avatar" id="chatAvatar">
+      ‹
+
+    </button>
+
+    <div
+      class="channel-avatar"
+      id="chatAvatar">
+
       💬
+
     </div>
 
     <div class="chat-title">
 
-      <div class="chat-title-main" id="chatChannelName">
+      <div
+        class="chat-title-main"
+        id="chatChannelName">
+
         Channel
+
       </div>
 
-      <div class="chat-title-small" id="chatChannelInfo">
+      <div
+        class="chat-title-small"
+        id="chatChannelInfo">
+
         Channel
+
       </div>
 
     </div>
+
+    <!-- SIR COMMENT BUTTON -->
+
+    <button
+      id="commentToggleButton"
+      class="comment-toggle"
+      onclick="toggleComments()">
+
+      💬 Comments
+
+    </button>
 
     <div class="online-dot"></div>
 
   </div>
 
-  <div class="messages" id="messages">
+
+  <div
+    class="messages"
+    id="messages">
+
     <div class="loading">
       Messages loading...
     </div>
+
   </div>
 
-  <div class="chat-input">
+
+  <!-- MESSAGE INPUT -->
+
+  <div
+    class="chat-input"
+    id="chatInputArea">
 
     <input
       id="chatMessage"
       maxlength="1000"
-      placeholder="Message / Comment...">
+      placeholder="Comment बंद आहे..."
+      disabled>
 
-    <button class="send" onclick="sendMessage()">➤</button>
+    <button
+      class="send"
+      id="sendButton"
+      onclick="sendMessage()"
+      disabled>
+
+      ➤
+
+    </button>
+
+  </div>
+
+
+  <!-- STUDENT OFF MESSAGE -->
+
+  <div
+    class="comment-off-bar"
+    id="commentOffBar">
+
+    🔒 Sir ने comments बंद केले आहेत.
 
   </div>
 
 </div>
 
+
 <div class="toast" id="toast"></div>
 
 </div>
+
 
 <script>
 
@@ -867,25 +1118,40 @@ let allChannels = [];
 let currentIsSir = false;
 let followedChannelIds = new Set();
 
-const $ = id => document.getElementById(id);
+
+const $ = id =>
+  document.getElementById(id);
 
 
 /* =====================================================
    TOAST
 ===================================================== */
 
-function toast(message,type="success"){
+function toast(
+  message,
+  type="success"
+){
 
-  const box = $("toast");
+  const box =
+    $("toast");
 
-  box.innerText = message;
-  box.className = "toast show " + type;
+  box.innerText =
+    message;
 
-  clearTimeout(window.toastTimer);
+  box.className =
+    "toast show " + type;
 
-  window.toastTimer = setTimeout(()=>{
-    box.className = "toast";
-  },3000);
+  clearTimeout(
+    window.toastTimer
+  );
+
+  window.toastTimer =
+    setTimeout(()=>{
+
+      box.className =
+        "toast";
+
+    },3000);
 }
 
 
@@ -895,9 +1161,11 @@ function toast(message,type="success"){
 
 function escapeHTML(text){
 
-  const div = document.createElement("div");
+  const div =
+    document.createElement("div");
 
-  div.textContent = text ?? "";
+  div.textContent =
+    text ?? "";
 
   return div.innerHTML;
 }
@@ -922,7 +1190,8 @@ async function hashText(text){
     new Uint8Array(hash)
   )
   .map(
-    b => b.toString(16).padStart(2,"0")
+    b =>
+      b.toString(16).padStart(2,"0")
   )
   .join("");
 }
@@ -948,34 +1217,43 @@ async function loadUser(){
     currentUser =
       data?.user || null;
 
+
     if(!currentUser){
 
-      $("headerUser").innerText = "Guest";
+      $("headerUser").innerText =
+        "Guest";
 
       loadSavedChannels();
 
       return;
     }
 
+
     const username =
       currentUser.user_metadata?.username
       ||
-      localStorage.getItem("gyansetu_username")
+      localStorage.getItem(
+        "gyansetu_username"
+      )
       ||
       "User";
 
+
     $("headerUser").innerText =
       "@" + username;
+
 
     localStorage.setItem(
       "gyansetu_username",
       username
     );
 
+
     localStorage.setItem(
       "gyansetu_user_id",
       currentUser.id
     );
+
 
     await checkMyChannel();
 
@@ -986,9 +1264,13 @@ async function loadUser(){
   }
   catch(error){
 
-    console.error("USER ERROR:",error);
+    console.error(
+      "USER ERROR:",
+      error
+    );
 
-    $("headerUser").innerText = "Guest";
+    $("headerUser").innerText =
+      "Guest";
 
     loadSavedChannels();
   }
@@ -1002,18 +1284,27 @@ async function loadUser(){
 function goHome(){
 
   closeModal();
+
   closeAddModal();
 
-  $("homeSection").classList.add("active");
-  $("createSection").classList.remove("active");
-  $("studentSection").classList.remove("active");
+  $("homeSection")
+    .classList
+    .add("active");
+
+  $("createSection")
+    .classList
+    .remove("active");
+
+  $("studentSection")
+    .classList
+    .remove("active");
 
   loadSavedChannels();
 }
 
 
 /* =====================================================
-   CREATE
+   CREATE CONFIRM
 ===================================================== */
 
 function openCreateConfirm(){
@@ -1028,19 +1319,26 @@ function openCreateConfirm(){
     return;
   }
 
+
   if(currentChannel){
 
     confirmSir();
+
     return;
   }
 
-  $("sirConfirmModal").classList.add("show");
+
+  $("sirConfirmModal")
+    .classList
+    .add("show");
 }
 
 
 function closeModal(){
 
-  $("sirConfirmModal").classList.remove("show");
+  $("sirConfirmModal")
+    .classList
+    .remove("show");
 }
 
 
@@ -1048,17 +1346,29 @@ function confirmSir(){
 
   closeModal();
 
-  $("homeSection").classList.remove("active");
-  $("studentSection").classList.remove("active");
-  $("createSection").classList.add("active");
+  $("homeSection")
+    .classList
+    .remove("active");
+
+  $("studentSection")
+    .classList
+    .remove("active");
+
+  $("createSection")
+    .classList
+    .add("active");
+
 
   if(currentChannel){
 
     showExistingSirChannel();
 
-  }else{
+  }
+  else{
 
-    $("createCard").style.display = "block";
+    $("createCard")
+      .style
+      .display = "block";
   }
 }
 
@@ -1071,10 +1381,14 @@ async function createChannel(){
 
   if(!currentUser){
 
-    toast("Login required.","error");
+    toast(
+      "Login required.",
+      "error"
+    );
 
     return;
   }
+
 
   if(currentChannel){
 
@@ -1088,18 +1402,27 @@ async function createChannel(){
     return;
   }
 
+
   const name =
-    $("channelName").value.trim();
+    $("channelName")
+      .value
+      .trim();
 
   const password =
-    $("channelPassword").value;
+    $("channelPassword")
+      .value;
+
 
   if(name.length < 2){
 
-    toast("Channel name टाका.","error");
+    toast(
+      "Channel name टाका.",
+      "error"
+    );
 
     return;
   }
+
 
   if(password.length < 4){
 
@@ -1111,6 +1434,7 @@ async function createChannel(){
     return;
   }
 
+
   const button =
     $("createChannelButton");
 
@@ -1119,17 +1443,22 @@ async function createChannel(){
   button.innerText =
     "Channel तयार होत आहे...";
 
+
   try{
 
     const username =
       currentUser.user_metadata?.username
       ||
-      localStorage.getItem("gyansetu_username")
+      localStorage.getItem(
+        "gyansetu_username"
+      )
       ||
       "User";
 
+
     const passwordHash =
       await hashText(password);
+
 
     const {
       data,
@@ -1138,32 +1467,61 @@ async function createChannel(){
     await supabaseClient
       .from("gs_channels")
       .insert({
-        owner_id:currentUser.id,
-        owner_username:username,
-        channel_name:name,
-        password_hash:passwordHash,
-        followers_count:0
+
+        owner_id:
+          currentUser.id,
+
+        owner_username:
+          username,
+
+        channel_name:
+          name,
+
+        password_hash:
+          passwordHash,
+
+        followers_count:
+          0,
+
+        comments_enabled:
+          true
+
       })
       .select()
       .single();
 
+
     if(error)
       throw error;
 
-    currentChannel = data;
-    currentIsSir = true;
+
+    currentChannel =
+      data;
+
+    currentIsSir =
+      true;
+
 
     localStorage.setItem(
       "gyansetu_my_channel_id",
       data.id
     );
 
-    $("channelName").value = "";
-    $("channelPassword").value = "";
 
-    $("createCard").style.display = "none";
+    $("channelName").value =
+      "";
+
+    $("channelPassword").value =
+      "";
+
+
+    $("createCard")
+      .style
+      .display = "none";
+
 
     showExistingSirChannel();
+
 
     toast(
       "🎉 तुमचा channel तयार झाला!",
@@ -1173,11 +1531,16 @@ async function createChannel(){
   }
   catch(error){
 
-    console.error("CREATE ERROR:",error);
+    console.error(
+      "CREATE ERROR:",
+      error
+    );
+
 
     if(error.code === "23505"){
 
       await checkMyChannel();
+
 
       if(currentChannel){
 
@@ -1191,6 +1554,7 @@ async function createChannel(){
         return;
       }
     }
+
 
     toast(
       "Channel तयार करता आला नाही. Supabase RLS/SQL तपासा.",
@@ -1217,6 +1581,7 @@ async function checkMyChannel(){
   if(!currentUser)
     return;
 
+
   try{
 
     const {
@@ -1232,6 +1597,7 @@ async function checkMyChannel(){
       )
       .maybeSingle();
 
+
     if(error){
 
       console.error(
@@ -1242,15 +1608,21 @@ async function checkMyChannel(){
       return;
     }
 
+
     if(data){
 
-      currentChannel = data;
-      currentIsSir = true;
+      currentChannel =
+        data;
+
+      currentIsSir =
+        true;
+
 
       localStorage.setItem(
         "gyansetu_my_channel_id",
         data.id
       );
+
     }
 
   }
@@ -1262,10 +1634,12 @@ async function checkMyChannel(){
 
 
 /* =====================================================
-   FOLLOWER COUNT — IMPORTANT
+   FOLLOWER COUNT
 ===================================================== */
 
-async function getFollowerCount(channelId){
+async function getFollowerCount(
+  channelId
+){
 
   try{
 
@@ -1287,8 +1661,10 @@ async function getFollowerCount(channelId){
         channelId
       );
 
+
     if(error)
       throw error;
+
 
     return count || 0;
 
@@ -1306,24 +1682,32 @@ async function getFollowerCount(channelId){
 
 
 /* =====================================================
-   UPDATE ONE CHANNEL COUNT
+   UPDATE CHANNEL COUNT
 ===================================================== */
 
-async function updateChannelCount(channelId){
+async function updateChannelCount(
+  channelId
+){
 
   const count =
-    await getFollowerCount(channelId);
+    await getFollowerCount(
+      channelId
+    );
+
 
   const channel =
     allChannels.find(
-      item => item.id === channelId
+      item =>
+        item.id === channelId
     );
+
 
   if(channel){
 
     channel.followers_count =
       count;
   }
+
 
   if(
     currentChannel &&
@@ -1333,6 +1717,7 @@ async function updateChannelCount(channelId){
     currentChannel.followers_count =
       count;
   }
+
 
   return count;
 }
@@ -1344,32 +1729,46 @@ async function updateChannelCount(channelId){
 
 async function showExistingSirChannel(){
 
-  $("createCard").style.display = "none";
+  $("createCard")
+    .style
+    .display = "none";
+
 
   const box =
     $("existingSirChannel");
 
+
   if(!currentChannel){
 
-    box.innerHTML = "";
+    box.innerHTML =
+      "";
 
-    $("createCard").style.display =
-      "block";
+    $("createCard")
+      .style
+      .display = "block";
 
     return;
   }
+
 
   const count =
     await updateChannelCount(
       currentChannel.id
     );
 
+
   const firstLetter =
     (
-      currentChannel.channel_name || "G"
+      currentChannel.channel_name ||
+      "G"
     )
     .charAt(0)
     .toUpperCase();
+
+
+  const commentsEnabled =
+    currentChannel.comments_enabled !== false;
+
 
   box.innerHTML = `
 
@@ -1407,6 +1806,23 @@ async function showExistingSirChannel(){
 
       </div>
 
+
+      <div
+        class="comment-status ${
+          commentsEnabled
+          ? "on"
+          : "off"
+        }">
+
+        ${
+          commentsEnabled
+          ? "🟢 Student Comments ON"
+          : "🔴 Student Comments OFF"
+        }
+
+      </div>
+
+
       <button
         class="primary"
         onclick="openChannelChat(currentChannel,true)">
@@ -1414,6 +1830,7 @@ async function showExistingSirChannel(){
         💬 Open Channel Chat
 
       </button>
+
 
       <button
         class="secondary"
@@ -1434,24 +1851,36 @@ async function showExistingSirChannel(){
 
 function openStudentSection(){
 
-  $("homeSection").classList.remove("active");
-  $("createSection").classList.remove("active");
-  $("studentSection").classList.add("active");
+  $("homeSection")
+    .classList
+    .remove("active");
+
+  $("createSection")
+    .classList
+    .remove("active");
+
+  $("studentSection")
+    .classList
+    .add("active");
+
 
   loadChannels();
 }
 
 
 /* =====================================================
-   LOAD FOLLOWED
+   FOLLOWED
 ===================================================== */
 
 async function loadFollowedChannels(){
 
-  followedChannelIds = new Set();
+  followedChannelIds =
+    new Set();
+
 
   if(!currentUser)
     return;
+
 
   try{
 
@@ -1467,6 +1896,7 @@ async function loadFollowedChannels(){
         currentUser.id
       );
 
+
     if(error){
 
       console.error(
@@ -1477,13 +1907,15 @@ async function loadFollowedChannels(){
       return;
     }
 
-    (data || []).forEach(item=>{
 
-      followedChannelIds.add(
-        String(item.channel_id)
-      );
+    (data || [])
+      .forEach(item=>{
 
-    });
+        followedChannelIds.add(
+          String(item.channel_id)
+        );
+
+      });
 
   }
   catch(error){
@@ -1502,10 +1934,14 @@ async function loadChannels(){
   const box =
     $("channelsList");
 
+
   box.innerHTML =
-    `<div class="loading">
-      ⏳ Channels loading...
-    </div>`;
+    `
+      <div class="loading">
+        ⏳ Channels loading...
+      </div>
+    `;
+
 
   try{
 
@@ -1518,21 +1954,22 @@ async function loadChannels(){
       .select("*")
       .order(
         "created_at",
-        {ascending:false}
+        {
+          ascending:false
+        }
       );
+
 
     if(error)
       throw error;
 
+
     allChannels =
       data || [];
 
-    /*
-      प्रत्येक channel चा actual count
-      followers table मधून घेणे.
-    */
 
     await Promise.all(
+
       allChannels.map(
         async channel=>{
 
@@ -1543,11 +1980,16 @@ async function loadChannels(){
 
         }
       )
+
     );
+
 
     await loadFollowedChannels();
 
-    renderChannels(allChannels);
+
+    renderChannels(
+      allChannels
+    );
 
   }
   catch(error){
@@ -1556,6 +1998,7 @@ async function loadChannels(){
       "LOAD CHANNEL ERROR:",
       error
     );
+
 
     box.innerHTML = `
 
@@ -1576,6 +2019,7 @@ async function loadChannels(){
         </button>
 
       </div>
+
     `;
   }
 }
@@ -1590,6 +2034,7 @@ function renderChannels(list){
   const box =
     $("channelsList");
 
+
   if(!list.length){
 
     box.innerHTML = `
@@ -1603,13 +2048,17 @@ function renderChannels(list){
         अजून कोणताही channel तयार झालेला नाही.
 
       </div>
+
     `;
 
     return;
   }
 
+
   box.innerHTML =
-    list.map(channelCard).join("");
+    list
+      .map(channelCard)
+      .join("");
 }
 
 
@@ -1620,20 +2069,27 @@ function channelCard(channel){
       String(channel.id)
     );
 
+
   const isOwner =
     currentUser &&
     String(channel.owner_id) ===
     String(currentUser.id);
 
+
   const firstLetter =
     (
-      channel.channel_name || "G"
+      channel.channel_name ||
+      "G"
     )
     .charAt(0)
     .toUpperCase();
 
+
   const count =
-    Number(channel.followers_count || 0);
+    Number(
+      channel.followers_count || 0
+    );
+
 
   return `
 
@@ -1665,14 +2121,18 @@ function channelCard(channel){
             🎓 Educational
           </span>
 
-          <span class="badge"
-                id="badge-${channel.id}">
+          <span
+            class="badge"
+            id="badge-${channel.id}">
+
             👥 ${count}
+
           </span>
 
         </div>
 
       </div>
+
 
       <div class="follow-row">
 
@@ -1684,6 +2144,7 @@ function channelCard(channel){
 
         </div>
 
+
         ${
           isOwner
 
@@ -1692,14 +2153,18 @@ function channelCard(channel){
           `<button
             class="follow-btn following"
             disabled>
+
             Your Channel
+
           </button>`
 
           :
 
           `<button
             class="follow-btn ${
-              isFollowing ? "following" : ""
+              isFollowing
+              ? "following"
+              : ""
             }"
             onclick="toggleFollow('${channel.id}',this)">
 
@@ -1714,6 +2179,7 @@ function channelCard(channel){
 
       </div>
 
+
       <button
         class="primary"
         onclick="openChannelDetails('${channel.id}')">
@@ -1723,6 +2189,7 @@ function channelCard(channel){
       </button>
 
     </div>
+
   `;
 }
 
@@ -1739,35 +2206,41 @@ function filterChannels(){
       .toLowerCase()
       .trim();
 
+
   const filtered =
-    allChannels.filter(channel=>{
+    allChannels.filter(
+      channel=>{
 
-      return (
+        return (
 
-        String(
-          channel.channel_name || ""
-        )
-        .toLowerCase()
-        .includes(text)
+          String(
+            channel.channel_name || ""
+          )
+          .toLowerCase()
+          .includes(text)
 
-        ||
+          ||
 
-        String(
-          channel.owner_username || ""
-        )
-        .toLowerCase()
-        .includes(text)
+          String(
+            channel.owner_username || ""
+          )
+          .toLowerCase()
+          .includes(text)
 
-      );
+        );
 
-    });
+      }
+    );
 
-  renderChannels(filtered);
+
+  renderChannels(
+    filtered
+  );
 }
 
 
 /* =====================================================
-   FOLLOW / UNFOLLOW
+   FOLLOW
 ===================================================== */
 
 async function toggleFollow(
@@ -1785,19 +2258,20 @@ async function toggleFollow(
     return;
   }
 
+
   const id =
     String(channelId);
 
-  button.disabled = true;
+
+  button.disabled =
+    true;
+
 
   const alreadyFollowing =
     followedChannelIds.has(id);
 
-  try{
 
-    /* =========================
-       UNFOLLOW
-    ========================= */
+  try{
 
     if(alreadyFollowing){
 
@@ -1816,20 +2290,20 @@ async function toggleFollow(
           currentUser.id
         );
 
+
       if(error)
         throw error;
 
+
       followedChannelIds.delete(id);
+
 
       toast(
         "Channel unfollow केला.",
         "success"
       );
-    }
 
-    /* =========================
-       FOLLOW
-    ========================= */
+    }
 
     else{
 
@@ -1850,8 +2324,10 @@ async function toggleFollow(
         )
         .maybeSingle();
 
+
       if(checkError)
         throw checkError;
+
 
       if(!existing){
 
@@ -1861,23 +2337,28 @@ async function toggleFollow(
         await supabaseClient
           .from("gs_channel_followers")
           .insert({
-            channel_id:channelId,
-            user_id:currentUser.id
+
+            channel_id:
+              channelId,
+
+            user_id:
+              currentUser.id
+
           });
 
-        if(insertError){
 
-          /*
-            Duplicate असेल तर
-            Following समजायचे.
-          */
+        if(
+          insertError &&
+          insertError.code !== "23505"
+        ){
 
-          if(insertError.code !== "23505")
-            throw insertError;
+          throw insertError;
         }
       }
 
+
       followedChannelIds.add(id);
+
 
       toast(
         "✅ Channel follow केला.",
@@ -1886,24 +2367,18 @@ async function toggleFollow(
     }
 
 
-    /* =========================
-       GET REAL COUNT
-    ========================= */
-
     const newCount =
       await getFollowerCount(
         channelId
       );
 
-    /*
-      Local channel update
-    */
 
     const channel =
       allChannels.find(
         item =>
-        String(item.id) === id
+          String(item.id) === id
       );
+
 
     if(channel){
 
@@ -1912,26 +2387,25 @@ async function toggleFollow(
     }
 
 
-    /*
-      CURRENT CARD DIRECT UPDATE
-      म्हणजे reload शिवाय count बदलेल.
-    */
-
     const countElement =
       document.getElementById(
         "count-" + channelId
       );
 
+
     if(countElement){
 
       countElement.innerText =
-        newCount + " followers";
+        newCount +
+        " followers";
     }
+
 
     const badgeElement =
       document.getElementById(
         "badge-" + channelId
       );
+
 
     if(badgeElement){
 
@@ -1940,19 +2414,7 @@ async function toggleFollow(
     }
 
 
-    /*
-      Follow button update
-    */
-
-    if(
-      button &&
-      !(
-        currentUser &&
-        channel &&
-        String(channel.owner_id) ===
-        String(currentUser.id)
-      )
-    ){
+    if(button){
 
       if(
         followedChannelIds.has(id)
@@ -1965,7 +2427,8 @@ async function toggleFollow(
         button.innerText =
           "✓ Following";
 
-      }else{
+      }
+      else{
 
         button.classList.remove(
           "following"
@@ -1976,20 +2439,6 @@ async function toggleFollow(
       }
     }
 
-
-    /*
-      Current opened channel count
-    */
-
-    if(
-      currentChannel &&
-      String(currentChannel.id) === id
-    ){
-
-      currentChannel.followers_count =
-        newCount;
-    }
-
   }
   catch(error){
 
@@ -1998,15 +2447,17 @@ async function toggleFollow(
       error
     );
 
+
     toast(
-      "Follow बदलता आला नाही. Supabase RLS तपासा.",
+      "Follow बदलता आला नाही.",
       "error"
     );
 
   }
   finally{
 
-    button.disabled = false;
+    button.disabled =
+      false;
   }
 }
 
@@ -2015,14 +2466,17 @@ async function toggleFollow(
    CHANNEL DETAILS
 ===================================================== */
 
-async function openChannelDetails(channelId){
+async function openChannelDetails(
+  channelId
+){
 
   let channel =
     allChannels.find(
       item =>
-      String(item.id) ===
-      String(channelId)
+        String(item.id) ===
+        String(channelId)
     );
+
 
   if(!channel){
 
@@ -2039,6 +2493,7 @@ async function openChannelDetails(channelId){
       )
       .single();
 
+
     if(error){
 
       toast(
@@ -2049,22 +2504,23 @@ async function openChannelDetails(channelId){
       return;
     }
 
-    channel = data;
+
+    channel =
+      data;
   }
 
-  /*
-    Chat उघडण्याआधी actual follower count.
-  */
 
   channel.followers_count =
     await getFollowerCount(
       channel.id
     );
 
+
   const isSir =
     currentUser &&
     String(channel.owner_id) ===
     String(currentUser.id);
+
 
   openChannelChat(
     channel,
@@ -2085,7 +2541,10 @@ async function openChannelChat(
   if(!channel)
     return;
 
-  currentChannel = channel;
+
+  currentChannel =
+    channel;
+
 
   currentIsSir =
     !!isSir ||
@@ -2095,16 +2554,20 @@ async function openChannelChat(
       String(currentUser.id)
     );
 
+
   const count =
     await getFollowerCount(
       channel.id
     );
 
+
   currentChannel.followers_count =
     count;
 
+
   $("chatChannelName").innerText =
     channel.channel_name;
+
 
   $("chatChannelInfo").innerText =
     "@" +
@@ -2113,21 +2576,271 @@ async function openChannelChat(
     count +
     " followers";
 
+
   $("chatAvatar").innerText =
     (
-      channel.channel_name || "G"
+      channel.channel_name ||
+      "G"
     )
     .charAt(0)
     .toUpperCase();
 
-  $("chatMessage").placeholder =
-    currentIsSir
-    ? "📢 Sir Post करा..."
-    : "💬 Comment करा...";
 
-  $("chatWrap").classList.add("active");
+  $("chatWrap")
+    .classList
+    .add("active");
+
+
+  updateCommentUI();
+
 
   await loadMessages();
+}
+
+
+/* =====================================================
+   UPDATE COMMENT UI
+===================================================== */
+
+function updateCommentUI(){
+
+  if(!currentChannel)
+    return;
+
+
+  const input =
+    $("chatMessage");
+
+  const sendButton =
+    $("sendButton");
+
+  const toggleButton =
+    $("commentToggleButton");
+
+  const offBar =
+    $("commentOffBar");
+
+
+  const commentsEnabled =
+    currentChannel.comments_enabled !== false;
+
+
+  /* =================================================
+     SIR
+  ================================================= */
+
+  if(currentIsSir){
+
+    toggleButton.style.display =
+      "block";
+
+
+    offBar.classList.remove(
+      "show"
+    );
+
+
+    input.disabled =
+      false;
+
+
+    sendButton.disabled =
+      false;
+
+
+    input.placeholder =
+      "📢 Sir Post करा...";
+
+
+    if(commentsEnabled){
+
+      toggleButton.innerText =
+        "🟢 Comments ON";
+
+      toggleButton.classList
+        .add("on");
+
+      toggleButton.classList
+        .remove("off");
+
+    }
+    else{
+
+      toggleButton.innerText =
+        "🔴 Comments OFF";
+
+      toggleButton.classList
+        .add("off");
+
+      toggleButton.classList
+        .remove("on");
+    }
+
+
+    return;
+  }
+
+
+  /* =================================================
+     STUDENT
+  ================================================= */
+
+  toggleButton.style.display =
+    "none";
+
+
+  if(commentsEnabled){
+
+    input.disabled =
+      false;
+
+    sendButton.disabled =
+      false;
+
+    input.placeholder =
+      "💬 Comment करा...";
+
+    offBar.classList.remove(
+      "show"
+    );
+
+  }
+  else{
+
+    input.disabled =
+      true;
+
+    sendButton.disabled =
+      true;
+
+    input.value =
+      "";
+
+    input.placeholder =
+      "🔒 Comments बंद आहेत";
+
+    offBar.classList.add(
+      "show"
+    );
+  }
+}
+
+
+/* =====================================================
+   TOGGLE COMMENTS
+===================================================== */
+
+async function toggleComments(){
+
+  if(!currentUser){
+
+    toast(
+      "Login required.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(!currentChannel){
+
+    return;
+  }
+
+
+  const isOwner =
+    String(
+      currentChannel.owner_id
+    ) ===
+    String(
+      currentUser.id
+    );
+
+
+  if(!isOwner){
+
+    toast(
+      "फक्त Sir comments बदलू शकतात.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const newStatus =
+    currentChannel.comments_enabled === false;
+
+
+  const button =
+    $("commentToggleButton");
+
+
+  button.disabled =
+    true;
+
+
+  try{
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("gs_channels")
+      .update({
+
+        comments_enabled:
+          newStatus
+
+      })
+      .eq(
+        "id",
+        currentChannel.id
+      )
+      .select()
+      .single();
+
+
+    if(error)
+      throw error;
+
+
+    currentChannel =
+      data;
+
+
+    updateCommentUI();
+
+
+    toast(
+      newStatus
+      ? "🟢 Comments ON केले."
+      : "🔴 Comments OFF केले.",
+      "success"
+    );
+
+  }
+  catch(error){
+
+    console.error(
+      "COMMENT TOGGLE ERROR:",
+      error
+    );
+
+
+    toast(
+      "Comments setting बदलता आली नाही.",
+      "error"
+    );
+
+  }
+  finally{
+
+    button.disabled =
+      false;
+  }
 }
 
 
@@ -2140,6 +2853,12 @@ function closeChat(){
   $("chatWrap")
     .classList
     .remove("active");
+
+  currentChannel =
+    null;
+
+  currentIsSir =
+    false;
 }
 
 
@@ -2152,13 +2871,18 @@ async function loadMessages(){
   if(!currentChannel)
     return;
 
+
   const box =
     $("messages");
 
+
   box.innerHTML =
-    `<div class="loading">
-      ⏳ Messages loading...
-    </div>`;
+    `
+      <div class="loading">
+        ⏳ Messages loading...
+      </div>
+    `;
+
 
   try{
 
@@ -2175,11 +2899,15 @@ async function loadMessages(){
       )
       .order(
         "created_at",
-        {ascending:true}
+        {
+          ascending:true
+        }
       );
+
 
     if(error)
       throw error;
+
 
     if(!data || !data.length){
 
@@ -2194,17 +2922,24 @@ async function loadMessages(){
           अजून messages नाहीत.
 
         </div>
+
       `;
 
       return;
     }
 
+
     box.innerHTML =
-      data.map(renderMessage).join("");
+      data
+        .map(renderMessage)
+        .join("");
+
 
     requestAnimationFrame(()=>{
+
       box.scrollTop =
         box.scrollHeight;
+
     });
 
   }
@@ -2214,6 +2949,7 @@ async function loadMessages(){
       "MESSAGE LOAD ERROR:",
       error
     );
+
 
     box.innerHTML = `
 
@@ -2234,40 +2970,53 @@ async function loadMessages(){
         </button>
 
       </div>
+
     `;
   }
 }
 
 
 /* =====================================================
-   MESSAGE
+   RENDER MESSAGE
 ===================================================== */
 
-function renderMessage(message){
+function renderMessage(
+  message
+){
 
   const me =
     currentUser &&
     String(message.user_id) ===
     String(currentUser.id);
 
+
   const type =
-    message.message_type === "sir_post"
+    message.message_type ===
+    "sir_post"
+
     ? "📢 Sir"
+
     : "💬 Comment";
+
 
   return `
 
-    <div class="message ${me ? "me" : ""}">
+    <div
+      class="message ${
+        me ? "me" : ""
+      }">
 
       <div class="message-user">
 
         @${escapeHTML(
-          message.username || "User"
+          message.username ||
+          "User"
         )}
 
         • ${type}
 
       </div>
+
 
       <div class="message-bubble">
 
@@ -2276,6 +3025,7 @@ function renderMessage(message){
         )}
 
       </div>
+
 
       <div>
 
@@ -2306,6 +3056,7 @@ function renderMessage(message){
       </div>
 
     </div>
+
   `;
 }
 
@@ -2326,31 +3077,108 @@ async function sendMessage(){
     return;
   }
 
+
   if(!currentChannel)
     return;
+
+
+  /*
+    STUDENT साठी local check
+  */
+
+  if(
+    !currentIsSir &&
+    currentChannel.comments_enabled === false
+  ){
+
+    toast(
+      "🔒 Sir ने comments बंद केले आहेत.",
+      "error"
+    );
+
+    updateCommentUI();
+
+    return;
+  }
+
 
   const input =
     $("chatMessage");
 
+
   const text =
     input.value.trim();
+
 
   if(!text)
     return;
 
+
   const username =
     currentUser.user_metadata?.username
     ||
-    localStorage.getItem("gyansetu_username")
+    localStorage.getItem(
+      "gyansetu_username"
+    )
     ||
     "User";
 
-  const button =
-    document.querySelector(".send");
 
-  button.disabled = true;
+  const button =
+    $("sendButton");
+
+
+  button.disabled =
+    true;
+
 
   try{
+
+    /*
+      पुन्हा database मधून status check
+      म्हणजे stale page असला तरी protection राहील.
+    */
+
+    if(!currentIsSir){
+
+      const {
+        data:latestChannel,
+        error:channelError
+      } =
+      await supabaseClient
+        .from("gs_channels")
+        .select(
+          "comments_enabled"
+        )
+        .eq(
+          "id",
+          currentChannel.id
+        )
+        .single();
+
+
+      if(channelError)
+        throw channelError;
+
+
+      if(
+        latestChannel.comments_enabled === false
+      ){
+
+        currentChannel.comments_enabled =
+          false;
+
+        updateCommentUI();
+
+        toast(
+          "🔒 Sir ने comments बंद केले आहेत.",
+          "error"
+        );
+
+        return;
+      }
+    }
+
 
     const {
       error
@@ -2375,12 +3203,17 @@ async function sendMessage(){
           currentIsSir
           ? "sir_post"
           : "comment"
+
       });
+
 
     if(error)
       throw error;
 
-    input.value = "";
+
+    input.value =
+      "";
+
 
     await loadMessages();
 
@@ -2392,6 +3225,7 @@ async function sendMessage(){
       error
     );
 
+
     toast(
       "Message पाठवता आला नाही.",
       "error"
@@ -2400,7 +3234,22 @@ async function sendMessage(){
   }
   finally{
 
-    button.disabled = false;
+    /*
+      Sir असल्यास send चालू ठेवणे.
+      Student असल्यास updateCommentUI status ठरवेल.
+    */
+
+    if(currentIsSir){
+
+      button.disabled =
+        false;
+
+    }
+    else{
+
+      updateCommentUI();
+
+    }
   }
 }
 
@@ -2424,6 +3273,7 @@ async function reactMessage(
     return;
   }
 
+
   try{
 
     const {
@@ -2433,20 +3283,28 @@ async function reactMessage(
       .from("gs_message_reactions")
       .upsert({
 
-        message_id:messageId,
-        user_id:currentUser.id,
-        reaction:reaction
+        message_id:
+          messageId,
+
+        user_id:
+          currentUser.id,
+
+        reaction:
+          reaction
 
       },{
         onConflict:
           "message_id,user_id"
       });
 
+
     if(error)
       throw error;
 
+
     toast(
-      reaction + " Reacted",
+      reaction +
+      " Reacted",
       "success"
     );
 
@@ -2458,6 +3316,7 @@ async function reactMessage(
       error
     );
 
+
     toast(
       "Reaction save झाली नाही.",
       "error"
@@ -2467,7 +3326,7 @@ async function reactMessage(
 
 
 /* =====================================================
-   ADD CHANNEL
+   ADD CHANNEL MODAL
 ===================================================== */
 
 function openAddChannelModal(){
@@ -2476,8 +3335,12 @@ function openAddChannelModal(){
     .classList
     .add("show");
 
+
   setTimeout(()=>{
-    $("addChannelName").focus();
+
+    $("addChannelName")
+      .focus();
+
   },100);
 }
 
@@ -2489,6 +3352,10 @@ function closeAddModal(){
     .remove("show");
 }
 
+
+/* =====================================================
+   ADD CHANNEL
+===================================================== */
 
 async function addChannel(){
 
@@ -2502,13 +3369,17 @@ async function addChannel(){
     return;
   }
 
+
   const name =
     $("addChannelName")
       .value
       .trim();
 
+
   const password =
-    $("addChannelPassword").value;
+    $("addChannelPassword")
+      .value;
+
 
   if(!name || !password){
 
@@ -2520,10 +3391,14 @@ async function addChannel(){
     return;
   }
 
+
   try{
 
     const hash =
-      await hashText(password);
+      await hashText(
+        password
+      );
+
 
     const {
       data,
@@ -2542,8 +3417,10 @@ async function addChannel(){
       )
       .maybeSingle();
 
+
     if(error)
       throw error;
+
 
     if(!data){
 
@@ -2555,24 +3432,33 @@ async function addChannel(){
       return;
     }
 
+
     let saved =
       getSavedChannels();
 
-    if(!saved.includes(data.id)){
 
-      saved.push(data.id);
+    if(
+      !saved.includes(data.id)
+    ){
+
+      saved.push(
+        data.id
+      );
+
 
       localStorage.setItem(
         "gyansetu_saved_channels",
         JSON.stringify(saved)
       );
 
+
       toast(
         "✅ Channel saved झाला.",
         "success"
       );
 
-    }else{
+    }
+    else{
 
       toast(
         "हा channel आधीच saved आहे.",
@@ -2580,10 +3466,17 @@ async function addChannel(){
       );
     }
 
+
     closeAddModal();
 
-    $("addChannelName").value = "";
-    $("addChannelPassword").value = "";
+
+    $("addChannelName")
+      .value = "";
+
+
+    $("addChannelPassword")
+      .value = "";
+
 
     await loadSavedChannels();
 
@@ -2594,6 +3487,7 @@ async function addChannel(){
       "ADD CHANNEL ERROR:",
       error
     );
+
 
     toast(
       "Channel add करता आला नाही.",
@@ -2630,8 +3524,10 @@ async function loadSavedChannels(){
   const ids =
     getSavedChannels();
 
+
   const box =
     $("savedBox");
+
 
   if(!ids.length){
 
@@ -2639,7 +3535,9 @@ async function loadSavedChannels(){
 
       <div
         class="card"
-        style="text-align:center;color:#777;">
+        style="
+          text-align:center;
+          color:#777;">
 
         ➕ Add केलेले channels येथे दिसतील.
 
@@ -2652,10 +3550,12 @@ async function loadSavedChannels(){
         </button>
 
       </div>
+
     `;
 
     return;
   }
+
 
   try{
 
@@ -2671,18 +3571,17 @@ async function loadSavedChannels(){
         ids
       );
 
+
     if(error)
       throw error;
+
 
     const channels =
       data || [];
 
-    /*
-      Saved channels साठीसुद्धा
-      actual followers count.
-    */
 
     await Promise.all(
+
       channels.map(
         async channel=>{
 
@@ -2693,7 +3592,9 @@ async function loadSavedChannels(){
 
         }
       )
+
     );
+
 
     box.innerHTML = `
 
@@ -2702,66 +3603,82 @@ async function loadSavedChannels(){
       </div>
 
       ${
-        channels.map(channel=>`
+        channels
+          .map(
+            channel=>`
 
-          <div class="saved-item">
+              <div class="saved-item">
 
-            <div
-              class="channel-avatar"
-              style="
-                width:40px;
-                height:40px;
-                font-size:18px;">
+                <div
+                  class="channel-avatar"
+                  style="
+                    width:40px;
+                    height:40px;
+                    font-size:18px;">
 
-              ${escapeHTML(
-                (
-                  channel.channel_name ||
-                  "G"
-                )
-                .charAt(0)
-                .toUpperCase()
-              )}
+                  ${escapeHTML(
+                    (
+                      channel.channel_name ||
+                      "G"
+                    )
+                    .charAt(0)
+                    .toUpperCase()
+                  )}
 
-            </div>
+                </div>
 
-            <div
-              class="saved-item-info"
-              onclick="openChannelDetails('${channel.id}')"
-              style="cursor:pointer;">
 
-              <div class="saved-item-name">
+                <div
+                  class="saved-item-info"
+                  onclick="
+                    openChannelDetails('${channel.id}')
+                  "
+                  style="
+                    cursor:pointer;">
 
-                ${escapeHTML(
-                  channel.channel_name
-                )}
+                  <div class="saved-item-name">
+
+                    ${escapeHTML(
+                      channel.channel_name
+                    )}
+
+                  </div>
+
+
+                  <div class="saved-item-small">
+
+                    @${escapeHTML(
+                      channel.owner_username
+                    )}
+
+                    •
+
+                    ${channel.followers_count}
+
+                    followers
+
+                  </div>
+
+                </div>
+
+
+                <button
+                  class="remove-save"
+                  onclick="
+                    removeSavedChannel('${channel.id}')
+                  ">
+
+                  ×
+
+                </button>
 
               </div>
 
-              <div class="saved-item-small">
-
-                @${escapeHTML(
-                  channel.owner_username
-                )}
-                •
-                ${channel.followers_count}
-                followers
-
-              </div>
-
-            </div>
-
-            <button
-              class="remove-save"
-              onclick="removeSavedChannel('${channel.id}')">
-
-              ×
-
-            </button>
-
-          </div>
-
-        `).join("")
+            `
+          )
+          .join("")
       }
+
 
       <button
         class="secondary"
@@ -2781,35 +3698,47 @@ async function loadSavedChannels(){
       error
     );
 
+
     box.innerHTML = `
+
       <div
         class="card"
-        style="text-align:center;color:#888;">
+        style="
+          text-align:center;
+          color:#888;">
 
         Saved channels load झाले नाहीत.
 
       </div>
+
     `;
   }
 }
 
 
-function removeSavedChannel(id){
+function removeSavedChannel(
+  id
+){
 
   let saved =
     getSavedChannels();
 
+
   saved =
     saved.filter(
-      item => item !== id
+      item =>
+        item !== id
     );
+
 
   localStorage.setItem(
     "gyansetu_saved_channels",
     JSON.stringify(saved)
   );
 
+
   loadSavedChannels();
+
 
   toast(
     "Channel saved list मधून काढला.",
@@ -2823,22 +3752,23 @@ function removeSavedChannel(id){
 ===================================================== */
 
 $("chatMessage")
-.addEventListener(
-  "keydown",
-  event=>{
+  .addEventListener(
+    "keydown",
+    event=>{
 
-    if(
-      event.key === "Enter" &&
-      !event.shiftKey
-    ){
+      if(
+        event.key === "Enter" &&
+        !event.shiftKey
+      ){
 
-      event.preventDefault();
+        event.preventDefault();
 
-      sendMessage();
+        sendMessage();
+
+      }
+
     }
-
-  }
-);
+  );
 
 
 /* =====================================================
@@ -2846,37 +3776,39 @@ $("chatMessage")
 ===================================================== */
 
 $("sirConfirmModal")
-.addEventListener(
-  "click",
-  event=>{
+  .addEventListener(
+    "click",
+    event=>{
 
-    if(
-      event.target ===
-      $("sirConfirmModal")
-    ){
+      if(
+        event.target ===
+        $("sirConfirmModal")
+      ){
 
-      closeModal();
+        closeModal();
+
+      }
+
     }
-
-  }
-);
+  );
 
 
 $("addChannelModal")
-.addEventListener(
-  "click",
-  event=>{
+  .addEventListener(
+    "click",
+    event=>{
 
-    if(
-      event.target ===
-      $("addChannelModal")
-    ){
+      if(
+        event.target ===
+        $("addChannelModal")
+      ){
 
-      closeAddModal();
+        closeAddModal();
+
+      }
+
     }
-
-  }
-);
+  );
 
 
 /* =====================================================
@@ -2887,10 +3819,14 @@ document.addEventListener(
   "keydown",
   event=>{
 
-    if(event.key === "Escape"){
+    if(
+      event.key === "Escape"
+    ){
 
       closeModal();
+
       closeAddModal();
+
 
       if(
         $("chatWrap")
@@ -2899,7 +3835,9 @@ document.addEventListener(
       ){
 
         closeChat();
+
       }
+
     }
 
   }
@@ -2911,10 +3849,14 @@ document.addEventListener(
 ===================================================== */
 
 supabaseClient.auth.onAuthStateChange(
-  async(event,session)=>{
+  async(
+    event,
+    session
+  )=>{
 
     currentUser =
       session?.user || null;
+
 
     if(currentUser){
 
@@ -2927,10 +3869,12 @@ supabaseClient.auth.onAuthStateChange(
         ||
         "User";
 
+
       $("headerUser").innerText =
         "@" + username;
 
-    }else{
+    }
+    else{
 
       $("headerUser").innerText =
         "Guest";
