@@ -7,6 +7,7 @@
 
 <title>GyanSetu - Live Classes</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
 <style>
@@ -19,8 +20,8 @@
 }
 
 body{
-  background:#f4f8ff;
-  color:#123;
+  background:#080b12;
+  color:#fff;
   min-height:100vh;
 }
 
@@ -29,12 +30,12 @@ body{
   max-width:650px;
   min-height:100vh;
   margin:auto;
-  background:#fff;
+  background:#0d111a;
 }
 
 .header{
   height:64px;
-  background:#1769e0;
+  background:linear-gradient(135deg,#050505,#151a27,#1769e0);
   color:white;
   display:flex;
   align-items:center;
@@ -43,12 +44,13 @@ body{
   position:sticky;
   top:0;
   z-index:10;
+  border-bottom:1px solid #252b38;
 }
 
 .back-btn{
   border:0;
-  background:rgba(255,255,255,.15);
-  color:white;
+  background:#111827;
+  color:#fff;
   width:42px;
   height:42px;
   border-radius:50%;
@@ -65,11 +67,12 @@ main{
 }
 
 .hero{
-  background:linear-gradient(135deg,#1769e0,#4b91ff);
+  background:linear-gradient(135deg,#090b10,#111827,#1769e0);
   color:white;
   padding:25px 20px;
   border-radius:20px;
   margin-bottom:20px;
+  border:1px solid #252c3a;
 }
 
 .hero h1{
@@ -79,7 +82,7 @@ main{
 
 .hero p{
   line-height:1.5;
-  opacity:.95;
+  opacity:.9;
 }
 
 .main-buttons{
@@ -91,7 +94,7 @@ main{
 .live-main-btn{
   width:100%;
   border:0;
-  background:#1769e0;
+  background:linear-gradient(135deg,#1769e0,#0750c7);
   color:white;
   padding:17px 10px;
   border-radius:14px;
@@ -104,8 +107,8 @@ main{
 .recorded-main-btn{
   width:100%;
   border:1px solid #1769e0;
-  background:white;
-  color:#1769e0;
+  background:#10151f;
+  color:#5c9cff;
   padding:17px 10px;
   border-radius:14px;
   font-size:17px;
@@ -113,10 +116,75 @@ main{
   cursor:pointer;
 }
 
+.live-channels-btn{
+  width:100%;
+  border:0;
+  background:linear-gradient(135deg,#ff1493,#1769e0);
+  color:white;
+  padding:17px;
+  border-radius:14px;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:12px;
+  box-shadow:0 7px 18px rgba(255,20,147,.22);
+}
+
+.live-channel-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:18px;
+}
+
+.live-channel-card{
+  background:#111722;
+  border:1px solid #283244;
+  border-radius:15px;
+  padding:15px;
+  cursor:pointer;
+}
+
+.live-channel-card:hover{
+  border-color:#1769e0;
+}
+
+.live-channel-name{
+  font-size:17px;
+  font-weight:bold;
+}
+
+.live-channel-id{
+  color:#8b95a7;
+  font-size:12px;
+  margin-top:6px;
+  word-break:break-all;
+}
+
+.live-now{
+  display:inline-block;
+  background:#e91e63;
+  color:#fff;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+  margin-top:9px;
+}
+
+.no-live{
+  padding:25px;
+  text-align:center;
+  background:#111722;
+  border-radius:15px;
+  color:#8993a5;
+  margin-top:15px;
+}
+
 .overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.58);
+  background:rgba(0,0,0,.78);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -133,7 +201,9 @@ main{
   max-width:500px;
   max-height:92vh;
   overflow-y:auto;
-  background:white;
+  background:#10151f;
+  color:#fff;
+  border:1px solid #293346;
   border-radius:22px;
   padding:22px;
 }
@@ -143,14 +213,15 @@ main{
 }
 
 .popup p{
-  color:#666;
+  color:#aab3c2;
   line-height:1.5;
 }
 
 .close-popup{
   float:right;
   border:0;
-  background:#edf2f8;
+  background:#202734;
+  color:#fff;
   width:34px;
   height:34px;
   border-radius:50%;
@@ -166,8 +237,9 @@ main{
 }
 
 .role-btn{
-  border:1px solid #dbe4f1;
-  background:#f7faff;
+  border:1px solid #30394a;
+  background:#151c28;
+  color:#fff;
   border-radius:15px;
   padding:22px 10px;
   cursor:pointer;
@@ -194,11 +266,16 @@ main{
   margin-top:12px;
 }
 
+.primary-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
 .secondary-btn{
   width:100%;
   border:0;
-  background:#edf2f8;
-  color:#222;
+  background:#252c38;
+  color:#fff;
   padding:14px;
   border-radius:12px;
   font-size:16px;
@@ -209,7 +286,9 @@ main{
 
 .input{
   width:100%;
-  border:1px solid #ccd7e6;
+  border:1px solid #384355;
+  background:#0b1018;
+  color:#fff;
   padding:14px;
   border-radius:11px;
   outline:none;
@@ -224,12 +303,12 @@ main{
 .channel-name{
   font-size:18px;
   font-weight:bold;
-  color:#123;
+  color:#fff;
   margin-top:5px;
 }
 
 .channel-box{
-  background:#eef5ff;
+  background:#0c1626;
   border:1px dashed #1769e0;
   border-radius:14px;
   padding:15px;
@@ -238,13 +317,13 @@ main{
 
 .channel-label{
   font-size:13px;
-  color:#666;
+  color:#8993a5;
 }
 
 .channel-value{
   font-size:23px;
   font-weight:bold;
-  color:#1769e0;
+  color:#5c9cff;
   letter-spacing:1px;
   word-break:break-all;
   margin:6px 0 10px;
@@ -261,8 +340,8 @@ main{
 
 .edit-btn{
   border:0;
-  background:white;
-  color:#1769e0;
+  background:#111722;
+  color:#5c9cff;
   border:1px solid #1769e0;
   padding:9px 14px;
   border-radius:8px;
@@ -273,7 +352,8 @@ main{
 .status{
   padding:10px;
   border-radius:10px;
-  background:#f3f6fa;
+  background:#171e2a;
+  color:#b9c2d0;
   margin-top:10px;
   font-size:14px;
 }
@@ -281,7 +361,7 @@ main{
 .video-wrap{
   position:relative;
   width:100%;
-  background:#07111f;
+  background:#05070b;
   border-radius:16px;
   overflow:hidden;
   margin-top:15px;
@@ -311,7 +391,7 @@ main{
   position:absolute;
   top:10px;
   left:10px;
-  background:#e53935;
+  background:#e91e63;
   color:white;
   padding:6px 10px;
   border-radius:20px;
@@ -321,7 +401,7 @@ main{
 
 .audio-badge{
   display:inline-block;
-  background:#168a3a;
+  background:#1769e0;
   color:white;
   padding:7px 12px;
   border-radius:20px;
@@ -332,7 +412,7 @@ main{
 
 .count-badge{
   display:inline-block;
-  background:#1769e0;
+  background:#e91e63;
   color:white;
   padding:7px 12px;
   border-radius:20px;
@@ -348,7 +428,7 @@ main{
 }
 
 .student-item{
-  background:#f4f7fb;
+  background:#171e2a;
   padding:11px;
   border-radius:10px;
 }
@@ -359,7 +439,7 @@ main{
   bottom:10px;
   z-index:5;
   border:0;
-  background:rgba(0,0,0,.65);
+  background:rgba(0,0,0,.7);
   color:white;
   width:42px;
   height:42px;
@@ -371,7 +451,7 @@ main{
 .end-btn{
   width:100%;
   border:0;
-  background:#d93025;
+  background:#e91e63;
   color:white;
   padding:14px;
   border-radius:12px;
@@ -405,10 +485,10 @@ main{
 }
 
 .record-card{
-  border:1px solid #e0e7f2;
+  border:1px solid #2a3342;
   border-radius:15px;
   padding:14px;
-  background:white;
+  background:#111722;
 }
 
 .record-title{
@@ -418,8 +498,8 @@ main{
 
 .record-type{
   display:inline-block;
-  background:#eef5ff;
-  color:#1769e0;
+  background:#132746;
+  color:#5c9cff;
   border-radius:20px;
   padding:5px 9px;
   font-size:12px;
@@ -455,19 +535,19 @@ main{
 }
 
 .download-btn{
-  background:#eaf2ff;
-  color:#1769e0;
+  background:#132746;
+  color:#5c9cff;
 }
 
 .delete-btn{
-  background:#edf2f8;
-  color:#333;
+  background:#252c38;
+  color:#fff;
 }
 
 .empty-recordings{
   padding:25px;
   text-align:center;
-  background:#f5f8fd;
+  background:#151c28;
   border-radius:15px;
   color:#777;
 }
@@ -568,6 +648,17 @@ onclick="openRecordedPopup()">
 
 </div>
 
+<button
+class="live-channels-btn"
+onclick="openLiveChannels()">
+🔴 सध्या Live असलेले Classes
+</button>
+
+<div
+id="liveChannelList"
+class="live-channel-list hidden">
+</div>
+
 </main>
 
 </div>
@@ -629,18 +720,44 @@ onclick="closeSirPopup()">×</button>
 <div id="sirSetup">
 
 <p>
-तुमचा Channel एकदाच तयार करा.
-पुढच्या वेळी नवीन Channel तयार होणार नाही.
+GyanSetu Channel तयार करा.
+प्रत्येक account ला एकच Channel तयार करता येईल.
 </p>
+
+<label style="display:block;margin-top:15px;color:#aaa;font-size:14px;">
+Channel Name
+</label>
+
+<input
+id="createChannelName"
+class="input"
+type="text"
+maxlength="80"
+placeholder="उदा. Hitesh Study Channel">
+
+<label style="display:block;margin-top:12px;color:#aaa;font-size:14px;">
+Channel Password
+</label>
+
+<input
+id="createChannelPassword"
+class="input"
+type="password"
+maxlength="60"
+placeholder="Channel password">
 
 <button
 id="createChannelBtn"
 class="primary-btn"
 onclick="createSirChannel()">
 
-🔗 Create Channel
+🚀 Create My Channel
 
 </button>
+
+<div class="status">
+💡 Channel password सुरक्षित hash स्वरूपात Supabase मध्ये save केला जातो.
+</div>
 
 </div>
 
@@ -685,11 +802,9 @@ onclick="openEditChannelPopup()">
 
 </div>
 
-
 <div id="sirStatus" class="status">
 Channel तयार आहे.
 </div>
-
 
 <button
 id="startCameraBtn"
@@ -699,7 +814,6 @@ onclick="startSirCamera()">
 ▶️ Start Class
 
 </button>
-
 
 <div
 class="video-wrap"
@@ -726,13 +840,11 @@ onclick="toggleFullscreen('sirVideoWrap')">
 
 </div>
 
-
 <span
 id="sirAudioBadge"
 class="audio-badge hidden">
 🎤 Sir Mic ON
 </span>
-
 
 <span
 id="studentCountBadge"
@@ -740,12 +852,10 @@ class="count-badge">
 Students: 0
 </span>
 
-
 <div
 id="studentList"
 class="student-list">
 </div>
-
 
 <button
 id="endSirClass"
@@ -785,7 +895,7 @@ onclick="closeEditChannelPopup()">
 id="channelNameInput"
 class="input"
 type="text"
-maxlength="50"
+maxlength="80"
 placeholder="Channel Name">
 
 <button
@@ -835,7 +945,7 @@ Sir चा Channel ID टाका.
 id="channelInput"
 class="input"
 type="text"
-maxlength="50"
+maxlength="100"
 placeholder="Sir Channel ID">
 
 <button
@@ -870,7 +980,6 @@ Live Class connecting...
 
 </div>
 
-
 <div
 class="video-wrap"
 id="studentVideoWrap">
@@ -899,7 +1008,6 @@ onclick="toggleFullscreen('studentVideoWrap')">
 
 </div>
 
-
 <span
 id="studentAudioBadge"
 class="audio-badge hidden">
@@ -907,7 +1015,6 @@ class="audio-badge hidden">
 🔊 Sir Audio ON
 
 </span>
-
 
 <button
 id="enableAudioBtn"
@@ -918,7 +1025,6 @@ onclick="enableStudentAudio()">
 
 </button>
 
-
 <button
 class="end-btn"
 onclick="leaveStudentClass()">
@@ -927,6 +1033,36 @@ onclick="leaveStudentClass()">
 
 </button>
 
+</div>
+
+</div>
+
+</div>
+
+
+<!-- LIVE CHANNELS -->
+
+<div
+id="liveChannelsOverlay"
+class="overlay hidden">
+
+<div class="popup">
+
+<button
+class="close-popup"
+onclick="closeLiveChannels()">
+×
+</button>
+
+<h2>🔴 Live Classes</h2>
+
+<p>
+सध्या Live असलेले Classes.
+</p>
+
+<div
+id="popupLiveChannelList"
+class="live-channel-list">
 </div>
 
 </div>
@@ -1043,9 +1179,35 @@ OK
 
 <script>
 
-/* =========================
-VARIABLES
-========================= */
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+const SUPABASE_URL =
+"https://eqglttfffhvoyvrclzse.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
+);
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentUser=null;
 
 let peer=null;
 
@@ -1080,18 +1242,81 @@ let studentAudioContext=null;
 let studentOscillator=null;
 
 
-/* =========================
-SHORTCUT
-========================= */
+/* =====================================================
+   SHORTCUT
+===================================================== */
 
 function $(id){
 return document.getElementById(id);
 }
 
 
-/* =========================
-MESSAGE
-========================= */
+/* =====================================================
+   HASH
+===================================================== */
+
+async function hashText(text){
+
+const data=
+new TextEncoder().encode(text);
+
+const hash=
+await crypto.subtle.digest(
+"SHA-256",
+data
+);
+
+return Array.from(
+new Uint8Array(hash)
+)
+.map(
+b=>
+b.toString(16).padStart(2,"0")
+)
+.join("");
+
+}
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+async function loadCurrentUser(){
+
+try{
+
+const {
+data,
+error
+}=
+await supabaseClient.auth.getUser();
+
+if(error){
+console.error(error);
+}
+
+currentUser=
+data?.user || null;
+
+}
+catch(error){
+
+console.error(
+"AUTH ERROR:",
+error
+);
+
+currentUser=null;
+
+}
+
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
 
 function showMessage(title,message,icon="ℹ️"){
 
@@ -1113,9 +1338,9 @@ $("messageOverlay")
 }
 
 
-/* =========================
-HOME
-========================= */
+/* =====================================================
+   HOME
+===================================================== */
 
 function goHome(){
 
@@ -1148,9 +1373,9 @@ window.location.href="home.html";
 }
 
 
-/* =========================
-ROLE
-========================= */
+/* =====================================================
+   ROLE
+===================================================== */
 
 function openRolePopup(){
 
@@ -1168,14 +1393,14 @@ $("roleOverlay")
 }
 
 
-function openSirPopup(){
+async function openSirPopup(){
 
 closeRolePopup();
 
 $("sirOverlay")
 .classList.remove("hidden");
 
-initializeSirChannel();
+await initializeSirChannel();
 
 }
 
@@ -1214,9 +1439,231 @@ $("studentOverlay")
 }
 
 
-/* =========================
-CHANNEL
-========================= */
+/* =====================================================
+   LIVE CHANNELS
+===================================================== */
+
+async function openLiveChannels(){
+
+$("liveChannelsOverlay")
+.classList.remove("hidden");
+
+await loadLiveChannels();
+
+}
+
+
+function closeLiveChannels(){
+
+$("liveChannelsOverlay")
+.classList.add("hidden");
+
+}
+
+
+async function loadLiveChannels(){
+
+const containers=[
+$("liveChannelList"),
+$("popupLiveChannelList")
+];
+
+containers.forEach(
+function(container){
+
+if(container){
+
+container.innerHTML=
+"<div class='no-live'>🔄 Live Classes शोधत आहे...</div>";
+
+}
+
+});
+
+
+try{
+
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq("is_live",true);
+
+
+if(error){
+
+/*
+  जर gs_channels मध्ये is_live column नसेल,
+  तर local browser मधील live status वापरला जाईल.
+*/
+
+console.error(
+"Live channels error:",
+error
+);
+
+renderLiveChannels([]);
+
+return;
+
+}
+
+
+renderLiveChannels(
+data || []
+);
+
+}
+catch(error){
+
+console.error(error);
+
+renderLiveChannels([]);
+
+}
+
+}
+
+
+function renderLiveChannels(channels){
+
+const uniqueChannels=[];
+
+const seen=new Set();
+
+channels.forEach(
+function(channel){
+
+const id=String(channel.id);
+
+if(!seen.has(id)){
+
+seen.add(id);
+
+uniqueChannels.push(channel);
+
+}
+
+});
+
+
+[
+$("liveChannelList"),
+$("popupLiveChannelList")
+].forEach(
+function(container){
+
+if(!container){
+return;
+}
+
+container.innerHTML="";
+
+
+if(uniqueChannels.length===0){
+
+const empty=
+document.createElement("div");
+
+empty.className=
+"no-live";
+
+empty.textContent=
+"🔵 सध्या कोणतीही Live Class नाही.";
+
+container.appendChild(empty);
+
+return;
+
+}
+
+
+uniqueChannels.forEach(
+function(channel){
+
+const card=
+document.createElement("div");
+
+card.className=
+"live-channel-card";
+
+card.onclick=
+function(){
+
+joinLiveChannelFromList(channel);
+
+};
+
+
+const name=
+document.createElement("div");
+
+name.className=
+"live-channel-name";
+
+name.textContent=
+channel.channel_name ||
+"GyanSetu Live Class";
+
+
+const id=
+document.createElement("div");
+
+id.className=
+"live-channel-id";
+
+id.textContent=
+"Channel ID: "+channel.id;
+
+
+const live=
+document.createElement("span");
+
+live.className=
+"live-now";
+
+live.textContent=
+"🔴 LIVE NOW";
+
+
+card.appendChild(name);
+card.appendChild(id);
+card.appendChild(live);
+
+container.appendChild(card);
+
+});
+
+});
+
+}
+
+
+function joinLiveChannelFromList(channel){
+
+closeLiveChannels();
+
+$("studentOverlay")
+.classList
+.remove("hidden");
+
+$("channelInput")
+.value=
+String(channel.id);
+
+$("studentStatus")
+.textContent=
+"🔴 Live Class सापडली. ID confirm करून Start Class करा.";
+
+}
+
+
+/* =====================================================
+   CHANNEL
+===================================================== */
 
 function getSavedChannel(){
 
@@ -1233,7 +1680,8 @@ return null;
 
 return JSON.parse(saved);
 
-}catch(error){
+}
+catch(error){
 
 return null;
 
@@ -1252,129 +1700,455 @@ JSON.stringify(data)
 }
 
 
-function generateChannelId(){
+/* =====================================================
+   INITIALIZE CHANNEL
+===================================================== */
 
-const chars=
-"ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+async function initializeSirChannel(){
 
-let result="GS-";
+if(!currentUser){
 
-for(let i=0;i<8;i++){
+await loadCurrentUser();
 
-result+=
-chars[
-Math.floor(
-Math.random()*chars.length
+}
+
+
+if(!currentUser){
+
+$("sirSetup")
+.classList.remove("hidden");
+
+$("sirLiveArea")
+.classList.add("hidden");
+
+$("sirStatus").textContent=
+"Login required. आधी GyanSetu Account मध्ये Login करा.";
+
+return;
+
+}
+
+
+try{
+
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq(
+"owner_id",
+currentUser.id
 )
-];
-
-}
-
-return result;
-
-}
+.maybeSingle();
 
 
-/* =========================
-INITIALIZE CHANNEL
-========================= */
+if(error){
 
-function initializeSirChannel(){
-
-const saved=
-getSavedChannel();
-
-if(!saved){
-
-$("sirSetup")
-.classList.remove("hidden");
-
-$("sirLiveArea")
-.classList.add("hidden");
-
-return;
-
-}
-
-$("sirSetup")
-.classList.add("hidden");
-
-$("sirLiveArea")
-.classList.remove("hidden");
-
-$("sirChannelId")
-.textContent=saved.id;
-
-$("sirChannelName")
-.textContent=
-saved.name ||
-"GyanSetu Live Class";
-
-$("sirStatus")
-.textContent=
-"✅ Channel तयार आहे. Start Class दाबा.";
-
-updateStudentUI();
-
-ensureSirPeer(saved.id);
-
-}
-
-
-/* =========================
-CREATE CHANNEL
-========================= */
-
-function createSirChannel(){
-
-if(getSavedChannel()){
-
-initializeSirChannel();
-
-return;
-
-}
-
-const id=
-generateChannelId();
-
-const data={
-id:id,
-name:"GyanSetu Live Class"
-};
-
-saveChannel(data);
-
-$("sirChannelId")
-.textContent=id;
-
-$("sirChannelName")
-.textContent=data.name;
-
-$("sirSetup")
-.classList.add("hidden");
-
-$("sirLiveArea")
-.classList.remove("hidden");
-
-$("sirStatus")
-.textContent=
-"✅ Channel तयार झाला. आता Start Class करा.";
-
-ensureSirPeer(id);
-
-showMessage(
-"Channel Created",
-"तुमचा Channel तयार झाला.\n\nSir ID:\n"+id,
-"🎉"
+console.error(
+"CHANNEL LOAD ERROR:",
+error
 );
 
 }
 
 
-/* =========================
-EDIT
-========================= */
+if(data){
+
+const channelData={
+id:String(data.id),
+name:
+data.channel_name ||
+"GyanSetu Live Class",
+owner_id:data.owner_id
+};
+
+saveChannel(channelData);
+
+$("sirSetup")
+.classList.add("hidden");
+
+$("sirLiveArea")
+.classList.remove("hidden");
+
+$("sirChannelId")
+.textContent=
+channelData.id;
+
+$("sirChannelName")
+.textContent=
+channelData.name;
+
+$("sirStatus").textContent=
+"✅ तुमचा Channel तयार आहे. आता Start Class करा.";
+
+ensureSirPeer(
+channelData.id
+);
+
+return;
+
+}
+
+
+$("sirSetup")
+.classList.remove("hidden");
+
+$("sirLiveArea")
+.classList.add("hidden");
+
+
+}
+catch(error){
+
+console.error(
+"INITIALIZE CHANNEL ERROR:",
+error
+);
+
+$("sirSetup")
+.classList.remove("hidden");
+
+$("sirLiveArea")
+.classList.add("hidden");
+
+}
+
+}
+
+
+/* =====================================================
+   CREATE CHANNEL
+===================================================== */
+
+async function createSirChannel(){
+
+if(!currentUser){
+
+await loadCurrentUser();
+
+}
+
+
+if(!currentUser){
+
+showMessage(
+"Login Required",
+"Channel तयार करण्यासाठी आधी GyanSetu Account मध्ये Login करा.",
+"🔐"
+);
+
+return;
+
+}
+
+
+try{
+
+const {
+data:existing,
+error:existingError
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq(
+"owner_id",
+currentUser.id
+)
+.maybeSingle();
+
+
+if(existingError){
+
+throw existingError;
+
+}
+
+
+if(existing){
+
+const saved={
+id:String(existing.id),
+name:
+existing.channel_name ||
+"GyanSetu Live Class",
+owner_id:existing.owner_id
+};
+
+saveChannel(saved);
+
+$("createChannelName").value="";
+$("createChannelPassword").value="";
+
+$("sirSetup")
+.classList.add("hidden");
+
+$("sirLiveArea")
+.classList.remove("hidden");
+
+$("sirChannelId")
+.textContent=
+saved.id;
+
+$("sirChannelName")
+.textContent=
+saved.name;
+
+ensureSirPeer(
+saved.id
+);
+
+return;
+
+}
+
+}
+catch(error){
+
+console.error(
+"EXISTING CHANNEL CHECK ERROR:",
+error
+);
+
+showMessage(
+"Channel Error",
+"Channel तपासता आला नाही. Supabase RLS/SQL तपासा.",
+"❌"
+);
+
+return;
+
+}
+
+
+const name=
+$("createChannelName")
+.value
+.trim();
+
+const password=
+$("createChannelPassword")
+.value;
+
+
+if(name.length<2){
+
+showMessage(
+"Channel Name",
+"Channel name टाका.",
+"⚠️"
+);
+
+return;
+
+}
+
+
+if(password.length<4){
+
+showMessage(
+"Password",
+"Channel password किमान 4 characters असावा.",
+"⚠️"
+);
+
+return;
+
+}
+
+
+const button=
+$("createChannelBtn");
+
+button.disabled=true;
+
+button.textContent=
+"Channel तयार होत आहे...";
+
+
+try{
+
+const username=
+currentUser.user_metadata?.username
+||
+localStorage.getItem(
+"gyansetu_username"
+)
+||
+"User";
+
+
+const passwordHash=
+await hashText(password);
+
+
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.insert({
+
+owner_id:
+currentUser.id,
+
+owner_username:
+username,
+
+channel_name:
+name,
+
+password_hash:
+passwordHash,
+
+followers_count:
+0,
+
+comments_enabled:
+true,
+
+is_live:false
+
+})
+.select()
+.single();
+
+
+if(error){
+
+if(error.code==="23505"){
+
+const {
+data:existingAfterError
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq(
+"owner_id",
+currentUser.id
+)
+.maybeSingle();
+
+
+if(existingAfterError){
+
+const saved={
+id:String(existingAfterError.id),
+name:
+existingAfterError.channel_name ||
+"GyanSetu Live Class",
+owner_id:existingAfterError.owner_id
+};
+
+saveChannel(saved);
+
+$("sirSetup")
+.classList.add("hidden");
+
+$("sirLiveArea")
+.classList.remove("hidden");
+
+$("sirChannelId")
+.textContent=
+saved.id;
+
+$("sirChannelName")
+.textContent=
+saved.name;
+
+ensureSirPeer(
+saved.id
+);
+
+return;
+
+}
+
+}
+
+throw error;
+
+}
+
+
+const saved={
+id:String(data.id),
+name:
+data.channel_name,
+owner_id:
+data.owner_id
+};
+
+saveChannel(saved);
+
+
+$("createChannelName").value="";
+$("createChannelPassword").value="";
+
+$("sirSetup")
+.classList.add("hidden");
+
+$("sirLiveArea")
+.classList.remove("hidden");
+
+$("sirChannelId")
+.textContent=
+saved.id;
+
+$("sirChannelName")
+.textContent=
+saved.name;
+
+$("sirStatus").textContent=
+"✅ Channel तयार झाला. आता Start Class करा.";
+
+ensureSirPeer(
+saved.id
+);
+
+
+showMessage(
+"Channel Created",
+"तुमचा GyanSetu Channel तयार झाला.\n\nSir / Channel ID:\n"+saved.id,
+"🎉"
+);
+
+
+}
+catch(error){
+
+console.error(
+"CREATE CHANNEL ERROR:",
+error
+);
+
+showMessage(
+"Channel तयार झाला नाही",
+"Channel तयार करता आला नाही. Supabase RLS/SQL policies तपासा.",
+"❌"
+);
+
+}
+finally{
+
+button.disabled=false;
+
+button.textContent=
+"🚀 Create My Channel";
+
+}
+
+}
+
+
+/* =====================================================
+   EDIT CHANNEL
+===================================================== */
 
 function openEditChannelPopup(){
 
@@ -1403,7 +2177,14 @@ $("channelEditOverlay")
 }
 
 
-function saveChannelName(){
+async function saveChannelName(){
+
+if(!currentUser){
+
+await loadCurrentUser();
+
+}
+
 
 const saved=
 getSavedChannel();
@@ -1412,11 +2193,13 @@ if(!saved){
 return;
 }
 
+
 let name=
 $("channelNameInput")
 .value
 .trim()
 .replace(/\s+/g," ");
+
 
 if(!name){
 
@@ -1424,22 +2207,75 @@ name="GyanSetu Live Class";
 
 }
 
+
+name=
+name.slice(0,80);
+
+
+try{
+
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.update({
+
+channel_name:name
+
+})
+.eq(
+"id",
+saved.id
+)
+.eq(
+"owner_id",
+currentUser.id
+)
+.select()
+.single();
+
+
+if(error)
+throw error;
+
+
 saved.name=
-name.slice(0,50);
+data.channel_name;
 
 saveChannel(saved);
 
+
 $("sirChannelName")
-.textContent=saved.name;
+.textContent=
+saved.name;
 
 closeEditChannelPopup();
+
+
+}
+catch(error){
+
+console.error(
+"EDIT CHANNEL ERROR:",
+error
+);
+
+showMessage(
+"Edit Error",
+"Channel name बदलता आला नाही.",
+"❌"
+);
+
+}
 
 }
 
 
-/* =========================
-SIR PEER
-========================= */
+/* =====================================================
+   SIR PEER
+===================================================== */
 
 function ensureSirPeer(channelId){
 
@@ -1463,11 +2299,11 @@ peer=null;
 
 }
 
-sirPeerId=channelId;
+sirPeerId=String(channelId);
 
 peer=
 new Peer(
-channelId,
+sirPeerId,
 {
 debug:1
 }
@@ -1538,9 +2374,9 @@ peer.reconnect();
 }
 
 
-/* =========================
-SIR CONNECTION
-========================= */
+/* =====================================================
+   SIR CONNECTION
+===================================================== */
 
 function setupSirConnection(conn){
 
@@ -1624,9 +2460,9 @@ removeStudent(conn.peer);
 }
 
 
-/* =========================
-INCOMING CALL
-========================= */
+/* =====================================================
+   INCOMING CALL
+===================================================== */
 
 function handleSirIncomingCall(call){
 
@@ -1646,12 +2482,6 @@ return;
 sirCalls.push(call);
 
 try{
-
-/*
-IMPORTANT:
-Sir stream contains
-VIDEO + MICROPHONE AUDIO
-*/
 
 call.answer(sirStream);
 
@@ -1677,9 +2507,9 @@ c=>c!==call
 }
 
 
-/* =========================
-STUDENT UI
-========================= */
+/* =====================================================
+   STUDENT UI
+===================================================== */
 
 function updateStudentUI(){
 
@@ -1741,9 +2571,9 @@ updateStudentUI();
 }
 
 
-/* =========================
-COPY
-========================= */
+/* =====================================================
+   COPY
+===================================================== */
 
 async function copyChannelId(){
 
@@ -1765,7 +2595,8 @@ showMessage(
 "📋"
 );
 
-}catch(e){
+}
+catch(e){
 
 const textarea=
 document.createElement("textarea");
@@ -1791,9 +2622,9 @@ showMessage(
 }
 
 
-/* =========================
-SIR CAMERA + MIC
-========================= */
+/* =====================================================
+   SIR CAMERA
+===================================================== */
 
 async function startSirCamera(){
 
@@ -1872,11 +2703,35 @@ $("sirStatus")
 "🔴 Live Class सुरू आहे • 🎤 Mic ON";
 
 
+/*
+  LIVE STATUS DATABASE मध्ये save.
+  त्यामुळे सर्व users ला
+  Live Classes list मध्ये दिसेल.
+*/
+
+const saved=
+getSavedChannel();
+
+if(saved){
+
+await supabaseClient
+.from("gs_channels")
+.update({
+is_live:true,
+live_started_at:
+new Date().toISOString()
+})
+.eq("id",saved.id);
+
+}
+
+
 startSirRecording();
 
 broadcastClassStatus();
 
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
@@ -1898,9 +2753,9 @@ showMessage(
 }
 
 
-/* =========================
-MIME
-========================= */
+/* =====================================================
+   MIME
+===================================================== */
 
 function getRecorderMimeType(){
 
@@ -1935,9 +2790,9 @@ return "";
 }
 
 
-/* =========================
-SIR RECORDING
-========================= */
+/* =====================================================
+   SIR RECORDING
+===================================================== */
 
 function startSirRecording(){
 
@@ -2026,7 +2881,8 @@ sirRecorder=null;
 
 recorder.start(1000);
 
-}catch(error){
+}
+catch(error){
 
 console.error(
 "Sir recording error:",
@@ -2038,9 +2894,9 @@ error
 }
 
 
-/* =========================
-STATUS
-========================= */
+/* =====================================================
+   STATUS
+===================================================== */
 
 function sendClassStatus(conn){
 
@@ -2072,7 +2928,8 @@ classStartedAt
 
 });
 
-}catch(e){}
+}
+catch(e){}
 
 }
 
@@ -2090,9 +2947,9 @@ sendClassStatus(conn);
 }
 
 
-/* =========================
-END SIR
-========================= */
+/* =====================================================
+   END SIR
+===================================================== */
 
 function confirmEndClass(){
 
@@ -2114,7 +2971,7 @@ endSirClass(true);
 }
 
 
-function endSirClass(showPopup=true){
+async function endSirClass(showPopup=true){
 
 if(!isSirLive){
 
@@ -2139,12 +2996,29 @@ message:
 "Sir ने Live Class समाप्त केली."
 });
 
-}catch(e){}
+}
+catch(e){}
 
 }
 
 }
 );
+
+
+const saved=
+getSavedChannel();
+
+if(saved){
+
+await supabaseClient
+.from("gs_channels")
+.update({
+is_live:false,
+live_started_at:null
+})
+.eq("id",saved.id);
+
+}
 
 
 stopSirRecording();
@@ -2241,6 +3115,10 @@ showMessage(
 }
 
 
+/* =====================================================
+   STOP RECORDING
+===================================================== */
+
 function stopSirRecording(){
 
 if(!sirRecorder){
@@ -2260,7 +3138,8 @@ recorder.stop();
 
 }
 
-}catch(e){}
+}
+catch(e){}
 
 }
 
@@ -2291,9 +3170,9 @@ $("sirVideo")
 }
 
 
-/* =========================
-PEER ERROR
-========================= */
+/* =====================================================
+   PEER ERROR
+===================================================== */
 
 function handleSirPeerError(error){
 
@@ -2335,7 +3214,7 @@ message,
 
 
 /* =====================================================
-STUDENT JOIN
+   STUDENT JOIN
 ===================================================== */
 
 function joinStudentClass(){
@@ -2350,8 +3229,8 @@ return;
 const channel=
 $("channelInput")
 .value
-.trim()
-.toUpperCase();
+.trim();
+
 
 if(!channel){
 
@@ -2378,11 +3257,6 @@ $("studentStatus")
 .textContent=
 "🔄 Sir च्या Channel ला connect होत आहे...";
 
-
-/*
-Create Peer WITHOUT an ID.
-Student gets temporary Peer ID.
-*/
 
 peer=
 new Peer({
@@ -2424,7 +3298,7 @@ showMessage(
 
 
 /* =====================================================
-STUDENT CONNECTION
+   STUDENT CONNECTION
 ===================================================== */
 
 function connectStudentToSir(){
@@ -2460,7 +3334,8 @@ studentConnection.send({
 type:"STUDENT_JOINED"
 });
 
-}catch(e){}
+}
+catch(e){}
 
 }
 );
@@ -2506,9 +3381,9 @@ console.error(error);
 }
 
 
-/* =========================
-STUDENT DATA
-========================= */
+/* =====================================================
+   STUDENT DATA
+===================================================== */
 
 function handleStudentData(data){
 
@@ -2532,7 +3407,8 @@ $("studentStatus")
 
 startStudentCall();
 
-}else{
+}
+else{
 
 $("studentStatus")
 .textContent=
@@ -2560,16 +3436,12 @@ data.message ||
 
 
 /* =====================================================
-IMPORTANT AUDIO RECEIVE STREAM
+   RECEIVE STREAM
 ===================================================== */
 
 function createReceiveStream(){
 
 try{
-
-/* =========================
-VIDEO TRACK
-========================= */
 
 const canvas=
 document.createElement("canvas");
@@ -2581,6 +3453,7 @@ const context=
 canvas.getContext("2d");
 
 context.fillStyle="#000";
+
 context.fillRect(
 0,
 0,
@@ -2591,24 +3464,6 @@ context.fillRect(
 const stream=
 canvas.captureStream(1);
 
-
-/* =========================
-AUDIO TRACK
-========================= */
-
-/*
-Student ने Start Class button दाबलेला
-असतो, त्यामुळे AudioContext सुरू करता येतो.
-
-हा silent outgoing audio track आहे.
-तो Sir ला आवाज पाठवत नाही.
-
-याचा उपयोग WebRTC मध्ये audio channel
-negotiate करण्यासाठी होतो.
-
-Sir कडून येणारा actual microphone
-audio Student ला मिळतो.
-*/
 
 const AudioContext=
 window.AudioContext ||
@@ -2639,10 +3494,6 @@ const destination=
 studentAudioContext
 .createMediaStreamDestination();
 
-
-/*
-Silent outgoing audio.
-*/
 
 gain.gain.value=0;
 
@@ -2677,8 +3528,8 @@ oscillator;
 
 return stream;
 
-
-}catch(error){
+}
+catch(error){
 
 console.error(
 "Receive stream error:",
@@ -2693,7 +3544,7 @@ return new MediaStream();
 
 
 /* =====================================================
-STUDENT CALL
+   STUDENT CALL
 ===================================================== */
 
 function startStudentCall(){
@@ -2713,19 +3564,14 @@ createReceiveStream();
 
 try{
 
-/*
-IMPORTANT:
-Student call now contains
-VIDEO + AUDIO track.
-*/
-
 studentCall=
 peer.call(
 studentHostId,
 receiveStream
 );
 
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
@@ -2753,20 +3599,11 @@ studentRemoteStream=
 remoteStream;
 
 
-/* =========================
-REMOTE VIDEO
-========================= */
-
 const video=
 $("studentVideo");
 
 video.srcObject=
 remoteStream;
-
-
-/* =========================
-REMOTE AUDIO
-========================= */
 
 video.muted=false;
 
@@ -2775,12 +3612,6 @@ video.volume=1;
 
 const audioTracks=
 remoteStream.getAudioTracks();
-
-
-console.log(
-"Sir Audio Tracks:",
-audioTracks.length
-);
 
 
 audioTracks.forEach(
@@ -2802,7 +3633,8 @@ $("studentLiveStatus")
 .textContent=
 "🔴 Live Class चालू आहे • 🔊 Sir Audio उपलब्ध";
 
-}else{
+}
+else{
 
 $("studentLiveStatus")
 .textContent=
@@ -2810,10 +3642,6 @@ $("studentLiveStatus")
 
 }
 
-
-/* =========================
-SHOW LIVE AREA
-========================= */
 
 $("studentJoinArea")
 .classList
@@ -2828,10 +3656,6 @@ $("studentLiveBadge")
 .remove("hidden");
 
 
-/* =========================
-TRY AUTOPLAY
-========================= */
-
 video.play()
 .then(
 function(){
@@ -2844,7 +3668,7 @@ $("enableAudioBtn")
 
 $("enableAudioBtn")
 .style.background=
-"#168a3a";
+"#1769e0";
 
 }
 
@@ -2858,12 +3682,6 @@ console.log(
 error
 );
 
-/*
-Android Chrome मध्ये sound autoplay
-block होऊ शकतो.
-Button user manually दाबू शकतो.
-*/
-
 $("enableAudioBtn")
 .classList
 .remove("hidden");
@@ -2872,10 +3690,6 @@ $("enableAudioBtn")
 );
 
 
-/* =========================
-RECORD VIDEO + AUDIO
-========================= */
-
 startStudentRecording(
 remoteStream
 );
@@ -2883,10 +3697,6 @@ remoteStream
 }
 );
 
-
-/* =========================
-CALL CLOSED
-========================= */
 
 studentCall.on(
 "close",
@@ -2930,7 +3740,7 @@ showMessage(
 
 
 /* =====================================================
-ENABLE SIR AUDIO
+   ENABLE AUDIO
 ===================================================== */
 
 function enableStudentAudio(){
@@ -2975,7 +3785,7 @@ $("enableAudioBtn")
 
 $("enableAudioBtn")
 .style.background=
-"#168a3a";
+"#1769e0";
 
 $("studentAudioBadge")
 .classList
@@ -3008,7 +3818,7 @@ showMessage(
 
 
 /* =====================================================
-STUDENT RECORDING
+   STUDENT RECORDING
 ===================================================== */
 
 function startStudentRecording(remoteStream){
@@ -3023,25 +3833,6 @@ return;
 if(studentRecorder){
 return;
 }
-
-
-const audioTracks=
-remoteStream.getAudioTracks();
-
-
-console.log(
-"Recording Audio Tracks:",
-audioTracks.length
-);
-
-
-audioTracks.forEach(
-function(track){
-
-track.enabled=true;
-
-}
-);
 
 
 try{
@@ -3131,7 +3922,8 @@ studentRecorder=null;
 recorder.start(1000);
 
 
-}catch(error){
+}
+catch(error){
 
 console.error(
 "Student recording error:",
@@ -3144,7 +3936,7 @@ error
 
 
 /* =====================================================
-STOP STUDENT RECORDING
+   STOP STUDENT RECORDING
 ===================================================== */
 
 function stopStudentRecording(){
@@ -3166,13 +3958,14 @@ recorder.stop();
 
 }
 
-}catch(e){}
+}
+catch(e){}
 
 }
 
 
 /* =====================================================
-STOP STUDENT CLASS
+   STOP STUDENT
 ===================================================== */
 
 function stopStudentClass(message){
@@ -3182,16 +3975,8 @@ const hadClass=
 !!studentRemoteStream;
 
 
-/* =========================
-STOP RECORDING
-========================= */
-
 stopStudentRecording();
 
-
-/* =========================
-CLOSE CALL
-========================= */
 
 if(studentCall){
 
@@ -3203,10 +3988,6 @@ studentCall=null;
 
 }
 
-
-/* =========================
-STOP REMOTE STREAM
-========================= */
 
 if(studentRemoteStream){
 
@@ -3226,10 +4007,6 @@ studentRemoteStream=null;
 
 }
 
-
-/* =========================
-STOP AUDIO CONTEXT
-========================= */
 
 if(studentOscillator){
 
@@ -3253,10 +4030,6 @@ studentAudioContext=null;
 }
 
 
-/* =========================
-VIDEO RESET
-========================= */
-
 $("studentVideo")
 .srcObject=null;
 
@@ -3264,10 +4037,6 @@ $("studentVideo").muted=false;
 
 $("studentVideo").volume=1;
 
-
-/* =========================
-CONNECTION
-========================= */
 
 if(studentConnection){
 
@@ -3279,10 +4048,6 @@ studentConnection=null;
 
 }
 
-
-/* =========================
-PEER
-========================= */
 
 if(peer){
 
@@ -3296,10 +4061,6 @@ peer=null;
 
 studentHostId=null;
 
-
-/* =========================
-UI RESET
-========================= */
 
 $("studentLiveBadge")
 .classList.add("hidden");
@@ -3319,7 +4080,7 @@ $("enableAudioBtn")
 "🔊 Enable Sir Audio";
 
 $("enableAudioBtn")
-.style.background=
+style.background=
 "#1769e0";
 
 
@@ -3360,9 +4121,9 @@ message+
 }
 
 
-/* =========================
-RESET BUTTON
-========================= */
+/* =====================================================
+   RESET
+===================================================== */
 
 function resetStudentJoinButton(){
 
@@ -3376,9 +4137,9 @@ $("joinStudentBtn")
 }
 
 
-/* =========================
-LEAVE
-========================= */
+/* =====================================================
+   LEAVE
+===================================================== */
 
 function notifyStudentLeft(){
 
@@ -3393,7 +4154,8 @@ studentConnection.send({
 type:"STUDENT_LEFT"
 });
 
-}catch(e){}
+}
+catch(e){}
 
 }
 
@@ -3412,7 +4174,7 @@ stopStudentClass(
 
 
 /* =====================================================
-FULLSCREEN
+   FULLSCREEN
 ===================================================== */
 
 async function toggleFullscreen(id){
@@ -3447,7 +4209,8 @@ element.webkitRequestFullscreen();
 
 }
 
-}catch(error){
+}
+catch(error){
 
 console.error(error);
 
@@ -3457,7 +4220,7 @@ console.error(error);
 
 
 /* =====================================================
-RECORDED POPUP
+   RECORDED
 ===================================================== */
 
 function openRecordedPopup(){
@@ -3483,7 +4246,7 @@ $("recordedOverlay")
 
 
 /* =====================================================
-INDEXED DB
+   INDEXED DB
 ===================================================== */
 
 let db=null;
@@ -3578,7 +4341,7 @@ request.error
 
 
 /* =====================================================
-SAVE RECORDING
+   SAVE RECORDING
 ===================================================== */
 
 function saveRecording(
@@ -3676,7 +4439,7 @@ error
 
 
 /* =====================================================
-GET RECORDINGS
+   GET RECORDINGS
 ===================================================== */
 
 function getAllRecordings(){
@@ -3749,8 +4512,8 @@ request.error
 
 
 /* =====================================================
-LOAD RECORDINGS
-========================================================= */
+   LOAD RECORDINGS
+===================================================== */
 
 function loadRecordingsInto(id){
 
@@ -3777,8 +4540,8 @@ console.error(error);
 
 
 /* =====================================================
-RENDER
-========================================================= */
+   RENDER
+===================================================== */
 
 function renderRecordingContainer(
 container,
@@ -3957,8 +4720,8 @@ container.appendChild(card);
 
 
 /* =====================================================
-PLAY
-========================================================= */
+   PLAY
+===================================================== */
 
 function playRecording(recording){
 
@@ -4025,8 +4788,8 @@ function(){}
 
 
 /* =====================================================
-CLOSE PLAYER
-========================================================= */
+   CLOSE PLAYER
+===================================================== */
 
 function closePlayerPopup(){
 
@@ -4061,8 +4824,8 @@ $("playerOverlay")
 
 
 /* =====================================================
-DOWNLOAD
-========================================================= */
+   DOWNLOAD
+===================================================== */
 
 function downloadRecording(recording){
 
@@ -4113,8 +4876,8 @@ URL.revokeObjectURL(url);
 
 
 /* =====================================================
-DELETE
-========================================================= */
+   DELETE
+===================================================== */
 
 function deleteRecording(id){
 
@@ -4187,8 +4950,8 @@ console.error(error);
 
 
 /* =====================================================
-HELPERS
-========================================================= */
+   HELPERS
+===================================================== */
 
 function formatDate(date){
 
@@ -4203,7 +4966,8 @@ timeStyle:"short"
 }
 );
 
-}catch(e){
+}
+catch(e){
 
 return String(date || "");
 
@@ -4278,8 +5042,8 @@ value ||
 
 
 /* =====================================================
-INPUT
-========================================================= */
+   INPUT
+===================================================== */
 
 $("channelInput")
 .addEventListener(
@@ -4288,12 +5052,8 @@ function(){
 
 this.value=
 this.value
-.toUpperCase()
-.replace(
-/[^A-Z0-9-]/g,
-""
-)
-.slice(0,50);
+.trim()
+.slice(0,100);
 
 }
 );
@@ -4314,6 +5074,20 @@ joinStudentClass();
 );
 
 
+$("createChannelName")
+.addEventListener(
+"input",
+function(){
+
+this.value=
+this.value
+.replace(/\s+/g," ")
+.slice(0,80);
+
+}
+);
+
+
 $("channelNameInput")
 .addEventListener(
 "input",
@@ -4322,15 +5096,15 @@ function(){
 this.value=
 this.value
 .replace(/\s+/g," ")
-.slice(0,50);
+.slice(0,80);
 
 }
 );
 
 
 /* =====================================================
-OUTSIDE CLICK
-========================================================= */
+   OUTSIDE CLICK
+===================================================== */
 
 $("roleOverlay")
 .addEventListener(
@@ -4444,9 +5218,27 @@ closeEditChannelPopup();
 );
 
 
+$("liveChannelsOverlay")
+.addEventListener(
+"click",
+function(event){
+
+if(
+event.target===
+$("liveChannelsOverlay")
+){
+
+closeLiveChannels();
+
+}
+
+}
+);
+
+
 /* =====================================================
-PAGE EXIT
-========================================================= */
+   PAGE EXIT
+===================================================== */
 
 window.addEventListener(
 "beforeunload",
@@ -4458,17 +5250,34 @@ notifyStudentLeft();
 
 }
 
-}
-);
+});
 
 
 /* =====================================================
-START
-========================================================= */
+   AUTH
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+async(
+event,
+session
+)=>{
+
+currentUser=
+session?.user || null;
+
+});
+
+
+/* =====================================================
+   START
+===================================================== */
 
 document.addEventListener(
 "DOMContentLoaded",
-function(){
+async function(){
+
+await loadCurrentUser();
 
 openDatabase()
 .then(
@@ -4488,10 +5297,9 @@ console.error(error);
 }
 );
 
-}
-);
+});
 
 </script>
 
 </body>
-</html> 
+</html>
