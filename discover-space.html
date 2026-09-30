@@ -2,11 +2,8 @@
 <html lang="mr">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>GyanSetu - Live Classes</title>
 
@@ -361,11 +358,6 @@ main{
   font-size:14px;
 }
 
-
-/* =====================================================
-   SIR VIDEO
-===================================================== */
-
 .video-wrap{
   position:relative;
   width:100%;
@@ -395,12 +387,11 @@ main{
   object-fit:contain;
 }
 
-
 /* =====================================================
    STUDENT YOUTUBE STYLE PLAYER
 ===================================================== */
 
-.youtube-live-player{
+.student-live-player{
   position:relative;
   width:100%;
   background:#000;
@@ -408,10 +399,10 @@ main{
   overflow:hidden;
   margin-top:15px;
   aspect-ratio:16/9;
-  box-shadow:0 5px 25px rgba(0,0,0,.45);
+  box-shadow:0 8px 30px rgba(0,0,0,.55);
 }
 
-.youtube-live-player video{
+.student-live-player video{
   width:100%;
   height:100%;
   display:block;
@@ -419,117 +410,61 @@ main{
   object-fit:contain;
 }
 
-/* LIVE badge */
-
-.youtube-live-badge{
-  position:absolute;
-  top:12px;
-  left:12px;
-  z-index:5;
-  background:#e91e63;
-  color:#fff;
-  padding:6px 10px;
-  border-radius:5px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-/* Fullscreen button */
-
-.youtube-fullscreen-btn{
-  position:absolute;
-  right:12px;
-  bottom:48px;
-  z-index:20;
-
-  width:44px;
-  height:40px;
-
-  border:0;
-  border-radius:5px;
-
-  background:rgba(0,0,0,.78);
-  color:#fff;
-
-  font-size:22px;
-  cursor:pointer;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  transition:.15s;
-}
-
-.youtube-fullscreen-btn:active{
-  transform:scale(.92);
-  background:rgba(0,0,0,.95);
-}
-
-
-/* Fullscreen player */
-
-.youtube-live-player:fullscreen{
+.student-live-player:fullscreen{
   width:100vw;
   height:100vh;
-
-  max-width:none;
-  max-height:none;
-
   aspect-ratio:auto;
-
   border-radius:0;
-  margin:0;
-
   background:#000;
+}
 
+.student-live-player:fullscreen video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+/* Android / iPhone native fullscreen support */
+
+.student-live-player video:fullscreen{
+  width:100vw;
+  height:100vh;
+  object-fit:contain;
+  background:#000;
+}
+
+.student-live-player video::-webkit-media-controls{
+  z-index:20;
+}
+
+.student-player-fullscreen{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  z-index:30;
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:10px;
+  background:rgba(0,0,0,.72);
+  color:white;
+  font-size:21px;
+  cursor:pointer;
   display:flex;
   align-items:center;
   justify-content:center;
 }
 
-.youtube-live-player:fullscreen video{
-  width:100vw;
-  height:100vh;
-
-  max-width:none;
-  max-height:none;
-
-  object-fit:contain;
-
-  background:#000;
+.student-player-fullscreen:active{
+  transform:scale(.94);
 }
 
-
-/* Android / WebKit */
-
-.youtube-live-player:-webkit-full-screen{
-  width:100vw;
-  height:100vh;
-
-  border-radius:0;
-  margin:0;
-
-  background:#000;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.student-player-title{
+  margin-top:12px;
+  font-size:16px;
+  font-weight:bold;
+  color:#fff;
 }
-
-.youtube-live-player:-webkit-full-screen video{
-  width:100vw;
-  height:100vh;
-
-  object-fit:contain;
-
-  background:#000;
-}
-
-
-/* =====================================================
-   BADGES
-===================================================== */
 
 .live-badge{
   position:absolute;
@@ -541,6 +476,7 @@ main{
   border-radius:20px;
   font-size:12px;
   font-weight:bold;
+  z-index:25;
 }
 
 .audio-badge{
@@ -746,16 +682,38 @@ main{
     font-size:23px;
   }
 
-  .youtube-live-player{
-    border-radius:10px;
-    aspect-ratio:16/9;
+  /* Student class popup मध्ये player जास्त मोठा */
+
+  #studentOverlay{
+    padding:0;
+    background:#000;
+    align-items:stretch;
   }
 
-  .youtube-fullscreen-btn{
-    right:8px;
-    bottom:48px;
-    width:40px;
-    height:36px;
+  #studentOverlay .popup{
+    max-width:none;
+    width:100%;
+    max-height:none;
+    height:100%;
+    border-radius:0;
+    border:0;
+    padding:14px;
+    background:#080b12;
+  }
+
+  #studentOverlay .close-popup{
+    position:relative;
+    z-index:50;
+  }
+
+  #studentLiveArea{
+    width:100%;
+  }
+
+  .student-live-player{
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:8px;
   }
 
 }
@@ -820,9 +778,7 @@ class="live-channel-list hidden">
 </div>
 
 
-<!-- =====================================================
-     ROLE
-===================================================== -->
+<!-- ROLE -->
 
 <div id="roleOverlay" class="overlay hidden">
 
@@ -863,9 +819,7 @@ Student
 </div>
 
 
-<!-- =====================================================
-     SIR
-===================================================== -->
+<!-- SIR -->
 
 <div id="sirOverlay" class="overlay hidden">
 
@@ -909,7 +863,7 @@ placeholder="Channel password">
 <button
 id="createChannelBtn"
 class="primary-btn"
-onclick="createSirChannel()">
+onclick="createSirChannel">
 
 🚀 Create My Channel
 
@@ -920,7 +874,6 @@ onclick="createSirChannel()">
 </div>
 
 </div>
-
 
 <div id="sirLiveArea" class="hidden">
 
@@ -1033,9 +986,7 @@ onclick="confirmEndClass()">
 </div>
 
 
-<!-- =====================================================
-     EDIT CHANNEL
-===================================================== -->
+<!-- EDIT CHANNEL -->
 
 <div
 id="channelEditOverlay"
@@ -1081,9 +1032,7 @@ Cancel
 </div>
 
 
-<!-- =====================================================
-     STUDENT
-===================================================== -->
+<!-- STUDENT -->
 
 <div
 id="studentOverlay"
@@ -1132,10 +1081,6 @@ Sir चा Channel ID टाका.
 </div>
 
 
-<!-- =====================================================
-     STUDENT LIVE AREA
-===================================================== -->
-
 <div
 id="studentLiveArea"
 class="hidden">
@@ -1148,48 +1093,43 @@ Live Class connecting...
 
 </div>
 
-
-<!-- YOUTUBE STYLE PLAYER -->
+<!-- =================================================
+     NEW YOUTUBE STYLE STUDENT PLAYER
+================================================== -->
 
 <div
-class="youtube-live-player"
+class="student-live-player"
 id="studentVideoWrap">
 
 <video
 id="studentVideo"
 autoplay
 playsinline
-controls
-preload="auto">
+controls>
 </video>
 
 <span
 id="studentLiveBadge"
-class="youtube-live-badge hidden">
-
+class="live-badge hidden">
 🔴 LIVE
-
 </span>
 
 <button
-id="studentFullscreenBtn"
-class="youtube-fullscreen-btn"
-type="button"
+class="student-player-fullscreen"
 onclick="toggleStudentFullscreen()">
-
 ⛶
-
 </button>
 
 </div>
 
+<div class="student-player-title">
+🔴 GyanSetu Live Class
+</div>
 
 <span
 id="studentAudioBadge"
 class="audio-badge hidden">
-
 🔊 Sir Audio ON
-
 </span>
 
 <button
@@ -1216,9 +1156,7 @@ onclick="leaveStudentClass()">
 </div>
 
 
-<!-- =====================================================
-     LIVE CHANNELS
-===================================================== -->
+<!-- LIVE CHANNELS -->
 
 <div
 id="liveChannelsOverlay"
@@ -1248,9 +1186,7 @@ class="live-channel-list">
 </div>
 
 
-<!-- =====================================================
-     RECORDED
-===================================================== -->
+<!-- RECORDED -->
 
 <div
 id="recordedOverlay"
@@ -1280,9 +1216,7 @@ class="recordings-list">
 </div>
 
 
-<!-- =====================================================
-     PLAYER
-===================================================== -->
+<!-- PLAYER -->
 
 <div
 id="playerOverlay"
@@ -1323,9 +1257,7 @@ onclick="toggleFullscreen('playbackWrap')">
 </div>
 
 
-<!-- =====================================================
-     MESSAGE
-===================================================== -->
+<!-- MESSAGE -->
 
 <div
 id="messageOverlay"
@@ -1375,15 +1307,15 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
+SUPABASE_URL,
+SUPABASE_KEY,
+{
+auth:{
+persistSession:true,
+autoRefreshToken:true,
+detectSessionInUrl:true
+}
+}
 );
 
 
@@ -1431,7 +1363,7 @@ let studentOscillator=null;
 ===================================================== */
 
 function $(id){
-  return document.getElementById(id);
+return document.getElementById(id);
 }
 
 
@@ -1441,23 +1373,22 @@ function $(id){
 
 async function hashText(text){
 
-  const data=
-  new TextEncoder().encode(text);
+const data=
+new TextEncoder().encode(text);
 
-  const hash=
-  await crypto.subtle.digest(
-    "SHA-256",
-    data
-  );
+const hash=
+await crypto.subtle.digest(
+"SHA-256",
+data
+);
 
-  return Array.from(
-    new Uint8Array(hash)
-  )
-  .map(
-    b=>
-    b.toString(16).padStart(2,"0")
-  )
-  .join("");
+return Array.from(
+new Uint8Array(hash)
+)
+.map(
+b=>b.toString(16).padStart(2,"0")
+)
+.join("");
 
 }
 
@@ -1468,32 +1399,32 @@ async function hashText(text){
 
 async function loadCurrentUser(){
 
-  try{
+try{
 
-    const {
-      data,
-      error
-    }=
-    await supabaseClient.auth.getUser();
+const {
+data,
+error
+}=
+await supabaseClient.auth.getUser();
 
-    if(error){
-      console.error(error);
-    }
+if(error){
+console.error(error);
+}
 
-    currentUser=
-    data?.user || null;
+currentUser=
+data?.user || null;
 
-  }
-  catch(error){
+}
+catch(error){
 
-    console.error(
-      "AUTH ERROR:",
-      error
-    );
+console.error(
+"AUTH ERROR:",
+error
+);
 
-    currentUser=null;
+currentUser=null;
 
-  }
+}
 
 }
 
@@ -1502,26 +1433,21 @@ async function loadCurrentUser(){
    MESSAGE
 ===================================================== */
 
-function showMessage(
-  title,
-  message,
-  icon="ℹ️"
-){
+function showMessage(title,message,icon="ℹ️"){
 
-  $("messageIcon").textContent=icon;
-  $("messageTitle").textContent=title;
-  $("messageText").textContent=message;
+$("messageIcon").textContent=icon;
+$("messageTitle").textContent=title;
+$("messageText").textContent=message;
 
-  $("messageOverlay")
-  .classList.remove("hidden");
+$("messageOverlay")
+.classList.remove("hidden");
 
 }
 
-
 function closeMessage(){
 
-  $("messageOverlay")
-  .classList.add("hidden");
+$("messageOverlay")
+.classList.add("hidden");
 
 }
 
@@ -1532,31 +1458,31 @@ function closeMessage(){
 
 function goHome(){
 
-  if(isSirLive){
+if(isSirLive){
 
-    endSirClass(false);
+endSirClass(false);
 
-  }
+}
 
-  if(studentCall){
+if(studentCall){
 
-    notifyStudentLeft();
+notifyStudentLeft();
 
-    stopStudentClass(false);
+stopStudentClass(false);
 
-  }
+}
 
-  if(peer){
+if(peer){
 
-    try{
-      peer.destroy();
-    }catch(e){}
+try{
+peer.destroy();
+}catch(e){}
 
-    peer=null;
+peer=null;
 
-  }
+}
 
-  window.location.href="home.html";
+window.location.href="home.html";
 
 }
 
@@ -1567,62 +1493,57 @@ function goHome(){
 
 function openRolePopup(){
 
-  $("roleOverlay")
-  .classList.remove("hidden");
+$("roleOverlay")
+.classList.remove("hidden");
 
 }
-
 
 function closeRolePopup(){
 
-  $("roleOverlay")
-  .classList.add("hidden");
+$("roleOverlay")
+.classList.add("hidden");
 
 }
-
 
 async function openSirPopup(){
 
-  closeRolePopup();
+closeRolePopup();
 
-  $("sirOverlay")
-  .classList.remove("hidden");
+$("sirOverlay")
+.classList.remove("hidden");
 
-  await initializeSirChannel();
+await initializeSirChannel();
 
 }
-
 
 function closeSirPopup(){
 
-  if(isSirLive){
-    return;
-  }
-
-  $("sirOverlay")
-  .classList.add("hidden");
-
+if(isSirLive){
+return;
 }
 
+$("sirOverlay")
+.classList.add("hidden");
+
+}
 
 function openStudentPopup(){
 
-  closeRolePopup();
+closeRolePopup();
 
-  $("studentOverlay")
-  .classList.remove("hidden");
+$("studentOverlay")
+.classList.remove("hidden");
 
 }
 
-
 function closeStudentPopup(){
 
-  if(studentCall){
-    return;
-  }
+if(studentCall){
+return;
+}
 
-  $("studentOverlay")
-  .classList.add("hidden");
+$("studentOverlay")
+.classList.add("hidden");
 
 }
 
@@ -1633,217 +1554,181 @@ function closeStudentPopup(){
 
 async function openLiveChannels(){
 
-  $("liveChannelsOverlay")
-  .classList.remove("hidden");
+$("liveChannelsOverlay")
+.classList.remove("hidden");
 
-  await loadLiveChannels();
+await loadLiveChannels();
 
 }
-
 
 function closeLiveChannels(){
 
-  $("liveChannelsOverlay")
-  .classList.add("hidden");
+$("liveChannelsOverlay")
+.classList.add("hidden");
 
 }
-
 
 async function loadLiveChannels(){
 
-  const containers=[
-    $("liveChannelList"),
-    $("popupLiveChannelList")
-  ];
+const containers=[
+$("liveChannelList"),
+$("popupLiveChannelList")
+];
 
-  containers.forEach(
-    function(container){
+containers.forEach(
+function(container){
 
-      if(container){
+if(container){
 
-        container.innerHTML=
-        "<div class='no-live'>🔄 Live Classes शोधत आहे...</div>";
-
-      }
-
-    }
-  );
-
-
-  try{
-
-    const {
-      data,
-      error
-    }=
-    await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .eq("is_live",true);
-
-
-    if(error){
-
-      console.error(
-        "Live channels error:",
-        error
-      );
-
-      renderLiveChannels([]);
-
-      return;
-
-    }
-
-
-    renderLiveChannels(
-      data || []
-    );
-
-  }
-  catch(error){
-
-    console.error(error);
-
-    renderLiveChannels([]);
-
-  }
+container.innerHTML=
+"<div class='no-live'>🔄 Live Classes शोधत आहे...</div>";
 
 }
 
+});
+
+try{
+
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq("is_live",true);
+
+if(error){
+
+console.error(
+"Live channels error:",
+error
+);
+
+renderLiveChannels([]);
+
+return;
+
+}
+
+renderLiveChannels(data || []);
+
+}
+catch(error){
+
+console.error(error);
+
+renderLiveChannels([]);
+
+}
+
+}
 
 function renderLiveChannels(channels){
 
-  const uniqueChannels=[];
+const uniqueChannels=[];
 
-  const seen=new Set();
+const seen=new Set();
 
-  channels.forEach(
-    function(channel){
+channels.forEach(
+function(channel){
 
-      const id=String(channel.id);
+const id=String(channel.id);
 
-      if(!seen.has(id)){
+if(!seen.has(id)){
 
-        seen.add(id);
-
-        uniqueChannels.push(channel);
-
-      }
-
-    }
-  );
-
-
-  [
-    $("liveChannelList"),
-    $("popupLiveChannelList")
-  ].forEach(
-    function(container){
-
-      if(!container){
-        return;
-      }
-
-      container.innerHTML="";
-
-
-      if(uniqueChannels.length===0){
-
-        const empty=
-        document.createElement("div");
-
-        empty.className=
-        "no-live";
-
-        empty.textContent=
-        "🔵 सध्या कोणतीही Live Class नाही.";
-
-        container.appendChild(empty);
-
-        return;
-
-      }
-
-
-      uniqueChannels.forEach(
-        function(channel){
-
-          const card=
-          document.createElement("div");
-
-          card.className=
-          "live-channel-card";
-
-          card.onclick=
-          function(){
-
-            joinLiveChannelFromList(channel);
-
-          };
-
-
-          const name=
-          document.createElement("div");
-
-          name.className=
-          "live-channel-name";
-
-          name.textContent=
-          channel.channel_name ||
-          "GyanSetu Live Class";
-
-
-          const id=
-          document.createElement("div");
-
-          id.className=
-          "live-channel-id";
-
-          id.textContent=
-          "Channel ID: "+channel.id;
-
-
-          const live=
-          document.createElement("span");
-
-          live.className=
-          "live-now";
-
-          live.textContent=
-          "🔴 LIVE NOW";
-
-
-          card.appendChild(name);
-          card.appendChild(id);
-          card.appendChild(live);
-
-          container.appendChild(card);
-
-        }
-      );
-
-    }
-  );
+seen.add(id);
+uniqueChannels.push(channel);
 
 }
 
+});
+
+[
+$("liveChannelList"),
+$("popupLiveChannelList")
+].forEach(
+function(container){
+
+if(!container){
+return;
+}
+
+container.innerHTML="";
+
+if(uniqueChannels.length===0){
+
+const empty=document.createElement("div");
+
+empty.className="no-live";
+
+empty.textContent=
+"🔵 सध्या कोणतीही Live Class नाही.";
+
+container.appendChild(empty);
+
+return;
+
+}
+
+uniqueChannels.forEach(
+function(channel){
+
+const card=document.createElement("div");
+
+card.className="live-channel-card";
+
+card.onclick=function(){
+
+joinLiveChannelFromList(channel);
+
+};
+
+const name=document.createElement("div");
+
+name.className="live-channel-name";
+
+name.textContent=
+channel.channel_name ||
+"GyanSetu Live Class";
+
+const id=document.createElement("div");
+
+id.className="live-channel-id";
+
+id.textContent=
+"Channel ID: "+channel.id;
+
+const live=document.createElement("span");
+
+live.className="live-now";
+
+live.textContent="🔴 LIVE NOW";
+
+card.appendChild(name);
+card.appendChild(id);
+card.appendChild(live);
+
+container.appendChild(card);
+
+});
+
+});
+
+}
 
 function joinLiveChannelFromList(channel){
 
-  closeLiveChannels();
+closeLiveChannels();
 
-  $("studentOverlay")
-  .classList
-  .remove("hidden");
+$("studentOverlay")
+.classList.remove("hidden");
 
-  $("channelInput")
-  .value=
-  String(channel.id);
+$("channelInput").value=
+String(channel.id);
 
-  $("studentStatus")
-  .textContent=
-  "🔴 Live Class सापडली. ID confirm करून Start Class करा.";
+$("studentStatus").textContent=
+"🔴 Live Class सापडली. ID confirm करून Start Class करा.";
 
 }
 
@@ -1854,35 +1739,34 @@ function joinLiveChannelFromList(channel){
 
 function getSavedChannel(){
 
-  try{
+try{
 
-    const saved=
-    localStorage.getItem(
-      CHANNEL_STORAGE_KEY
-    );
+const saved=
+localStorage.getItem(
+CHANNEL_STORAGE_KEY
+);
 
-    if(!saved){
-      return null;
-    }
+if(!saved){
+return null;
+}
 
-    return JSON.parse(saved);
+return JSON.parse(saved);
 
-  }
-  catch(error){
+}
+catch(error){
 
-    return null;
-
-  }
+return null;
 
 }
 
+}
 
 function saveChannel(data){
 
-  localStorage.setItem(
-    CHANNEL_STORAGE_KEY,
-    JSON.stringify(data)
-  );
+localStorage.setItem(
+CHANNEL_STORAGE_KEY,
+JSON.stringify(data)
+);
 
 }
 
@@ -1893,130 +1777,93 @@ function saveChannel(data){
 
 async function initializeSirChannel(){
 
-  if(!currentUser){
+if(!currentUser){
 
-    await loadCurrentUser();
+await loadCurrentUser();
 
-  }
+}
 
+if(!currentUser){
 
-  if(!currentUser){
+$("sirSetup")
+.classList.remove("hidden");
 
-    $("sirSetup")
-    .classList
-    .remove("hidden");
+$("sirLiveArea")
+.classList.add("hidden");
 
-    $("sirLiveArea")
-    .classList
-    .add("hidden");
+return;
 
-    return;
+}
 
-  }
+try{
 
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq("owner_id",currentUser.id)
+.maybeSingle();
 
-  try{
+if(error){
+console.error("CHANNEL LOAD ERROR:",error);
+}
 
-    const {
-      data,
-      error
-    }=
-    await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .eq(
-      "owner_id",
-      currentUser.id
-    )
-    .maybeSingle();
+if(data){
 
+const channelData={
+id:String(data.id),
+name:data.channel_name ||
+"GyanSetu Live Class",
+owner_id:data.owner_id
+};
 
-    if(error){
+saveChannel(channelData);
 
-      console.error(
-        "CHANNEL LOAD ERROR:",
-        error
-      );
+$("sirSetup")
+.classList.add("hidden");
 
-    }
+$("sirLiveArea")
+.classList.remove("hidden");
 
+$("sirChannelId").textContent=
+channelData.id;
 
-    if(data){
+$("sirChannelName").textContent=
+channelData.name;
 
-      const channelData={
+$("sirStatus").textContent=
+"✅ तुमचा Channel तयार आहे. आता Start Class करा.";
 
-        id:String(data.id),
+ensureSirPeer(channelData.id);
 
-        name:
-        data.channel_name ||
-        "GyanSetu Live Class",
+return;
 
-        owner_id:
-        data.owner_id
+}
 
-      };
+$("sirSetup")
+.classList.remove("hidden");
 
+$("sirLiveArea")
+.classList.add("hidden");
 
-      saveChannel(channelData);
+}
+catch(error){
 
+console.error(
+"INITIALIZE CHANNEL ERROR:",
+error
+);
 
-      $("sirSetup")
-      .classList
-      .add("hidden");
+$("sirSetup")
+.classList.remove("hidden");
 
-      $("sirLiveArea")
-      .classList
-      .remove("hidden");
+$("sirLiveArea")
+.classList.add("hidden");
 
-
-      $("sirChannelId")
-      .textContent=
-      channelData.id;
-
-      $("sirChannelName")
-      .textContent=
-      channelData.name;
-
-
-      $("sirStatus")
-      .textContent=
-      "✅ तुमचा Channel तयार आहे. आता Start Class करा.";
-
-
-      ensureSirPeer(
-        channelData.id
-      );
-
-      return;
-
-    }
-
-
-    $("sirSetup")
-    .classList
-    .remove("hidden");
-
-    $("sirLiveArea")
-    .classList
-    .add("hidden");
-
-  }
-  catch(error){
-
-    console.error(
-      "INITIALIZE CHANNEL ERROR:",
-      error
-    );
-
-    $("sirSetup")
-    .classList
-    .remove("hidden");
-
-    $("sirLiveArea")
-    .classList
-    .add("hidden");
-
-  }
+}
 
 }
 
@@ -2027,349 +1874,243 @@ async function initializeSirChannel(){
 
 async function createSirChannel(){
 
-  if(!currentUser){
+if(!currentUser){
 
-    await loadCurrentUser();
+await loadCurrentUser();
 
-  }
+}
 
+if(!currentUser){
 
-  if(!currentUser){
+showMessage(
+"Login Required",
+"Channel तयार करण्यासाठी आधी GyanSetu Account मध्ये Login करा.",
+"🔐"
+);
 
-    showMessage(
-      "Login Required",
-      "Channel तयार करण्यासाठी आधी GyanSetu Account मध्ये Login करा.",
-      "🔐"
-    );
+return;
 
-    return;
+}
 
-  }
+try{
 
+const {
+data:existing,
+error:existingError
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq("owner_id",currentUser.id)
+.maybeSingle();
 
-  try{
+if(existingError){
+throw existingError;
+}
 
-    const {
-      data:existing,
-      error:existingError
-    }=
-    await supabaseClient
-    .from("gs_channels")
-    .select("*")
-    .eq(
-      "owner_id",
-      currentUser.id
-    )
-    .maybeSingle();
+if(existing){
 
+const saved={
+id:String(existing.id),
+name:existing.channel_name ||
+"GyanSetu Live Class",
+owner_id:existing.owner_id
+};
 
-    if(existingError){
-      throw existingError;
-    }
+saveChannel(saved);
 
+$("sirSetup")
+.classList.add("hidden");
 
-    if(existing){
+$("sirLiveArea")
+.classList.remove("hidden");
 
-      const saved={
+$("sirChannelId").textContent=saved.id;
+$("sirChannelName").textContent=saved.name;
 
-        id:String(existing.id),
+ensureSirPeer(saved.id);
 
-        name:
-        existing.channel_name ||
-        "GyanSetu Live Class",
+return;
 
-        owner_id:
-        existing.owner_id
+}
 
-      };
+}
+catch(error){
 
+console.error(
+"EXISTING CHANNEL CHECK ERROR:",
+error
+);
 
-      saveChannel(saved);
+showMessage(
+"Channel Error",
+"Channel तपासता आला नाही. Supabase RLS/SQL तपासा.",
+"❌"
+);
 
-      $("createChannelName").value="";
-      $("createChannelPassword").value="";
+return;
 
-      $("sirSetup")
-      .classList
-      .add("hidden");
+}
 
-      $("sirLiveArea")
-      .classList
-      .remove("hidden");
+const name=
+$("createChannelName")
+.value.trim();
 
-      $("sirChannelId")
-      .textContent=
-      saved.id;
+const password=
+$("createChannelPassword").value;
 
-      $("sirChannelName")
-      .textContent=
-      saved.name;
+if(name.length<2){
 
-      ensureSirPeer(
-        saved.id
-      );
+showMessage(
+"Channel Name",
+"Channel name टाका.",
+"⚠️"
+);
 
-      return;
+return;
 
-    }
+}
 
-  }
-  catch(error){
+if(password.length<4){
 
-    console.error(
-      "EXISTING CHANNEL CHECK ERROR:",
-      error
-    );
+showMessage(
+"Password",
+"Channel password किमान 4 characters असावा.",
+"⚠️"
+);
 
-    showMessage(
-      "Channel Error",
-      "Channel तपासता आला नाही. Supabase RLS/SQL तपासा.",
-      "❌"
-    );
+return;
 
-    return;
+}
 
-  }
+const button=$("createChannelBtn");
 
+button.disabled=true;
 
-  const name=
-  $("createChannelName")
-  .value
-  .trim();
+button.textContent=
+"Channel तयार होत आहे...";
 
-  const password=
-  $("createChannelPassword")
-  .value;
+try{
 
+const username=
+currentUser.user_metadata?.username ||
+localStorage.getItem("gyansetu_username") ||
+"User";
 
-  if(name.length<2){
+const passwordHash=
+await hashText(password);
 
-    showMessage(
-      "Channel Name",
-      "Channel name टाका.",
-      "⚠️"
-    );
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.insert({
+owner_id:currentUser.id,
+owner_username:username,
+channel_name:name,
+password_hash:passwordHash,
+followers_count:0,
+comments_enabled:true,
+is_live:false
+})
+.select()
+.single();
 
-    return;
+if(error){
 
-  }
+if(error.code==="23505"){
 
+const {
+data:existingAfterError
+}=
+await supabaseClient
+.from("gs_channels")
+.select("*")
+.eq("owner_id",currentUser.id)
+.maybeSingle();
 
-  if(password.length<4){
+if(existingAfterError){
 
-    showMessage(
-      "Password",
-      "Channel password किमान 4 characters असावा.",
-      "⚠️"
-    );
+const saved={
+id:String(existingAfterError.id),
+name:existingAfterError.channel_name ||
+"GyanSetu Live Class",
+owner_id:existingAfterError.owner_id
+};
 
-    return;
+saveChannel(saved);
 
-  }
+$("sirSetup").classList.add("hidden");
+$("sirLiveArea").classList.remove("hidden");
 
+$("sirChannelId").textContent=saved.id;
+$("sirChannelName").textContent=saved.name;
 
-  const button=
-  $("createChannelBtn");
+ensureSirPeer(saved.id);
 
-  button.disabled=true;
+return;
 
-  button.textContent=
-  "Channel तयार होत आहे...";
+}
 
+}
 
-  try{
+throw error;
 
-    const username=
-    currentUser.user_metadata?.username
-    ||
-    localStorage.getItem(
-      "gyansetu_username"
-    )
-    ||
-    "User";
+}
 
+const saved={
+id:String(data.id),
+name:data.channel_name,
+owner_id:data.owner_id
+};
 
-    const passwordHash=
-    await hashText(password);
+saveChannel(saved);
 
+$("createChannelName").value="";
+$("createChannelPassword").value="";
 
-    const {
-      data,
-      error
-    }=
-    await supabaseClient
-    .from("gs_channels")
-    .insert({
+$("sirSetup").classList.add("hidden");
+$("sirLiveArea").classList.remove("hidden");
 
-      owner_id:
-      currentUser.id,
+$("sirChannelId").textContent=saved.id;
+$("sirChannelName").textContent=saved.name;
 
-      owner_username:
-      username,
+$("sirStatus").textContent=
+"✅ Channel तयार झाला. आता Start Class करा.";
 
-      channel_name:
-      name,
+ensureSirPeer(saved.id);
 
-      password_hash:
-      passwordHash,
+showMessage(
+"Channel Created",
+"तुमचा GyanSetu Channel तयार झाला.\n\nSir / Channel ID:\n"+saved.id,
+"🎉"
+);
 
-      followers_count:
-      0,
+}
+catch(error){
 
-      comments_enabled:
-      true,
+console.error(
+"CREATE CHANNEL ERROR:",
+error
+);
 
-      is_live:false
+showMessage(
+"Channel तयार झाला नाही",
+"Channel तयार करता आला नाही. Supabase RLS/SQL policies तपासा.",
+"❌"
+);
 
-    })
-    .select()
-    .single();
+}
+finally{
 
+button.disabled=false;
 
-    if(error){
+button.textContent=
+"🚀 Create My Channel";
 
-      if(error.code==="23505"){
-
-        const {
-          data:existingAfterError
-        }=
-        await supabaseClient
-        .from("gs_channels")
-        .select("*")
-        .eq(
-          "owner_id",
-          currentUser.id
-        )
-        .maybeSingle();
-
-
-        if(existingAfterError){
-
-          const saved={
-
-            id:String(existingAfterError.id),
-
-            name:
-            existingAfterError.channel_name ||
-            "GyanSetu Live Class",
-
-            owner_id:
-            existingAfterError.owner_id
-
-          };
-
-
-          saveChannel(saved);
-
-          $("sirSetup")
-          .classList
-          .add("hidden");
-
-          $("sirLiveArea")
-          .classList
-          .remove("hidden");
-
-          $("sirChannelId")
-          .textContent=
-          saved.id;
-
-          $("sirChannelName")
-          .textContent=
-          saved.name;
-
-          ensureSirPeer(
-            saved.id
-          );
-
-          return;
-
-        }
-
-      }
-
-      throw error;
-
-    }
-
-
-    const saved={
-
-      id:String(data.id),
-
-      name:
-      data.channel_name,
-
-      owner_id:
-      data.owner_id
-
-    };
-
-
-    saveChannel(saved);
-
-
-    $("createChannelName").value="";
-    $("createChannelPassword").value="";
-
-
-    $("sirSetup")
-    .classList
-    .add("hidden");
-
-    $("sirLiveArea")
-    .classList
-    .remove("hidden");
-
-
-    $("sirChannelId")
-    .textContent=
-    saved.id;
-
-    $("sirChannelName")
-    .textContent=
-    saved.name;
-
-
-    $("sirStatus")
-    .textContent=
-    "✅ Channel तयार झाला. आता Start Class करा.";
-
-
-    ensureSirPeer(
-      saved.id
-    );
-
-
-    showMessage(
-      "Channel Created",
-      "तुमचा GyanSetu Channel तयार झाला.\n\nSir / Channel ID:\n"+saved.id,
-      "🎉"
-    );
-
-
-  }
-  catch(error){
-
-    console.error(
-      "CREATE CHANNEL ERROR:",
-      error
-    );
-
-    showMessage(
-      "Channel तयार झाला नाही",
-      "Channel तयार करता आला नाही. Supabase RLS/SQL policies तपासा.",
-      "❌"
-    );
-
-  }
-  finally{
-
-    button.disabled=false;
-
-    button.textContent=
-    "🚀 Create My Channel";
-
-  }
+}
 
 }
 
@@ -2380,125 +2121,92 @@ async function createSirChannel(){
 
 function openEditChannelPopup(){
 
-  const saved=
-  getSavedChannel();
+const saved=getSavedChannel();
 
-  if(!saved){
-    return;
-  }
-
-  $("channelNameInput").value=
-  saved.name ||
-  "GyanSetu Live Class";
-
-  $("channelEditOverlay")
-  .classList
-  .remove("hidden");
-
+if(!saved){
+return;
 }
 
+$("channelNameInput").value=
+saved.name || "GyanSetu Live Class";
+
+$("channelEditOverlay")
+.classList.remove("hidden");
+
+}
 
 function closeEditChannelPopup(){
 
-  $("channelEditOverlay")
-  .classList
-  .add("hidden");
+$("channelEditOverlay")
+.classList.add("hidden");
 
 }
 
-
 async function saveChannelName(){
 
-  if(!currentUser){
+if(!currentUser){
+await loadCurrentUser();
+}
 
-    await loadCurrentUser();
+const saved=getSavedChannel();
 
-  }
+if(!saved){
+return;
+}
 
+let name=
+$("channelNameInput")
+.value.trim()
+.replace(/\s+/g," ");
 
-  const saved=
-  getSavedChannel();
+if(!name){
+name="GyanSetu Live Class";
+}
 
-  if(!saved){
-    return;
-  }
+name=name.slice(0,80);
 
+try{
 
-  let name=
-  $("channelNameInput")
-  .value
-  .trim()
-  .replace(/\s+/g," ");
+const {
+data,
+error
+}=
+await supabaseClient
+.from("gs_channels")
+.update({
+channel_name:name
+})
+.eq("id",saved.id)
+.eq("owner_id",currentUser.id)
+.select()
+.single();
 
+if(error)
+throw error;
 
-  if(!name){
+saved.name=data.channel_name;
 
-    name="GyanSetu Live Class";
+saveChannel(saved);
 
-  }
+$("sirChannelName").textContent=saved.name;
 
+closeEditChannelPopup();
 
-  name=
-  name.slice(0,80);
+}
+catch(error){
 
+console.error(
+"EDIT CHANNEL ERROR:",
+error
+);
 
-  try{
+showMessage(
+"Edit Error",
+"Channel name बदलता आला नाही.",
+"❌"
+);
 
-    const {
-      data,
-      error
-    }=
-    await supabaseClient
-    .from("gs_channels")
-    .update({
-
-      channel_name:name
-
-    })
-    .eq(
-      "id",
-      saved.id
-    )
-    .eq(
-      "owner_id",
-      currentUser.id
-    )
-    .select()
-    .single();
-
-
-    if(error)
-      throw error;
-
-
-    saved.name=
-    data.channel_name;
-
-    saveChannel(saved);
-
-
-    $("sirChannelName")
-    .textContent=
-    saved.name;
-
-
-    closeEditChannelPopup();
-
-  }
-  catch(error){
-
-    console.error(
-      "EDIT CHANNEL ERROR:",
-      error
-    );
-
-    showMessage(
-      "Edit Error",
-      "Channel name बदलता आला नाही.",
-      "❌"
-    );
-
-  }
+}
 
 }
 
@@ -2509,101 +2217,71 @@ async function saveChannelName(){
 
 function ensureSirPeer(channelId){
 
-  if(
-    peer &&
-    !peer.destroyed &&
-    sirPeerId===channelId
-  ){
+if(
+peer &&
+!peer.destroyed &&
+sirPeerId===channelId
+){
+return;
+}
 
-    return;
+if(peer){
 
-  }
+try{
+peer.destroy();
+}catch(e){}
 
+peer=null;
 
-  if(peer){
+}
 
-    try{
-      peer.destroy();
-    }catch(e){}
+sirPeerId=String(channelId);
 
-    peer=null;
+peer=
+new Peer(
+sirPeerId,
+{
+debug:1
+}
+);
 
-  }
+peer.on("open",function(id){
 
+sirPeerId=id;
 
-  sirPeerId=
-  String(channelId);
+$("sirChannelId").textContent=id;
 
+});
 
-  peer=
-  new Peer(
-    sirPeerId,
-    {
-      debug:1
-    }
-  );
+peer.on("connection",function(conn){
 
+setupSirConnection(conn);
 
-  peer.on(
-    "open",
-    function(id){
+});
 
-      sirPeerId=id;
+peer.on("call",function(call){
 
-      $("sirChannelId")
-      .textContent=id;
+handleSirIncomingCall(call);
 
-    }
-  );
+});
 
+peer.on("error",function(error){
 
-  peer.on(
-    "connection",
-    function(conn){
+handleSirPeerError(error);
 
-      setupSirConnection(conn);
+});
 
-    }
-  );
+peer.on("disconnected",function(){
 
+if(peer && !peer.destroyed){
 
-  peer.on(
-    "call",
-    function(call){
+try{
+peer.reconnect();
+}catch(e){}
 
-      handleSirIncomingCall(call);
+}
 
-    }
-  );
-
-
-  peer.on(
-    "error",
-    function(error){
-
-      handleSirPeerError(error);
-
-    }
-  );
-
-
-  peer.on(
-    "disconnected",
-    function(){
-
-      if(
-        peer &&
-        !peer.destroyed
-      ){
-
-        try{
-          peer.reconnect();
-        }catch(e){}
-
-      }
-
-    }
-  );
+});
 
 }
 
@@ -2614,83 +2292,66 @@ function ensureSirPeer(channelId){
 
 function setupSirConnection(conn){
 
-  if(!conn){
-    return;
-  }
+if(!conn){
+return;
+}
 
-  sirConnections.push(conn);
+sirConnections.push(conn);
 
+conn.on("open",function(){
 
-  conn.on(
-    "open",
-    function(){
+sendClassStatus(conn);
 
-      sendClassStatus(conn);
+});
 
-    }
-  );
+conn.on("data",function(data){
 
+if(
+data &&
+data.type==="STUDENT_JOINED"
+){
 
-  conn.on(
-    "data",
-    function(data){
+students.set(
+conn.peer,
+{
+name:"Student",
+conn:conn
+}
+);
 
-      if(
-        data &&
-        data.type==="STUDENT_JOINED"
-      ){
+updateStudentUI();
 
-        students.set(
-          conn.peer,
-          {
-            name:"Student",
-            conn:conn
-          }
-        );
+sendClassStatus(conn);
 
-        updateStudentUI();
+}
 
-        sendClassStatus(conn);
+if(
+data &&
+data.type==="STUDENT_LEFT"
+){
 
-      }
+removeStudent(conn.peer);
 
+}
 
-      if(
-        data &&
-        data.type==="STUDENT_LEFT"
-      ){
+});
 
-        removeStudent(conn.peer);
+conn.on("close",function(){
 
-      }
+removeStudent(conn.peer);
 
-    }
-  );
+sirConnections=
+sirConnections.filter(
+c=>c!==conn
+);
 
+});
 
-  conn.on(
-    "close",
-    function(){
+conn.on("error",function(){
 
-      removeStudent(conn.peer);
+removeStudent(conn.peer);
 
-      sirConnections=
-      sirConnections.filter(
-        c=>c!==conn
-      );
-
-    }
-  );
-
-
-  conn.on(
-    "error",
-    function(){
-
-      removeStudent(conn.peer);
-
-    }
-  );
+});
 
 }
 
@@ -2701,48 +2362,35 @@ function setupSirConnection(conn){
 
 function handleSirIncomingCall(call){
 
-  if(
-    !isSirLive ||
-    !sirStream
-  ){
+if(
+!isSirLive ||
+!sirStream
+){
 
-    try{
-      call.close();
-    }catch(e){}
+try{
+call.close();
+}catch(e){}
 
-    return;
+return;
 
-  }
+}
 
+sirCalls.push(call);
 
-  sirCalls.push(call);
+try{
+call.answer(sirStream);
+}catch(e){
+console.error(e);
+}
 
+call.on("close",function(){
 
-  try{
+sirCalls=
+sirCalls.filter(
+c=>c!==call
+);
 
-    call.answer(
-      sirStream
-    );
-
-  }
-  catch(e){
-
-    console.error(e);
-
-  }
-
-
-  call.on(
-    "close",
-    function(){
-
-      sirCalls=
-      sirCalls.filter(
-        c=>c!==call
-      );
-
-    }
-  );
+});
 
 }
 
@@ -2753,66 +2401,51 @@ function handleSirIncomingCall(call){
 
 function updateStudentUI(){
 
-  $("studentCountBadge")
-  .textContent=
-  "Students: "+students.size;
+$("studentCountBadge")
+.textContent=
+"Students: "+students.size;
 
+$("studentList").innerHTML="";
 
-  $("studentList").innerHTML="";
+if(students.size===0){
 
+const item=document.createElement("div");
 
-  if(students.size===0){
+item.className="student-item";
 
-    const item=
-    document.createElement("div");
+item.textContent=
+"अजून कोणताही Student Join झालेला नाही.";
 
-    item.className=
-    "student-item";
+$("studentList").appendChild(item);
 
-    item.textContent=
-    "अजून कोणताही Student Join झालेला नाही.";
-
-
-    $("studentList")
-    .appendChild(item);
-
-    return;
-
-  }
-
-
-  let number=1;
-
-
-  students.forEach(
-    function(){
-
-      const item=
-      document.createElement("div");
-
-      item.className=
-      "student-item";
-
-      item.textContent=
-      number+". Student";
-
-
-      $("studentList")
-      .appendChild(item);
-
-      number++;
-
-    }
-  );
+return;
 
 }
 
+let number=1;
+
+students.forEach(function(){
+
+const item=document.createElement("div");
+
+item.className="student-item";
+
+item.textContent=
+number+". Student";
+
+$("studentList").appendChild(item);
+
+number++;
+
+});
+
+}
 
 function removeStudent(peerId){
 
-  students.delete(peerId);
+students.delete(peerId);
 
-  updateStudentUI();
+updateStudentUI();
 
 }
 
@@ -2823,59 +2456,44 @@ function removeStudent(peerId){
 
 async function copyChannelId(){
 
-  const id=
-  $("sirChannelId")
-  .textContent;
+const id=$("sirChannelId").textContent;
 
+if(!id || id==="---"){
+return;
+}
 
-  if(
-    !id ||
-    id==="---"
-  ){
-    return;
-  }
+try{
 
+await navigator.clipboard.writeText(id);
 
-  try{
+showMessage(
+"Copied",
+"Sir / Channel ID copy झाला.",
+"📋"
+);
 
-    await navigator.clipboard
-    .writeText(id);
+}
+catch(e){
 
+const textarea=document.createElement("textarea");
 
-    showMessage(
-      "Copied",
-      "Sir / Channel ID copy झाला.",
-      "📋"
-    );
+textarea.value=id;
 
-  }
-  catch(e){
+document.body.appendChild(textarea);
 
-    const textarea=
-    document.createElement("textarea");
+textarea.select();
 
-    textarea.value=id;
+document.execCommand("copy");
 
-    document.body.appendChild(
-      textarea
-    );
+textarea.remove();
 
-    textarea.select();
+showMessage(
+"Copied",
+"Channel ID copy झाला.",
+"📋"
+);
 
-    document.execCommand(
-      "copy"
-    );
-
-    textarea.remove();
-
-
-    showMessage(
-      "Copied",
-      "Channel ID copy झाला.",
-      "📋"
-    );
-
-  }
+}
 
 }
 
@@ -2886,145 +2504,106 @@ async function copyChannelId(){
 
 async function startSirCamera(){
 
-  if(isSirLive){
-    return;
-  }
+if(isSirLive){
+return;
+}
 
+$("startCameraBtn").disabled=true;
 
-  $("startCameraBtn")
-  .disabled=true;
+$("startCameraBtn").textContent="Starting...";
 
-  $("startCameraBtn")
-  .textContent=
-  "Starting...";
+try{
 
+const stream=
+await navigator.mediaDevices.getUserMedia({
 
-  try{
+video:{
+width:{ideal:1280},
+height:{ideal:720},
+facingMode:"user"
+},
 
-    const stream=
-    await navigator.mediaDevices
-    .getUserMedia({
+audio:{
+echoCancellation:true,
+noiseSuppression:true,
+autoGainControl:true
+}
 
-      video:{
-        width:{ideal:1280},
-        height:{ideal:720},
-        facingMode:"user"
-      },
+});
 
-      audio:{
-        echoCancellation:true,
-        noiseSuppression:true,
-        autoGainControl:true
-      }
+sirStream=stream;
 
-    });
+$("sirVideo").srcObject=stream;
 
+$("sirVideo").muted=true;
 
-    sirStream=stream;
+const audioTracks=
+stream.getAudioTracks();
 
+if(audioTracks.length){
 
-    $("sirVideo")
-    .srcObject=stream;
+audioTracks.forEach(
+function(track){
+track.enabled=true;
+}
+);
 
-    $("sirVideo")
-    .muted=true;
+$("sirAudioBadge")
+.classList.remove("hidden");
 
+}
 
-    const audioTracks=
-    stream.getAudioTracks();
+isSirLive=true;
 
+classStartedAt=new Date();
 
-    if(audioTracks.length){
+$("sirLiveBadge")
+.classList.remove("hidden");
 
-      audioTracks.forEach(
-        function(track){
-          track.enabled=true;
-        }
-      );
+$("startCameraBtn")
+.classList.add("hidden");
 
+$("endSirClass")
+.classList.remove("hidden");
 
-      $("sirAudioBadge")
-      .classList
-      .remove("hidden");
+$("sirStatus").textContent=
+"🔴 Live Class सुरू आहे • 🎤 Mic ON";
 
-    }
+const saved=getSavedChannel();
 
+if(saved){
 
-    isSirLive=true;
+await supabaseClient
+.from("gs_channels")
+.update({
+is_live:true,
+live_started_at:new Date().toISOString()
+})
+.eq("id",saved.id);
 
-    classStartedAt=
-    new Date();
+}
 
+startSirRecording();
 
-    $("sirLiveBadge")
-    .classList
-    .remove("hidden");
+broadcastClassStatus();
 
+}
+catch(error){
 
-    $("startCameraBtn")
-    .classList
-    .add("hidden");
+console.error(error);
 
+$("startCameraBtn").disabled=false;
 
-    $("endSirClass")
-    .classList
-    .remove("hidden");
+$("startCameraBtn").textContent=
+"▶️ Start Class";
 
+showMessage(
+"Camera / Microphone Error",
+"Camera आणि Microphone permission Allow करा.",
+"❌"
+);
 
-    $("sirStatus")
-    .textContent=
-    "🔴 Live Class सुरू आहे • 🎤 Mic ON";
-
-
-    const saved=
-    getSavedChannel();
-
-
-    if(saved){
-
-      await supabaseClient
-      .from("gs_channels")
-      .update({
-
-        is_live:true,
-
-        live_started_at:
-        new Date().toISOString()
-
-      })
-      .eq(
-        "id",
-        saved.id
-      );
-
-    }
-
-
-    startSirRecording();
-
-    broadcastClassStatus();
-
-  }
-  catch(error){
-
-    console.error(error);
-
-
-    $("startCameraBtn")
-    .disabled=false;
-
-    $("startCameraBtn")
-    .textContent=
-    "▶️ Start Class";
-
-
-    showMessage(
-      "Camera / Microphone Error",
-      "Camera आणि Microphone permission Allow करा.",
-      "❌"
-    );
-
-  }
+}
 
 }
 
@@ -3035,41 +2614,25 @@ async function startSirCamera(){
 
 function getRecorderMimeType(){
 
-  if(
-    typeof MediaRecorder==="undefined"
-  ){
-    return "";
-  }
+if(typeof MediaRecorder==="undefined"){
+return "";
+}
 
+const types=[
+"video/webm;codecs=vp9,opus",
+"video/webm;codecs=vp8,opus",
+"video/webm"
+];
 
-  const types=[
+for(const type of types){
 
-    "video/webm;codecs=vp9,opus",
+if(MediaRecorder.isTypeSupported(type)){
+return type;
+}
 
-    "video/webm;codecs=vp8,opus",
+}
 
-    "video/webm"
-
-  ];
-
-
-  for(
-    const type of types
-  ){
-
-    if(
-      MediaRecorder
-      .isTypeSupported(type)
-    ){
-
-      return type;
-
-    }
-
-  }
-
-
-  return "";
+return "";
 
 }
 
@@ -3080,111 +2643,86 @@ function getRecorderMimeType(){
 
 function startSirRecording(){
 
-  if(
-    !sirStream ||
-    typeof MediaRecorder==="undefined"
-  ){
-    return;
-  }
+if(
+!sirStream ||
+typeof MediaRecorder==="undefined"
+){
+return;
+}
 
+try{
 
-  try{
+const mimeType=getRecorderMimeType();
 
-    const mimeType=
-    getRecorderMimeType();
+const recorder=
+mimeType
+? new MediaRecorder(
+sirStream,
+{mimeType:mimeType}
+)
+: new MediaRecorder(sirStream);
 
+sirRecorder=recorder;
 
-    const recorder=
-    mimeType
-    ? new MediaRecorder(
-        sirStream,
-        {mimeType:mimeType}
-      )
-    : new MediaRecorder(
-        sirStream
-      );
+sirRecordingChunks=[];
 
+recorder.ondataavailable=function(event){
 
-    sirRecorder=recorder;
+if(event.data && event.data.size>0){
 
-    sirRecordingChunks=[];
+sirRecordingChunks.push(event.data);
 
+}
 
-    recorder.ondataavailable=
-    function(event){
+};
 
-      if(
-        event.data &&
-        event.data.size>0
-      ){
+recorder.onstop=function(){
 
-        sirRecordingChunks
-        .push(event.data);
+if(!sirRecordingChunks.length){
 
-      }
+if(sirRecorder===recorder){
+sirRecorder=null;
+}
 
-    };
+return;
 
+}
 
-    recorder.onstop=
-    function(){
+const blob=
+new Blob(
+sirRecordingChunks,
+{
+type:
+recorder.mimeType ||
+"video/webm"
+}
+);
 
-      if(
-        !sirRecordingChunks.length
-      ){
+saveRecording(
+"Sir Live Class - Video + Audio",
+blob,
+"sir"
+);
 
-        if(
-          sirRecorder===recorder
-        ){
-          sirRecorder=null;
-        }
+sirRecordingChunks=[];
 
-        return;
+if(sirRecorder===recorder){
+sirRecorder=null;
+}
 
-      }
+};
 
+recorder.start(1000);
 
-      const blob=
-      new Blob(
-        sirRecordingChunks,
-        {
-          type:
-          recorder.mimeType ||
-          "video/webm"
-        }
-      );
+}
+catch(error){
 
+console.error(
+"Sir recording error:",
+error
+);
 
-      saveRecording(
-        "Sir Live Class - Video + Audio",
-        blob,
-        "sir"
-      );
-
-
-      sirRecordingChunks=[];
-
-
-      if(
-        sirRecorder===recorder
-      ){
-        sirRecorder=null;
-      }
-
-    };
-
-
-    recorder.start(1000);
-
-  }
-  catch(error){
-
-    console.error(
-      "Sir recording error:",
-      error
-    );
-
-  }
+}
 
 }
 
@@ -3195,50 +2733,45 @@ function startSirRecording(){
 
 function sendClassStatus(conn){
 
-  if(
-    !conn ||
-    !conn.open
-  ){
-    return;
-  }
+if(!conn || !conn.open){
+return;
+}
 
+try{
 
-  try{
+conn.send({
 
-    conn.send({
+type:"CLASS_STATUS",
 
-      type:"CLASS_STATUS",
+live:isSirLive,
 
-      live:isSirLive,
+hostId:sirPeerId,
 
-      hostId:sirPeerId,
+channelName:
+getSavedChannel()?.name ||
+"GyanSetu Live Class",
 
-      channelName:
-      getSavedChannel()?.name ||
-      "GyanSetu Live Class",
+startedAt:
+classStartedAt
+? classStartedAt.toISOString()
+:null
 
-      startedAt:
-      classStartedAt
-      ? classStartedAt.toISOString()
-      :null
+});
 
-    });
-
-  }
-  catch(e){}
+}
+catch(e){}
 
 }
 
-
 function broadcastClassStatus(){
 
-  sirConnections.forEach(
-    function(conn){
+sirConnections.forEach(
+function(conn){
 
-      sendClassStatus(conn);
+sendClassStatus(conn);
 
-    }
-  );
+}
+);
 
 }
 
@@ -3249,183 +2782,145 @@ function broadcastClassStatus(){
 
 function confirmEndClass(){
 
-  if(!isSirLive){
-    return;
-  }
+if(!isSirLive){
+return;
+}
 
+const answer=
+confirm(
+"Live Class बंद करायची आहे का?"
+);
 
-  const answer=
-  confirm(
-    "Live Class बंद करायची आहे का?"
-  );
+if(answer){
 
-
-  if(answer){
-
-    endSirClass(true);
-
-  }
+endSirClass(true);
 
 }
 
+}
 
-async function endSirClass(
-  showPopup=true
-){
+async function endSirClass(showPopup=true){
 
-  if(!isSirLive){
-    return;
-  }
+if(!isSirLive){
+return;
+}
 
+sirConnections.forEach(
+function(conn){
 
-  sirConnections.forEach(
-    function(conn){
+if(conn && conn.open){
 
-      if(
-        conn &&
-        conn.open
-      ){
+try{
 
-        try{
+conn.send({
+type:"CLASS_ENDED",
+message:
+"Sir ने Live Class समाप्त केली."
+});
 
-          conn.send({
+}
+catch(e){}
 
-            type:"CLASS_ENDED",
+}
 
-            message:
-            "Sir ने Live Class समाप्त केली."
+});
 
-          });
+const saved=getSavedChannel();
 
-        }
-        catch(e){}
+if(saved){
 
-      }
+await supabaseClient
+.from("gs_channels")
+.update({
+is_live:false,
+live_started_at:null
+})
+.eq("id",saved.id);
 
-    }
-  );
+}
 
+stopSirRecording();
 
-  const saved=
-  getSavedChannel();
+sirCalls.forEach(
+function(call){
 
+try{
+call.close();
+}catch(e){}
 
-  if(saved){
+}
+);
 
-    await supabaseClient
-    .from("gs_channels")
-    .update({
+sirCalls=[];
 
-      is_live:false,
+sirConnections.forEach(
+function(conn){
 
-      live_started_at:null
+try{
+conn.close();
+}catch(e){}
 
-    })
-    .eq(
-      "id",
-      saved.id
-    );
+}
+);
 
-  }
+sirConnections=[];
 
+students.clear();
 
-  stopSirRecording();
+updateStudentUI();
 
+stopSirMedia();
 
-  sirCalls.forEach(
-    function(call){
+isSirLive=false;
 
-      try{
-        call.close();
-      }catch(e){}
+classStartedAt=null;
 
-    }
-  );
+if(peer){
 
+try{
+peer.destroy();
+}catch(e){}
 
-  sirCalls=[];
+peer=null;
 
+}
 
-  sirConnections.forEach(
-    function(conn){
+$("sirLiveBadge")
+.classList.add("hidden");
 
-      try{
-        conn.close();
-      }catch(e){}
+$("sirAudioBadge")
+.classList.add("hidden");
 
-    }
-  );
+$("endSirClass")
+.classList.add("hidden");
 
+$("startCameraBtn")
+.classList.remove("hidden");
 
-  sirConnections=[];
+$("startCameraBtn").disabled=false;
 
-  students.clear();
+$("startCameraBtn").textContent=
+"▶️ Start Class";
 
-  updateStudentUI();
+$("sirStatus").textContent=
+"Class समाप्त झाली. Channel अजूनही तुमचाच आहे.";
 
-  stopSirMedia();
+if(showPopup){
 
-  isSirLive=false;
+setTimeout(
+function(){
 
-  classStartedAt=null;
+showMessage(
+"Class Ended",
+"Live Class समाप्त झाली.\nRecording Video + Audio save होत आहे.",
+"✅"
+);
 
+},
+500
+);
 
-  if(peer){
-
-    try{
-      peer.destroy();
-    }catch(e){}
-
-    peer=null;
-
-  }
-
-
-  $("sirLiveBadge")
-  .classList
-  .add("hidden");
-
-  $("sirAudioBadge")
-  .classList
-  .add("hidden");
-
-  $("endSirClass")
-  .classList
-  .add("hidden");
-
-  $("startCameraBtn")
-  .classList
-  .remove("hidden");
-
-  $("startCameraBtn")
-  .disabled=false;
-
-  $("startCameraBtn")
-  .textContent=
-  "▶️ Start Class";
-
-
-  $("sirStatus")
-  .textContent=
-  "Class समाप्त झाली. Channel अजूनही तुमचाच आहे.";
-
-
-  if(showPopup){
-
-    setTimeout(
-      function(){
-
-        showMessage(
-          "Class Ended",
-          "Live Class समाप्त झाली.\nRecording Video + Audio save होत आहे.",
-          "✅"
-        );
-
-      },
-      500
-    );
-
-  }
+}
 
 }
 
@@ -3436,54 +2931,43 @@ async function endSirClass(
 
 function stopSirRecording(){
 
-  if(!sirRecorder){
-    return;
-  }
+if(!sirRecorder){
+return;
+}
 
+const recorder=sirRecorder;
 
-  const recorder=
-  sirRecorder;
+try{
 
+if(recorder.state!=="inactive"){
+recorder.stop();
+}
 
-  try{
-
-    if(
-      recorder.state!=="inactive"
-    ){
-
-      recorder.stop();
-
-    }
-
-  }
-  catch(e){}
+}
+catch(e){}
 
 }
 
-
 function stopSirMedia(){
 
-  if(sirStream){
+if(sirStream){
 
-    sirStream
-    .getTracks()
-    .forEach(
-      function(track){
+sirStream.getTracks()
+.forEach(
+function(track){
 
-        try{
-          track.stop();
-        }catch(e){}
+try{
+track.stop();
+}catch(e){}
 
-      }
-    );
+}
+);
 
-    sirStream=null;
+sirStream=null;
 
-  }
+}
 
-
-  $("sirVideo")
-  .srcObject=null;
+$("sirVideo").srcObject=null;
 
 }
 
@@ -3494,43 +2978,33 @@ function stopSirMedia(){
 
 function handleSirPeerError(error){
 
-  console.error(
-    "Sir Peer Error:",
-    error
-  );
+console.error(
+"Sir Peer Error:",
+error
+);
 
+let message=
+"Connection मध्ये problem आली.";
 
-  let message=
-  "Connection मध्ये problem आली.";
+if(error && error.type==="unavailable-id"){
 
+message=
+"हा Channel ID सध्या दुसऱ्या browser मध्ये वापरला जात आहे.";
 
-  if(
-    error &&
-    error.type==="unavailable-id"
-  ){
+}
 
-    message=
-    "हा Channel ID सध्या दुसऱ्या browser मध्ये वापरला जात आहे.";
+if(error && error.type==="network"){
 
-  }
+message=
+"Internet connection तपासा.";
 
+}
 
-  if(
-    error &&
-    error.type==="network"
-  ){
-
-    message=
-    "Internet connection तपासा.";
-
-  }
-
-
-  showMessage(
-    "Connection Error",
-    message,
-    "❌"
-  );
+showMessage(
+"Connection Error",
+message,
+"❌"
+);
 
 }
 
@@ -3541,86 +3015,104 @@ function handleSirPeerError(error){
 
 function joinStudentClass(){
 
-  if(
-    studentConnection ||
-    studentCall
-  ){
-    return;
-  }
+if(
+studentConnection ||
+studentCall
+){
+return;
+}
+
+const channel=
+$("channelInput")
+.value.trim();
+
+if(!channel){
+
+showMessage(
+"Channel ID",
+"कृपया Sir चा Channel ID टाका.",
+"⚠️"
+);
+
+return;
+
+}
+
+studentHostId=channel;
+
+$("joinStudentBtn").disabled=true;
+
+$("joinStudentBtn").textContent=
+"Connecting...";
+
+$("studentStatus").textContent=
+"🔄 Sir च्या Channel ला connect होत आहे...";
 
 
-  const channel=
-  $("channelInput")
-  .value
-  .trim();
+/*
+=====================================================
+IMPORTANT:
+Start Class हा user click असल्यामुळे
+player fullscreen करण्याचा प्रयत्न इथे केला आहे.
+जर browser automatic fullscreen allow करत नसेल,
+नंतर ⛶ button ने लगेच fullscreen होईल.
+=====================================================
+*/
+
+try{
+
+const player=$("studentVideoWrap");
+
+if(player && player.requestFullscreen){
+
+player.requestFullscreen()
+.catch(function(){});
+
+}
+
+}
+catch(e){
+
+console.log(
+"Automatic fullscreen blocked by browser"
+);
+
+}
 
 
-  if(!channel){
+peer=
+new Peer({
+debug:1
+});
 
-    showMessage(
-      "Channel ID",
-      "कृपया Sir चा Channel ID टाका.",
-      "⚠️"
-    );
+peer.on(
+"open",
+function(){
 
-    return;
+connectStudentToSir();
 
-  }
+}
+);
 
+peer.on(
+"error",
+function(error){
 
-  studentHostId=channel;
+console.error(
+"Student Peer Error:",
+error
+);
 
+resetStudentJoinButton();
 
-  $("joinStudentBtn")
-  .disabled=true;
+showMessage(
+"Join Failed",
+"Sir च्या Channel ला connect होता आले नाही.\nChannel ID तपासा.",
+"❌"
+);
 
-  $("joinStudentBtn")
-  .textContent=
-  "Connecting...";
-
-
-  $("studentStatus")
-  .textContent=
-  "🔄 Sir च्या Channel ला connect होत आहे...";
-
-
-  peer=
-  new Peer({
-    debug:1
-  });
-
-
-  peer.on(
-    "open",
-    function(){
-
-      connectStudentToSir();
-
-    }
-  );
-
-
-  peer.on(
-    "error",
-    function(error){
-
-      console.error(
-        "Student Peer Error:",
-        error
-      );
-
-
-      resetStudentJoinButton();
-
-
-      showMessage(
-        "Join Failed",
-        "Sir च्या Channel ला connect होता आले नाही.\nChannel ID तपासा.",
-        "❌"
-      );
-
-    }
-  );
+}
+);
 
 }
 
@@ -3631,83 +3123,69 @@ function joinStudentClass(){
 
 function connectStudentToSir(){
 
-  if(
-    !peer ||
-    !studentHostId
-  ){
-    return;
-  }
+if(
+!peer ||
+!studentHostId
+){
+return;
+}
 
+studentConnection=
+peer.connect(
+studentHostId,
+{
+reliable:true
+}
+);
 
-  studentConnection=
-  peer.connect(
-    studentHostId,
-    {
-      reliable:true
-    }
-  );
+studentConnection.on(
+"open",
+function(){
 
+$("studentStatus").textContent=
+"✅ Sir ला connect झाले.";
 
-  studentConnection.on(
-    "open",
-    function(){
+try{
 
-      $("studentStatus")
-      .textContent=
-      "✅ Sir ला connect झाले.";
+studentConnection.send({
+type:"STUDENT_JOINED"
+});
 
+}
+catch(e){}
 
-      try{
+});
 
-        studentConnection.send({
+studentConnection.on(
+"data",
+function(data){
 
-          type:"STUDENT_JOINED"
+handleStudentData(data);
 
-        });
+});
 
-      }
-      catch(e){}
+studentConnection.on(
+"close",
+function(){
 
-    }
-  );
+if(!studentCall){
 
+resetStudentJoinButton();
 
-  studentConnection.on(
-    "data",
-    function(data){
+$("studentStatus").textContent=
+"❌ Sir connection बंद झाली.";
 
-      handleStudentData(data);
+}
 
-    }
-  );
+});
 
+studentConnection.on(
+"error",
+function(error){
 
-  studentConnection.on(
-    "close",
-    function(){
+console.error(error);
 
-      if(!studentCall){
-
-        resetStudentJoinButton();
-
-        $("studentStatus")
-        .textContent=
-        "❌ Sir connection बंद झाली.";
-
-      }
-
-    }
-  );
-
-
-  studentConnection.on(
-    "error",
-    function(error){
-
-      console.error(error);
-
-    }
-  );
+});
 
 }
 
@@ -3718,51 +3196,42 @@ function connectStudentToSir(){
 
 function handleStudentData(data){
 
-  if(
-    !data ||
-    typeof data!=="object"
-  ){
-    return;
-  }
+if(
+!data ||
+typeof data!=="object"
+){
+return;
+}
 
+if(data.type==="CLASS_STATUS"){
 
-  if(
-    data.type==="CLASS_STATUS"
-  ){
+if(data.live){
 
-    if(data.live){
+$("studentStatus").textContent=
+"🔴 Live Class आहे. Video + Audio connect होत आहे...";
 
-      $("studentStatus")
-      .textContent=
-      "🔴 Live Class आहे. Video + Audio connect होत आहे...";
+startStudentCall();
 
+}
+else{
 
-      startStudentCall();
+$("studentStatus").textContent=
+"⏳ Sir ने अजून Live Class सुरू केलेली नाही.";
 
-    }
-    else{
+}
 
-      $("studentStatus")
-      .textContent=
-      "⏳ Sir ने अजून Live Class सुरू केलेली नाही.";
+return;
 
-    }
+}
 
-    return;
+if(data.type==="CLASS_ENDED"){
 
-  }
+stopStudentClass(
+data.message ||
+"Sir ने Live Class समाप्त केली."
+);
 
-
-  if(
-    data.type==="CLASS_ENDED"
-  ){
-
-    stopStudentClass(
-      data.message ||
-      "Sir ने Live Class समाप्त केली."
-    );
-
-  }
+}
 
 }
 
@@ -3773,119 +3242,94 @@ function handleStudentData(data){
 
 function createReceiveStream(){
 
-  try{
+try{
 
-    const canvas=
-    document.createElement("canvas");
+const canvas=
+document.createElement("canvas");
 
-    canvas.width=2;
-    canvas.height=2;
+canvas.width=2;
+canvas.height=2;
 
+const context=
+canvas.getContext("2d");
 
-    const context=
-    canvas.getContext("2d");
+context.fillStyle="#000";
 
+context.fillRect(
+0,
+0,
+2,
+2
+);
 
-    context.fillStyle="#000";
+const stream=
+canvas.captureStream(1);
 
+const AudioContext=
+window.AudioContext ||
+window.webkitAudioContext;
 
-    context.fillRect(
-      0,
-      0,
-      2,
-      2
-    );
+if(AudioContext){
 
+studentAudioContext=
+new AudioContext();
 
-    const stream=
-    canvas.captureStream(1);
+if(
+studentAudioContext.state==="suspended"
+){
 
+studentAudioContext.resume()
+.catch(function(){});
 
-    const AudioContext=
-    window.AudioContext ||
-    window.webkitAudioContext;
+}
 
+const oscillator=
+studentAudioContext.createOscillator();
 
-    if(AudioContext){
+const gain=
+studentAudioContext.createGain();
 
-      studentAudioContext=
-      new AudioContext();
+const destination=
+studentAudioContext
+.createMediaStreamDestination();
 
+gain.gain.value=0;
 
-      if(
-        studentAudioContext.state==="suspended"
-      ){
+oscillator.connect(gain);
 
-        studentAudioContext
-        .resume()
-        .catch(
-          function(){}
-        );
+gain.connect(destination);
 
-      }
+oscillator.start();
 
+const audioTrack=
+destination.stream
+.getAudioTracks()[0];
 
-      const oscillator=
-      studentAudioContext
-      .createOscillator();
+if(audioTrack){
 
+audioTrack.enabled=true;
 
-      const gain=
-      studentAudioContext
-      .createGain();
+stream.addTrack(audioTrack);
 
+}
 
-      const destination=
-      studentAudioContext
-      .createMediaStreamDestination();
+studentOscillator=oscillator;
 
+}
 
-      gain.gain.value=0;
+return stream;
 
+}
+catch(error){
 
-      oscillator.connect(gain);
+console.error(
+"Receive stream error:",
+error
+);
 
-      gain.connect(destination);
+return new MediaStream();
 
-      oscillator.start();
-
-
-      const audioTrack=
-      destination
-      .stream
-      .getAudioTracks()[0];
-
-
-      if(audioTrack){
-
-        audioTrack.enabled=true;
-
-        stream.addTrack(
-          audioTrack
-        );
-
-      }
-
-
-      studentOscillator=
-      oscillator;
-
-    }
-
-
-    return stream;
-
-  }
-  catch(error){
-
-    console.error(
-      "Receive stream error:",
-      error
-    );
-
-    return new MediaStream();
-
-  }
+}
 
 }
 
@@ -3896,210 +3340,181 @@ function createReceiveStream(){
 
 function startStudentCall(){
 
-  if(
-    !peer ||
-    !studentHostId ||
-    studentCall
-  ){
-    return;
-  }
+if(
+!peer ||
+!studentHostId ||
+studentCall
+){
+return;
+}
 
+const receiveStream=
+createReceiveStream();
 
-  const receiveStream=
-  createReceiveStream();
+try{
 
+studentCall=
+peer.call(
+studentHostId,
+receiveStream
+);
 
-  try{
+}
+catch(error){
 
-    studentCall=
-    peer.call(
-      studentHostId,
-      receiveStream
-    );
+console.error(error);
 
-  }
-  catch(error){
+showMessage(
+"Live Error",
+"Live connection सुरू करता आली नाही.",
+"❌"
+);
 
-    console.error(error);
+return;
 
+}
 
-    showMessage(
-      "Live Error",
-      "Live connection सुरू करता आली नाही.",
-      "❌"
-    );
+if(!studentCall){
+return;
+}
 
-    return;
+studentCall.on(
+"stream",
+function(remoteStream){
 
-  }
+studentRemoteStream=
+remoteStream;
 
+const video=$("studentVideo");
 
-  if(!studentCall){
-    return;
-  }
+video.srcObject=remoteStream;
 
+video.muted=false;
 
-  studentCall.on(
-    "stream",
-    function(remoteStream){
+video.volume=1;
 
-      studentRemoteStream=
-      remoteStream;
 
+/*
+=====================================================
+YouTube-style player
+=====================================================
+*/
 
-      const video=
-      $("studentVideo");
+video.controls=true;
 
+video.playsInline=true;
 
-      /*
-       * YouTube style player
-       * remote live stream directly video मध्ये
-       */
+const audioTracks=
+remoteStream.getAudioTracks();
 
-      video.srcObject=
-      remoteStream;
+audioTracks.forEach(
+function(track){
 
-      video.muted=false;
-      video.volume=1;
+track.enabled=true;
 
+}
+);
 
-      const audioTracks=
-      remoteStream
-      .getAudioTracks();
+if(audioTracks.length>0){
 
+$("studentAudioBadge")
+.classList.remove("hidden");
 
-      audioTracks.forEach(
-        function(track){
+$("studentLiveStatus").textContent=
+"🔴 Live Class चालू आहे • 🔊 Sir Audio उपलब्ध";
 
-          track.enabled=true;
+}
+else{
 
-        }
-      );
+$("studentLiveStatus").textContent=
+"🔴 Live Class चालू आहे • Audio track सापडला नाही";
 
+}
 
-      if(audioTracks.length>0){
+$("studentJoinArea")
+.classList.add("hidden");
 
-        $("studentAudioBadge")
-        .classList
-        .remove("hidden");
+$("studentLiveArea")
+.classList.remove("hidden");
 
+$("studentLiveBadge")
+.classList.remove("hidden");
 
-        $("studentLiveStatus")
-        .textContent=
-        "🔴 Live Class चालू आहे • 🔊 Sir Audio उपलब्ध";
 
-      }
-      else{
+/*
+=====================================================
+Player screen वर लगेच दाखवा
+=====================================================
+*/
 
-        $("studentLiveStatus")
-        .textContent=
-        "🔴 Live Class चालू आहे • Audio track सापडला नाही";
+video.play()
+.then(function(){
 
-      }
+if(audioTracks.length>0){
 
+$("enableAudioBtn").textContent=
+"🔊 Sir Audio ON";
 
-      $("studentJoinArea")
-      .classList
-      .add("hidden");
+$("enableAudioBtn").style.background=
+"#1769e0";
 
+}
 
-      $("studentLiveArea")
-      .classList
-      .remove("hidden");
+})
+.catch(function(error){
 
+console.log(
+"Autoplay with audio blocked:",
+error
+);
 
-      $("studentLiveBadge")
-      .classList
-      .remove("hidden");
+$("enableAudioBtn")
+.classList.remove("hidden");
 
+});
 
-      /*
-       * Video सुरू करण्याचा प्रयत्न
-       */
 
-      video.play()
-      .then(
-        function(){
+startStudentRecording(remoteStream);
 
-          if(audioTracks.length>0){
+}
+);
 
-            $("enableAudioBtn")
-            .textContent=
-            "🔊 Sir Audio ON";
 
-            $("enableAudioBtn")
-            .style
-            .background=
-            "#1769e0";
+studentCall.on(
+"close",
+function(){
 
-          }
+if(studentRemoteStream){
 
-        }
-      )
-      .catch(
-        function(error){
+stopStudentClass(
+"Live video connection बंद झाली."
+);
 
-          console.log(
-            "Autoplay with audio blocked:",
-            error
-          );
+}
 
+}
+);
 
-          $("enableAudioBtn")
-          .classList
-          .remove("hidden");
+studentCall.on(
+"error",
+function(error){
 
-        }
-      );
+console.error(
+"Student Call Error:",
+error
+);
 
+stopStudentClass(
+"Live video connection बंद झाली."
+);
 
-      startStudentRecording(
-        remoteStream
-      );
+showMessage(
+"Live Error",
+"Sir चा Live video/audio connection बंद झाला.",
+"❌"
+);
 
-    }
-  );
-
-
-  studentCall.on(
-    "close",
-    function(){
-
-      if(studentRemoteStream){
-
-        stopStudentClass(
-          "Live video connection बंद झाली."
-        );
-
-      }
-
-    }
-  );
-
-
-  studentCall.on(
-    "error",
-    function(error){
-
-      console.error(
-        "Student Call Error:",
-        error
-      );
-
-
-      stopStudentClass(
-        "Live video connection बंद झाली."
-      );
-
-
-      showMessage(
-        "Live Error",
-        "Sir चा Live video/audio connection बंद झाला.",
-        "❌"
-      );
-
-    }
-  );
+});
 
 }
 
@@ -4110,118 +3525,66 @@ function startStudentCall(){
 
 async function toggleStudentFullscreen(){
 
-  const player=
-  document.getElementById(
-    "studentVideoWrap"
-  );
+const player=
+$("studentVideoWrap");
+
+const video=
+$("studentVideo");
+
+try{
+
+if(document.fullscreenElement){
+
+await document.exitFullscreen();
+
+return;
+
+}
 
 
-  const video=
-  document.getElementById(
-    "studentVideo"
-  );
+/*
+पहिला प्रयत्न:
+पूर्ण player fullscreen
+*/
+
+if(player.requestFullscreen){
+
+await player.requestFullscreen();
+
+return;
+
+}
 
 
-  if(!player){
-    return;
-  }
+/*
+iPhone / काही mobile browsers
+*/
 
+if(video.webkitEnterFullscreen){
 
-  try{
+video.webkitEnterFullscreen();
 
-    /*
-     * जर आधीच fullscreen असेल
-     * तर exit
-     */
+return;
 
-    if(
-      document.fullscreenElement ||
-      document.webkitFullscreenElement
-    ){
+}
 
-      if(document.exitFullscreen){
+if(video.webkitRequestFullscreen){
 
-        await document.exitFullscreen();
+video.webkitRequestFullscreen();
 
-      }
-      else if(
-        document.webkitExitFullscreen
-      ){
+return;
 
-        document.webkitExitFullscreen();
+}
 
-      }
+}
+catch(error){
 
-      return;
+console.error(
+"Fullscreen error:",
+error
+);
 
-    }
-
-
-    /*
-     * Complete YouTube-style player
-     * fullscreen
-     */
-
-    if(
-      player.requestFullscreen
-    ){
-
-      await player.requestFullscreen();
-
-      return;
-
-    }
-
-
-    /*
-     * iPhone / WebKit fallback
-     */
-
-    if(
-      player.webkitRequestFullscreen
-    ){
-
-      player.webkitRequestFullscreen();
-
-      return;
-
-    }
-
-
-    /*
-     * अंतिम fallback
-     */
-
-    if(
-      video.requestFullscreen
-    ){
-
-      await video.requestFullscreen();
-
-      return;
-
-    }
-
-
-    if(
-      video.webkitRequestFullscreen
-    ){
-
-      video.webkitRequestFullscreen();
-
-      return;
-
-    }
-
-  }
-  catch(error){
-
-    console.error(
-      "Student fullscreen error:",
-      error
-    );
-
-  }
+}
 
 }
 
@@ -4232,81 +3595,70 @@ async function toggleStudentFullscreen(){
 
 function enableStudentAudio(){
 
-  const video=
-  $("studentVideo");
+const video=
+$("studentVideo");
 
+if(!video){
+return;
+}
 
-  if(!video){
-    return;
-  }
+video.muted=false;
 
+video.volume=1;
 
-  video.muted=false;
+if(studentRemoteStream){
 
-  video.volume=1;
+const tracks=
+studentRemoteStream
+.getAudioTracks();
 
+tracks.forEach(
+function(track){
 
-  if(studentRemoteStream){
+track.enabled=true;
 
-    const tracks=
-    studentRemoteStream
-    .getAudioTracks();
+}
+);
 
+}
 
-    tracks.forEach(
-      function(track){
+video.play()
+.then(
+function(){
 
-        track.enabled=true;
+$("enableAudioBtn")
+.textContent=
+"🔊 Sir Audio ON";
 
-      }
-    );
+$("enableAudioBtn")
+.style.background=
+"#1769e0";
 
-  }
+$("studentAudioBadge")
+.classList
+.remove("hidden");
 
+$("studentLiveStatus").textContent=
+"🔴 Live Class चालू आहे • 🔊 Sir Audio ON";
 
-  video.play()
-  .then(
-    function(){
+}
+)
+.catch(
+function(error){
 
-      $("enableAudioBtn")
-      .textContent=
-      "🔊 Sir Audio ON";
+console.error(
+"Audio error:",
+error
+);
 
+showMessage(
+"Audio सुरू झाला नाही",
+"Video वर Play करा आणि फोनचा Media Volume वाढवा.",
+"🔊"
+);
 
-      $("enableAudioBtn")
-      .style
-      .background=
-      "#1769e0";
-
-
-      $("studentAudioBadge")
-      .classList
-      .remove("hidden");
-
-
-      $("studentLiveStatus")
-      .textContent=
-      "🔴 Live Class चालू आहे • 🔊 Sir Audio ON";
-
-    }
-  )
-  .catch(
-    function(error){
-
-      console.error(
-        "Audio error:",
-        error
-      );
-
-
-      showMessage(
-        "Audio सुरू झाला नाही",
-        "Video वर Play करा आणि फोनचा Media Volume वाढवा.",
-        "🔊"
-      );
-
-    }
-  );
+}
+);
 
 }
 
@@ -4315,124 +3667,102 @@ function enableStudentAudio(){
    STUDENT RECORDING
 ===================================================== */
 
-function startStudentRecording(
-  remoteStream
+function startStudentRecording(remoteStream){
+
+if(
+!remoteStream ||
+typeof MediaRecorder==="undefined"
+){
+return;
+}
+
+if(studentRecorder){
+return;
+}
+
+try{
+
+const mimeType=
+getRecorderMimeType();
+
+const recorder=
+mimeType
+? new MediaRecorder(
+remoteStream,
+{mimeType:mimeType}
+)
+: new MediaRecorder(remoteStream);
+
+studentRecorder=recorder;
+
+studentRecordingChunks=[];
+
+recorder.ondataavailable=
+function(event){
+
+if(
+event.data &&
+event.data.size>0
 ){
 
-  if(
-    !remoteStream ||
-    typeof MediaRecorder==="undefined"
-  ){
-    return;
-  }
+studentRecordingChunks.push(
+event.data
+);
 
+}
 
-  if(studentRecorder){
-    return;
-  }
+};
 
+recorder.onstop=
+function(){
 
-  try{
+if(!studentRecordingChunks.length){
 
-    const mimeType=
-    getRecorderMimeType();
+if(studentRecorder===recorder){
+studentRecorder=null;
+}
 
+return;
 
-    const recorder=
-    mimeType
-    ? new MediaRecorder(
-        remoteStream,
-        {mimeType:mimeType}
-      )
-    : new MediaRecorder(
-        remoteStream
-      );
+}
 
+const blob=
+new Blob(
+studentRecordingChunks,
+{
+type:
+recorder.mimeType ||
+"video/webm"
+}
+);
 
-    studentRecorder=
-    recorder;
+saveRecording(
+"Student Watched Class - Video + Audio",
+blob,
+"student"
+);
 
+studentRecordingChunks=[];
 
-    studentRecordingChunks=[];
+if(studentRecorder===recorder){
 
+studentRecorder=null;
 
-    recorder.ondataavailable=
-    function(event){
+}
 
-      if(
-        event.data &&
-        event.data.size>0
-      ){
+};
 
-        studentRecordingChunks
-        .push(event.data);
+recorder.start(1000);
 
-      }
+}
+catch(error){
 
-    };
+console.error(
+"Student recording error:",
+error
+);
 
-
-    recorder.onstop=
-    function(){
-
-      if(
-        !studentRecordingChunks.length
-      ){
-
-        if(
-          studentRecorder===recorder
-        ){
-          studentRecorder=null;
-        }
-
-        return;
-
-      }
-
-
-      const blob=
-      new Blob(
-        studentRecordingChunks,
-        {
-          type:
-          recorder.mimeType ||
-          "video/webm"
-        }
-      );
-
-
-      saveRecording(
-        "Student Watched Class - Video + Audio",
-        blob,
-        "student"
-      );
-
-
-      studentRecordingChunks=[];
-
-
-      if(
-        studentRecorder===recorder
-      ){
-
-        studentRecorder=null;
-
-      }
-
-    };
-
-
-    recorder.start(1000);
-
-  }
-  catch(error){
-
-    console.error(
-      "Student recording error:",
-      error
-    );
-
-  }
+}
 
 }
 
@@ -4443,27 +3773,22 @@ function startStudentRecording(
 
 function stopStudentRecording(){
 
-  if(!studentRecorder){
-    return;
-  }
+if(!studentRecorder){
+return;
+}
 
+const recorder=studentRecorder;
 
-  const recorder=
-  studentRecorder;
+try{
 
+if(recorder.state!=="inactive"){
 
-  try{
+recorder.stop();
 
-    if(
-      recorder.state!=="inactive"
-    ){
+}
 
-      recorder.stop();
-
-    }
-
-  }
-  catch(e){}
+}
+catch(e){}
 
 }
 
@@ -4472,170 +3797,152 @@ function stopStudentRecording(){
    STOP STUDENT
 ===================================================== */
 
-function stopStudentClass(
-  message
-){
+function stopStudentClass(message){
 
-  const hadClass=
-  !!studentCall ||
-  !!studentRemoteStream;
+const hadClass=
+!!studentCall ||
+!!studentRemoteStream;
 
+stopStudentRecording();
 
-  stopStudentRecording();
+if(studentCall){
 
+try{
+studentCall.close();
+}catch(e){}
 
-  if(studentCall){
+studentCall=null;
 
-    try{
-      studentCall.close();
-    }catch(e){}
+}
 
-    studentCall=null;
+if(studentRemoteStream){
 
-  }
+studentRemoteStream
+.getTracks()
+.forEach(
+function(track){
 
+try{
+track.stop();
+}catch(e){}
 
-  if(studentRemoteStream){
+}
+);
 
-    studentRemoteStream
-    .getTracks()
-    .forEach(
-      function(track){
+studentRemoteStream=null;
 
-        try{
-          track.stop();
-        }catch(e){}
+}
 
-      }
-    );
+if(studentOscillator){
 
-    studentRemoteStream=null;
+try{
+studentOscillator.stop();
+}catch(e){}
 
-  }
+studentOscillator=null;
 
+}
 
-  if(studentOscillator){
+if(studentAudioContext){
 
-    try{
-      studentOscillator.stop();
-    }catch(e){}
+try{
+studentAudioContext.close();
+}catch(e){}
 
-    studentOscillator=null;
+studentAudioContext=null;
 
-  }
+}
 
+$("studentVideo").srcObject=null;
 
-  if(studentAudioContext){
+$("studentVideo").muted=false;
 
-    try{
-      studentAudioContext.close();
-    }catch(e){}
+$("studentVideo").volume=1;
 
-    studentAudioContext=null;
+if(studentConnection){
 
-  }
+try{
+studentConnection.close();
+}catch(e){}
 
+studentConnection=null;
 
-  $("studentVideo")
-  .srcObject=null;
+}
 
-  $("studentVideo")
-  .muted=false;
+if(peer){
 
-  $("studentVideo")
-  .volume=1;
+try{
+peer.destroy();
+}catch(e){}
 
+peer=null;
 
-  if(studentConnection){
+}
 
-    try{
-      studentConnection.close();
-    }catch(e){}
+studentHostId=null;
 
-    studentConnection=null;
+$("studentLiveBadge")
+.classList.add("hidden");
 
-  }
+$("studentAudioBadge")
+.classList.add("hidden");
 
+$("studentLiveArea")
+.classList.add("hidden");
 
-  if(peer){
+$("studentJoinArea")
+.classList.remove("hidden");
 
-    try{
-      peer.destroy();
-    }catch(e){}
+$("enableAudioBtn").textContent=
+"🔊 Enable Sir Audio";
 
-    peer=null;
+$("enableAudioBtn").style.background=
+"#1769e0";
 
-  }
+resetStudentJoinButton();
 
+$("studentStatus").textContent=
+"Class बंद झाली.";
 
-  studentHostId=null;
 
+/*
+=====================================================
+Fullscreen मधून बाहेर
+=====================================================
+*/
 
-  $("studentLiveBadge")
-  .classList
-  .add("hidden");
+if(document.fullscreenElement){
 
+document.exitFullscreen()
+.catch(function(){});
 
-  $("studentAudioBadge")
-  .classList
-  .add("hidden");
+}
 
+if(hadClass){
 
-  $("studentLiveArea")
-  .classList
-  .add("hidden");
+setTimeout(
+function(){
 
+loadRecordingsInto(
+"recordingsPopupList"
+);
 
-  $("studentJoinArea")
-  .classList
-  .remove("hidden");
+if(message){
 
+showMessage(
+"Class Ended",
+message+
+"\nVideo + Audio recording save होत आहे.",
+"✅"
+);
 
-  $("enableAudioBtn")
-  .textContent=
-  "🔊 Enable Sir Audio";
+}
 
+},
+500
+);
 
-  $("enableAudioBtn")
-  .style
-  .background=
-  "#1769e0";
-
-
-  resetStudentJoinButton();
-
-
-  $("studentStatus")
-  .textContent=
-  "Class बंद झाली.";
-
-
-  if(hadClass){
-
-    setTimeout(
-      function(){
-
-        loadRecordingsInto(
-          "recordingsPopupList"
-        );
-
-
-        if(message){
-
-          showMessage(
-            "Class Ended",
-            message+
-            "\nVideo + Audio recording save होत आहे.",
-            "✅"
-          );
-
-        }
-
-      },
-      500
-    );
-
-  }
+}
 
 }
 
@@ -4646,13 +3953,12 @@ function stopStudentClass(
 
 function resetStudentJoinButton(){
 
-  $("joinStudentBtn")
-  .disabled=false;
+$("joinStudentBtn")
+.disabled=false;
 
-
-  $("joinStudentBtn")
-  .textContent=
-  "▶️ Start Class";
+$("joinStudentBtn")
+.textContent=
+"▶️ Start Class";
 
 }
 
@@ -4663,84 +3969,77 @@ function resetStudentJoinButton(){
 
 function notifyStudentLeft(){
 
-  if(
-    studentConnection &&
-    studentConnection.open
-  ){
+if(
+studentConnection &&
+studentConnection.open
+){
 
-    try{
+try{
 
-      studentConnection.send({
+studentConnection.send({
+type:"STUDENT_LEFT"
+});
 
-        type:"STUDENT_LEFT"
-
-      });
-
-    }
-    catch(e){}
-
-  }
+}
+catch(e){}
 
 }
 
+}
 
 function leaveStudentClass(){
 
-  notifyStudentLeft();
+notifyStudentLeft();
 
-  stopStudentClass(
-    "तुम्ही Live Class मधून बाहेर पडलात."
-  );
+stopStudentClass(
+"तुम्ही Live Class मधून बाहेर पडलात."
+);
 
 }
 
 
 /* =====================================================
-   FULLSCREEN - OTHER PLAYERS
+   GENERAL FULLSCREEN
 ===================================================== */
 
 async function toggleFullscreen(id){
 
-  const element=$(id);
+const element=$(id);
 
+if(!element){
+return;
+}
 
-  if(!element){
-    return;
-  }
+try{
 
+if(document.fullscreenElement){
 
-  try{
+await document.exitFullscreen();
 
-    if(document.fullscreenElement){
+return;
 
-      await document.exitFullscreen();
+}
 
-      return;
+if(element.requestFullscreen){
 
-    }
+await element.requestFullscreen();
 
+return;
 
-    if(element.requestFullscreen){
+}
 
-      await element.requestFullscreen();
+if(element.webkitRequestFullscreen){
 
-      return;
+element.webkitRequestFullscreen();
 
-    }
+}
 
+}
+catch(error){
 
-    if(element.webkitRequestFullscreen){
+console.error(error);
 
-      element.webkitRequestFullscreen();
-
-    }
-
-  }
-  catch(error){
-
-    console.error(error);
-
-  }
+}
 
 }
 
@@ -4751,23 +4050,19 @@ async function toggleFullscreen(id){
 
 function openRecordedPopup(){
 
-  $("recordedOverlay")
-  .classList
-  .remove("hidden");
+$("recordedOverlay")
+.classList.remove("hidden");
 
-
-  loadRecordingsInto(
-    "recordingsPopupList"
-  );
+loadRecordingsInto(
+"recordingsPopupList"
+);
 
 }
 
-
 function closeRecordedPopup(){
 
-  $("recordedOverlay")
-  .classList
-  .add("hidden");
+$("recordedOverlay")
+.classList.add("hidden");
 
 }
 
@@ -4786,86 +4081,75 @@ const DB_VERSION=1;
 const STORE_NAME=
 "recordings";
 
-
 function openDatabase(){
 
-  return new Promise(
-    function(resolve,reject){
+return new Promise(
+function(resolve,reject){
 
-      if(db){
+if(db){
 
-        resolve(db);
+resolve(db);
 
-        return;
+return;
 
-      }
+}
 
+const request=
+indexedDB.open(
+DB_NAME,
+DB_VERSION
+);
 
-      const request=
-      indexedDB.open(
-        DB_NAME,
-        DB_VERSION
-      );
+request.onupgradeneeded=
+function(event){
 
+const database=
+event.target.result;
 
-      request.onupgradeneeded=
-      function(event){
+if(
+!database.objectStoreNames
+.contains(STORE_NAME)
+){
 
-        const database=
-        event.target.result;
+const store=
+database.createObjectStore(
+STORE_NAME,
+{
+keyPath:"id",
+autoIncrement:true
+}
+);
 
+store.createIndex(
+"createdAt",
+"createdAt",
+{
+unique:false
+}
+);
 
-        if(
-          !database
-          .objectStoreNames
-          .contains(STORE_NAME)
-        ){
+}
 
-          const store=
-          database.createObjectStore(
-            STORE_NAME,
-            {
-              keyPath:"id",
-              autoIncrement:true
-            }
-          );
+};
 
+request.onsuccess=
+function(event){
 
-          store.createIndex(
-            "createdAt",
-            "createdAt",
-            {
-              unique:false
-            }
-          );
+db=event.target.result;
 
-        }
+resolve(db);
 
-      };
+};
 
+request.onerror=
+function(){
 
-      request.onsuccess=
-      function(event){
+reject(request.error);
 
-        db=
-        event.target.result;
+};
 
-        resolve(db);
-
-      };
-
-
-      request.onerror=
-      function(){
-
-        reject(
-          request.error
-        );
-
-      };
-
-    }
-  );
+}
+);
 
 }
 
@@ -4875,97 +4159,89 @@ function openDatabase(){
 ===================================================== */
 
 function saveRecording(
-  title,
-  blob,
-  type
+title,
+blob,
+type
 ){
 
-  if(
-    !blob ||
-    blob.size===0
-  ){
-    return;
-  }
+if(
+!blob ||
+blob.size===0
+){
+return;
+}
 
+openDatabase()
+.then(
+function(database){
 
-  openDatabase()
-  .then(
-    function(database){
+return new Promise(
+function(resolve,reject){
 
-      return new Promise(
-        function(resolve,reject){
+const transaction=
+database.transaction(
+[STORE_NAME],
+"readwrite"
+);
 
-          const transaction=
-          database.transaction(
-            [STORE_NAME],
-            "readwrite"
-          );
+const store=
+transaction.objectStore(
+STORE_NAME
+);
 
+store.add({
 
-          const store=
-          transaction
-          .objectStore(
-            STORE_NAME
-          );
+title:title,
 
+blob:blob,
 
-          store.add({
+type:type,
 
-            title:title,
+createdAt:
+new Date().toISOString(),
 
-            blob:blob,
+size:blob.size
 
-            type:type,
+});
 
-            createdAt:
-            new Date().toISOString(),
+transaction.oncomplete=
+function(){
 
-            size:blob.size
+resolve();
 
-          });
+};
 
+transaction.onerror=
+function(){
 
-          transaction.oncomplete=
-          function(){
+reject(transaction.error);
 
-            resolve();
+};
 
-          };
+}
+);
 
+}
+)
+.then(
+function(){
 
-          transaction.onerror=
-          function(){
+loadRecordingsInto(
+"recordingsPopupList"
+);
 
-            reject(
-              transaction.error
-            );
+}
+)
+.catch(
+function(error){
 
-          };
+console.error(
+"Save recording error:",
+error
+);
 
-        }
-      );
-
-    }
-  )
-  .then(
-    function(){
-
-      loadRecordingsInto(
-        "recordingsPopupList"
-      );
-
-    }
-  )
-  .catch(
-    function(error){
-
-      console.error(
-        "Save recording error:",
-        error
-      );
-
-    }
-  );
+}
+);
 
 }
 
@@ -4976,72 +4252,59 @@ function saveRecording(
 
 function getAllRecordings(){
 
-  return openDatabase()
-  .then(
-    function(database){
+return openDatabase()
+.then(
+function(database){
 
-      return new Promise(
-        function(resolve,reject){
+return new Promise(
+function(resolve,reject){
 
-          const transaction=
-          database.transaction(
-            [STORE_NAME],
-            "readonly"
-          );
+const transaction=
+database.transaction(
+[STORE_NAME],
+"readonly"
+);
 
+const store=
+transaction.objectStore(
+STORE_NAME
+);
 
-          const store=
-          transaction
-          .objectStore(
-            STORE_NAME
-          );
+const request=
+store.getAll();
 
+request.onsuccess=
+function(){
 
-          const request=
-          store.getAll();
+const records=
+request.result || [];
 
+records.sort(
+function(a,b){
 
-          request.onsuccess=
-          function(){
+return new Date(b.createdAt)
+-
+new Date(a.createdAt);
 
-            const records=
-            request.result || [];
+}
+);
 
+resolve(records);
 
-            records.sort(
-              function(a,b){
+};
 
-                return new Date(
-                  b.createdAt
-                )
-                -
-                new Date(
-                  a.createdAt
-                );
+request.onerror=
+function(){
 
-              }
-            );
+reject(request.error);
 
+};
 
-            resolve(records);
+}
+);
 
-          };
-
-
-          request.onerror=
-          function(){
-
-            reject(
-              request.error
-            );
-
-          };
-
-        }
-      );
-
-    }
-  );
+}
+);
 
 }
 
@@ -5052,24 +4315,24 @@ function getAllRecordings(){
 
 function loadRecordingsInto(id){
 
-  getAllRecordings()
-  .then(
-    function(records){
+getAllRecordings()
+.then(
+function(records){
 
-      renderRecordingContainer(
-        $(id),
-        records
-      );
+renderRecordingContainer(
+$(id),
+records
+);
 
-    }
-  )
-  .catch(
-    function(error){
+}
+)
+.catch(
+function(error){
 
-      console.error(error);
+console.error(error);
 
-    }
-  );
+}
+);
 
 }
 
@@ -5079,200 +4342,147 @@ function loadRecordingsInto(id){
 ===================================================== */
 
 function renderRecordingContainer(
-  container,
-  recordings
+container,
+recordings
 ){
 
-  if(!container){
-    return;
-  }
+if(!container){
+return;
+}
 
+container.innerHTML="";
 
-  container.innerHTML="";
+if(
+!recordings ||
+recordings.length===0
+){
 
+const empty=
+document.createElement("div");
 
-  if(
-    !recordings ||
-    recordings.length===0
-  ){
+empty.className=
+"empty-recordings";
 
-    const empty=
-    document.createElement("div");
+empty.textContent=
+"अजून कोणतीही Recorded Class नाही.";
 
+container.appendChild(empty);
 
-    empty.className=
-    "empty-recordings";
+return;
 
+}
 
-    empty.textContent=
-    "अजून कोणतीही Recorded Class नाही.";
+recordings.forEach(
+function(recording){
 
+const card=
+document.createElement("div");
 
-    container.appendChild(empty);
+card.className="record-card";
 
-    return;
+const title=
+document.createElement("div");
 
-  }
+title.className="record-title";
 
+title.textContent=
+recording.title ||
+"GyanSetu Live Class";
 
-  recordings.forEach(
-    function(recording){
+const type=
+document.createElement("span");
 
-      const card=
-      document.createElement("div");
+type.className="record-type";
 
+type.textContent=
+recording.type==="sir"
+? "👨‍🏫 Sir Class • 🎤 Audio"
+: "👨‍🎓 Student Class • 🔊 Audio";
 
-      card.className=
-      "record-card";
+const date=
+document.createElement("div");
 
+date.className="record-date";
 
-      const title=
-      document.createElement("div");
+date.textContent=
+formatDate(recording.createdAt);
 
+const size=
+document.createElement("div");
 
-      title.className=
-      "record-title";
+size.className="record-size";
 
+size.textContent=
+formatFileSize(
+recording.size ||
+recording.blob?.size ||
+0
+);
 
-      title.textContent=
-      recording.title ||
-      "GyanSetu Live Class";
+const actions=
+document.createElement("div");
 
+actions.className="record-actions";
 
-      const type=
-      document.createElement("span");
+const watch=
+document.createElement("button");
 
+watch.className=
+"small-btn watch-btn";
 
-      type.className=
-      "record-type";
+watch.textContent="▶️ Watch";
 
+watch.onclick=
+function(){
 
-      type.textContent=
-      recording.type==="sir"
-      ? "👨‍🏫 Sir Class • 🎤 Audio"
-      : "👨‍🎓 Student Class • 🔊 Audio";
+playRecording(recording);
 
+};
 
-      const date=
-      document.createElement("div");
+const download=
+document.createElement("button");
 
+download.className=
+"small-btn download-btn";
 
-      date.className=
-      "record-date";
+download.textContent="⬇️ Download";
 
+download.onclick=
+function(){
 
-      date.textContent=
-      formatDate(
-        recording.createdAt
-      );
+downloadRecording(recording);
 
+};
 
-      const size=
-      document.createElement("div");
+const remove=
+document.createElement("button");
 
+remove.className=
+"small-btn delete-btn";
 
-      size.className=
-      "record-size";
+remove.textContent="🗑️ Delete";
 
+remove.onclick=
+function(){
 
-      size.textContent=
-      formatFileSize(
-        recording.size ||
-        recording.blob?.size ||
-        0
-      );
+deleteRecording(recording.id);
 
+};
 
-      const actions=
-      document.createElement("div");
+actions.appendChild(watch);
+actions.appendChild(download);
+actions.appendChild(remove);
 
+card.appendChild(title);
+card.appendChild(type);
+card.appendChild(date);
+card.appendChild(size);
+card.appendChild(actions);
 
-      actions.className=
-      "record-actions";
+container.appendChild(card);
 
-
-      const watch=
-      document.createElement("button");
-
-
-      watch.className=
-      "small-btn watch-btn";
-
-
-      watch.textContent=
-      "▶️ Watch";
-
-
-      watch.onclick=
-      function(){
-
-        playRecording(
-          recording
-        );
-
-      };
-
-
-      const download=
-      document.createElement("button");
-
-
-      download.className=
-      "small-btn download-btn";
-
-
-      download.textContent=
-      "⬇️ Download";
-
-
-      download.onclick=
-      function(){
-
-        downloadRecording(
-          recording
-        );
-
-      };
-
-
-      const remove=
-      document.createElement("button");
-
-
-      remove.className=
-      "small-btn delete-btn";
-
-
-      remove.textContent=
-      "🗑️ Delete";
-
-
-      remove.onclick=
-      function(){
-
-        deleteRecording(
-          recording.id
-        );
-
-      };
-
-
-      actions.appendChild(watch);
-      actions.appendChild(download);
-      actions.appendChild(remove);
-
-
-      card.appendChild(title);
-      card.appendChild(type);
-      card.appendChild(date);
-      card.appendChild(size);
-      card.appendChild(actions);
-
-
-      container.appendChild(card);
-
-    }
-  );
+}
+);
 
 }
 
@@ -5283,67 +4493,53 @@ function renderRecordingContainer(
 
 function playRecording(recording){
 
-  if(
-    !recording ||
-    !recording.blob
-  ){
+if(
+!recording ||
+!recording.blob
+){
 
-    showMessage(
-      "Video Error",
-      "Recording file उपलब्ध नाही.",
-      "❌"
-    );
+showMessage(
+"Video Error",
+"Recording file उपलब्ध नाही.",
+"❌"
+);
 
-    return;
+return;
 
-  }
+}
 
+if(currentPlaybackUrl){
 
-  if(currentPlaybackUrl){
+URL.revokeObjectURL(
+currentPlaybackUrl
+);
 
-    URL.revokeObjectURL(
-      currentPlaybackUrl
-    );
+currentPlaybackUrl=null;
 
-    currentPlaybackUrl=null;
+}
 
-  }
+currentPlaybackUrl=
+URL.createObjectURL(
+recording.blob
+);
 
+$("recordingVideo").src=
+currentPlaybackUrl;
 
-  currentPlaybackUrl=
-  URL.createObjectURL(
-    recording.blob
-  );
+$("recordingVideo").muted=false;
 
+$("recordingVideo").volume=1;
 
-  $("recordingVideo")
-  .src=
-  currentPlaybackUrl;
+$("playerTitle").textContent=
+recording.title ||
+"🎬 Recorded Class";
 
+$("playerOverlay")
+.classList.remove("hidden");
 
-  $("recordingVideo")
-  .muted=false;
-
-  $("recordingVideo")
-  .volume=1;
-
-
-  $("playerTitle")
-  .textContent=
-  recording.title ||
-  "🎬 Recorded Class";
-
-
-  $("playerOverlay")
-  .classList
-  .remove("hidden");
-
-
-  $("recordingVideo")
-  .play()
-  .catch(
-    function(){}
-  );
+$("recordingVideo")
+.play()
+.catch(function(){});
 
 }
 
@@ -5354,34 +4550,29 @@ function playRecording(recording){
 
 function closePlayerPopup(){
 
-  const video=
-  $("recordingVideo");
+const video=
+$("recordingVideo");
 
+try{
+video.pause();
+}catch(e){}
 
-  try{
-    video.pause();
-  }catch(e){}
+video.removeAttribute("src");
 
+video.load();
 
-  video.removeAttribute("src");
+if(currentPlaybackUrl){
 
-  video.load();
+URL.revokeObjectURL(
+currentPlaybackUrl
+);
 
+currentPlaybackUrl=null;
 
-  if(currentPlaybackUrl){
+}
 
-    URL.revokeObjectURL(
-      currentPlaybackUrl
-    );
-
-    currentPlaybackUrl=null;
-
-  }
-
-
-  $("playerOverlay")
-  .classList
-  .add("hidden");
+$("playerOverlay")
+.classList.add("hidden");
 
 }
 
@@ -5390,54 +4581,45 @@ function closePlayerPopup(){
    DOWNLOAD
 ===================================================== */
 
-function downloadRecording(
-  recording
+function downloadRecording(recording){
+
+if(
+!recording ||
+!recording.blob
 ){
+return;
+}
 
-  if(
-    !recording ||
-    !recording.blob
-  ){
-    return;
-  }
+const url=
+URL.createObjectURL(
+recording.blob
+);
 
+const a=
+document.createElement("a");
 
-  const url=
-  URL.createObjectURL(
-    recording.blob
-  );
+a.href=url;
 
+a.download=
+safeFileName(
+recording.title ||
+"GyanSetu Recorded Class"
+)+".webm";
 
-  const a=
-  document.createElement("a");
+document.body.appendChild(a);
 
+a.click();
 
-  a.href=url;
+a.remove();
 
+setTimeout(
+function(){
 
-  a.download=
-  safeFileName(
-    recording.title ||
-    "GyanSetu Recorded Class"
-  )+
-  ".webm";
+URL.revokeObjectURL(url);
 
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-
-  setTimeout(
-    function(){
-
-      URL.revokeObjectURL(url);
-
-    },
-    1000
-  );
+},
+1000
+);
 
 }
 
@@ -5448,73 +4630,65 @@ function downloadRecording(
 
 function deleteRecording(id){
 
-  if(!id){
-    return;
-  }
+if(!id){
+return;
+}
 
+openDatabase()
+.then(
+function(database){
 
-  openDatabase()
-  .then(
-    function(database){
+return new Promise(
+function(resolve,reject){
 
-      return new Promise(
-        function(resolve,reject){
+const transaction=
+database.transaction(
+[STORE_NAME],
+"readwrite"
+);
 
-          const transaction=
-          database.transaction(
-            [STORE_NAME],
-            "readwrite"
-          );
+const store=
+transaction.objectStore(
+STORE_NAME
+);
 
+store.delete(id);
 
-          const store=
-          transaction
-          .objectStore(
-            STORE_NAME
-          );
+transaction.oncomplete=
+function(){
 
+resolve();
 
-          store.delete(id);
+};
 
+transaction.onerror=
+function(){
 
-          transaction.oncomplete=
-          function(){
+reject(transaction.error);
 
-            resolve();
+};
 
-          };
+}
+);
 
+}
+)
+.then(
+function(){
 
-          transaction.onerror=
-          function(){
+loadRecordingsInto(
+"recordingsPopupList"
+);
 
-            reject(
-              transaction.error
-            );
+}
+)
+.catch(
+function(error){
 
-          };
+console.error(error);
 
-        }
-      );
-
-    }
-  )
-  .then(
-    function(){
-
-      loadRecordingsInto(
-        "recordingsPopupList"
-      );
-
-    }
-  )
-  .catch(
-    function(error){
-
-      console.error(error);
-
-    }
-  );
+}
+);
 
 }
 
@@ -5525,91 +4699,82 @@ function deleteRecording(id){
 
 function formatDate(date){
 
-  try{
+try{
 
-    return new Date(date)
-    .toLocaleString(
-      "en-IN",
-      {
-        dateStyle:"medium",
-        timeStyle:"short"
-      }
-    );
+return new Date(date)
+.toLocaleString(
+"en-IN",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+);
 
-  }
-  catch(e){
+}
+catch(e){
 
-    return String(
-      date || ""
-    );
-
-  }
+return String(date || "");
 
 }
 
+}
 
 function formatFileSize(bytes){
 
-  if(
-    !bytes ||
-    bytes<=0
-  ){
+if(
+!bytes ||
+bytes<=0
+){
 
-    return "0 KB";
-
-  }
-
-
-  const units=[
-    "Bytes",
-    "KB",
-    "MB",
-    "GB"
-  ];
-
-
-  let index=0;
-
-  let size=bytes;
-
-
-  while(
-    size>=1024 &&
-    index<units.length-1
-  ){
-
-    size/=1024;
-
-    index++;
-
-  }
-
-
-  return size.toFixed(
-    index===0 ? 0 : 2
-  )+
-  " "+
-  units[index];
+return "0 KB";
 
 }
 
+const units=[
+"Bytes",
+"KB",
+"MB",
+"GB"
+];
+
+let index=0;
+
+let size=bytes;
+
+while(
+size>=1024 &&
+index<units.length-1
+){
+
+size/=1024;
+
+index++;
+
+}
+
+return size.toFixed(
+index===0 ? 0 : 2
+)+" "+
+units[index];
+
+}
 
 function safeFileName(value){
 
-  return String(
-    value ||
-    "recording"
-  )
-  .replace(
-    /[<>:"/\\|?*\x00-\x1F]/g,
-    "_"
-  )
-  .replace(
-    /\s+/g,
-    " "
-  )
-  .trim()
-  .slice(0,80);
+return String(
+value ||
+"recording"
+)
+.replace(
+/[<>:"/\\|?*\x00-\x1F]/g,
+"_"
+)
+.replace(
+/\s+/g,
+" "
+)
+.trim()
+.slice(0,80);
 
 }
 
@@ -5620,58 +4785,55 @@ function safeFileName(value){
 
 $("channelInput")
 .addEventListener(
-  "input",
-  function(){
+"input",
+function(){
 
-    this.value=
-    this.value
-    .trim()
-    .slice(0,100);
+this.value=
+this.value
+.trim()
+.slice(0,100);
 
-  }
+}
 );
-
 
 $("channelInput")
 .addEventListener(
-  "keydown",
-  function(event){
+"keydown",
+function(event){
 
-    if(event.key==="Enter"){
+if(event.key==="Enter"){
 
-      joinStudentClass();
+joinStudentClass();
 
-    }
+}
 
-  }
+}
 );
-
 
 $("createChannelName")
 .addEventListener(
-  "input",
-  function(){
+"input",
+function(){
 
-    this.value=
-    this.value
-    .replace(/\s+/g," ")
-    .slice(0,80);
+this.value=
+this.value
+.replace(/\s+/g," ")
+.slice(0,80);
 
-  }
+}
 );
-
 
 $("channelNameInput")
 .addEventListener(
-  "input",
-  function(){
+"input",
+function(){
 
-    this.value=
-    this.value
-    .replace(/\s+/g," ")
-    .slice(0,80);
+this.value=
+this.value
+.replace(/\s+/g," ")
+.slice(0,80);
 
-  }
+}
 );
 
 
@@ -5681,131 +4843,104 @@ $("channelNameInput")
 
 $("roleOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("roleOverlay")
-    ){
+if(event.target===$("roleOverlay")){
 
-      closeRolePopup();
+closeRolePopup();
 
-    }
+}
 
-  }
+}
 );
-
 
 $("sirOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("sirOverlay")
-    ){
+if(event.target===$("sirOverlay")){
 
-      closeSirPopup();
+closeSirPopup();
 
-    }
+}
 
-  }
+}
 );
-
 
 $("studentOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("studentOverlay")
-    ){
+if(event.target===$("studentOverlay")){
 
-      if(!studentCall){
+if(!studentCall){
 
-        closeStudentPopup();
+closeStudentPopup();
 
-      }
+}
 
-    }
+}
 
-  }
+}
 );
-
 
 $("recordedOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("recordedOverlay")
-    ){
+if(event.target===$("recordedOverlay")){
 
-      closeRecordedPopup();
+closeRecordedPopup();
 
-    }
+}
 
-  }
+}
 );
-
 
 $("playerOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("playerOverlay")
-    ){
+if(event.target===$("playerOverlay")){
 
-      closePlayerPopup();
+closePlayerPopup();
 
-    }
+}
 
-  }
+}
 );
-
 
 $("channelEditOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("channelEditOverlay")
-    ){
+if(event.target===$("channelEditOverlay")){
 
-      closeEditChannelPopup();
+closeEditChannelPopup();
 
-    }
+}
 
-  }
+}
 );
-
 
 $("liveChannelsOverlay")
 .addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      event.target===
-      $("liveChannelsOverlay")
-    ){
+if(event.target===$("liveChannelsOverlay")){
 
-      closeLiveChannels();
+closeLiveChannels();
 
-    }
+}
 
-  }
+}
 );
 
 
@@ -5814,17 +4949,16 @@ $("liveChannelsOverlay")
 ===================================================== */
 
 window.addEventListener(
-  "beforeunload",
-  function(){
+"beforeunload",
+function(){
 
-    if(studentConnection){
+if(studentConnection){
 
-      notifyStudentLeft();
+notifyStudentLeft();
 
-    }
+}
 
-  }
-);
+});
 
 
 /* =====================================================
@@ -5832,16 +4966,15 @@ window.addEventListener(
 ===================================================== */
 
 supabaseClient.auth.onAuthStateChange(
-  async(
-    event,
-    session
-  )=>{
+async(
+event,
+session
+)=>{
 
-    currentUser=
-    session?.user || null;
+currentUser=
+session?.user || null;
 
-  }
-);
+});
 
 
 /* =====================================================
@@ -5849,32 +4982,30 @@ supabaseClient.auth.onAuthStateChange(
 ===================================================== */
 
 document.addEventListener(
-  "DOMContentLoaded",
-  async function(){
+"DOMContentLoaded",
+async function(){
 
-    await loadCurrentUser();
+await loadCurrentUser();
 
+openDatabase()
+.then(
+function(){
 
-    openDatabase()
-    .then(
-      function(){
-
-        loadRecordingsInto(
-          "recordingsPopupList"
-        );
-
-      }
-    )
-    .catch(
-      function(error){
-
-        console.error(error);
-
-      }
-    );
-
-  }
+loadRecordingsInto(
+"recordingsPopupList"
 );
+
+}
+)
+.catch(
+function(error){
+
+console.error(error);
+
+}
+);
+
+});
 
 </script>
 
