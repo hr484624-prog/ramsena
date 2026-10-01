@@ -1,913 +1,4212 @@
 <!DOCTYPE html>
 <html lang="mr">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <title>GyanSetu - Live Classes</title>
+<meta charset="UTF-8">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #172033;
-    }
+<title>GyanSetu - Live Classes</title>
 
-    /* HEADER */
-    .header {
-      background: linear-gradient(135deg, #1565c0, #42a5f5);
-      color: white;
-      padding: 18px 16px 24px;
-      border-radius: 0 0 25px 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
-    .brand {
-      font-size: 23px;
-      font-weight: bold;
-    }
+<style>
 
-    .profile {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 21px;
-    }
+/* =====================================================
+   RESET
+===================================================== */
 
-    .welcome {
-      margin-top: 22px;
-    }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-    .welcome h1 {
-      margin: 0;
-      font-size: 27px;
-    }
+html,
+body{
+  width:100%;
+  min-height:100%;
+}
 
-    .welcome p {
-      margin: 7px 0 0;
-      opacity: 0.9;
-      font-size: 14px;
-    }
+body{
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    /* SEARCH */
-    .search-box {
-      margin: 18px 0;
-      position: relative;
-    }
+  background:#f8f9fa;
 
-    .search-box input {
-      width: 100%;
-      padding: 15px 18px;
-      border: none;
-      outline: none;
-      border-radius: 15px;
-      font-size: 15px;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-    }
+  color:#0f0f0f;
 
-    /* FILTER */
-    .filters {
-      display: flex;
-      gap: 9px;
-      overflow-x: auto;
-      padding-bottom: 5px;
-    }
+  overflow-x:hidden;
+}
 
-    .filters::-webkit-scrollbar {
-      display: none;
-    }
+button,
+input{
+  font-family:inherit;
+}
 
-    .filter-btn {
-      border: none;
-      background: white;
-      color: #1565c0;
-      padding: 10px 16px;
-      border-radius: 30px;
-      white-space: nowrap;
-      font-weight: bold;
-      cursor: pointer;
-    }
 
-    .filter-btn.active {
-      background: #1565c0;
-      color: white;
-    }
+/* =====================================================
+   HEADER
+===================================================== */
 
-    /* MAIN */
-    .container {
-      padding: 20px 15px 90px;
-      max-width: 900px;
-      margin: auto;
-    }
+.header{
 
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 8px 0 15px;
-    }
+  position:sticky;
 
-    .section-title h2 {
-      margin: 0;
-      font-size: 21px;
-    }
+  top:0;
 
-    .live-count {
-      color: #e53935;
-      font-size: 13px;
-      font-weight: bold;
-    }
+  z-index:1000;
 
-    /* CLASS CARD */
-    .class-card {
-      background: white;
-      border-radius: 20px;
-      margin-bottom: 17px;
-      padding: 16px;
-      box-shadow: 0 5px 18px rgba(0,0,0,0.07);
-      transition: 0.2s;
-    }
+  height:64px;
 
-    .class-card:hover {
-      transform: translateY(-2px);
-    }
+  background:#ffffff;
 
-    .card-top {
-      display: flex;
-      gap: 14px;
-    }
+  border-bottom:1px solid #e5e5e5;
 
-    .teacher-img {
-      width: 62px;
-      height: 62px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      flex-shrink: 0;
-    }
+  display:flex;
 
-    .class-info {
-      flex: 1;
-    }
+  align-items:center;
 
-    .live-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      background: #ffebee;
-      color: #d32f2f;
-      padding: 5px 9px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: bold;
-    }
+  padding:
+    0 18px;
 
-    .live-dot {
-      width: 7px;
-      height: 7px;
-      background: #e53935;
-      border-radius: 50%;
-      animation: blink 1s infinite;
-    }
+  gap:20px;
+}
 
-    @keyframes blink {
-      50% {
-        opacity: 0.25;
-      }
-    }
+.menu-btn{
 
-    .class-title {
-      margin: 8px 0 4px;
-      font-size: 18px;
-      font-weight: bold;
-    }
+  width:42px;
+  height:42px;
 
-    .teacher {
-      margin: 0;
-      color: #697386;
-      font-size: 13px;
-    }
+  border:none;
 
-    .details {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 15px;
-    }
+  background:transparent;
 
-    .detail {
-      background: #f1f5f9;
-      padding: 8px 10px;
-      border-radius: 9px;
-      font-size: 12px;
-      color: #475569;
-    }
+  border-radius:50%;
 
-    .card-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-top: 16px;
-    }
+  font-size:24px;
 
-    .students {
-      font-size: 12px;
-      color: #7a8494;
-    }
+  cursor:pointer;
+}
 
-    .join-btn {
-      border: none;
-      background: linear-gradient(135deg, #1565c0, #2196f3);
-      color: white;
-      padding: 11px 20px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
+.menu-btn:hover{
 
-    .join-btn:active {
-      transform: scale(0.96);
-    }
+  background:#f2f2f2;
+}
 
-    /* UPCOMING */
-    .upcoming {
-      border-left: 4px solid #1565c0;
-    }
+.logo{
 
-    .upcoming .join-btn {
-      background: #e3f2fd;
-      color: #1565c0;
-    }
+  display:flex;
 
-    /* EMPTY */
-    .empty {
-      display: none;
-      text-align: center;
-      background: white;
-      padding: 35px 20px;
-      border-radius: 18px;
-      color: #7a8494;
-    }
+  align-items:center;
 
-    .empty-icon {
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
+  gap:7px;
 
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 67px;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-      z-index: 100;
-    }
+  font-size:21px;
 
-    .nav-item {
-      text-align: center;
-      color: #7b8494;
-      font-size: 11px;
-      cursor: pointer;
-    }
+  font-weight:700;
 
-    .nav-icon {
-      font-size: 22px;
-      margin-bottom: 3px;
-    }
+  white-space:nowrap;
+}
 
-    .nav-item.active {
-      color: #1565c0;
-      font-weight: bold;
-    }
+.logo-icon{
 
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.65);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+  font-size:25px;
+}
 
-    .modal-box {
-      width: 100%;
-      max-width: 500px;
-      background: white;
-      border-radius: 22px;
-      padding: 20px;
-      text-align: center;
-    }
+.logo-text{
 
-    .modal-box h2 {
-      margin-top: 0;
-    }
+  color:#111;
+}
 
-    .video-area {
-      height: 220px;
-      border-radius: 15px;
-      background: #111827;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 10px;
-      margin: 15px 0;
-    }
+.logo-text span{
 
-    .video-icon {
-      font-size: 48px;
-    }
+  color:#1565c0;
+}
 
-    .close-btn {
-      border: none;
-      background: #e5e7eb;
-      padding: 11px 25px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
 
-    @media (min-width: 700px) {
-      .class-list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 17px;
-      }
+/* =====================================================
+   SEARCH
+===================================================== */
 
-      .class-card {
-        margin-bottom: 0;
-      }
+.header-search{
 
-      .welcome h1 {
-        font-size: 32px;
-      }
-    }
-  </style>
+  flex:1;
+
+  max-width:650px;
+
+  margin:auto;
+
+  display:flex;
+
+  height:42px;
+}
+
+.header-search input{
+
+  flex:1;
+
+  border:
+    1px solid #ccc;
+
+  border-right:none;
+
+  border-radius:
+    22px 0 0 22px;
+
+  padding:
+    0 18px;
+
+  outline:none;
+
+  font-size:15px;
+
+  background:#fff;
+}
+
+.header-search input:focus{
+
+  border-color:#1c62b9;
+}
+
+.search-btn{
+
+  width:62px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius:
+    0 22px 22px 0;
+
+  background:#f8f8f8;
+
+  font-size:20px;
+
+  cursor:pointer;
+}
+
+.search-btn:hover{
+
+  background:#eee;
+}
+
+
+/* =====================================================
+   HEADER RIGHT
+===================================================== */
+
+.header-right{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+}
+
+.header-icon{
+
+  width:42px;
+  height:42px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:transparent;
+
+  font-size:20px;
+
+  cursor:pointer;
+}
+
+.header-icon:hover{
+
+  background:#f2f2f2;
+}
+
+.profile{
+
+  width:38px;
+  height:38px;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #1565c0,
+      #42a5f5
+    );
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:19px;
+}
+
+
+/* =====================================================
+   PAGE LAYOUT
+===================================================== */
+
+.page{
+
+  display:flex;
+
+  min-height:
+    calc(100vh - 64px);
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar{
+
+  width:235px;
+
+  background:#fff;
+
+  border-right:
+    1px solid #e5e5e5;
+
+  padding:
+    15px 10px;
+
+  flex-shrink:0;
+
+  transition:
+    .25s;
+}
+
+.sidebar-item{
+
+  width:100%;
+
+  border:none;
+
+  background:transparent;
+
+  padding:
+    12px 16px;
+
+  border-radius:10px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:18px;
+
+  font-size:14px;
+
+  text-align:left;
+
+  cursor:pointer;
+
+  color:#222;
+}
+
+.sidebar-item:hover{
+
+  background:#f2f2f2;
+}
+
+.sidebar-item.active{
+
+  background:#e8f0fe;
+
+  color:#1565c0;
+
+  font-weight:bold;
+}
+
+.sidebar-icon{
+
+  width:25px;
+
+  text-align:center;
+
+  font-size:21px;
+}
+
+.sidebar-title{
+
+  font-size:14px;
+}
+
+.sidebar-divider{
+
+  height:1px;
+
+  background:#e5e5e5;
+
+  margin:
+    15px 5px;
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.content{
+
+  flex:1;
+
+  min-width:0;
+
+  padding:
+    20px 24px 90px;
+}
+
+
+/* =====================================================
+   FILTER BAR
+===================================================== */
+
+.filter-bar{
+
+  display:flex;
+
+  gap:10px;
+
+  overflow-x:auto;
+
+  padding-bottom:12px;
+
+  scrollbar-width:none;
+}
+
+.filter-bar::-webkit-scrollbar{
+
+  display:none;
+}
+
+.filter-btn{
+
+  border:none;
+
+  background:#f0f0f0;
+
+  color:#111;
+
+  padding:
+    9px 16px;
+
+  border-radius:9px;
+
+  white-space:nowrap;
+
+  font-size:14px;
+
+  cursor:pointer;
+}
+
+.filter-btn:hover{
+
+  background:#ddd;
+}
+
+.filter-btn.active{
+
+  background:#0f0f0f;
+
+  color:#fff;
+}
+
+
+/* =====================================================
+   TITLE
+===================================================== */
+
+.page-heading{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin:
+    20px 0 16px;
+}
+
+.page-heading h1{
+
+  font-size:23px;
+}
+
+.live-counter{
+
+  color:#d93025;
+
+  font-weight:bold;
+
+  font-size:13px;
+}
+
+
+/* =====================================================
+   CLASS GRID
+===================================================== */
+
+.class-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(
+        280px,
+        1fr
+      )
+    );
+
+  gap:20px;
+}
+
+
+/* =====================================================
+   CLASS CARD
+===================================================== */
+
+.class-card{
+
+  background:#fff;
+
+  border:
+    1px solid #e5e5e5;
+
+  border-radius:13px;
+
+  overflow:hidden;
+
+  cursor:pointer;
+
+  transition:
+    transform .18s,
+    box-shadow .18s;
+}
+
+.class-card:hover{
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 5px 20px
+    rgba(
+      0,
+      0,
+      0,
+      .10
+    );
+}
+
+
+/* =====================================================
+   CARD THUMBNAIL
+===================================================== */
+
+.thumbnail{
+
+  height:175px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0f172a,
+      #1e3a5f
+    );
+
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  overflow:hidden;
+}
+
+.thumbnail-icon{
+
+  font-size:58px;
+
+  opacity:.9;
+}
+
+.thumbnail-live{
+
+  position:absolute;
+
+  left:10px;
+
+  top:10px;
+
+  background:#ff0000;
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:bold;
+
+  padding:
+    5px 8px;
+
+  border-radius:4px;
+}
+
+.thumbnail-upcoming{
+
+  position:absolute;
+
+  left:10px;
+
+  top:10px;
+
+  background:#1565c0;
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:bold;
+
+  padding:
+    5px 8px;
+
+  border-radius:4px;
+}
+
+.thumbnail-time{
+
+  position:absolute;
+
+  right:10px;
+
+  bottom:10px;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .8
+    );
+
+  color:#fff;
+
+  padding:
+    4px 7px;
+
+  border-radius:4px;
+
+  font-size:11px;
+}
+
+
+/* =====================================================
+   CARD BODY
+===================================================== */
+
+.card-body{
+
+  padding:13px;
+}
+
+.card-title{
+
+  font-size:16px;
+
+  font-weight:600;
+
+  line-height:1.35;
+
+  margin-bottom:7px;
+}
+
+.card-teacher{
+
+  font-size:13px;
+
+  color:#606060;
+
+  margin-bottom:10px;
+}
+
+.card-meta{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:10px;
+}
+
+.card-subject{
+
+  background:#f1f3f4;
+
+  padding:
+    5px 8px;
+
+  border-radius:6px;
+
+  font-size:11px;
+
+  color:#555;
+}
+
+.card-join{
+
+  border:none;
+
+  background:#1565c0;
+
+  color:#fff;
+
+  padding:
+    8px 13px;
+
+  border-radius:7px;
+
+  font-size:12px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+.card-join:hover{
+
+  background:#0d47a1;
+}
+
+.card-join.upcoming{
+
+  background:#f1f3f4;
+
+  color:#1565c0;
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+
+  display:none;
+
+  background:#fff;
+
+  border:
+    1px solid #eee;
+
+  border-radius:14px;
+
+  padding:50px 20px;
+
+  text-align:center;
+
+  margin-top:20px;
+}
+
+.empty-icon{
+
+  font-size:50px;
+
+  margin-bottom:12px;
+}
+
+.empty h3{
+
+  margin-bottom:7px;
+}
+
+.empty p{
+
+  color:#777;
+
+  font-size:14px;
+}
+
+
+/* =====================================================
+   LIVE PLAYER OVERLAY
+===================================================== */
+
+.live-overlay{
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  background:
+    #000;
+
+  z-index:5000;
+
+  overflow-y:auto;
+}
+
+.live-overlay.show{
+
+  display:block;
+}
+
+
+/* =====================================================
+   PLAYER HEADER
+===================================================== */
+
+.player-header{
+
+  height:58px;
+
+  background:
+    #0f0f0f;
+
+  color:#fff;
+
+  display:flex;
+
+  align-items:center;
+
+  padding:
+    0 14px;
+
+  gap:14px;
+
+  position:sticky;
+
+  top:0;
+
+  z-index:10;
+}
+
+.player-back{
+
+  width:40px;
+  height:40px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:transparent;
+
+  color:#fff;
+
+  font-size:24px;
+
+  cursor:pointer;
+}
+
+.player-back:hover{
+
+  background:#272727;
+}
+
+.player-title{
+
+  flex:1;
+
+  min-width:0;
+}
+
+.player-title-main{
+
+  font-size:16px;
+
+  font-weight:bold;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.player-title-sub{
+
+  font-size:11px;
+
+  color:#aaa;
+
+  margin-top:3px;
+}
+
+
+/* =====================================================
+   PLAYER LAYOUT
+===================================================== */
+
+.player-layout{
+
+  max-width:1500px;
+
+  margin:auto;
+
+  padding:
+    18px;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(
+      0,
+      1fr
+    )
+    330px;
+
+  gap:18px;
+}
+
+
+/* =====================================================
+   VIDEO
+===================================================== */
+
+.video-section{
+
+  min-width:0;
+}
+
+.video-container{
+
+  width:100%;
+
+  aspect-ratio:
+    16 / 9;
+
+  background:#000;
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+  position:relative;
+}
+
+#studentVideo{
+
+  width:100%;
+
+  height:100%;
+
+  display:block;
+
+  object-fit:contain;
+
+  background:#000;
+}
+
+.video-loading{
+
+  position:absolute;
+
+  inset:0;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  flex-direction:column;
+
+  gap:12px;
+
+  color:#fff;
+
+  background:#000;
+
+  z-index:2;
+}
+
+.video-loading.hidden{
+
+  display:none;
+}
+
+.spinner{
+
+  width:42px;
+  height:42px;
+
+  border:
+    4px solid
+    rgba(
+      255,
+      255,
+      255,
+      .25
+    );
+
+  border-top-color:#fff;
+
+  border-radius:50%;
+
+  animation:
+    spin .8s linear infinite;
+}
+
+@keyframes spin{
+
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+
+/* =====================================================
+   VIDEO CONTROLS
+===================================================== */
+
+.video-controls{
+
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  padding:
+    45px 12px 12px;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(
+        0,
+        0,
+        0,
+        .9
+      )
+    );
+
+  display:flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  z-index:5;
+}
+
+.control-btn{
+
+  width:38px;
+  height:38px;
+
+  border:none;
+
+  background:transparent;
+
+  color:#fff;
+
+  font-size:19px;
+
+  cursor:pointer;
+
+  border-radius:5px;
+}
+
+.control-btn:hover{
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .15
+    );
+}
+
+.live-pill{
+
+  margin-left:5px;
+
+  background:#ff0000;
+
+  color:#fff;
+
+  font-size:11px;
+
+  font-weight:bold;
+
+  padding:
+    6px 9px;
+
+  border-radius:4px;
+}
+
+.spacer{
+
+  flex:1;
+}
+
+
+/* =====================================================
+   VIDEO INFO
+===================================================== */
+
+.video-info{
+
+  color:#fff;
+
+  padding-top:14px;
+}
+
+.video-info h2{
+
+  font-size:20px;
+
+  margin-bottom:8px;
+}
+
+.video-info-meta{
+
+  color:#aaa;
+
+  font-size:13px;
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+}
+
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+.chat-box{
+
+  background:#181818;
+
+  border:
+    1px solid #303030;
+
+  border-radius:10px;
+
+  height:
+    calc(
+      100vh - 130px
+    );
+
+  min-height:400px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  overflow:hidden;
+}
+
+.chat-header{
+
+  padding:
+    14px;
+
+  color:#fff;
+
+  font-weight:bold;
+
+  border-bottom:
+    1px solid #303030;
+}
+
+.chat-messages{
+
+  flex:1;
+
+  overflow-y:auto;
+
+  padding:12px;
+}
+
+.chat-message{
+
+  display:flex;
+
+  gap:8px;
+
+  margin-bottom:14px;
+
+  color:#ddd;
+}
+
+.chat-avatar{
+
+  width:30px;
+  height:30px;
+
+  border-radius:50%;
+
+  background:#333;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  flex-shrink:0;
+}
+
+.chat-text{
+
+  font-size:13px;
+
+  line-height:1.4;
+}
+
+.chat-name{
+
+  font-weight:bold;
+
+  color:#fff;
+
+  margin-right:5px;
+}
+
+.chat-input{
+
+  padding:10px;
+
+  border-top:
+    1px solid #303030;
+
+  display:flex;
+
+  gap:7px;
+}
+
+.chat-input input{
+
+  flex:1;
+
+  background:#272727;
+
+  color:#fff;
+
+  border:
+    1px solid #444;
+
+  border-radius:20px;
+
+  padding:
+    10px 13px;
+
+  outline:none;
+}
+
+.chat-send{
+
+  width:40px;
+
+  border:none;
+
+  border-radius:50%;
+
+  background:#1565c0;
+
+  color:#fff;
+
+  cursor:pointer;
+}
+
+
+/* =====================================================
+   JOIN SCREEN
+===================================================== */
+
+.join-screen{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:6000;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .82
+    );
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+}
+
+.join-screen.show{
+
+  display:flex;
+}
+
+.join-box{
+
+  width:100%;
+
+  max-width:450px;
+
+  background:#fff;
+
+  border-radius:18px;
+
+  padding:25px;
+
+  text-align:center;
+}
+
+.join-box h2{
+
+  margin-bottom:8px;
+}
+
+.join-box p{
+
+  color:#666;
+
+  font-size:14px;
+
+  margin-bottom:20px;
+}
+
+.channel-input{
+
+  width:100%;
+
+  padding:13px;
+
+  border:
+    1px solid #ccc;
+
+  border-radius:9px;
+
+  outline:none;
+
+  margin-bottom:10px;
+}
+
+.start-join-btn{
+
+  width:100%;
+
+  border:none;
+
+  background:#1565c0;
+
+  color:#fff;
+
+  padding:13px;
+
+  border-radius:9px;
+
+  font-weight:bold;
+
+  cursor:pointer;
+}
+
+.cancel-btn{
+
+  width:100%;
+
+  margin-top:8px;
+
+  border:none;
+
+  background:#eee;
+
+  padding:12px;
+
+  border-radius:9px;
+
+  cursor:pointer;
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+
+  position:fixed;
+
+  left:50%;
+
+  bottom:25px;
+
+  transform:
+    translateX(-50%)
+    translateY(100px);
+
+  background:#222;
+
+  color:#fff;
+
+  padding:
+    13px 18px;
+
+  border-radius:10px;
+
+  z-index:9999;
+
+  font-size:13px;
+
+  transition:.25s;
+
+  opacity:0;
+}
+
+.toast.show{
+
+  transform:
+    translateX(-50%)
+    translateY(0);
+
+  opacity:1;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:800px){
+
+  .sidebar{
+
+    position:fixed;
+
+    left:-250px;
+
+    top:64px;
+
+    bottom:0;
+
+    z-index:2000;
+
+    box-shadow:
+      3px 0 15px
+      rgba(
+        0,
+        0,
+        0,
+        .15
+      );
+  }
+
+  .sidebar.open{
+
+    left:0;
+  }
+
+  .content{
+
+    padding:
+      15px 12px 80px;
+  }
+
+  .header{
+
+    padding:
+      0 9px;
+
+    gap:7px;
+  }
+
+  .logo{
+
+    font-size:18px;
+  }
+
+  .header-search{
+
+    display:none;
+  }
+
+  .header-right{
+
+    margin-left:auto;
+  }
+
+  .class-grid{
+
+    grid-template-columns:1fr;
+
+    gap:14px;
+  }
+
+  .thumbnail{
+
+    height:190px;
+  }
+
+  .player-layout{
+
+    display:block;
+
+    padding:0;
+  }
+
+  .video-container{
+
+    border-radius:0;
+
+    aspect-ratio:
+      16 / 9;
+  }
+
+  .video-info{
+
+    padding:
+      13px;
+  }
+
+  .video-info h2{
+
+    font-size:17px;
+  }
+
+  .chat-box{
+
+    margin:
+      15px 12px;
+
+    height:350px;
+
+    min-height:0;
+  }
+
+  .player-header{
+
+    height:55px;
+  }
+
+  .page-heading h1{
+
+    font-size:20px;
+  }
+}
+
+
+@media(max-width:420px){
+
+  .profile{
+
+    width:34px;
+    height:34px;
+  }
+
+  .header-icon{
+
+    width:35px;
+    height:35px;
+  }
+
+  .thumbnail{
+
+    height:180px;
+  }
+
+}
+
+
+/* =====================================================
+   HIDDEN
+===================================================== */
+
+.hidden{
+
+  display:none !important;
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-  <!-- HEADER -->
-  <header class="header">
 
-    <div class="topbar">
-      <div class="brand">📚 GyanSetu</div>
-      <div class="profile">👤</div>
-    </div>
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
-    <div class="welcome">
-      <h1>🎥 Live Classes</h1>
-      <p>आजचे Live Classes येथे पहा आणि लगेच Join करा.</p>
-    </div>
+<header class="header">
 
-  </header>
+  <button
+    class="menu-btn"
+    onclick="toggleSidebar()">
+    ☰
+  </button>
 
+  <div class="logo">
 
-  <!-- MAIN -->
-  <main class="container">
+    <span class="logo-icon">
+      📚
+    </span>
 
-    <!-- SEARCH -->
-    <div class="search-box">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="🔍 Class, Subject किंवा Teacher शोधा..."
-        oninput="searchClasses()"
-      >
-    </div>
-
-
-    <!-- FILTERS -->
-    <div class="filters">
-
-      <button
-        class="filter-btn active"
-        onclick="filterClasses('all', this)">
-        All
-      </button>
-
-      <button
-        class="filter-btn"
-        onclick="filterClasses('live', this)">
-        🔴 Live Now
-      </button>
-
-      <button
-        class="filter-btn"
-        onclick="filterClasses('maths', this)">
-        गणित
-      </button>
-
-      <button
-        class="filter-btn"
-        onclick="filterClasses('science', this)">
-        विज्ञान
-      </button>
-
-      <button
-        class="filter-btn"
-        onclick="filterClasses('english', this)">
-        English
-      </button>
-
-      <button
-        class="filter-btn"
-        onclick="filterClasses('history', this)">
-        इतिहास
-      </button>
-
-    </div>
-
-
-    <!-- TITLE -->
-    <div class="section-title">
-      <h2>आजचे Classes</h2>
-      <span class="live-count">🔴 Live Classes</span>
-    </div>
-
-
-    <!-- CLASS LIST -->
-    <div class="class-list" id="classList">
-
-
-      <!-- CLASS 1 -->
-      <div
-        class="class-card"
-        data-subject="maths"
-        data-status="live"
-        data-search="गणित mathematics maths राहुल सर">
-
-        <div class="card-top">
-
-          <div class="teacher-img">👨‍🏫</div>
-
-          <div class="class-info">
-
-            <span class="live-tag">
-              <span class="live-dot"></span>
-              LIVE NOW
-            </span>
-
-            <div class="class-title">
-              गणित - बीजगणित
-            </div>
-
-            <p class="teacher">
-              👨‍🏫 राहुल सर
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="details">
-          <span class="detail">📚 इयत्ता 10वी</span>
-          <span class="detail">⏱️ 60 मिनिटे</span>
-          <span class="detail">📖 गणित</span>
-        </div>
-
-        <div class="card-bottom">
-
-          <span class="students">
-            👥 128 Students
-          </span>
-
-          <button
-            class="join-btn"
-            onclick="joinClass('गणित - बीजगणित','राहुल सर')">
-            Join Class
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- CLASS 2 -->
-      <div
-        class="class-card"
-        data-subject="science"
-        data-status="live"
-        data-search="विज्ञान science physics पूजा मॅडम">
-
-        <div class="card-top">
-
-          <div class="teacher-img">👩‍🏫</div>
-
-          <div class="class-info">
-
-            <span class="live-tag">
-              <span class="live-dot"></span>
-              LIVE NOW
-            </span>
-
-            <div class="class-title">
-              विज्ञान - प्रकाश
-            </div>
-
-            <p class="teacher">
-              👩‍🏫 पूजा मॅडम
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="details">
-          <span class="detail">📚 इयत्ता 10वी</span>
-          <span class="detail">⏱️ 45 मिनिटे</span>
-          <span class="detail">🔬 विज्ञान</span>
-        </div>
-
-        <div class="card-bottom">
-
-          <span class="students">
-            👥 94 Students
-          </span>
-
-          <button
-            class="join-btn"
-            onclick="joinClass('विज्ञान - प्रकाश','पूजा मॅडम')">
-            Join Class
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- CLASS 3 -->
-      <div
-        class="class-card"
-        data-subject="english"
-        data-status="upcoming"
-        data-search="english grammar english अमोल सर">
-
-        <div class="card-top">
-
-          <div class="teacher-img">👨‍🏫</div>
-
-          <div class="class-info">
-
-            <span
-              class="live-tag"
-              style="background:#e3f2fd;color:#1565c0;">
-              🕒 UPCOMING
-            </span>
-
-            <div class="class-title">
-              English Grammar
-            </div>
-
-            <p class="teacher">
-              👨‍🏫 अमोल सर
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="details">
-          <span class="detail">📚 इयत्ता 10वी</span>
-          <span class="detail">🕐 5:00 PM</span>
-          <span class="detail">🇬🇧 English</span>
-        </div>
-
-        <div class="card-bottom">
-
-          <span class="students">
-            📅 आज
-          </span>
-
-          <button
-            class="join-btn"
-            onclick="showUpcoming()">
-            Set Reminder
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- CLASS 4 -->
-      <div
-        class="class-card"
-        data-subject="history"
-        data-status="upcoming"
-        data-search="इतिहास history महाराष्ट्र इतिहास स्नेहा मॅडम">
-
-        <div class="card-top">
-
-          <div class="teacher-img">👩‍🏫</div>
-
-          <div class="class-info">
-
-            <span
-              class="live-tag"
-              style="background:#e3f2fd;color:#1565c0;">
-              🕒 UPCOMING
-            </span>
-
-            <div class="class-title">
-              महाराष्ट्राचा इतिहास
-            </div>
-
-            <p class="teacher">
-              👩‍🏫 स्नेहा मॅडम
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="details">
-          <span class="detail">📚 इयत्ता 10वी</span>
-          <span class="detail">🕐 7:00 PM</span>
-          <span class="detail">🏛️ इतिहास</span>
-        </div>
-
-        <div class="card-bottom">
-
-          <span class="students">
-            📅 आज
-          </span>
-
-          <button
-            class="join-btn"
-            onclick="showUpcoming()">
-            Set Reminder
-          </button>
-
-        </div>
-
-      </div>
-
-
-    </div>
-
-
-    <!-- EMPTY -->
-    <div class="empty" id="empty">
-
-      <div class="empty-icon">🔍</div>
-
-      <h3>Class सापडला नाही</h3>
-
-      <p>
-        दुसरा Subject, Teacher किंवा Class शोधून पहा.
-      </p>
-
-    </div>
-
-  </main>
-
-
-  <!-- BOTTOM NAV -->
-  <nav class="bottom-nav">
-
-    <div
-      class="nav-item"
-      onclick="goHome()">
-
-      <div class="nav-icon">🏠</div>
-      Home
-
-    </div>
-
-
-    <div
-      class="nav-item active">
-
-      <div class="nav-icon">🎥</div>
-      Live
-
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="alert('Courses page लवकरच उपलब्ध होईल.')">
-
-      <div class="nav-icon">📚</div>
-      Courses
-
-    </div>
-
-
-    <div
-      class="nav-item"
-      onclick="alert('Profile page लवकरच उपलब्ध होईल.')">
-
-      <div class="nav-icon">👤</div>
-      Profile
-
-    </div>
-
-  </nav>
-
-
-  <!-- JOIN MODAL -->
-  <div class="modal" id="joinModal">
-
-    <div class="modal-box">
-
-      <h2 id="modalTitle">
-        Live Class
-      </h2>
-
-      <p id="modalTeacher">
-        Teacher
-      </p>
-
-      <div class="video-area">
-
-        <div class="video-icon">▶️</div>
-
-        <div>
-          Live class video येथे दिसेल
-        </div>
-
-      </div>
-
-      <button
-        class="close-btn"
-        onclick="closeModal()">
-        Close
-      </button>
-
-    </div>
+    <span class="logo-text">
+      Gyan<span>Setu</span>
+    </span>
 
   </div>
 
 
-  <script>
+  <div class="header-search">
 
-    let currentFilter = "all";
+    <input
+      id="headerSearch"
+      type="text"
+      placeholder="Search"
+      oninput="searchClasses()"
+    >
+
+    <button
+      class="search-btn"
+      onclick="searchClasses()">
+      🔍
+    </button>
+
+  </div>
 
 
-    /* FILTER */
-    function filterClasses(type, button) {
+  <div class="header-right">
 
-      currentFilter = type;
+    <button
+      class="header-icon"
+      onclick="location.reload()">
+      🔄
+    </button>
 
-      document
-        .querySelectorAll(".filter-btn")
-        .forEach(btn => {
-          btn.classList.remove("active");
-        });
+    <button
+      class="header-icon"
+      onclick="showToast('Notifications लवकरच उपलब्ध होतील.')">
+      🔔
+    </button>
 
-      button.classList.add("active");
+    <div class="profile">
+      👤
+    </div>
 
-      applyFilters();
+  </div>
+
+</header>
+
+
+<!-- =====================================================
+     PAGE
+===================================================== -->
+
+<div class="page">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+  class="sidebar"
+  id="sidebar">
+
+  <button
+    class="sidebar-item"
+    onclick="goHome()">
+
+    <span class="sidebar-icon">
+      🏠
+    </span>
+
+    <span class="sidebar-title">
+      Home
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item active">
+
+    <span class="sidebar-icon">
+      🎥
+    </span>
+
+    <span class="sidebar-title">
+      Live Classes
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="showToast('Courses लवकरच उपलब्ध होतील.')">
+
+    <span class="sidebar-icon">
+      📚
+    </span>
+
+    <span class="sidebar-title">
+      Courses
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="showToast('Recorded Classes उघडण्यासाठी येथे वापरा.')">
+
+    <span class="sidebar-icon">
+      🎬
+    </span>
+
+    <span class="sidebar-title">
+      Recorded Classes
+    </span>
+
+  </button>
+
+
+  <div class="sidebar-divider"></div>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterClasses('maths')">
+
+    <span class="sidebar-icon">
+      ➗
+    </span>
+
+    <span class="sidebar-title">
+      गणित
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterClasses('science')">
+
+    <span class="sidebar-icon">
+      🔬
+    </span>
+
+    <span class="sidebar-title">
+      विज्ञान
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterClasses('english')">
+
+    <span class="sidebar-icon">
+      🇬🇧
+    </span>
+
+    <span class="sidebar-title">
+      English
+    </span>
+
+  </button>
+
+
+  <button
+    class="sidebar-item"
+    onclick="filterClasses('history')">
+
+    <span class="sidebar-icon">
+      🏛️
+    </span>
+
+    <span class="sidebar-title">
+      इतिहास
+    </span>
+
+  </button>
+
+</aside>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<main class="content">
+
+
+  <!-- FILTER -->
+
+  <div class="filter-bar">
+
+    <button
+      class="filter-btn active"
+      data-filter="all"
+      onclick="filterClasses('all')">
+      All
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="live"
+      onclick="filterClasses('live')">
+      🔴 Live Now
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="maths"
+      onclick="filterClasses('maths')">
+      गणित
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="science"
+      onclick="filterClasses('science')">
+      विज्ञान
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="english"
+      onclick="filterClasses('english')">
+      English
+    </button>
+
+    <button
+      class="filter-btn"
+      data-filter="history"
+      onclick="filterClasses('history')">
+      इतिहास
+    </button>
+
+  </div>
+
+
+  <!-- TITLE -->
+
+  <div class="page-heading">
+
+    <h1>
+      🎥 Live Classes
+    </h1>
+
+    <span
+      class="live-counter"
+      id="liveCounter">
+      🔴 0 Live
+    </span>
+
+  </div>
+
+
+  <!-- CLASS GRID -->
+
+  <div
+    class="class-grid"
+    id="classGrid">
+
+  </div>
+
+
+  <!-- EMPTY -->
+
+  <div
+    class="empty"
+    id="empty">
+
+    <div class="empty-icon">
+      🔍
+    </div>
+
+    <h3>
+      Class सापडला नाही
+    </h3>
+
+    <p>
+      दुसरा Subject किंवा Class शोधून पहा.
+    </p>
+
+  </div>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     LIVE PLAYER
+===================================================== -->
+
+<div
+  class="live-overlay"
+  id="liveOverlay">
+
+
+  <!-- PLAYER HEADER -->
+
+  <div class="player-header">
+
+    <button
+      class="player-back"
+      onclick="closeLivePlayer()">
+      ←
+    </button>
+
+
+    <div class="player-title">
+
+      <div
+        class="player-title-main"
+        id="playerTitle">
+        GyanSetu Live Class
+      </div>
+
+      <div
+        class="player-title-sub"
+        id="playerTeacher">
+        Live Class
+      </div>
+
+    </div>
+
+
+    <button
+      class="header-icon"
+      style="color:white;"
+      onclick="toggleFullscreen()">
+      ⛶
+    </button>
+
+  </div>
+
+
+  <!-- PLAYER LAYOUT -->
+
+  <div class="player-layout">
+
+
+    <!-- VIDEO -->
+
+    <section class="video-section">
+
+      <div
+        class="video-container"
+        id="videoContainer">
+
+
+        <video
+          id="studentVideo"
+          playsinline
+          autoplay
+          controls>
+        </video>
+
+
+        <div
+          class="video-loading"
+          id="videoLoading">
+
+          <div class="spinner"></div>
+
+          <div>
+            Sir च्या Live Class ला connect होत आहे...
+          </div>
+
+        </div>
+
+
+        <div class="video-controls">
+
+          <button
+            class="control-btn"
+            onclick="toggleVideoMute()"
+            id="muteBtn">
+            🔊
+          </button>
+
+
+          <button
+            class="control-btn"
+            onclick="togglePlay()"
+            id="playBtn">
+            ▶️
+          </button>
+
+
+          <span
+            class="live-pill">
+            🔴 LIVE
+          </span>
+
+
+          <span class="spacer"></span>
+
+
+          <button
+            class="control-btn"
+            onclick="toggleFullscreen()">
+            ⛶
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- VIDEO INFO -->
+
+      <div class="video-info">
+
+        <h2 id="liveVideoTitle">
+          GyanSetu Live Class
+        </h2>
+
+        <div class="video-info-meta">
+
+          <span id="liveVideoTeacher">
+            👨‍🏫 Teacher
+          </span>
+
+          <span>
+            •
+          </span>
+
+          <span id="liveVideoSubject">
+            📚 Subject
+          </span>
+
+          <span>
+            •
+          </span>
+
+          <span>
+            🔴 Live Now
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CHAT -->
+
+    <aside class="chat-box">
+
+      <div class="chat-header">
+        Live Chat
+      </div>
+
+
+      <div
+        class="chat-messages"
+        id="chatMessages">
+
+        <div class="chat-message">
+
+          <div class="chat-avatar">
+            👨‍🎓
+          </div>
+
+          <div class="chat-text">
+
+            <span class="chat-name">
+              GyanSetu
+            </span>
+
+            Live Class मध्ये स्वागत आहे! 🎉
+
+          </div>
+
+        </div>
+
+
+        <div class="chat-message">
+
+          <div class="chat-avatar">
+            👨‍🏫
+          </div>
+
+          <div class="chat-text">
+
+            <span class="chat-name">
+              Sir
+            </span>
+
+            Class सुरू आहे.
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="chat-input">
+
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Chat मध्ये message..."
+          maxlength="150"
+          onkeydown="chatKey(event)"
+        >
+
+        <button
+          class="chat-send"
+          onclick="sendChat()">
+          ➤
+        </button>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     JOIN CHANNEL POPUP
+===================================================== -->
+
+<div
+  class="join-screen"
+  id="joinScreen">
+
+  <div class="join-box">
+
+    <h2>
+      🎥 Join Live Class
+    </h2>
+
+    <p id="joinDescription">
+      Sir च्या Live Class ला join करा.
+    </p>
+
+
+    <input
+      class="channel-input"
+      id="channelInput"
+      placeholder="Channel ID"
+      autocomplete="off"
+    >
+
+
+    <button
+      class="start-join-btn"
+      onclick="startJoin()">
+
+      ▶️ Join Class
+
+    </button>
+
+
+    <button
+      class="cancel-btn"
+      onclick="closeJoinScreen()">
+
+      Cancel
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+  class="toast"
+  id="toast">
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE
+===================================================== */
+
+/*
+   इथे तुझ्या आधीच्या working Live Classes
+   code मधले SAME Supabase URL आणि ANON KEY ठेव.
+*/
+
+const SUPABASE_URL =
+  "YOUR_SUPABASE_URL";
+
+const SUPABASE_ANON_KEY =
+  "YOUR_SUPABASE_ANON_KEY";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let allClasses = [];
+
+let currentFilter = "all";
+
+let selectedClass = null;
+
+let peer = null;
+
+let studentConnection = null;
+
+let studentCall = null;
+
+let studentRemoteStream = null;
+
+let studentHostId = null;
+
+let studentAudioContext = null;
+
+let studentOscillator = null;
+
+let isMuted = false;
+
+
+/* =====================================================
+   ELEMENT
+===================================================== */
+
+function $(id){
+
+  return document.getElementById(id);
+
+}
+
+
+/* =====================================================
+   INIT
+===================================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    loadClasses();
+
+  }
+);
+
+
+/* =====================================================
+   LOAD CLASSES
+===================================================== */
+
+async function loadClasses(){
+
+  try{
+
+    /*
+      तुझ्या existing backend मधील gs_channels
+      table वापरली जात आहे.
+    */
+
+    const result =
+      await supabaseClient
+        .from("gs_channels")
+        .select("*")
+        .order(
+          "created_at",
+          {
+            ascending:false
+          }
+        );
+
+
+    if(result.error){
+
+      console.error(
+        "CHANNEL LOAD ERROR:",
+        result.error
+      );
+
+      loadDemoClasses();
+
+      return;
     }
 
 
-    /* SEARCH */
-    function searchClasses() {
-      applyFilters();
+    const rows =
+      result.data || [];
+
+
+    if(!rows.length){
+
+      loadDemoClasses();
+
+      return;
     }
 
 
-    /* APPLY FILTERS */
-    function applyFilters() {
+    allClasses =
+      rows.map(
+        function(channel){
 
-      const search =
-        document
-          .getElementById("searchInput")
-          .value
-          .toLowerCase()
-          .trim();
+          return {
 
-      const cards =
-        document.querySelectorAll(".class-card");
+            id:
+              channel.id,
 
-      let visible = 0;
+            channelId:
+              channel.channel_id ||
+              channel.id,
 
-      cards.forEach(card => {
+            title:
+              channel.channel_name ||
+              "GyanSetu Live Class",
 
-        const subject =
-          card.dataset.subject;
+            teacher:
+              channel.teacher_name ||
+              channel.owner_name ||
+              "GyanSetu Teacher",
 
-        const status =
-          card.dataset.status;
+            subject:
+              detectSubject(
+                channel.channel_name ||
+                ""
+              ),
 
-        const searchText =
-          card.dataset.search.toLowerCase();
+            isLive:
+              !!channel.is_live,
 
-        const filterMatch =
-          currentFilter === "all" ||
-          currentFilter === subject ||
-          currentFilter === status;
+            startedAt:
+              channel.live_started_at ||
+              null,
 
-        const searchMatch =
-          search === "" ||
-          searchText.includes(search);
+            thumbnail:
+              channel.thumbnail ||
+              null
 
-        if (filterMatch && searchMatch) {
+          };
 
-          card.style.display = "";
+        }
+      );
 
-          visible++;
 
-        } else {
+    renderClasses();
 
-          card.style.display = "none";
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+    loadDemoClasses();
+
+  }
+
+}
+
+
+/* =====================================================
+   DEMO
+===================================================== */
+
+function loadDemoClasses(){
+
+  /*
+     Backend table empty असल्यास page blank राहू नये
+     म्हणून sample classes.
+  */
+
+  allClasses = [
+
+    {
+      id:"demo-maths",
+      channelId:"",
+      title:"गणित - बीजगणित",
+      teacher:"गणित शिक्षक",
+      subject:"maths",
+      isLive:false
+    },
+
+    {
+      id:"demo-science",
+      channelId:"",
+      title:"विज्ञान - प्रकाश",
+      teacher:"विज्ञान शिक्षक",
+      subject:"science",
+      isLive:false
+    },
+
+    {
+      id:"demo-english",
+      channelId:"",
+      title:"English Grammar",
+      teacher:"English Teacher",
+      subject:"english",
+      isLive:false
+    },
+
+    {
+      id:"demo-history",
+      channelId:"",
+      title:"महाराष्ट्राचा इतिहास",
+      teacher:"इतिहास शिक्षक",
+      subject:"history",
+      isLive:false
+    }
+
+  ];
+
+
+  renderClasses();
+
+}
+
+
+/* =====================================================
+   SUBJECT
+===================================================== */
+
+function detectSubject(name){
+
+  const value =
+    String(name)
+      .toLowerCase();
+
+
+  if(
+    value.includes("गणित") ||
+    value.includes("math")
+  ){
+
+    return "maths";
+
+  }
+
+
+  if(
+    value.includes("विज्ञान") ||
+    value.includes("science") ||
+    value.includes("physics") ||
+    value.includes("chemistry")
+  ){
+
+    return "science";
+
+  }
+
+
+  if(
+    value.includes("english") ||
+    value.includes("grammar")
+  ){
+
+    return "english";
+
+  }
+
+
+  if(
+    value.includes("इतिहास") ||
+    value.includes("history")
+  ){
+
+    return "history";
+
+  }
+
+
+  return "other";
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderClasses(){
+
+  const grid =
+    $("classGrid");
+
+  grid.innerHTML = "";
+
+  let visibleCount = 0;
+
+  let liveCount = 0;
+
+
+  allClasses.forEach(
+    function(item){
+
+      if(item.isLive){
+
+        liveCount++;
+
+      }
+
+
+      const matches =
+        matchesFilter(item);
+
+
+      if(!matches){
+
+        return;
+
+      }
+
+
+      visibleCount++;
+
+
+      const card =
+        createClassCard(item);
+
+
+      grid.appendChild(card);
+
+    }
+  );
+
+
+  $("liveCounter")
+    .textContent =
+      "🔴 " +
+      liveCount +
+      " Live";
+
+
+  $("empty")
+    .style.display =
+      visibleCount === 0
+      ?
+      "block"
+      :
+      "none";
+
+}
+
+
+/* =====================================================
+   FILTER MATCH
+===================================================== */
+
+function matchesFilter(item){
+
+  const filter =
+    currentFilter;
+
+
+  const search =
+    $("headerSearch")
+      .value
+      .toLowerCase()
+      .trim();
+
+
+  const text =
+    (
+      item.title +
+      " " +
+      item.teacher +
+      " " +
+      item.subject
+    )
+    .toLowerCase();
+
+
+  const filterMatch =
+    filter === "all" ||
+    filter === item.subject ||
+    (
+      filter === "live" &&
+      item.isLive
+    );
+
+
+  const searchMatch =
+    !search ||
+    text.includes(search);
+
+
+  return (
+    filterMatch &&
+    searchMatch
+  );
+
+}
+
+
+/* =====================================================
+   CREATE CARD
+===================================================== */
+
+function createClassCard(item){
+
+  const card =
+    document.createElement("div");
+
+
+  card.className =
+    "class-card";
+
+
+  const thumbnail =
+    document.createElement("div");
+
+  thumbnail.className =
+    "thumbnail";
+
+
+  if(item.thumbnail){
+
+    thumbnail.style.backgroundImage =
+      "url('" +
+      item.thumbnail +
+      "')";
+
+    thumbnail.style.backgroundSize =
+      "cover";
+
+    thumbnail.style.backgroundPosition =
+      "center";
+
+  }
+
+
+  const icon =
+    document.createElement("div");
+
+  icon.className =
+    "thumbnail-icon";
+
+  icon.textContent =
+    getSubjectIcon(
+      item.subject
+    );
+
+
+  if(!item.thumbnail){
+
+    thumbnail.appendChild(icon);
+
+  }
+
+
+  if(item.isLive){
+
+    const live =
+      document.createElement("div");
+
+    live.className =
+      "thumbnail-live";
+
+    live.textContent =
+      "🔴 LIVE";
+
+    thumbnail.appendChild(live);
+
+  }
+  else{
+
+    const upcoming =
+      document.createElement("div");
+
+    upcoming.className =
+      "thumbnail-upcoming";
+
+    upcoming.textContent =
+      "UPCOMING";
+
+    thumbnail.appendChild(upcoming);
+
+  }
+
+
+  const body =
+    document.createElement("div");
+
+  body.className =
+    "card-body";
+
+
+  const title =
+    document.createElement("div");
+
+  title.className =
+    "card-title";
+
+  title.textContent =
+    item.title;
+
+
+  const teacher =
+    document.createElement("div");
+
+  teacher.className =
+    "card-teacher";
+
+  teacher.textContent =
+    "👨‍🏫 " +
+    item.teacher;
+
+
+  const meta =
+    document.createElement("div");
+
+  meta.className =
+    "card-meta";
+
+
+  const subject =
+    document.createElement("span");
+
+  subject.className =
+    "card-subject";
+
+  subject.textContent =
+    getSubjectName(
+      item.subject
+    );
+
+
+  const join =
+    document.createElement("button");
+
+  join.className =
+    "card-join";
+
+
+  if(item.isLive){
+
+    join.textContent =
+      "▶️ Join";
+
+    join.onclick =
+      function(event){
+
+        event.stopPropagation();
+
+        openLiveClass(item);
+
+      };
+
+  }
+  else{
+
+    join.textContent =
+      "🔔 Reminder";
+
+    join.classList.add(
+      "upcoming"
+    );
+
+    join.onclick =
+      function(event){
+
+        event.stopPropagation();
+
+        showToast(
+          "🔔 Class reminder सेट झाला."
+        );
+
+      };
+
+  }
+
+
+  meta.appendChild(subject);
+
+  meta.appendChild(join);
+
+
+  body.appendChild(title);
+
+  body.appendChild(teacher);
+
+  body.appendChild(meta);
+
+
+  card.appendChild(thumbnail);
+
+  card.appendChild(body);
+
+
+  card.onclick =
+    function(){
+
+      if(item.isLive){
+
+        openLiveClass(item);
+
+      }
+      else{
+
+        showToast(
+          "ही class अजून सुरू झालेली नाही."
+        );
+
+      }
+
+    };
+
+
+  return card;
+
+}
+
+
+/* =====================================================
+   ICON
+===================================================== */
+
+function getSubjectIcon(subject){
+
+  if(subject === "maths"){
+
+    return "➗";
+
+  }
+
+  if(subject === "science"){
+
+    return "🔬";
+
+  }
+
+  if(subject === "english"){
+
+    return "🇬🇧";
+
+  }
+
+  if(subject === "history"){
+
+    return "🏛️";
+
+  }
+
+  return "🎥";
+
+}
+
+
+/* =====================================================
+   SUBJECT NAME
+===================================================== */
+
+function getSubjectName(subject){
+
+  if(subject === "maths"){
+
+    return "गणित";
+
+  }
+
+  if(subject === "science"){
+
+    return "विज्ञान";
+
+  }
+
+  if(subject === "english"){
+
+    return "English";
+
+  }
+
+  if(subject === "history"){
+
+    return "इतिहास";
+
+  }
+
+  return "Live Class";
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function filterClasses(type){
+
+  currentFilter =
+    type;
+
+
+  document
+    .querySelectorAll(
+      ".filter-btn"
+    )
+    .forEach(
+      function(button){
+
+        button.classList.remove(
+          "active"
+        );
+
+        if(
+          button.dataset.filter ===
+          type
+        ){
+
+          button.classList.add(
+            "active"
+          );
 
         }
 
+      }
+    );
+
+
+  renderClasses();
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function searchClasses(){
+
+  renderClasses();
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+function toggleSidebar(){
+
+  $("sidebar")
+    .classList
+    .toggle("open");
+
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+function goHome(){
+
+  window.location.href =
+    "home.html";
+
+}
+
+
+/* =====================================================
+   OPEN LIVE
+===================================================== */
+
+function openLiveClass(item){
+
+  selectedClass =
+    item;
+
+
+  $("playerTitle")
+    .textContent =
+      item.title;
+
+
+  $("playerTeacher")
+    .textContent =
+      "👨‍🏫 " +
+      item.teacher;
+
+
+  $("liveVideoTitle")
+    .textContent =
+      item.title;
+
+
+  $("liveVideoTeacher")
+    .textContent =
+      "👨‍🏫 " +
+      item.teacher;
+
+
+  $("liveVideoSubject")
+    .textContent =
+      "📚 " +
+      getSubjectName(
+        item.subject
+      );
+
+
+  $("liveOverlay")
+    .classList
+    .add("show");
+
+
+  $("videoLoading")
+    .classList
+    .remove("hidden");
+
+
+  $("chatMessages")
+    .innerHTML =
+      `
+      <div class="chat-message">
+
+        <div class="chat-avatar">
+          👨‍🎓
+        </div>
+
+        <div class="chat-text">
+
+          <span class="chat-name">
+            GyanSetu
+          </span>
+
+          Live Class मध्ये स्वागत आहे! 🎉
+
+        </div>
+
+      </div>
+      `;
+
+
+  startStudentPeer(
+    item
+  );
+
+}
+
+
+/* =====================================================
+   START STUDENT PEER
+===================================================== */
+
+function startStudentPeer(item){
+
+  cleanupStudentConnection(
+    false
+  );
+
+
+  if(
+    !item.channelId
+  ){
+
+    $("videoLoading")
+      .classList
+      .add("hidden");
+
+
+    showToast(
+      "या class चा Channel ID उपलब्ध नाही."
+    );
+
+    return;
+
+  }
+
+
+  studentHostId =
+    item.channelId;
+
+
+  try{
+
+    peer =
+      new Peer({
+        debug:1
       });
 
 
-      document.getElementById("empty").style.display =
-        visible === 0 ? "block" : "none";
+    peer.on(
+      "open",
+      function(){
+
+        connectToSir();
+
+      }
+    );
+
+
+    peer.on(
+      "error",
+      function(error){
+
+        console.error(
+          "Peer error:",
+          error
+        );
+
+
+        $("videoLoading")
+          .classList
+          .add("hidden");
+
+
+        showToast(
+          "Live Class ला connect होता आले नाही."
+        );
+
+      }
+    );
+
+
+    peer.on(
+      "disconnected",
+      function(){
+
+        console.log(
+          "Peer disconnected"
+        );
+
+      }
+    );
+
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+    $("videoLoading")
+      .classList
+      .add("hidden");
+
+  }
+
+}
+
+
+/* =====================================================
+   CONNECT
+===================================================== */
+
+function connectToSir(){
+
+  if(
+    !peer ||
+    !studentHostId
+  ){
+
+    return;
+
+  }
+
+
+  studentConnection =
+    peer.connect(
+      studentHostId,
+      {
+        reliable:true
+      }
+    );
+
+
+  studentConnection.on(
+    "open",
+    function(){
+
+      try{
+
+        studentConnection.send({
+
+          type:
+            "STUDENT_JOINED"
+
+        });
+
+      }
+      catch(e){}
+
+
+      startStudentCall();
+
+    }
+  );
+
+
+  studentConnection.on(
+    "data",
+    function(data){
+
+      if(
+        data &&
+        data.type ===
+        "CLASS_STATUS"
+      ){
+
+        if(data.live){
+
+          startStudentCall();
+
+        }
+        else{
+
+          showToast(
+            "Sir ने अजून class सुरू केलेली नाही."
+          );
+
+        }
+
+      }
+
+
+      if(
+        data &&
+        data.type ===
+        "CLASS_ENDED"
+      ){
+
+        showToast(
+          "Sir ने Live Class समाप्त केली."
+        );
+
+        closeLivePlayer();
+
+      }
+
+    }
+  );
+
+
+  studentConnection.on(
+    "close",
+    function(){
+
+      showToast(
+        "Sir connection बंद झाली."
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   RECEIVE STREAM
+===================================================== */
+
+function createReceiveStream(){
+
+  try{
+
+    const canvas =
+      document.createElement(
+        "canvas"
+      );
+
+
+    canvas.width =
+      2;
+
+    canvas.height =
+      2;
+
+
+    const context =
+      canvas.getContext(
+        "2d"
+      );
+
+
+    context.fillStyle =
+      "#000";
+
+
+    context.fillRect(
+      0,
+      0,
+      2,
+      2
+    );
+
+
+    const stream =
+      canvas.captureStream(
+        1
+      );
+
+
+    const AudioContext =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+
+    if(AudioContext){
+
+      studentAudioContext =
+        new AudioContext();
+
+
+      if(
+        studentAudioContext.state ===
+        "suspended"
+      ){
+
+        studentAudioContext
+          .resume()
+          .catch(
+            function(){}
+          );
+
+      }
+
+
+      const oscillator =
+        studentAudioContext
+          .createOscillator();
+
+
+      const gain =
+        studentAudioContext
+          .createGain();
+
+
+      const destination =
+        studentAudioContext
+          .createMediaStreamDestination();
+
+
+      gain.gain.value =
+        0;
+
+
+      oscillator.connect(
+        gain
+      );
+
+
+      gain.connect(
+        destination
+      );
+
+
+      oscillator.start();
+
+
+      const audioTrack =
+        destination.stream
+          .getAudioTracks()[0];
+
+
+      if(audioTrack){
+
+        stream.addTrack(
+          audioTrack
+        );
+
+      }
+
+
+      studentOscillator =
+        oscillator;
+
     }
 
 
-    /* JOIN CLASS */
-    function joinClass(title, teacher) {
+    return stream;
 
-      document.getElementById("modalTitle")
-        .innerText = title;
+  }
+  catch(error){
 
-      document.getElementById("modalTeacher")
-        .innerText = "👨‍🏫 " + teacher;
+    console.error(
+      error
+    );
 
-      document.getElementById("joinModal")
-        .style.display = "flex";
+    return new MediaStream();
+
+  }
+
+}
+
+
+/* =====================================================
+   CALL SIR
+===================================================== */
+
+function startStudentCall(){
+
+  if(
+    !peer ||
+    !studentHostId ||
+    studentCall
+  ){
+
+    return;
+
+  }
+
+
+  const receiveStream =
+    createReceiveStream();
+
+
+  try{
+
+    studentCall =
+      peer.call(
+        studentHostId,
+        receiveStream
+      );
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+    $("videoLoading")
+      .classList
+      .add("hidden");
+
+    return;
+
+  }
+
+
+  if(!studentCall){
+
+    return;
+
+  }
+
+
+  studentCall.on(
+    "stream",
+    function(remoteStream){
+
+      studentRemoteStream =
+        remoteStream;
+
+
+      const video =
+        $("studentVideo");
+
+
+      video.srcObject =
+        remoteStream;
+
+
+      video.muted =
+        false;
+
+
+      video.volume =
+        1;
+
+
+      const audioTracks =
+        remoteStream
+          .getAudioTracks();
+
+
+      audioTracks.forEach(
+        function(track){
+
+          track.enabled =
+            true;
+
+        }
+      );
+
+
+      $("videoLoading")
+        .classList
+        .add("hidden");
+
+
+      video.play()
+        .catch(
+          function(error){
+
+            console.log(
+              "Autoplay:",
+              error
+            );
+
+            showToast(
+              "🔊 Video वर Play दाबा."
+            );
+
+          }
+        );
+
+    }
+  );
+
+
+  studentCall.on(
+    "close",
+    function(){
+
+      showToast(
+        "Live connection बंद झाली."
+      );
+
+    }
+  );
+
+
+  studentCall.on(
+    "error",
+    function(error){
+
+      console.error(
+        error
+      );
+
+      $("videoLoading")
+        .classList
+        .add("hidden");
+
+
+      showToast(
+        "Live video/audio connection बंद झाला."
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   CLOSE LIVE
+===================================================== */
+
+function closeLivePlayer(){
+
+  cleanupStudentConnection(
+    true
+  );
+
+
+  $("liveOverlay")
+    .classList
+    .remove("show");
+
+
+  $("studentVideo")
+    .pause();
+
+
+  $("studentVideo")
+    .srcObject =
+      null;
+
+
+  selectedClass =
+    null;
+
+}
+
+
+/* =====================================================
+   CLEANUP
+===================================================== */
+
+function cleanupStudentConnection(
+  showMessageAfter
+){
+
+  if(
+    studentConnection &&
+    studentConnection.open
+  ){
+
+    try{
+
+      studentConnection.send({
+
+        type:
+          "STUDENT_LEFT"
+
+      });
+
+    }
+    catch(e){}
+
+  }
+
+
+  if(studentCall){
+
+    try{
+
+      studentCall.close();
+
+    }
+    catch(e){}
+
+    studentCall =
+      null;
+
+  }
+
+
+  if(studentRemoteStream){
+
+    studentRemoteStream
+      .getTracks()
+      .forEach(
+        function(track){
+
+          try{
+
+            track.stop();
+
+          }
+          catch(e){}
+
+        }
+      );
+
+
+    studentRemoteStream =
+      null;
+
+  }
+
+
+  if(studentConnection){
+
+    try{
+
+      studentConnection.close();
+
+    }
+    catch(e){}
+
+    studentConnection =
+      null;
+
+  }
+
+
+  if(studentOscillator){
+
+    try{
+
+      studentOscillator.stop();
+
+    }
+    catch(e){}
+
+    studentOscillator =
+      null;
+
+  }
+
+
+  if(studentAudioContext){
+
+    try{
+
+      studentAudioContext.close();
+
+    }
+    catch(e){}
+
+    studentAudioContext =
+      null;
+
+  }
+
+
+  if(peer){
+
+    try{
+
+      peer.destroy();
+
+    }
+    catch(e){}
+
+    peer =
+      null;
+
+  }
+
+
+  studentHostId =
+    null;
+
+}
+
+
+/* =====================================================
+   MUTE
+===================================================== */
+
+function toggleVideoMute(){
+
+  const video =
+    $("studentVideo");
+
+
+  if(!video){
+
+    return;
+
+  }
+
+
+  isMuted =
+    !isMuted;
+
+
+  video.muted =
+    isMuted;
+
+
+  $("muteBtn")
+    .textContent =
+      isMuted
+      ?
+      "🔇"
+      :
+      "🔊";
+
+}
+
+
+/* =====================================================
+   PLAY
+===================================================== */
+
+function togglePlay(){
+
+  const video =
+    $("studentVideo");
+
+
+  if(video.paused){
+
+    video.play()
+      .catch(
+        function(){}
+      );
+
+    $("playBtn")
+      .textContent =
+      "⏸️";
+
+  }
+  else{
+
+    video.pause();
+
+    $("playBtn")
+      .textContent =
+      "▶️";
+
+  }
+
+}
+
+
+/* =====================================================
+   FULLSCREEN
+===================================================== */
+
+async function toggleFullscreen(){
+
+  const player =
+    $("videoContainer");
+
+
+  try{
+
+    if(
+      document.fullscreenElement
+    ){
+
+      await document.exitFullscreen();
+
+      return;
 
     }
 
 
-    /* CLOSE MODAL */
-    function closeModal() {
+    if(
+      player &&
+      player.requestFullscreen
+    ){
 
-      document.getElementById("joinModal")
-        .style.display = "none";
+      await player.requestFullscreen();
+
+      return;
 
     }
 
 
-    /* UPCOMING */
-    function showUpcoming() {
+    const video =
+      $("studentVideo");
 
-      alert(
-        "🔔 Reminder सेट झाला!\n\nClass सुरू होण्यापूर्वी तुम्हाला आठवण करून दिली जाईल."
+
+    if(
+      video &&
+      video.webkitEnterFullscreen
+    ){
+
+      video.webkitEnterFullscreen();
+
+    }
+
+  }
+  catch(error){
+
+    console.error(
+      error
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+function chatKey(event){
+
+  if(
+    event.key ===
+    "Enter"
+  ){
+
+    sendChat();
+
+  }
+
+}
+
+
+function sendChat(){
+
+  const input =
+    $("chatInput");
+
+
+  const message =
+    input.value.trim();
+
+
+  if(!message){
+
+    return;
+
+  }
+
+
+  const row =
+    document.createElement(
+      "div"
+    );
+
+  row.className =
+    "chat-message";
+
+
+  row.innerHTML =
+    `
+      <div class="chat-avatar">
+        👨‍🎓
+      </div>
+
+      <div class="chat-text">
+
+        <span class="chat-name">
+          You
+        </span>
+
+        ${escapeHtml(message)}
+
+      </div>
+    `;
+
+
+  $("chatMessages")
+    .appendChild(row);
+
+
+  $("chatMessages")
+    .scrollTop =
+      $("chatMessages")
+        .scrollHeight;
+
+
+  input.value =
+    "";
+
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =====================================================
+   JOIN SCREEN
+===================================================== */
+
+function startJoin(){
+
+  const value =
+    $("channelInput")
+      .value
+      .trim();
+
+
+  if(!value){
+
+    showToast(
+      "Channel ID टाका."
+    );
+
+    return;
+
+  }
+
+
+  const item = {
+
+    id:
+      "manual",
+
+    channelId:
+      value,
+
+    title:
+      "GyanSetu Live Class",
+
+    teacher:
+      "Sir",
+
+    subject:
+      "other",
+
+    isLive:
+      true
+
+  };
+
+
+  closeJoinScreen();
+
+
+  openLiveClass(
+    item
+  );
+
+}
+
+
+function closeJoinScreen(){
+
+  $("joinScreen")
+    .classList
+    .remove("show");
+
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+let toastTimer = null;
+
+
+function showToast(message){
+
+  const toast =
+    $("toast");
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      function(){
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      3000
+    );
+
+}
+
+
+/* =====================================================
+   LIVE CHANNEL REFRESH
+===================================================== */
+
+setInterval(
+  async function(){
+
+    try{
+
+      const result =
+        await supabaseClient
+          .from("gs_channels")
+          .select("*")
+          .order(
+            "created_at",
+            {
+              ascending:false
+            }
+          );
+
+
+      if(
+        result.error ||
+        !result.data
+      ){
+
+        return;
+
+      }
+
+
+      allClasses =
+        result.data.map(
+          function(channel){
+
+            return {
+
+              id:
+                channel.id,
+
+              channelId:
+                channel.channel_id ||
+                channel.id,
+
+              title:
+                channel.channel_name ||
+                "GyanSetu Live Class",
+
+              teacher:
+                channel.teacher_name ||
+                channel.owner_name ||
+                "GyanSetu Teacher",
+
+              subject:
+                detectSubject(
+                  channel.channel_name ||
+                  ""
+                ),
+
+              isLive:
+                !!channel.is_live,
+
+              startedAt:
+                channel.live_started_at ||
+                null
+
+            };
+
+          }
+        );
+
+
+      renderClasses();
+
+
+    }
+    catch(error){
+
+      console.error(
+        error
       );
 
     }
 
+  },
+  5000
+);
 
-    /* HOME */
-    function goHome() {
 
-      window.location.href = "home.html";
+/* =====================================================
+   AUTH
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  function(
+    event,
+    session
+  ){
+
+    console.log(
+      "Auth:",
+      event
+    );
+
+  }
+);
+
+
+/* =====================================================
+   BEFORE EXIT
+===================================================== */
+
+window.addEventListener(
+  "beforeunload",
+  function(){
+
+    cleanupStudentConnection(
+      false
+    );
+
+  }
+);
+
+
+/* =====================================================
+   ESC KEY
+===================================================== */
+
+document.addEventListener(
+  "keydown",
+  function(event){
+
+    if(
+      event.key ===
+      "Escape"
+    ){
+
+      if(
+        $("liveOverlay")
+          .classList
+          .contains("show")
+      ){
+
+        closeLivePlayer();
+
+      }
+
+
+      $("sidebar")
+        .classList
+        .remove("open");
 
     }
 
+  }
+);
 
-    /* MODAL OUTSIDE CLICK */
-    document.getElementById("joinModal")
-      .addEventListener("click", function(event) {
-
-        if (event.target === this) {
-          closeModal();
-        }
-
-      });
-
-  </script>
+</script>
 
 </body>
+
 </html>
