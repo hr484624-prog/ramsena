@@ -7,20 +7,34 @@ on:
       - main
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
 
+      # ==================================================
+      # CHECKOUT
+      # ==================================================
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
+
+      # ==================================================
+      # NODE
+      # ==================================================
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+
+      # ==================================================
+      # JAVA
+      # ==================================================
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -29,9 +43,9 @@ jobs:
           java-version: 21
 
 
-      # --------------------------------------------------
-      # Install Capacitor + OneSignal
-      # --------------------------------------------------
+      # ==================================================
+      # INSTALL CAPACITOR + ONESIGNAL
+      # ==================================================
 
       - name: Install Capacitor and OneSignal
         run: |
@@ -44,11 +58,9 @@ jobs:
             @onesignal/capacitor-plugin@latest
 
 
-      # --------------------------------------------------
-      # Create www folder
-      # IMPORTANT:
-      # google-services.json is NOT copied to www
-      # --------------------------------------------------
+      # ==================================================
+      # CREATE WWW
+      # ==================================================
 
       - name: Create www folder
         run: |
@@ -66,9 +78,9 @@ jobs:
           \) -exec cp {} www/ \;
 
 
-      # --------------------------------------------------
-      # Check Firebase configuration
-      # --------------------------------------------------
+      # ==================================================
+      # CHECK FIREBASE
+      # ==================================================
 
       - name: Check Firebase configuration
         run: |
@@ -80,9 +92,9 @@ jobs:
           echo "Firebase google-services.json found."
 
 
-      # --------------------------------------------------
-      # Capacitor configuration
-      # --------------------------------------------------
+      # ==================================================
+      # CAPACITOR CONFIG
+      # ==================================================
 
       - name: Create Capacitor config
         run: |
@@ -98,27 +110,53 @@ jobs:
           EOF
 
 
-      # --------------------------------------------------
-      # Add Android
-      # --------------------------------------------------
+      # ==================================================
+      # ADD ANDROID
+      # ==================================================
 
       - name: Add Android
         run: |
           npx cap add android
 
 
-      # --------------------------------------------------
-      # Firebase configuration
-      # --------------------------------------------------
+      # ==================================================
+      # GS APP ICON
+      # ==================================================
+
+      - name: Create GyanSetu GS App Icon
+        run: |
+
+          echo "Checking GS logo..."
+
+          if [ ! -f "file_00000000333c82089b2140630d08f97c.png" ]; then
+            echo "ERROR: GS logo file not found!"
+            exit 1
+          fi
+
+          echo "GS logo found."
+
+          mkdir -p android/app/src/main/res/drawable-nodpi
+
+          # Copy GS logo as Android launcher icon
+          cp \
+            file_00000000333c82089b2140630d08f97c.png \
+            android/app/src/main/res/drawable-nodpi/gs_icon.png
+
+          echo "GS icon copied."
+
+
+      # ==================================================
+      # FIREBASE
+      # ==================================================
 
       - name: Add Firebase google-services.json
         run: |
           cp google-services.json android/app/google-services.json
 
 
-      # --------------------------------------------------
-      # Google Services Gradle plugin
-      # --------------------------------------------------
+      # ==================================================
+      # GOOGLE SERVICES
+      # ==================================================
 
       - name: Configure Google Services
         run: |
@@ -126,6 +164,7 @@ jobs:
           from pathlib import Path
 
           project_gradle = Path("android/build.gradle")
+
           text = project_gradle.read_text()
 
           if "com.google.gms:google-services" not in text:
@@ -143,6 +182,7 @@ jobs:
 
 
           app_gradle = Path("android/app/build.gradle")
+
           text = app_gradle.read_text()
 
           if "com.google.gms.google-services" not in text:
@@ -153,12 +193,47 @@ jobs:
           """
 
           app_gradle.write_text(text)
+
           PY
 
 
-      # --------------------------------------------------
-      # Android permissions
-      # --------------------------------------------------
+      # ==================================================
+      # SET GS ICON IN ANDROID MANIFEST
+      # ==================================================
+
+      - name: Set GyanSetu Launcher Icon
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          manifest = Path(
+              "android/app/src/main/AndroidManifest.xml"
+          )
+
+          text = manifest.read_text()
+
+          # Set normal launcher icon
+          text = text.replace(
+              'android:icon="@mipmap/ic_launcher"',
+              'android:icon="@drawable/gs_icon"'
+          )
+
+          # Set round launcher icon
+          text = text.replace(
+              'android:roundIcon="@mipmap/ic_launcher_round"',
+              'android:roundIcon="@drawable/gs_icon"'
+          )
+
+          manifest.write_text(text)
+
+          print("GyanSetu GS launcher icon configured.")
+
+          PY
+
+
+      # ==================================================
+      # ANDROID PERMISSIONS
+      # ==================================================
 
       - name: Add Android permissions
         run: |
@@ -173,13 +248,21 @@ jobs:
           text = manifest.read_text()
 
           permissions = [
+
               "android.permission.INTERNET",
+
               "android.permission.ACCESS_NETWORK_STATE",
+
               "android.permission.CAMERA",
+
               "android.permission.RECORD_AUDIO",
+
               "android.permission.MODIFY_AUDIO_SETTINGS",
+
               "android.permission.POST_NOTIFICATIONS",
+
               "android.permission.VIBRATE"
+
           ]
 
           match = re.search(
@@ -211,18 +294,21 @@ jobs:
                   )
 
           manifest.write_text(text)
+
           PY
 
 
-      # --------------------------------------------------
-      # Camera + Microphone WebView
-      # --------------------------------------------------
+      # ==================================================
+      # CAMERA + MICROPHONE WEBVIEW
+      # ==================================================
 
       - name: Configure WebView camera microphone
         run: |
+
           mkdir -p android/app/src/main/java/com/ramsena/xi
 
           cat > android/app/src/main/java/com/ramsena/xi/MainActivity.java <<'EOF'
+
           package com.ramsena.xi;
 
           import android.Manifest;
@@ -241,18 +327,25 @@ jobs:
 
               private static final int REQUEST_MEDIA = 1001;
 
+
               @Override
               public void onCreate(Bundle savedInstanceState) {
+
                   super.onCreate(savedInstanceState);
 
                   requestMediaPermissions();
 
-                  WebView webView = this.bridge.getWebView();
+                  WebView webView =
+                      this.bridge.getWebView();
 
-                  webView.getSettings().setJavaScriptEnabled(true);
+
+                  webView.getSettings()
+                      .setJavaScriptEnabled(true);
+
 
                   webView.getSettings()
                       .setMediaPlaybackRequiresUserGesture(false);
+
 
                   webView.setWebChromeClient(
                       new WebChromeClient() {
@@ -270,26 +363,38 @@ jobs:
                                           Manifest.permission.CAMERA
                                       ) == PackageManager.PERMISSION_GRANTED;
 
+
                                   boolean microphone =
                                       ContextCompat.checkSelfPermission(
                                           MainActivity.this,
                                           Manifest.permission.RECORD_AUDIO
                                       ) == PackageManager.PERMISSION_GRANTED;
 
-                                  if (camera && microphone) {
+
+                                  if (
+                                      camera &&
+                                      microphone
+                                  ) {
 
                                       request.grant(
                                           request.getResources()
                                       );
 
-                                  } else {
+                                  }
+
+                                  else {
 
                                       request.deny();
+
                                   }
+
                               });
+
                           }
+
                       }
                   );
+
               }
 
 
@@ -301,23 +406,34 @@ jobs:
                           Manifest.permission.CAMERA
                       ) != PackageManager.PERMISSION_GRANTED;
 
+
                   boolean microphone =
                       ContextCompat.checkSelfPermission(
                           this,
                           Manifest.permission.RECORD_AUDIO
                       ) != PackageManager.PERMISSION_GRANTED;
 
-                  if (camera || microphone) {
+
+                  if (
+                      camera ||
+                      microphone
+                  ) {
 
                       ActivityCompat.requestPermissions(
                           this,
                           new String[] {
+
                               Manifest.permission.CAMERA,
+
                               Manifest.permission.RECORD_AUDIO
+
                           },
+
                           REQUEST_MEDIA
                       );
+
                   }
+
               }
 
 
@@ -334,29 +450,43 @@ jobs:
                       grantResults
                   );
 
-                  if (requestCode == REQUEST_MEDIA) {
+
+                  if (
+                      requestCode ==
+                      REQUEST_MEDIA
+                  ) {
 
                       if (
                           this.bridge != null &&
                           this.bridge.getWebView() != null
                       ) {
 
-                          this.bridge.getWebView().reload();
+                          this.bridge
+                              .getWebView()
+                              .reload();
+
                       }
+
                   }
+
               }
+
           }
+
           EOF
 
 
-      # --------------------------------------------------
-      # Create OneSignal initialization
-      # --------------------------------------------------
+      # ==================================================
+      # ONESIGNAL INITIALIZATION
+      # ==================================================
 
       - name: Create OneSignal initialization
         run: |
+
           cat > onesignal-init.js <<'EOF'
+
           import OneSignal from "@onesignal/capacitor-plugin";
+
 
           const ONESIGNAL_APP_ID =
             "b09e5ecd-3f5e-4030-8ddf-96a8f1645e6e";
@@ -367,8 +497,12 @@ jobs:
               try {
 
                   await OneSignal.initialize({
-                      appId: ONESIGNAL_APP_ID
+
+                      appId:
+                        ONESIGNAL_APP_ID
+
                   });
+
 
                   console.log(
                       "OneSignal initialized"
@@ -376,112 +510,136 @@ jobs:
 
 
                   const hasPermission =
-                      await OneSignal.Notifications.hasPermission();
+                      await OneSignal
+                          .Notifications
+                          .hasPermission();
 
 
                   if (!hasPermission) {
 
-                      await OneSignal.Notifications.requestPermission(
-                          true
-                      );
+                      await OneSignal
+                          .Notifications
+                          .requestPermission(true);
+
                   }
 
 
-                  /*
-                   * Wait for Supabase session.
-                   *
-                   * GyanSetu pages already load
-                   * Supabase from CDN.
-                   */
-
                   const waitForSupabase =
-                      setInterval(async () => {
+                      setInterval(
+                          async () => {
 
-                          try {
+                              try {
 
-                              if (
-                                  typeof window.supabaseClient ===
-                                  "undefined"
-                              ) {
-                                  return;
+                                  if (
+                                      typeof window.supabaseClient ===
+                                      "undefined"
+                                  ) {
+
+                                      return;
+
+                                  }
+
+
+                                  const {
+                                      data
+                                  } =
+                                      await window
+                                          .supabaseClient
+                                          .auth
+                                          .getSession();
+
+
+                                  if (
+                                      data &&
+                                      data.session &&
+                                      data.session.user
+                                  ) {
+
+                                      await OneSignal.login(
+
+                                          data
+                                              .session
+                                              .user
+                                              .id
+
+                                      );
+
+
+                                      console.log(
+                                          "OneSignal user linked:",
+                                          data.session.user.id
+                                      );
+
+
+                                      clearInterval(
+                                          waitForSupabase
+                                      );
+
+                                  }
+
                               }
 
+                              catch(error) {
 
-                              const {
-                                  data
-                              } =
-                                  await window.supabaseClient.auth.getSession();
-
-
-                              if (
-                                  data &&
-                                  data.session &&
-                                  data.session.user
-                              ) {
-
-                                  await OneSignal.login(
-                                      data.session.user.id
+                                  console.error(
+                                      "OneSignal Supabase sync error:",
+                                      error
                                   );
 
-                                  console.log(
-                                      "OneSignal user linked:",
-                                      data.session.user.id
-                                  );
-
-                                  clearInterval(
-                                      waitForSupabase
-                                  );
                               }
 
-                          } catch (error) {
-
-                              console.error(
-                                  "OneSignal Supabase sync error:",
-                                  error
-                              );
-                          }
-
-                      }, 1000);
-
-
-                  /*
-                   * Stop checking after 30 seconds.
-                   */
-
-                  setTimeout(() => {
-
-                      clearInterval(
-                          waitForSupabase
+                          },
+                          1000
                       );
 
-                  }, 30000);
+
+                  setTimeout(
+                      () => {
+
+                          clearInterval(
+                              waitForSupabase
+                          );
+
+                      },
+                      30000
+                  );
 
 
-              } catch (error) {
+              }
+
+              catch(error) {
 
                   console.error(
                       "OneSignal initialization error:",
                       error
                   );
+
               }
+
           }
 
 
           initOneSignal();
+
           EOF
 
 
-      # --------------------------------------------------
-      # Bundle OneSignal
-      # --------------------------------------------------
+      # ==================================================
+      # ESBUILD
+      # ==================================================
 
       - name: Install esbuild
         run: |
           npm install --save-dev esbuild
 
 
+      # ==================================================
+      # BUILD ONESIGNAL
+      # ==================================================
+
       - name: Build OneSignal bundle
         run: |
+
           npx esbuild onesignal-init.js \
             --bundle \
             --format=esm \
@@ -489,14 +647,17 @@ jobs:
             --outfile=www/onesignal-init.bundle.js
 
 
-      # --------------------------------------------------
-      # Inject OneSignal into HTML
-      # --------------------------------------------------
+      # ==================================================
+      # INJECT ONESIGNAL
+      # ==================================================
 
       - name: Inject OneSignal into HTML pages
         run: |
+
           python3 - <<'PY'
+
           from pathlib import Path
+
 
           for html in Path("www").glob("*.html"):
 
@@ -504,12 +665,17 @@ jobs:
                   encoding="utf-8"
               )
 
+
               script = (
                   '\n<script type="module" '
                   'src="onesignal-init.bundle.js"></script>\n'
               )
 
-              if "onesignal-init.bundle.js" not in text:
+
+              if (
+                  "onesignal-init.bundle.js"
+                  not in text
+              ):
 
                   if "</body>" in text:
 
@@ -522,48 +688,60 @@ jobs:
 
                       text += script
 
+
                   html.write_text(
                       text,
                       encoding="utf-8"
                   )
+
           PY
 
 
-      # --------------------------------------------------
-      # Sync Capacitor
-      # --------------------------------------------------
+      # ==================================================
+      # SYNC CAPACITOR
+      # ==================================================
 
       - name: Sync Capacitor
         run: |
+
           npx cap sync android
 
 
-      # --------------------------------------------------
-      # Build APK
-      # --------------------------------------------------
+      # ==================================================
+      # BUILD APK
+      # ==================================================
 
       - name: Build APK
         run: |
+
           cd android
+
           chmod +x gradlew
+
           ./gradlew assembleDebug
 
 
-      # --------------------------------------------------
-      # Check APK
-      # --------------------------------------------------
+      # ==================================================
+      # CHECK APK
+      # ==================================================
 
       - name: Check APK
         run: |
-          ls -lh android/app/build/outputs/apk/debug/app-debug.apk
+
+          ls -lh \
+            android/app/build/outputs/apk/debug/app-debug.apk
 
 
-      # --------------------------------------------------
-      # Upload APK
-      # --------------------------------------------------
+      # ==================================================
+      # UPLOAD APK
+      # ==================================================
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
+
         with:
+
           name: GYANSETU-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+
+          path:
+            android/app/build/outputs/apk/debug/app-debug.apk
