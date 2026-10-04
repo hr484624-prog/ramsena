@@ -2,370 +2,699 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 
-<title>GyanSetu Information</title>
+<title>GyanSetu Board AI Teacher</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
-}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
 body{
-    min-height:100vh;
-    background:linear-gradient(135deg,#eaf4ff,#ffffff);
-    color:#123;
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f6fb;
+    color:#172033;
 }
 
-/* Background */
-.bg{
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at 10% 20%,rgba(0,123,255,.15),transparent 30%),
-    radial-gradient(circle at 90% 80%,rgba(0,200,255,.12),transparent 30%);
-    z-index:-1;
-}
+body.lock{overflow:hidden}
 
-/* Main Popup */
-.popup{
-    width:94%;
-    max-width:650px;
-    margin:25px auto;
-    background:white;
-    border-radius:25px;
-    box-shadow:0 15px 50px rgba(0,0,0,.15);
-    overflow:hidden;
-    border:1px solid #dcecff;
-}
-
-/* Header */
 .header{
-    background:linear-gradient(135deg,#087cf5,#0056d6);
-    color:white;
-    padding:30px 22px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    padding:22px 16px;
     text-align:center;
 }
 
-.logo{
-    width:75px;
-    height:75px;
+.header h1{margin:0;font-size:27px}
+.header p{margin:8px 0 0;font-size:15px}
+
+.container{
+    max-width:1100px;
     margin:auto;
-    border-radius:20px;
-    background:white;
-    color:#087cf5;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:34px;
-    font-weight:bold;
-    box-shadow:0 8px 20px rgba(0,0,0,.2);
+    padding:20px;
 }
 
-.header h1{
-    margin-top:15px;
-    font-size:30px;
-}
-
-.header p{
-    margin-top:8px;
-    font-size:15px;
-    opacity:.95;
-}
-
-/* Intro */
-.intro{
-    padding:22px;
-    text-align:center;
-    line-height:1.7;
-    color:#444;
-}
-
-.intro strong{
-    color:#006ce5;
-}
-
-/* Feature list */
-.features{
-    padding:10px 18px 25px;
-}
-
-.feature{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    padding:16px;
-    margin:10px 0;
-    border:1px solid #e1edff;
+.info{
+    background:#fff;
     border-radius:18px;
-    background:#fbfdff;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.subject-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
+
+.subject{
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:20px;
     cursor:pointer;
-    transition:.25s;
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+    transition:.2s;
 }
 
-.feature:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(0,100,220,.12);
-    border-color:#9dcaff;
+.subject:hover{
+    transform:translateY(-3px);
 }
 
-.icon{
-    width:52px;
-    height:52px;
-    min-width:52px;
-    border-radius:15px;
-    background:#e8f3ff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:27px;
+.subject-icon{
+    font-size:35px;
 }
 
-.feature h3{
-    color:#075ec9;
-    font-size:17px;
-    margin-bottom:4px;
+.subject h3{
+    margin:10px 0 5px;
 }
 
-.feature p{
-    font-size:13px;
-    color:#666;
+.subject p{
+    margin:0;
+    color:#64748b;
 }
 
-.arrow{
-    margin-left:auto;
-    font-size:22px;
-    color:#087cf5;
-}
 
-/* Details Popup */
+/* POPUP */
+
 .modal{
     display:none;
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.55);
-    z-index:100;
+    z-index:5000;
+    background:rgba(0,0,0,.72);
+    align-items:center;
+    justify-content:center;
     padding:18px;
-    overflow-y:auto;
 }
+
+.modal.show{display:flex}
 
 .modal-box{
     width:100%;
-    max-width:650px;
-    margin:25px auto;
-    background:white;
-    border-radius:25px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
+    max-width:460px;
+    max-height:90vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:24px;
+    padding:25px;
+    box-shadow:0 25px 70px rgba(0,0,0,.35);
 }
 
-.modal-header{
-    background:linear-gradient(135deg,#087cf5,#0056d6);
-    color:white;
-    padding:24px;
-    text-align:center;
+.modal-box h2{
+    margin-top:0;
 }
 
-.modal-icon{
-    font-size:45px;
+.board-list{
+    display:grid;
+    gap:12px;
+    margin-top:18px;
 }
 
-.modal-header h2{
-    margin-top:8px;
-}
-
-.modal-content{
-    padding:24px;
-}
-
-.modal-content h3{
-    color:#075ec9;
-    margin:18px 0 8px;
-}
-
-.modal-content p{
-    color:#444;
-    line-height:1.75;
-    font-size:15px;
-}
-
-.modal-content ul{
-    padding-left:22px;
-    color:#444;
-    line-height:1.9;
-}
-
-.close-btn{
+.board-btn{
     width:100%;
-    border:0;
-    padding:14px;
+    padding:17px;
+    border:1px solid #dbe3ef;
+    background:#f8fafc;
     border-radius:14px;
-    background:#087cf5;
-    color:white;
+    text-align:left;
     font-size:16px;
     font-weight:bold;
-    margin-top:22px;
     cursor:pointer;
 }
 
-.close-btn:hover{
-    background:#0056d6;
+.board-btn:hover{
+    background:#eff6ff;
+    border-color:#2563eb;
 }
 
-/* Footer */
-.footer{
+.input{
+    width:100%;
+    padding:15px;
+    border:1px solid #cbd5e1;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+    margin-top:10px;
+}
+
+.primary{
+    width:100%;
+    margin-top:15px;
+    padding:15px;
+    border:0;
+    border-radius:12px;
+    background:#2563eb;
+    color:#fff;
+    font-weight:bold;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.secondary{
+    width:100%;
+    margin-top:10px;
+    padding:13px;
+    border:0;
+    border-radius:12px;
+    background:#e2e8f0;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+
+/* CLASS SCREEN */
+
+.class-screen{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:4000;
+    background:#020617;
+    color:#fff;
+    overflow-y:auto;
+}
+
+.class-header{
+    position:sticky;
+    top:0;
+    z-index:10;
+    min-height:65px;
+    background:rgba(2,6,23,.97);
+    border-bottom:1px solid #334155;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 14px;
+}
+
+.class-title{
+    font-weight:bold;
+    font-size:17px;
+    max-width:78%;
+}
+
+.close{
+    width:44px;
+    height:44px;
+    border:0;
+    border-radius:50%;
+    background:#ef4444;
+    color:#fff;
+    font-size:25px;
+    cursor:pointer;
+}
+
+.class-content{
+    width:100%;
+    max-width:1050px;
+    margin:auto;
+    padding:18px;
+}
+
+
+/* TEACHER */
+
+.teacher-screen{
+    min-height:390px;
+    border-radius:22px;
+    background:radial-gradient(circle,#334155,#020617 70%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.teacher{
     text-align:center;
+}
+
+.head{
+    width:150px;
+    height:150px;
+    background:#f5c9a5;
+    border:5px solid white;
+    border-radius:50%;
+    position:relative;
+    margin:auto;
+}
+
+.hair{
+    position:absolute;
+    width:115px;
+    height:60px;
+    top:-14px;
+    left:13px;
+    background:#172033;
+    border-radius:70px 70px 20px 20px;
+}
+
+.eye{
+    width:13px;
+    height:13px;
+    background:#111;
+    border-radius:50%;
+    position:absolute;
+    top:62px;
+}
+
+.eye.left{left:38px}
+.eye.right{right:38px}
+
+.mouth{
+    width:48px;
+    height:10px;
+    background:#8b3a3a;
+    border-radius:20px;
+    position:absolute;
+    left:46px;
+    top:104px;
+}
+
+.body{
+    width:190px;
+    height:155px;
+    margin:-3px auto 0;
+    background:#2563eb;
+    border-radius:80px 80px 20px 20px;
+}
+
+.teacher-name{
+    font-size:20px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.speaking .mouth{
+    animation:talk .16s infinite alternate;
+}
+
+@keyframes talk{
+    from{height:7px}
+    to{height:27px}
+}
+
+.status{
+    position:absolute;
+    left:15px;
+    right:15px;
+    bottom:15px;
+    background:rgba(0,0,0,.65);
+    padding:11px;
+    border-radius:12px;
+    text-align:center;
+}
+
+
+/* TIMER */
+
+.timer{
+    background:#111827;
+    border:1px solid #334155;
+    padding:14px;
+    border-radius:15px;
+    margin-top:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.timer strong{
+    font-size:21px;
+    color:#60a5fa;
+}
+
+
+/* LESSON */
+
+.lesson{
+    margin-top:16px;
+    background:#fff;
+    color:#172033;
+    border-radius:18px;
     padding:20px;
-    color:#777;
-    font-size:13px;
+    line-height:1.75;
+    min-height:180px;
+}
+
+.lesson h2{margin-top:0}
+
+.question-card{
+    margin-top:15px;
+    padding:15px;
+    background:#eff6ff;
+    border-left:5px solid #2563eb;
+    border-radius:10px;
+}
+
+
+/* CONTROLS */
+
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:15px;
+}
+
+.controls button{
+    padding:14px;
+    border:0;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.speak{
+    background:#22c55e;
+    color:#fff;
+}
+
+.stop{
+    background:#ef4444;
+    color:#fff;
+}
+
+.next{
+    background:#7c3aed;
+    color:#fff;
+    margin-top:10px;
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+
+/* ASK */
+
+.ask{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.ask input{
+    flex:1;
+    padding:14px;
+    border:0;
+    border-radius:12px;
+    outline:none;
+}
+
+.ask button{
+    padding:14px 20px;
+    border:0;
+    border-radius:12px;
+    background:#7c3aed;
+    color:#fff;
+    font-weight:bold;
+}
+
+
+/* MOTIVATION */
+
+.motivation{
+    margin-top:15px;
+    padding:17px;
+    border-radius:15px;
+    background:linear-gradient(135deg,#312e81,#581c87);
+    color:#fff;
+    line-height:1.6;
+}
+
+.motivation strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    .container{padding:14px}
+
+    .subject-grid{
+        grid-template-columns:1fr;
+    }
+
+    .teacher-screen{
+        min-height:350px;
+    }
+
+    .head{
+        width:130px;
+        height:130px;
+    }
+
+    .hair{
+        width:100px;
+        height:50px;
+        left:10px;
+    }
+
+    .eye{top:55px}
+    .eye.left{left:32px}
+    .eye.right{right:32px}
+    .mouth{
+        left:40px;
+        top:91px;
+    }
+
+    .body{
+        width:165px;
+        height:125px;
+    }
+
+    .ask{
+        flex-direction:column;
+    }
+
+    .controls{
+        grid-template-columns:1fr;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
+<!-- HEADER -->
 
-<div class="popup">
+<div class="header">
+    <h1>🤖 GyanSetu Board AI Teacher</h1>
+    <p>Board Exam Preparation • Learn • Understand • Practice</p>
+</div>
 
-    <div class="header">
+<div class="container">
 
-        <div class="logo">G</div>
-
-        <h1>GyanSetu</h1>
-
-        <p>शिक्षण, कौशल्य आणि नवीन संधी एकाच ठिकाणी</p>
-
-    </div>
-
-    <div class="intro">
-
+    <div class="info">
+        <h2>📚 Board AI Study</h2>
         <p>
-        <strong>GyanSetu</strong> हे विद्यार्थ्यांना शिक्षण,
-        कौशल्यांचा सराव आणि आधुनिक learning tools
-        एकाच ठिकाणी उपलब्ध करून देण्यासाठी तयार केलेले
-        educational platform आहे.
+            तुमचा Board निवडा आणि AI Teacher सोबत Board Exam ची
+            तयारी सुरू करा.
         </p>
 
-        <br>
+        <div id="selectedInfo"></div>
 
-        <p>
-        खालीलपैकी कोणत्याही feature वर tap करून
-        GyanSetu मधून तुम्ही काय करू शकता याबद्दल
-        सविस्तर माहिती जाणून घ्या.
-        </p>
-
-    </div>
-
-    <div class="features">
-
-        <div class="feature" onclick="openInfo('study')">
-            <div class="icon">🎓</div>
-            <div>
-                <h3>Study / Classes</h3>
-                <p>विषयानुसार अभ्यास आणि classes</p>
+        <div id="subjects" class="subject-grid">
+            <div class="subject">
+                <div class="subject-icon">⏳</div>
+                <h3>Loading...</h3>
+                <p>Subjects तयार होत आहेत.</p>
             </div>
-            <div class="arrow">›</div>
         </div>
-
-
-        <div class="feature" onclick="openInfo('live')">
-            <div class="icon">🎥</div>
-            <div>
-                <h3>Live Classes</h3>
-                <p>शिक्षक आणि विद्यार्थ्यांसाठी live learning</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-
-        <div class="feature" onclick="openInfo('ai')">
-            <div class="icon">🤖</div>
-            <div>
-                <h3>AI Study</h3>
-                <p>अभ्यासासाठी AI आधारित मदत</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-
-        <div class="feature" onclick="openInfo('cyber')">
-            <div class="icon">🔐</div>
-            <div>
-                <h3>Cybersecurity Learn</h3>
-                <p>Cybersecurity चे knowledge आणि learning</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-
-        <div class="feature" onclick="openInfo('coding')">
-            <div class="icon">💻</div>
-            <div>
-                <h3>Code Practice</h3>
-                <p>Coding शिकणे आणि practice करणे</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-
-        <div class="feature" onclick="openInfo('trading')">
-            <div class="icon">📈</div>
-            <div>
-                <h3>Trading Practice</h3>
-                <p>Trading concepts चा educational practice</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-
-        <div class="feature" onclick="openInfo('profile')">
-            <div class="icon">👤</div>
-            <div>
-                <h3>Profile / Username</h3>
-                <p>तुमचे स्वतःचे GyanSetu profile</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-    </div>
-
-    <div class="footer">
-        © 2026 GyanSetu • Learn • Practice • Grow
     </div>
 
 </div>
 
 
-<!-- INFORMATION MODAL -->
+<!-- BOARD POPUP -->
 
-<div class="modal" id="infoModal">
+<div id="boardModal" class="modal">
 
     <div class="modal-box">
 
-        <div class="modal-header">
-            <div class="modal-icon" id="modalIcon">🎓</div>
-            <h2 id="modalTitle">GyanSetu</h2>
+        <h2>🎓 तुमचा Board निवडा</h2>
+
+        <p>तुम्ही कोणत्या Board साठी अभ्यास करत आहात?</p>
+
+        <div class="board-list">
+
+            <button class="board-btn"
+                    onclick="selectBoard('Maharashtra State Board')">
+                🇮🇳 Maharashtra State Board
+            </button>
+
+            <button class="board-btn"
+                    onclick="selectBoard('CBSE')">
+                📘 CBSE
+            </button>
+
+            <button class="board-btn"
+                    onclick="selectBoard('ICSE')">
+                📗 ICSE
+            </button>
+
         </div>
 
-        <div class="modal-content">
+    </div>
 
-            <p id="modalDescription"></p>
+</div>
 
-            <h3>✨ तुम्ही यातून काय करू शकता?</h3>
 
-            <ul id="modalList"></ul>
+<!-- NAME POPUP -->
 
-            <h3>🚀 GyanSetu मध्ये याचा उपयोग</h3>
+<div id="nameModal" class="modal">
 
-            <p id="modalExtra"></p>
+    <div class="modal-box">
 
-            <button class="close-btn" onclick="closeInfo()">
-                ← परत GyanSetu Information
+        <h2>👋 आधी तुमचं नाव सांगा</h2>
+
+        <p>
+            AI Teacher तुम्हाला तुमच्या नावाने शिकवतील.
+        </p>
+
+        <input
+            id="nameInput"
+            class="input"
+            maxlength="40"
+            placeholder="उदा. Hitesh"
+        >
+
+        <button class="primary"
+                onclick="saveName()">
+            🚀 Start Learning
+        </button>
+
+        <button class="secondary"
+                onclick="closeName()">
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- CLASS SCREEN -->
+
+<div id="classScreen" class="class-screen">
+
+    <div class="class-header">
+
+        <div id="classTitle" class="class-title">
+            🤖 GyanSetu AI Teacher
+        </div>
+
+        <button class="close"
+                onclick="closeClass()">
+            ×
+        </button>
+
+    </div>
+
+    <div class="class-content">
+
+        <div class="teacher-screen">
+
+            <div id="teacher" class="teacher">
+
+                <div class="head">
+                    <div class="hair"></div>
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="mouth"></div>
+                </div>
+
+                <div class="body"></div>
+
+                <div class="teacher-name">
+                    🤖 GyanSetu AI Sir
+                </div>
+
+            </div>
+
+            <div id="status" class="status">
+                Class तयार होत आहे...
+            </div>
+
+        </div>
+
+
+        <!-- TIMER -->
+
+        <div class="timer">
+
+            <div>
+                ⏱️ आजचा AI Class
+            </div>
+
+            <strong id="timer">
+                60:00
+            </strong>
+
+        </div>
+
+
+        <!-- LESSON -->
+
+        <div id="lesson" class="lesson">
+            ⏳ AI Teacher तुमच्यासाठी class तयार करत आहेत...
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="controls">
+
+            <button class="speak"
+                    onclick="startSpeaking()">
+                🔊 Start / Replay
             </button>
+
+            <button class="stop"
+                    onclick="stopSpeaking()">
+                ⏹ Stop
+            </button>
+
+        </div>
+
+        <button class="next"
+                onclick="nextQuestion()">
+            ➡️ पुढचा Board Question
+        </button>
+
+
+        <!-- ASK -->
+
+        <div class="ask">
+
+            <input
+                id="question"
+                placeholder="🤔 AI Teacher ला प्रश्न विचारा..."
+            >
+
+            <button onclick="askAI()">
+                Ask
+            </button>
+
+        </div>
+
+
+        <!-- MOTIVATION -->
+
+        <div class="motivation">
+
+            <strong>💪 आजची Motivation</strong>
+
+            <span id="motivationText">
+                हार मानायची नाही. आपण हळूहळू सगळं शिकणार आहोत.
+            </span>
 
         </div>
 
@@ -376,175 +705,1122 @@ body{
 
 <script>
 
-const information = {
+/* =========================================================
+   CONFIG
+========================================================= */
 
-    study:{
-        icon:"🎓",
-        title:"Study / Classes",
-        description:
-        "GyanSetu मधील Study / Classes section विद्यार्थ्यांना त्यांच्या अभ्यासासाठी आवश्यक learning material आणि विषयानुसार educational content एका ठिकाणी उपलब्ध करून देण्यासाठी तयार केले आहे.",
-        list:[
-            "वेगवेगळे subjects निवडून अभ्यास करता येतो.",
-            "विषयानुसार educational content पाहता येते.",
-            "वेगवेगळ्या classes आणि standards साठी अभ्यास करता येतो.",
-            "अभ्यासासाठी आवश्यक material एका ठिकाणी ठेवता येते.",
-            "स्वतःच्या learning speed नुसार अभ्यास करता येतो."
-        ],
-        extra:
-        "विद्यार्थ्यांना वेगवेगळ्या ठिकाणी material शोधण्याऐवजी शिक्षणाशी संबंधित content एका platform वर मिळवण्याचा उद्देश आहे."
+const API =
+"https://gyan-setu-ai-study-backend.vercel.app";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let selectedBoard = "";
+let studentName = "";
+let selectedSubject = "";
+let currentText = "";
+let currentQuestionIndex = 0;
+let speech = null;
+
+let timerSeconds = 60 * 60;
+let timerInterval = null;
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+const SSC_SUBJECTS = [
+
+    {
+        id:"marathi",
+        icon:"📚",
+        title:"मराठी",
+        description:"गद्य • पद्य • व्याकरण • लेखन • अपठित"
     },
 
-    live:{
-        icon:"🎥",
-        title:"Live Classes",
-        description:
-        "GyanSetu Live Classes च्या माध्यमातून शिक्षक आणि विद्यार्थ्यांना live online class च्या स्वरूपात जोडण्याचा प्रयत्न केला जातो. शिक्षक online class सुरू करू शकतात आणि विद्यार्थी दिलेल्या class ID द्वारे सहभागी होऊ शकतात.",
-        list:[
-            "शिक्षक live class सुरू करू शकतात.",
-            "विद्यार्थी दिलेल्या class ID द्वारे class join करू शकतात.",
-            "शिक्षक आणि विद्यार्थी online learning session मध्ये सहभागी होऊ शकतात.",
-            "Live teaching साठी camera आणि video communication चा उपयोग करता येतो.",
-            "Class नंतर recording उपलब्ध असल्यास ती पुन्हा पाहता येऊ शकते."
-        ],
-        extra:
-        "उदाहरणार्थ, शिक्षकाने एखाद्या विषयाचा live class सुरू केला तर विद्यार्थी त्यात सहभागी होऊन शिक्षकाकडून शिकू शकतात. त्यामुळे classroom learning ला online पर्याय मिळतो."
+    {
+        id:"hindi",
+        icon:"📖",
+        title:"हिंदी",
+        description:"गद्य • पद्य • व्याकरण • लेखन"
     },
 
-    ai:{
-        icon:"🤖",
-        title:"AI Study",
-        description:
-        "AI Study हे विद्यार्थ्यांना अभ्यास समजून घेण्यासाठी AI आधारित educational assistance देण्यासाठी तयार केलेले feature आहे.",
-        list:[
-            "अभ्यासातील प्रश्न समजून घेण्यासाठी मदत घेता येते.",
-            "कठीण concepts सोप्या भाषेत समजून घेण्यास मदत मिळू शकते.",
-            "अभ्यासाचे explanations मिळवता येतात.",
-            "Revision साठी AI चा educational उपयोग करता येतो.",
-            "वेगवेगळ्या विषयांबद्दल प्रश्न विचारून शिकता येते."
-        ],
-        extra:
-        "AI चा उद्देश विद्यार्थ्याला शिकताना additional learning assistant उपलब्ध करून देणे आहे."
+    {
+        id:"english",
+        icon:"🇬🇧",
+        title:"English",
+        description:"Prose • Poetry • Grammar • Writing"
     },
 
-    cyber:{
-        icon:"🔐",
-        title:"Cybersecurity Learn",
-        description:
-        "Cybersecurity Learn section विद्यार्थ्यांना digital security आणि cybersecurity विषयी educational knowledge देण्यासाठी आहे.",
-        list:[
-            "Cybersecurity चे basic concepts शिकता येतात.",
-            "Online safety बद्दल माहिती मिळवता येते.",
-            "Digital security चे महत्त्व समजून घेता येते.",
-            "Cyber threats बद्दल educational knowledge मिळवता येते.",
-            "सुरक्षितपणे internet वापरण्याच्या सवयी शिकता येतात."
-        ],
-        extra:
-        "आजच्या digital world मध्ये online safety समजून घेणे महत्त्वाचे आहे. GyanSetu मध्ये cybersecurity education साठी स्वतंत्र learning section ठेवता येतो."
+    {
+        id:"math1",
+        icon:"➗",
+        title:"गणित भाग 1",
+        description:"Algebra • AP • GST • Probability • Statistics"
     },
 
-    coding:{
-        icon:"💻",
-        title:"Code Practice",
-        description:
-        "Code Practice विद्यार्थ्यांना programming शिकताना code लिहिणे, समजून घेणे आणि practice करण्यासाठी तयार केलेले section आहे.",
-        list:[
-            "Programming concepts शिकता येतात.",
-            "Code examples समजून घेता येतात.",
-            "स्वतः code लिहून practice करता येते.",
-            "Programming logic develop करण्याचा सराव करता येतो.",
-            "Coding शिकण्याची सुरुवात करता येते."
-        ],
-        extra:
-        "Coding हे आधुनिक technology skills मधील महत्त्वाचे skill आहे. त्यामुळे विद्यार्थ्यांना learning सोबत practical coding practice मिळावी हा यामागचा उद्देश आहे."
+    {
+        id:"math2",
+        icon:"📐",
+        title:"गणित भाग 2",
+        description:"Geometry • Trigonometry • Coordinate Geometry"
     },
 
-    trading:{
-        icon:"📈",
-        title:"Trading Practice",
-        description:
-        "Trading Practice section चा उद्देश विद्यार्थ्यांना financial markets आणि trading concepts विषयी educational practice environment देणे आहे.",
-        list:[
-            "Trading चे basic concepts समजून घेता येतात.",
-            "Charts आणि market concepts चा educational अभ्यास करता येतो.",
-            "Risk आणि decision-making बद्दल शिकता येते.",
-            "Real money वापरण्याऐवजी learning आणि practice वर लक्ष देता येते.",
-            "Financial education समजून घेण्याची सुरुवात करता येते."
-        ],
-        extra:
-        "हा section educational learning आणि practice साठी आहे. प्रत्यक्ष आर्थिक निर्णय घेण्यापूर्वी योग्य पालक/शिक्षक/आर्थिक तज्ज्ञांचा सल्ला घेणे महत्त्वाचे आहे."
+    {
+        id:"science1",
+        icon:"🔬",
+        title:"विज्ञान व तंत्रज्ञान भाग 1",
+        description:"Physics • Chemistry • Space"
     },
 
-    profile:{
-        icon:"👤",
-        title:"Profile / Username",
-        description:
-        "GyanSetu Profile मध्ये प्रत्येक विद्यार्थ्याला किंवा user ला स्वतःची ओळख तयार करण्यासाठी username आणि profile ची सुविधा देता येते.",
-        list:[
-            "स्वतःचा username तयार करता येतो.",
-            "तुमचे profile पाहता येते.",
-            "तुमच्या GyanSetu activity साठी profile वापरता येते.",
-            "Learning journey एका profile शी जोडता येते.",
-            "भविष्यात points आणि leaderboard सारख्या features सोबत profile जोडता येते."
-        ],
-        extra:
-        "GyanSetu मध्ये user ची learning journey एका profile भोवती तयार करण्याचा उद्देश आहे."
+    {
+        id:"science2",
+        icon:"🧬",
+        title:"विज्ञान व तंत्रज्ञान भाग 2",
+        description:"Biology • Environment • Biotechnology"
+    },
+
+    {
+        id:"history",
+        icon:"🏛️",
+        title:"इतिहास",
+        description:"History • Arts • Media • Tourism"
+    },
+
+    {
+        id:"civics",
+        icon:"⚖️",
+        title:"राज्यशास्त्र",
+        description:"Constitution • Elections • Political Parties"
     }
 
-};
+];
 
 
-function openInfo(type){
+/* =========================================================
+   BOARD POPUP
+========================================================= */
 
-    const data = information[type];
+function openBoardPopup(){
 
-    document.getElementById("modalIcon").textContent = data.icon;
+    document.getElementById(
+        "boardModal"
+    ).classList.add("show");
 
-    document.getElementById("modalTitle").textContent = data.title;
+    document.body.classList.add("lock");
+}
 
-    document.getElementById("modalDescription").textContent =
-        data.description;
 
-    document.getElementById("modalExtra").textContent =
-        data.extra;
+function selectBoard(board){
 
-    const list = document.getElementById("modalList");
+    selectedBoard = board;
 
-    list.innerHTML = "";
+    document.getElementById(
+        "boardModal"
+    ).classList.remove("show");
 
-    data.list.forEach(function(item){
+    document.getElementById(
+        "nameModal"
+    ).classList.add("show");
 
-        const li = document.createElement("li");
+    document.getElementById(
+        "nameInput"
+    ).focus();
 
-        li.textContent = item;
+}
 
-        list.appendChild(li);
+
+/* =========================================================
+   NAME
+========================================================= */
+
+function saveName(){
+
+    const input =
+        document.getElementById("nameInput");
+
+    studentName =
+        input.value.trim();
+
+    if(!studentName){
+
+        studentName = "विद्यार्थी";
+
+    }
+
+    document.getElementById(
+        "nameModal"
+    ).classList.remove("show");
+
+    document.body.classList.remove("lock");
+
+    renderSubjects();
+
+    document.getElementById(
+        "selectedInfo"
+    ).innerHTML = `
+
+        <div style="
+            margin-top:15px;
+            padding:14px;
+            border-radius:12px;
+            background:#eff6ff;
+            color:#1d4ed8;
+            font-weight:bold;
+        ">
+
+            👤 ${escapeHTML(studentName)}
+            &nbsp; • &nbsp;
+            🎓 ${escapeHTML(selectedBoard)}
+
+        </div>
+
+    `;
+
+}
+
+
+function closeName(){
+
+    document.getElementById(
+        "nameModal"
+    ).classList.remove("show");
+
+    document.body.classList.remove("lock");
+
+}
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+function renderSubjects(){
+
+    const box =
+        document.getElementById("subjects");
+
+    box.innerHTML = "";
+
+    SSC_SUBJECTS.forEach(subject => {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "subject";
+
+        card.innerHTML = `
+
+            <div class="subject-icon">
+                ${subject.icon}
+            </div>
+
+            <h3>
+                ${subject.title}
+            </h3>
+
+            <p>
+                ${subject.description}
+            </p>
+
+            <div style="
+                margin-top:15px;
+                color:#2563eb;
+                font-weight:bold;
+            ">
+                🤖 AI Teacher सोबत शिका →
+            </div>
+
+        `;
+
+        card.onclick = () =>
+            startSubject(subject);
+
+        box.appendChild(card);
 
     });
 
-    document.getElementById("infoModal").style.display = "block";
-
-    document.body.style.overflow = "hidden";
 }
 
 
-function closeInfo(){
+/* =========================================================
+   START SUBJECT
+========================================================= */
 
-    document.getElementById("infoModal").style.display = "none";
+async function startSubject(subject){
 
-    document.body.style.overflow = "auto";
+    selectedSubject =
+        subject.title;
+
+    currentQuestionIndex = 0;
+
+    document.getElementById(
+        "classScreen"
+    ).style.display = "block";
+
+    document.body.classList.add("lock");
+
+    document.getElementById(
+        "classTitle"
+    ).innerText =
+        `🤖 ${subject.title} • ${studentName}`;
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "⏳ AI Teacher class तयार करत आहेत...";
+
+    document.getElementById(
+        "lesson"
+    ).innerHTML =
+        "⏳ मागील Board questions वरून आजचा 1 तासाचा class तयार होत आहे...";
+
+    startOneHourTimer();
+
+    setMotivation();
+
+    await loadBoardLesson();
+
 }
 
 
-/* Modal बाहेर tap केल्यावर बंद */
-document.getElementById("infoModal").addEventListener("click",function(e){
+/* =========================================================
+   1 HOUR TIMER
+========================================================= */
 
-    if(e.target === this){
+function startOneHourTimer(){
 
-        closeInfo();
+    clearInterval(timerInterval);
+
+    timerSeconds = 60 * 60;
+
+    updateTimer();
+
+    timerInterval =
+        setInterval(() => {
+
+            if(timerSeconds <= 0){
+
+                clearInterval(timerInterval);
+
+                document.getElementById(
+                    "timer"
+                ).innerText =
+                    "00:00";
+
+                return;
+
+            }
+
+            timerSeconds--;
+
+            updateTimer();
+
+        },1000);
+
+}
+
+
+function updateTimer(){
+
+    const minutes =
+        Math.floor(timerSeconds / 60);
+
+    const seconds =
+        timerSeconds % 60;
+
+    document.getElementById(
+        "timer"
+    ).innerText =
+        String(minutes).padStart(2,"0")
+        + ":" +
+        String(seconds).padStart(2,"0");
+
+}
+
+
+/* =========================================================
+   BOARD AI LESSON
+========================================================= */
+
+async function loadBoardLesson(){
+
+    const prompt = `
+
+तुम्ही GyanSetu चे Board Exam AI Teacher आहात.
+
+विद्यार्थ्याचे नाव: ${studentName}
+Board: ${selectedBoard}
+Subject: ${selectedSubject}
+
+हा 60 मिनिटांचा Board Exam teaching session आहे.
+
+महत्त्वाचे नियम:
+
+1. Chapter-by-chapter lecture देऊ नका.
+2. Board exam मध्ये विचारल्या जाणाऱ्या प्रश्नांच्या प्रकारांवर
+   मुख्य भर द्या.
+3. मागील 5 वर्षांच्या उपलब्ध Board Questions च्या pattern प्रमाणे
+   प्रश्न समजावून सांगा.
+4. प्रत्येक प्रश्न:
+   - प्रश्न नीट समजावून सांगा
+   - कोणता concept वापरायचा ते सांगा
+   - step-by-step solution द्या
+   - Board answer कसा लिहायचा ते सांगा
+   - विद्यार्थ्यांकडून होणारी common mistake सांगा
+5. उत्तर फक्त पाठ करून देऊ नका.
+   विद्यार्थ्याला स्वतः विचार करायला शिकवा.
+6. मध्ये मध्ये विद्यार्थ्याला प्रश्न विचारा.
+7. विद्यार्थ्याचे नाव नैसर्गिकपणे वापरा.
+8. भाषा सोपी Marathi/Hinglish ठेवा.
+9. Maths/Science मध्ये calculations आणि steps स्पष्ट ठेवा.
+10. Languages मध्ये writing format, grammar आणि answer presentation
+    स्पष्ट करा.
+11. इतिहास/राज्यशास्त्रात points मध्ये exam-ready answers द्या.
+12. प्रत्येक काही मिनिटांनी छोटा revision/question घ्या.
+13. मध्ये मध्ये हलके motivation द्या.
+14. Motivation अभ्यासापासून पूर्णपणे भरकटणारे नसावे.
+15. विद्यार्थ्यावर guilt किंवा भीती निर्माण करू नका.
+16. "Board आहे, घाबरायचं नाही, आपण तयारी करून घेऊ"
+    अशा positive पद्धतीने motivate करा.
+17. पालकांच्या मेहनतीचा उल्लेख positive पद्धतीने करा:
+    "तुमचे आई-बाबा तुमच्यासाठी मेहनत घेतात; त्यांच्या प्रेमाची
+    किंमत आपण आपल्या प्रयत्नांनी दाखवूया."
+18. "तुला हे जमणार नाही" किंवा भीती निर्माण करणारी भाषा वापरू नका.
+
+आजचा session:
+- Warm-up
+- Board question practice
+- Concept explanation
+- Step-by-step solutions
+- Student interaction
+- Quick revision
+- Mini test
+- Exam writing tips
+- Motivation
+
+फक्त अत्यंत लांब theoretical chapter lecture न देता
+Board-question oriented teaching करा.
+
+`;
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/lesson",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        topic:
+                            selectedSubject,
+
+                        language:
+                            "Marathi",
+
+                        studentName:
+                            studentName,
+
+                        board:
+                            selectedBoard,
+
+                        prompt:
+                            prompt
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Backend error"
+            );
+
+        }
+
+
+        currentText =
+            data.lesson ||
+            data.content ||
+            data.response ||
+            data.answer ||
+            "";
+
+
+        if(!currentText){
+
+            throw new Error(
+                "No lesson received"
+            );
+
+        }
+
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            formatText(currentText);
+
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            `🎓 ${studentName}, class सुरू आहे. AI Teacher शिकवत आहेत.`;
+
+
+        const greeting =
+
+            `नमस्कार ${studentName}! ` +
+            `आज आपण ${selectedBoard} च्या ` +
+            `${selectedSubject} ची Board Exam preparation करणार आहोत. ` +
+            `घाबरायचं अजिबात नाही. ` +
+            `आपण एकेक प्रश्न समजून घेऊ आणि step by step सोडवू. ` +
+            `चला सुरुवात करूया!`;
+
+
+        setTimeout(() => {
+
+            speakText(greeting);
+
+        },500);
+
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML = `
+
+            <h2>❌ AI Teacher Connection Error</h2>
+
+            <p>
+                Backend कडून lesson मिळाला नाही.
+                Internet आणि backend तपासा.
+            </p>
+
+        `;
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Backend unavailable";
 
     }
 
-});
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+async function nextQuestion(){
+
+    currentQuestionIndex++;
+
+    document.getElementById(
+        "lesson"
+    ).innerHTML =
+        "⏳ पुढचा Board-style question तयार होत आहे...";
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "🤖 AI Teacher पुढचा प्रश्न तयार करत आहेत...";
+
+
+    const prompt = `
+
+तुम्ही GyanSetu Board AI Teacher आहात.
+
+Student: ${studentName}
+Board: ${selectedBoard}
+Subject: ${selectedSubject}
+
+आता विद्यार्थ्याला पुढचा important Board-style question शिकवा.
+
+Question number:
+${currentQuestionIndex}
+
+Format:
+
+1. प्रश्न
+2. प्रश्नाचा सोपा अर्थ
+3. हा प्रश्न Board मध्ये कसा विचारला जाऊ शकतो
+4. Concept
+5. Step-by-step answer
+6. Exam मध्ये answer कसा लिहायचा
+7. Common mistake
+8. छोटा similar practice question
+9. शेवटी विद्यार्थ्याला स्वतः उत्तर देण्यासाठी एक छोटा प्रश्न
+
+भाषा: सोपी Marathi/Hinglish.
+
+विद्यार्थ्याचे नाव मध्ये योग्य ठिकाणी वापरा.
+
+भीती किंवा guilt नको.
+Positive motivation द्या.
+
+`;
+
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/ask",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        question:
+                            prompt,
+
+                        topic:
+                            selectedSubject,
+
+                        language:
+                            "Marathi",
+
+                        studentName:
+                            studentName,
+
+                        board:
+                            selectedBoard
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const answer =
+            data.answer ||
+            data.response ||
+            data.content ||
+            data.message ||
+            "उत्तर मिळाले नाही.";
+
+
+        currentText =
+            answer;
+
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            formatText(answer);
+
+
+        speakText(
+            `${studentName}, चला पुढचा प्रश्न पाहूया. `
+            + cleanText(answer)
+        );
+
+
+        setMotivation();
+
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            "❌ पुढचा प्रश्न मिळाला नाही.";
+
+    }
+
+}
+
+
+/* =========================================================
+   ASK AI
+========================================================= */
+
+async function askAI(){
+
+    const input =
+        document.getElementById(
+            "question"
+        );
+
+    const question =
+        input.value.trim();
+
+    if(!question){
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "lesson"
+    ).innerHTML =
+        "⏳ AI Teacher तुमचा प्रश्न समजून घेत आहेत...";
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "🤔 विचार करत आहेत...";
+
+
+    const fullQuestion = `
+
+विद्यार्थ्याचे नाव: ${studentName}
+Board: ${selectedBoard}
+Subject: ${selectedSubject}
+
+विद्यार्थ्याचा प्रश्न:
+${question}
+
+तुम्ही GyanSetu AI Teacher आहात.
+
+हा प्रश्न विद्यार्थ्याला अगदी सोप्या भाषेत समजावून सांगा.
+
+फक्त final answer देऊ नका.
+
+पहिले:
+- प्रश्नाचा अर्थ
+- Concept
+- विचार करण्याची पद्धत
+- Step-by-step solution
+- Board exam मध्ये answer presentation
+- Common mistake
+
+जर हा Board question असेल तर तो कोणत्या प्रकारचा
+question आहे हेही सांगा.
+
+विद्यार्थ्याला positive motivation द्या.
+
+विद्यार्थ्याचे नाव योग्य ठिकाणी वापरा.
+
+`;
+
+
+    try{
+
+        const response =
+            await fetch(
+                API + "/api/ai/ask",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        question:
+                            fullQuestion,
+
+                        topic:
+                            selectedSubject,
+
+                        language:
+                            "Marathi",
+
+                        studentName:
+                            studentName,
+
+                        board:
+                            selectedBoard
+
+                    })
+
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        const answer =
+            data.answer ||
+            data.response ||
+            data.content ||
+            data.message ||
+            "उत्तर मिळाले नाही.";
+
+
+        currentText =
+            answer;
+
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            formatText(answer);
+
+
+        input.value = "";
+
+
+        speakText(
+            `${studentName}, `
+            + cleanText(answer)
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        document.getElementById(
+            "lesson"
+        ).innerHTML =
+            "❌ AI Teacher उत्तर देऊ शकले नाहीत.";
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Connection error";
+
+    }
+
+}
+
+
+/* =========================================================
+   SPEECH
+========================================================= */
+
+function startSpeaking(){
+
+    if(!currentText){
+
+        return;
+
+    }
+
+
+    stopSpeaking();
+
+
+    const intro =
+        `चला ${studentName}, ` +
+        `आता हा भाग आपण नीट समजून घेऊया. `;
+
+
+    speakText(
+        intro +
+        cleanText(currentText)
+    );
+
+}
+
+
+function speakText(text){
+
+    if(!("speechSynthesis" in window)){
+
+        document.getElementById(
+            "status"
+        ).innerText =
+            "Voice speech या browser मध्ये उपलब्ध नाही.";
+
+        return;
+
+    }
+
+
+    window.speechSynthesis.cancel();
+
+
+    const teacher =
+        document.getElementById(
+            "teacher"
+        );
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    teacher.classList.add(
+        "speaking"
+    );
+
+
+    status.innerText =
+        `🎙️ ${studentName}, AI Teacher शिकवत आहेत...`;
+
+
+    speech =
+        new SpeechSynthesisUtterance(text);
+
+
+    speech.lang =
+        "mr-IN";
+
+    speech.rate =
+        0.88;
+
+    speech.pitch =
+        1;
+
+
+    speech.onend = () => {
+
+        teacher.classList.remove(
+            "speaking"
+        );
+
+        status.innerText =
+            `✅ ${studentName}, explanation completed.`;
+
+    };
+
+
+    speech.onerror = () => {
+
+        teacher.classList.remove(
+            "speaking"
+        );
+
+        status.innerText =
+            "Speech unavailable";
+
+    };
+
+
+    window.speechSynthesis.speak(
+        speech
+    );
+
+}
+
+
+function stopSpeaking(){
+
+    if("speechSynthesis" in window){
+
+        window.speechSynthesis.cancel();
+
+    }
+
+
+    document.getElementById(
+        "teacher"
+    ).classList.remove(
+        "speaking"
+    );
+
+    document.getElementById(
+        "status"
+    ).innerText =
+        "⏹ AI Teacher stopped";
+
+}
+
+
+/* =========================================================
+   MOTIVATION
+========================================================= */
+
+const motivations = [
+
+    "💪 Board आहे, घाबरायचं नाही. आपण तयारी करून घेऊ. एक प्रश्न एकावेळी!",
+
+    "🌟 प्रत्येक प्रश्न समजला की तुमचा confidence वाढतो. चला पुढचा प्रश्न घेऊया!",
+
+    "❤️ तुमचे आई-बाबा तुमच्यासाठी खूप मेहनत घेतात. त्यांच्या प्रेमाची किंमत आपल्या प्रयत्नांनी दाखवूया.",
+
+    "🔥 Hitesh, perfect असण्याची गरज नाही. आज कालपेक्षा थोडं चांगलं शिकणं महत्त्वाचं आहे.",
+
+    "🧠 चूक झाली तरी काही हरकत नाही. चूक म्हणजे पुढचं उत्तर बरोबर करण्याची संधी.",
+
+    "🎯 Board मध्ये marks मिळवण्यासाठी फक्त पाठांतर नाही, तर प्रश्न समजून घेणं महत्त्वाचं आहे.",
+
+    "😊 Tension घेऊ नको. जे होईल ते पाहू, पण आपली तयारी मात्र पूर्ण ताकदीने करूया.",
+
+    "🚀 रोज थोडी मेहनत केली तर मोठा syllabus सुद्धा manageable होतो. चला सुरू ठेवूया."
+
+];
+
+
+function setMotivation(){
+
+    const random =
+        motivations[
+            Math.floor(
+                Math.random() *
+                motivations.length
+            )
+        ];
+
+
+    document.getElementById(
+        "motivationText"
+    ).innerText =
+        random.replace(
+            "Hitesh",
+            studentName
+        );
+
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+function closeClass(){
+
+    stopSpeaking();
+
+    clearInterval(
+        timerInterval
+    );
+
+    document.getElementById(
+        "classScreen"
+    ).style.display =
+        "none";
+
+    document.body.classList.remove(
+        "lock"
+    );
+
+}
+
+
+/* =========================================================
+   FORMAT
+========================================================= */
+
+function formatText(text){
+
+    let safe =
+        escapeHTML(
+            String(text)
+        );
+
+    safe =
+        safe.replace(
+            /\*\*(.*?)\*\*/g,
+            "<strong>$1</strong>"
+        );
+
+    safe =
+        safe.replace(
+            /\n/g,
+            "<br>"
+        );
+
+    return safe;
+
+}
+
+
+function cleanText(text){
+
+    const div =
+        document.createElement("div");
+
+    div.innerHTML =
+        text;
+
+    return div.innerText;
+
+}
+
+
+function escapeHTML(text){
+
+    return text
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document.getElementById(
+    "nameInput"
+).addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Enter"){
+
+            saveName();
+
+        }
+
+    }
+);
+
+
+document.getElementById(
+    "question"
+).addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Enter"){
+
+            askAI();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PAGE START
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        openBoardPopup();
+
+    }
+);
 
 </script>
 
