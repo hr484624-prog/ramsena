@@ -1,27 +1,17 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>GyanSetu Board AI Teacher</title>
 
 <style>
-
-/* =========================================================
-   GLOBAL
-========================================================= */
-
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+html,body{
     margin:0;
     padding:0;
     font-family:Arial,sans-serif;
@@ -33,10 +23,7 @@ body.lock{
     overflow:hidden;
 }
 
-
-/* =========================================================
-   HOME HEADER
-========================================================= */
+/* HOME */
 
 .header{
     background:linear-gradient(135deg,#2563eb,#7c3aed);
@@ -102,10 +89,7 @@ body.lock{
     color:#64748b;
 }
 
-
-/* =========================================================
-   COMMON MODAL
-========================================================= */
+/* MODAL */
 
 .modal{
     display:none;
@@ -194,10 +178,7 @@ body.lock{
     font-weight:bold;
 }
 
-
-/* =========================================================
-   AI TEACHER FULL SCREEN
-========================================================= */
+/* FULL SCREEN CLASS */
 
 .class-screen{
     display:none;
@@ -205,49 +186,31 @@ body.lock{
     inset:0;
     z-index:8000;
     background:
-        radial-gradient(
-            circle at top,
-            #172554 0%,
-            #020617 48%,
-            #000 100%
-        );
+        radial-gradient(circle at top,#172554,#020617 50%,#000);
     color:#fff;
     overflow:hidden;
 }
-
-
-/* =========================================================
-   CLASS HEADER
-========================================================= */
 
 .class-header{
     position:absolute;
     top:0;
     left:0;
     right:0;
-    z-index:20;
-
     height:68px;
-
-    background:rgba(2,6,23,.90);
+    z-index:20;
+    background:rgba(2,6,23,.92);
     backdrop-filter:blur(14px);
-
     border-bottom:1px solid rgba(255,255,255,.12);
-
     display:flex;
     align-items:center;
     justify-content:space-between;
-
-    padding:
-        env(safe-area-inset-top)
-        14px 0 14px 14px;
+    padding:10px 14px;
 }
 
 .class-title{
     font-weight:bold;
     font-size:17px;
-    max-width:65%;
-
+    max-width:62%;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -255,16 +218,16 @@ body.lock{
 
 .header-actions{
     display:flex;
-    align-items:center;
     gap:8px;
+    align-items:center;
 }
 
-.lesson-text-btn{
-    border:1px solid rgba(255,255,255,.18);
+.lesson-btn{
+    border:0;
     background:#2563eb;
     color:#fff;
+    padding:10px 13px;
     border-radius:12px;
-    padding:10px 12px;
     font-weight:bold;
     cursor:pointer;
 }
@@ -280,416 +243,200 @@ body.lock{
     cursor:pointer;
 }
 
-
-/* =========================================================
-   TEACHER AREA
-========================================================= */
+/* MAIN */
 
 .teacher-area{
     position:absolute;
-    inset:68px 0 0 0;
-
+    inset:68px 0 0;
     display:flex;
     flex-direction:column;
-
     align-items:center;
     justify-content:center;
-
     padding:15px;
-
     overflow:auto;
 }
 
-
-/* =========================================================
-   AI TEACHER STAGE
-========================================================= */
-
 .teacher-stage{
-    width:min(900px,100%);
-    min-height:420px;
-
+    width:min(950px,100%);
+    height:min(560px,65vh);
+    min-height:390px;
     position:relative;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     border-radius:30px;
-
     background:
-        radial-gradient(
-            circle at 50% 35%,
-            #334155 0%,
-            #111827 42%,
-            #020617 78%
-        );
-
-    border:1px solid rgba(255,255,255,.10);
-
-    box-shadow:
-        0 25px 80px rgba(0,0,0,.45),
-        inset 0 0 80px rgba(59,130,246,.08);
-
+        radial-gradient(circle at 50% 30%,#334155,#111827 45%,#020617 80%);
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 25px 80px rgba(0,0,0,.45);
     overflow:hidden;
 }
 
-
-/* =========================================================
-   BOARD BEHIND TEACHER
-========================================================= */
+/* BOARD */
 
 .virtual-board{
     position:absolute;
-    top:28px;
+    top:25px;
     left:50%;
     transform:translateX(-50%);
-
-    width:72%;
-    max-width:600px;
-    height:110px;
-
+    width:70%;
+    max-width:650px;
+    height:95px;
+    background:#064e3b;
+    border:7px solid #78350f;
     border-radius:12px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #064e3b,
-            #065f46
-        );
-
-    border:8px solid #78350f;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.4);
-
-    opacity:.95;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
-    padding:15px;
-
     text-align:center;
+    padding:10px;
 }
 
 .virtual-board-text{
-    color:#f8fafc;
     font-size:20px;
     font-weight:bold;
-    line-height:1.4;
+    color:#fff;
 }
 
-
-/* =========================================================
-   TEACHER
-========================================================= */
+/* ROBOT */
 
 .teacher{
     text-align:center;
-
     position:relative;
-    z-index:3;
-
-    margin-top:95px;
-
+    z-index:4;
+    margin-top:105px;
     transform-origin:center bottom;
 }
 
 .teacher.speaking{
-    animation:teacherBreathing 1.4s infinite ease-in-out;
+    animation:breathe 1.2s infinite ease-in-out;
 }
 
-@keyframes teacherBreathing{
-
-    0%{
-        transform:translateY(0);
-    }
-
-    50%{
-        transform:translateY(-3px);
-    }
-
-    100%{
-        transform:translateY(0);
-    }
-
+@keyframes breathe{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-3px)}
 }
-
-
-/* =========================================================
-   ROBOT HEAD
-========================================================= */
 
 .robot-head{
-
     width:180px;
     height:150px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #e5e7eb,
-            #94a3b8
-        );
-
+    background:linear-gradient(145deg,#f1f5f9,#94a3b8);
     border:5px solid #475569;
-
     border-radius:38px;
-
     position:relative;
-
     margin:auto;
-
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.5),
-        inset 0 5px 15px rgba(255,255,255,.45);
-
+    box-shadow:0 12px 35px rgba(0,0,0,.5);
 }
-
-
-/* antenna */
 
 .antenna{
     position:absolute;
-
     width:6px;
     height:28px;
-
     background:#64748b;
-
     left:50%;
     top:-30px;
-
     transform:translateX(-50%);
-
-    border-radius:10px;
 }
 
 .antenna-light{
     position:absolute;
-
     width:14px;
     height:14px;
-
     background:#22c55e;
-
     border-radius:50%;
-
-    top:-42px;
+    top:-43px;
     left:50%;
-
     transform:translateX(-50%);
-
-    box-shadow:
-        0 0 12px #22c55e;
-
-    animation:blink 1.3s infinite;
+    box-shadow:0 0 15px #22c55e;
+    animation:blink 1s infinite;
 }
 
 @keyframes blink{
-
-    0%,100%{
-        opacity:1;
-    }
-
-    50%{
-        opacity:.3;
-    }
-
+    0%,100%{opacity:1}
+    50%{opacity:.3}
 }
-
-
-/* robot eyes */
 
 .robot-eye{
-
     position:absolute;
-
     width:35px;
     height:35px;
-
-    background:#0f172a;
-
+    background:#020617;
     border-radius:50%;
-
     top:48px;
-
     border:5px solid #64748b;
-
-    box-shadow:
-        inset 0 0 0 5px #020617;
-
 }
 
-.robot-eye.left{
-    left:32px;
-}
-
-.robot-eye.right{
-    right:32px;
-}
+.robot-eye.left{left:32px}
+.robot-eye.right{right:32px}
 
 .robot-eye::after{
-
     content:"";
-
     position:absolute;
-
     width:10px;
     height:10px;
-
     background:#38bdf8;
-
     border-radius:50%;
-
     top:5px;
     left:7px;
-
-    box-shadow:
-        0 0 10px #38bdf8;
-
+    box-shadow:0 0 10px #38bdf8;
 }
 
-
-/* robot mouth */
-
 .robot-mouth{
-
     position:absolute;
-
     width:70px;
-    height:12px;
-
+    height:11px;
     background:#0f172a;
-
     border-radius:20px;
-
     bottom:25px;
-
     left:50%;
-
     transform:translateX(-50%);
-
-    transition:.12s;
-
 }
 
 .speaking .robot-mouth{
-
-    height:32px;
-
-    border-radius:10px;
-
-    animation:
-        robotTalking .14s infinite alternate;
-
+    animation:talk .15s infinite alternate;
 }
 
-@keyframes robotTalking{
-
-    from{
-        height:9px;
-    }
-
-    to{
-        height:31px;
-    }
-
+@keyframes talk{
+    from{height:8px}
+    to{height:30px}
 }
-
-
-/* =========================================================
-   ROBOT BODY
-========================================================= */
 
 .robot-body{
-
     width:225px;
-    height:175px;
-
+    height:170px;
     margin:-4px auto 0;
-
-    background:
-        linear-gradient(
-            145deg,
-            #2563eb,
-            #1e3a8a
-        );
-
-    border-radius:
-        90px
-        90px
-        25px
-        25px;
-
+    background:linear-gradient(145deg,#2563eb,#1e3a8a);
+    border-radius:90px 90px 25px 25px;
     border:5px solid #172554;
-
     position:relative;
-
-    box-shadow:
-        0 18px 40px rgba(0,0,0,.5);
-
+    box-shadow:0 18px 40px rgba(0,0,0,.5);
 }
 
-
-/* body screen */
-
 .robot-screen{
-
     position:absolute;
-
-    width:105px;
+    width:110px;
     height:58px;
-
     left:50%;
     top:28px;
-
     transform:translateX(-50%);
-
     background:#020617;
-
     border:3px solid #475569;
-
     border-radius:10px;
-
     display:flex;
     align-items:center;
     justify-content:center;
-
     color:#38bdf8;
-
-    font-size:13px;
+    font-size:12px;
     font-weight:bold;
-
 }
-
-.speaking .robot-screen{
-
-    color:#22c55e;
-
-    box-shadow:
-        0 0 15px rgba(34,197,94,.35);
-
-}
-
-
-/* robot arms */
 
 .robot-arm{
-
     position:absolute;
-
     width:38px;
     height:110px;
-
     background:#2563eb;
-
     border-radius:30px;
-
     top:30px;
-
 }
 
 .robot-arm.left{
@@ -703,495 +450,245 @@ body.lock{
 }
 
 .speaking .robot-arm.right{
-
-    animation:
-        teachingHand .6s infinite alternate;
-
+    animation:hand .7s infinite alternate;
 }
 
-@keyframes teachingHand{
-
-    from{
-        transform:rotate(-15deg);
-    }
-
-    to{
-        transform:rotate(-32deg);
-    }
-
+@keyframes hand{
+    from{transform:rotate(-15deg)}
+    to{transform:rotate(-30deg)}
 }
-
-
-/* =========================================================
-   TEACHER NAME
-========================================================= */
 
 .teacher-name{
-
-    margin-top:12px;
-
+    margin-top:10px;
     font-size:21px;
-
     font-weight:bold;
-
-    color:#fff;
-
-    text-shadow:
-        0 2px 8px rgba(0,0,0,.7);
-
 }
 
+/* LIVE SENTENCE */
 
-/* =========================================================
-   LIVE STATUS
-========================================================= */
-
-.teacher-status{
-
+.live-speech{
     position:absolute;
-
-    left:20px;
-    right:20px;
-
+    left:25px;
+    right:25px;
     bottom:18px;
-
-    background:rgba(0,0,0,.65);
-
-    backdrop-filter:blur(10px);
-
-    border:1px solid rgba(255,255,255,.1);
-
-    padding:12px;
-
-    border-radius:14px;
-
+    z-index:8;
+    min-height:65px;
+    max-height:120px;
+    overflow:auto;
+    padding:14px 18px;
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(96,165,250,.35);
+    border-radius:16px;
     text-align:center;
-
-    font-size:14px;
-
+    font-size:17px;
+    line-height:1.55;
+    color:#fff;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
 }
 
+.live-speech.active{
+    border-color:#22c55e;
+    box-shadow:0 0 25px rgba(34,197,94,.15);
+}
 
-/* =========================================================
-   TOP LIVE BADGE
-========================================================= */
+.live-label{
+    display:block;
+    font-size:11px;
+    color:#60a5fa;
+    font-weight:bold;
+    margin-bottom:4px;
+}
+
+/* BADGE */
 
 .live-badge{
-
     position:absolute;
-
-    top:18px;
-    left:18px;
-
+    top:15px;
+    left:15px;
+    z-index:10;
     background:#ef4444;
-
     color:#fff;
-
     padding:7px 11px;
-
     border-radius:20px;
-
-    font-size:12px;
-
+    font-size:11px;
     font-weight:bold;
-
-    z-index:5;
-
-    box-shadow:
-        0 0 15px rgba(239,68,68,.4);
-
 }
 
-.live-dot{
+/* CONTROLS */
 
-    display:inline-block;
-
-    width:8px;
-    height:8px;
-
-    background:#fff;
-
-    border-radius:50%;
-
-    margin-right:5px;
-
-    animation:blink 1s infinite;
-
+.teacher-controls{
+    width:min(950px,100%);
+    margin-top:10px;
 }
-
-
-/* =========================================================
-   CLASS BOTTOM AREA
-========================================================= */
-
-.teacher-controls-area{
-
-    width:min(900px,100%);
-
-    margin-top:12px;
-
-}
-
-
-/* =========================================================
-   TIMER
-========================================================= */
 
 .timer{
-
-    background:rgba(15,23,42,.92);
-
+    background:rgba(15,23,42,.95);
     border:1px solid rgba(255,255,255,.12);
-
-    padding:11px 15px;
-
-    border-radius:15px;
-
+    padding:10px 15px;
+    border-radius:14px;
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
-
-    margin-bottom:10px;
-
+    margin-bottom:9px;
 }
 
 .timer strong{
-
-    font-size:21px;
-
     color:#60a5fa;
-
+    font-size:21px;
 }
 
-
-/* =========================================================
-   CONTROL BUTTONS
-========================================================= */
-
 .controls{
-
     display:grid;
-
-    grid-template-columns:
-        repeat(2,1fr);
-
-    gap:9px;
-
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
 }
 
 .controls button{
-
-    padding:14px;
-
+    padding:13px 8px;
     border:0;
-
-    border-radius:13px;
-
+    border-radius:12px;
     font-weight:bold;
-
     cursor:pointer;
-
-    font-size:14px;
-
-}
-
-.speak{
-
-    background:#22c55e;
     color:#fff;
-
 }
 
-.stop{
-
-    background:#ef4444;
-    color:#fff;
-
-}
-
-.next{
-
-    background:#7c3aed;
-    color:#fff;
-
-}
-
-.doubt{
-
-    background:#0ea5e9;
-    color:#fff;
-
-}
-
-
-/* =========================================================
-   DOUBT AREA
-========================================================= */
+.speak{background:#22c55e}
+.stop{background:#ef4444}
+.next{background:#7c3aed}
+.doubt{background:#0ea5e9}
 
 .ask{
-
     display:flex;
-
     gap:8px;
-
-    margin-top:9px;
-
+    margin-top:8px;
 }
 
 .ask input{
-
     flex:1;
-
-    padding:14px;
-
-    border:1px solid #334155;
-
-    background:#0f172a;
-
-    color:#fff;
-
-    border-radius:12px;
-
-    outline:none;
-
     min-width:0;
-
+    padding:13px;
+    border:1px solid #334155;
+    border-radius:12px;
+    background:#0f172a;
+    color:#fff;
+    outline:none;
 }
 
 .ask button{
-
-    padding:14px 17px;
-
     border:0;
-
+    padding:13px 18px;
     border-radius:12px;
-
     background:#f59e0b;
-
     color:#111827;
-
     font-weight:bold;
-
-    cursor:pointer;
-
 }
-
-
-/* =========================================================
-   LESSON TEXT MODAL
-========================================================= */
-
-.lesson-modal{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:12000;
-
-    background:rgba(0,0,0,.82);
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:15px;
-
-}
-
-.lesson-modal.show{
-
-    display:flex;
-
-}
-
-.lesson-modal-box{
-
-    width:100%;
-
-    max-width:850px;
-
-    max-height:88vh;
-
-    background:#fff;
-
-    color:#172033;
-
-    border-radius:22px;
-
-    overflow:hidden;
-
-    display:flex;
-
-    flex-direction:column;
-
-    box-shadow:0 30px 80px rgba(0,0,0,.5);
-
-}
-
-.lesson-modal-header{
-
-    padding:15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #7c3aed
-        );
-
-    color:#fff;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:10px;
-
-}
-
-.lesson-modal-header h2{
-
-    margin:0;
-
-    font-size:18px;
-
-}
-
-.lesson-close{
-
-    width:40px;
-    height:40px;
-
-    border:0;
-
-    border-radius:50%;
-
-    background:#ef4444;
-
-    color:#fff;
-
-    font-size:22px;
-
-    cursor:pointer;
-
-}
-
-.lesson-text{
-
-    padding:20px;
-
-    overflow:auto;
-
-    line-height:1.75;
-
-    font-size:16px;
-
-}
-
-.lesson-text strong{
-
-    color:#1d4ed8;
-
-}
-
-
-/* =========================================================
-   MOTIVATION SMALL
-========================================================= */
 
 .motivation{
-
-    margin-top:9px;
-
-    padding:12px 15px;
-
-    border-radius:14px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #312e81,
-            #581c87
-        );
-
-    color:#fff;
-
-    line-height:1.5;
-
-    font-size:14px;
-
+    margin-top:8px;
+    padding:10px 14px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#312e81,#581c87);
+    font-size:13px;
 }
 
-
-/* =========================================================
-   LOADING SCREEN
-========================================================= */
+/* LOADING */
 
 .ai-loading{
-
     position:absolute;
-
     inset:0;
-
-    z-index:10;
-
+    z-index:30;
     display:flex;
-
     flex-direction:column;
-
     align-items:center;
-
     justify-content:center;
-
-    background:rgba(2,6,23,.72);
-
-    backdrop-filter:blur(4px);
-
+    background:rgba(2,6,23,.75);
+    backdrop-filter:blur(5px);
     text-align:center;
-
 }
 
 .ai-loading.hidden{
-
     display:none;
-
 }
 
 .loader{
-
     width:48px;
     height:48px;
-
     border:5px solid rgba(255,255,255,.2);
-
     border-top-color:#60a5fa;
-
     border-radius:50%;
-
-    animation:
-        spin .8s linear infinite;
-
+    animation:spin .8s linear infinite;
 }
 
 @keyframes spin{
-
-    to{
-        transform:rotate(360deg);
-    }
-
+    to{transform:rotate(360deg)}
 }
 
+/* LESSON POPUP */
 
-/* =========================================================
-   MOBILE
-========================================================= */
+.lesson-modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:12000;
+    background:rgba(0,0,0,.82);
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.lesson-modal.show{
+    display:flex;
+}
+
+.lesson-box{
+    width:100%;
+    max-width:850px;
+    max-height:88vh;
+    background:#fff;
+    color:#172033;
+    border-radius:22px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+}
+
+.lesson-header{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    padding:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.lesson-header h2{
+    margin:0;
+    font-size:18px;
+}
+
+.lesson-close{
+    width:40px;
+    height:40px;
+    border:0;
+    border-radius:50%;
+    background:#ef4444;
+    color:#fff;
+    font-size:22px;
+}
+
+.lesson-content{
+    padding:20px;
+    overflow:auto;
+    line-height:1.75;
+    font-size:16px;
+}
+
+.lesson-content strong{
+    color:#1d4ed8;
+}
+
+/* MOBILE */
 
 @media(max-width:600px){
 
@@ -1212,264 +709,130 @@ body.lock{
     }
 
     .class-title{
-        font-size:14px;
-        max-width:48%;
+        font-size:13px;
+        max-width:47%;
     }
 
-    .lesson-text-btn{
+    .lesson-btn{
+        font-size:11px;
         padding:9px 10px;
-        font-size:12px;
     }
 
     .teacher-area{
-        inset:62px 0 0 0;
-
+        inset:62px 0 0;
         justify-content:flex-start;
-
-        padding:
-            10px
-            10px
-            calc(10px + env(safe-area-inset-bottom));
+        padding:8px;
     }
 
     .teacher-stage{
-
-        min-height:350px;
-
         height:52vh;
-
+        min-height:330px;
         border-radius:22px;
-
         flex-shrink:0;
-
     }
 
     .virtual-board{
-
-        top:15px;
-
+        top:12px;
         width:78%;
-
-        height:70px;
-
+        height:65px;
         border-width:5px;
-
     }
 
     .virtual-board-text{
-
-        font-size:13px;
-
+        font-size:12px;
     }
 
     .teacher{
-
-        margin-top:55px;
-
-        transform:scale(.72);
-
+        transform:scale(.67);
+        margin-top:50px;
     }
 
     .teacher.speaking{
-
         animation:none;
-
     }
 
-    .robot-head{
-
-        width:170px;
-        height:140px;
-
-    }
-
-    .robot-body{
-
-        width:210px;
-        height:155px;
-
-    }
-
-    .teacher-name{
-
-        font-size:18px;
-
-    }
-
-    .teacher-status{
-
-        left:10px;
-        right:10px;
-        bottom:10px;
-
-        font-size:12px;
-
+    .live-speech{
+        left:8px;
+        right:8px;
+        bottom:8px;
+        font-size:13px;
+        min-height:58px;
+        max-height:95px;
+        padding:10px;
     }
 
     .live-badge{
-
-        top:10px;
-        left:10px;
-
+        top:8px;
+        left:8px;
+        font-size:10px;
     }
 
-    .teacher-controls-area{
-
-        margin-top:8px;
-
+    .teacher-controls{
+        margin-top:7px;
         flex-shrink:0;
-
     }
 
     .timer{
-
-        padding:9px 12px;
-
-        font-size:13px;
-
+        padding:8px 12px;
+        font-size:12px;
     }
 
     .timer strong{
-
         font-size:18px;
-
     }
 
     .controls{
-
-        grid-template-columns:
-            repeat(2,1fr);
-
-        gap:7px;
-
+        grid-template-columns:repeat(2,1fr);
+        gap:6px;
     }
 
     .controls button{
-
-        padding:11px 7px;
-
-        font-size:12px;
-
+        padding:11px 5px;
+        font-size:11px;
     }
 
     .ask input{
-
-        font-size:14px;
-
+        font-size:13px;
     }
 
     .ask button{
-
-        padding:12px;
-
+        padding:11px 13px;
     }
 
     .motivation{
-
-        font-size:12px;
-
-        margin-bottom:8px;
-
+        font-size:11px;
+        margin-bottom:5px;
     }
-
 }
-
-
-/* VERY SMALL PHONES */
 
 @media(max-width:380px){
 
     .teacher-stage{
-
-        height:47vh;
-
-        min-height:300px;
-
+        height:48vh;
+        min-height:295px;
     }
 
     .teacher{
-
-        transform:scale(.58);
-
-        margin-top:40px;
-
+        transform:scale(.55);
+        margin-top:35px;
     }
 
-    .controls button{
-
-        font-size:11px;
-
-        padding:10px 5px;
-
+    .live-speech{
+        font-size:12px;
     }
-
-}
-
-
-/* LANDSCAPE */
-
-@media(max-height:500px) and (orientation:landscape){
-
-    .teacher-area{
-
-        flex-direction:row;
-
-        align-items:center;
-
-        overflow:auto;
-
-    }
-
-    .teacher-stage{
-
-        width:55%;
-
-        min-height:330px;
-
-        height:80vh;
-
-    }
-
-    .teacher-controls-area{
-
-        width:45%;
-
-        margin-left:10px;
-
-    }
-
-    .teacher{
-
-        transform:scale(.58);
-
-        margin-top:50px;
-
-    }
-
 }
 
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================================================
-     HOME
-========================================================= -->
+<!-- HOME -->
 
 <div class="header">
-
     <h1>🤖 GyanSetu Board AI Teacher</h1>
-
-    <p>
-        Board Exam Preparation • Learn • Understand • Practice
-    </p>
-
+    <p>Board Exam Preparation • Learn • Understand • Practice</p>
 </div>
-
 
 <div class="container">
 
@@ -1487,19 +850,9 @@ body.lock{
         <div id="subjects" class="subject-grid">
 
             <div class="subject">
-
-                <div class="subject-icon">
-                    ⏳
-                </div>
-
-                <h3>
-                    Loading...
-                </h3>
-
-                <p>
-                    Subjects तयार होत आहेत.
-                </p>
-
+                <div class="subject-icon">⏳</div>
+                <h3>Loading...</h3>
+                <p>Subjects तयार होत आहेत.</p>
             </div>
 
         </div>
@@ -1509,17 +862,13 @@ body.lock{
 </div>
 
 
-<!-- =========================================================
-     BOARD MODAL
-========================================================= -->
+<!-- BOARD -->
 
 <div id="boardModal" class="modal">
 
     <div class="modal-box">
 
-        <h2>
-            🎓 तुमचा Board निवडा
-        </h2>
+        <h2>🎓 तुमचा Board निवडा</h2>
 
         <p>
             तुम्ही कोणत्या Board साठी अभ्यास करत आहात?
@@ -1530,25 +879,19 @@ body.lock{
             <button
                 class="board-btn"
                 onclick="selectBoard('Maharashtra State Board')">
-
                 🇮🇳 Maharashtra State Board
-
             </button>
 
             <button
                 class="board-btn"
                 onclick="selectBoard('CBSE')">
-
                 📘 CBSE
-
             </button>
 
             <button
                 class="board-btn"
                 onclick="selectBoard('ICSE')">
-
                 📗 ICSE
-
             </button>
 
         </div>
@@ -1558,17 +901,13 @@ body.lock{
 </div>
 
 
-<!-- =========================================================
-     NAME MODAL
-========================================================= -->
+<!-- NAME -->
 
 <div id="nameModal" class="modal">
 
     <div class="modal-box">
 
-        <h2>
-            👋 आधी तुमचं नाव सांगा
-        </h2>
+        <h2>👋 आधी तुमचं नाव सांगा</h2>
 
         <p>
             AI Teacher तुम्हाला तुमच्या नावाने शिकवतील.
@@ -1583,17 +922,13 @@ body.lock{
         <button
             class="primary"
             onclick="saveName()">
-
             🚀 Start Learning
-
         </button>
 
         <button
             class="secondary"
             onclick="closeName()">
-
             Cancel
-
         </button>
 
     </div>
@@ -1601,42 +936,30 @@ body.lock{
 </div>
 
 
-<!-- =========================================================
-     FULL SCREEN AI CLASS
-========================================================= -->
+<!-- FULL CLASS -->
 
 <div id="classScreen" class="class-screen">
-
-
-    <!-- HEADER -->
 
     <div class="class-header">
 
         <div
             id="classTitle"
             class="class-title">
-
             🤖 GyanSetu AI Teacher
-
         </div>
-
 
         <div class="header-actions">
 
             <button
-                class="lesson-text-btn"
+                class="lesson-btn"
                 onclick="openLessonText()">
-
                 📖 Lesson
-
             </button>
 
             <button
                 class="close"
                 onclick="closeClass()">
-
                 ×
-
             </button>
 
         </div>
@@ -1644,35 +967,21 @@ body.lock{
     </div>
 
 
-    <!-- TEACHER AREA -->
-
     <div class="teacher-area">
-
-
-        <!-- TEACHER STAGE -->
 
         <div class="teacher-stage">
 
-
             <div class="live-badge">
-
-                <span class="live-dot"></span>
-
-                AI TEACHING
-
+                🔴 AI TEACHING
             </div>
 
-
-            <!-- VIRTUAL BOARD -->
 
             <div class="virtual-board">
 
                 <div
                     id="boardText"
                     class="virtual-board-text">
-
                     📚 GyanSetu Board Exam Class
-
                 </div>
 
             </div>
@@ -1683,7 +992,6 @@ body.lock{
             <div
                 id="teacher"
                 class="teacher">
-
 
                 <div class="robot-head">
 
@@ -1709,30 +1017,32 @@ body.lock{
                     <div
                         id="robotScreen"
                         class="robot-screen">
-
                         READY
-
                     </div>
 
                 </div>
 
 
                 <div class="teacher-name">
-
                     🤖 GyanSetu AI Sir
-
                 </div>
 
             </div>
 
 
-            <!-- STATUS -->
+            <!-- LIVE SPOKEN TEXT -->
 
             <div
-                id="status"
-                class="teacher-status">
+                id="liveSpeech"
+                class="live-speech">
 
-                ⏳ AI Teacher class तयार करत आहेत...
+                <span class="live-label">
+                    🎙️ AI Teacher बोलत आहेत
+                </span>
+
+                <span id="liveSpeechText">
+                    Class तयार होत आहे...
+                </span>
 
             </div>
 
@@ -1746,15 +1056,11 @@ body.lock{
                 <div class="loader"></div>
 
                 <div style="margin-top:15px;font-weight:bold;">
-
                     🤖 AI Teacher lesson तयार करत आहेत...
-
                 </div>
 
-                <div style="margin-top:6px;font-size:13px;opacity:.8;">
-
-                    थोडा वेळ लागेल...
-
+                <div style="margin-top:6px;font-size:13px;">
+                    Board questions analyze करत आहेत...
                 </div>
 
             </div>
@@ -1764,10 +1070,7 @@ body.lock{
 
         <!-- CONTROLS -->
 
-        <div class="teacher-controls-area">
-
-
-            <!-- TIMER -->
+        <div class="teacher-controls">
 
             <div class="timer">
 
@@ -1782,49 +1085,34 @@ body.lock{
             </div>
 
 
-            <!-- BUTTONS -->
-
             <div class="controls">
 
                 <button
                     class="speak"
                     onclick="startSpeaking()">
-
                     🔊 Start / Replay
-
                 </button>
-
 
                 <button
                     class="stop"
                     onclick="stopSpeaking()">
-
                     ⏹ Stop
-
                 </button>
-
 
                 <button
                     class="next"
                     onclick="nextQuestion()">
-
                     ➡️ Next Question
-
                 </button>
-
 
                 <button
                     class="doubt"
                     onclick="focusDoubt()">
-
                     🤔 Ask Doubt
-
                 </button>
 
             </div>
 
-
-            <!-- ASK -->
 
             <div class="ask">
 
@@ -1833,23 +1121,16 @@ body.lock{
                     placeholder="🤔 AI Teacher ला प्रश्न विचारा...">
 
                 <button onclick="askAI()">
-
                     Ask
-
                 </button>
 
             </div>
 
 
-            <!-- MOTIVATION -->
-
             <div class="motivation">
 
                 <span id="motivationText">
-
-                    💪 हार मानायची नाही.
-                    आपण हळूहळू सगळं शिकणार आहोत.
-
+                    💪 आपण एकेक प्रश्न समजून घेऊया.
                 </span>
 
             </div>
@@ -1861,17 +1142,15 @@ body.lock{
 </div>
 
 
-<!-- =========================================================
-     LESSON TEXT POPUP
-========================================================= -->
+<!-- FULL LESSON POPUP -->
 
 <div
     id="lessonModal"
     class="lesson-modal">
 
-    <div class="lesson-modal-box">
+    <div class="lesson-box">
 
-        <div class="lesson-modal-header">
+        <div class="lesson-header">
 
             <h2>
                 📖 आजचा AI Teacher Lesson
@@ -1880,20 +1159,15 @@ body.lock{
             <button
                 class="lesson-close"
                 onclick="closeLessonText()">
-
                 ×
-
             </button>
 
         </div>
 
-
         <div
-            id="lessonText"
-            class="lesson-text">
-
+            id="lessonContent"
+            class="lesson-content">
             ⏳ Lesson तयार होत आहे...
-
         </div>
 
     </div>
@@ -1916,20 +1190,18 @@ const API =
 ========================================================= */
 
 let selectedBoard = "";
-
 let studentName = "";
-
 let selectedSubject = "";
 
 let currentText = "";
-
 let currentQuestionIndex = 0;
 
-let speech = null;
-
-let timerSeconds = 60 * 60;
-
+let timerSeconds = 3600;
 let timerInterval = null;
+
+let speechQueue = [];
+let speechIndex = 0;
+let speechStopped = false;
 
 
 /* =========================================================
@@ -2005,7 +1277,7 @@ const SSC_SUBJECTS = [
 
 
 /* =========================================================
-   BOARD POPUP
+   BOARD
 ========================================================= */
 
 function openBoardPopup(){
@@ -2014,11 +1286,7 @@ function openBoardPopup(){
         .getElementById("boardModal")
         .classList.add("show");
 
-    document
-        .body
-        .classList
-        .add("lock");
-
+    document.body.classList.add("lock");
 }
 
 
@@ -2028,13 +1296,11 @@ function selectBoard(board){
 
     document
         .getElementById("boardModal")
-        .classList
-        .remove("show");
+        .classList.remove("show");
 
     document
         .getElementById("nameModal")
-        .classList
-        .add("show");
+        .classList.add("show");
 
     setTimeout(() => {
 
@@ -2043,7 +1309,6 @@ function selectBoard(board){
             .focus();
 
     },100);
-
 }
 
 
@@ -2060,20 +1325,14 @@ function saveName(){
         input.value.trim();
 
     if(!studentName){
-
         studentName = "विद्यार्थी";
-
     }
 
     document
         .getElementById("nameModal")
-        .classList
-        .remove("show");
+        .classList.remove("show");
 
-    document
-        .body
-        .classList
-        .remove("lock");
+    document.body.classList.remove("lock");
 
     renderSubjects();
 
@@ -2081,25 +1340,24 @@ function saveName(){
         .getElementById("selectedInfo")
         .innerHTML = `
 
-            <div style="
-                margin-top:15px;
-                padding:14px;
-                border-radius:12px;
-                background:#eff6ff;
-                color:#1d4ed8;
-                font-weight:bold;
-            ">
+        <div style="
+            margin-top:15px;
+            padding:14px;
+            border-radius:12px;
+            background:#eff6ff;
+            color:#1d4ed8;
+            font-weight:bold;
+        ">
 
-                👤 ${escapeHTML(studentName)}
+            👤 ${escapeHTML(studentName)}
 
-                &nbsp; • &nbsp;
+            &nbsp; • &nbsp;
 
-                🎓 ${escapeHTML(selectedBoard)}
+            🎓 ${escapeHTML(selectedBoard)}
 
-            </div>
+        </div>
 
-        `;
-
+    `;
 }
 
 
@@ -2107,14 +1365,9 @@ function closeName(){
 
     document
         .getElementById("nameModal")
-        .classList
-        .remove("show");
+        .classList.remove("show");
 
-    document
-        .body
-        .classList
-        .remove("lock");
-
+    document.body.classList.remove("lock");
 }
 
 
@@ -2139,21 +1392,15 @@ function renderSubjects(){
         card.innerHTML = `
 
             <div class="subject-icon">
-
                 ${subject.icon}
-
             </div>
 
             <h3>
-
                 ${subject.title}
-
             </h3>
 
             <p>
-
                 ${subject.description}
-
             </p>
 
             <div style="
@@ -2161,9 +1408,7 @@ function renderSubjects(){
                 color:#2563eb;
                 font-weight:bold;
             ">
-
                 🤖 AI Teacher सोबत शिका →
-
             </div>
 
         `;
@@ -2174,7 +1419,6 @@ function renderSubjects(){
         box.appendChild(card);
 
     });
-
 }
 
 
@@ -2193,101 +1437,61 @@ async function startSubject(subject){
 
     document
         .getElementById("classScreen")
-        .style
-        .display = "block";
+        .style.display = "block";
 
-    document
-        .body
-        .classList
-        .add("lock");
-
+    document.body.classList.add("lock");
 
     document
         .getElementById("classTitle")
         .innerText =
         `🤖 ${subject.title} • ${studentName}`;
 
-
     document
         .getElementById("boardText")
         .innerText =
         `${selectedBoard} • ${subject.title}`;
 
-
     document
-        .getElementById("status")
+        .getElementById("liveSpeechText")
         .innerText =
-        "🌺 नवरात्रीच्या हार्दिक शुभेच्छा...";
-
+        "नमस्कार! आजचा class सुरू होत आहे...";
 
     document
         .getElementById("robotScreen")
         .innerText =
         "WELCOME";
 
-
-    document
-        .getElementById("lessonText")
-        .innerHTML =
-        `
-
-        <h3>
-            🤖 AI Teacher Class
-        </h3>
-
-        <p>
-            ⏳ Lesson तयार होत आहे...
-        </p>
-
-        `;
-
-
     startOneHourTimer();
 
     setMotivation();
 
-
     /*
-       FIRST:
-       NAVRATRI GREETING
+       FIRST NAVRATRI GREETING
     */
 
     const navratriGreeting =
 
         `नमस्कार ${studentName}! ` +
-
         `तुम्हाला आणि तुमच्या संपूर्ण कुटुंबाला ` +
-
         `नवरात्रीच्या हार्दिक शुभेच्छा! ` +
-
-        `ही नवरात्र तुमच्या आयुष्यात ` +
-
-        `आनंद, आत्मविश्वास आणि यश घेऊन येवो. ` +
-
+        `ही नवरात्र तुमच्या आयुष्यात आनंद, ` +
+        `आत्मविश्वास आणि यश घेऊन येवो. ` +
         `आता चला, आपण ${selectedBoard} च्या ` +
-
         `${selectedSubject} ची तयारी सुरू करूया. ` +
-
         `घाबरायचं अजिबात नाही. ` +
-
         `आपण प्रत्येक प्रश्न समजून घेऊ, ` +
-
         `step by step शिकू आणि Board Exam साठी ` +
-
         `मजबूत तयारी करूया. ` +
+        `चला तर मग सुरुवात करूया!`;
 
-        `चला तर मग, सुरुवात करूया!`;
+    speakSentences(
+        navratriGreeting,
+        async function(){
 
+            await loadBoardLesson();
 
-    speakText(navratriGreeting);
-
-
-    /*
-       LESSON BACKEND LOAD
-    */
-
-    await loadBoardLesson();
-
+        }
+    );
 }
 
 
@@ -2299,7 +1503,7 @@ function startOneHourTimer(){
 
     clearInterval(timerInterval);
 
-    timerSeconds = 60 * 60;
+    timerSeconds = 3600;
 
     updateTimer();
 
@@ -2316,7 +1520,6 @@ function startOneHourTimer(){
                     "00:00";
 
                 return;
-
             }
 
             timerSeconds--;
@@ -2324,7 +1527,6 @@ function startOneHourTimer(){
             updateTimer();
 
         },1000);
-
 }
 
 
@@ -2340,20 +1542,21 @@ function updateTimer(){
         .getElementById("timer")
         .innerText =
         String(minutes).padStart(2,"0")
-        + ":"
-        +
+        + ":" +
         String(seconds).padStart(2,"0");
-
 }
 
 
 /* =========================================================
-   BOARD AI LESSON
+   LOAD AI LESSON
 ========================================================= */
 
 async function loadBoardLesson(){
 
     showLoading(true);
+
+    document
+        .getElementById("status");
 
     const prompt = `
 
@@ -2367,70 +1570,54 @@ Subject: ${selectedSubject}
 
 हा 60 मिनिटांचा Board Exam teaching session आहे.
 
-महत्त्वाचे नियम:
+विद्यार्थ्याला खऱ्या शिक्षकाप्रमाणे शिकवा.
 
-1. Chapter-by-chapter lecture देऊ नका.
+Chapter-by-chapter मोठा theoretical lecture नको.
 
-2. Board exam मध्ये विचारल्या जाणाऱ्या
-   प्रश्नांच्या प्रकारांवर मुख्य भर द्या.
+Board exam मध्ये येणाऱ्या प्रश्नांच्या प्रकारांवर भर द्या.
 
-3. मागील 5 वर्षांच्या उपलब्ध Board Questions
-   च्या pattern प्रमाणे प्रश्न समजावून सांगा.
+प्रत्येक explanation conversational असावी.
 
-4. प्रत्येक प्रश्न:
-   - प्रश्न नीट समजावून सांगा
-   - कोणता concept वापरायचा ते सांगा
-   - step-by-step solution द्या
-   - Board answer कसा लिहायचा ते सांगा
-   - common mistake सांगा
+विद्यार्थ्याला थेट बोलत असल्यासारखे लिहा.
 
-5. विद्यार्थ्याला फक्त answer पाठ करून देऊ नका.
+उदा:
+"चला आधी हा प्रश्न समजून घेऊया."
+"इथे आपल्याला हे formula वापरायचे आहे."
+"आता पुढची step बघ."
+"इथे विद्यार्थ्यांकडून एक common mistake होते."
 
-6. विद्यार्थ्याला स्वतः विचार करायला शिकवा.
+प्रत्येक प्रश्नासाठी:
 
-7. मध्ये मध्ये विद्यार्थ्याला प्रश्न विचारा.
+1. प्रश्न
+2. सोपा अर्थ
+3. Concept
+4. विचार करण्याची पद्धत
+5. Step-by-step solution
+6. Board मध्ये answer कसा लिहायचा
+7. Common mistake
+8. छोटा practice question
 
-8. विद्यार्थ्याचे नाव नैसर्गिकपणे वापरा.
+मध्ये मध्ये विद्यार्थ्याचे नाव नैसर्गिकपणे वापरा.
 
-9. भाषा सोपी Marathi/Hinglish ठेवा.
+भाषा:
+सोपे Marathi + आवश्यक English terms.
 
-10. Maths/Science मध्ये calculations आणि steps स्पष्ट ठेवा.
+Maths/Science:
+calculations आणि steps स्पष्ट ठेवा.
 
-11. Languages मध्ये writing format,
-    grammar आणि answer presentation स्पष्ट करा.
+Languages:
+grammar, writing format आणि presentation समजावून सांगा.
 
-12. इतिहास/राज्यशास्त्रात points मध्ये
-    exam-ready answers द्या.
+History/Civics:
+exam-ready points द्या.
 
-13. मध्ये मध्ये quick revision/question घ्या.
+शिक्षकासारखा conversational teaching flow ठेवा.
 
-14. Motivation positive ठेवा.
+भीती किंवा guilt निर्माण करू नका.
 
-15. विद्यार्थ्यावर guilt किंवा भीती निर्माण करू नका.
+Positive motivation द्या.
 
-16. "Board आहे, घाबरायचं नाही,
-    आपण तयारी करून घेऊ"
-    अशा positive पद्धतीने motivate करा.
-
-17. पालकांच्या मेहनतीचा positive उल्लेख करा.
-
-18. "तुला हे जमणार नाही"
-    किंवा भीती निर्माण करणारी भाषा वापरू नका.
-
-आजचा session:
-
-- Warm-up
-- Board question practice
-- Concept explanation
-- Step-by-step solutions
-- Student interaction
-- Quick revision
-- Mini test
-- Exam writing tips
-- Motivation
-
-फक्त अत्यंत लांब theoretical chapter lecture न देता
-Board-question oriented teaching करा.
+पालकांच्या मेहनतीचा सकारात्मक उल्लेख करू शकता.
 
 `;
 
@@ -2449,39 +1636,26 @@ Board-question oriented teaching करा.
 
                     body:JSON.stringify({
 
-                        topic:
-                            selectedSubject,
+                        topic:selectedSubject,
 
-                        language:
-                            "Marathi",
+                        language:"Marathi",
 
-                        studentName:
-                            studentName,
+                        studentName:studentName,
 
-                        board:
-                            selectedBoard,
+                        board:selectedBoard,
 
-                        prompt:
-                            prompt
+                        prompt:prompt
 
                     })
-
                 }
             );
-
 
         const data =
             await response.json();
 
-
         if(!response.ok){
-
-            throw new Error(
-                "Backend error"
-            );
-
+            throw new Error("Backend error");
         }
-
 
         currentText =
             data.lesson ||
@@ -2490,48 +1664,28 @@ Board-question oriented teaching करा.
             data.answer ||
             "";
 
-
         if(!currentText){
-
-            throw new Error(
-                "No lesson received"
-            );
-
+            throw new Error("No lesson");
         }
 
-
         document
-            .getElementById("lessonText")
+            .getElementById("lessonContent")
             .innerHTML =
             formatText(currentText);
 
-
-        document
-            .getElementById("status")
-            .innerText =
-            `🎓 ${studentName}, AI Teacher शिकवत आहेत.`;
-
-
-        document
-            .getElementById("robotScreen")
-            .innerText =
-            "TEACHING";
-
-
         showLoading(false);
 
-
         /*
-           GREETING SPEECH संपल्यावर
-           ACTUAL LESSON सुरू
+           ACTUAL LESSON SPEAK
         */
 
         setTimeout(() => {
 
-            startSpeaking();
+            speakSentences(
+                cleanText(currentText)
+            );
 
-        },1800);
-
+        },500);
 
     }catch(error){
 
@@ -2542,14 +1696,11 @@ Board-question oriented teaching करा.
         currentText =
             "AI Teacher कडून lesson मिळाला नाही.";
 
-
         document
-            .getElementById("lessonText")
+            .getElementById("lessonContent")
             .innerHTML = `
 
-                <h3>
-                    ❌ AI Teacher Connection Error
-                </h3>
+                <h3>❌ AI Teacher Connection Error</h3>
 
                 <p>
                     Backend कडून lesson मिळाला नाही.
@@ -2558,20 +1709,222 @@ Board-question oriented teaching करा.
 
             `;
 
-
-        document
-            .getElementById("status")
-            .innerText =
-            "Backend unavailable";
-
+        setLiveSpeech(
+            "AI Teacher lesson मिळाला नाही."
+        );
 
         document
             .getElementById("robotScreen")
             .innerText =
             "ERROR";
+    }
+}
 
+
+/* =========================================================
+   SENTENCE BY SENTENCE SPEECH
+========================================================= */
+
+function speakSentences(text, onComplete){
+
+    stopSpeaking(false);
+
+    speechStopped = false;
+
+    /*
+       Text ला sentences मध्ये divide करणे
+    */
+
+    speechQueue =
+        splitIntoSentences(text);
+
+    speechIndex = 0;
+
+    if(!speechQueue.length){
+
+        if(onComplete){
+            onComplete();
+        }
+
+        return;
     }
 
+    document
+        .getElementById("teacher")
+        .classList.add("speaking");
+
+    document
+        .getElementById("robotScreen")
+        .innerText =
+        "SPEAKING";
+
+    document
+        .getElementById("liveSpeech")
+        .classList.add("active");
+
+    speakNextSentence(onComplete);
+}
+
+
+function speakNextSentence(onComplete){
+
+    if(speechStopped){
+
+        return;
+    }
+
+    if(speechIndex >= speechQueue.length){
+
+        document
+            .getElementById("teacher")
+            .classList.remove("speaking");
+
+        document
+            .getElementById("robotScreen")
+            .innerText =
+            "READY";
+
+        document
+            .getElementById("liveSpeech")
+            .classList.remove("active");
+
+        document
+            .getElementById("liveSpeechText")
+            .innerText =
+            `छान ${studentName}! हा भाग आपण पूर्ण केला.`;
+
+        document
+            .getElementById("status")
+            .innerText =
+            `✅ ${studentName}, explanation completed.`;
+
+        if(onComplete){
+            onComplete();
+        }
+
+        return;
+    }
+
+    const sentence =
+        speechQueue[speechIndex];
+
+    /*
+       हा exact sentence screen वर
+       live दाखवला जातो.
+    */
+
+    setLiveSpeech(sentence);
+
+    document
+        .getElementById("status")
+        .innerText =
+        `🎙️ ${studentName}, AI Teacher शिकवत आहेत...`;
+
+    const utterance =
+        new SpeechSynthesisUtterance(sentence);
+
+    utterance.lang = "mr-IN";
+
+    utterance.rate = 0.88;
+
+    utterance.pitch = 1;
+
+    utterance.volume = 1;
+
+    utterance.onend = function(){
+
+        if(speechStopped){
+            return;
+        }
+
+        speechIndex++;
+
+        /*
+           छोटा natural pause
+        */
+
+        setTimeout(() => {
+
+            speakNextSentence(onComplete);
+
+        },180);
+
+    };
+
+    utterance.onerror = function(){
+
+        if(speechStopped){
+            return;
+        }
+
+        speechIndex++;
+
+        setTimeout(() => {
+
+            speakNextSentence(onComplete);
+
+        },100);
+
+    };
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+}
+
+
+/* =========================================================
+   SPLIT SENTENCES
+========================================================= */
+
+function splitIntoSentences(text){
+
+    /*
+       Marathi/English punctuation दोन्ही
+    */
+
+    let cleaned =
+        String(text)
+        .replace(/\r/g," ")
+        .replace(/\n+/g," ");
+
+    /*
+       punctuation नंतर sentence break
+    */
+
+    let parts =
+        cleaned.match(
+            /[^.!?।]+[.!?।]+|[^.!?।]+$/g
+        );
+
+    if(!parts){
+        return [cleaned.trim()];
+    }
+
+    return parts
+
+        .map(x => x.trim())
+
+        .filter(x => x.length > 0);
+
+}
+
+
+/* =========================================================
+   LIVE TEXT
+========================================================= */
+
+function setLiveSpeech(text){
+
+    document
+        .getElementById("liveSpeechText")
+        .innerText =
+        text;
+
+    const box =
+        document.getElementById("liveSpeech");
+
+    box.scrollTop = 0;
 }
 
 
@@ -2581,22 +1934,20 @@ Board-question oriented teaching करा.
 
 async function nextQuestion(){
 
+    stopSpeaking(false);
+
     currentQuestionIndex++;
 
     showLoading(true);
 
-
-    document
-        .getElementById("status")
-        .innerText =
-        "🤖 AI Teacher पुढचा प्रश्न तयार करत आहेत...";
-
+    setLiveSpeech(
+        "पुढचा Board question तयार करत आहे..."
+    );
 
     document
         .getElementById("robotScreen")
         .innerText =
         "THINKING";
-
 
     const prompt = `
 
@@ -2608,35 +1959,42 @@ Board: ${selectedBoard}
 
 Subject: ${selectedSubject}
 
-आता विद्यार्थ्याला पुढचा important Board-style
-question शिकवा.
-
 Question number:
 ${currentQuestionIndex}
 
+विद्यार्थ्याला पुढचा important Board-style question
+खऱ्या शिक्षकाप्रमाणे शिकवा.
+
+Conversational Marathi/Hinglish वापरा.
+
 Format:
 
-1. प्रश्न
-2. प्रश्नाचा सोपा अर्थ
-3. हा प्रश्न Board मध्ये कसा विचारला जाऊ शकतो
-4. Concept
-5. Step-by-step answer
-6. Exam मध्ये answer कसा लिहायचा
-7. Common mistake
-8. छोटा similar practice question
-9. शेवटी विद्यार्थ्याला स्वतः उत्तर देण्यासाठी
-   एक छोटा प्रश्न
+प्रथम विद्यार्थ्याला प्रश्न सांगा.
 
-भाषा: सोपी Marathi/Hinglish.
+मग:
+- हा प्रश्न काय विचारतो
+- Concept
+- विचार करण्याची पद्धत
+- Step-by-step solution
+- Board answer writing
+- Common mistake
+- Similar practice question
 
-विद्यार्थ्याचे नाव योग्य ठिकाणी वापरा.
+उदाहरणासारखी teaching भाषा वापरा:
+
+"चला हा प्रश्न आधी नीट समजून घेऊया."
+
+"आता पहिली step बघ."
+
+"इथे एक महत्त्वाची गोष्ट लक्षात ठेव."
+
+"आता हा भाग तू स्वतः सोडवून बघ."
 
 भीती किंवा guilt नको.
 
 Positive motivation द्या.
 
 `;
-
 
     try{
 
@@ -2653,30 +2011,22 @@ Positive motivation द्या.
 
                     body:JSON.stringify({
 
-                        question:
-                            prompt,
+                        question:prompt,
 
-                        topic:
-                            selectedSubject,
+                        topic:selectedSubject,
 
-                        language:
-                            "Marathi",
+                        language:"Marathi",
 
-                        studentName:
-                            studentName,
+                        studentName:studentName,
 
-                        board:
-                            selectedBoard
+                        board:selectedBoard
 
                     })
-
                 }
             );
 
-
         const data =
             await response.json();
-
 
         const answer =
             data.answer ||
@@ -2685,45 +2035,20 @@ Positive motivation द्या.
             data.message ||
             "उत्तर मिळाले नाही.";
 
-
-        currentText =
-            answer;
-
+        currentText = answer;
 
         document
-            .getElementById("lessonText")
+            .getElementById("lessonContent")
             .innerHTML =
             formatText(answer);
 
-
         showLoading(false);
 
-
-        document
-            .getElementById("robotScreen")
-            .innerText =
-            "TEACHING";
-
-
-        document
-            .getElementById("status")
-            .innerText =
-            `🎓 ${studentName}, पुढचा प्रश्न शिकूया.`;
-
-
-        speakText(
-
-            `${studentName}, चला आता `
-            +
-            `पुढचा Board question पाहूया. `
-            +
+        speakSentences(
             cleanText(answer)
-
         );
 
-
         setMotivation();
-
 
     }catch(error){
 
@@ -2731,18 +2056,15 @@ Positive motivation द्या.
 
         showLoading(false);
 
-        document
-            .getElementById("lessonText")
-            .innerHTML =
-            "❌ पुढचा प्रश्न मिळाला नाही.";
+        setLiveSpeech(
+            "पुढचा प्रश्न मिळाला नाही."
+        );
 
         document
-            .getElementById("status")
+            .getElementById("robotScreen")
             .innerText =
-            "Connection error";
-
+            "ERROR";
     }
-
 }
 
 
@@ -2758,32 +2080,25 @@ async function askAI(){
     const question =
         input.value.trim();
 
-
     if(!question){
-
-        focusDoubt();
-
+        input.focus();
         return;
-
     }
 
+    stopSpeaking(false);
 
     showLoading(true);
 
-
-    document
-        .getElementById("status")
-        .innerText =
-        "🤔 AI Teacher तुमचा प्रश्न समजून घेत आहेत...";
-
+    setLiveSpeech(
+        "तुमचा प्रश्न समजून घेत आहे..."
+    );
 
     document
         .getElementById("robotScreen")
         .innerText =
         "THINKING";
 
-
-    const fullQuestion = `
+    const prompt = `
 
 विद्यार्थ्याचे नाव: ${studentName}
 
@@ -2797,28 +2112,28 @@ ${question}
 
 तुम्ही GyanSetu AI Teacher आहात.
 
-हा प्रश्न विद्यार्थ्याला अगदी सोप्या भाषेत समजावून सांगा.
+विद्यार्थ्याशी थेट बोलत असल्यासारखे उत्तर द्या.
 
-फक्त final answer देऊ नका.
+पहिले प्रश्नाचा अर्थ समजवा.
 
-पहिले:
+नंतर Concept सांगा.
 
-- प्रश्नाचा अर्थ
-- Concept
-- विचार करण्याची पद्धत
-- Step-by-step solution
-- Board exam मध्ये answer presentation
-- Common mistake
+नंतर विचार करण्याची पद्धत सांगा.
 
-जर हा Board question असेल तर तो कोणत्या प्रकारचा
-question आहे हेही सांगा.
+नंतर Step-by-step solution द्या.
 
-विद्यार्थ्याला positive motivation द्या.
+नंतर Board exam मध्ये answer कसा लिहायचा ते सांगा.
 
-विद्यार्थ्याचे नाव योग्य ठिकाणी वापरा.
+नंतर Common mistake सांगा.
+
+शेवटी विद्यार्थ्याला एक छोटा practice question विचारा.
+
+भाषा:
+सोपे Marathi/Hinglish.
+
+Teacher सारखी conversational भाषा वापरा.
 
 `;
-
 
     try{
 
@@ -2835,30 +2150,22 @@ question आहे हेही सांगा.
 
                     body:JSON.stringify({
 
-                        question:
-                            fullQuestion,
+                        question:prompt,
 
-                        topic:
-                            selectedSubject,
+                        topic:selectedSubject,
 
-                        language:
-                            "Marathi",
+                        language:"Marathi",
 
-                        studentName:
-                            studentName,
+                        studentName:studentName,
 
-                        board:
-                            selectedBoard
+                        board:selectedBoard
 
                     })
-
                 }
             );
 
-
         const data =
             await response.json();
-
 
         const answer =
             data.answer ||
@@ -2867,37 +2174,20 @@ question आहे हेही सांगा.
             data.message ||
             "उत्तर मिळाले नाही.";
 
-
-        currentText =
-            answer;
-
+        currentText = answer;
 
         document
-            .getElementById("lessonText")
+            .getElementById("lessonContent")
             .innerHTML =
             formatText(answer);
 
-
         input.value = "";
-
 
         showLoading(false);
 
-
-        document
-            .getElementById("robotScreen")
-            .innerText =
-            "ANSWER";
-
-
-        speakText(
-
-            `${studentName}, `
-            +
+        speakSentences(
             cleanText(answer)
-
         );
-
 
     }catch(error){
 
@@ -2905,145 +2195,50 @@ question आहे हेही सांगा.
 
         showLoading(false);
 
-        document
-            .getElementById("lessonText")
-            .innerHTML =
-            "❌ AI Teacher उत्तर देऊ शकले नाहीत.";
+        setLiveSpeech(
+            "AI Teacher उत्तर देऊ शकले नाहीत."
+        );
 
         document
-            .getElementById("status")
+            .getElementById("robotScreen")
             .innerText =
-            "Connection error";
-
+            "ERROR";
     }
-
 }
 
 
 /* =========================================================
-   SPEECH
+   START / REPLAY
 ========================================================= */
 
 function startSpeaking(){
 
     if(!currentText){
 
-        document
-            .getElementById("status")
-            .innerText =
-            "⏳ Lesson अजून तयार झालेला नाही.";
+        setLiveSpeech(
+            "Lesson अजून तयार झालेला नाही."
+        );
 
         return;
-
     }
 
-
-    stopSpeaking(false);
-
-
-    const intro =
-        `चला ${studentName}, `
-        +
-        `आता हा भाग आपण नीट समजून घेऊया. `;
-
-
-    speakText(
-
-        intro
-        +
+    speakSentences(
         cleanText(currentText)
-
     );
-
 }
 
 
-function speakText(text){
-
-    if(!("speechSynthesis" in window)){
-
-        document
-            .getElementById("status")
-            .innerText =
-            "Voice speech या browser मध्ये उपलब्ध नाही.";
-
-        return;
-
-    }
-
-
-    window.speechSynthesis.cancel();
-
-
-    const teacher =
-        document.getElementById("teacher");
-
-    const status =
-        document.getElementById("status");
-
-    const robotScreen =
-        document.getElementById("robotScreen");
-
-
-    teacher.classList.add("speaking");
-
-
-    robotScreen.innerText =
-        "SPEAKING";
-
-
-    status.innerText =
-        `🎙️ ${studentName}, AI Teacher शिकवत आहेत...`;
-
-
-    speech =
-        new SpeechSynthesisUtterance(text);
-
-
-    speech.lang =
-        "mr-IN";
-
-    speech.rate =
-        0.88;
-
-    speech.pitch =
-        1;
-
-
-    speech.onend = () => {
-
-        teacher.classList.remove("speaking");
-
-        robotScreen.innerText =
-            "READY";
-
-        status.innerText =
-            `✅ ${studentName}, explanation completed.`;
-
-    };
-
-
-    speech.onerror = () => {
-
-        teacher.classList.remove("speaking");
-
-        robotScreen.innerText =
-            "READY";
-
-        status.innerText =
-            "Speech unavailable";
-
-    };
-
-
-    window.speechSynthesis.speak(
-        speech
-    );
-
-}
-
+/* =========================================================
+   STOP
+========================================================= */
 
 function stopSpeaking(changeStatus=true){
+
+    speechStopped = true;
+
+    speechQueue = [];
+
+    speechIndex = 0;
 
     if("speechSynthesis" in window){
 
@@ -3051,18 +2246,18 @@ function stopSpeaking(changeStatus=true){
 
     }
 
-
     document
         .getElementById("teacher")
-        .classList
-        .remove("speaking");
+        .classList.remove("speaking");
 
+    document
+        .getElementById("liveSpeech")
+        .classList.remove("active");
 
     document
         .getElementById("robotScreen")
         .innerText =
         "READY";
-
 
     if(changeStatus){
 
@@ -3071,8 +2266,11 @@ function stopSpeaking(changeStatus=true){
             .innerText =
             "⏹ AI Teacher stopped";
 
-    }
+        setLiveSpeech(
+            "Teaching थांबवले आहे. पुन्हा सुरू करण्यासाठी Replay दाबा."
+        );
 
+    }
 }
 
 
@@ -3086,20 +2284,15 @@ function showLoading(show){
         document.getElementById("aiLoading");
 
     if(show){
-
         loader.classList.remove("hidden");
-
     }else{
-
         loader.classList.add("hidden");
-
     }
-
 }
 
 
 /* =========================================================
-   LESSON TEXT POPUP
+   LESSON POPUP
 ========================================================= */
 
 function openLessonText(){
@@ -3108,7 +2301,6 @@ function openLessonText(){
         .getElementById("lessonModal")
         .classList
         .add("show");
-
 }
 
 
@@ -3118,12 +2310,11 @@ function closeLessonText(){
         .getElementById("lessonModal")
         .classList
         .remove("show");
-
 }
 
 
 /* =========================================================
-   DOUBT FOCUS
+   DOUBT
 ========================================================= */
 
 function focusDoubt(){
@@ -3132,7 +2323,6 @@ function focusDoubt(){
         document.getElementById("question");
 
     input.focus();
-
 }
 
 
@@ -3144,19 +2334,17 @@ const motivations = [
 
     "💪 Board आहे, घाबरायचं नाही. आपण तयारी करून घेऊ. एक प्रश्न एकावेळी!",
 
-    "🌟 प्रत्येक प्रश्न समजला की तुमचा confidence वाढतो. चला पुढचा प्रश्न घेऊया!",
+    "🌟 प्रत्येक प्रश्न समजला की confidence वाढतो. चला पुढचा प्रश्न घेऊया!",
 
     "❤️ तुमचे आई-बाबा तुमच्यासाठी मेहनत घेतात. त्यांच्या प्रेमाची किंमत आपल्या प्रयत्नांनी दाखवूया.",
-
-    "🔥 Perfect असण्याची गरज नाही. आज कालपेक्षा थोडं चांगलं शिकणं महत्त्वाचं आहे.",
 
     "🧠 चूक झाली तरी काही हरकत नाही. चूक म्हणजे पुढचं उत्तर बरोबर करण्याची संधी.",
 
     "🎯 Board मध्ये marks मिळवण्यासाठी फक्त पाठांतर नाही, तर प्रश्न समजून घेणं महत्त्वाचं आहे.",
 
-    "😊 Tension घेऊ नको. आपली तयारी मात्र पूर्ण ताकदीने करूया.",
+    "😊 Tension घेऊ नको. आपण तयारी पूर्ण ताकदीने करूया.",
 
-    "🚀 रोज थोडी मेहनत केली तर मोठा syllabus सुद्धा manageable होतो. चला सुरू ठेवूया."
+    "🚀 रोज थोडी मेहनत केली तर मोठा syllabus manageable होतो."
 
 ];
 
@@ -3166,12 +2354,10 @@ function setMotivation(){
     const random =
         motivations[
             Math.floor(
-                Math.random()
-                *
+                Math.random() *
                 motivations.length
             )
         ];
-
 
     document
         .getElementById("motivationText")
@@ -3180,7 +2366,6 @@ function setMotivation(){
             "Hitesh",
             studentName
         );
-
 }
 
 
@@ -3192,9 +2377,7 @@ function closeClass(){
 
     stopSpeaking(false);
 
-    clearInterval(
-        timerInterval
-    );
+    clearInterval(timerInterval);
 
     closeLessonText();
 
@@ -3202,29 +2385,21 @@ function closeClass(){
 
     document
         .getElementById("classScreen")
-        .style
-        .display =
+        .style.display =
         "none";
 
-    document
-        .body
-        .classList
-        .remove("lock");
-
+    document.body.classList.remove("lock");
 }
 
 
 /* =========================================================
-   FORMAT TEXT
+   FORMAT
 ========================================================= */
 
 function formatText(text){
 
     let safe =
-        escapeHTML(
-            String(text)
-        );
-
+        escapeHTML(String(text));
 
     safe =
         safe.replace(
@@ -3232,16 +2407,13 @@ function formatText(text){
             "<strong>$1</strong>"
         );
 
-
     safe =
         safe.replace(
             /\n/g,
             "<br>"
         );
 
-
     return safe;
-
 }
 
 
@@ -3250,11 +2422,9 @@ function cleanText(text){
     const div =
         document.createElement("div");
 
-    div.innerHTML =
-        text;
+    div.innerHTML = text;
 
     return div.innerText;
-
 }
 
 
@@ -3262,36 +2432,20 @@ function escapeHTML(text){
 
     return text
 
-        .replace(
-            /&/g,
-            "&amp;"
-        )
+        .replace(/&/g,"&amp;")
 
-        .replace(
-            /</g,
-            "&lt;"
-        )
+        .replace(/</g,"&lt;")
 
-        .replace(
-            />/g,
-            "&gt;"
-        )
+        .replace(/>/g,"&gt;")
 
-        .replace(
-            /"/g,
-            "&quot;"
-        )
+        .replace(/"/g,"&quot;")
 
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+        .replace(/'/g,"&#039;");
 }
 
 
 /* =========================================================
-   ENTER KEY
+   ENTER
 ========================================================= */
 
 document
@@ -3301,9 +2455,7 @@ document
         function(e){
 
             if(e.key === "Enter"){
-
                 saveName();
-
             }
 
         }
@@ -3317,9 +2469,7 @@ document
         function(e){
 
             if(e.key === "Enter"){
-
                 askAI();
-
             }
 
         }
@@ -3327,7 +2477,7 @@ document
 
 
 /* =========================================================
-   CLOSE MODALS WHEN OUTSIDE CLICK
+   OUTSIDE CLICK
 ========================================================= */
 
 document
@@ -3337,9 +2487,7 @@ document
         function(e){
 
             if(e.target === this){
-
                 closeLessonText();
-
             }
 
         }
