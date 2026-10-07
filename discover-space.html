@@ -2,549 +2,1883 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 
-<title>GyanSetu Information</title>
+<title>GyanSetu AI</title>
 
 <style>
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:Arial, sans-serif;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  -webkit-tap-highlight-color:transparent;
 }
 
-body{
-    min-height:100vh;
-    background:linear-gradient(135deg,#eaf4ff,#ffffff);
-    color:#123;
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#080808;
+  color:#fff;
 }
 
-/* Background */
-.bg{
-    position:fixed;
-    inset:0;
-    background:
-    radial-gradient(circle at 10% 20%,rgba(0,123,255,.15),transparent 30%),
-    radial-gradient(circle at 90% 80%,rgba(0,200,255,.12),transparent 30%);
-    z-index:-1;
+button{
+  font-family:inherit;
+  cursor:pointer;
 }
 
-/* Main Popup */
-.popup{
-    width:94%;
-    max-width:650px;
-    margin:25px auto;
-    background:white;
-    border-radius:25px;
-    box-shadow:0 15px 50px rgba(0,0,0,.15);
-    overflow:hidden;
-    border:1px solid #dcecff;
+.app{
+  width:100%;
+  max-width:520px;
+  height:100dvh;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+  background:#0b0b0b;
 }
 
-/* Header */
+/* ================= HEADER ================= */
+
 .header{
-    background:linear-gradient(135deg,#087cf5,#0056d6);
-    color:white;
-    padding:30px 22px;
-    text-align:center;
+  height:62px;
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  z-index:20;
+  background:rgba(11,11,11,.94);
+  border-bottom:1px solid #252525;
+  backdrop-filter:blur(18px);
 }
 
-.logo{
-    width:75px;
-    height:75px;
-    margin:auto;
-    border-radius:20px;
-    background:white;
-    color:#087cf5;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:34px;
-    font-weight:bold;
-    box-shadow:0 8px 20px rgba(0,0,0,.2);
+.header-btn{
+  width:40px;
+  height:40px;
+  border:1px solid #303030;
+  border-radius:12px;
+  background:#151515;
+  color:#fff;
+  font-size:19px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-.header h1{
-    margin-top:15px;
-    font-size:30px;
+.header-title{
+  flex:1;
+  min-width:0;
 }
 
-.header p{
-    margin-top:8px;
-    font-size:15px;
-    opacity:.95;
+.header-title h2{
+  font-size:17px;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
-/* Intro */
-.intro{
-    padding:22px;
-    text-align:center;
-    line-height:1.7;
-    color:#444;
+.header-title p{
+  color:#8b8b8b;
+  font-size:10px;
+  margin-top:2px;
 }
 
-.intro strong{
-    color:#006ce5;
+.status{
+  font-size:10px;
+  color:#42d392;
+  white-space:nowrap;
 }
 
-/* Feature list */
-.features{
-    padding:10px 18px 25px;
+/* ================= CHAT ================= */
+
+.chat{
+  position:absolute;
+  inset:0;
+  padding-top:62px;
+  padding-bottom:82px;
+  overflow-y:auto;
+  scroll-behavior:smooth;
 }
 
-.feature{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    padding:16px;
-    margin:10px 0;
-    border:1px solid #e1edff;
-    border-radius:18px;
-    background:#fbfdff;
-    cursor:pointer;
-    transition:.25s;
+.chat::-webkit-scrollbar{
+  width:3px;
 }
 
-.feature:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 20px rgba(0,100,220,.12);
-    border-color:#9dcaff;
+.chat::-webkit-scrollbar-thumb{
+  background:#333;
+  border-radius:10px;
 }
 
-.icon{
-    width:52px;
-    height:52px;
-    min-width:52px;
-    border-radius:15px;
-    background:#e8f3ff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:27px;
+/* ================= WELCOME ================= */
+
+.welcome{
+  min-height:calc(100dvh - 144px);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:30px 22px 80px;
+  text-align:center;
 }
 
-.feature h3{
-    color:#075ec9;
-    font-size:17px;
-    margin-bottom:4px;
+.ai-logo{
+  width:76px;
+  height:76px;
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:39px;
+  background:
+    linear-gradient(145deg,#1d1d1d,#111);
+  border:1px solid #333;
+  box-shadow:0 15px 45px rgba(0,0,0,.45);
+  margin-bottom:20px;
 }
 
-.feature p{
-    font-size:13px;
-    color:#666;
+.welcome h1{
+  font-size:27px;
+  font-weight:800;
+  letter-spacing:-.5px;
 }
 
-.arrow{
-    margin-left:auto;
-    font-size:22px;
-    color:#087cf5;
+.gradient-text{
+  background:linear-gradient(90deg,#ff1493,#9b5cff,#168cff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
 
-/* Details Popup */
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    z-index:100;
-    padding:18px;
-    overflow-y:auto;
+.welcome p{
+  color:#999;
+  font-size:14px;
+  line-height:1.55;
+  max-width:330px;
+  margin-top:9px;
 }
 
-.modal-box{
-    width:100%;
-    max-width:650px;
-    margin:25px auto;
-    background:white;
-    border-radius:25px;
-    overflow:hidden;
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
+.suggestions{
+  width:100%;
+  max-width:390px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:28px;
 }
 
-.modal-header{
-    background:linear-gradient(135deg,#087cf5,#0056d6);
-    color:white;
-    padding:24px;
-    text-align:center;
+.suggestion{
+  min-height:65px;
+  padding:11px;
+  text-align:left;
+  border:1px solid #292929;
+  border-radius:15px;
+  background:#121212;
+  color:#ddd;
 }
 
-.modal-icon{
-    font-size:45px;
+.suggestion strong{
+  display:block;
+  font-size:12px;
+  margin-bottom:4px;
 }
 
-.modal-header h2{
-    margin-top:8px;
+.suggestion span{
+  color:#777;
+  font-size:10px;
 }
 
-.modal-content{
-    padding:24px;
+/* ================= MESSAGES ================= */
+
+.message{
+  width:100%;
+  padding:12px 15px;
+  display:flex;
 }
 
-.modal-content h3{
-    color:#075ec9;
-    margin:18px 0 8px;
+.message.user{
+  justify-content:flex-end;
 }
 
-.modal-content p{
-    color:#444;
-    line-height:1.75;
-    font-size:15px;
+.message.ai{
+  justify-content:flex-start;
 }
 
-.modal-content ul{
-    padding-left:22px;
-    color:#444;
-    line-height:1.9;
+.message-inner{
+  max-width:88%;
 }
 
-.close-btn{
-    width:100%;
-    border:0;
-    padding:14px;
-    border-radius:14px;
-    background:#087cf5;
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    margin-top:22px;
-    cursor:pointer;
+.avatar{
+  width:29px;
+  height:29px;
+  border-radius:9px;
+  background:#1b1b1b;
+  border:1px solid #303030;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:16px;
+  margin-bottom:5px;
 }
 
-.close-btn:hover{
-    background:#0056d6;
+.user .avatar{
+  display:none;
 }
 
-/* Footer */
-.footer{
-    text-align:center;
-    padding:20px;
-    color:#777;
-    font-size:13px;
+.bubble{
+  font-size:14px;
+  line-height:1.65;
+  word-break:break-word;
+}
+
+.user .bubble{
+  padding:11px 14px;
+  border-radius:19px;
+  border-bottom-right-radius:5px;
+  background:#2b2b2b;
+  color:#fff;
+}
+
+.ai .bubble{
+  color:#ededed;
+  padding-right:5px;
+}
+
+.ai .bubble h3{
+  font-size:17px;
+  margin:12px 0 7px;
+}
+
+.ai .bubble strong{
+  color:#fff;
+}
+
+.ai .bubble ul,
+.ai .bubble ol{
+  margin:7px 0 7px 20px;
+}
+
+.ai .bubble li{
+  margin:4px 0;
+}
+
+/* ================= CODE ================= */
+
+.code-wrap{
+  margin:12px 0;
+  border:1px solid #303030;
+  border-radius:13px;
+  overflow:hidden;
+  background:#090909;
+}
+
+.code-head{
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  background:#151515;
+  border-bottom:1px solid #292929;
+  color:#888;
+  font-size:10px;
+}
+
+.code-copy{
+  border:1px solid #333;
+  border-radius:7px;
+  background:#202020;
+  color:#ddd;
+  padding:5px 8px;
+  font-size:10px;
+}
+
+.code-content{
+  padding:12px;
+  overflow-x:auto;
+  font-family:monospace;
+  font-size:12px;
+  line-height:1.6;
+  color:#ddd;
+  white-space:pre;
+}
+
+/* ================= MESSAGE ACTIONS ================= */
+
+.actions{
+  display:flex;
+  gap:4px;
+  margin-top:7px;
+}
+
+.action-btn{
+  border:none;
+  background:transparent;
+  color:#777;
+  padding:5px 7px;
+  border-radius:7px;
+  font-size:11px;
+}
+
+.action-btn:active{
+  background:#1d1d1d;
+}
+
+/* ================= THINKING ================= */
+
+.thinking{
+  display:none;
+  padding:12px 15px;
+  align-items:flex-start;
+}
+
+.thinking-box{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  color:#888;
+  font-size:12px;
+}
+
+.thinking-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#aaa;
+  animation:thinking 1.2s infinite;
+}
+
+.thinking-dot:nth-child(2){
+  animation-delay:.15s;
+}
+
+.thinking-dot:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes thinking{
+  0%,100%{
+    opacity:.25;
+    transform:translateY(0);
+  }
+  50%{
+    opacity:1;
+    transform:translateY(-3px);
+  }
+}
+
+/* ================= IMAGE ================= */
+
+.user-image{
+  max-width:220px;
+  max-height:220px;
+  border-radius:15px;
+  display:block;
+  margin-bottom:7px;
+  border:1px solid #333;
+}
+
+.image-preview{
+  display:none;
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:75px;
+  z-index:40;
+  padding:8px;
+  background:#171717;
+  border:1px solid #333;
+  border-radius:13px;
+}
+
+.image-preview img{
+  width:65px;
+  height:65px;
+  object-fit:cover;
+  border-radius:9px;
+}
+
+.remove-image{
+  position:absolute;
+  top:2px;
+  left:67px;
+  width:22px;
+  height:22px;
+  border:0;
+  border-radius:50%;
+  background:#e63964;
+  color:#fff;
+}
+
+/* ================= COMPOSER ================= */
+
+.composer-area{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:30;
+  padding:8px 10px 10px;
+  background:linear-gradient(
+    to top,
+    #0b0b0b 65%,
+    rgba(11,11,11,.92)
+  );
+}
+
+.composer{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  padding:6px;
+  border:1px solid #353535;
+  background:#151515;
+  border-radius:18px;
+}
+
+.tool-btn{
+  flex:0 0 38px;
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:12px;
+  background:#222;
+  color:#ddd;
+  font-size:18px;
+}
+
+.textarea{
+  flex:1;
+  min-width:0;
+  max-height:110px;
+  min-height:38px;
+  resize:none;
+  overflow-y:auto;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
+  font-size:14px;
+  line-height:1.4;
+  padding:10px 4px;
+}
+
+.textarea::placeholder{
+  color:#777;
+}
+
+.send{
+  flex:0 0 40px;
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#000;
+  font-size:18px;
+}
+
+.send:disabled{
+  opacity:.35;
+}
+
+/* ================= NEW CHAT MENU ================= */
+
+.side-overlay{
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:100;
+  background:rgba(0,0,0,.65);
+}
+
+.side-panel{
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  width:82%;
+  max-width:350px;
+  background:#101010;
+  border-right:1px solid #303030;
+  padding:18px 13px;
+  box-shadow:15px 0 45px rgba(0,0,0,.5);
+}
+
+.side-top{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.side-top h3{
+  flex:1;
+  font-size:18px;
+}
+
+.close-side{
+  width:36px;
+  height:36px;
+  border:1px solid #333;
+  background:#191919;
+  color:#fff;
+  border-radius:10px;
+}
+
+.new-chat{
+  width:100%;
+  border:1px solid #333;
+  background:#191919;
+  color:#fff;
+  border-radius:12px;
+  padding:12px;
+  text-align:left;
+  margin-bottom:18px;
+}
+
+.history-title{
+  color:#777;
+  font-size:11px;
+  margin-bottom:9px;
+}
+
+.history-empty{
+  color:#666;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* ================= POPUP ================= */
+
+.popup{
+  display:none;
+  position:absolute;
+  inset:0;
+  z-index:200;
+  background:rgba(0,0,0,.72);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.popup-box{
+  width:100%;
+  max-width:370px;
+  background:#171717;
+  border:1px solid #333;
+  border-radius:18px;
+  padding:20px;
+}
+
+.popup-box h3{
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.popup-box p{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.5;
+}
+
+.popup-close{
+  width:100%;
+  margin-top:16px;
+  padding:11px;
+  border:0;
+  border-radius:11px;
+  background:#fff;
+  color:#000;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:380px){
+  .suggestions{
+    grid-template-columns:1fr;
+  }
+
+  .welcome h1{
+    font-size:24px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg"></div>
+<div class="app">
 
-<div class="popup">
+  <!-- HEADER -->
+  <header class="header">
 
-    <div class="header">
+    <button class="header-btn" onclick="goHome()">←</button>
 
-        <div class="logo">G</div>
+    <button
+      class="header-btn"
+      onclick="openHistory()">
+      ☰
+    </button>
 
-        <h1>GyanSetu</h1>
+    <div class="header-title">
+      <h2>GyanSetu AI</h2>
+      <p>AI Study Assistant</p>
+    </div>
 
-        <p>शिक्षण, कौशल्य आणि नवीन संधी एकाच ठिकाणी</p>
+    <div class="status">● Online</div>
+
+    <button
+      class="header-btn"
+      onclick="newChat()">
+      ＋
+    </button>
+
+  </header>
+
+
+  <!-- CHAT -->
+  <main
+    class="chat"
+    id="chat">
+
+    <!-- WELCOME -->
+    <section
+      class="welcome"
+      id="welcome">
+
+      <div class="ai-logo">🤖</div>
+
+      <h1>
+        <span class="gradient-text">
+          GyanSetu AI
+        </span>
+      </h1>
+
+      <p>
+        अभ्यास, प्रश्न, गणित, विज्ञान, coding
+        किंवा कोणत्याही विषयाबद्दल मला विचारा.
+      </p>
+
+      <div class="suggestions">
+
+        <button
+          class="suggestion"
+          onclick="useSuggestion('मला गणिताचा प्रश्न step by step समजावून सांग')">
+          <strong>📐 गणित शिकायचं?</strong>
+          <span>Step-by-step solution</span>
+        </button>
+
+        <button
+          class="suggestion"
+          onclick="useSuggestion('मला 10वी बोर्ड परीक्षेची तयारी करून दे')">
+          <strong>📚 Board तयारी</strong>
+          <span>Exam preparation</span>
+        </button>
+
+        <button
+          class="suggestion"
+          onclick="useSuggestion('हा विषय मला सोप्या मराठीत समजावून सांग')">
+          <strong>🧠 Topic समजून घ्या</strong>
+          <span>Simple explanation</span>
+        </button>
+
+        <button
+          class="suggestion"
+          onclick="useSuggestion('मला HTML coding शिकव')">
+          <strong>💻 Coding</strong>
+          <span>Learn & practice</span>
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- THINKING -->
+    <div
+      class="thinking"
+      id="thinking">
+
+      <div class="avatar">🤖</div>
+
+      <div class="thinking-box">
+        <span>GyanSetu AI विचार करत आहे</span>
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+      </div>
 
     </div>
 
-    <div class="intro">
-
-        <p>
-        <strong>GyanSetu</strong> हे विद्यार्थ्यांना शिक्षण,
-        कौशल्यांचा सराव आणि आधुनिक learning tools
-        एकाच ठिकाणी उपलब्ध करून देण्यासाठी तयार केलेले
-        educational platform आहे.
-        </p>
-
-        <br>
-
-        <p>
-        खालीलपैकी कोणत्याही feature वर tap करून
-        GyanSetu मधून तुम्ही काय करू शकता याबद्दल
-        सविस्तर माहिती जाणून घ्या.
-        </p>
-
-    </div>
-
-    <div class="features">
-
-        <div class="feature" onclick="openInfo('study')">
-            <div class="icon">🎓</div>
-            <div>
-                <h3>Study / Classes</h3>
-                <p>विषयानुसार अभ्यास आणि classes</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+  </main>
 
 
-        <div class="feature" onclick="openInfo('live')">
-            <div class="icon">🎥</div>
-            <div>
-                <h3>Live Classes</h3>
-                <p>शिक्षक आणि विद्यार्थ्यांसाठी live learning</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+  <!-- IMAGE PREVIEW -->
+  <div
+    class="image-preview"
+    id="imagePreview">
+
+    <img id="previewImg">
+
+    <button
+      class="remove-image"
+      onclick="removeImage()">
+      ×
+    </button>
+
+  </div>
 
 
-        <div class="feature" onclick="openInfo('ai')">
-            <div class="icon">🤖</div>
-            <div>
-                <h3>AI Study</h3>
-                <p>अभ्यासासाठी AI आधारित मदत</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+  <!-- COMPOSER -->
+  <div class="composer-area">
 
+    <div class="composer">
 
-        <div class="feature" onclick="openInfo('cyber')">
-            <div class="icon">🔐</div>
-            <div>
-                <h3>Cybersecurity Learn</h3>
-                <p>Cybersecurity चे knowledge आणि learning</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+      <button
+        class="tool-btn"
+        onclick="selectImage()">
+        ＋
+      </button>
 
+      <input
+        type="file"
+        id="imageInput"
+        accept="image/*"
+        hidden
+        onchange="handleImage(event)">
 
-        <div class="feature" onclick="openInfo('coding')">
-            <div class="icon">💻</div>
-            <div>
-                <h3>Code Practice</h3>
-                <p>Coding शिकणे आणि practice करणे</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+      <textarea
+        id="question"
+        class="textarea"
+        rows="1"
+        placeholder="GyanSetu AI ला विचारा..."
+        onkeydown="handleEnter(event)"></textarea>
 
+      <button
+        class="tool-btn"
+        id="micBtn"
+        onclick="startVoice()">
+        🎙️
+      </button>
 
-        <div class="feature" onclick="openInfo('trading')">
-            <div class="icon">📈</div>
-            <div>
-                <h3>Trading Practice</h3>
-                <p>Trading concepts चा educational practice</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
-
-
-        <div class="feature" onclick="openInfo('profile')">
-            <div class="icon">👤</div>
-            <div>
-                <h3>Profile / Username</h3>
-                <p>तुमचे स्वतःचे GyanSetu profile</p>
-            </div>
-            <div class="arrow">›</div>
-        </div>
+      <button
+        class="send"
+        id="sendBtn"
+        onclick="askAI()">
+        ↑
+      </button>
 
     </div>
 
-    <div class="footer">
-        © 2026 GyanSetu • Learn • Practice • Grow
+  </div>
+
+
+  <!-- SIDE HISTORY -->
+  <div
+    class="side-overlay"
+    id="sideOverlay"
+    onclick="closeHistory(event)">
+
+    <aside
+      class="side-panel"
+      onclick="event.stopPropagation()">
+
+      <div class="side-top">
+
+        <h3>GyanSetu AI</h3>
+
+        <button
+          class="close-side"
+          onclick="closeHistory()">
+          ×
+        </button>
+
+      </div>
+
+      <button
+        class="new-chat"
+        onclick="newChat();closeHistory();">
+        ＋ New Chat
+      </button>
+
+      <div class="history-title">
+        RECENT CHATS
+      </div>
+
+      <div
+        id="historyList"
+        class="history-empty">
+        अजून कोणतीही chat history नाही.
+      </div>
+
+    </aside>
+
+  </div>
+
+
+  <!-- POPUP -->
+  <div
+    class="popup"
+    id="popup">
+
+    <div class="popup-box">
+
+      <h3 id="popupTitle">GyanSetu</h3>
+
+      <p id="popupText"></p>
+
+      <button
+        class="popup-close"
+        onclick="closePopup()">
+        OK
+      </button>
+
     </div>
 
-</div>
-
-
-<!-- INFORMATION MODAL -->
-
-<div class="modal" id="infoModal">
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-            <div class="modal-icon" id="modalIcon">🎓</div>
-            <h2 id="modalTitle">GyanSetu</h2>
-        </div>
-
-        <div class="modal-content">
-
-            <p id="modalDescription"></p>
-
-            <h3>✨ तुम्ही यातून काय करू शकता?</h3>
-
-            <ul id="modalList"></ul>
-
-            <h3>🚀 GyanSetu मध्ये याचा उपयोग</h3>
-
-            <p id="modalExtra"></p>
-
-            <button class="close-btn" onclick="closeInfo()">
-                ← परत GyanSetu Information
-            </button>
-
-        </div>
-
-    </div>
+  </div>
 
 </div>
 
 
 <script>
 
-const information = {
+/* =====================================================
+   GYANSETU AI
+===================================================== */
 
-    study:{
-        icon:"🎓",
-        title:"Study / Classes",
-        description:
-        "GyanSetu मधील Study / Classes section विद्यार्थ्यांना त्यांच्या अभ्यासासाठी आवश्यक learning material आणि विषयानुसार educational content एका ठिकाणी उपलब्ध करून देण्यासाठी तयार केले आहे.",
-        list:[
-            "वेगवेगळे subjects निवडून अभ्यास करता येतो.",
-            "विषयानुसार educational content पाहता येते.",
-            "वेगवेगळ्या classes आणि standards साठी अभ्यास करता येतो.",
-            "अभ्यासासाठी आवश्यक material एका ठिकाणी ठेवता येते.",
-            "स्वतःच्या learning speed नुसार अभ्यास करता येतो."
-        ],
-        extra:
-        "विद्यार्थ्यांना वेगवेगळ्या ठिकाणी material शोधण्याऐवजी शिक्षणाशी संबंधित content एका platform वर मिळवण्याचा उद्देश आहे."
-    },
+const API_URL =
+"https://gyan-setu-self.vercel.app/api/chat";
 
-    live:{
-        icon:"🎥",
-        title:"Live Classes",
-        description:
-        "GyanSetu Live Classes च्या माध्यमातून शिक्षक आणि विद्यार्थ्यांना live online class च्या स्वरूपात जोडण्याचा प्रयत्न केला जातो. शिक्षक online class सुरू करू शकतात आणि विद्यार्थी दिलेल्या class ID द्वारे सहभागी होऊ शकतात.",
-        list:[
-            "शिक्षक live class सुरू करू शकतात.",
-            "विद्यार्थी दिलेल्या class ID द्वारे class join करू शकतात.",
-            "शिक्षक आणि विद्यार्थी online learning session मध्ये सहभागी होऊ शकतात.",
-            "Live teaching साठी camera आणि video communication चा उपयोग करता येतो.",
-            "Class नंतर recording उपलब्ध असल्यास ती पुन्हा पाहता येऊ शकते."
-        ],
-        extra:
-        "उदाहरणार्थ, शिक्षकाने एखाद्या विषयाचा live class सुरू केला तर विद्यार्थी त्यात सहभागी होऊन शिक्षकाकडून शिकू शकतात. त्यामुळे classroom learning ला online पर्याय मिळतो."
-    },
+let selectedImage = null;
+let selectedImageType = null;
+let thinking = false;
 
-    ai:{
-        icon:"🤖",
-        title:"AI Study",
-        description:
-        "AI Study हे विद्यार्थ्यांना अभ्यास समजून घेण्यासाठी AI आधारित educational assistance देण्यासाठी तयार केलेले feature आहे.",
-        list:[
-            "अभ्यासातील प्रश्न समजून घेण्यासाठी मदत घेता येते.",
-            "कठीण concepts सोप्या भाषेत समजून घेण्यास मदत मिळू शकते.",
-            "अभ्यासाचे explanations मिळवता येतात.",
-            "Revision साठी AI चा educational उपयोग करता येतो.",
-            "वेगवेगळ्या विषयांबद्दल प्रश्न विचारून शिकता येते."
-        ],
-        extra:
-        "AI चा उद्देश विद्यार्थ्याला शिकताना additional learning assistant उपलब्ध करून देणे आहे."
-    },
+let chatMessages = [];
 
-    cyber:{
-        icon:"🔐",
-        title:"Cybersecurity Learn",
-        description:
-        "Cybersecurity Learn section विद्यार्थ्यांना digital security आणि cybersecurity विषयी educational knowledge देण्यासाठी आहे.",
-        list:[
-            "Cybersecurity चे basic concepts शिकता येतात.",
-            "Online safety बद्दल माहिती मिळवता येते.",
-            "Digital security चे महत्त्व समजून घेता येते.",
-            "Cyber threats बद्दल educational knowledge मिळवता येते.",
-            "सुरक्षितपणे internet वापरण्याच्या सवयी शिकता येतात."
-        ],
-        extra:
-        "आजच्या digital world मध्ये online safety समजून घेणे महत्त्वाचे आहे. GyanSetu मध्ये cybersecurity education साठी स्वतंत्र learning section ठेवता येतो."
-    },
 
-    coding:{
-        icon:"💻",
-        title:"Code Practice",
-        description:
-        "Code Practice विद्यार्थ्यांना programming शिकताना code लिहिणे, समजून घेणे आणि practice करण्यासाठी तयार केलेले section आहे.",
-        list:[
-            "Programming concepts शिकता येतात.",
-            "Code examples समजून घेता येतात.",
-            "स्वतः code लिहून practice करता येते.",
-            "Programming logic develop करण्याचा सराव करता येतो.",
-            "Coding शिकण्याची सुरुवात करता येते."
-        ],
-        extra:
-        "Coding हे आधुनिक technology skills मधील महत्त्वाचे skill आहे. त्यामुळे विद्यार्थ्यांना learning सोबत practical coding practice मिळावी हा यामागचा उद्देश आहे."
-    },
+/* =========================
+   HELPER
+========================= */
 
-    trading:{
-        icon:"📈",
-        title:"Trading Practice",
-        description:
-        "Trading Practice section चा उद्देश विद्यार्थ्यांना financial markets आणि trading concepts विषयी educational practice environment देणे आहे.",
-        list:[
-            "Trading चे basic concepts समजून घेता येतात.",
-            "Charts आणि market concepts चा educational अभ्यास करता येतो.",
-            "Risk आणि decision-making बद्दल शिकता येते.",
-            "Real money वापरण्याऐवजी learning आणि practice वर लक्ष देता येते.",
-            "Financial education समजून घेण्याची सुरुवात करता येते."
-        ],
-        extra:
-        "हा section educational learning आणि practice साठी आहे. प्रत्यक्ष आर्थिक निर्णय घेण्यापूर्वी योग्य पालक/शिक्षक/आर्थिक तज्ज्ञांचा सल्ला घेणे महत्त्वाचे आहे."
-    },
+function $(id){
+  return document.getElementById(id);
+}
 
-    profile:{
-        icon:"👤",
-        title:"Profile / Username",
-        description:
-        "GyanSetu Profile मध्ये प्रत्येक विद्यार्थ्याला किंवा user ला स्वतःची ओळख तयार करण्यासाठी username आणि profile ची सुविधा देता येते.",
-        list:[
-            "स्वतःचा username तयार करता येतो.",
-            "तुमचे profile पाहता येते.",
-            "तुमच्या GyanSetu activity साठी profile वापरता येते.",
-            "Learning journey एका profile शी जोडता येते.",
-            "भविष्यात points आणि leaderboard सारख्या features सोबत profile जोडता येते."
-        ],
-        extra:
-        "GyanSetu मध्ये user ची learning journey एका profile भोवती तयार करण्याचा उद्देश आहे."
+
+/* =========================
+   POPUP
+========================= */
+
+function showPopup(title,text){
+
+  $("popupTitle").textContent = title;
+  $("popupText").textContent = text;
+
+  $("popup").style.display = "flex";
+}
+
+function closePopup(){
+
+  $("popup").style.display = "none";
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function goHome(){
+
+  window.location.href = "home.html";
+}
+
+
+/* =========================
+   SUGGESTION
+========================= */
+
+function useSuggestion(text){
+
+  $("question").value = text;
+
+  autoResize();
+
+  $("question").focus();
+
+}
+
+
+/* =========================
+   IMAGE
+========================= */
+
+function selectImage(){
+
+  $("imageInput").click();
+
+}
+
+
+function handleImage(event){
+
+  const file = event.target.files[0];
+
+  if(!file) return;
+
+  if(file.size > 8 * 1024 * 1024){
+
+    showPopup(
+      "Image मोठी आहे",
+      "कृपया 8MB पेक्षा कमी image निवडा."
+    );
+
+    $("imageInput").value = "";
+
+    return;
+  }
+
+  selectedImageType = file.type;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e){
+
+    selectedImage = e.target.result;
+
+    $("previewImg").src = selectedImage;
+
+    $("imagePreview").style.display = "block";
+  };
+
+  reader.readAsDataURL(file);
+}
+
+
+function removeImage(){
+
+  selectedImage = null;
+  selectedImageType = null;
+
+  $("imageInput").value = "";
+
+  $("previewImg").src = "";
+
+  $("imagePreview").style.display = "none";
+}
+
+
+/* =========================
+   ENTER
+========================= */
+
+function handleEnter(event){
+
+  if(
+    event.key === "Enter" &&
+    !event.shiftKey
+  ){
+
+    event.preventDefault();
+
+    askAI();
+  }
+}
+
+
+/* =========================
+   AUTO RESIZE
+========================= */
+
+$("question").addEventListener(
+  "input",
+  autoResize
+);
+
+function autoResize(){
+
+  const box = $("question");
+
+  box.style.height = "auto";
+
+  box.style.height =
+    Math.min(box.scrollHeight,110) + "px";
+}
+
+
+/* =========================
+   ESCAPE
+========================= */
+
+function escapeHTML(text){
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+}
+
+
+/* =========================
+   FORMAT AI TEXT
+========================= */
+
+function formatAIText(text){
+
+  if(!text) return "";
+
+  let escaped = escapeHTML(text);
+
+  /*
+    Code blocks
+  */
+
+  escaped = escaped.replace(
+    /```([\w+-]*)\n?([\s\S]*?)```/g,
+    function(match,language,code){
+
+      const safeCode =
+        code
+          .replace(/^\n/,"")
+          .replace(/\n$/,"");
+
+      return `
+        <div class="code-wrap">
+
+          <div class="code-head">
+
+            <span>${language || "code"}</span>
+
+            <button
+              class="code-copy"
+              onclick="copyCode(this)">
+              Copy
+            </button>
+
+          </div>
+
+          <pre class="code-content">${safeCode}</pre>
+
+        </div>
+      `;
+    }
+  );
+
+  /*
+    Headings
+  */
+
+  escaped = escaped.replace(
+    /^### (.*)$/gm,
+    "<h3>$1</h3>"
+  );
+
+  escaped = escaped.replace(
+    /^## (.*)$/gm,
+    "<h3>$1</h3>"
+  );
+
+  /*
+    Bold
+  */
+
+  escaped = escaped.replace(
+    /\*\*(.*?)\*\*/g,
+    "<strong>$1</strong>"
+  );
+
+  /*
+    Bullet points
+  */
+
+  escaped = escaped.replace(
+    /^[•*-] (.*)$/gm,
+    "• $1"
+  );
+
+  /*
+    New lines
+  */
+
+  escaped = escaped.replace(
+    /\n/g,
+    "<br>"
+  );
+
+  return escaped;
+}
+
+
+/* =========================
+   ADD USER
+========================= */
+
+function addUserMessage(
+  text,
+  image
+){
+
+  const message =
+    document.createElement("div");
+
+  message.className =
+    "message user";
+
+  let content = "";
+
+  if(image){
+
+    content += `
+      <img
+        class="user-image"
+        src="${image}">
+    `;
+  }
+
+  if(text){
+
+    content +=
+      escapeHTML(text)
+        .replace(/\n/g,"<br>");
+  }
+
+  message.innerHTML = `
+
+    <div class="message-inner">
+
+      <div class="bubble">
+        ${content}
+      </div>
+
+    </div>
+
+  `;
+
+  $("chat").insertBefore(
+    message,
+    $("thinking")
+  );
+}
+
+
+/* =========================
+   ADD AI
+========================= */
+
+function addAIMessage(text){
+
+  const message =
+    document.createElement("div");
+
+  message.className =
+    "message ai";
+
+  message.innerHTML = `
+
+    <div class="message-inner">
+
+      <div class="avatar">
+        🤖
+      </div>
+
+      <div class="bubble">
+        ${formatAIText(text)}
+      </div>
+
+      <div class="actions">
+
+        <button
+          class="action-btn"
+          onclick="copyAnswer(this)">
+          📋 Copy
+        </button>
+
+        <button
+          class="action-btn"
+          onclick="speakAnswer(this)">
+          🔊 Listen
+        </button>
+
+        <button
+          class="action-btn"
+          onclick="regenerate()">
+          🔄 Retry
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  $("chat").insertBefore(
+    message,
+    $("thinking")
+  );
+
+  scrollBottom();
+}
+
+
+/* =========================
+   COPY ANSWER
+========================= */
+
+function copyAnswer(button){
+
+  const bubble =
+    button
+      .closest(".message-inner")
+      .querySelector(".bubble");
+
+  const text =
+    bubble.innerText;
+
+  navigator.clipboard
+    .writeText(text)
+    .then(function(){
+
+      button.textContent =
+        "✅ Copied";
+
+      setTimeout(
+        function(){
+          button.textContent =
+            "📋 Copy";
+        },
+        1500
+      );
+
+    });
+}
+
+
+/* =========================
+   COPY CODE
+========================= */
+
+function copyCode(button){
+
+  const code =
+    button
+      .closest(".code-wrap")
+      .querySelector(".code-content")
+      .innerText;
+
+  navigator.clipboard
+    .writeText(code)
+    .then(function(){
+
+      button.textContent =
+        "Copied!";
+
+      setTimeout(
+        function(){
+          button.textContent =
+            "Copy";
+        },
+        1500
+      );
+
+    });
+}
+
+
+/* =========================
+   SPEAK
+========================= */
+
+function speakAnswer(button){
+
+  const bubble =
+    button
+      .closest(".message-inner")
+      .querySelector(".bubble");
+
+  const text =
+    bubble.innerText;
+
+  if(!("speechSynthesis" in window)){
+
+    showPopup(
+      "Voice unavailable",
+      "या browser मध्ये voice support उपलब्ध नाही."
+    );
+
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const speech =
+    new SpeechSynthesisUtterance(text);
+
+  speech.lang = "mr-IN";
+
+  speech.rate = .95;
+
+  speech.pitch = 1;
+
+  speechSynthesis.speak(speech);
+}
+
+
+/* =========================
+   VOICE INPUT
+========================= */
+
+function startVoice(){
+
+  const Recognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if(!Recognition){
+
+    showPopup(
+      "Voice unavailable",
+      "तुमच्या browser मध्ये voice input support उपलब्ध नाही."
+    );
+
+    return;
+  }
+
+  const recognition =
+    new Recognition();
+
+  recognition.lang = "mr-IN";
+
+  recognition.interimResults = false;
+
+  recognition.continuous = false;
+
+  $("micBtn").textContent = "🔴";
+
+  recognition.onresult =
+    function(event){
+
+      const text =
+        event.results[0][0].transcript;
+
+      $("question").value +=
+        (
+          $("question").value
+            ? " "
+            : ""
+        ) + text;
+
+      autoResize();
+    };
+
+  recognition.onerror =
+    function(){
+
+      showPopup(
+        "Voice error",
+        "Voice input सुरू करता आले नाही."
+      );
+    };
+
+  recognition.onend =
+    function(){
+
+      $("micBtn").textContent =
+        "🎙️";
+    };
+
+  recognition.start();
+}
+
+
+/* =========================
+   ASK AI
+========================= */
+
+async function askAI(){
+
+  if(thinking) return;
+
+  const question =
+    $("question").value.trim();
+
+  if(
+    !question &&
+    !selectedImage
+  ){
+
+    showPopup(
+      "प्रश्न लिहा",
+      "कृपया प्रश्न लिहा किंवा image पाठवा."
+    );
+
+    return;
+  }
+
+  thinking = true;
+
+  $("sendBtn").disabled = true;
+
+  $("welcome").style.display = "none";
+
+
+  /*
+    Save current question
+  */
+
+  chatMessages.push({
+    role:"user",
+    content:question
+  });
+
+
+  /*
+    Show user
+  */
+
+  addUserMessage(
+    question,
+    selectedImage
+  );
+
+
+  const imageToSend =
+    selectedImage;
+
+  const imageTypeToSend =
+    selectedImageType;
+
+
+  $("question").value = "";
+
+  autoResize();
+
+  removeImage();
+
+
+  /*
+    Thinking
+  */
+
+  $("thinking").style.display =
+    "flex";
+
+  scrollBottom();
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+
+            question:question,
+
+            image:imageToSend,
+
+            imageType:imageTypeToSend
+
+          })
+        }
+      );
+
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " + response.status
+      );
     }
 
-};
+
+    const data =
+      await response.json();
 
 
-function openInfo(type){
+    const answer =
+      data.answer ||
+      data.message ||
+      data.response ||
+      data.text;
 
-    const data = information[type];
 
-    document.getElementById("modalIcon").textContent = data.icon;
+    if(!answer){
 
-    document.getElementById("modalTitle").textContent = data.title;
+      throw new Error(
+        "Empty AI response"
+      );
+    }
 
-    document.getElementById("modalDescription").textContent =
-        data.description;
 
-    document.getElementById("modalExtra").textContent =
-        data.extra;
+    chatMessages.push({
+      role:"assistant",
+      content:answer
+    });
 
-    const list = document.getElementById("modalList");
+
+    addAIMessage(answer);
+
+
+    saveHistory();
+
+
+  }
+  catch(error){
+
+    console.error(
+      "GyanSetu AI Error:",
+      error
+    );
+
+
+    const errorText =
+      "⚠️ GyanSetu AI शी connect होता आले नाही. Internet connection तपासा आणि पुन्हा प्रयत्न करा.";
+
+
+    addAIMessage(
+      errorText
+    );
+
+  }
+  finally{
+
+    thinking = false;
+
+    $("sendBtn").disabled =
+      false;
+
+    $("thinking").style.display =
+      "none";
+
+    scrollBottom();
+  }
+}
+
+
+/* =========================
+   SCROLL
+========================= */
+
+function scrollBottom(){
+
+  setTimeout(
+    function(){
+
+      $("chat").scrollTop =
+        $("chat").scrollHeight;
+
+    },
+    50
+  );
+}
+
+
+/* =========================
+   NEW CHAT
+========================= */
+
+function newChat(){
+
+  if(thinking) return;
+
+  $("chat")
+    .querySelectorAll(
+      ".message"
+    )
+    .forEach(function(item){
+
+      item.remove();
+    });
+
+
+  chatMessages = [];
+
+
+  $("welcome").style.display =
+    "flex";
+
+
+  $("question").value = "";
+
+  autoResize();
+
+  removeImage();
+
+  speechSynthesis.cancel();
+
+  scrollBottom();
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function openHistory(){
+
+  $("sideOverlay").style.display =
+    "block";
+
+  renderHistory();
+}
+
+
+function closeHistory(event){
+
+  if(
+    event &&
+    event.target !==
+    $("sideOverlay")
+  ){
+    return;
+  }
+
+  $("sideOverlay").style.display =
+    "none";
+}
+
+
+function saveHistory(){
+
+  try{
+
+    const history =
+      JSON.parse(
+        localStorage.getItem(
+          "gyansetu_ai_history"
+        ) || "[]"
+      );
+
+
+    history.unshift({
+      title:
+        chatMessages[0]
+          ?.content
+          ?.slice(0,50) ||
+        "New Chat",
+
+      messages:
+        chatMessages,
+
+      time:
+        Date.now()
+    });
+
+
+    /*
+      Keep latest 10 chats
+    */
+
+    const limited =
+      history.slice(0,10);
+
+
+    localStorage.setItem(
+      "gyansetu_ai_history",
+      JSON.stringify(limited)
+    );
+
+  }
+  catch(error){
+
+    console.log(
+      "History save error",
+      error
+    );
+  }
+}
+
+
+function renderHistory(){
+
+  const list =
+    $("historyList");
+
+  try{
+
+    const history =
+      JSON.parse(
+        localStorage.getItem(
+          "gyansetu_ai_history"
+        ) || "[]"
+      );
+
+
+    if(!history.length){
+
+      list.innerHTML =
+        "अजून कोणतीही chat history नाही.";
+
+      return;
+    }
+
 
     list.innerHTML = "";
 
-    data.list.forEach(function(item){
 
-        const li = document.createElement("li");
+    history.forEach(
+      function(item,index){
 
-        li.textContent = item;
+        const button =
+          document.createElement(
+            "button"
+          );
 
-        list.appendChild(li);
+        button.style.width =
+          "100%";
 
-    });
+        button.style.padding =
+          "11px";
 
-    document.getElementById("infoModal").style.display = "block";
+        button.style.marginBottom =
+          "7px";
 
-    document.body.style.overflow = "hidden";
+        button.style.textAlign =
+          "left";
+
+        button.style.background =
+          "#181818";
+
+        button.style.color =
+          "#ddd";
+
+        button.style.border =
+          "1px solid #2d2d2d";
+
+        button.style.borderRadius =
+          "11px";
+
+        button.textContent =
+          item.title || "Chat";
+
+
+        button.onclick =
+          function(){
+
+            loadHistory(index);
+          };
+
+
+        list.appendChild(
+          button
+        );
+      }
+    );
+
+  }
+  catch(error){
+
+    list.textContent =
+      "History load करता आली नाही.";
+  }
 }
 
 
-function closeInfo(){
+function loadHistory(index){
 
-    document.getElementById("infoModal").style.display = "none";
+  try{
 
-    document.body.style.overflow = "auto";
+    const history =
+      JSON.parse(
+        localStorage.getItem(
+          "gyansetu_ai_history"
+        ) || "[]"
+      );
+
+
+    const item =
+      history[index];
+
+
+    if(!item) return;
+
+
+    newChat();
+
+
+    item.messages.forEach(
+      function(message){
+
+        if(message.role === "user"){
+
+          addUserMessage(
+            message.content,
+            null
+          );
+
+        }
+        else if(
+          message.role === "assistant"
+        ){
+
+          addAIMessage(
+            message.content
+          );
+        }
+      }
+    );
+
+
+    chatMessages =
+      item.messages || [];
+
+
+    closeHistory();
+
+    scrollBottom();
+
+  }
+  catch(error){
+
+    console.log(error);
+  }
 }
 
 
-/* Modal बाहेर tap केल्यावर बंद */
-document.getElementById("infoModal").addEventListener("click",function(e){
+/* =========================
+   CLOSE POPUP
+========================= */
 
-    if(e.target === this){
+$("popup").addEventListener(
+  "click",
+  function(event){
 
-        closeInfo();
+    if(
+      event.target ===
+      $("popup")
+    ){
 
+      closePopup();
     }
+  }
+);
 
-});
+
+/* =========================
+   INITIAL
+========================= */
+
+window.addEventListener(
+  "load",
+  function(){
+
+    $("question").focus();
+
+  }
+);
 
 </script>
 
