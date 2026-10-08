@@ -75,6 +75,7 @@ body{
 
 /* =========================
    GYANSETU PNG LOGO
+   TAP = SECRET ADMIN
 ========================= */
 
 .logo-image{
@@ -86,6 +87,7 @@ body{
   flex-shrink:1;
   cursor:pointer;
   transition:transform .18s ease;
+  -webkit-tap-highlight-color:transparent;
 }
 
 .logo-image:active{
@@ -253,7 +255,7 @@ body{
 }
 
 /* =========================
-   INTERVIEW + CHANNEL + VIDEO
+   TOP BUTTONS
 ========================= */
 
 .top-buttons{
@@ -864,13 +866,18 @@ body{
 
   <div class="header-row">
 
-    <!-- GYANSETU PNG LOGO -->
+    <!--
+      GYANSETU LOGO
+
+      Logo वर tap केल्यावर
+      Secret Admin Page उघडेल.
+    -->
 
     <img
       class="logo-image"
       src="file_000000006b688211bca059396adb24a1.png"
       alt="GyanSetu"
-      onclick="window.location.href='home.html'"
+      onclick="openSecretAdmin()"
     >
 
     <div class="header-actions">
@@ -961,6 +968,7 @@ body{
 
 </div>
 
+
 <!-- =========================
      SEARCH
 ========================= -->
@@ -980,6 +988,7 @@ body{
 
 </div>
 
+
 <div
   class="no-results"
   id="noResults">
@@ -988,6 +997,7 @@ body{
   दुसरं काही search करून बघा.
 
 </div>
+
 
 <!-- =========================
      FEATURES
@@ -1026,6 +1036,7 @@ body{
 
     </div>
 
+
     <div
       class="feature searchable"
       data-search="
@@ -1051,6 +1062,7 @@ body{
 
     </div>
 
+
     <div
       class="feature searchable"
       data-search="
@@ -1075,6 +1087,7 @@ body{
       </p>
 
     </div>
+
 
     <div
       class="feature searchable"
@@ -1105,6 +1118,7 @@ body{
   </div>
 
 </div>
+
 
 <!-- =========================
      DAILY GOAL
@@ -1156,6 +1170,7 @@ body{
 
 </div>
 
+
 <!-- =========================
      XP CARD
 ========================= -->
@@ -1192,6 +1207,7 @@ body{
 
 </div>
 
+
 <!-- =========================
      FEED
 ========================= -->
@@ -1199,6 +1215,7 @@ body{
 <div class="feed-title">
   📖 Learning Feed
 </div>
+
 
 <div
   class="post searchable"
@@ -1246,6 +1263,7 @@ body{
 
 </div>
 
+
 <!-- =========================
      BOTTOM NAV
 ========================= -->
@@ -1262,6 +1280,7 @@ body{
 
   </div>
 
+
   <div
     class="nav-item"
     onclick="window.location.href='learn.html'">
@@ -1273,6 +1292,7 @@ body{
     Learn
 
   </div>
+
 
   <div
     class="nav-item"
@@ -1286,6 +1306,7 @@ body{
 
   </div>
 
+
   <div
     class="nav-item"
     onclick="window.location.href='leaderboard.html'">
@@ -1297,6 +1318,7 @@ body{
     search
 
   </div>
+
 
   <div
     class="nav-item"
@@ -1314,7 +1336,20 @@ body{
 
 </div>
 
+
 <script>
+
+/* =========================
+   SECRET ADMIN
+========================= */
+
+function openSecretAdmin(){
+
+  window.location.href =
+    "secret-admin.html";
+
+}
+
 
 /* =========================
    USERNAME
@@ -1334,6 +1369,7 @@ if(savedUsername){
 
 }
 
+
 /* =========================
    SKILLS
 ========================= */
@@ -1344,6 +1380,7 @@ function goSkills(){
     "skills.html";
 
 }
+
 
 /* =========================
    TRADING
@@ -1356,6 +1393,7 @@ function goTrading(){
 
 }
 
+
 /* =========================
    DISCOVER SPACE
 ========================= */
@@ -1366,6 +1404,7 @@ function goDiscoverSpace(){
     "discover-space.html";
 
 }
+
 
 /* =========================
    SMART STUDY
@@ -1378,6 +1417,7 @@ function goSmartStudy(){
 
 }
 
+
 /* =========================
    PROFILE
 ========================= */
@@ -1388,6 +1428,7 @@ function goProfile(){
     "profile.html";
 
 }
+
 
 /* =========================
    XP SYSTEM
@@ -1407,11 +1448,13 @@ function loadXP(){
     .textContent =
     xp + " XP";
 
+
   const dailyXP =
     Math.min(
       xp,
       100
     );
+
 
   document
     .getElementById("dailyPoints")
@@ -1419,21 +1462,25 @@ function loadXP(){
     dailyXP +
     " / 100 XP";
 
+
   const percentage =
     Math.min(
       dailyXP,
       100
     );
 
+
   document
     .getElementById("progressBar")
     .style.width =
     percentage + "%";
 
+
   const goalText =
     document.getElementById(
       "goalText"
     );
+
 
   if(xp >= 100){
 
@@ -1458,6 +1505,7 @@ function loadXP(){
 
 }
 
+
 /* =========================
    SEARCH
 ========================= */
@@ -1467,15 +1515,18 @@ const searchInput =
     "homeSearch"
   );
 
+
 const searchableItems =
   document.querySelectorAll(
     ".searchable"
   );
 
+
 const noResults =
   document.getElementById(
     "noResults"
   );
+
 
 searchInput.addEventListener(
   "input",
@@ -1485,6 +1536,7 @@ searchInput.addEventListener(
       this.value
         .trim()
         .toLowerCase();
+
 
     if(query === ""){
 
@@ -1505,7 +1557,9 @@ searchInput.addEventListener(
 
     }
 
+
     let found = false;
+
 
     searchableItems.forEach(
       function(item){
@@ -1520,6 +1574,7 @@ searchInput.addEventListener(
             )
           )
           .toLowerCase();
+
 
         if(
           text.includes(query)
@@ -1544,6 +1599,7 @@ searchInput.addEventListener(
       }
     );
 
+
     if(found){
 
       noResults.style.display =
@@ -1561,11 +1617,13 @@ searchInput.addEventListener(
   }
 );
 
+
 /* =========================
    LOAD XP
 ========================= */
 
 loadXP();
+
 
 window.addEventListener(
   "pageshow",
