@@ -42,7 +42,8 @@ body{
 }
 
 button,
-input{
+input,
+textarea{
   font:inherit;
 }
 
@@ -473,35 +474,17 @@ main{
 }
 
 /* =====================================================
-   CAMERA TOOLS (NEW)
-===================================================== */
-
-.cam-tools{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:10px;
-}
-
-.cam-tools .secondary-btn{
-  margin-top:0;
-  padding:12px 6px;
-  font-size:15px;
-}
-
-/* =====================================================
-   VIDEO (SIR) - FIXED
+   VIDEO (SIR)
 ===================================================== */
 
 .video-wrap{
   position:relative;
   width:100%;
-  height:70vh;
-  height:70dvh;
-  background:#000;
+  background:#05070b;
   border-radius:16px;
   overflow:hidden;
   margin-top:15px;
+  aspect-ratio:16/10;
   box-shadow:0 10px 35px rgba(0,0,0,.45);
 }
 
@@ -510,17 +493,18 @@ main{
   height:100%;
   object-fit:cover;
   display:block;
-  background:#000;
 }
 
-/* Mirror फक्त Sir च्या स्क्रीनवरील preview साठी */
-.video-wrap video.mirror{
+/* Sir चा camera सरळ दिसण्यासाठी (फक्त Sir च्या स्क्रीनवरील preview).
+   जर चुकीचं दिसलं तर ही खालची एक ओळ काढून टाका. */
+#sirVideo{
   transform:scaleX(-1);
 }
 
 .video-wrap:fullscreen{
   width:100vw;
   height:100vh;
+  aspect-ratio:auto;
   border-radius:0;
   background:#000;
 }
@@ -530,18 +514,17 @@ main{
 }
 
 /* =====================================================
-   STUDENT PLAYER - FIXED
+   STUDENT PLAYER
 ===================================================== */
 
 .student-live-player{
   position:relative;
   width:100%;
-  height:70vh;
-  height:70dvh;
   background:#000;
   border-radius:14px;
   overflow:hidden;
   margin-top:15px;
+  aspect-ratio:16/9;
   box-shadow:0 8px 30px rgba(0,0,0,.55);
 }
 
@@ -556,6 +539,7 @@ main{
 .student-live-player:fullscreen{
   width:100vw;
   height:100vh;
+  aspect-ratio:auto;
   border-radius:0;
   background:#000;
 }
@@ -626,6 +610,18 @@ main{
   font-weight:bold;
 }
 
+.timer-badge{
+  display:inline-block;
+  background:#252c38;
+  color:#fff;
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:13px;
+  margin-top:10px;
+  margin-left:6px;
+  font-weight:bold;
+}
+
 .count-badge{
   display:inline-block;
   background:#e91e63;
@@ -651,6 +647,185 @@ main{
   background:#171e2a;
   padding:11px;
   border-radius:10px;
+  border:1px solid transparent;
+}
+
+.student-item.hand-up{
+  border-color:#e9a21e;
+}
+
+/* =====================================================
+   CARDS (FEEDBACK / CHAT / NOTES)
+===================================================== */
+
+.card{
+  background:#111722;
+  border:1px solid #283244;
+  border-radius:15px;
+  padding:14px;
+  margin-top:14px;
+}
+
+.card h3{
+  font-size:16px;
+  margin-bottom:6px;
+}
+
+.card .status{
+  margin-top:6px;
+}
+
+/* =====================================================
+   FEEDBACK BUTTONS (STUDENT)
+===================================================== */
+
+.feedback-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.fb-btn{
+  border:1px solid #30394a;
+  background:#151c28;
+  color:#fff;
+  border-radius:12px;
+  padding:12px 4px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.fb-btn.active{
+  background:#e9a21e;
+  border-color:#e9a21e;
+  color:#000;
+}
+
+.fb-btn.active-yes{
+  background:#1faa59;
+  border-color:#1faa59;
+}
+
+.fb-btn.active-no{
+  background:#e91e63;
+  border-color:#e91e63;
+}
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+.chat-messages{
+  height:200px;
+  overflow-y:auto;
+  background:#0b1018;
+  border-radius:10px;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.chat-messages:empty::before{
+  content:"💬 अजून कोणताही message नाही";
+  color:#667085;
+  text-align:center;
+  font-size:13px;
+  padding:14px 6px;
+}
+
+.chat-msg{
+  background:#171e2a;
+  border-radius:10px;
+  padding:7px 10px;
+  font-size:14px;
+  line-height:1.4;
+  max-width:92%;
+  word-break:break-word;
+}
+
+.chat-msg.mine{
+  align-self:flex-end;
+  background:#12356b;
+}
+
+.chat-msg.sir{
+  border:1px solid #1769e0;
+}
+
+.chat-from{
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  color:#8bb8ff;
+  margin-bottom:2px;
+}
+
+.chat-input-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  margin-top:8px;
+}
+
+.chat-input-row .input{
+  margin-top:0;
+  padding:11px;
+  font-size:15px;
+}
+
+.chat-send{
+  border:0;
+  background:#1769e0;
+  color:#fff;
+  border-radius:11px;
+  padding:0 18px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+/* =====================================================
+   NOTES
+===================================================== */
+
+.notes-area{
+  width:100%;
+  min-height:120px;
+  background:#0b1018;
+  color:#fff;
+  border:1px solid #384355;
+  border-radius:11px;
+  padding:12px;
+  font-size:15px;
+  outline:none;
+  resize:vertical;
+  margin-top:6px;
+}
+
+.notes-area:focus{
+  border-color:#1769e0;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+  position:fixed;
+  top:calc(12px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  max-width:90%;
+  background:#1f2937;
+  color:#fff;
+  border:1px solid #1769e0;
+  border-radius:12px;
+  padding:10px 16px;
+  font-size:14px;
+  z-index:500;
+  box-shadow:0 8px 25px rgba(0,0,0,.5);
+  text-align:center;
 }
 
 /* =====================================================
@@ -924,6 +1099,8 @@ main{
 
 <body>
 
+<div id="toast" class="toast hidden"></div>
+
 <div class="app">
 
 <header class="header">
@@ -1084,24 +1261,6 @@ Sir / Channel ID
 
 <div id="sirStatus" class="status">Channel तयार आहे.</div>
 
-<!-- NEW: Camera tools -->
-<div class="cam-tools">
-
-<button
-id="switchCamBtn"
-class="secondary-btn"
-onclick="switchSirCamera()">
-🔄 Front Camera
-</button>
-
-<button
-class="secondary-btn"
-onclick="toggleSirMirror()">
-🪞 Mirror
-</button>
-
-</div>
-
 <button id="startCameraBtn" class="primary-btn" onclick="startSirCamera()">
 ▶️ Start Class
 </button>
@@ -1118,11 +1277,52 @@ onclick="toggleSirMirror()">
 
 <span id="sirAudioBadge" class="audio-badge hidden">🎤 Sir Mic ON</span>
 
+<span id="sirTimerBadge" class="timer-badge hidden">⏱️ 00:00</span>
+
 <br>
 
 <span id="studentCountBadge" class="count-badge">Students: 0</span>
 
+<!-- Students feedback -->
+
+<div class="card">
+
+<h3>📊 Students Feedback</h3>
+
+<div id="feedbackSummary" class="status">
+✅ समजलं: 0 • ❓ नाही समजलं: 0 • ✋ Hand: 0
+</div>
+
+<button class="secondary-btn" onclick="resetFeedback()">
+🔄 Feedback Reset करा
+</button>
+
 <div id="studentList" class="student-list"></div>
+
+</div>
+
+<!-- Chat -->
+
+<div class="card">
+
+<h3>💬 Class Chat</h3>
+
+<div id="sirChatMessages" class="chat-messages"></div>
+
+<div class="chat-input-row">
+
+<input
+id="sirChatInput"
+class="input"
+type="text"
+maxlength="300"
+placeholder="Message लिहा...">
+
+<button class="chat-send" onclick="sendSirChat()">➤</button>
+
+</div>
+
+</div>
 
 <button id="endSirClass" class="end-btn hidden" onclick="openEndConfirm()">
 ⛔ End Live Class
@@ -1188,6 +1388,13 @@ type="text"
 maxlength="100"
 placeholder="Sir Channel ID">
 
+<input
+id="studentNameInput"
+class="input"
+type="text"
+maxlength="30"
+placeholder="तुमचं नाव (Sir ला दिसेल)">
+
 <button id="joinStudentBtn" class="primary-btn" onclick="joinStudentClass()">
 ▶️ Start Class
 </button>
@@ -1219,9 +1426,63 @@ Live Class connecting...
 
 <span id="studentAudioBadge" class="audio-badge hidden">🔊 Sir Audio ON</span>
 
+<span id="studentTimerBadge" class="timer-badge">⏱️ 00:00</span>
+
 <button id="enableAudioBtn" class="primary-btn" onclick="enableStudentAudio()">
 🔊 Enable Sir Audio
 </button>
+
+<!-- Hand / understanding -->
+
+<div class="feedback-row">
+
+<button id="handBtn" class="fb-btn" onclick="toggleHand()">✋ Hand Raise</button>
+
+<button id="yesBtn" class="fb-btn" onclick="setUnderstand('yes')">✅ समजलं</button>
+
+<button id="noBtn" class="fb-btn" onclick="setUnderstand('no')">❓ नाही समजलं</button>
+
+</div>
+
+<!-- Chat -->
+
+<div class="card">
+
+<h3>💬 Class Chat</h3>
+
+<div id="studentChatMessages" class="chat-messages"></div>
+
+<div class="chat-input-row">
+
+<input
+id="studentChatInput"
+class="input"
+type="text"
+maxlength="300"
+placeholder="Doubt / Message लिहा...">
+
+<button class="chat-send" onclick="sendStudentChat()">➤</button>
+
+</div>
+
+</div>
+
+<!-- Notes -->
+
+<div class="card">
+
+<h3>📝 माझ्या Notes</h3>
+
+<textarea
+id="studentNotes"
+class="notes-area"
+placeholder="Class मधले महत्त्वाचे मुद्दे इथे लिहा..."></textarea>
+
+<button class="secondary-btn" onclick="downloadStudentNotes()">
+⬇️ Notes Download करा
+</button>
+
+</div>
 
 <button class="end-btn" onclick="leaveStudentClass()">🚪 Leave Class</button>
 
@@ -1427,8 +1688,21 @@ const DB_VERSION=1;
 
 const STORE_NAME="recordings";
 
-/* NEW: camera direction ("user" = front, "environment" = back) */
-let sirFacingMode="user";
+/* ---- Student helper features ---- */
+
+let studentName="Student";
+
+let handRaised=false;
+
+let understandValue=null;
+
+let studentClassStart=null;
+
+let sirTimerInterval=null;
+
+let studentTimerInterval=null;
+
+let toastTimer=null;
 
 
 /* =====================================================
@@ -1501,6 +1775,120 @@ function showMessage(title,message,icon="ℹ️"){
 function closeMessage(){
 
   $("messageOverlay").classList.add("hidden");
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+function showToast(text){
+
+  const toast=$("toast");
+
+  toast.textContent=text;
+
+  toast.classList.remove("hidden");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(function(){
+
+    toast.classList.add("hidden");
+
+  },3000);
+}
+
+
+/* =====================================================
+   TIMER HELPERS
+===================================================== */
+
+function formatDuration(ms){
+
+  const total=Math.max(0,Math.floor(ms/1000));
+
+  const h=Math.floor(total/3600);
+
+  const m=Math.floor((total%3600)/60);
+
+  const s=total%60;
+
+  const mm=String(m).padStart(2,"0");
+
+  const ss=String(s).padStart(2,"0");
+
+  return h>0 ? h+":"+mm+":"+ss : mm+":"+ss;
+}
+
+
+function startSirTimer(){
+
+  stopSirTimer();
+
+  const badge=$("sirTimerBadge");
+
+  badge.classList.remove("hidden");
+
+  function tick(){
+
+    if(classStartedAt){
+
+      badge.textContent=
+        "⏱️ "+formatDuration(Date.now()-classStartedAt.getTime());
+    }
+  }
+
+  tick();
+
+  sirTimerInterval=setInterval(tick,1000);
+}
+
+
+function stopSirTimer(){
+
+  if(sirTimerInterval){
+
+    clearInterval(sirTimerInterval);
+
+    sirTimerInterval=null;
+  }
+
+  $("sirTimerBadge").classList.add("hidden");
+}
+
+
+function startStudentTimer(){
+
+  stopStudentTimer();
+
+  const badge=$("studentTimerBadge");
+
+  function tick(){
+
+    if(studentClassStart){
+
+      badge.textContent=
+        "⏱️ "+formatDuration(Date.now()-studentClassStart.getTime());
+    }
+  }
+
+  tick();
+
+  studentTimerInterval=setInterval(tick,1000);
+}
+
+
+function stopStudentTimer(){
+
+  if(studentTimerInterval){
+
+    clearInterval(studentTimerInterval);
+
+    studentTimerInterval=null;
+  }
+
+  $("studentTimerBadge").textContent="⏱️ 00:00";
 }
 
 
@@ -2197,6 +2585,18 @@ function ensureSirPeer(channelId){
    SIR CONNECTION
 ===================================================== */
 
+function cleanName(value){
+
+  const name=
+    String(value || "")
+      .replace(/\s+/g," ")
+      .trim()
+      .slice(0,30);
+
+  return name || "Student";
+}
+
+
 function setupSirConnection(conn){
 
   if(!conn){
@@ -2211,17 +2611,100 @@ function setupSirConnection(conn){
 
   conn.on("data",function(data){
 
-    if(data && data.type==="STUDENT_JOINED"){
+    if(!data || typeof data!=="object"){
+      return;
+    }
 
-      students.set(conn.peer,{name:"Student",conn:conn});
+    if(data.type==="STUDENT_JOINED"){
+
+      const name=cleanName(data.name);
+
+      students.set(
+        conn.peer,
+        {
+          name:name,
+          conn:conn,
+          hand:false,
+          understand:null
+        }
+      );
 
       updateStudentUI();
 
       sendClassStatus(conn);
+
+      showToast("👨‍🎓 "+name+" Join झाला");
+
+      return;
     }
 
-    if(data && data.type==="STUDENT_LEFT"){
+    if(data.type==="STUDENT_LEFT"){
+
       removeStudent(conn.peer);
+
+      return;
+    }
+
+    const student=students.get(conn.peer);
+
+    if(!student){
+      return;
+    }
+
+    if(data.type==="CHAT"){
+
+      const text=String(data.text || "").trim().slice(0,300);
+
+      if(!text){
+        return;
+      }
+
+      const message={
+        type:"CHAT_MSG",
+        from:student.name,
+        text:text,
+        role:"student",
+        peerId:conn.peer,
+        time:Date.now()
+      };
+
+      appendChat("sirChatMessages",message,false);
+
+      broadcastToStudents(message);
+
+      return;
+    }
+
+    if(data.type==="HAND"){
+
+      student.hand=!!data.raised;
+
+      updateStudentUI();
+
+      if(student.hand){
+        showToast("✋ "+student.name+" ने Hand Raise केला");
+      }
+
+      return;
+    }
+
+    if(data.type==="UNDERSTAND"){
+
+      if(data.value==="yes" || data.value==="no"){
+
+        student.understand=data.value;
+
+        if(data.value==="no"){
+          showToast("❓ "+student.name+": नाही समजलं");
+        }
+
+      }
+      else{
+
+        student.understand=null;
+      }
+
+      updateStudentUI();
     }
   });
 
@@ -2270,7 +2753,7 @@ function handleSirIncomingCall(call){
 
 
 /* =====================================================
-   STUDENT UI
+   STUDENT UI (SIR SIDE)
 ===================================================== */
 
 function updateStudentUI(){
@@ -2278,7 +2761,35 @@ function updateStudentUI(){
   $("studentCountBadge").textContent=
     "Students: "+students.size;
 
-  $("studentList").innerHTML="";
+  let yes=0;
+
+  let no=0;
+
+  let hands=0;
+
+  students.forEach(function(student){
+
+    if(student.understand==="yes"){
+      yes++;
+    }
+
+    if(student.understand==="no"){
+      no++;
+    }
+
+    if(student.hand){
+      hands++;
+    }
+  });
+
+  $("feedbackSummary").textContent=
+    "✅ समजलं: "+yes+
+    " • ❓ नाही समजलं: "+no+
+    " • ✋ Hand: "+hands;
+
+  const list=$("studentList");
+
+  list.innerHTML="";
 
   if(students.size===0){
 
@@ -2288,33 +2799,181 @@ function updateStudentUI(){
 
     item.textContent="अजून कोणताही Student Join झालेला नाही.";
 
-    $("studentList").appendChild(item);
+    list.appendChild(item);
 
     return;
   }
 
-  let number=1;
+  const sorted=
+    Array.from(students.values()).sort(function(a,b){
 
-  students.forEach(function(){
+      return (b.hand ? 1 : 0)-(a.hand ? 1 : 0);
+    });
+
+  sorted.forEach(function(student,index){
 
     const item=document.createElement("div");
 
     item.className="student-item";
 
-    item.textContent=number+". Student";
+    if(student.hand){
+      item.classList.add("hand-up");
+    }
 
-    $("studentList").appendChild(item);
+    item.textContent=
+      (index+1)+". "+student.name+
+      (student.hand ? " ✋" : "")+
+      (student.understand==="yes" ? " ✅" : "")+
+      (student.understand==="no" ? " ❓" : "");
 
-    number++;
+    list.appendChild(item);
   });
 }
 
 
 function removeStudent(peerId){
 
+  const student=students.get(peerId);
+
   students.delete(peerId);
 
   updateStudentUI();
+
+  if(student){
+    showToast("🚪 "+student.name+" बाहेर पडला");
+  }
+}
+
+
+/* =====================================================
+   FEEDBACK RESET (SIR)
+===================================================== */
+
+function resetFeedback(){
+
+  students.forEach(function(student){
+
+    student.hand=false;
+
+    student.understand=null;
+  });
+
+  updateStudentUI();
+
+  broadcastToStudents({type:"RESET_FEEDBACK"});
+
+  showToast("🔄 Feedback reset झाला");
+}
+
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+function appendChat(containerId,message,mine){
+
+  const container=$(containerId);
+
+  if(!container || !message){
+    return;
+  }
+
+  const text=String(message.text || "").slice(0,300);
+
+  if(!text){
+    return;
+  }
+
+  const bubble=document.createElement("div");
+
+  bubble.className="chat-msg";
+
+  if(mine){
+    bubble.classList.add("mine");
+  }
+
+  if(message.role==="sir"){
+    bubble.classList.add("sir");
+  }
+
+  const from=document.createElement("span");
+
+  from.className="chat-from";
+
+  from.textContent=String(message.from || "").slice(0,40);
+
+  const body=document.createElement("span");
+
+  body.textContent=text;
+
+  bubble.appendChild(from);
+
+  bubble.appendChild(body);
+
+  container.appendChild(bubble);
+
+  while(container.children.length>200){
+    container.removeChild(container.firstChild);
+  }
+
+  container.scrollTop=container.scrollHeight;
+}
+
+
+function broadcastToStudents(data){
+
+  sirConnections.forEach(function(conn){
+
+    if(conn && conn.open){
+
+      try{
+        conn.send(data);
+      }
+      catch(e){}
+    }
+  });
+}
+
+
+function sendSirChat(){
+
+  const input=$("sirChatInput");
+
+  const text=input.value.trim().slice(0,300);
+
+  if(!text){
+    return;
+  }
+
+  const message={
+    type:"CHAT_MSG",
+    from:"Sir 👨‍🏫",
+    text:text,
+    role:"sir",
+    time:Date.now()
+  };
+
+  appendChat("sirChatMessages",message,true);
+
+  broadcastToStudents(message);
+
+  input.value="";
+}
+
+
+function sendStudentChat(){
+
+  const input=$("studentChatInput");
+
+  const text=input.value.trim().slice(0,300);
+
+  if(!text){
+    return;
+  }
+
+  if(sendToSir({type:"CHAT",text:text})){
+    input.value="";
+  }
 }
 
 
@@ -2357,43 +3016,6 @@ async function copyChannelId(){
 
 
 /* =====================================================
-   CAMERA TOOLS (NEW)
-===================================================== */
-
-function switchSirCamera(){
-
-  if(isSirLive){
-
-    showMessage(
-      "Camera",
-      "Class सुरू असताना Camera बदलता येत नाही.\nआधी Class End करा.",
-      "⚠️"
-    );
-
-    return;
-  }
-
-  sirFacingMode=
-    sirFacingMode==="user"
-    ? "environment"
-    : "user";
-
-  $("switchCamBtn").textContent=
-    sirFacingMode==="user"
-    ? "🔄 Front Camera"
-    : "🔄 Back Camera";
-}
-
-
-/* Mirror फक्त Sir च्या स्क्रीनवरील preview साठी आहे.
-   Students ना आणि Recording मध्ये व्हिडिओ नेहमी खरा दिसतो. */
-function toggleSirMirror(){
-
-  $("sirVideo").classList.toggle("mirror");
-}
-
-
-/* =====================================================
    SIR CAMERA
 ===================================================== */
 
@@ -2409,15 +3031,21 @@ async function startSirCamera(){
 
   try{
 
-    const isPortrait=window.innerHeight>window.innerWidth;
+    /* पहिली Class संपल्यावर peer बंद होतो,
+       म्हणून दुसऱ्या Class साठी तो पुन्हा तयार करतो */
+    const savedChannel=getSavedChannel();
+
+    if(savedChannel){
+      ensureSirPeer(savedChannel.id);
+    }
 
     const stream=
     await navigator.mediaDevices.getUserMedia({
 
       video:{
-        width:{ideal:isPortrait ? 720 : 1280},
-        height:{ideal:isPortrait ? 1280 : 720},
-        facingMode:sirFacingMode
+        width:{ideal:1280},
+        height:{ideal:720},
+        facingMode:"user"
       },
 
       audio:{
@@ -2447,6 +3075,8 @@ async function startSirCamera(){
     isSirLive=true;
 
     classStartedAt=new Date();
+
+    startSirTimer();
 
     $("sirLiveBadge").classList.remove("hidden");
 
@@ -2724,11 +3354,15 @@ async function endSirClass(showPopup=true){
 
   updateStudentUI();
 
+  $("sirChatMessages").innerHTML="";
+
   stopSirMedia();
 
   isSirLive=false;
 
   classStartedAt=null;
+
+  stopSirTimer();
 
   if(peer){
 
@@ -2860,6 +3494,22 @@ function joinStudentClass(){
     return;
   }
 
+  const typedName=
+    $("studentNameInput")
+      .value
+      .replace(/\s+/g," ")
+      .trim()
+      .slice(0,30);
+
+  studentName=typedName || "Student";
+
+  try{
+
+    localStorage.setItem("gyansetu_student_name",typedName);
+
+  }
+  catch(e){}
+
   studentHostId=channel;
 
   $("joinStudentBtn").disabled=true;
@@ -2906,6 +3556,26 @@ function joinStudentClass(){
    STUDENT CONNECTION
 ===================================================== */
 
+function sendToSir(data){
+
+  if(studentConnection && studentConnection.open){
+
+    try{
+
+      studentConnection.send(data);
+
+      return true;
+
+    }
+    catch(e){}
+  }
+
+  showToast("⚠️ Sir शी connection नाही");
+
+  return false;
+}
+
+
 function connectStudentToSir(){
 
   if(!peer || !studentHostId){
@@ -2921,7 +3591,10 @@ function connectStudentToSir(){
 
     try{
 
-      studentConnection.send({type:"STUDENT_JOINED"});
+      studentConnection.send({
+        type:"STUDENT_JOINED",
+        name:studentName
+      });
 
     }
     catch(e){}
@@ -2964,6 +3637,24 @@ function handleStudentData(data){
       $("studentStatus").textContent=
         "🔴 Live Class आहे. Video + Audio connect होत आहे...";
 
+      if(data.startedAt){
+
+        const started=new Date(data.startedAt);
+
+        if(
+          !isNaN(started.getTime()) &&
+          (
+            !studentClassStart ||
+            studentClassStart.getTime()!==started.getTime()
+          )
+        ){
+
+          studentClassStart=started;
+
+          startStudentTimer();
+        }
+      }
+
       startStudentCall();
 
     }
@@ -2981,7 +3672,166 @@ function handleStudentData(data){
     stopStudentClass(
       data.message || "Sir ने Live Class समाप्त केली."
     );
+
+    return;
   }
+
+  if(data.type==="CHAT_MSG"){
+
+    const mine=
+      !!data.peerId &&
+      !!peer &&
+      data.peerId===peer.id;
+
+    appendChat("studentChatMessages",data,mine);
+
+    return;
+  }
+
+  if(data.type==="RESET_FEEDBACK"){
+
+    handRaised=false;
+
+    understandValue=null;
+
+    updateStudentFeedbackUI();
+
+    showToast("🔄 Sir ने Feedback reset केला");
+  }
+}
+
+
+/* =====================================================
+   STUDENT FEEDBACK (HAND / UNDERSTAND)
+===================================================== */
+
+function updateStudentFeedbackUI(){
+
+  $("handBtn").textContent=
+    handRaised
+    ? "✋ Hand खाली करा"
+    : "✋ Hand Raise";
+
+  $("handBtn").classList.toggle("active",handRaised);
+
+  $("yesBtn").classList.toggle(
+    "active-yes",
+    understandValue==="yes"
+  );
+
+  $("noBtn").classList.toggle(
+    "active-no",
+    understandValue==="no"
+  );
+}
+
+
+function toggleHand(){
+
+  const next=!handRaised;
+
+  if(sendToSir({type:"HAND",raised:next})){
+
+    handRaised=next;
+
+    updateStudentFeedbackUI();
+
+    showToast(
+      next
+      ? "✋ Sir ला कळवलं"
+      : "Hand खाली केला"
+    );
+  }
+}
+
+
+function setUnderstand(value){
+
+  const next=understandValue===value ? null : value;
+
+  if(sendToSir({type:"UNDERSTAND",value:next})){
+
+    understandValue=next;
+
+    updateStudentFeedbackUI();
+  }
+}
+
+
+/* =====================================================
+   STUDENT NOTES
+===================================================== */
+
+function notesKey(){
+
+  return "GyanSetu_Notes_"+(studentHostId || "general");
+}
+
+
+function loadStudentNotes(){
+
+  try{
+
+    $("studentNotes").value=
+      localStorage.getItem(notesKey()) || "";
+
+  }
+  catch(e){}
+}
+
+
+function saveStudentNotes(){
+
+  try{
+
+    localStorage.setItem(
+      notesKey(),
+      $("studentNotes").value
+    );
+
+  }
+  catch(e){}
+}
+
+
+function downloadStudentNotes(){
+
+  const text=$("studentNotes").value.trim();
+
+  if(!text){
+
+    showToast("📝 Notes रिकाम्या आहेत");
+
+    return;
+  }
+
+  const blob=
+    new Blob(
+      ["GyanSetu Class Notes\n"+
+       formatDate(new Date())+
+       "\n\n"+text],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+
+  a.href=url;
+
+  a.download="GyanSetu Notes.txt";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  setTimeout(function(){
+
+    URL.revokeObjectURL(url);
+
+  },1000);
 }
 
 
@@ -3133,6 +3983,10 @@ function startStudentCall(){
     $("studentLiveArea").classList.remove("hidden");
 
     $("studentLiveBadge").classList.remove("hidden");
+
+    loadStudentNotes();
+
+    updateStudentFeedbackUI();
 
     video.play()
       .then(function(){
@@ -3374,6 +4228,8 @@ function stopStudentClass(message){
 
   const hadClass=!!studentCall || !!studentRemoteStream;
 
+  saveStudentNotes();
+
   stopStudentRecording();
 
   if(studentCall){
@@ -3446,6 +4302,20 @@ function stopStudentClass(message){
   }
 
   studentHostId=null;
+
+  studentClassStart=null;
+
+  stopStudentTimer();
+
+  handRaised=false;
+
+  understandValue=null;
+
+  updateStudentFeedbackUI();
+
+  $("studentChatMessages").innerHTML="";
+
+  $("studentNotes").value="";
 
   $("studentLiveBadge").classList.add("hidden");
 
@@ -4087,6 +4957,28 @@ $("channelNameInput").addEventListener("input",function(){
 });
 
 
+$("sirChatInput").addEventListener("keydown",function(event){
+
+  if(event.key==="Enter"){
+    sendSirChat();
+  }
+});
+
+
+$("studentChatInput").addEventListener("keydown",function(event){
+
+  if(event.key==="Enter"){
+    sendStudentChat();
+  }
+});
+
+
+$("studentNotes").addEventListener("input",function(){
+
+  saveStudentNotes();
+});
+
+
 /* =====================================================
    OUTSIDE CLICK
 ===================================================== */
@@ -4162,6 +5054,22 @@ supabaseClient.auth.onAuthStateChange(
 document.addEventListener("DOMContentLoaded",async function(){
 
   await loadCurrentUser();
+
+  try{
+
+    const savedName=
+      localStorage.getItem("gyansetu_student_name") ||
+      currentUser?.user_metadata?.username ||
+      localStorage.getItem("gyansetu_username") ||
+      "";
+
+    $("studentNameInput").value=
+      String(savedName).slice(0,30);
+
+  }
+  catch(e){}
+
+  updateStudentUI();
 
   openDatabase()
     .then(function(){
