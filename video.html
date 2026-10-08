@@ -1,986 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>Videos - GyanSetu</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-body{
-  font-family:Arial,sans-serif;
-  background:#050509;
-  color:white;
-  min-height:100vh;
-  padding-bottom:75px;
-}
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  height:62px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:0 12px;
-  background:rgba(5,5,9,.96);
-  border-bottom:1px solid #252533;
-}
-
-.back{
-  width:40px;
-  height:40px;
-  border:0;
-  border-radius:50%;
-  background:#171722;
-  color:white;
-  font-size:25px;
-}
-
-.logo{
-  font-size:21px;
-  font-weight:800;
-  background:linear-gradient(90deg,#ff2bd6,#4d7cff);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.search-box{
-  padding:12px;
-  background:#09090f;
-  position:sticky;
-  top:62px;
-  z-index:90;
-}
-
-.search{
-  width:100%;
-  height:45px;
-  border:1px solid #29293a;
-  border-radius:14px;
-  outline:none;
-  background:#15151e;
-  color:white;
-  padding:0 15px;
-  font-size:15px;
-}
-
-.search:focus{
-  border-color:#ff2bd6;
-}
-
-.feed{
-  max-width:650px;
-  margin:auto;
-  padding:10px;
-}
-
-.video-card{
-  background:#0e0e16;
-  border:1px solid #222231;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:16px;
-  box-shadow:0 5px 25px rgba(0,0,0,.35);
-}
-
-.thumb{
-  position:relative;
-  width:100%;
-  aspect-ratio:16/9;
-  background:#111;
-  cursor:pointer;
-  overflow:hidden;
-}
-
-.thumb video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  pointer-events:none;
-}
-
-.play{
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  width:58px;
-  height:58px;
-  border-radius:50%;
-  background:rgba(255,43,214,.9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  box-shadow:0 0 25px rgba(255,43,214,.4);
-}
-
-.card-content{
-  padding:12px;
-}
-
-.card-title{
-  font-size:17px;
-  font-weight:bold;
-  margin-bottom:7px;
-}
-
-.card-description{
-  color:#aaa;
-  font-size:13px;
-  line-height:1.5;
-}
-
-.card-meta{
-  color:#777;
-  font-size:11px;
-  margin-top:9px;
-}
-
-.empty{
-  text-align:center;
-  padding:60px 20px;
-  color:#777;
-}
-
-.loader{
-  text-align:center;
-  padding:40px;
-  color:#aaa;
-}
-
-.bottom{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  height:65px;
-  background:#09090f;
-  border-top:1px solid #252533;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:200;
-}
-
-.nav{
-  border:0;
-  background:none;
-  color:#777;
-  font-size:11px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-}
-
-.nav span{
-  font-size:22px;
-}
-
-.nav.active{
-  color:#ff3bd4;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh;padding-bottom:75px}
+.header{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;gap:10px;padding:0 12px;background:rgba(5,5,9,.96);border-bottom:1px solid #252533}
+.back{width:40px;height:40px;border:0;border-radius:50%;background:#171722;color:#fff;font-size:25px}
+.logo{font-size:21px;font-weight:800;background:linear-gradient(90deg,#ff2bd6,#4d7cff);-webkit-background-clip:text;color:transparent;flex:1}
+.post-btn{border:0;border-radius:20px;padding:10px 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
+.search-box{padding:12px;background:#09090f;position:sticky;top:62px;z-index:90}
+.search{width:100%;height:45px;border:1px solid #29293a;border-radius:14px;outline:none;background:#15151e;color:#fff;padding:0 15px;font-size:15px}
+.search:focus{border-color:#ff2bd6}
+.feed{max-width:650px;margin:auto;padding:10px}
+.video-card{background:#0e0e16;border:1px solid #222231;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 5px 25px rgba(0,0,0,.35)}
+.thumb{position:relative;width:100%;aspect-ratio:16/9;background:#111;cursor:pointer;overflow:hidden}
+.thumb video{width:100%;height:100%;object-fit:cover;pointer-events:none}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,43,214,.9);display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 25px rgba(255,43,214,.4)}
+.card-content{padding:12px}
+.card-title{font-size:17px;font-weight:bold;margin-bottom:7px}
+.card-description{color:#aaa;font-size:13px;line-height:1.5}
+.card-meta{color:#777;font-size:11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.del-btn{border:0;background:#2a1520;color:#ff6b8a;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer}
+.empty,.loader{text-align:center;padding:60px 20px;color:#777}
+.bottom{position:fixed;left:0;right:0;bottom:0;height:65px;background:#09090f;border-top:1px solid #252533;display:flex;justify-content:space-around;align-items:center;z-index:200}
+.nav{border:0;background:none;color:#777;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.nav span{font-size:22px}
+.nav.active{color:#ff3bd4}
 
 /* PLAYER */
+.player-modal{position:fixed;inset:0;z-index:1000;display:none;background:#000;overflow-y:auto}
+.player-modal.show{display:block}
+.player-top{height:58px;display:flex;align-items:center;padding:0 12px;gap:10px;background:#07070b;border-bottom:1px solid #252533;position:sticky;top:0;z-index:5}
+.close-player{width:42px;height:42px;border:0;border-radius:50%;background:#191923;color:#fff;font-size:25px}
+.player-title-small{font-weight:bold;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.player-wrap{max-width:900px;margin:auto}
+.main-video{width:100%;max-height:70vh;background:#000;display:block}
+.player-info{padding:15px}
+.player-title{font-size:20px;font-weight:bold;line-height:1.35}
+.player-user{color:#ff54db;margin-top:7px;font-size:13px}
+.player-description{color:#bbb;line-height:1.6;margin-top:12px;white-space:pre-wrap}
+.player-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.action-btn{border:1px solid #343445;background:#15151e;color:#fff;border-radius:12px;padding:11px 17px;font-weight:bold;cursor:pointer}
+.action-btn.share{background:linear-gradient(135deg,#ff28cf,#416cff);border:0}
+.other-title{font-size:18px;font-weight:bold;padding:15px;border-top:1px solid #252533}
+.related{padding:0 10px 30px}
 
-.player-modal{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:none;
-  background:#000;
-  overflow-y:auto;
-}
-
-.player-modal.show{
-  display:block;
-}
-
-.player-top{
-  height:58px;
-  display:flex;
-  align-items:center;
-  padding:0 12px;
-  gap:10px;
-  background:#07070b;
-  border-bottom:1px solid #252533;
-  position:sticky;
-  top:0;
-  z-index:5;
-}
-
-.close-player{
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:50%;
-  background:#191923;
-  color:white;
-  font-size:25px;
-}
-
-.player-title-small{
-  font-weight:bold;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-.player-wrap{
-  max-width:900px;
-  margin:auto;
-}
-
-.main-video{
-  width:100%;
-  max-height:70vh;
-  background:#000;
-  display:block;
-}
-
-.player-info{
-  padding:15px;
-}
-
-.player-title{
-  font-size:20px;
-  font-weight:bold;
-  line-height:1.35;
-}
-
-.player-user{
-  color:#ff54db;
-  margin-top:7px;
-  font-size:13px;
-}
-
-.player-description{
-  color:#bbb;
-  line-height:1.6;
-  margin-top:12px;
-  white-space:pre-wrap;
-}
-
-.player-actions{
-  display:flex;
-  gap:10px;
-  margin-top:16px;
-}
-
-.action-btn{
-  border:1px solid #343445;
-  background:#15151e;
-  color:white;
-  border-radius:12px;
-  padding:11px 17px;
-  font-weight:bold;
-}
-
-.action-btn.share{
-  background:linear-gradient(135deg,#ff28cf,#416cff);
-  border:0;
-}
-
-.other-title{
-  font-size:18px;
-  font-weight:bold;
-  padding:15px;
-  border-top:1px solid #252533;
-}
-
-.related{
-  padding:0 10px 30px;
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:85px;
-  transform:translateX(-50%);
-  background:#20202a;
-  color:white;
-  padding:11px 18px;
-  border-radius:20px;
-  display:none;
-  z-index:3000;
-  font-size:13px;
-}
-
-.toast.show{
-  display:block;
-}
-
+/* UPLOAD */
+.upload-modal{position:fixed;inset:0;z-index:1500;display:none;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:16px}
+.upload-modal.show{display:flex}
+.upload-box{width:100%;max-width:450px;background:#0e0e16;border:1px solid #252533;border-radius:18px;padding:18px}
+.upload-box h3{margin-bottom:14px}
+.upload-box input[type=text],.upload-box textarea{width:100%;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:12px;font-size:14px;margin-bottom:10px;outline:none;font-family:inherit}
+.upload-box textarea{height:90px;resize:none}
+.upload-box input[type=file]{width:100%;margin-bottom:10px;color:#aaa;font-size:13px}
+.upload-preview{width:100%;max-height:200px;border-radius:12px;background:#000;margin-bottom:10px;display:none}
+.upload-row{display:flex;gap:10px}
+.upload-row button{flex:1;padding:12px;border-radius:12px;font-weight:bold;border:0;cursor:pointer;color:#fff}
+.btn-cancel{background:#1c1c28}
+.btn-submit{background:linear-gradient(135deg,#ff28cf,#416cff)}
+.btn-submit:disabled{opacity:.5}
+.toast{position:fixed;left:50%;bottom:85px;transform:translateX(-50%);background:#20202a;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;font-size:13px;max-width:90%;text-align:center}
+.toast.show{display:block}
 </style>
 </head>
-
 <body>
 
 <header class="header">
-
   <button class="back" onclick="goHome()">‹</button>
-
-  <div class="logo">
-    🎬 GyanSetu
-  </div>
-
+  <div class="logo">🎬 GyanSetu</div>
+  <button class="post-btn" onclick="openUpload()">＋ Post</button>
 </header>
 
-
 <div class="search-box">
-
-  <input
-    id="searchInput"
-    class="search"
-    placeholder="🔍 Search videos..."
-    oninput="searchVideos()">
-
+  <input id="searchInput" class="search" placeholder="🔍 Search videos..." oninput="searchVideos()">
 </div>
-
 
 <main class="feed" id="feed">
-
-  <div class="loader">
-    Loading videos...
-  </div>
-
+  <div class="loader">Loading videos...</div>
 </main>
 
-
 <nav class="bottom">
-
-  <button class="nav" onclick="goHome()">
-    <span>🏠</span>
-    Home
-  </button>
-
-  <button class="nav active">
-    <span>🎬</span>
-    Videos
-  </button>
-
-  <button class="nav" onclick="goCreate()">
-    <span>👥</span>
-    users
-  </button>
-
-  <button class="nav" onclick="goProfile()">
-    <span>👤</span>
-    Profile
-  </button>
-
+  <button class="nav" onclick="goHome()"><span>🏠</span>Home</button>
+  <button class="nav active"><span>🎬</span>Videos</button>
+  <button class="nav" onclick="openUpload()"><span>➕</span>Post</button>
+  <button class="nav" onclick="goCreate()"><span>👥</span>Users</button>
+  <button class="nav" onclick="goProfile()"><span>👤</span>Profile</button>
 </nav>
 
-
-<!-- PLAYER -->
-
-<div class="player-modal" id="playerModal">
-
-  <div class="player-top">
-
-    <button
-      class="close-player"
-      onclick="closePlayer()">
-      ×
-    </button>
-
-    <div
-      class="player-title-small"
-      id="playerSmallTitle">
+<!-- UPLOAD MODAL -->
+<div class="upload-modal" id="uploadModal">
+  <div class="upload-box">
+    <h3>🎬 New Video Post</h3>
+    <input type="text" id="upTitle" placeholder="Title" maxlength="120">
+    <textarea id="upDesc" placeholder="Description (optional)"></textarea>
+    <input type="file" id="upFile" accept="video/*" onchange="previewFile()">
+    <video id="upPreview" class="upload-preview" controls playsinline></video>
+    <div class="upload-row">
+      <button class="btn-cancel" onclick="closeUpload()">Cancel</button>
+      <button class="btn-submit" id="upSubmit" onclick="submitVideo()">Post</button>
     </div>
-
   </div>
-
-
-  <div class="player-wrap">
-
-    <video
-      id="mainVideo"
-      class="main-video"
-      controls
-      playsinline>
-    </video>
-
-
-    <div class="player-info">
-
-      <div
-        class="player-title"
-        id="playerTitle">
-      </div>
-
-      <div
-        class="player-user"
-        id="playerUser">
-      </div>
-
-      <div
-        class="player-description"
-        id="playerDescription">
-      </div>
-
-
-      <div class="player-actions">
-
-        <button
-          class="action-btn share"
-          onclick="shareCurrentVideo()">
-          🔗 Share
-        </button>
-
-        <button
-          class="action-btn"
-          onclick="closePlayer()">
-          ↓ Back to videos
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="other-title">
-      More Videos
-    </div>
-
-    <div
-      class="related"
-      id="related">
-    </div>
-
-  </div>
-
 </div>
 
+<!-- PLAYER -->
+<div class="player-modal" id="playerModal">
+  <div class="player-top">
+    <button class="close-player" onclick="closePlayer()">×</button>
+    <div class="player-title-small" id="playerSmallTitle"></div>
+  </div>
+  <div class="player-wrap">
+    <video id="mainVideo" class="main-video" controls playsinline></video>
+    <div class="player-info">
+      <div class="player-title" id="playerTitle"></div>
+      <div class="player-user" id="playerUser"></div>
+      <div class="player-description" id="playerDescription"></div>
+      <div class="player-actions">
+        <button class="action-btn share" onclick="shareCurrentVideo()">🔗 Share</button>
+        <button class="action-btn" onclick="closePlayer()">↓ Back to videos</button>
+      </div>
+    </div>
+    <div class="other-title">More Videos</div>
+    <div class="related" id="related"></div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
-
 <script>
+const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
+const SUPABASE_KEY = "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+const BUCKET = "videos";          // Storage bucket name
+const MAX_MB = 50;                // max video size
 
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let currentUser = null;
+let currentName = "GyanSetu User";
 let videos = [];
 let currentVideo = null;
 
-
 /* NAVIGATION */
-
-function goHome(){
-  location.href="home.html";
-}
-
-function goProfile(){
-  location.href="profile.html";
-}
-
-function goCreate(){
-  location.href="users.html";
-}
-
+function goHome(){ location.href = "home.html"; }
+function goProfile(){ location.href = "profile.html"; }
+function goCreate(){ location.href = "users.html"; }
 
 /* TOAST */
-
 function showToast(text){
-
-  const t =
-    document.getElementById("toast");
-
-  t.textContent=text;
+  const t = document.getElementById("toast");
+  t.textContent = text;
   t.classList.add("show");
-
-  setTimeout(()=>{
-    t.classList.remove("show");
-  },2200);
+  setTimeout(()=>t.classList.remove("show"), 2600);
 }
-
 
 /* USER */
-
 async function getUser(){
+  const { data } = await supabaseClient.auth.getUser();
+  currentUser = data?.user || null;
+  if(!currentUser) return;
 
-  const {
-    data
-  } =
-  await supabaseClient.auth.getUser();
+  currentName =
+    currentUser.user_metadata?.username ||
+    currentUser.user_metadata?.name ||
+    (currentUser.email ? currentUser.email.split("@")[0] : "GyanSetu User");
 
-  currentUser =
-    data?.user || null;
-
+  // try to get username from Profiles table (ignored if column doesn't exist)
+  try{
+    const { data:p } = await supabaseClient
+      .from("Profiles").select("username")
+      .eq("id", currentUser.id).maybeSingle();
+    if(p?.username) currentName = p.username;
+  }catch(e){}
 }
-
 
 /* LOAD VIDEOS */
-
 async function loadVideos(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-  .from("Videos")
-  .select("*")
-  .order(
-    "created_at",
-    {
-      ascending:false
-    }
-  );
+  const { data, error } = await supabaseClient
+    .from("Videos").select("*")
+    .order("created_at", { ascending:false });
 
   if(error){
-
     console.error(error);
-
     document.getElementById("feed").innerHTML =
-      `<div class="empty">
-        Videos load झाले नाहीत.
-      </div>`;
-
+      `<div class="empty">Videos load झाले नाहीत.<br><small>${escapeHtml(error.message)}</small></div>`;
     return;
   }
-
-  videos =
-    data || [];
-
-  renderVideos(videos);
-
+  videos = data || [];
+  searchVideos();
 }
 
+/* CARD HTML */
+function cardHtml(video, full){
+  const mine = currentUser && video.user_id && video.user_id === currentUser.id;
+  return `
+    <div class="thumb" onclick="openPlayer('${escapeAttr(video.id)}')">
+      <video src="${escapeAttr(video.video_url)}#t=0.5" preload="metadata" muted playsinline></video>
+      <div class="play">▶</div>
+    </div>
+    <div class="card-content">
+      <div class="card-title">${escapeHtml(video.title)}</div>
+      ${full ? `<div class="card-description">${escapeHtml(video.description || "")}</div>` : ""}
+      <div class="card-meta">
+        <span>👤 ${escapeHtml(video.username || "GyanSetu User")}
+        ${full ? " • " + formatDate(video.created_at) : ""}</span>
+        ${mine && full ? `<button class="del-btn" onclick="deleteVideo('${escapeAttr(video.id)}')">🗑 Delete</button>` : ""}
+      </div>
+    </div>`;
+}
 
 /* RENDER */
-
 function renderVideos(list){
-
-  const feed =
-    document.getElementById("feed");
-
-  feed.innerHTML="";
-
+  const feed = document.getElementById("feed");
+  feed.innerHTML = "";
   if(!list.length){
-
-    feed.innerHTML =
-      `<div class="empty">
-        🎬 अजून videos post झालेले नाहीत.
-      </div>`;
-
+    feed.innerHTML = `<div class="empty">🎬 अजून videos post झालेले नाहीत.<br><br>वर "＋ Post" दाबून पहिला video टाका!</div>`;
     return;
   }
-
-
   list.forEach(video=>{
-
-    const card =
-      document.createElement("div");
-
-    card.className="video-card";
-
-    card.innerHTML=`
-
-      <div class="thumb"
-           onclick="openPlayer('${video.id}')">
-
-        <video
-          src="${escapeAttr(video.video_url)}"
-          preload="metadata"
-          muted
-          playsinline>
-        </video>
-
-        <div class="play">
-          ▶
-        </div>
-
-      </div>
-
-      <div class="card-content">
-
-        <div class="card-title">
-          ${escapeHtml(video.title)}
-        </div>
-
-        <div class="card-description">
-          ${escapeHtml(video.description || "")}
-        </div>
-
-        <div class="card-meta">
-          👤 ${escapeHtml(video.username || "GyanSetu User")}
-          • ${formatDate(video.created_at)}
-        </div>
-
-      </div>
-
-    `;
-
+    const card = document.createElement("div");
+    card.className = "video-card";
+    card.innerHTML = cardHtml(video, true);
     feed.appendChild(card);
-
   });
-
 }
-
 
 /* SEARCH */
-
 function searchVideos(){
-
-  const q =
-    document.getElementById(
-      "searchInput"
-    ).value
-    .trim()
-    .toLowerCase();
-
-  if(!q){
-
-    renderVideos(videos);
-    return;
-
-  }
-
-
-  const filtered =
-    videos.filter(video=>{
-
-      return (
-        String(video.title)
-          .toLowerCase()
-          .includes(q)
-        ||
-        String(video.description || "")
-          .toLowerCase()
-          .includes(q)
-        ||
-        String(video.username || "")
-          .toLowerCase()
-          .includes(q)
-      );
-
-    });
-
-  renderVideos(filtered);
-
+  const q = document.getElementById("searchInput").value.trim().toLowerCase();
+  if(!q){ renderVideos(videos); return; }
+  renderVideos(videos.filter(v =>
+    String(v.title||"").toLowerCase().includes(q) ||
+    String(v.description||"").toLowerCase().includes(q) ||
+    String(v.username||"").toLowerCase().includes(q)
+  ));
 }
 
+/* UPLOAD */
+function openUpload(){
+  if(!currentUser){
+    showToast("Post करण्यासाठी Login करा");
+    return;
+  }
+  document.getElementById("uploadModal").classList.add("show");
+}
+
+function closeUpload(){
+  document.getElementById("uploadModal").classList.remove("show");
+  document.getElementById("upTitle").value = "";
+  document.getElementById("upDesc").value = "";
+  document.getElementById("upFile").value = "";
+  const pv = document.getElementById("upPreview");
+  pv.pause(); pv.removeAttribute("src"); pv.style.display = "none";
+  const btn = document.getElementById("upSubmit");
+  btn.disabled = false; btn.textContent = "Post";
+}
+
+function previewFile(){
+  const f = document.getElementById("upFile").files[0];
+  const pv = document.getElementById("upPreview");
+  if(!f){ pv.style.display = "none"; return; }
+  pv.src = URL.createObjectURL(f);
+  pv.style.display = "block";
+}
+
+async function submitVideo(){
+  if(!currentUser){ showToast("Login required"); return; }
+
+  const title = document.getElementById("upTitle").value.trim();
+  const desc  = document.getElementById("upDesc").value.trim();
+  const file  = document.getElementById("upFile").files[0];
+
+  if(!title){ showToast("Title लिहा"); return; }
+  if(!file){ showToast("Video निवडा"); return; }
+  if(!file.type.startsWith("video/")){ showToast("फक्त video file चालेल"); return; }
+  if(file.size > MAX_MB*1024*1024){ showToast("Video "+MAX_MB+"MB पेक्षा लहान हवा"); return; }
+
+  const btn = document.getElementById("upSubmit");
+  btn.disabled = true;
+  btn.textContent = "Uploading...";
+
+  try{
+    const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
+    const path = `${currentUser.id}/${Date.now()}.${ext}`;
+
+    const { error:upErr } = await supabaseClient.storage
+      .from(BUCKET)
+      .upload(path, file, { contentType:file.type, upsert:false });
+    if(upErr) throw upErr;
+
+    const { data:pub } = supabaseClient.storage.from(BUCKET).getPublicUrl(path);
+
+    const { error:insErr } = await supabaseClient.from("Videos").insert({
+      title: title,
+      description: desc,
+      video_url: pub.publicUrl,
+      username: currentName,
+      user_id: currentUser.id
+    });
+    if(insErr) throw insErr;
+
+    closeUpload();
+    showToast("✅ Video post झाला!");
+    await loadVideos();
+
+  }catch(err){
+    console.error(err);
+    showToast("Post failed: " + (err.message || "error"));
+    btn.disabled = false;
+    btn.textContent = "Post";
+  }
+}
+
+/* DELETE */
+async function deleteVideo(id){
+  const video = videos.find(v => String(v.id) === String(id));
+  if(!video || !currentUser) return;
+  if(!confirm("हा video delete करायचा?")) return;
+
+  const { error } = await supabaseClient
+    .from("Videos").delete()
+    .eq("id", video.id)
+    .eq("user_id", currentUser.id);
+
+  if(error){
+    console.error(error);
+    showToast("Delete करता आला नाही");
+    return;
+  }
+
+  // remove file from storage (best effort)
+  try{
+    const marker = `/${BUCKET}/`;
+    const idx = video.video_url.indexOf(marker);
+    if(idx > -1){
+      const p = decodeURIComponent(video.video_url.substring(idx + marker.length).split("?")[0]);
+      await supabaseClient.storage.from(BUCKET).remove([p]);
+    }
+  }catch(e){}
+
+  showToast("🗑 Video delete झाला");
+  loadVideos();
+}
 
 /* PLAYER */
-
 function openPlayer(id){
+  const video = videos.find(v => String(v.id) === String(id));
+  if(!video) return;
+  currentVideo = video;
 
-  const video =
-    videos.find(
-      v=>v.id===id
-    );
+  document.getElementById("playerTitle").textContent = video.title;
+  document.getElementById("playerSmallTitle").textContent = video.title;
+  document.getElementById("playerUser").textContent = "👤 " + (video.username || "GyanSetu User");
+  document.getElementById("playerDescription").textContent = video.description || "";
 
-  if(!video){
-    return;
-  }
+  const main = document.getElementById("mainVideo");
+  main.src = video.video_url;
+  main.play().catch(()=>{});
 
-  currentVideo =
-    video;
-
-  document.getElementById(
-    "playerTitle"
-  ).textContent =
-    video.title;
-
-  document.getElementById(
-    "playerSmallTitle"
-  ).textContent =
-    video.title;
-
-  document.getElementById(
-    "playerUser"
-  ).textContent =
-    "👤 " +
-    (video.username || "GyanSetu User");
-
-  document.getElementById(
-    "playerDescription"
-  ).textContent =
-    video.description || "";
-
-  const main =
-    document.getElementById(
-      "mainVideo"
-    );
-
-  main.src =
-    video.video_url;
-
-  document.getElementById(
-    "playerModal"
-  ).classList.add("show");
-
-  document.body.style.overflow="hidden";
-
+  document.getElementById("playerModal").classList.add("show");
+  document.body.style.overflow = "hidden";
   renderRelated(video.id);
-
 }
 
-
 function closePlayer(){
-
-  const main =
-    document.getElementById(
-      "mainVideo"
-    );
-
+  const main = document.getElementById("mainVideo");
   main.pause();
   main.removeAttribute("src");
   main.load();
-
-  document.getElementById(
-    "playerModal"
-  ).classList.remove("show");
-
-  document.body.style.overflow="";
-
-  currentVideo=null;
-
+  document.getElementById("playerModal").classList.remove("show");
+  document.body.style.overflow = "";
+  currentVideo = null;
 }
-
 
 /* RELATED */
-
 function renderRelated(currentId){
-
-  const box =
-    document.getElementById(
-      "related"
-    );
-
-  box.innerHTML="";
-
-  videos
-  .filter(v=>v.id!==currentId)
-  .slice(0,8)
-  .forEach(video=>{
-
-    const div =
-      document.createElement("div");
-
-    div.className="video-card";
-
-    div.innerHTML=`
-
-      <div class="thumb"
-           onclick="openPlayer('${video.id}')">
-
-        <video
-          src="${escapeAttr(video.video_url)}"
-          preload="metadata"
-          muted
-          playsinline>
-        </video>
-
-        <div class="play">
-          ▶
-        </div>
-
-      </div>
-
-      <div class="card-content">
-
-        <div class="card-title">
-          ${escapeHtml(video.title)}
-        </div>
-
-        <div class="card-meta">
-          👤 ${escapeHtml(video.username || "User")}
-        </div>
-
-      </div>
-    `;
-
+  const box = document.getElementById("related");
+  box.innerHTML = "";
+  videos.filter(v => String(v.id) !== String(currentId)).slice(0,8).forEach(video=>{
+    const div = document.createElement("div");
+    div.className = "video-card";
+    div.innerHTML = cardHtml(video, false);
     box.appendChild(div);
-
   });
-
+  document.getElementById("playerModal").scrollTo({ top:0 });
 }
-
 
 /* SHARE */
-
 async function shareCurrentVideo(){
+  if(!currentVideo) return;
+  if(!currentUser){ showToast("Login required"); return; }
 
-  if(!currentVideo){
-    return;
-  }
-
-  if(!currentUser){
-
-    showToast("Login required");
-    return;
-
-  }
-
-
-  const {
-    data:profiles,
-    error
-  } =
-  await supabaseClient
-  .from("Profiles")
-  .select("id")
-  .neq(
-    "id",
-    currentUser.id
-  );
-
+  const { data:profiles, error } = await supabaseClient
+    .from("Profiles").select("id").neq("id", currentUser.id);
 
   if(error){
-
     console.error(error);
-
-    showToast(
-      "Users load झाले नाहीत."
-    );
-
+    showToast("Users load झाले नाहीत.");
     return;
   }
-
-
   if(!profiles || !profiles.length){
-
-    showToast(
-      "Share करण्यासाठी दुसरे registered users नाहीत."
-    );
-
+    showToast("Share करण्यासाठी दुसरे registered users नाहीत.");
     return;
   }
 
+  const message = "VIDEO:" + currentVideo.id + "|" + currentVideo.title;
+  const rows = profiles.map(p => ({
+    sender_id: currentUser.id,
+    receiver_id: p.id,
+    message: message,
+    is_read: false
+  }));
 
-  const message =
-    "VIDEO:" +
-    currentVideo.id +
-    "|" +
-    currentVideo.title;
-
-
-  const rows =
-    profiles.map(profile=>({
-
-      sender_id:
-        currentUser.id,
-
-      receiver_id:
-        profile.id,
-
-      message:
-        message,
-
-      is_read:false
-
-    }));
-
-
-  const {
-    error:sendError
-  } =
-  await supabaseClient
-  .from("Messages")
-  .insert(rows);
-
-
+  const { error:sendError } = await supabaseClient.from("Messages").insert(rows);
   if(sendError){
-
     console.error(sendError);
-
-    showToast(
-      "Video share करता आला नाही."
-    );
-
+    showToast("Video share करता आला नाही.");
     return;
   }
-
-
-  showToast(
-    "✅ Video सर्व registered usersना share केला."
-  );
-
+  showToast("✅ Video सर्व registered usersना share केला.");
 }
 
-
 /* HELPERS */
-
 function escapeHtml(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text ?? "";
-
+  const div = document.createElement("div");
+  div.textContent = text ?? "";
   return div.innerHTML;
-
 }
 
 function escapeAttr(text){
-
-  return String(text || "")
-    .replace(/&/g,"&amp;")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
-
+  return String(text ?? "")
+    .replace(/&/g,"&amp;").replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 
 function formatDate(value){
-
-  if(!value){
-    return "";
-  }
-
-  return new Date(value)
-    .toLocaleDateString(
-      [],
-      {
-        day:"numeric",
-        month:"short",
-        year:"numeric"
-      }
-    );
-
+  if(!value) return "";
+  return new Date(value).toLocaleDateString([], { day:"numeric", month:"short", year:"numeric" });
 }
-
 
 /* START */
-
 async function start(){
-
   await getUser();
-
   await loadVideos();
-
 }
-
 start();
-
 </script>
-
 </body>
 </html>
