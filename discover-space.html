@@ -1380,6 +1380,33 @@ main{
   flex:0 0 auto;
 }
 
+/* camera flip (front / back) */
+
+.flip-btn{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  z-index:30;
+  border:0;
+  background:rgba(0,0,0,.7);
+  color:#fff;
+  height:42px;
+  padding:0 14px;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.flip-btn:disabled{
+  opacity:.5;
+}
+
+/* Back camera ला mirror नको */
+#sirVideo.back-cam{
+  transform:none;
+}
+
 </style>
 
 </head>
@@ -1565,6 +1592,8 @@ GyanSetu Live Class
 <video id="sirVideo" autoplay muted playsinline></video>
 
 <span id="sirLiveBadge" class="live-badge hidden">🔴 LIVE</span>
+
+<button id="flipCamBtn" class="flip-btn" onclick="switchSirCamera()">🔄 Back Cam</button>
 
 <button class="fullscreen-btn" onclick="toggleFullscreen('sirVideoWrap')">⛶</button>
 
@@ -2068,6 +2097,14 @@ let sirTimerInterval=null;
 let studentTimerInterval=null;
 
 let toastTimer=null;
+
+/* ---- Sir camera (front / back) ---- */
+
+let sirFacing="user";
+
+let switchingCamera=false;
+
+let sirRecPart=1;
 
 
 /* =====================================================
@@ -3507,7 +3544,7 @@ async function startSirCamera(){
       video:{
         width:{ideal:1280},
         height:{ideal:720},
-        facingMode:"user"
+        facingMode:sirFacing
       },
 
       audio:{
@@ -3522,6 +3559,8 @@ async function startSirCamera(){
     $("sirVideo").srcObject=stream;
 
     $("sirVideo").muted=true;
+
+    applyCameraUI();
 
     const audioTracks=stream.getAudioTracks();
 
@@ -3561,6 +3600,8 @@ async function startSirCamera(){
         .eq("id",saved.id);
     }
 
+    sirRecPart=1;
+
     startSirRecording();
 
     broadcastClassStatus();
@@ -3586,6 +3627,186 @@ async function startSirCamera(){
 /* =====================================================
    MIME
 ===================================================== */
+
+function applyCameraUI(){
+
+  $("sirVideo").classList.toggle(
+    "back-cam",
+    sirFacing==="environment"
+  );
+
+  $("flipCamBtn").textContent=
+    sirFacing==="environment"
+    ? "🔄 Front Cam"
+    : "🔄 Back Cam";
+}
+
+
+async function switchSirCamera(){
+
+  if(switchingCamera){
+    return;
+  }
+
+  const next=sirFacing==="user" ? "environment" : "user";
+
+  /* Class सुरू नसेल तर फक्त camera ची निवड बदला */
+
+  if(!isSirLive || !sirStream){
+
+    sirFacing=next;
+
+    applyCameraUI();
+
+    showToast(
+      next==="environment"
+      ? "📷 Back camera निवडला"
+      : "🤳 Front camera निवडला"
+    );
+
+    return;
+  }
+
+  switchingCamera=true;
+
+  $("flipCamBtn").disabled=true;
+
+  const oldTrack=sirStream.getVideoTracks()[0] || null;
+
+  /* Recording चा नवीन भाग सुरू करण्यासाठी जुना थांबवा
+     (stream मध्ये track बदलल्यावर recorder चालू राहत नाही) */
+
+  stopSirRecording();
+
+  /* बहुतेक phones वर दुसरा camera उघडण्यापूर्वी जुना बंद करावा लागतो */
+
+  if(oldTrack){
+
+    try{
+      oldTrack.stop();
+    }
+    catch(e){}
+  }
+
+  let newTrack=null;
+
+  let usedFacing=next;
+
+  async function openCamera(facing){
+
+    const camStream=
+    await navigator.mediaDevices.getUserMedia({
+
+      video:{
+        width:{ideal:1280},
+        height:{ideal:720},
+        facingMode:{ideal:facing}
+      },
+
+      audio:false
+    });
+
+    return camStream.getVideoTracks()[0];
+  }
+
+  try{
+
+    newTrack=await openCamera(next);
+
+  }
+  catch(error){
+
+    console.error("Camera switch error:",error);
+
+    /* नवीन camera उघडला नाही तर जुना परत सुरू करा */
+
+    try{
+
+      newTrack=await openCamera(sirFacing);
+
+      usedFacing=sirFacing;
+
+    }
+    catch(e){
+
+      console.error("Camera restore error:",e);
+    }
+  }
+
+  if(!newTrack){
+
+    switchingCamera=false;
+
+    $("flipCamBtn").disabled=false;
+
+    showMessage(
+      "Camera Error",
+      "Camera बदलता आला नाही. Camera permission तपासा.",
+      "❌"
+    );
+
+    return;
+  }
+
+  /* जुना video track काढा, नवीन लावा */
+
+  if(oldTrack){
+
+    try{
+      sirStream.removeTrack(oldTrack);
+    }
+    catch(e){}
+  }
+
+  sirStream.addTrack(newTrack);
+
+  $("sirVideo").srcObject=sirStream;
+
+  $("sirVideo").play().catch(function(){});
+
+  /* Students ना जाणाऱ्या live video मध्ये नवीन camera टाका */
+
+  sirCalls.forEach(function(call){
+
+    try{
+
+      const senders=call.peerConnection.getSenders();
+
+      const sender=
+        senders.find(function(s){
+          return s.track && s.track.kind==="video";
+        });
+
+      if(sender){
+        sender.replaceTrack(newTrack);
+      }
+
+    }
+    catch(e){
+
+      console.error("replaceTrack error:",e);
+    }
+  });
+
+  sirFacing=usedFacing;
+
+  applyCameraUI();
+
+  sirRecPart++;
+
+  startSirRecording();
+
+  switchingCamera=false;
+
+  $("flipCamBtn").disabled=false;
+
+  showToast(
+    sirFacing==="environment"
+    ? "📷 Back camera सुरू झाला"
+    : "🤳 Front camera सुरू झाला"
+  );
+}
+
 
 function getRecorderMimeType(){
 
@@ -3631,18 +3852,20 @@ function startSirRecording(){
 
     sirRecorder=recorder;
 
-    sirRecordingChunks=[];
+    const chunks=[];
+
+    const partNo=sirRecPart;
 
     recorder.ondataavailable=function(event){
 
       if(event.data && event.data.size>0){
-        sirRecordingChunks.push(event.data);
+        chunks.push(event.data);
       }
     };
 
     recorder.onstop=function(){
 
-      if(!sirRecordingChunks.length){
+      if(!chunks.length){
 
         if(sirRecorder===recorder){
           sirRecorder=null;
@@ -3653,17 +3876,17 @@ function startSirRecording(){
 
       const blob=
         new Blob(
-          sirRecordingChunks,
+          chunks,
           {type:recorder.mimeType || "video/webm"}
         );
 
       saveRecording(
-        "Sir Live Class - Video + Audio",
+        partNo>1
+        ? "Sir Live Class - Video + Audio (Part "+partNo+")"
+        : "Sir Live Class - Video + Audio",
         blob,
         "sir"
       );
-
-      sirRecordingChunks=[];
 
       if(sirRecorder===recorder){
         sirRecorder=null;
@@ -5553,5 +5776,6 @@ document.addEventListener("DOMContentLoaded",async function(){
 });
 
 </script>
+
 </body>
 </html>
