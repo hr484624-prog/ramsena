@@ -12,9 +12,16 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 .back{width:40px;height:40px;border:0;border-radius:50%;background:#171722;color:#fff;font-size:25px}
 .logo{font-size:21px;font-weight:800;background:linear-gradient(90deg,#ff2bd6,#4d7cff);-webkit-background-clip:text;color:transparent;flex:1}
 .post-btn{border:0;border-radius:20px;padding:10px 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
-.search-box{padding:12px;background:#09090f;position:sticky;top:62px;z-index:90}
+.search-box{padding:12px 12px 8px;background:#09090f;position:sticky;top:62px;z-index:90}
 .search{width:100%;height:45px;border:1px solid #29293a;border-radius:14px;outline:none;background:#15151e;color:#fff;padding:0 15px;font-size:15px}
 .search:focus{border-color:#ff2bd6}
+
+/* FEATURE 3: sort / filter chips */
+.chips{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid #2d2d40;background:#15151e;color:#bbb;border-radius:18px;padding:7px 14px;font-size:13px;cursor:pointer}
+.chip.active{background:linear-gradient(135deg,#ff28cf,#416cff);border-color:transparent;color:#fff;font-weight:bold}
+
 .feed{max-width:650px;margin:auto;padding:10px}
 .video-card{background:#0e0e16;border:1px solid #222231;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 5px 25px rgba(0,0,0,.35)}
 .thumb{position:relative;width:100%;aspect-ratio:16/9;background:#111;cursor:pointer;overflow:hidden}
@@ -26,6 +33,12 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 .card-meta{color:#777;font-size:11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .del-btn{border:0;background:#2a1520;color:#ff6b8a;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer}
 .empty,.loader{text-align:center;padding:60px 20px;color:#777}
+
+/* FEATURE 1/2/4: card action row */
+.card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.mini-btn{border:1px solid #2d2d40;background:#15151e;color:#ddd;border-radius:20px;padding:7px 13px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.mini-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+
 .bottom{position:fixed;left:0;right:0;bottom:0;height:65px;background:#09090f;border-top:1px solid #252533;display:flex;justify-content:space-around;align-items:center;z-index:200}
 .nav{border:0;background:none;color:#777;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .nav span{font-size:22px}
@@ -46,6 +59,27 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 .player-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
 .action-btn{border:1px solid #343445;background:#15151e;color:#fff;border-radius:12px;padding:11px 17px;font-weight:bold;cursor:pointer}
 .action-btn.share{background:linear-gradient(135deg,#ff28cf,#416cff);border:0}
+.action-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+
+/* FEATURE 5: player controls */
+.player-tools{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap;color:#aaa;font-size:13px}
+.player-tools select{background:#15151e;color:#fff;border:1px solid #343445;border-radius:10px;padding:8px 10px;font-size:13px}
+.player-tools label{display:flex;align-items:center;gap:6px;cursor:pointer}
+
+/* FEATURE 2: comments */
+.comments{padding:15px;border-top:1px solid #252533}
+.comments h4{font-size:16px;margin-bottom:12px}
+.c-form{display:flex;gap:8px;margin-bottom:14px}
+.c-form input{flex:1;height:42px;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:0 12px;font-size:14px;outline:none}
+.c-form input:focus{border-color:#ff2bd6}
+.c-form button{border:0;border-radius:12px;padding:0 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
+.c-item{background:#0e0e16;border:1px solid #222231;border-radius:12px;padding:10px 12px;margin-bottom:8px}
+.c-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#ff54db;margin-bottom:4px}
+.c-head small{color:#666;margin-left:6px}
+.c-text{font-size:14px;color:#ddd;line-height:1.5;word-break:break-word}
+.c-del{border:0;background:none;color:#ff6b8a;font-size:12px;cursor:pointer}
+.c-empty{color:#666;font-size:13px;padding:6px 0}
+
 .other-title{font-size:18px;font-weight:bold;padding:15px;border-top:1px solid #252533}
 .related{padding:0 10px 30px}
 
@@ -77,6 +111,13 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 
 <div class="search-box">
   <input id="searchInput" class="search" placeholder="🔍 Search videos..." oninput="searchVideos()">
+  <div class="chips" id="chips">
+    <button class="chip active" data-sort="latest" onclick="setSort('latest')">🆕 Latest</button>
+    <button class="chip" data-sort="liked" onclick="setSort('liked')">🔥 Most liked</button>
+    <button class="chip" data-sort="oldest" onclick="setSort('oldest')">🕰 Oldest</button>
+    <button class="chip" data-sort="mine" onclick="setSort('mine')">🙋 My videos</button>
+    <button class="chip" data-sort="saved" onclick="setSort('saved')">🔖 Saved</button>
+  </div>
 </div>
 
 <main class="feed" id="feed">
@@ -118,11 +159,37 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
       <div class="player-title" id="playerTitle"></div>
       <div class="player-user" id="playerUser"></div>
       <div class="player-description" id="playerDescription"></div>
+
       <div class="player-actions">
+        <button class="action-btn" id="pLike" onclick="toggleLike(currentVideo && currentVideo.id)">🤍 0</button>
+        <button class="action-btn" id="pSave" onclick="toggleSave(currentVideo && currentVideo.id)">🔖 Save</button>
         <button class="action-btn share" onclick="shareCurrentVideo()">🔗 Share</button>
-        <button class="action-btn" onclick="closePlayer()">↓ Back to videos</button>
+        <button class="action-btn" onclick="copyLink()">📋 Copy link</button>
+      </div>
+
+      <div class="player-tools">
+        <span>⚡ Speed</span>
+        <select id="speedSel" onchange="setSpeed(this.value)">
+          <option value="0.5">0.5x</option>
+          <option value="0.75">0.75x</option>
+          <option value="1" selected>1x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2x</option>
+        </select>
+        <label><input type="checkbox" id="autoNext" checked onchange="saveAutoNext()"> Autoplay next</label>
       </div>
     </div>
+
+    <div class="comments">
+      <h4>💬 Comments <span id="cCount">(0)</span></h4>
+      <div class="c-form">
+        <input id="cInput" type="text" maxlength="300" placeholder="Comment लिहा..." onkeydown="if(event.key==='Enter')submitComment()">
+        <button onclick="submitComment()">Send</button>
+      </div>
+      <div id="cList"></div>
+    </div>
+
     <div class="other-title">More Videos</div>
     <div class="related" id="related"></div>
   </div>
@@ -143,6 +210,15 @@ let currentName = "GyanSetu User";
 let videos = [];
 let currentVideo = null;
 
+/* NEW STATE */
+let sortMode = "latest";
+let likeCount = {};          // video_id -> number
+let myLikes = new Set();     // video_ids liked by me
+let commentCount = {};       // video_id -> number
+let savedSet = new Set();    // bookmarks (stored in this browser)
+let likesReady = true;
+let commentsReady = true;
+
 /* NAVIGATION */
 function goHome(){ location.href = "home.html"; }
 function goProfile(){ location.href = "profile.html"; }
@@ -156,6 +232,15 @@ function showToast(text){
   setTimeout(()=>t.classList.remove("show"), 2600);
 }
 
+/* LOCAL STORAGE HELPERS */
+function lsGet(k, def){
+  try{ const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); }
+  catch(e){ return def; }
+}
+function lsSet(k, v){
+  try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){}
+}
+
 /* USER */
 async function getUser(){
   const { data } = await supabaseClient.auth.getUser();
@@ -167,7 +252,6 @@ async function getUser(){
     currentUser.user_metadata?.name ||
     (currentUser.email ? currentUser.email.split("@")[0] : "GyanSetu User");
 
-  // try to get username from Profiles table (ignored if column doesn't exist)
   try{
     const { data:p } = await supabaseClient
       .from("Profiles").select("username")
@@ -189,24 +273,245 @@ async function loadVideos(){
     return;
   }
   videos = data || [];
+  await Promise.all([loadLikes(), loadCommentCounts()]);
   searchVideos();
+}
+
+/* ============ FEATURE 1: LIKES ============ */
+async function loadLikes(){
+  likeCount = {}; myLikes = new Set();
+  const { data, error } = await supabaseClient
+    .from("VideoLikes").select("video_id,user_id");
+  if(error){ likesReady = false; console.warn("VideoLikes:", error.message); return; }
+  likesReady = true;
+  (data || []).forEach(r=>{
+    const vid = String(r.video_id);
+    likeCount[vid] = (likeCount[vid] || 0) + 1;
+    if(currentUser && r.user_id === currentUser.id) myLikes.add(vid);
+  });
+}
+
+async function toggleLike(id){
+  if(id === undefined || id === null) return;
+  id = String(id);
+  if(!currentUser){ showToast("Like करण्यासाठी Login करा"); return; }
+  if(!likesReady){ showToast("Likes table अजून तयार नाही (SQL चालवा)"); return; }
+
+  const liked = myLikes.has(id);
+  // optimistic update
+  if(liked){ myLikes.delete(id); likeCount[id] = Math.max(0,(likeCount[id]||1)-1); }
+  else { myLikes.add(id); likeCount[id] = (likeCount[id]||0)+1; }
+  refreshActionUI(id);
+
+  let error;
+  if(liked){
+    ({ error } = await supabaseClient.from("VideoLikes").delete()
+      .eq("video_id", id).eq("user_id", currentUser.id));
+  }else{
+    ({ error } = await supabaseClient.from("VideoLikes")
+      .insert({ video_id:id, user_id:currentUser.id }));
+  }
+  if(error){
+    console.error(error);
+    // roll back
+    if(liked){ myLikes.add(id); likeCount[id]=(likeCount[id]||0)+1; }
+    else { myLikes.delete(id); likeCount[id]=Math.max(0,(likeCount[id]||1)-1); }
+    refreshActionUI(id);
+    showToast("Like बदलता आला नाही");
+  }
+}
+
+/* ============ FEATURE 2: COMMENTS ============ */
+async function loadCommentCounts(){
+  commentCount = {};
+  const { data, error } = await supabaseClient
+    .from("VideoComments").select("video_id");
+  if(error){ commentsReady = false; console.warn("VideoComments:", error.message); return; }
+  commentsReady = true;
+  (data || []).forEach(r=>{
+    const vid = String(r.video_id);
+    commentCount[vid] = (commentCount[vid] || 0) + 1;
+  });
+}
+
+async function loadComments(videoId){
+  const list = document.getElementById("cList");
+  if(!commentsReady){
+    list.innerHTML = `<div class="c-empty">Comments सुरू करण्यासाठी SQL चालवा.</div>`;
+    return;
+  }
+  list.innerHTML = `<div class="c-empty">Loading...</div>`;
+  const { data, error } = await supabaseClient
+    .from("VideoComments").select("*")
+    .eq("video_id", String(videoId))
+    .order("created_at", { ascending:true });
+
+  if(!currentVideo || String(currentVideo.id) !== String(videoId)) return; // user moved on
+  if(error){
+    list.innerHTML = `<div class="c-empty">Comments load झाले नाहीत.</div>`;
+    return;
+  }
+  commentCount[String(videoId)] = (data || []).length;
+  document.getElementById("cCount").textContent = "(" + (data||[]).length + ")";
+  refreshActionUI(videoId);
+
+  if(!data || !data.length){
+    list.innerHTML = `<div class="c-empty">अजून comments नाहीत. पहिला comment तुमचा!</div>`;
+    return;
+  }
+  list.innerHTML = data.map(c=>{
+    const mine = currentUser && c.user_id === currentUser.id;
+    return `<div class="c-item">
+      <div class="c-head">
+        <span>👤 ${escapeHtml(c.username || "GyanSetu User")}<small>${formatDate(c.created_at)}</small></span>
+        ${mine ? `<button class="c-del" onclick="deleteComment('${escapeAttr(c.id)}')">Delete</button>` : ""}
+      </div>
+      <div class="c-text">${escapeHtml(c.text)}</div>
+    </div>`;
+  }).join("");
+}
+
+async function submitComment(){
+  if(!currentVideo) return;
+  if(!currentUser){ showToast("Comment साठी Login करा"); return; }
+  if(!commentsReady){ showToast("Comments table अजून तयार नाही (SQL चालवा)"); return; }
+
+  const input = document.getElementById("cInput");
+  const text = input.value.trim();
+  if(!text) return;
+
+  const { error } = await supabaseClient.from("VideoComments").insert({
+    video_id: String(currentVideo.id),
+    user_id: currentUser.id,
+    username: currentName,
+    text: text
+  });
+  if(error){
+    console.error(error);
+    showToast("Comment पाठवता आला नाही");
+    return;
+  }
+  input.value = "";
+  loadComments(currentVideo.id);
+}
+
+async function deleteComment(cid){
+  if(!currentUser || !currentVideo) return;
+  if(!confirm("हा comment delete करायचा?")) return;
+  const { error } = await supabaseClient.from("VideoComments")
+    .delete().eq("id", cid).eq("user_id", currentUser.id);
+  if(error){ showToast("Delete करता आला नाही"); return; }
+  loadComments(currentVideo.id);
+}
+
+/* ============ FEATURE 3: SORT / FILTER ============ */
+function setSort(mode){
+  sortMode = mode;
+  document.querySelectorAll(".chip").forEach(c =>
+    c.classList.toggle("active", c.dataset.sort === mode));
+  searchVideos();
+}
+
+/* ============ FEATURE 4: SAVE / BOOKMARK ============ */
+function loadSaved(){ savedSet = new Set((lsGet("gs_saved_videos", [])).map(String)); }
+
+function toggleSave(id){
+  if(id === undefined || id === null) return;
+  id = String(id);
+  if(savedSet.has(id)){ savedSet.delete(id); showToast("Saved मधून काढला"); }
+  else { savedSet.add(id); showToast("🔖 Video save झाला"); }
+  lsSet("gs_saved_videos", Array.from(savedSet));
+  refreshActionUI(id);
+  if(sortMode === "saved") searchVideos();
+}
+
+/* ============ FEATURE 5: PLAYER EXTRAS ============ */
+function setSpeed(v){
+  document.getElementById("mainVideo").playbackRate = parseFloat(v) || 1;
+  lsSet("gs_speed", v);
+}
+function saveAutoNext(){
+  lsSet("gs_autonext", document.getElementById("autoNext").checked);
+}
+function playNext(){
+  if(!currentVideo || !document.getElementById("autoNext").checked) return;
+  const list = getVisibleList();
+  const i = list.findIndex(v => String(v.id) === String(currentVideo.id));
+  const next = i > -1 ? list[i+1] : null;
+  if(next) openPlayer(next.id);
+}
+async function copyLink(){
+  if(!currentVideo) return;
+  const url = location.origin + location.pathname + "?v=" + encodeURIComponent(currentVideo.id);
+  try{
+    if(navigator.share){
+      await navigator.share({ title: currentVideo.title, url });
+      return;
+    }
+  }catch(e){ if(e && e.name === "AbortError") return; }
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast("✅ Link copy झाली");
+  }catch(e){
+    prompt("Link copy करा:", url);
+  }
+}
+
+/* UI REFRESH for like / save / comment count (no full re-render) */
+function refreshActionUI(id){
+  id = String(id);
+  const liked = myLikes.has(id);
+  const saved = savedSet.has(id);
+  const lc = likeCount[id] || 0;
+  const cc = commentCount[id] || 0;
+
+  document.querySelectorAll(`[data-like="${CSS.escape(id)}"]`).forEach(b=>{
+    b.classList.toggle("on", liked);
+    b.textContent = (liked ? "❤️ " : "🤍 ") + lc;
+  });
+  document.querySelectorAll(`[data-save="${CSS.escape(id)}"]`).forEach(b=>{
+    b.classList.toggle("on", saved);
+    b.textContent = saved ? "🔖 Saved" : "🔖 Save";
+  });
+  document.querySelectorAll(`[data-cmt="${CSS.escape(id)}"]`).forEach(b=>{
+    b.textContent = "💬 " + cc;
+  });
+
+  if(currentVideo && String(currentVideo.id) === id){
+    const pl = document.getElementById("pLike");
+    pl.classList.toggle("on", liked);
+    pl.textContent = (liked ? "❤️ " : "🤍 ") + lc;
+    const ps = document.getElementById("pSave");
+    ps.classList.toggle("on", saved);
+    ps.textContent = saved ? "🔖 Saved" : "🔖 Save";
+    document.getElementById("cCount").textContent = "(" + cc + ")";
+  }
 }
 
 /* CARD HTML */
 function cardHtml(video, full){
   const mine = currentUser && video.user_id && video.user_id === currentUser.id;
+  const id = escapeAttr(video.id);
+  const liked = myLikes.has(String(video.id));
+  const saved = savedSet.has(String(video.id));
   return `
-    <div class="thumb" onclick="openPlayer('${escapeAttr(video.id)}')">
+    <div class="thumb" onclick="openPlayer('${id}')">
       <video src="${escapeAttr(video.video_url)}#t=0.5" preload="metadata" muted playsinline></video>
       <div class="play">▶</div>
     </div>
     <div class="card-content">
       <div class="card-title">${escapeHtml(video.title)}</div>
       ${full ? `<div class="card-description">${escapeHtml(video.description || "")}</div>` : ""}
+      ${full ? `
+      <div class="card-actions">
+        <button class="mini-btn ${liked?"on":""}" data-like="${id}" onclick="toggleLike('${id}')">${liked?"❤️":"🤍"} ${likeCount[String(video.id)]||0}</button>
+        <button class="mini-btn" data-cmt="${id}" onclick="openPlayer('${id}',true)">💬 ${commentCount[String(video.id)]||0}</button>
+        <button class="mini-btn ${saved?"on":""}" data-save="${id}" onclick="toggleSave('${id}')">${saved?"🔖 Saved":"🔖 Save"}</button>
+      </div>` : ""}
       <div class="card-meta">
         <span>👤 ${escapeHtml(video.username || "GyanSetu User")}
         ${full ? " • " + formatDate(video.created_at) : ""}</span>
-        ${mine && full ? `<button class="del-btn" onclick="deleteVideo('${escapeAttr(video.id)}')">🗑 Delete</button>` : ""}
+        ${mine && full ? `<button class="del-btn" onclick="deleteVideo('${id}')">🗑 Delete</button>` : ""}
       </div>
     </div>`;
 }
@@ -216,7 +521,11 @@ function renderVideos(list){
   const feed = document.getElementById("feed");
   feed.innerHTML = "";
   if(!list.length){
-    feed.innerHTML = `<div class="empty">🎬 अजून videos post झालेले नाहीत.<br><br>वर "＋ Post" दाबून पहिला video टाका!</div>`;
+    let msg = `🎬 अजून videos post झालेले नाहीत.<br><br>वर "＋ Post" दाबून पहिला video टाका!`;
+    if(sortMode === "saved") msg = "🔖 अजून कोणताही video save केलेला नाही.";
+    else if(sortMode === "mine") msg = "🙋 तुम्ही अजून कोणताही video post केलेला नाही.";
+    else if(document.getElementById("searchInput").value.trim()) msg = "🔍 काहीही सापडले नाही.";
+    feed.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
   list.forEach(video=>{
@@ -227,15 +536,32 @@ function renderVideos(list){
   });
 }
 
-/* SEARCH */
-function searchVideos(){
+/* SEARCH + SORT */
+function getVisibleList(){
   const q = document.getElementById("searchInput").value.trim().toLowerCase();
-  if(!q){ renderVideos(videos); return; }
-  renderVideos(videos.filter(v =>
-    String(v.title||"").toLowerCase().includes(q) ||
-    String(v.description||"").toLowerCase().includes(q) ||
-    String(v.username||"").toLowerCase().includes(q)
-  ));
+  let list = videos.slice();
+
+  if(q){
+    list = list.filter(v =>
+      String(v.title||"").toLowerCase().includes(q) ||
+      String(v.description||"").toLowerCase().includes(q) ||
+      String(v.username||"").toLowerCase().includes(q)
+    );
+  }
+
+  if(sortMode === "saved") list = list.filter(v => savedSet.has(String(v.id)));
+  if(sortMode === "mine")  list = list.filter(v => currentUser && v.user_id === currentUser.id);
+
+  const t = v => new Date(v.created_at || 0).getTime();
+  if(sortMode === "oldest") list.sort((a,b)=> t(a)-t(b));
+  else if(sortMode === "liked") list.sort((a,b)=> (likeCount[String(b.id)]||0)-(likeCount[String(a.id)]||0) || t(b)-t(a));
+  else list.sort((a,b)=> t(b)-t(a));
+
+  return list;
+}
+
+function searchVideos(){
+  renderVideos(getVisibleList());
 }
 
 /* UPLOAD */
@@ -341,12 +667,19 @@ async function deleteVideo(id){
     }
   }catch(e){}
 
+  // clean up likes/comments of this video (best effort)
+  try{ await supabaseClient.from("VideoLikes").delete().eq("video_id", String(video.id)); }catch(e){}
+  try{ await supabaseClient.from("VideoComments").delete().eq("video_id", String(video.id)); }catch(e){}
+
+  savedSet.delete(String(video.id));
+  lsSet("gs_saved_videos", Array.from(savedSet));
+
   showToast("🗑 Video delete झाला");
   loadVideos();
 }
 
 /* PLAYER */
-function openPlayer(id){
+function openPlayer(id, scrollToComments){
   const video = videos.find(v => String(v.id) === String(id));
   if(!video) return;
   currentVideo = video;
@@ -358,11 +691,24 @@ function openPlayer(id){
 
   const main = document.getElementById("mainVideo");
   main.src = video.video_url;
+  const sp = parseFloat(document.getElementById("speedSel").value) || 1;
+  main.playbackRate = sp;
   main.play().catch(()=>{});
 
   document.getElementById("playerModal").classList.add("show");
   document.body.style.overflow = "hidden";
   renderRelated(video.id);
+  refreshActionUI(video.id);
+  loadComments(video.id);
+
+  try{ history.replaceState(null, "", "?v=" + encodeURIComponent(video.id)); }catch(e){}
+
+  if(scrollToComments){
+    setTimeout(()=>{
+      const c = document.querySelector(".comments");
+      if(c) document.getElementById("playerModal").scrollTo({ top: c.offsetTop - 60, behavior:"smooth" });
+    }, 250);
+  }
 }
 
 function closePlayer(){
@@ -373,6 +719,7 @@ function closePlayer(){
   document.getElementById("playerModal").classList.remove("show");
   document.body.style.overflow = "";
   currentVideo = null;
+  try{ history.replaceState(null, "", location.pathname); }catch(e){}
 }
 
 /* RELATED */
@@ -388,7 +735,7 @@ function renderRelated(currentId){
   document.getElementById("playerModal").scrollTo({ top:0 });
 }
 
-/* SHARE */
+/* SHARE (original: send to all registered users in chat) */
 async function shareCurrentVideo(){
   if(!currentVideo) return;
   if(!currentUser){ showToast("Login required"); return; }
@@ -441,10 +788,30 @@ function formatDate(value){
   return new Date(value).toLocaleDateString([], { day:"numeric", month:"short", year:"numeric" });
 }
 
+/* KEYBOARD: Esc closes player / upload */
+document.addEventListener("keydown", e=>{
+  if(e.key !== "Escape") return;
+  if(document.getElementById("playerModal").classList.contains("show")) closePlayer();
+  else if(document.getElementById("uploadModal").classList.contains("show")) closeUpload();
+});
+
+/* AUTOPLAY NEXT when video ends */
+document.getElementById("mainVideo").addEventListener("ended", playNext);
+
 /* START */
 async function start(){
+  // restore saved settings
+  loadSaved();
+  const sp = lsGet("gs_speed", "1");
+  document.getElementById("speedSel").value = sp;
+  document.getElementById("autoNext").checked = lsGet("gs_autonext", true);
+
   await getUser();
   await loadVideos();
+
+  // open a shared link like videos.html?v=123
+  const vid = new URLSearchParams(location.search).get("v");
+  if(vid) openPlayer(vid);
 }
 start();
 </script>
