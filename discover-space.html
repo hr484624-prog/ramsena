@@ -2,818 +2,2096 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Videos - GyanSetu</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh;padding-bottom:75px}
-.header{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;gap:10px;padding:0 12px;background:rgba(5,5,9,.96);border-bottom:1px solid #252533}
-.back{width:40px;height:40px;border:0;border-radius:50%;background:#171722;color:#fff;font-size:25px}
-.logo{font-size:21px;font-weight:800;background:linear-gradient(90deg,#ff2bd6,#4d7cff);-webkit-background-clip:text;color:transparent;flex:1}
-.post-btn{border:0;border-radius:20px;padding:10px 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
-.search-box{padding:12px 12px 8px;background:#09090f;position:sticky;top:62px;z-index:90}
-.search{width:100%;height:45px;border:1px solid #29293a;border-radius:14px;outline:none;background:#15151e;color:#fff;padding:0 15px;font-size:15px}
-.search:focus{border-color:#ff2bd6}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-/* FEATURE 3: sort / filter chips */
-.chips{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:1px solid #2d2d40;background:#15151e;color:#bbb;border-radius:18px;padding:7px 14px;font-size:13px;cursor:pointer}
-.chip.active{background:linear-gradient(135deg,#ff28cf,#416cff);border-color:transparent;color:#fff;font-weight:bold}
+body {
+    font-family: Arial, sans-serif;
+    background: #050509;
+    color: #fff;
+    min-height: 100vh;
+    padding-bottom: 75px;
+}
 
-.feed{max-width:650px;margin:auto;padding:10px}
-.video-card{background:#0e0e16;border:1px solid #222231;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 5px 25px rgba(0,0,0,.35)}
-.thumb{position:relative;width:100%;aspect-ratio:16/9;background:#111;cursor:pointer;overflow:hidden}
-.thumb video{width:100%;height:100%;object-fit:cover;pointer-events:none}
-.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,43,214,.9);display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 25px rgba(255,43,214,.4)}
-.card-content{padding:12px}
-.card-title{font-size:17px;font-weight:bold;margin-bottom:7px}
-.card-description{color:#aaa;font-size:13px;line-height:1.5}
-.card-meta{color:#777;font-size:11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.del-btn{border:0;background:#2a1520;color:#ff6b8a;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer}
-.empty,.loader{text-align:center;padding:60px 20px;color:#777}
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    background: rgba(5, 5, 9, .96);
+    border-bottom: 1px solid #252533;
+}
 
-/* FEATURE 1/2/4: card action row */
-.card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.mini-btn{border:1px solid #2d2d40;background:#15151e;color:#ddd;border-radius:20px;padding:7px 13px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.mini-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+.back {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: #171722;
+    color: #fff;
+    font-size: 25px;
+    cursor: pointer;
+}
 
-.bottom{position:fixed;left:0;right:0;bottom:0;height:65px;background:#09090f;border-top:1px solid #252533;display:flex;justify-content:space-around;align-items:center;z-index:200}
-.nav{border:0;background:none;color:#777;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.nav span{font-size:22px}
-.nav.active{color:#ff3bd4}
+.logo {
+    font-size: 21px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ff2bd6, #4d7cff);
+    -webkit-background-clip: text;
+    color: transparent;
+    flex: 1;
+}
 
-/* PLAYER */
-.player-modal{position:fixed;inset:0;z-index:1000;display:none;background:#000;overflow-y:auto}
-.player-modal.show{display:block}
-.player-top{height:58px;display:flex;align-items:center;padding:0 12px;gap:10px;background:#07070b;border-bottom:1px solid #252533;position:sticky;top:0;z-index:5}
-.close-player{width:42px;height:42px;border:0;border-radius:50%;background:#191923;color:#fff;font-size:25px}
-.player-title-small{font-weight:bold;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.player-wrap{max-width:900px;margin:auto}
-.main-video{width:100%;max-height:70vh;background:#000;display:block}
-.player-info{padding:15px}
-.player-title{font-size:20px;font-weight:bold;line-height:1.35}
-.player-user{color:#ff54db;margin-top:7px;font-size:13px}
-.player-description{color:#bbb;line-height:1.6;margin-top:12px;white-space:pre-wrap}
-.player-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.action-btn{border:1px solid #343445;background:#15151e;color:#fff;border-radius:12px;padding:11px 17px;font-weight:bold;cursor:pointer}
-.action-btn.share{background:linear-gradient(135deg,#ff28cf,#416cff);border:0}
-.action-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+.post-btn {
+    border: 0;
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #ff28cf, #416cff);
+    cursor: pointer;
+}
 
-/* FEATURE 5: player controls */
-.player-tools{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap;color:#aaa;font-size:13px}
-.player-tools select{background:#15151e;color:#fff;border:1px solid #343445;border-radius:10px;padding:8px 10px;font-size:13px}
-.player-tools label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.search-box {
+    padding: 12px 12px 8px;
+    background: #09090f;
+    position: sticky;
+    top: 62px;
+    z-index: 90;
+}
 
-/* FEATURE 2: comments */
-.comments{padding:15px;border-top:1px solid #252533}
-.comments h4{font-size:16px;margin-bottom:12px}
-.c-form{display:flex;gap:8px;margin-bottom:14px}
-.c-form input{flex:1;height:42px;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:0 12px;font-size:14px;outline:none}
-.c-form input:focus{border-color:#ff2bd6}
-.c-form button{border:0;border-radius:12px;padding:0 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
-.c-item{background:#0e0e16;border:1px solid #222231;border-radius:12px;padding:10px 12px;margin-bottom:8px}
-.c-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#ff54db;margin-bottom:4px}
-.c-head small{color:#666;margin-left:6px}
-.c-text{font-size:14px;color:#ddd;line-height:1.5;word-break:break-word}
-.c-del{border:0;background:none;color:#ff6b8a;font-size:12px;cursor:pointer}
-.c-empty{color:#666;font-size:13px;padding:6px 0}
+.search {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #29293a;
+    border-radius: 14px;
+    outline: none;
+    background: #15151e;
+    color: #fff;
+    padding: 0 15px;
+    font-size: 15px;
+}
 
-.other-title{font-size:18px;font-weight:bold;padding:15px;border-top:1px solid #252533}
-.related{padding:0 10px 30px}
+.search:focus {
+    border-color: #ff2bd6;
+}
+
+.chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.chips::-webkit-scrollbar {
+    display: none;
+}
+
+.chip {
+    flex: 0 0 auto;
+    border: 1px solid #2d2d40;
+    background: #15151e;
+    color: #bbb;
+    border-radius: 18px;
+    padding: 7px 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.chip.active {
+    background: linear-gradient(135deg, #ff28cf, #416cff);
+    border-color: transparent;
+    color: #fff;
+    font-weight: bold;
+}
+
+.feed {
+    max-width: 650px;
+    margin: auto;
+    padding: 10px;
+}
+
+.video-card {
+    background: #0e0e16;
+    border: 1px solid #222231;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: 0 5px 25px rgba(0, 0, 0, .35);
+}
+
+.thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #111;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.play {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255, 43, 214, .9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    box-shadow: 0 0 25px rgba(255, 43, 214, .4);
+}
+
+.card-content {
+    padding: 12px;
+}
+
+.card-title {
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 7px;
+}
+
+.card-description {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.card-meta {
+    color: #777;
+    font-size: 11px;
+    margin-top: 9px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.del-btn {
+    border: 0;
+    background: #2a1520;
+    color: #ff6b8a;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.empty,
+.loader {
+    text-align: center;
+    padding: 60px 20px;
+    color: #777;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.mini-btn {
+    border: 1px solid #2d2d40;
+    background: #15151e;
+    color: #ddd;
+    border-radius: 20px;
+    padding: 7px 13px;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mini-btn.on {
+    border-color: #ff2bd6;
+    color: #ff6ee0;
+    background: #24122a;
+}
+
+.bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 65px;
+    background: #09090f;
+    border-top: 1px solid #252533;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 200;
+}
+
+.nav {
+    border: 0;
+    background: none;
+    color: #777;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.nav span {
+    font-size: 22px;
+}
+
+.nav.active {
+    color: #ff3bd4;
+}
+
+/* VIDEO PLAYER */
+
+.player-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    background: #000;
+    overflow-y: auto;
+}
+
+.player-modal.show {
+    display: block;
+}
+
+.player-top {
+    height: 58px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 10px;
+    background: #07070b;
+    border-bottom: 1px solid #252533;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.close-player {
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 50%;
+    background: #191923;
+    color: #fff;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.player-title-small {
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.player-wrap {
+    max-width: 900px;
+    margin: auto;
+}
+
+.main-video {
+    width: 100%;
+    max-height: 70vh;
+    background: #000;
+    display: block;
+}
+
+.player-info {
+    padding: 15px;
+}
+
+.player-title {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1.35;
+}
+
+.player-user {
+    color: #ff54db;
+    margin-top: 7px;
+    font-size: 13px;
+}
+
+.player-description {
+    color: #bbb;
+    line-height: 1.6;
+    margin-top: 12px;
+    white-space: pre-wrap;
+}
+
+.player-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    border: 1px solid #343445;
+    background: #15151e;
+    color: #fff;
+    border-radius: 12px;
+    padding: 11px 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.action-btn.share {
+    background: linear-gradient(135deg, #ff28cf, #416cff);
+    border: 0;
+}
+
+.action-btn.on {
+    border-color: #ff2bd6;
+    color: #ff6ee0;
+    background: #24122a;
+}
+
+.player-tools {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.player-tools select {
+    background: #15151e;
+    color: #fff;
+    border: 1px solid #343445;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 13px;
+}
+
+.player-tools label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+/* COMMENTS */
+
+.comments {
+    padding: 15px;
+    border-top: 1px solid #252533;
+}
+
+.comments h4 {
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.c-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.c-form input {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+    background: #15151e;
+    border: 1px solid #29293a;
+    border-radius: 12px;
+    color: #fff;
+    padding: 0 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.c-form input:focus {
+    border-color: #ff2bd6;
+}
+
+.c-form button {
+    border: 0;
+    border-radius: 12px;
+    padding: 0 16px;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(135deg, #ff28cf, #416cff);
+    cursor: pointer;
+}
+
+.c-item {
+    background: #0e0e16;
+    border: 1px solid #222231;
+    border-radius: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+}
+
+.c-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #ff54db;
+    margin-bottom: 4px;
+}
+
+.c-head small {
+    color: #666;
+    margin-left: 6px;
+}
+
+.c-text {
+    font-size: 14px;
+    color: #ddd;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.c-del {
+    border: 0;
+    background: none;
+    color: #ff6b8a;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.c-empty {
+    color: #666;
+    font-size: 13px;
+    padding: 6px 0;
+}
+
+.other-title {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 15px;
+    border-top: 1px solid #252533;
+}
+
+.related {
+    padding: 0 10px 30px;
+}
 
 /* UPLOAD */
-.upload-modal{position:fixed;inset:0;z-index:1500;display:none;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:16px}
-.upload-modal.show{display:flex}
-.upload-box{width:100%;max-width:450px;background:#0e0e16;border:1px solid #252533;border-radius:18px;padding:18px}
-.upload-box h3{margin-bottom:14px}
-.upload-box input[type=text],.upload-box textarea{width:100%;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:12px;font-size:14px;margin-bottom:10px;outline:none;font-family:inherit}
-.upload-box textarea{height:90px;resize:none}
-.upload-box input[type=file]{width:100%;margin-bottom:10px;color:#aaa;font-size:13px}
-.upload-preview{width:100%;max-height:200px;border-radius:12px;background:#000;margin-bottom:10px;display:none}
-.upload-row{display:flex;gap:10px}
-.upload-row button{flex:1;padding:12px;border-radius:12px;font-weight:bold;border:0;cursor:pointer;color:#fff}
-.btn-cancel{background:#1c1c28}
-.btn-submit{background:linear-gradient(135deg,#ff28cf,#416cff)}
-.btn-submit:disabled{opacity:.5}
-.toast{position:fixed;left:50%;bottom:85px;transform:translateX(-50%);background:#20202a;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;font-size:13px;max-width:90%;text-align:center}
-.toast.show{display:block}
+
+.upload-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: none;
+    background: rgba(0, 0, 0, .8);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.upload-modal.show {
+    display: flex;
+}
+
+.upload-box {
+    width: 100%;
+    max-width: 450px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #0e0e16;
+    border: 1px solid #252533;
+    border-radius: 18px;
+    padding: 18px;
+}
+
+.upload-box h3 {
+    margin-bottom: 14px;
+}
+
+.upload-box input[type="text"],
+.upload-box textarea {
+    width: 100%;
+    background: #15151e;
+    border: 1px solid #29293a;
+    border-radius: 12px;
+    color: #fff;
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    outline: none;
+    font-family: inherit;
+}
+
+.upload-box textarea {
+    height: 90px;
+    resize: none;
+}
+
+.upload-box input[type="file"] {
+    width: 100%;
+    margin-bottom: 10px;
+    color: #aaa;
+    font-size: 13px;
+}
+
+.upload-preview {
+    width: 100%;
+    max-height: 200px;
+    border-radius: 12px;
+    background: #000;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.upload-row {
+    display: flex;
+    gap: 10px;
+}
+
+.upload-row button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    border: 0;
+    cursor: pointer;
+    color: #fff;
+}
+
+.btn-cancel {
+    background: #1c1c28;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #ff28cf, #416cff);
+}
+
+.btn-submit:disabled {
+    opacity: .5;
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 85px;
+    transform: translateX(-50%);
+    background: #20202a;
+    color: #fff;
+    padding: 11px 18px;
+    border-radius: 20px;
+    display: none;
+    z-index: 3000;
+    font-size: 13px;
+    max-width: 90%;
+    text-align: center;
+}
+
+.toast.show {
+    display: block;
+}
 </style>
 </head>
+
 <body>
 
 <header class="header">
-  <button class="back" onclick="goHome()">‹</button>
-  <div class="logo">🎬 GyanSetu</div>
-  <button class="post-btn" onclick="openUpload()">＋ Post</button>
+    <button class="back" onclick="goHome()">‹</button>
+    <div class="logo">🎬 GyanSetu</div>
+    <button class="post-btn" onclick="openUpload()">＋ Post</button>
 </header>
 
 <div class="search-box">
-  <input id="searchInput" class="search" placeholder="🔍 Search videos..." oninput="searchVideos()">
-  <div class="chips" id="chips">
-    <button class="chip active" data-sort="latest" onclick="setSort('latest')">🆕 Latest</button>
-    <button class="chip" data-sort="liked" onclick="setSort('liked')">🔥 Most liked</button>
-    <button class="chip" data-sort="oldest" onclick="setSort('oldest')">🕰 Oldest</button>
-    <button class="chip" data-sort="mine" onclick="setSort('mine')">🙋 My videos</button>
-    <button class="chip" data-sort="saved" onclick="setSort('saved')">🔖 Saved</button>
-  </div>
+    <input
+        id="searchInput"
+        class="search"
+        placeholder="🔍 Search videos..."
+        oninput="searchVideos()"
+    >
+
+    <div class="chips" id="chips">
+        <button class="chip active" data-sort="latest" onclick="setSort('latest')">🆕 Latest</button>
+        <button class="chip" data-sort="liked" onclick="setSort('liked')">🔥 Most liked</button>
+        <button class="chip" data-sort="oldest" onclick="setSort('oldest')">🕰 Oldest</button>
+        <button class="chip" data-sort="mine" onclick="setSort('mine')">🙋 My videos</button>
+        <button class="chip" data-sort="saved" onclick="setSort('saved')">🔖 Saved</button>
+    </div>
 </div>
 
 <main class="feed" id="feed">
-  <div class="loader">Loading videos...</div>
+    <div class="loader">Loading videos...</div>
 </main>
 
 <nav class="bottom">
-  <button class="nav" onclick="goHome()"><span>🏠</span>Home</button>
-  <button class="nav active"><span>🎬</span>Videos</button>
-  <button class="nav" onclick="openUpload()"><span>➕</span>Post</button>
-  <button class="nav" onclick="goCreate()"><span>👥</span>Users</button>
-  <button class="nav" onclick="goProfile()"><span>👤</span>Profile</button>
+    <button class="nav" onclick="goHome()">
+        <span>🏠</span>Home
+    </button>
+
+    <button class="nav active">
+        <span>🎬</span>Videos
+    </button>
+
+    <button class="nav" onclick="openUpload()">
+        <span>➕</span>Post
+    </button>
+
+    <button class="nav" onclick="goCreate()">
+        <span>👥</span>Users
+    </button>
+
+    <button class="nav" onclick="goProfile()">
+        <span>👤</span>Profile
+    </button>
 </nav>
 
 <!-- UPLOAD MODAL -->
+
 <div class="upload-modal" id="uploadModal">
-  <div class="upload-box">
-    <h3>🎬 New Video Post</h3>
-    <input type="text" id="upTitle" placeholder="Title" maxlength="120">
-    <textarea id="upDesc" placeholder="Description (optional)"></textarea>
-    <input type="file" id="upFile" accept="video/*" onchange="previewFile()">
-    <video id="upPreview" class="upload-preview" controls playsinline></video>
-    <div class="upload-row">
-      <button class="btn-cancel" onclick="closeUpload()">Cancel</button>
-      <button class="btn-submit" id="upSubmit" onclick="submitVideo()">Post</button>
+    <div class="upload-box">
+        <h3>🎬 New Video Post</h3>
+
+        <input
+            type="text"
+            id="upTitle"
+            placeholder="Title"
+            maxlength="120"
+        >
+
+        <textarea
+            id="upDesc"
+            placeholder="Description (optional)"
+        ></textarea>
+
+        <input
+            type="file"
+            id="upFile"
+            accept="video/*"
+            onchange="previewFile()"
+        >
+
+        <video
+            id="upPreview"
+            class="upload-preview"
+            controls
+            playsinline
+        ></video>
+
+        <div class="upload-row">
+            <button class="btn-cancel" onclick="closeUpload()">Cancel</button>
+            <button class="btn-submit" id="upSubmit" onclick="submitVideo()">Post</button>
+        </div>
     </div>
-  </div>
 </div>
 
-<!-- PLAYER -->
+<!-- VIDEO PLAYER -->
+
 <div class="player-modal" id="playerModal">
-  <div class="player-top">
-    <button class="close-player" onclick="closePlayer()">×</button>
-    <div class="player-title-small" id="playerSmallTitle"></div>
-  </div>
-  <div class="player-wrap">
-    <video id="mainVideo" class="main-video" controls playsinline></video>
-    <div class="player-info">
-      <div class="player-title" id="playerTitle"></div>
-      <div class="player-user" id="playerUser"></div>
-      <div class="player-description" id="playerDescription"></div>
 
-      <div class="player-actions">
-        <button class="action-btn" id="pLike" onclick="toggleLike(currentVideo && currentVideo.id)">🤍 0</button>
-        <button class="action-btn" id="pSave" onclick="toggleSave(currentVideo && currentVideo.id)">🔖 Save</button>
-        <button class="action-btn share" onclick="shareCurrentVideo()">🔗 Share</button>
-        <button class="action-btn" onclick="copyLink()">📋 Copy link</button>
-      </div>
-
-      <div class="player-tools">
-        <span>⚡ Speed</span>
-        <select id="speedSel" onchange="setSpeed(this.value)">
-          <option value="0.5">0.5x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1" selected>1x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-        </select>
-        <label><input type="checkbox" id="autoNext" checked onchange="saveAutoNext()"> Autoplay next</label>
-      </div>
+    <div class="player-top">
+        <button class="close-player" onclick="closePlayer()">×</button>
+        <div class="player-title-small" id="playerSmallTitle"></div>
     </div>
 
-    <div class="comments">
-      <h4>💬 Comments <span id="cCount">(0)</span></h4>
-      <div class="c-form">
-        <input id="cInput" type="text" maxlength="300" placeholder="Comment लिहा..." onkeydown="if(event.key==='Enter')submitComment()">
-        <button onclick="submitComment()">Send</button>
-      </div>
-      <div id="cList"></div>
-    </div>
+    <div class="player-wrap">
 
-    <div class="other-title">More Videos</div>
-    <div class="related" id="related"></div>
-  </div>
+        <video
+            id="mainVideo"
+            class="main-video"
+            controls
+            playsinline
+        ></video>
+
+        <div class="player-info">
+
+            <div class="player-title" id="playerTitle"></div>
+            <div class="player-user" id="playerUser"></div>
+            <div class="player-description" id="playerDescription"></div>
+
+            <div class="player-actions">
+                <button class="action-btn" id="pLike" onclick="toggleLike(currentVideo && currentVideo.id)">🤍 0</button>
+                <button class="action-btn" id="pSave" onclick="toggleSave(currentVideo && currentVideo.id)">🔖 Save</button>
+                <button class="action-btn share" onclick="shareCurrentVideo()">🔗 Share</button>
+                <button class="action-btn" onclick="copyLink()">📋 Copy link</button>
+            </div>
+
+            <div class="player-tools">
+                <span>⚡ Speed</span>
+
+                <select id="speedSel" onchange="setSpeed(this.value)">
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                </select>
+
+                <label>
+                    <input type="checkbox" id="autoNext" checked onchange="saveAutoNext()">
+                    Autoplay next
+                </label>
+            </div>
+
+        </div>
+
+        <!-- COMMENTS -->
+
+        <div class="comments">
+            <h4>💬 Comments <span id="cCount">(0)</span></h4>
+
+            <div class="c-form">
+                <input
+                    id="cInput"
+                    type="text"
+                    maxlength="300"
+                    placeholder="Comment लिहा..."
+                    onkeydown="if(event.key==='Enter')submitComment()"
+                >
+
+                <button onclick="submitComment()">Send</button>
+            </div>
+
+            <div id="cList"></div>
+        </div>
+
+        <div class="other-title">More Videos</div>
+        <div class="related" id="related"></div>
+
+    </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-const BUCKET = "videos";          // Storage bucket name
-const MAX_MB = 50;                // max video size
+"use strict";
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+/* SUPABASE CONFIGURATION */
+
+const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
+const SUPABASE_KEY = "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-Hak";
+const BUCKET = "videos";
+const MAX_MB = 50;
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+/* APPLICATION STATE */
 
 let currentUser = null;
 let currentName = "GyanSetu User";
 let videos = [];
 let currentVideo = null;
 
-/* NEW STATE */
 let sortMode = "latest";
-let likeCount = {};          // video_id -> number
-let myLikes = new Set();     // video_ids liked by me
-let commentCount = {};       // video_id -> number
-let savedSet = new Set();    // bookmarks (stored in this browser)
+
+let likeCount = {};
+let myLikes = new Set();
+
+let commentCount = {};
+let savedSet = new Set();
+
 let likesReady = true;
 let commentsReady = true;
 
 /* NAVIGATION */
-function goHome(){ location.href = "home.html"; }
-function goProfile(){ location.href = "profile.html"; }
-function goCreate(){ location.href = "users.html"; }
 
-/* TOAST */
-function showToast(text){
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 2600);
+function goHome() {
+    location.href = "home.html";
+}
+
+function goProfile() {
+    location.href = "profile.html";
+}
+
+function goCreate() {
+    location.href = "users.html";
+}
+
+/* TOAST MESSAGE */
+
+function showToast(text) {
+    const toast = document.getElementById("toast");
+
+    toast.textContent = text;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 2600);
 }
 
 /* LOCAL STORAGE HELPERS */
-function lsGet(k, def){
-  try{ const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); }
-  catch(e){ return def; }
+
+function lsGet(key, defaultValue) {
+    try {
+        const value = localStorage.getItem(key);
+
+        return value === null
+            ? defaultValue
+            : JSON.parse(value);
+
+    } catch (error) {
+        return defaultValue;
+    }
 }
-function lsSet(k, v){
-  try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){}
+
+function lsSet(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+        console.warn("Local storage unavailable:", error);
+    }
 }
 
-/* USER */
-async function getUser(){
-  const { data } = await supabaseClient.auth.getUser();
-  currentUser = data?.user || null;
-  if(!currentUser) return;
+/* CURRENT USER */
 
-  currentName =
-    currentUser.user_metadata?.username ||
-    currentUser.user_metadata?.name ||
-    (currentUser.email ? currentUser.email.split("@")[0] : "GyanSetu User");
+async function getUser() {
+    const { data, error } = await supabaseClient.auth.getUser();
 
-  try{
-    const { data:p } = await supabaseClient
-      .from("Profiles").select("username")
-      .eq("id", currentUser.id).maybeSingle();
-    if(p?.username) currentName = p.username;
-  }catch(e){}
+    if (error) {
+        console.warn("Could not get current user:", error.message);
+    }
+
+    currentUser = data?.user || null;
+
+    if (!currentUser) {
+        currentName = "GyanSetu User";
+        return;
+    }
+
+    currentName =
+        currentUser.user_metadata?.username ||
+        currentUser.user_metadata?.name ||
+        (
+            currentUser.email
+                ? currentUser.email.split("@")[0]
+                : "GyanSetu User"
+        );
+
+    try {
+        const { data: profile } = await supabaseClient
+            .from("Profiles")
+            .select("username")
+            .eq("id", currentUser.id)
+            .maybeSingle();
+
+        if (profile?.username) {
+            currentName = profile.username;
+        }
+
+    } catch (error) {
+        console.warn("Profile lookup failed:", error);
+    }
 }
 
 /* LOAD VIDEOS */
-async function loadVideos(){
-  const { data, error } = await supabaseClient
-    .from("Videos").select("*")
-    .order("created_at", { ascending:false });
 
-  if(error){
-    console.error(error);
-    document.getElementById("feed").innerHTML =
-      `<div class="empty">Videos load झाले नाहीत.<br><small>${escapeHtml(error.message)}</small></div>`;
-    return;
-  }
-  videos = data || [];
-  await Promise.all([loadLikes(), loadCommentCounts()]);
-  searchVideos();
-}
+async function loadVideos() {
+    const { data, error } = await supabaseClient
+        .from("Videos")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-/* ============ FEATURE 1: LIKES ============ */
-async function loadLikes(){
-  likeCount = {}; myLikes = new Set();
-  const { data, error } = await supabaseClient
-    .from("VideoLikes").select("video_id,user_id");
-  if(error){ likesReady = false; console.warn("VideoLikes:", error.message); return; }
-  likesReady = true;
-  (data || []).forEach(r=>{
-    const vid = String(r.video_id);
-    likeCount[vid] = (likeCount[vid] || 0) + 1;
-    if(currentUser && r.user_id === currentUser.id) myLikes.add(vid);
-  });
-}
+    if (error) {
+        console.error(error);
 
-async function toggleLike(id){
-  if(id === undefined || id === null) return;
-  id = String(id);
-  if(!currentUser){ showToast("Like करण्यासाठी Login करा"); return; }
-  if(!likesReady){ showToast("Likes table अजून तयार नाही (SQL चालवा)"); return; }
+        document.getElementById("feed").innerHTML =
+            `<div class="empty">
+                Videos load झाले नाहीत.<br>
+                <small>${escapeHtml(error.message)}</small>
+            </div>`;
 
-  const liked = myLikes.has(id);
-  // optimistic update
-  if(liked){ myLikes.delete(id); likeCount[id] = Math.max(0,(likeCount[id]||1)-1); }
-  else { myLikes.add(id); likeCount[id] = (likeCount[id]||0)+1; }
-  refreshActionUI(id);
-
-  let error;
-  if(liked){
-    ({ error } = await supabaseClient.from("VideoLikes").delete()
-      .eq("video_id", id).eq("user_id", currentUser.id));
-  }else{
-    ({ error } = await supabaseClient.from("VideoLikes")
-      .insert({ video_id:id, user_id:currentUser.id }));
-  }
-  if(error){
-    console.error(error);
-    // roll back
-    if(liked){ myLikes.add(id); likeCount[id]=(likeCount[id]||0)+1; }
-    else { myLikes.delete(id); likeCount[id]=Math.max(0,(likeCount[id]||1)-1); }
-    refreshActionUI(id);
-    showToast("Like बदलता आला नाही");
-  }
-}
-
-/* ============ FEATURE 2: COMMENTS ============ */
-async function loadCommentCounts(){
-  commentCount = {};
-  const { data, error } = await supabaseClient
-    .from("VideoComments").select("video_id");
-  if(error){ commentsReady = false; console.warn("VideoComments:", error.message); return; }
-  commentsReady = true;
-  (data || []).forEach(r=>{
-    const vid = String(r.video_id);
-    commentCount[vid] = (commentCount[vid] || 0) + 1;
-  });
-}
-
-async function loadComments(videoId){
-  const list = document.getElementById("cList");
-  if(!commentsReady){
-    list.innerHTML = `<div class="c-empty">Comments सुरू करण्यासाठी SQL चालवा.</div>`;
-    return;
-  }
-  list.innerHTML = `<div class="c-empty">Loading...</div>`;
-  const { data, error } = await supabaseClient
-    .from("VideoComments").select("*")
-    .eq("video_id", String(videoId))
-    .order("created_at", { ascending:true });
-
-  if(!currentVideo || String(currentVideo.id) !== String(videoId)) return; // user moved on
-  if(error){
-    list.innerHTML = `<div class="c-empty">Comments load झाले नाहीत.</div>`;
-    return;
-  }
-  commentCount[String(videoId)] = (data || []).length;
-  document.getElementById("cCount").textContent = "(" + (data||[]).length + ")";
-  refreshActionUI(videoId);
-
-  if(!data || !data.length){
-    list.innerHTML = `<div class="c-empty">अजून comments नाहीत. पहिला comment तुमचा!</div>`;
-    return;
-  }
-  list.innerHTML = data.map(c=>{
-    const mine = currentUser && c.user_id === currentUser.id;
-    return `<div class="c-item">
-      <div class="c-head">
-        <span>👤 ${escapeHtml(c.username || "GyanSetu User")}<small>${formatDate(c.created_at)}</small></span>
-        ${mine ? `<button class="c-del" onclick="deleteComment('${escapeAttr(c.id)}')">Delete</button>` : ""}
-      </div>
-      <div class="c-text">${escapeHtml(c.text)}</div>
-    </div>`;
-  }).join("");
-}
-
-async function submitComment(){
-  if(!currentVideo) return;
-  if(!currentUser){ showToast("Comment साठी Login करा"); return; }
-  if(!commentsReady){ showToast("Comments table अजून तयार नाही (SQL चालवा)"); return; }
-
-  const input = document.getElementById("cInput");
-  const text = input.value.trim();
-  if(!text) return;
-
-  const { error } = await supabaseClient.from("VideoComments").insert({
-    video_id: String(currentVideo.id),
-    user_id: currentUser.id,
-    username: currentName,
-    text: text
-  });
-  if(error){
-    console.error(error);
-    showToast("Comment पाठवता आला नाही");
-    return;
-  }
-  input.value = "";
-  loadComments(currentVideo.id);
-}
-
-async function deleteComment(cid){
-  if(!currentUser || !currentVideo) return;
-  if(!confirm("हा comment delete करायचा?")) return;
-  const { error } = await supabaseClient.from("VideoComments")
-    .delete().eq("id", cid).eq("user_id", currentUser.id);
-  if(error){ showToast("Delete करता आला नाही"); return; }
-  loadComments(currentVideo.id);
-}
-
-/* ============ FEATURE 3: SORT / FILTER ============ */
-function setSort(mode){
-  sortMode = mode;
-  document.querySelectorAll(".chip").forEach(c =>
-    c.classList.toggle("active", c.dataset.sort === mode));
-  searchVideos();
-}
-
-/* ============ FEATURE 4: SAVE / BOOKMARK ============ */
-function loadSaved(){ savedSet = new Set((lsGet("gs_saved_videos", [])).map(String)); }
-
-function toggleSave(id){
-  if(id === undefined || id === null) return;
-  id = String(id);
-  if(savedSet.has(id)){ savedSet.delete(id); showToast("Saved मधून काढला"); }
-  else { savedSet.add(id); showToast("🔖 Video save झाला"); }
-  lsSet("gs_saved_videos", Array.from(savedSet));
-  refreshActionUI(id);
-  if(sortMode === "saved") searchVideos();
-}
-
-/* ============ FEATURE 5: PLAYER EXTRAS ============ */
-function setSpeed(v){
-  document.getElementById("mainVideo").playbackRate = parseFloat(v) || 1;
-  lsSet("gs_speed", v);
-}
-function saveAutoNext(){
-  lsSet("gs_autonext", document.getElementById("autoNext").checked);
-}
-function playNext(){
-  if(!currentVideo || !document.getElementById("autoNext").checked) return;
-  const list = getVisibleList();
-  const i = list.findIndex(v => String(v.id) === String(currentVideo.id));
-  const next = i > -1 ? list[i+1] : null;
-  if(next) openPlayer(next.id);
-}
-async function copyLink(){
-  if(!currentVideo) return;
-  const url = location.origin + location.pathname + "?v=" + encodeURIComponent(currentVideo.id);
-  try{
-    if(navigator.share){
-      await navigator.share({ title: currentVideo.title, url });
-      return;
+        return;
     }
-  }catch(e){ if(e && e.name === "AbortError") return; }
-  try{
-    await navigator.clipboard.writeText(url);
-    showToast("✅ Link copy झाली");
-  }catch(e){
-    prompt("Link copy करा:", url);
-  }
+
+    videos = data || [];
+
+    await Promise.all([
+        loadLikes(),
+        loadCommentCounts()
+    ]);
+
+    searchVideos();
 }
 
-/* UI REFRESH for like / save / comment count (no full re-render) */
-function refreshActionUI(id){
-  id = String(id);
-  const liked = myLikes.has(id);
-  const saved = savedSet.has(id);
-  const lc = likeCount[id] || 0;
-  const cc = commentCount[id] || 0;
+/* LIKES */
 
-  document.querySelectorAll(`[data-like="${CSS.escape(id)}"]`).forEach(b=>{
-    b.classList.toggle("on", liked);
-    b.textContent = (liked ? "❤️ " : "🤍 ") + lc;
-  });
-  document.querySelectorAll(`[data-save="${CSS.escape(id)}"]`).forEach(b=>{
-    b.classList.toggle("on", saved);
-    b.textContent = saved ? "🔖 Saved" : "🔖 Save";
-  });
-  document.querySelectorAll(`[data-cmt="${CSS.escape(id)}"]`).forEach(b=>{
-    b.textContent = "💬 " + cc;
-  });
+async function loadLikes() {
+    likeCount = {};
+    myLikes = new Set();
 
-  if(currentVideo && String(currentVideo.id) === id){
-    const pl = document.getElementById("pLike");
-    pl.classList.toggle("on", liked);
-    pl.textContent = (liked ? "❤️ " : "🤍 ") + lc;
-    const ps = document.getElementById("pSave");
-    ps.classList.toggle("on", saved);
-    ps.textContent = saved ? "🔖 Saved" : "🔖 Save";
-    document.getElementById("cCount").textContent = "(" + cc + ")";
-  }
-}
+    const { data, error } = await supabaseClient
+        .from("VideoLikes")
+        .select("video_id,user_id");
 
-/* CARD HTML */
-function cardHtml(video, full){
-  const mine = currentUser && video.user_id && video.user_id === currentUser.id;
-  const id = escapeAttr(video.id);
-  const liked = myLikes.has(String(video.id));
-  const saved = savedSet.has(String(video.id));
-  return `
-    <div class="thumb" onclick="openPlayer('${id}')">
-      <video src="${escapeAttr(video.video_url)}#t=0.5" preload="metadata" muted playsinline></video>
-      <div class="play">▶</div>
-    </div>
-    <div class="card-content">
-      <div class="card-title">${escapeHtml(video.title)}</div>
-      ${full ? `<div class="card-description">${escapeHtml(video.description || "")}</div>` : ""}
-      ${full ? `
-      <div class="card-actions">
-        <button class="mini-btn ${liked?"on":""}" data-like="${id}" onclick="toggleLike('${id}')">${liked?"❤️":"🤍"} ${likeCount[String(video.id)]||0}</button>
-        <button class="mini-btn" data-cmt="${id}" onclick="openPlayer('${id}',true)">💬 ${commentCount[String(video.id)]||0}</button>
-        <button class="mini-btn ${saved?"on":""}" data-save="${id}" onclick="toggleSave('${id}')">${saved?"🔖 Saved":"🔖 Save"}</button>
-      </div>` : ""}
-      <div class="card-meta">
-        <span>👤 ${escapeHtml(video.username || "GyanSetu User")}
-        ${full ? " • " + formatDate(video.created_at) : ""}</span>
-        ${mine && full ? `<button class="del-btn" onclick="deleteVideo('${id}')">🗑 Delete</button>` : ""}
-      </div>
-    </div>`;
-}
+    if (error) {
+        likesReady = false;
+        console.warn("VideoLikes:", error.message);
+        return;
+    }
 
-/* RENDER */
-function renderVideos(list){
-  const feed = document.getElementById("feed");
-  feed.innerHTML = "";
-  if(!list.length){
-    let msg = `🎬 अजून videos post झालेले नाहीत.<br><br>वर "＋ Post" दाबून पहिला video टाका!`;
-    if(sortMode === "saved") msg = "🔖 अजून कोणताही video save केलेला नाही.";
-    else if(sortMode === "mine") msg = "🙋 तुम्ही अजून कोणताही video post केलेला नाही.";
-    else if(document.getElementById("searchInput").value.trim()) msg = "🔍 काहीही सापडले नाही.";
-    feed.innerHTML = `<div class="empty">${msg}</div>`;
-    return;
-  }
-  list.forEach(video=>{
-    const card = document.createElement("div");
-    card.className = "video-card";
-    card.innerHTML = cardHtml(video, true);
-    feed.appendChild(card);
-  });
-}
+    likesReady = true;
 
-/* SEARCH + SORT */
-function getVisibleList(){
-  const q = document.getElementById("searchInput").value.trim().toLowerCase();
-  let list = videos.slice();
+    (data || []).forEach(row => {
+        const videoId = String(row.video_id);
 
-  if(q){
-    list = list.filter(v =>
-      String(v.title||"").toLowerCase().includes(q) ||
-      String(v.description||"").toLowerCase().includes(q) ||
-      String(v.username||"").toLowerCase().includes(q)
-    );
-  }
+        likeCount[videoId] =
+            (likeCount[videoId] || 0) + 1;
 
-  if(sortMode === "saved") list = list.filter(v => savedSet.has(String(v.id)));
-  if(sortMode === "mine")  list = list.filter(v => currentUser && v.user_id === currentUser.id);
-
-  const t = v => new Date(v.created_at || 0).getTime();
-  if(sortMode === "oldest") list.sort((a,b)=> t(a)-t(b));
-  else if(sortMode === "liked") list.sort((a,b)=> (likeCount[String(b.id)]||0)-(likeCount[String(a.id)]||0) || t(b)-t(a));
-  else list.sort((a,b)=> t(b)-t(a));
-
-  return list;
-}
-
-function searchVideos(){
-  renderVideos(getVisibleList());
-}
-
-/* UPLOAD */
-function openUpload(){
-  if(!currentUser){
-    showToast("Post करण्यासाठी Login करा");
-    return;
-  }
-  document.getElementById("uploadModal").classList.add("show");
-}
-
-function closeUpload(){
-  document.getElementById("uploadModal").classList.remove("show");
-  document.getElementById("upTitle").value = "";
-  document.getElementById("upDesc").value = "";
-  document.getElementById("upFile").value = "";
-  const pv = document.getElementById("upPreview");
-  pv.pause(); pv.removeAttribute("src"); pv.style.display = "none";
-  const btn = document.getElementById("upSubmit");
-  btn.disabled = false; btn.textContent = "Post";
-}
-
-function previewFile(){
-  const f = document.getElementById("upFile").files[0];
-  const pv = document.getElementById("upPreview");
-  if(!f){ pv.style.display = "none"; return; }
-  pv.src = URL.createObjectURL(f);
-  pv.style.display = "block";
-}
-
-async function submitVideo(){
-  if(!currentUser){ showToast("Login required"); return; }
-
-  const title = document.getElementById("upTitle").value.trim();
-  const desc  = document.getElementById("upDesc").value.trim();
-  const file  = document.getElementById("upFile").files[0];
-
-  if(!title){ showToast("Title लिहा"); return; }
-  if(!file){ showToast("Video निवडा"); return; }
-  if(!file.type.startsWith("video/")){ showToast("फक्त video file चालेल"); return; }
-  if(file.size > MAX_MB*1024*1024){ showToast("Video "+MAX_MB+"MB पेक्षा लहान हवा"); return; }
-
-  const btn = document.getElementById("upSubmit");
-  btn.disabled = true;
-  btn.textContent = "Uploading...";
-
-  try{
-    const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
-    const path = `${currentUser.id}/${Date.now()}.${ext}`;
-
-    const { error:upErr } = await supabaseClient.storage
-      .from(BUCKET)
-      .upload(path, file, { contentType:file.type, upsert:false });
-    if(upErr) throw upErr;
-
-    const { data:pub } = supabaseClient.storage.from(BUCKET).getPublicUrl(path);
-
-    const { error:insErr } = await supabaseClient.from("Videos").insert({
-      title: title,
-      description: desc,
-      video_url: pub.publicUrl,
-      username: currentName,
-      user_id: currentUser.id
+        if (
+            currentUser &&
+            row.user_id === currentUser.id
+        ) {
+            myLikes.add(videoId);
+        }
     });
-    if(insErr) throw insErr;
-
-    closeUpload();
-    showToast("✅ Video post झाला!");
-    await loadVideos();
-
-  }catch(err){
-    console.error(err);
-    showToast("Post failed: " + (err.message || "error"));
-    btn.disabled = false;
-    btn.textContent = "Post";
-  }
 }
 
-/* DELETE */
-async function deleteVideo(id){
-  const video = videos.find(v => String(v.id) === String(id));
-  if(!video || !currentUser) return;
-  if(!confirm("हा video delete करायचा?")) return;
-
-  const { error } = await supabaseClient
-    .from("Videos").delete()
-    .eq("id", video.id)
-    .eq("user_id", currentUser.id);
-
-  if(error){
-    console.error(error);
-    showToast("Delete करता आला नाही");
-    return;
-  }
-
-  // remove file from storage (best effort)
-  try{
-    const marker = `/${BUCKET}/`;
-    const idx = video.video_url.indexOf(marker);
-    if(idx > -1){
-      const p = decodeURIComponent(video.video_url.substring(idx + marker.length).split("?")[0]);
-      await supabaseClient.storage.from(BUCKET).remove([p]);
+async function toggleLike(id) {
+    if (id === undefined || id === null) {
+        return;
     }
-  }catch(e){}
 
-  // clean up likes/comments of this video (best effort)
-  try{ await supabaseClient.from("VideoLikes").delete().eq("video_id", String(video.id)); }catch(e){}
-  try{ await supabaseClient.from("VideoComments").delete().eq("video_id", String(video.id)); }catch(e){}
+    id = String(id);
 
-  savedSet.delete(String(video.id));
-  lsSet("gs_saved_videos", Array.from(savedSet));
+    if (!currentUser) {
+        showToast("Like करण्यासाठी Login करा");
+        return;
+    }
 
-  showToast("🗑 Video delete झाला");
-  loadVideos();
+    if (!likesReady) {
+        showToast("Likes table अजून तयार नाही (SQL चालवा)");
+        return;
+    }
+
+    const liked = myLikes.has(id);
+
+    if (liked) {
+        myLikes.delete(id);
+        likeCount[id] = Math.max(
+            0,
+            (likeCount[id] || 1) - 1
+        );
+    } else {
+        myLikes.add(id);
+        likeCount[id] = (likeCount[id] || 0) + 1;
+    }
+
+    refreshActionUI(id);
+
+    let error;
+
+    if (liked) {
+        ({ error } = await supabaseClient
+            .from("VideoLikes")
+            .delete()
+            .eq("video_id", id)
+            .eq("user_id", currentUser.id));
+
+    } else {
+        ({ error } = await supabaseClient
+            .from("VideoLikes")
+            .insert({
+                video_id: id,
+                user_id: currentUser.id
+            }));
+    }
+
+    if (error) {
+        console.error(error);
+
+        if (liked) {
+            myLikes.add(id);
+            likeCount[id] = (likeCount[id] || 0) + 1;
+
+        } else {
+            myLikes.delete(id);
+            likeCount[id] = Math.max(
+                0,
+                (likeCount[id] || 1) - 1
+            );
+        }
+
+        refreshActionUI(id);
+        showToast("Like बदलता आला नाही");
+    }
 }
 
-/* PLAYER */
-function openPlayer(id, scrollToComments){
-  const video = videos.find(v => String(v.id) === String(id));
-  if(!video) return;
-  currentVideo = video;
+/* COMMENTS COUNT */
 
-  document.getElementById("playerTitle").textContent = video.title;
-  document.getElementById("playerSmallTitle").textContent = video.title;
-  document.getElementById("playerUser").textContent = "👤 " + (video.username || "GyanSetu User");
-  document.getElementById("playerDescription").textContent = video.description || "";
+async function loadCommentCounts() {
+    commentCount = {};
 
-  const main = document.getElementById("mainVideo");
-  main.src = video.video_url;
-  const sp = parseFloat(document.getElementById("speedSel").value) || 1;
-  main.playbackRate = sp;
-  main.play().catch(()=>{});
+    const { data, error } = await supabaseClient
+        .from("VideoComments")
+        .select("video_id");
 
-  document.getElementById("playerModal").classList.add("show");
-  document.body.style.overflow = "hidden";
-  renderRelated(video.id);
-  refreshActionUI(video.id);
-  loadComments(video.id);
+    if (error) {
+        commentsReady = false;
+        console.warn("VideoComments:", error.message);
+        return;
+    }
 
-  try{ history.replaceState(null, "", "?v=" + encodeURIComponent(video.id)); }catch(e){}
+    commentsReady = true;
 
-  if(scrollToComments){
-    setTimeout(()=>{
-      const c = document.querySelector(".comments");
-      if(c) document.getElementById("playerModal").scrollTo({ top: c.offsetTop - 60, behavior:"smooth" });
-    }, 250);
-  }
+    (data || []).forEach(row => {
+        const videoId = String(row.video_id);
+
+        commentCount[videoId] =
+            (commentCount[videoId] || 0) + 1;
+    });
 }
 
-function closePlayer(){
-  const main = document.getElementById("mainVideo");
-  main.pause();
-  main.removeAttribute("src");
-  main.load();
-  document.getElementById("playerModal").classList.remove("show");
-  document.body.style.overflow = "";
-  currentVideo = null;
-  try{ history.replaceState(null, "", location.pathname); }catch(e){}
+/* LOAD VIDEO COMMENTS */
+
+async function loadComments(videoId) {
+    const list = document.getElementById("cList");
+
+    if (!commentsReady) {
+        list.innerHTML =
+            `<div class="c-empty">
+                Comments सुरू करण्यासाठी SQL चालवा.
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML =
+        `<div class="c-empty">Loading...</div>`;
+
+    const { data, error } = await supabaseClient
+        .from("VideoComments")
+        .select("*")
+        .eq("video_id", String(videoId))
+        .order("created_at", { ascending: true });
+
+    if (
+        !currentVideo ||
+        String(currentVideo.id) !== String(videoId)
+    ) {
+        return;
+    }
+
+    if (error) {
+        console.error(error);
+
+        list.innerHTML =
+            `<div class="c-empty">
+                Comments load झाले नाहीत.
+            </div>`;
+
+        return;
+    }
+
+    const comments = data || [];
+
+    commentCount[String(videoId)] = comments.length;
+
+    document.getElementById("cCount").textContent =
+        "(" + comments.length + ")";
+
+    refreshActionUI(videoId);
+
+    if (!comments.length) {
+        list.innerHTML =
+            `<div class="c-empty">
+                अजून comments नाहीत. पहिला comment तुमचा!
+            </div>`;
+
+        return;
+    }
+
+    list.innerHTML = comments.map(comment => {
+        const mine =
+            currentUser &&
+            comment.user_id === currentUser.id;
+
+        return `
+            <div class="c-item">
+
+                <div class="c-head">
+                    <span>
+                        👤 ${escapeHtml(comment.username || "GyanSetu User")}
+                        <small>${formatDate(comment.created_at)}</small>
+                    </span>
+
+                    ${
+                        mine
+                            ? `<button
+                                class="c-del"
+                                onclick="deleteComment('${escapeAttr(comment.id)}')"
+                            >Delete</button>`
+                            : ""
+                    }
+                </div>
+
+                <div class="c-text">
+                    ${escapeHtml(comment.text)}
+                </div>
+
+            </div>
+        `;
+    }).join("");
 }
 
-/* RELATED */
-function renderRelated(currentId){
-  const box = document.getElementById("related");
-  box.innerHTML = "";
-  videos.filter(v => String(v.id) !== String(currentId)).slice(0,8).forEach(video=>{
+/* SUBMIT COMMENT */
+
+async function submitComment() {
+    if (!currentVideo) {
+        return;
+    }
+
+    if (!currentUser) {
+        showToast("Comment साठी Login करा");
+        return;
+    }
+
+    if (!commentsReady) {
+        showToast("Comments table अजून तयार नाही (SQL चालवा)");
+        return;
+    }
+
+    const input = document.getElementById("cInput");
+    const text = input.value.trim();
+
+    if (!text) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("VideoComments")
+        .insert({
+            video_id: String(currentVideo.id),
+            user_id: currentUser.id,
+            username: currentName,
+            text: text
+        });
+
+    if (error) {
+        console.error(error);
+        showToast("Comment पाठवता आला नाही");
+        return;
+    }
+
+    input.value = "";
+
+    await loadComments(currentVideo.id);
+}
+
+/* DELETE COMMENT */
+
+async function deleteComment(commentId) {
+    if (!currentUser || !currentVideo) {
+        return;
+    }
+
+    if (!confirm("हा comment delete करायचा?")) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("VideoComments")
+        .delete()
+        .eq("id", commentId)
+        .eq("user_id", currentUser.id);
+
+    if (error) {
+        console.error(error);
+        showToast("Delete करता आला नाही");
+        return;
+    }
+
+    await loadComments(currentVideo.id);
+}
+
+/* SORT AND FILTER */
+
+function setSort(mode) {
+    sortMode = mode;
+
+    document.querySelectorAll(".chip").forEach(chip => {
+        chip.classList.toggle(
+            "active",
+            chip.dataset.sort === mode
+        );
+    });
+
+    searchVideos();
+}
+
+/* SAVE / BOOKMARK */
+
+function loadSaved() {
+    const saved = lsGet("gs_saved_videos", []);
+
+    savedSet = new Set(
+        Array.isArray(saved) ? saved.map(String) : []
+    );
+}
+
+function toggleSave(id) {
+    if (id === undefined || id === null) {
+        return;
+    }
+
+    id = String(id);
+
+    if (savedSet.has(id)) {
+        savedSet.delete(id);
+        showToast("Saved मधून काढला");
+
+    } else {
+        savedSet.add(id);
+        showToast("🔖 Video save झाला");
+    }
+
+    lsSet("gs_saved_videos", Array.from(savedSet));
+
+    refreshActionUI(id);
+
+    if (sortMode === "saved") {
+        searchVideos();
+    }
+}
+
+/* PLAYER SPEED */
+
+function setSpeed(value) {
+    document.getElementById("mainVideo").playbackRate =
+        parseFloat(value) || 1;
+
+    lsSet("gs_speed", value);
+}
+
+/* AUTOPLAY NEXT SETTING */
+
+function saveAutoNext() {
+    lsSet(
+        "gs_autonext",
+        document.getElementById("autoNext").checked
+    );
+}
+
+/* PLAY NEXT VIDEO */
+
+function playNext() {
+    if (
+        !currentVideo ||
+        !document.getElementById("autoNext").checked
+    ) {
+        return;
+    }
+
+    const list = getVisibleList();
+
+    const index = list.findIndex(
+        video => String(video.id) === String(currentVideo.id)
+    );
+
+    const next = index > -1 ? list[index + 1] : null;
+
+    if (next) {
+        openPlayer(next.id);
+    }
+}
+
+/* COPY / SHARE LINK */
+
+async function copyLink() {
+    if (!currentVideo) {
+        return;
+    }
+
+    const url =
+        location.origin +
+        location.pathname +
+        "?v=" +
+        encodeURIComponent(currentVideo.id);
+
+    try {
+        if (navigator.share) {
+            await navigator.share({
+                title: currentVideo.title,
+                url: url
+            });
+
+            return;
+        }
+    } catch (error) {
+        if (error?.name === "AbortError") {
+            return;
+        }
+    }
+
+    try {
+        await navigator.clipboard.writeText(url);
+        showToast("✅ Link copy झाली");
+
+    } catch (error) {
+        prompt("Link copy करा:", url);
+    }
+}
+
+/* REFRESH ACTION BUTTONS */
+
+function refreshActionUI(id) {
+    id = String(id);
+
+    const liked = myLikes.has(id);
+    const saved = savedSet.has(id);
+    const likes = likeCount[id] || 0;
+    const comments = commentCount[id] || 0;
+
+    document.querySelectorAll("[data-like]").forEach(button => {
+        if (button.dataset.like !== id) {
+            return;
+        }
+
+        button.classList.toggle("on", liked);
+
+        button.textContent =
+            (liked ? "❤️ " : "🤍 ") + likes;
+    });
+
+    document.querySelectorAll("[data-save]").forEach(button => {
+        if (button.dataset.save !== id) {
+            return;
+        }
+
+        button.classList.toggle("on", saved);
+
+        button.textContent =
+            saved ? "🔖 Saved" : "🔖 Save";
+    });
+
+    document.querySelectorAll("[data-cmt]").forEach(button => {
+        if (button.dataset.cmt !== id) {
+            return;
+        }
+
+        button.textContent = "💬 " + comments;
+    });
+
+    if (
+        currentVideo &&
+        String(currentVideo.id) === id
+    ) {
+        const likeButton = document.getElementById("pLike");
+
+        likeButton.classList.toggle("on", liked);
+
+        likeButton.textContent =
+            (liked ? "❤️ " : "🤍 ") + likes;
+
+        const saveButton = document.getElementById("pSave");
+
+        saveButton.classList.toggle("on", saved);
+
+        saveButton.textContent =
+            saved ? "🔖 Saved" : "🔖 Save";
+
+        document.getElementById("cCount").textContent =
+            "(" + comments + ")";
+    }
+}
+
+/* VIDEO CARD HTML */
+
+function cardHtml(video, full) {
+    const mine =
+        currentUser &&
+        video.user_id &&
+        video.user_id === currentUser.id;
+
+    const id = escapeAttr(video.id);
+    const liked = myLikes.has(String(video.id));
+    const saved = savedSet.has(String(video.id));
+
+    return `
+        <div
+            class="thumb"
+            onclick="openPlayer('${id}')"
+        >
+            <video
+                src="${escapeAttr(video.video_url)}#t=0.5"
+                preload="metadata"
+                muted
+                playsinline
+            ></video>
+
+            <div class="play">▶</div>
+        </div>
+
+        <div class="card-content">
+
+            <div class="card-title">
+                ${escapeHtml(video.title)}
+            </div>
+
+            ${
+                full
+                    ? `<div class="card-description">
+                        ${escapeHtml(video.description || "")}
+                    </div>`
+                    : ""
+            }
+
+            ${
+                full
+                    ? `
+                    <div class="card-actions">
+
+                        <button
+                            class="mini-btn ${liked ? "on" : ""}"
+                            data-like="${id}"
+                            onclick="toggleLike('${id}')"
+                        >
+                            ${liked ? "❤️" : "🤍"}
+                            ${likeCount[String(video.id)] || 0}
+                        </button>
+
+                        <button
+                            class="mini-btn"
+                            data-cmt="${id}"
+                            onclick="openPlayer('${id}', true)"
+                        >
+                            💬 ${commentCount[String(video.id)] || 0}
+                        </button>
+
+                        <button
+                            class="mini-btn ${saved ? "on" : ""}"
+                            data-save="${id}"
+                            onclick="toggleSave('${id}')"
+                        >
+                            ${saved ? "🔖 Saved" : "🔖 Save"}
+                        </button>
+
+                    </div>
+                    `
+                    : ""
+            }
+
+            <div class="card-meta">
+
+                <span>
+                    👤 ${escapeHtml(video.username || "GyanSetu User")}
+                    ${full ? " • " + formatDate(video.created_at) : ""}
+                </span>
+
+                ${
+                    mine && full
+                        ? `<button
+                            class="del-btn"
+                            onclick="deleteVideo('${id}')"
+                        >🗑 Delete</button>`
+                        : ""
+                }
+
+            </div>
+
+        </div>
+    `;
+}
+
+/* RENDER VIDEO FEED */
+
+function renderVideos(list) {
+    const feed = document.getElementById("feed");
+
+    feed.innerHTML = "";
+
+    if (!list.length) {
+        let message =
+            `🎬 अजून videos post झालेले नाहीत.<br><br>
+             वर "＋ Post" दाबून पहिला video टाका!`;
+
+        if (sortMode === "saved") {
+            message = "🔖 अजून कोणताही video save केलेला नाही.";
+
+        } else if (sortMode === "mine") {
+            message = "🙋 तुम्ही अजून कोणताही video post केलेला नाही.";
+
+        } else if (
+            document.getElementById("searchInput").value.trim()
+        ) {
+            message = "🔍 काहीही सापडले नाही.";
+        }
+
+        feed.innerHTML = `
+            <div class="empty">${message}</div>
+        `;
+
+        return;
+    }
+
+    list.forEach(video => {
+        const card = document.createElement("div");
+
+        card.className = "video-card";
+        card.innerHTML = cardHtml(video, true);
+
+        feed.appendChild(card);
+    });
+}
+
+/* SEARCH AND SORT VIDEOS */
+
+function getVisibleList() {
+    const query = document
+        .getElementById("searchInput")
+        .value.trim()
+        .toLowerCase();
+
+    let list = videos.slice();
+
+    if (query) {
+        list = list.filter(video =>
+            String(video.title || "").toLowerCase().includes(query) ||
+            String(video.description || "").toLowerCase().includes(query) ||
+            String(video.username || "").toLowerCase().includes(query)
+        );
+    }
+
+    if (sortMode === "saved") {
+        list = list.filter(
+            video => savedSet.has(String(video.id))
+        );
+    }
+
+    if (sortMode === "mine") {
+        list = list.filter(
+            video => currentUser && video.user_id === currentUser.id
+        );
+    }
+
+    const timestamp = video =>
+        new Date(video.created_at || 0).getTime();
+
+    if (sortMode === "oldest") {
+        list.sort((a, b) => timestamp(a) - timestamp(b));
+
+    } else if (sortMode === "liked") {
+        list.sort((a, b) =>
+            (likeCount[String(b.id)] || 0) -
+            (likeCount[String(a.id)] || 0) ||
+            timestamp(b) - timestamp(a)
+        );
+
+    } else {
+        list.sort((a, b) => timestamp(b) - timestamp(a));
+    }
+
+    return list;
+}
+
+function searchVideos() {
+    renderVideos(getVisibleList());
+}
+
+/* OPEN UPLOAD FORM */
+
+function openUpload() {
+    if (!currentUser) {
+        showToast("Post करण्यासाठी Login करा");
+        return;
+    }
+
+    document.getElementById("uploadModal").classList.add("show");
+}
+
+/* CLOSE UPLOAD FORM */
+
+function closeUpload() {
+    document.getElementById("uploadModal").classList.remove("show");
+
+    document.getElementById("upTitle").value = "";
+    document.getElementById("upDesc").value = "";
+    document.getElementById("upFile").value = "";
+
+    const preview = document.getElementById("upPreview");
+
+    preview.pause();
+    preview.removeAttribute("src");
+    preview.load();
+    preview.style.display = "none";
+
+    const button = document.getElementById("upSubmit");
+
+    button.disabled = false;
+    button.textContent = "Post";
+}
+
+/* PREVIEW SELECTED VIDEO */
+
+function previewFile() {
+    const file = document.getElementById("upFile").files[0];
+    const preview = document.getElementById("upPreview");
+
+    if (!file) {
+        preview.style.display = "none";
+        return;
+    }
+
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+}
+
+/* UPLOAD VIDEO */
+
+async function submitVideo() {
+    if (!currentUser) {
+        showToast("Login required");
+        return;
+    }
+
+    const title = document.getElementById("upTitle").value.trim();
+    const description = document.getElementById("upDesc").value.trim();
+    const file = document.getElementById("upFile").files[0];
+
+    if (!title) {
+        showToast("Title लिहा");
+        return;
+    }
+
+    if (!file) {
+        showToast("Video निवडा");
+        return;
+    }
+
+    if (!file.type.startsWith("video/")) {
+        showToast("फक्त video file चालेल");
+        return;
+    }
+
+    if (file.size > MAX_MB * 1024 * 1024) {
+        showToast("Video " + MAX_MB + "MB पेक्षा लहान हवा");
+        return;
+    }
+
+    const button = document.getElementById("upSubmit");
+
+    button.disabled = true;
+    button.textContent = "Uploading...";
+
+    try {
+        const extension =
+            (file.name.split(".").pop() || "mp4").toLowerCase();
+
+        const path =
+            `${currentUser.id}/${Date.now()}.${extension}`;
+
+        const { error: uploadError } = await supabaseClient
+            .storage
+            .from(BUCKET)
+            .upload(path, file, {
+                contentType: file.type,
+                upsert: false
+            });
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        const { data: publicData } = supabaseClient
+            .storage
+            .from(BUCKET)
+            .getPublicUrl(path);
+
+        const { error: insertError } = await supabaseClient
+            .from("Videos")
+            .insert({
+                title: title,
+                description: description,
+                video_url: publicData.publicUrl,
+                username: currentName,
+                user_id: currentUser.id
+            });
+
+        if (insertError) {
+            throw insertError;
+        }
+
+        closeUpload();
+
+        showToast("✅ Video post झाला!");
+
+        await loadVideos();
+
+    } catch (error) {
+        console.error(error);
+
+        showToast(
+            "Post failed: " + (error.message || "error")
+        );
+
+        button.disabled = false;
+        button.textContent = "Post";
+    }
+}
+
+/* DELETE VIDEO */
+
+async function deleteVideo(id) {
+    const video = videos.find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!video || !currentUser) {
+        return;
+    }
+
+    if (!confirm("हा video delete करायचा?")) {
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("Videos")
+        .delete()
+        .eq("id", video.id)
+        .eq("user_id", currentUser.id);
+
+    if (error) {
+        console.error(error);
+        showToast("Delete करता आला नाही");
+        return;
+    }
+
+    try {
+        const marker = `/${BUCKET}/`;
+        const index = video.video_url.indexOf(marker);
+
+        if (index > -1) {
+            const path = decodeURIComponent(
+                video.video_url
+                    .substring(index + marker.length)
+                    .split("?")[0]
+            );
+
+            await supabaseClient
+                .storage
+                .from(BUCKET)
+                .remove([path]);
+        }
+
+    } catch (error) {
+        console.warn("Storage cleanup failed:", error);
+    }
+
+    try {
+        await supabaseClient
+            .from("VideoLikes")
+            .delete()
+            .eq("video_id", String(video.id));
+
+    } catch (error) {
+        console.warn(error);
+    }
+
+    try {
+        await supabaseClient
+            .from("VideoComments")
+            .delete()
+            .eq("video_id", String(video.id));
+
+    } catch (error) {
+        console.warn(error);
+    }
+
+    savedSet.delete(String(video.id));
+
+    lsSet(
+        "gs_saved_videos",
+        Array.from(savedSet)
+    );
+
+    showToast("🗑 Video delete झाला");
+
+    await loadVideos();
+}
+
+/* OPEN VIDEO PLAYER */
+
+function openPlayer(id, scrollToComments) {
+    const video = videos.find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!video) {
+        return;
+    }
+
+    currentVideo = video;
+
+    document.getElementById("playerTitle").textContent =
+        video.title || "";
+
+    document.getElementById("playerSmallTitle").textContent =
+        video.title || "";
+
+    document.getElementById("playerUser").textContent =
+        "👤 " + (video.username || "GyanSetu User");
+
+    document.getElementById("playerDescription").textContent =
+        video.description || "";
+
+    const mainVideo = document.getElementById("mainVideo");
+
+    mainVideo.src = video.video_url;
+
+    mainVideo.playbackRate =
+        parseFloat(document.getElementById("speedSel").value) || 1;
+
+    document.getElementById("playerModal").classList.add("show");
+
+    document.body.style.overflow = "hidden";
+
+    renderRelated(video.id);
+    refreshActionUI(video.id);
+
+    document.getElementById("cInput").value = "";
+
+    loadComments(video.id);
+
+    mainVideo.play().catch(() => {});
+
+    try {
+        history.replaceState(
+            null,
+            "",
+            "?v=" + encodeURIComponent(video.id)
+        );
+    } catch (error) {
+        console.warn(error);
+    }
+
+    if (scrollToComments) {
+        setTimeout(() => {
+            const comments = document.querySelector(".comments");
+
+            if (comments) {
+                document.getElementById("playerModal").scrollTo({
+                    top: comments.offsetTop - 60,
+                    behavior: "smooth"
+                });
+            }
+        }, 250);
+    }
+}
+
+/* CLOSE VIDEO PLAYER */
+
+function closePlayer() {
+    const mainVideo = document.getElementById("mainVideo");
+
+    mainVideo.pause();
+    mainVideo.removeAttribute("src");
+    mainVideo.load();
+
+    document.getElementById("playerModal").classList.remove("show");
+
+    document.body.style.overflow = "";
+
+    currentVideo = null;
+
+    try {
+        history.replaceState(null, "", location.pathname);
+    } catch (error) {
+        console.warn(error);
+    }
+}
+
+/* RELATED VIDEOS */
+
+function renderRelated(currentId) {
+    const related = document.getElementById("related");
+
+    related.innerHTML = "";
+
+    videos
+        .filter(video => String(video.id) !== String(currentId))
+        .slice(0, 8)
+        .forEach(video => {
+            const card = document.createElement("div");
+
+            card.className = "video-card";
+            card.innerHTML = cardHtml(video, false);
+
+            related.appendChild(card);
+        });
+
+    document.getElementById("playerModal").scrollTo({
+        top: 0
+    });
+}
+
+/* SHARE VIDEO WITH REGISTERED USERS */
+
+async function shareCurrentVideo() {
+    if (!currentVideo) {
+        return;
+    }
+
+    if (!currentUser) {
+        showToast("Login required");
+        return;
+    }
+
+    const { data: profiles, error } = await supabaseClient
+        .from("Profiles")
+        .select("id")
+        .neq("id", currentUser.id);
+
+    if (error) {
+        console.error(error);
+        showToast("Users load झाले नाहीत.");
+        return;
+    }
+
+    if (!profiles || !profiles.length) {
+        showToast("Share करण्यासाठी दुसरे registered users नाहीत.");
+        return;
+    }
+
+    const message =
+        "VIDEO:" + currentVideo.id + "|" + currentVideo.title;
+
+    const rows = profiles.map(profile => ({
+        sender_id: currentUser.id,
+        receiver_id: profile.id,
+        message: message,
+        is_read: false
+    }));
+
+    const { error: sendError } = await supabaseClient
+        .from("Messages")
+        .insert(rows);
+
+    if (sendError) {
+        console.error(sendError);
+        showToast("Video share करता आला नाही.");
+        return;
+    }
+
+    showToast("✅ Video सर्व registered usersना share केला.");
+}
+
+/* HTML ESCAPING */
+
+function escapeHtml(value) {
     const div = document.createElement("div");
-    div.className = "video-card";
-    div.innerHTML = cardHtml(video, false);
-    box.appendChild(div);
-  });
-  document.getElementById("playerModal").scrollTo({ top:0 });
+
+    div.textContent = value ?? "";
+
+    return div.innerHTML;
 }
 
-/* SHARE (original: send to all registered users in chat) */
-async function shareCurrentVideo(){
-  if(!currentVideo) return;
-  if(!currentUser){ showToast("Login required"); return; }
-
-  const { data:profiles, error } = await supabaseClient
-    .from("Profiles").select("id").neq("id", currentUser.id);
-
-  if(error){
-    console.error(error);
-    showToast("Users load झाले नाहीत.");
-    return;
-  }
-  if(!profiles || !profiles.length){
-    showToast("Share करण्यासाठी दुसरे registered users नाहीत.");
-    return;
-  }
-
-  const message = "VIDEO:" + currentVideo.id + "|" + currentVideo.title;
-  const rows = profiles.map(p => ({
-    sender_id: currentUser.id,
-    receiver_id: p.id,
-    message: message,
-    is_read: false
-  }));
-
-  const { error:sendError } = await supabaseClient.from("Messages").insert(rows);
-  if(sendError){
-    console.error(sendError);
-    showToast("Video share करता आला नाही.");
-    return;
-  }
-  showToast("✅ Video सर्व registered usersना share केला.");
+function escapeAttr(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 }
 
-/* HELPERS */
-function escapeHtml(text){
-  const div = document.createElement("div");
-  div.textContent = text ?? "";
-  return div.innerHTML;
+/* DATE FORMAT */
+
+function formatDate(value) {
+    if (!value) {
+        return "";
+    }
+
+    return new Date(value).toLocaleDateString([], {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
 }
 
-function escapeAttr(text){
-  return String(text ?? "")
-    .replace(/&/g,"&amp;").replace(/"/g,"&quot;")
-    .replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
+/* KEYBOARD SHORTCUTS */
 
-function formatDate(value){
-  if(!value) return "";
-  return new Date(value).toLocaleDateString([], { day:"numeric", month:"short", year:"numeric" });
-}
+document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") {
+        return;
+    }
 
-/* KEYBOARD: Esc closes player / upload */
-document.addEventListener("keydown", e=>{
-  if(e.key !== "Escape") return;
-  if(document.getElementById("playerModal").classList.contains("show")) closePlayer();
-  else if(document.getElementById("uploadModal").classList.contains("show")) closeUpload();
+    if (
+        document.getElementById("playerModal")
+            .classList.contains("show")
+    ) {
+        closePlayer();
+
+    } else if (
+        document.getElementById("uploadModal")
+            .classList.contains("show")
+    ) {
+        closeUpload();
+    }
 });
 
-/* AUTOPLAY NEXT when video ends */
-document.getElementById("mainVideo").addEventListener("ended", playNext);
+/* AUTOPLAY NEXT VIDEO */
 
-/* START */
-async function start(){
-  // restore saved settings
-  loadSaved();
-  const sp = lsGet("gs_speed", "1");
-  document.getElementById("speedSel").value = sp;
-  document.getElementById("autoNext").checked = lsGet("gs_autonext", true);
+document.getElementById("mainVideo").addEventListener(
+    "ended",
+    playNext
+);
 
-  await getUser();
-  await loadVideos();
+/* INITIALIZE PAGE */
 
-  // open a shared link like videos.html?v=123
-  const vid = new URLSearchParams(location.search).get("v");
-  if(vid) openPlayer(vid);
+async function start() {
+    loadSaved();
+
+    const speed = lsGet("gs_speed", "1");
+
+    document.getElementById("speedSel").value = speed;
+
+    document.getElementById("autoNext").checked =
+        lsGet("gs_autonext", true);
+
+    await getUser();
+
+    await loadVideos();
+
+    const videoId =
+        new URLSearchParams(location.search).get("v");
+
+    if (videoId) {
+        openPlayer(videoId);
+    }
 }
+
 start();
 </script>
+
 </body>
 </html>
