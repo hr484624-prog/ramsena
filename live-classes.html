@@ -1093,6 +1093,293 @@ main{
 
 }
 
+/* =====================================================
+   ONE-SCREEN LIVE LAYOUT (SIR + STUDENT)
+   Class चालू असताना page scroll करावा लागत नाही.
+   Video मोठा, खाली buttons, Chat/Feedback/Notes
+   bottom sheet मध्ये उघडतात.
+===================================================== */
+
+#sirOverlay .popup,
+#studentOverlay .popup{
+  height:100vh;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
+
+#sirOverlay .popup,
+#studentOverlay .popup{
+  padding-bottom:calc(14px + env(safe-area-inset-bottom));
+}
+
+.ls-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex:0 0 auto;
+}
+
+.ls-head h2{
+  margin:0;
+  font-size:18px;
+}
+
+.ls-head .close-popup{
+  float:none;
+  flex-shrink:0;
+}
+
+#sirSetup,
+#studentJoinArea{
+  flex:0 0 auto;
+}
+
+.live-screen{
+  flex:1 1 auto;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  position:relative;
+  margin-top:8px;
+  overflow:hidden;
+}
+
+.live-screen > *{
+  flex:0 0 auto;
+}
+
+.live-screen > .video-wrap,
+.live-screen > .student-live-player{
+  flex:1 1 auto;
+  min-height:0;
+  aspect-ratio:auto;
+  margin-top:0;
+}
+
+#sirVideoWrap video{
+  object-fit:contain;
+}
+
+.live-screen > .status{
+  margin-top:0;
+  padding:7px 10px;
+  font-size:13px;
+  line-height:1.4;
+}
+
+/* compact channel box */
+
+.channel-box.cb-compact{
+  margin:0;
+  padding:9px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.cb-compact .cb-info{
+  min-width:0;
+}
+
+.cb-compact .channel-name{
+  font-size:16px;
+  margin-top:0;
+}
+
+.cb-compact .cb-id{
+  margin-top:2px;
+  font-size:13px;
+}
+
+.cb-compact .channel-value{
+  display:inline;
+  font-size:14px;
+  margin:0;
+  letter-spacing:.5px;
+}
+
+.cb-compact .cb-btns{
+  display:flex;
+  gap:6px;
+  flex-shrink:0;
+}
+
+.cb-compact .copy-btn,
+.cb-compact .edit-btn{
+  margin:0;
+  padding:8px 10px;
+  font-size:13px;
+}
+
+/* badges row */
+
+.ls-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
+}
+
+.ls-badges > *{
+  margin:0 !important;
+  padding:6px 10px;
+  font-size:12px;
+}
+
+.ls-badges .primary-btn{
+  width:auto;
+  border-radius:20px;
+}
+
+.ls-badges .student-player-title{
+  padding:0;
+  font-size:13px;
+}
+
+/* actions row */
+
+.ls-actions{
+  display:flex;
+  gap:8px;
+}
+
+.ls-actions .primary-btn,
+.ls-actions .end-btn{
+  margin:0;
+  padding:12px;
+  flex:1;
+}
+
+/* student feedback row */
+
+.live-screen .feedback-row{
+  margin-top:0;
+}
+
+.live-screen .fb-btn{
+  padding:10px 4px;
+}
+
+/* bottom tabs */
+
+.ls-tabs{
+  display:grid;
+  gap:8px;
+  grid-template-columns:repeat(var(--n,2),1fr);
+}
+
+.tab-btn{
+  position:relative;
+  border:1px solid #30394a;
+  background:#151c28;
+  color:#fff;
+  border-radius:12px;
+  padding:11px 4px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.tab-btn.leave{
+  background:#e91e63;
+  border-color:#e91e63;
+}
+
+.tab-btn .dot{
+  position:absolute;
+  top:6px;
+  right:8px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#e91e63;
+}
+
+.tab-btn.leave .dot{
+  background:#fff;
+}
+
+/* bottom sheets */
+
+.sheet{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:62%;
+  background:#0d111a;
+  border:1px solid #283244;
+  border-radius:16px 16px 0 0;
+  padding:12px;
+  display:none;
+  flex-direction:column;
+  z-index:40;
+  box-shadow:0 -10px 35px rgba(0,0,0,.6);
+}
+
+.sheet.open{
+  display:flex;
+}
+
+.sheet-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+  flex:0 0 auto;
+}
+
+.sheet-head h3{
+  font-size:16px;
+}
+
+.sheet-close{
+  border:0;
+  background:#202734;
+  color:#fff;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  font-size:18px;
+}
+
+.sheet .status{
+  margin-top:0;
+  flex:0 0 auto;
+}
+
+.sheet .chat-messages{
+  height:auto;
+  flex:1 1 auto;
+  min-height:0;
+}
+
+.sheet .chat-input-row{
+  flex:0 0 auto;
+}
+
+.sheet .student-list{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+}
+
+.sheet .notes-area{
+  flex:1 1 auto;
+  min-height:0;
+  resize:none;
+}
+
+.sheet .secondary-btn{
+  margin-top:8px;
+  padding:11px;
+  flex:0 0 auto;
+}
+
 </style>
 
 </head>
@@ -1188,9 +1475,13 @@ Student
 
 <div class="popup">
 
-<button class="close-popup" onclick="closeSirPopup()">×</button>
+<div class="ls-head">
 
 <h2>👨‍🏫 Sir Live Class</h2>
+
+<button class="close-popup" onclick="closeSirPopup()">×</button>
+
+</div>
 
 <!-- SETUP -->
 
@@ -1235,35 +1526,39 @@ Supabase मध्ये save केला जातो.
 </div>
 
 
-<!-- SIR LIVE -->
+<!-- SIR LIVE (ONE SCREEN) -->
 
-<div id="sirLiveArea" class="hidden">
+<div id="sirLiveArea" class="hidden live-screen">
 
-<div class="channel-box">
+<div class="channel-box cb-compact">
 
-<div class="channel-label">Channel Name</div>
+<div class="cb-info">
 
 <div id="sirChannelName" class="channel-name">
 GyanSetu Live Class
 </div>
 
-<div class="channel-label" style="margin-top:12px;">
-Sir / Channel ID
+<div class="cb-id">
+
+<span class="channel-label">Channel ID:</span>
+
+<span id="sirChannelId" class="channel-value">---</span>
+
 </div>
 
-<div id="sirChannelId" class="channel-value">---</div>
+</div>
 
-<button class="copy-btn" onclick="copyChannelId()">📋 Copy</button>
+<div class="cb-btns">
 
-<button class="edit-btn" onclick="openEditChannelPopup()">✏️ Edit</button>
+<button class="copy-btn" onclick="copyChannelId()">📋</button>
+
+<button class="edit-btn" onclick="openEditChannelPopup()">✏️</button>
+
+</div>
 
 </div>
 
 <div id="sirStatus" class="status">Channel तयार आहे.</div>
-
-<button id="startCameraBtn" class="primary-btn" onclick="startSirCamera()">
-▶️ Start Class
-</button>
 
 <div class="video-wrap" id="sirVideoWrap">
 
@@ -1275,19 +1570,52 @@ Sir / Channel ID
 
 </div>
 
+<div class="ls-badges">
+
 <span id="sirAudioBadge" class="audio-badge hidden">🎤 Sir Mic ON</span>
 
 <span id="sirTimerBadge" class="timer-badge hidden">⏱️ 00:00</span>
 
-<br>
-
 <span id="studentCountBadge" class="count-badge">Students: 0</span>
 
-<!-- Students feedback -->
+</div>
 
-<div class="card">
+<div class="ls-actions">
+
+<button id="startCameraBtn" class="primary-btn" onclick="startSirCamera()">
+▶️ Start Class
+</button>
+
+<button id="endSirClass" class="end-btn hidden" onclick="openEndConfirm()">
+⛔ End Live Class
+</button>
+
+</div>
+
+<div class="ls-tabs">
+
+<button class="tab-btn" onclick="toggleSheet('sirFeedbackSheet')">
+📊 Feedback
+</button>
+
+<button class="tab-btn" onclick="toggleSheet('sirChatSheet')">
+💬 Chat
+<span id="sirChatDot" class="dot hidden"></span>
+</button>
+
+</div>
+
+<!-- Students feedback sheet -->
+
+<div id="sirFeedbackSheet" class="sheet">
+
+<div class="sheet-head">
 
 <h3>📊 Students Feedback</h3>
+
+<button class="sheet-close" onclick="closeSheet('sirFeedbackSheet')">×</button>
+
+</div>
 
 <div id="feedbackSummary" class="status">
 ✅ समजलं: 0 • ❓ नाही समजलं: 0 • ✋ Hand: 0
@@ -1301,11 +1629,17 @@ Sir / Channel ID
 
 </div>
 
-<!-- Chat -->
+<!-- Chat sheet -->
 
-<div class="card">
+<div id="sirChatSheet" class="sheet">
+
+<div class="sheet-head">
 
 <h3>💬 Class Chat</h3>
+
+<button class="sheet-close" onclick="closeSheet('sirChatSheet')">×</button>
+
+</div>
 
 <div id="sirChatMessages" class="chat-messages"></div>
 
@@ -1323,10 +1657,6 @@ placeholder="Message लिहा...">
 </div>
 
 </div>
-
-<button id="endSirClass" class="end-btn hidden" onclick="openEndConfirm()">
-⛔ End Live Class
-</button>
 
 </div>
 
@@ -1373,9 +1703,13 @@ placeholder="Channel Name">
 
 <div class="popup">
 
-<button class="close-popup" onclick="closeStudentPopup()">×</button>
+<div class="ls-head">
 
 <h2>👨‍🎓 Student</h2>
+
+<button class="close-popup" onclick="closeStudentPopup()">×</button>
+
+</div>
 
 <div id="studentJoinArea">
 
@@ -1404,9 +1738,9 @@ placeholder="तुमचं नाव (Sir ला दिसेल)">
 </div>
 
 
-<!-- STUDENT LIVE -->
+<!-- STUDENT LIVE (ONE SCREEN) -->
 
-<div id="studentLiveArea" class="hidden">
+<div id="studentLiveArea" class="hidden live-screen">
 
 <div id="studentLiveStatus" class="status">
 Live Class connecting...
@@ -1422,6 +1756,8 @@ Live Class connecting...
 
 </div>
 
+<div class="ls-badges">
+
 <div class="student-player-title">🔴 GyanSetu Live Class</div>
 
 <span id="studentAudioBadge" class="audio-badge hidden">🔊 Sir Audio ON</span>
@@ -1431,6 +1767,8 @@ Live Class connecting...
 <button id="enableAudioBtn" class="primary-btn" onclick="enableStudentAudio()">
 🔊 Enable Sir Audio
 </button>
+
+</div>
 
 <!-- Hand / understanding -->
 
@@ -1444,11 +1782,34 @@ Live Class connecting...
 
 </div>
 
-<!-- Chat -->
+<div class="ls-tabs" style="--n:3">
 
-<div class="card">
+<button class="tab-btn" onclick="toggleSheet('studentChatSheet')">
+💬 Chat
+<span id="studentChatDot" class="dot hidden"></span>
+</button>
+
+<button class="tab-btn" onclick="toggleSheet('studentNotesSheet')">
+📝 Notes
+</button>
+
+<button class="tab-btn leave" onclick="leaveStudentClass()">
+🚪 Leave
+</button>
+
+</div>
+
+<!-- Chat sheet -->
+
+<div id="studentChatSheet" class="sheet">
+
+<div class="sheet-head">
 
 <h3>💬 Class Chat</h3>
+
+<button class="sheet-close" onclick="closeSheet('studentChatSheet')">×</button>
+
+</div>
 
 <div id="studentChatMessages" class="chat-messages"></div>
 
@@ -1467,11 +1828,17 @@ placeholder="Doubt / Message लिहा...">
 
 </div>
 
-<!-- Notes -->
+<!-- Notes sheet -->
 
-<div class="card">
+<div id="studentNotesSheet" class="sheet">
+
+<div class="sheet-head">
 
 <h3>📝 माझ्या Notes</h3>
+
+<button class="sheet-close" onclick="closeSheet('studentNotesSheet')">×</button>
+
+</div>
 
 <textarea
 id="studentNotes"
@@ -1483,8 +1850,6 @@ placeholder="Class मधले महत्त्वाचे मुद्द�
 </button>
 
 </div>
-
-<button class="end-btn" onclick="leaveStudentClass()">🚪 Leave Class</button>
 
 </div>
 
@@ -1711,6 +2076,79 @@ let toastTimer=null;
 
 function $(id){
   return document.getElementById(id);
+}
+
+
+/* =====================================================
+   BOTTOM SHEETS (ONE-SCREEN LAYOUT)
+===================================================== */
+
+function openSheet(id){
+
+  closeAllSheets();
+
+  const sheet=$(id);
+
+  if(!sheet){
+    return;
+  }
+
+  sheet.classList.add("open");
+
+  if(id==="sirChatSheet"){
+
+    $("sirChatDot").classList.add("hidden");
+
+    $("sirChatMessages").scrollTop=
+      $("sirChatMessages").scrollHeight;
+  }
+
+  if(id==="studentChatSheet"){
+
+    $("studentChatDot").classList.add("hidden");
+
+    $("studentChatMessages").scrollTop=
+      $("studentChatMessages").scrollHeight;
+  }
+}
+
+
+function closeSheet(id){
+
+  const sheet=$(id);
+
+  if(sheet){
+    sheet.classList.remove("open");
+  }
+}
+
+
+function toggleSheet(id){
+
+  const sheet=$(id);
+
+  if(!sheet){
+    return;
+  }
+
+  if(sheet.classList.contains("open")){
+
+    closeSheet(id);
+
+  }
+  else{
+
+    openSheet(id);
+  }
+}
+
+
+function closeAllSheets(){
+
+  document.querySelectorAll(".sheet").forEach(function(sheet){
+
+    sheet.classList.remove("open");
+  });
 }
 
 
@@ -2917,6 +3355,30 @@ function appendChat(containerId,message,mine){
   }
 
   container.scrollTop=container.scrollHeight;
+
+  /* Chat sheet बंद असेल तर tab वर लाल ठिपका दाखवा */
+
+  if(!mine){
+
+    const sheetId=
+      containerId==="sirChatMessages"
+      ? "sirChatSheet"
+      : "studentChatSheet";
+
+    const dotId=
+      containerId==="sirChatMessages"
+      ? "sirChatDot"
+      : "studentChatDot";
+
+    const sheet=$(sheetId);
+
+    const dot=$(dotId);
+
+    if(sheet && dot && !sheet.classList.contains("open")){
+
+      dot.classList.remove("hidden");
+    }
+  }
 }
 
 
@@ -3355,6 +3817,10 @@ async function endSirClass(showPopup=true){
   updateStudentUI();
 
   $("sirChatMessages").innerHTML="";
+
+  closeAllSheets();
+
+  $("sirChatDot").classList.add("hidden");
 
   stopSirMedia();
 
@@ -4317,6 +4783,10 @@ function stopStudentClass(message){
 
   $("studentNotes").value="";
 
+  closeAllSheets();
+
+  $("studentChatDot").classList.add("hidden");
+
   $("studentLiveBadge").classList.add("hidden");
 
   $("studentAudioBadge").classList.add("hidden");
@@ -5083,6 +5553,5 @@ document.addEventListener("DOMContentLoaded",async function(){
 });
 
 </script>
-
 </body>
 </html>
