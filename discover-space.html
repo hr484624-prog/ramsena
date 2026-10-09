@@ -646,6 +646,11 @@ async function deleteVideo(id){
   if(!video || !currentUser) return;
   if(!confirm("हा video delete करायचा?")) return;
 
+  // 1) first remove all likes/comments of this video (owner policy needs the Videos row to still exist)
+  try{ await supabaseClient.from("VideoLikes").delete().eq("video_id", String(video.id)); }catch(e){}
+  try{ await supabaseClient.from("VideoComments").delete().eq("video_id", String(video.id)); }catch(e){}
+
+  // 2) then delete the video itself
   const { error } = await supabaseClient
     .from("Videos").delete()
     .eq("id", video.id)
@@ -666,10 +671,6 @@ async function deleteVideo(id){
       await supabaseClient.storage.from(BUCKET).remove([p]);
     }
   }catch(e){}
-
-  // clean up likes/comments of this video (best effort)
-  try{ await supabaseClient.from("VideoLikes").delete().eq("video_id", String(video.id)); }catch(e){}
-  try{ await supabaseClient.from("VideoComments").delete().eq("video_id", String(video.id)); }catch(e){}
 
   savedSet.delete(String(video.id));
   lsSet("gs_saved_videos", Array.from(savedSet));
