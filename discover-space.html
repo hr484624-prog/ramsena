@@ -1,820 +1,5558 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Videos - GyanSetu</title>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>GyanSetu - Live Classes</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh;padding-bottom:75px}
-.header{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;gap:10px;padding:0 12px;background:rgba(5,5,9,.96);border-bottom:1px solid #252533}
-.back{width:40px;height:40px;border:0;border-radius:50%;background:#171722;color:#fff;font-size:25px}
-.logo{font-size:21px;font-weight:800;background:linear-gradient(90deg,#ff2bd6,#4d7cff);-webkit-background-clip:text;color:transparent;flex:1}
-.post-btn{border:0;border-radius:20px;padding:10px 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
-.search-box{padding:12px 12px 8px;background:#09090f;position:sticky;top:62px;z-index:90}
-.search{width:100%;height:45px;border:1px solid #29293a;border-radius:14px;outline:none;background:#15151e;color:#fff;padding:0 15px;font-size:15px}
-.search:focus{border-color:#ff2bd6}
 
-/* FEATURE 3: sort / filter chips */
-.chips{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:1px solid #2d2d40;background:#15151e;color:#bbb;border-radius:18px;padding:7px 14px;font-size:13px;cursor:pointer}
-.chip.active{background:linear-gradient(135deg,#ff28cf,#416cff);border-color:transparent;color:#fff;font-weight:bold}
+/* =====================================================
+   RESET
+===================================================== */
 
-.feed{max-width:650px;margin:auto;padding:10px}
-.video-card{background:#0e0e16;border:1px solid #222231;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 5px 25px rgba(0,0,0,.35)}
-.thumb{position:relative;width:100%;aspect-ratio:16/9;background:#111;cursor:pointer;overflow:hidden}
-.thumb video{width:100%;height:100%;object-fit:cover;pointer-events:none}
-.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,43,214,.9);display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 25px rgba(255,43,214,.4)}
-.card-content{padding:12px}
-.card-title{font-size:17px;font-weight:bold;margin-bottom:7px}
-.card-description{color:#aaa;font-size:13px;line-height:1.5}
-.card-meta{color:#777;font-size:11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.del-btn{border:0;background:#2a1520;color:#ff6b8a;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer}
-.empty,.loader{text-align:center;padding:60px 20px;color:#777}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
 
-/* FEATURE 1/2/4: card action row */
-.card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.mini-btn{border:1px solid #2d2d40;background:#15151e;color:#ddd;border-radius:20px;padding:7px 13px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.mini-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+html,
+body{
+  width:100%;
+  min-height:100%;
+  background:#080b12;
+  color:#fff;
+}
 
-.bottom{position:fixed;left:0;right:0;bottom:0;height:65px;background:#09090f;border-top:1px solid #252533;display:flex;justify-content:space-around;align-items:center;z-index:200}
-.nav{border:0;background:none;color:#777;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.nav span{font-size:22px}
-.nav.active{color:#ff3bd4}
+body{
+  overflow-x:hidden;
+}
 
-/* PLAYER */
-.player-modal{position:fixed;inset:0;z-index:1000;display:none;background:#000;overflow-y:auto}
-.player-modal.show{display:block}
-.player-top{height:58px;display:flex;align-items:center;padding:0 12px;gap:10px;background:#07070b;border-bottom:1px solid #252533;position:sticky;top:0;z-index:5}
-.close-player{width:42px;height:42px;border:0;border-radius:50%;background:#191923;color:#fff;font-size:25px}
-.player-title-small{font-weight:bold;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.player-wrap{max-width:900px;margin:auto}
-.main-video{width:100%;max-height:70vh;background:#000;display:block}
-.player-info{padding:15px}
-.player-title{font-size:20px;font-weight:bold;line-height:1.35}
-.player-user{color:#ff54db;margin-top:7px;font-size:13px}
-.player-description{color:#bbb;line-height:1.6;margin-top:12px;white-space:pre-wrap}
-.player-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.action-btn{border:1px solid #343445;background:#15151e;color:#fff;border-radius:12px;padding:11px 17px;font-weight:bold;cursor:pointer}
-.action-btn.share{background:linear-gradient(135deg,#ff28cf,#416cff);border:0}
-.action-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+button,
+input,
+textarea{
+  font:inherit;
+}
 
-/* FEATURE 5: player controls */
-.player-tools{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap;color:#aaa;font-size:13px}
-.player-tools select{background:#15151e;color:#fff;border:1px solid #343445;border-radius:10px;padding:8px 10px;font-size:13px}
-.player-tools label{display:flex;align-items:center;gap:6px;cursor:pointer}
+button{
+  cursor:pointer;
+}
 
-/* FEATURE 2: comments */
-.comments{padding:15px;border-top:1px solid #252533}
-.comments h4{font-size:16px;margin-bottom:12px}
-.c-form{display:flex;gap:8px;margin-bottom:14px}
-.c-form input{flex:1;height:42px;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:0 12px;font-size:14px;outline:none}
-.c-form input:focus{border-color:#ff2bd6}
-.c-form button{border:0;border-radius:12px;padding:0 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
-.c-item{background:#0e0e16;border:1px solid #222231;border-radius:12px;padding:10px 12px;margin-bottom:8px}
-.c-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#ff54db;margin-bottom:4px}
-.c-head small{color:#666;margin-left:6px}
-.c-text{font-size:14px;color:#ddd;line-height:1.5;word-break:break-word}
-.c-del{border:0;background:none;color:#ff6b8a;font-size:12px;cursor:pointer}
-.c-empty{color:#666;font-size:13px;padding:6px 0}
+/* =====================================================
+   APP
+===================================================== */
 
-.other-title{font-size:18px;font-weight:bold;padding:15px;border-top:1px solid #252533}
-.related{padding:0 10px 30px}
+.app{
+  width:100%;
+  min-height:100vh;
+  background:#0d111a;
+}
 
-/* UPLOAD */
-.upload-modal{position:fixed;inset:0;z-index:1500;display:none;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:16px}
-.upload-modal.show{display:flex}
-.upload-box{width:100%;max-width:450px;background:#0e0e16;border:1px solid #252533;border-radius:18px;padding:18px}
-.upload-box h3{margin-bottom:14px}
-.upload-box input[type=text],.upload-box textarea{width:100%;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:12px;font-size:14px;margin-bottom:10px;outline:none;font-family:inherit}
-.upload-box textarea{height:90px;resize:none}
-.upload-box input[type=file]{width:100%;margin-bottom:10px;color:#aaa;font-size:13px}
-.upload-preview{width:100%;max-height:200px;border-radius:12px;background:#000;margin-bottom:10px;display:none}
-.upload-row{display:flex;gap:10px}
-.upload-row button{flex:1;padding:12px;border-radius:12px;font-weight:bold;border:0;cursor:pointer;color:#fff}
-.btn-cancel{background:#1c1c28}
-.btn-submit{background:linear-gradient(135deg,#ff28cf,#416cff)}
-.btn-submit:disabled{opacity:.5}
-.toast{position:fixed;left:50%;bottom:85px;transform:translateX(-50%);background:#20202a;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;font-size:13px;max-width:90%;text-align:center}
-.toast.show{display:block}
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+  height:64px;
+  background:linear-gradient(135deg,#050505,#151a27,#1769e0);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  gap:12px;
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid #252b38;
+}
+
+.back-btn{
+  border:0;
+  background:#111827;
+  color:#fff;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  font-size:22px;
+  flex-shrink:0;
+}
+
+.header h2{
+  font-size:20px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+main{
+  width:100%;
+  max-width:700px;
+  margin:auto;
+  padding:22px 16px 50px;
+}
+
+.hero{
+  background:linear-gradient(135deg,#090b10,#111827,#1769e0);
+  color:#fff;
+  padding:25px 20px;
+  border-radius:20px;
+  margin-bottom:20px;
+  border:1px solid #252c3a;
+}
+
+.hero h1{
+  font-size:26px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  line-height:1.5;
+  opacity:.9;
+}
+
+/* =====================================================
+   MAIN BUTTONS
+===================================================== */
+
+.main-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.live-main-btn,
+.recorded-main-btn{
+  width:100%;
+  padding:17px 10px;
+  border-radius:14px;
+  font-size:17px;
+  font-weight:bold;
+}
+
+.live-main-btn{
+  border:0;
+  background:linear-gradient(135deg,#1769e0,#0750c7);
+  color:#fff;
+  box-shadow:0 7px 18px rgba(23,105,224,.25);
+}
+
+.recorded-main-btn{
+  border:1px solid #1769e0;
+  background:#10151f;
+  color:#5c9cff;
+}
+
+.live-channels-btn{
+  width:100%;
+  border:0;
+  background:linear-gradient(135deg,#ff1493,#1769e0);
+  color:#fff;
+  padding:17px;
+  border-radius:14px;
+  font-size:17px;
+  font-weight:bold;
+  margin-top:12px;
+  box-shadow:0 7px 18px rgba(255,20,147,.22);
+}
+
+/* =====================================================
+   LIVE CHANNEL LIST
+===================================================== */
+
+.live-channel-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:18px;
+}
+
+.live-channel-card{
+  background:#111722;
+  border:1px solid #283244;
+  border-radius:15px;
+  padding:15px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.live-channel-card:hover{
+  border-color:#1769e0;
+  transform:translateY(-1px);
+}
+
+.live-channel-name{
+  font-size:17px;
+  font-weight:bold;
+}
+
+.live-channel-id{
+  color:#8b95a7;
+  font-size:12px;
+  margin-top:6px;
+  word-break:break-all;
+}
+
+.live-now{
+  display:inline-block;
+  background:#e91e63;
+  color:#fff;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+  margin-top:9px;
+}
+
+.no-live{
+  padding:25px;
+  text-align:center;
+  background:#111722;
+  border-radius:15px;
+  color:#8993a5;
+  margin-top:15px;
+}
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.82);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:100;
+  animation:fadeIn .15s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* =====================================================
+   NORMAL POPUP
+===================================================== */
+
+.popup{
+  width:100%;
+  max-width:520px;
+  max-height:92vh;
+  overflow-y:auto;
+  background:#10151f;
+  color:#fff;
+  border:1px solid #293346;
+  border-radius:22px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+
+.popup h2{
+  margin-bottom:8px;
+}
+
+.popup p{
+  color:#aab3c2;
+  line-height:1.5;
+}
+
+/* =====================================================
+   FULL SCREEN SIR / STUDENT
+===================================================== */
+
+#sirOverlay,
+#studentOverlay{
+  padding:0;
+  background:#080b12;
+  align-items:stretch;
+  justify-content:stretch;
+}
+
+#sirOverlay .popup,
+#studentOverlay .popup{
+  width:100vw;
+  max-width:none;
+  height:100vh;
+  max-height:none;
+  border:0;
+  border-radius:0;
+  padding:16px 16px 40px;
+  background:#080b12;
+  overflow-y:auto;
+}
+
+/* =====================================================
+   CLOSE
+===================================================== */
+
+.close-popup{
+  float:right;
+  border:0;
+  background:#202734;
+  color:#fff;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:20px;
+  position:relative;
+  z-index:100;
+}
+
+/* =====================================================
+   ROLE
+===================================================== */
+
+.role-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+
+.role-btn{
+  border:1px solid #30394a;
+  background:#151c28;
+  color:#fff;
+  border-radius:15px;
+  padding:22px 10px;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.role-btn span{
+  display:block;
+  font-size:35px;
+  margin-bottom:10px;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.primary-btn{
+  width:100%;
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:12px;
+}
+
+.primary-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.secondary-btn{
+  width:100%;
+  border:0;
+  background:#252c38;
+  color:#fff;
+  padding:14px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+.input{
+  width:100%;
+  border:1px solid #384355;
+  background:#0b1018;
+  color:#fff;
+  padding:14px;
+  border-radius:11px;
+  outline:none;
+  font-size:16px;
+  margin-top:10px;
+}
+
+.input:focus{
+  border-color:#1769e0;
+}
+
+/* =====================================================
+   CHANNEL
+===================================================== */
+
+.channel-name{
+  font-size:18px;
+  font-weight:bold;
+  color:#fff;
+  margin-top:5px;
+  word-break:break-word;
+}
+
+.channel-box{
+  background:#0c1626;
+  border:1px dashed #1769e0;
+  border-radius:14px;
+  padding:15px;
+  margin:15px 0;
+}
+
+.channel-label{
+  font-size:13px;
+  color:#8993a5;
+}
+
+.channel-value{
+  font-size:23px;
+  font-weight:bold;
+  color:#5c9cff;
+  letter-spacing:1px;
+  word-break:break-all;
+  margin:6px 0 10px;
+}
+
+.copy-btn{
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:9px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.edit-btn{
+  border:1px solid #1769e0;
+  background:#111722;
+  color:#5c9cff;
+  padding:9px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  margin-left:5px;
+}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status{
+  padding:10px;
+  border-radius:10px;
+  background:#171e2a;
+  color:#b9c2d0;
+  margin-top:10px;
+  font-size:14px;
+  line-height:1.5;
+}
+
+/* =====================================================
+   VIDEO (SIR)
+===================================================== */
+
+.video-wrap{
+  position:relative;
+  width:100%;
+  background:#05070b;
+  border-radius:16px;
+  overflow:hidden;
+  margin-top:15px;
+  aspect-ratio:16/10;
+  box-shadow:0 10px 35px rgba(0,0,0,.45);
+}
+
+.video-wrap video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* Sir चा camera सरळ दिसण्यासाठी (फक्त Sir च्या स्क्रीनवरील preview).
+   जर चुकीचं दिसलं तर ही खालची एक ओळ काढून टाका. */
+#sirVideo{
+  transform:scaleX(-1);
+}
+
+.video-wrap:fullscreen{
+  width:100vw;
+  height:100vh;
+  aspect-ratio:auto;
+  border-radius:0;
+  background:#000;
+}
+
+.video-wrap:fullscreen video{
+  object-fit:contain;
+}
+
+/* =====================================================
+   STUDENT PLAYER
+===================================================== */
+
+.student-live-player{
+  position:relative;
+  width:100%;
+  background:#000;
+  border-radius:14px;
+  overflow:hidden;
+  margin-top:15px;
+  aspect-ratio:16/9;
+  box-shadow:0 8px 30px rgba(0,0,0,.55);
+}
+
+.student-live-player video{
+  width:100%;
+  height:100%;
+  display:block;
+  background:#000;
+  object-fit:contain;
+}
+
+.student-live-player:fullscreen{
+  width:100vw;
+  height:100vh;
+  aspect-ratio:auto;
+  border-radius:0;
+  background:#000;
+}
+
+.student-live-player:fullscreen video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.student-live-player video:fullscreen{
+  width:100vw;
+  height:100vh;
+  object-fit:contain;
+  background:#000;
+}
+
+.student-player-fullscreen{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  z-index:30;
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:10px;
+  background:rgba(0,0,0,.72);
+  color:white;
+  font-size:21px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.student-player-title{
+  margin-top:12px;
+  font-size:17px;
+  font-weight:bold;
+  color:#fff;
+}
+
+/* =====================================================
+   BADGES
+===================================================== */
+
+.live-badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#e91e63;
+  color:white;
+  padding:6px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+  z-index:25;
+}
+
+.audio-badge{
+  display:inline-block;
+  background:#1769e0;
+  color:white;
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:13px;
+  margin-top:10px;
+  font-weight:bold;
+}
+
+.timer-badge{
+  display:inline-block;
+  background:#252c38;
+  color:#fff;
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:13px;
+  margin-top:10px;
+  margin-left:6px;
+  font-weight:bold;
+}
+
+.count-badge{
+  display:inline-block;
+  background:#e91e63;
+  color:white;
+  padding:7px 12px;
+  border-radius:20px;
+  font-size:13px;
+  margin-top:15px;
+}
+
+/* =====================================================
+   STUDENTS
+===================================================== */
+
+.student-list{
+  margin-top:10px;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.student-item{
+  background:#171e2a;
+  padding:11px;
+  border-radius:10px;
+  border:1px solid transparent;
+}
+
+.student-item.hand-up{
+  border-color:#e9a21e;
+}
+
+/* =====================================================
+   CARDS (FEEDBACK / CHAT / NOTES)
+===================================================== */
+
+.card{
+  background:#111722;
+  border:1px solid #283244;
+  border-radius:15px;
+  padding:14px;
+  margin-top:14px;
+}
+
+.card h3{
+  font-size:16px;
+  margin-bottom:6px;
+}
+
+.card .status{
+  margin-top:6px;
+}
+
+/* =====================================================
+   FEEDBACK BUTTONS (STUDENT)
+===================================================== */
+
+.feedback-row{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.fb-btn{
+  border:1px solid #30394a;
+  background:#151c28;
+  color:#fff;
+  border-radius:12px;
+  padding:12px 4px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.fb-btn.active{
+  background:#e9a21e;
+  border-color:#e9a21e;
+  color:#000;
+}
+
+.fb-btn.active-yes{
+  background:#1faa59;
+  border-color:#1faa59;
+}
+
+.fb-btn.active-no{
+  background:#e91e63;
+  border-color:#e91e63;
+}
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+.chat-messages{
+  height:200px;
+  overflow-y:auto;
+  background:#0b1018;
+  border-radius:10px;
+  padding:8px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.chat-messages:empty::before{
+  content:"💬 अजून कोणताही message नाही";
+  color:#667085;
+  text-align:center;
+  font-size:13px;
+  padding:14px 6px;
+}
+
+.chat-msg{
+  background:#171e2a;
+  border-radius:10px;
+  padding:7px 10px;
+  font-size:14px;
+  line-height:1.4;
+  max-width:92%;
+  word-break:break-word;
+}
+
+.chat-msg.mine{
+  align-self:flex-end;
+  background:#12356b;
+}
+
+.chat-msg.sir{
+  border:1px solid #1769e0;
+}
+
+.chat-from{
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  color:#8bb8ff;
+  margin-bottom:2px;
+}
+
+.chat-input-row{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+  margin-top:8px;
+}
+
+.chat-input-row .input{
+  margin-top:0;
+  padding:11px;
+  font-size:15px;
+}
+
+.chat-send{
+  border:0;
+  background:#1769e0;
+  color:#fff;
+  border-radius:11px;
+  padding:0 18px;
+  font-size:18px;
+  font-weight:bold;
+}
+
+/* =====================================================
+   NOTES
+===================================================== */
+
+.notes-area{
+  width:100%;
+  min-height:120px;
+  background:#0b1018;
+  color:#fff;
+  border:1px solid #384355;
+  border-radius:11px;
+  padding:12px;
+  font-size:15px;
+  outline:none;
+  resize:vertical;
+  margin-top:6px;
+}
+
+.notes-area:focus{
+  border-color:#1769e0;
+}
+
+/* =====================================================
+   TOAST
+===================================================== */
+
+.toast{
+  position:fixed;
+  top:calc(12px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  max-width:90%;
+  background:#1f2937;
+  color:#fff;
+  border:1px solid #1769e0;
+  border-radius:12px;
+  padding:10px 16px;
+  font-size:14px;
+  z-index:500;
+  box-shadow:0 8px 25px rgba(0,0,0,.5);
+  text-align:center;
+}
+
+/* =====================================================
+   FULLSCREEN BUTTON
+===================================================== */
+
+.fullscreen-btn{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  z-index:30;
+  border:0;
+  background:rgba(0,0,0,.7);
+  color:white;
+  width:42px;
+  height:42px;
+  border-radius:10px;
+  font-size:20px;
+  cursor:pointer;
+}
+
+/* =====================================================
+   END
+===================================================== */
+
+.end-btn{
+  width:100%;
+  border:0;
+  background:#e91e63;
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:15px;
+}
+
+/* =====================================================
+   RECORDINGS
+===================================================== */
+
+.recordings-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:15px;
+}
+
+.record-card{
+  border:1px solid #2a3342;
+  border-radius:15px;
+  padding:14px;
+  background:#111722;
+}
+
+.record-title{
+  font-weight:bold;
+  margin-bottom:5px;
+  line-height:1.4;
+}
+
+.record-type{
+  display:inline-block;
+  background:#132746;
+  color:#5c9cff;
+  border-radius:20px;
+  padding:5px 9px;
+  font-size:12px;
+  margin-top:5px;
+}
+
+.record-date,
+.record-size{
+  color:#777;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.record-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:7px;
+  margin-top:12px;
+}
+
+.small-btn{
+  padding:10px 5px;
+  border:0;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:13px;
+}
+
+.watch-btn{
+  background:#1769e0;
+  color:white;
+}
+
+.download-btn{
+  background:#132746;
+  color:#5c9cff;
+}
+
+.delete-btn{
+  background:#252c38;
+  color:#fff;
+}
+
+.empty-recordings{
+  padding:25px;
+  text-align:center;
+  background:#151c28;
+  border-radius:15px;
+  color:#777;
+}
+
+/* =====================================================
+   PLAYBACK
+===================================================== */
+
+.playback-wrap{
+  position:relative;
+  width:100%;
+  background:#050b14;
+  border-radius:15px;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+.playback-wrap video{
+  width:100%;
+  max-height:65vh;
+  display:block;
+  background:#000;
+}
+
+.playback-wrap:fullscreen{
+  width:100vw;
+  height:100vh;
+  border-radius:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.playback-wrap:fullscreen video{
+  width:100%;
+  height:100%;
+  max-height:none;
+  object-fit:contain;
+}
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+.message-icon{
+  font-size:45px;
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.message-title{
+  text-align:center;
+}
+
+.message-text{
+  text-align:center;
+  margin-top:8px;
+  white-space:pre-line;
+}
+
+/* =====================================================
+   CONFIRM BOX
+===================================================== */
+
+.confirm-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:15px;
+}
+
+.confirm-danger{
+  border:0;
+  background:#e91e63;
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-weight:bold;
+}
+
+.confirm-cancel{
+  border:0;
+  background:#252c38;
+  color:white;
+  padding:14px;
+  border-radius:12px;
+  font-weight:bold;
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px){
+
+  main{
+    padding:16px 12px 40px;
+  }
+
+  .main-buttons{
+    grid-template-columns:1fr;
+  }
+
+  .role-grid{
+    grid-template-columns:1fr;
+  }
+
+  .record-actions{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:22px 17px;
+  }
+
+  .hero h1{
+    font-size:23px;
+  }
+
+  .header h2{
+    font-size:18px;
+  }
+
+  #sirOverlay .popup,
+  #studentOverlay .popup{
+    padding:
+      calc(12px + env(safe-area-inset-top))
+      12px
+      calc(30px + env(safe-area-inset-bottom));
+  }
+
+  .student-live-player{
+    border-radius:8px;
+  }
+
+}
+
+/* =====================================================
+   SMALL PHONE
+===================================================== */
+
+@media(max-width:380px){
+
+  .channel-value{
+    font-size:19px;
+  }
+
+  .popup{
+    padding:16px;
+  }
+
+}
+
+/* =====================================================
+   ONE-SCREEN LIVE LAYOUT (SIR + STUDENT)
+   Class चालू असताना page scroll करावा लागत नाही.
+   Video मोठा, खाली buttons, Chat/Feedback/Notes
+   bottom sheet मध्ये उघडतात.
+===================================================== */
+
+#sirOverlay .popup,
+#studentOverlay .popup{
+  height:100vh;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow-y:auto;
+}
+
+#sirOverlay .popup,
+#studentOverlay .popup{
+  padding-bottom:calc(14px + env(safe-area-inset-bottom));
+}
+
+.ls-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex:0 0 auto;
+}
+
+.ls-head h2{
+  margin:0;
+  font-size:18px;
+}
+
+.ls-head .close-popup{
+  float:none;
+  flex-shrink:0;
+}
+
+#sirSetup,
+#studentJoinArea{
+  flex:0 0 auto;
+}
+
+.live-screen{
+  flex:1 1 auto;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  position:relative;
+  margin-top:8px;
+  overflow:hidden;
+}
+
+.live-screen > *{
+  flex:0 0 auto;
+}
+
+.live-screen > .video-wrap,
+.live-screen > .student-live-player{
+  flex:1 1 auto;
+  min-height:0;
+  aspect-ratio:auto;
+  margin-top:0;
+}
+
+#sirVideoWrap video{
+  object-fit:contain;
+}
+
+.live-screen > .status{
+  margin-top:0;
+  padding:7px 10px;
+  font-size:13px;
+  line-height:1.4;
+}
+
+/* compact channel box */
+
+.channel-box.cb-compact{
+  margin:0;
+  padding:9px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.cb-compact .cb-info{
+  min-width:0;
+}
+
+.cb-compact .channel-name{
+  font-size:16px;
+  margin-top:0;
+}
+
+.cb-compact .cb-id{
+  margin-top:2px;
+  font-size:13px;
+}
+
+.cb-compact .channel-value{
+  display:inline;
+  font-size:14px;
+  margin:0;
+  letter-spacing:.5px;
+}
+
+.cb-compact .cb-btns{
+  display:flex;
+  gap:6px;
+  flex-shrink:0;
+}
+
+.cb-compact .copy-btn,
+.cb-compact .edit-btn{
+  margin:0;
+  padding:8px 10px;
+  font-size:13px;
+}
+
+/* badges row */
+
+.ls-badges{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
+}
+
+.ls-badges > *{
+  margin:0 !important;
+  padding:6px 10px;
+  font-size:12px;
+}
+
+.ls-badges .primary-btn{
+  width:auto;
+  border-radius:20px;
+}
+
+.ls-badges .student-player-title{
+  padding:0;
+  font-size:13px;
+}
+
+/* actions row */
+
+.ls-actions{
+  display:flex;
+  gap:8px;
+}
+
+.ls-actions .primary-btn,
+.ls-actions .end-btn{
+  margin:0;
+  padding:12px;
+  flex:1;
+}
+
+/* student feedback row */
+
+.live-screen .feedback-row{
+  margin-top:0;
+}
+
+.live-screen .fb-btn{
+  padding:10px 4px;
+}
+
+/* bottom tabs */
+
+.ls-tabs{
+  display:grid;
+  gap:8px;
+  grid-template-columns:repeat(var(--n,2),1fr);
+}
+
+.tab-btn{
+  position:relative;
+  border:1px solid #30394a;
+  background:#151c28;
+  color:#fff;
+  border-radius:12px;
+  padding:11px 4px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.tab-btn.leave{
+  background:#e91e63;
+  border-color:#e91e63;
+}
+
+.tab-btn .dot{
+  position:absolute;
+  top:6px;
+  right:8px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:#e91e63;
+}
+
+.tab-btn.leave .dot{
+  background:#fff;
+}
+
+/* bottom sheets */
+
+.sheet{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:62%;
+  background:#0d111a;
+  border:1px solid #283244;
+  border-radius:16px 16px 0 0;
+  padding:12px;
+  display:none;
+  flex-direction:column;
+  z-index:40;
+  box-shadow:0 -10px 35px rgba(0,0,0,.6);
+}
+
+.sheet.open{
+  display:flex;
+}
+
+.sheet-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+  flex:0 0 auto;
+}
+
+.sheet-head h3{
+  font-size:16px;
+}
+
+.sheet-close{
+  border:0;
+  background:#202734;
+  color:#fff;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  font-size:18px;
+}
+
+.sheet .status{
+  margin-top:0;
+  flex:0 0 auto;
+}
+
+.sheet .chat-messages{
+  height:auto;
+  flex:1 1 auto;
+  min-height:0;
+}
+
+.sheet .chat-input-row{
+  flex:0 0 auto;
+}
+
+.sheet .student-list{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+}
+
+.sheet .notes-area{
+  flex:1 1 auto;
+  min-height:0;
+  resize:none;
+}
+
+.sheet .secondary-btn{
+  margin-top:8px;
+  padding:11px;
+  flex:0 0 auto;
+}
+
 </style>
+
 </head>
+
 <body>
 
+<div id="toast" class="toast hidden"></div>
+
+<div class="app">
+
 <header class="header">
-  <button class="back" onclick="goHome()">‹</button>
-  <div class="logo">🎬 GyanSetu</div>
-  <button class="post-btn" onclick="openUpload()">＋ Post</button>
+
+<button class="back-btn" onclick="goHome()">←</button>
+
+<h2>🎥 GyanSetu Live Classes</h2>
+
 </header>
 
-<div class="search-box">
-  <input id="searchInput" class="search" placeholder="🔍 Search videos..." oninput="searchVideos()">
-  <div class="chips" id="chips">
-    <button class="chip active" data-sort="latest" onclick="setSort('latest')">🆕 Latest</button>
-    <button class="chip" data-sort="liked" onclick="setSort('liked')">🔥 Most liked</button>
-    <button class="chip" data-sort="oldest" onclick="setSort('oldest')">🕰 Oldest</button>
-    <button class="chip" data-sort="mine" onclick="setSort('mine')">🙋 My videos</button>
-    <button class="chip" data-sort="saved" onclick="setSort('saved')">🔖 Saved</button>
-  </div>
+<main>
+
+<section class="hero">
+
+<h1>🎓 Live Classes</h1>
+
+<p>
+Sir ची Live Class सुरू करा किंवा Sir चा ID वापरून
+Class मध्ये Join व्हा.
+</p>
+
+</section>
+
+<div class="main-buttons">
+
+<button class="live-main-btn" onclick="openRolePopup()">
+🎥 Live Class
+</button>
+
+<button class="recorded-main-btn" onclick="openRecordedPopup()">
+📚 Recorded Class
+</button>
+
 </div>
 
-<main class="feed" id="feed">
-  <div class="loader">Loading videos...</div>
+<button class="live-channels-btn" onclick="openLiveChannels()">
+🔴 सध्या Live असलेले Classes
+</button>
+
+<div id="liveChannelList" class="live-channel-list hidden"></div>
+
 </main>
 
-<nav class="bottom">
-  <button class="nav" onclick="goHome()"><span>🏠</span>Home</button>
-  <button class="nav active"><span>🎬</span>Videos</button>
-  <button class="nav" onclick="openUpload()"><span>➕</span>Post</button>
-  <button class="nav" onclick="goCreate()"><span>👥</span>Users</button>
-  <button class="nav" onclick="goProfile()"><span>👤</span>Profile</button>
-</nav>
-
-<!-- UPLOAD MODAL -->
-<div class="upload-modal" id="uploadModal">
-  <div class="upload-box">
-    <h3>🎬 New Video Post</h3>
-    <input type="text" id="upTitle" placeholder="Title" maxlength="120">
-    <textarea id="upDesc" placeholder="Description (optional)"></textarea>
-    <input type="file" id="upFile" accept="video/*" onchange="previewFile()">
-    <video id="upPreview" class="upload-preview" controls playsinline></video>
-    <div class="upload-row">
-      <button class="btn-cancel" onclick="closeUpload()">Cancel</button>
-      <button class="btn-submit" id="upSubmit" onclick="submitVideo()">Post</button>
-    </div>
-  </div>
 </div>
 
-<!-- PLAYER -->
-<div class="player-modal" id="playerModal">
-  <div class="player-top">
-    <button class="close-player" onclick="closePlayer()">×</button>
-    <div class="player-title-small" id="playerSmallTitle"></div>
-  </div>
-  <div class="player-wrap">
-    <video id="mainVideo" class="main-video" controls playsinline></video>
-    <div class="player-info">
-      <div class="player-title" id="playerTitle"></div>
-      <div class="player-user" id="playerUser"></div>
-      <div class="player-description" id="playerDescription"></div>
 
-      <div class="player-actions">
-        <button class="action-btn" id="pLike" onclick="toggleLike(currentVideo && currentVideo.id)">🤍 0</button>
-        <button class="action-btn" id="pSave" onclick="toggleSave(currentVideo && currentVideo.id)">🔖 Save</button>
-        <button class="action-btn share" onclick="shareCurrentVideo()">🔗 Share</button>
-        <button class="action-btn" onclick="copyLink()">📋 Copy link</button>
-      </div>
+<!-- =====================================================
+     ROLE POPUP
+===================================================== -->
 
-      <div class="player-tools">
-        <span>⚡ Speed</span>
-        <select id="speedSel" onchange="setSpeed(this.value)">
-          <option value="0.5">0.5x</option>
-          <option value="0.75">0.75x</option>
-          <option value="1" selected>1x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-        </select>
-        <label><input type="checkbox" id="autoNext" checked onchange="saveAutoNext()"> Autoplay next</label>
-      </div>
-    </div>
+<div id="roleOverlay" class="overlay hidden">
 
-    <div class="comments">
-      <h4>💬 Comments <span id="cCount">(0)</span></h4>
-      <div class="c-form">
-        <input id="cInput" type="text" maxlength="300" placeholder="Comment लिहा..." onkeydown="if(event.key==='Enter')submitComment()">
-        <button onclick="submitComment()">Send</button>
-      </div>
-      <div id="cList"></div>
-    </div>
+<div class="popup">
 
-    <div class="other-title">More Videos</div>
-    <div class="related" id="related"></div>
-  </div>
+<button class="close-popup" onclick="closeRolePopup()">×</button>
+
+<h2>Live Class</h2>
+
+<p>तुम्ही कोणत्या प्रकारे Join करणार?</p>
+
+<div class="role-grid">
+
+<button class="role-btn" onclick="openSirPopup()">
+<span>👨‍🏫</span>
+Sir
+</button>
+
+<button class="role-btn" onclick="openStudentPopup()">
+<span>👨‍🎓</span>
+Student
+</button>
+
 </div>
 
-<div class="toast" id="toast"></div>
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     SIR FULLSCREEN
+===================================================== -->
+
+<div id="sirOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<div class="ls-head">
+
+<h2>👨‍🏫 Sir Live Class</h2>
+
+<button class="close-popup" onclick="closeSirPopup()">×</button>
+
+</div>
+
+<!-- SETUP -->
+
+<div id="sirSetup">
+
+<p>
+GyanSetu Channel तयार करा.
+प्रत्येक account ला एकच Channel तयार करता येईल.
+</p>
+
+<label style="display:block;margin-top:15px;color:#aaa;font-size:14px;">
+Channel Name
+</label>
+
+<input
+id="createChannelName"
+class="input"
+type="text"
+maxlength="80"
+placeholder="उदा. Hitesh Study Channel">
+
+<label style="display:block;margin-top:12px;color:#aaa;font-size:14px;">
+Channel Password
+</label>
+
+<input
+id="createChannelPassword"
+class="input"
+type="password"
+maxlength="60"
+placeholder="Channel password">
+
+<button id="createChannelBtn" class="primary-btn" onclick="createSirChannel()">
+🚀 Create My Channel
+</button>
+
+<div class="status">
+💡 Channel password सुरक्षित hash स्वरूपात
+Supabase मध्ये save केला जातो.
+</div>
+
+</div>
+
+
+<!-- SIR LIVE (ONE SCREEN) -->
+
+<div id="sirLiveArea" class="hidden live-screen">
+
+<div class="channel-box cb-compact">
+
+<div class="cb-info">
+
+<div id="sirChannelName" class="channel-name">
+GyanSetu Live Class
+</div>
+
+<div class="cb-id">
+
+<span class="channel-label">Channel ID:</span>
+
+<span id="sirChannelId" class="channel-value">---</span>
+
+</div>
+
+</div>
+
+<div class="cb-btns">
+
+<button class="copy-btn" onclick="copyChannelId()">📋</button>
+
+<button class="edit-btn" onclick="openEditChannelPopup()">✏️</button>
+
+</div>
+
+</div>
+
+<div id="sirStatus" class="status">Channel तयार आहे.</div>
+
+<div class="video-wrap" id="sirVideoWrap">
+
+<video id="sirVideo" autoplay muted playsinline></video>
+
+<span id="sirLiveBadge" class="live-badge hidden">🔴 LIVE</span>
+
+<button class="fullscreen-btn" onclick="toggleFullscreen('sirVideoWrap')">⛶</button>
+
+</div>
+
+<div class="ls-badges">
+
+<span id="sirAudioBadge" class="audio-badge hidden">🎤 Sir Mic ON</span>
+
+<span id="sirTimerBadge" class="timer-badge hidden">⏱️ 00:00</span>
+
+<span id="studentCountBadge" class="count-badge">Students: 0</span>
+
+</div>
+
+<div class="ls-actions">
+
+<button id="startCameraBtn" class="primary-btn" onclick="startSirCamera()">
+▶️ Start Class
+</button>
+
+<button id="endSirClass" class="end-btn hidden" onclick="openEndConfirm()">
+⛔ End Live Class
+</button>
+
+</div>
+
+<div class="ls-tabs">
+
+<button class="tab-btn" onclick="toggleSheet('sirFeedbackSheet')">
+📊 Feedback
+</button>
+
+<button class="tab-btn" onclick="toggleSheet('sirChatSheet')">
+💬 Chat
+<span id="sirChatDot" class="dot hidden"></span>
+</button>
+
+</div>
+
+<!-- Students feedback sheet -->
+
+<div id="sirFeedbackSheet" class="sheet">
+
+<div class="sheet-head">
+
+<h3>📊 Students Feedback</h3>
+
+<button class="sheet-close" onclick="closeSheet('sirFeedbackSheet')">×</button>
+
+</div>
+
+<div id="feedbackSummary" class="status">
+✅ समजलं: 0 • ❓ नाही समजलं: 0 • ✋ Hand: 0
+</div>
+
+<button class="secondary-btn" onclick="resetFeedback()">
+🔄 Feedback Reset करा
+</button>
+
+<div id="studentList" class="student-list"></div>
+
+</div>
+
+<!-- Chat sheet -->
+
+<div id="sirChatSheet" class="sheet">
+
+<div class="sheet-head">
+
+<h3>💬 Class Chat</h3>
+
+<button class="sheet-close" onclick="closeSheet('sirChatSheet')">×</button>
+
+</div>
+
+<div id="sirChatMessages" class="chat-messages"></div>
+
+<div class="chat-input-row">
+
+<input
+id="sirChatInput"
+class="input"
+type="text"
+maxlength="300"
+placeholder="Message लिहा...">
+
+<button class="chat-send" onclick="sendSirChat()">➤</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     EDIT CHANNEL
+===================================================== -->
+
+<div id="channelEditOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<button class="close-popup" onclick="closeEditChannelPopup()">×</button>
+
+<h2>✏️ Edit Channel</h2>
+
+<p>फक्त Channel Name बदलता येईल.</p>
+
+<input
+id="channelNameInput"
+class="input"
+type="text"
+maxlength="80"
+placeholder="Channel Name">
+
+<button class="primary-btn" onclick="saveChannelName()">💾 Save</button>
+
+<button class="secondary-btn" onclick="closeEditChannelPopup()">Cancel</button>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     STUDENT FULLSCREEN
+===================================================== -->
+
+<div id="studentOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<div class="ls-head">
+
+<h2>👨‍🎓 Student</h2>
+
+<button class="close-popup" onclick="closeStudentPopup()">×</button>
+
+</div>
+
+<div id="studentJoinArea">
+
+<p>Sir चा Channel ID टाका.</p>
+
+<input
+id="channelInput"
+class="input"
+type="text"
+maxlength="100"
+placeholder="Sir Channel ID">
+
+<input
+id="studentNameInput"
+class="input"
+type="text"
+maxlength="30"
+placeholder="तुमचं नाव (Sir ला दिसेल)">
+
+<button id="joinStudentBtn" class="primary-btn" onclick="joinStudentClass()">
+▶️ Start Class
+</button>
+
+<div id="studentStatus" class="status">Sir चा Channel ID टाका.</div>
+
+</div>
+
+
+<!-- STUDENT LIVE (ONE SCREEN) -->
+
+<div id="studentLiveArea" class="hidden live-screen">
+
+<div id="studentLiveStatus" class="status">
+Live Class connecting...
+</div>
+
+<div class="student-live-player" id="studentVideoWrap">
+
+<video id="studentVideo" autoplay playsinline controls></video>
+
+<span id="studentLiveBadge" class="live-badge hidden">🔴 LIVE</span>
+
+<button class="student-player-fullscreen" onclick="toggleStudentFullscreen()">⛶</button>
+
+</div>
+
+<div class="ls-badges">
+
+<div class="student-player-title">🔴 GyanSetu Live Class</div>
+
+<span id="studentAudioBadge" class="audio-badge hidden">🔊 Sir Audio ON</span>
+
+<span id="studentTimerBadge" class="timer-badge">⏱️ 00:00</span>
+
+<button id="enableAudioBtn" class="primary-btn" onclick="enableStudentAudio()">
+🔊 Enable Sir Audio
+</button>
+
+</div>
+
+<!-- Hand / understanding -->
+
+<div class="feedback-row">
+
+<button id="handBtn" class="fb-btn" onclick="toggleHand()">✋ Hand Raise</button>
+
+<button id="yesBtn" class="fb-btn" onclick="setUnderstand('yes')">✅ समजलं</button>
+
+<button id="noBtn" class="fb-btn" onclick="setUnderstand('no')">❓ नाही समजलं</button>
+
+</div>
+
+<div class="ls-tabs" style="--n:3">
+
+<button class="tab-btn" onclick="toggleSheet('studentChatSheet')">
+💬 Chat
+<span id="studentChatDot" class="dot hidden"></span>
+</button>
+
+<button class="tab-btn" onclick="toggleSheet('studentNotesSheet')">
+📝 Notes
+</button>
+
+<button class="tab-btn leave" onclick="leaveStudentClass()">
+🚪 Leave
+</button>
+
+</div>
+
+<!-- Chat sheet -->
+
+<div id="studentChatSheet" class="sheet">
+
+<div class="sheet-head">
+
+<h3>💬 Class Chat</h3>
+
+<button class="sheet-close" onclick="closeSheet('studentChatSheet')">×</button>
+
+</div>
+
+<div id="studentChatMessages" class="chat-messages"></div>
+
+<div class="chat-input-row">
+
+<input
+id="studentChatInput"
+class="input"
+type="text"
+maxlength="300"
+placeholder="Doubt / Message लिहा...">
+
+<button class="chat-send" onclick="sendStudentChat()">➤</button>
+
+</div>
+
+</div>
+
+<!-- Notes sheet -->
+
+<div id="studentNotesSheet" class="sheet">
+
+<div class="sheet-head">
+
+<h3>📝 माझ्या Notes</h3>
+
+<button class="sheet-close" onclick="closeSheet('studentNotesSheet')">×</button>
+
+</div>
+
+<textarea
+id="studentNotes"
+class="notes-area"
+placeholder="Class मधले महत्त्वाचे मुद्दे इथे लिहा..."></textarea>
+
+<button class="secondary-btn" onclick="downloadStudentNotes()">
+⬇️ Notes Download करा
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     LIVE CHANNELS
+===================================================== -->
+
+<div id="liveChannelsOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<button class="close-popup" onclick="closeLiveChannels()">×</button>
+
+<h2>🔴 Live Classes</h2>
+
+<p>सध्या Live असलेले Classes.</p>
+
+<div id="popupLiveChannelList" class="live-channel-list"></div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     RECORDED
+===================================================== -->
+
+<div id="recordedOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<button class="close-popup" onclick="closeRecordedPopup()">×</button>
+
+<h2>📚 Recorded Class</h2>
+
+<p>Recorded Live Classes येथे दिसतील.</p>
+
+<div id="recordingsPopupList" class="recordings-list"></div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     PLAYER
+===================================================== -->
+
+<div id="playerOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<button class="close-popup" onclick="closePlayerPopup()">×</button>
+
+<h2 id="playerTitle">🎬 Recorded Class</h2>
+
+<div id="playbackWrap" class="playback-wrap">
+
+<video id="recordingVideo" controls playsinline></video>
+
+<button class="fullscreen-btn" onclick="toggleFullscreen('playbackWrap')">⛶</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     MESSAGE
+===================================================== -->
+
+<div id="messageOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<div id="messageIcon" class="message-icon">ℹ️</div>
+
+<h2 id="messageTitle" class="message-title">Message</h2>
+
+<p id="messageText" class="message-text"></p>
+
+<button class="primary-btn" onclick="closeMessage()">OK</button>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     END CONFIRM
+===================================================== -->
+
+<div id="endConfirmOverlay" class="overlay hidden">
+
+<div class="popup">
+
+<div class="message-icon">⛔</div>
+
+<h2 class="message-title">End Live Class?</h2>
+
+<p class="message-text">तुमची Live Class बंद करायची आहे का?</p>
+
+<div class="confirm-buttons">
+
+<button class="confirm-cancel" onclick="closeEndConfirm()">Cancel</button>
+
+<button class="confirm-danger" onclick="confirmEndClass()">⛔ End Class</button>
+
+</div>
+
+</div>
+
+</div>
+
 
 <script>
-const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-const BUCKET = "videos";          // Storage bucket name
-const MAX_MB = 50;                // max video size
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+/* =====================================================
+   SUPABASE
+===================================================== */
 
-let currentUser = null;
-let currentName = "GyanSetu User";
-let videos = [];
-let currentVideo = null;
+const SUPABASE_URL =
+"https://eqglttfffhvoyvrclzse.supabase.co";
 
-/* NEW STATE */
-let sortMode = "latest";
-let likeCount = {};          // video_id -> number
-let myLikes = new Set();     // video_ids liked by me
-let commentCount = {};       // video_id -> number
-let savedSet = new Set();    // bookmarks (stored in this browser)
-let likesReady = true;
-let commentsReady = true;
+const SUPABASE_KEY =
+"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
 
-/* NAVIGATION */
-function goHome(){ location.href = "home.html"; }
-function goProfile(){ location.href = "profile.html"; }
-function goCreate(){ location.href = "users.html"; }
+const supabaseClient =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
+    }
+  }
+);
 
-/* TOAST */
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let currentUser=null;
+
+let peer=null;
+
+let sirStream=null;
+
+let sirRecorder=null;
+
+let sirRecordingChunks=[];
+
+let sirPeerId=null;
+
+let isSirLive=false;
+
+let sirCalls=[];
+
+let sirConnections=[];
+
+let studentCall=null;
+
+let studentRemoteStream=null;
+
+let studentRecorder=null;
+
+let studentRecordingChunks=[];
+
+let studentHostId=null;
+
+let studentConnection=null;
+
+let classStartedAt=null;
+
+let currentPlaybackUrl=null;
+
+const students=new Map();
+
+const CHANNEL_STORAGE_KEY="GyanSetu_Sir_Channel_v1";
+
+let studentAudioContext=null;
+
+let studentOscillator=null;
+
+let db=null;
+
+const DB_NAME="GyanSetuLiveDB";
+
+const DB_VERSION=1;
+
+const STORE_NAME="recordings";
+
+/* ---- Student helper features ---- */
+
+let studentName="Student";
+
+let handRaised=false;
+
+let understandValue=null;
+
+let studentClassStart=null;
+
+let sirTimerInterval=null;
+
+let studentTimerInterval=null;
+
+let toastTimer=null;
+
+
+/* =====================================================
+   SHORTCUT
+===================================================== */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+
+/* =====================================================
+   BOTTOM SHEETS (ONE-SCREEN LAYOUT)
+===================================================== */
+
+function openSheet(id){
+
+  closeAllSheets();
+
+  const sheet=$(id);
+
+  if(!sheet){
+    return;
+  }
+
+  sheet.classList.add("open");
+
+  if(id==="sirChatSheet"){
+
+    $("sirChatDot").classList.add("hidden");
+
+    $("sirChatMessages").scrollTop=
+      $("sirChatMessages").scrollHeight;
+  }
+
+  if(id==="studentChatSheet"){
+
+    $("studentChatDot").classList.add("hidden");
+
+    $("studentChatMessages").scrollTop=
+      $("studentChatMessages").scrollHeight;
+  }
+}
+
+
+function closeSheet(id){
+
+  const sheet=$(id);
+
+  if(sheet){
+    sheet.classList.remove("open");
+  }
+}
+
+
+function toggleSheet(id){
+
+  const sheet=$(id);
+
+  if(!sheet){
+    return;
+  }
+
+  if(sheet.classList.contains("open")){
+
+    closeSheet(id);
+
+  }
+  else{
+
+    openSheet(id);
+  }
+}
+
+
+function closeAllSheets(){
+
+  document.querySelectorAll(".sheet").forEach(function(sheet){
+
+    sheet.classList.remove("open");
+  });
+}
+
+
+/* =====================================================
+   HASH
+===================================================== */
+
+async function hashText(text){
+
+  const data=new TextEncoder().encode(text);
+
+  const hash=await crypto.subtle.digest("SHA-256",data);
+
+  return Array.from(new Uint8Array(hash))
+    .map(b=>b.toString(16).padStart(2,"0"))
+    .join("");
+}
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+async function loadCurrentUser(){
+
+  try{
+
+    const {data,error}=await supabaseClient.auth.getUser();
+
+    if(error){
+      console.error(error);
+    }
+
+    currentUser=data?.user || null;
+
+  }
+  catch(error){
+
+    console.error("AUTH ERROR:",error);
+
+    currentUser=null;
+  }
+}
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(title,message,icon="ℹ️"){
+
+  $("messageIcon").textContent=icon;
+
+  $("messageTitle").textContent=title;
+
+  $("messageText").textContent=message;
+
+  $("messageOverlay").classList.remove("hidden");
+}
+
+
+function closeMessage(){
+
+  $("messageOverlay").classList.add("hidden");
+}
+
+
+/* =====================================================
+   TOAST
+===================================================== */
+
 function showToast(text){
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 2600);
+
+  const toast=$("toast");
+
+  toast.textContent=text;
+
+  toast.classList.remove("hidden");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(function(){
+
+    toast.classList.add("hidden");
+
+  },3000);
 }
 
-/* LOCAL STORAGE HELPERS */
-function lsGet(k, def){
-  try{ const v = localStorage.getItem(k); return v === null ? def : JSON.parse(v); }
-  catch(e){ return def; }
-}
-function lsSet(k, v){
-  try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){}
+
+/* =====================================================
+   TIMER HELPERS
+===================================================== */
+
+function formatDuration(ms){
+
+  const total=Math.max(0,Math.floor(ms/1000));
+
+  const h=Math.floor(total/3600);
+
+  const m=Math.floor((total%3600)/60);
+
+  const s=total%60;
+
+  const mm=String(m).padStart(2,"0");
+
+  const ss=String(s).padStart(2,"0");
+
+  return h>0 ? h+":"+mm+":"+ss : mm+":"+ss;
 }
 
-/* USER */
-async function getUser(){
-  const { data } = await supabaseClient.auth.getUser();
-  currentUser = data?.user || null;
-  if(!currentUser) return;
 
-  currentName =
-    currentUser.user_metadata?.username ||
-    currentUser.user_metadata?.name ||
-    (currentUser.email ? currentUser.email.split("@")[0] : "GyanSetu User");
+function startSirTimer(){
+
+  stopSirTimer();
+
+  const badge=$("sirTimerBadge");
+
+  badge.classList.remove("hidden");
+
+  function tick(){
+
+    if(classStartedAt){
+
+      badge.textContent=
+        "⏱️ "+formatDuration(Date.now()-classStartedAt.getTime());
+    }
+  }
+
+  tick();
+
+  sirTimerInterval=setInterval(tick,1000);
+}
+
+
+function stopSirTimer(){
+
+  if(sirTimerInterval){
+
+    clearInterval(sirTimerInterval);
+
+    sirTimerInterval=null;
+  }
+
+  $("sirTimerBadge").classList.add("hidden");
+}
+
+
+function startStudentTimer(){
+
+  stopStudentTimer();
+
+  const badge=$("studentTimerBadge");
+
+  function tick(){
+
+    if(studentClassStart){
+
+      badge.textContent=
+        "⏱️ "+formatDuration(Date.now()-studentClassStart.getTime());
+    }
+  }
+
+  tick();
+
+  studentTimerInterval=setInterval(tick,1000);
+}
+
+
+function stopStudentTimer(){
+
+  if(studentTimerInterval){
+
+    clearInterval(studentTimerInterval);
+
+    studentTimerInterval=null;
+  }
+
+  $("studentTimerBadge").textContent="⏱️ 00:00";
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+function goHome(){
+
+  if(isSirLive){
+    endSirClass(false);
+  }
+
+  if(studentCall){
+
+    notifyStudentLeft();
+
+    stopStudentClass(false);
+  }
+
+  if(peer){
+
+    try{
+      peer.destroy();
+    }
+    catch(e){}
+
+    peer=null;
+  }
+
+  window.location.href="home.html";
+}
+
+
+/* =====================================================
+   ROLE
+===================================================== */
+
+function openRolePopup(){
+  $("roleOverlay").classList.remove("hidden");
+}
+
+
+function closeRolePopup(){
+  $("roleOverlay").classList.add("hidden");
+}
+
+
+async function openSirPopup(){
+
+  closeRolePopup();
+
+  $("sirOverlay").classList.remove("hidden");
+
+  await initializeSirChannel();
+}
+
+
+function closeSirPopup(){
+
+  if(isSirLive){
+    return;
+  }
+
+  $("sirOverlay").classList.add("hidden");
+}
+
+
+function openStudentPopup(){
+
+  closeRolePopup();
+
+  $("studentOverlay").classList.remove("hidden");
+}
+
+
+function closeStudentPopup(){
+
+  if(studentCall){
+    return;
+  }
+
+  $("studentOverlay").classList.add("hidden");
+}
+
+
+/* =====================================================
+   LIVE CHANNELS
+===================================================== */
+
+async function openLiveChannels(){
+
+  $("liveChannelsOverlay").classList.remove("hidden");
+
+  await loadLiveChannels();
+}
+
+
+function closeLiveChannels(){
+
+  $("liveChannelsOverlay").classList.add("hidden");
+}
+
+
+async function loadLiveChannels(){
+
+  const containers=[
+    $("liveChannelList"),
+    $("popupLiveChannelList")
+  ];
+
+  containers.forEach(function(container){
+
+    if(container){
+
+      container.innerHTML=
+      "<div class='no-live'>🔄 Live Classes शोधत आहे...</div>";
+    }
+  });
 
   try{
-    const { data:p } = await supabaseClient
-      .from("Profiles").select("username")
-      .eq("id", currentUser.id).maybeSingle();
-    if(p?.username) currentName = p.username;
-  }catch(e){}
-}
 
-/* LOAD VIDEOS */
-async function loadVideos(){
-  const { data, error } = await supabaseClient
-    .from("Videos").select("*")
-    .order("created_at", { ascending:false });
+    const {data,error}=
+    await supabaseClient
+      .from("gs_channels")
+      .select("*")
+      .eq("is_live",true);
 
-  if(error){
-    console.error(error);
-    document.getElementById("feed").innerHTML =
-      `<div class="empty">Videos load झाले नाहीत.<br><small>${escapeHtml(error.message)}</small></div>`;
-    return;
-  }
-  videos = data || [];
-  await Promise.all([loadLikes(), loadCommentCounts()]);
-  searchVideos();
-}
+    if(error){
 
-/* ============ FEATURE 1: LIKES ============ */
-async function loadLikes(){
-  likeCount = {}; myLikes = new Set();
-  const { data, error } = await supabaseClient
-    .from("VideoLikes").select("video_id,user_id");
-  if(error){ likesReady = false; console.warn("VideoLikes:", error.message); return; }
-  likesReady = true;
-  (data || []).forEach(r=>{
-    const vid = String(r.video_id);
-    likeCount[vid] = (likeCount[vid] || 0) + 1;
-    if(currentUser && r.user_id === currentUser.id) myLikes.add(vid);
-  });
-}
+      console.error("Live channels error:",error);
 
-async function toggleLike(id){
-  if(id === undefined || id === null) return;
-  id = String(id);
-  if(!currentUser){ showToast("Like करण्यासाठी Login करा"); return; }
-  if(!likesReady){ showToast("Likes table अजून तयार नाही (SQL चालवा)"); return; }
+      renderLiveChannels([]);
 
-  const liked = myLikes.has(id);
-  // optimistic update
-  if(liked){ myLikes.delete(id); likeCount[id] = Math.max(0,(likeCount[id]||1)-1); }
-  else { myLikes.add(id); likeCount[id] = (likeCount[id]||0)+1; }
-  refreshActionUI(id);
-
-  let error;
-  if(liked){
-    ({ error } = await supabaseClient.from("VideoLikes").delete()
-      .eq("video_id", id).eq("user_id", currentUser.id));
-  }else{
-    ({ error } = await supabaseClient.from("VideoLikes")
-      .insert({ video_id:id, user_id:currentUser.id }));
-  }
-  if(error){
-    console.error(error);
-    // roll back
-    if(liked){ myLikes.add(id); likeCount[id]=(likeCount[id]||0)+1; }
-    else { myLikes.delete(id); likeCount[id]=Math.max(0,(likeCount[id]||1)-1); }
-    refreshActionUI(id);
-    showToast("Like बदलता आला नाही");
-  }
-}
-
-/* ============ FEATURE 2: COMMENTS ============ */
-async function loadCommentCounts(){
-  commentCount = {};
-  const { data, error } = await supabaseClient
-    .from("VideoComments").select("video_id");
-  if(error){ commentsReady = false; console.warn("VideoComments:", error.message); return; }
-  commentsReady = true;
-  (data || []).forEach(r=>{
-    const vid = String(r.video_id);
-    commentCount[vid] = (commentCount[vid] || 0) + 1;
-  });
-}
-
-async function loadComments(videoId){
-  const list = document.getElementById("cList");
-  if(!commentsReady){
-    list.innerHTML = `<div class="c-empty">Comments सुरू करण्यासाठी SQL चालवा.</div>`;
-    return;
-  }
-  list.innerHTML = `<div class="c-empty">Loading...</div>`;
-  const { data, error } = await supabaseClient
-    .from("VideoComments").select("*")
-    .eq("video_id", String(videoId))
-    .order("created_at", { ascending:true });
-
-  if(!currentVideo || String(currentVideo.id) !== String(videoId)) return; // user moved on
-  if(error){
-    list.innerHTML = `<div class="c-empty">Comments load झाले नाहीत.</div>`;
-    return;
-  }
-  commentCount[String(videoId)] = (data || []).length;
-  document.getElementById("cCount").textContent = "(" + (data||[]).length + ")";
-  refreshActionUI(videoId);
-
-  if(!data || !data.length){
-    list.innerHTML = `<div class="c-empty">अजून comments नाहीत. पहिला comment तुमचा!</div>`;
-    return;
-  }
-  list.innerHTML = data.map(c=>{
-    const mine = currentUser && c.user_id === currentUser.id;
-    return `<div class="c-item">
-      <div class="c-head">
-        <span>👤 ${escapeHtml(c.username || "GyanSetu User")}<small>${formatDate(c.created_at)}</small></span>
-        ${mine ? `<button class="c-del" onclick="deleteComment('${escapeAttr(c.id)}')">Delete</button>` : ""}
-      </div>
-      <div class="c-text">${escapeHtml(c.text)}</div>
-    </div>`;
-  }).join("");
-}
-
-async function submitComment(){
-  if(!currentVideo) return;
-  if(!currentUser){ showToast("Comment साठी Login करा"); return; }
-  if(!commentsReady){ showToast("Comments table अजून तयार नाही (SQL चालवा)"); return; }
-
-  const input = document.getElementById("cInput");
-  const text = input.value.trim();
-  if(!text) return;
-
-  const { error } = await supabaseClient.from("VideoComments").insert({
-    video_id: String(currentVideo.id),
-    user_id: currentUser.id,
-    username: currentName,
-    text: text
-  });
-  if(error){
-    console.error(error);
-    showToast("Comment पाठवता आला नाही");
-    return;
-  }
-  input.value = "";
-  loadComments(currentVideo.id);
-}
-
-async function deleteComment(cid){
-  if(!currentUser || !currentVideo) return;
-  if(!confirm("हा comment delete करायचा?")) return;
-  const { error } = await supabaseClient.from("VideoComments")
-    .delete().eq("id", cid).eq("user_id", currentUser.id);
-  if(error){ showToast("Delete करता आला नाही"); return; }
-  loadComments(currentVideo.id);
-}
-
-/* ============ FEATURE 3: SORT / FILTER ============ */
-function setSort(mode){
-  sortMode = mode;
-  document.querySelectorAll(".chip").forEach(c =>
-    c.classList.toggle("active", c.dataset.sort === mode));
-  searchVideos();
-}
-
-/* ============ FEATURE 4: SAVE / BOOKMARK ============ */
-function loadSaved(){ savedSet = new Set((lsGet("gs_saved_videos", [])).map(String)); }
-
-function toggleSave(id){
-  if(id === undefined || id === null) return;
-  id = String(id);
-  if(savedSet.has(id)){ savedSet.delete(id); showToast("Saved मधून काढला"); }
-  else { savedSet.add(id); showToast("🔖 Video save झाला"); }
-  lsSet("gs_saved_videos", Array.from(savedSet));
-  refreshActionUI(id);
-  if(sortMode === "saved") searchVideos();
-}
-
-/* ============ FEATURE 5: PLAYER EXTRAS ============ */
-function setSpeed(v){
-  document.getElementById("mainVideo").playbackRate = parseFloat(v) || 1;
-  lsSet("gs_speed", v);
-}
-function saveAutoNext(){
-  lsSet("gs_autonext", document.getElementById("autoNext").checked);
-}
-function playNext(){
-  if(!currentVideo || !document.getElementById("autoNext").checked) return;
-  const list = getVisibleList();
-  const i = list.findIndex(v => String(v.id) === String(currentVideo.id));
-  const next = i > -1 ? list[i+1] : null;
-  if(next) openPlayer(next.id);
-}
-async function copyLink(){
-  if(!currentVideo) return;
-  const url = location.origin + location.pathname + "?v=" + encodeURIComponent(currentVideo.id);
-  try{
-    if(navigator.share){
-      await navigator.share({ title: currentVideo.title, url });
       return;
     }
-  }catch(e){ if(e && e.name === "AbortError") return; }
+
+    renderLiveChannels(data || []);
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    renderLiveChannels([]);
+  }
+}
+
+
+function renderLiveChannels(channels){
+
+  const uniqueChannels=[];
+
+  const seen=new Set();
+
+  channels.forEach(function(channel){
+
+    const id=String(channel.id);
+
+    if(!seen.has(id)){
+
+      seen.add(id);
+
+      uniqueChannels.push(channel);
+    }
+  });
+
+  [
+    $("liveChannelList"),
+    $("popupLiveChannelList")
+  ]
+  .forEach(function(container){
+
+    if(!container){
+      return;
+    }
+
+    container.innerHTML="";
+
+    if(uniqueChannels.length===0){
+
+      const empty=document.createElement("div");
+
+      empty.className="no-live";
+
+      empty.textContent="🔵 सध्या कोणतीही Live Class नाही.";
+
+      container.appendChild(empty);
+
+      return;
+    }
+
+    uniqueChannels.forEach(function(channel){
+
+      const card=document.createElement("div");
+
+      card.className="live-channel-card";
+
+      card.onclick=function(){
+        joinLiveChannelFromList(channel);
+      };
+
+      const name=document.createElement("div");
+
+      name.className="live-channel-name";
+
+      name.textContent=
+        channel.channel_name ||
+        "GyanSetu Live Class";
+
+      const id=document.createElement("div");
+
+      id.className="live-channel-id";
+
+      id.textContent="Channel ID: "+channel.id;
+
+      const live=document.createElement("span");
+
+      live.className="live-now";
+
+      live.textContent="🔴 LIVE NOW";
+
+      card.appendChild(name);
+
+      card.appendChild(id);
+
+      card.appendChild(live);
+
+      container.appendChild(card);
+    });
+  });
+}
+
+
+function joinLiveChannelFromList(channel){
+
+  closeLiveChannels();
+
+  $("studentOverlay").classList.remove("hidden");
+
+  $("channelInput").value=String(channel.id);
+
+  $("studentStatus").textContent=
+    "🔴 Live Class सापडली. Start Class करा.";
+}
+
+
+/* =====================================================
+   CHANNEL STORAGE
+===================================================== */
+
+function getSavedChannel(){
+
   try{
-    await navigator.clipboard.writeText(url);
-    showToast("✅ Link copy झाली");
-  }catch(e){
-    prompt("Link copy करा:", url);
+
+    const saved=localStorage.getItem(CHANNEL_STORAGE_KEY);
+
+    if(!saved){
+      return null;
+    }
+
+    return JSON.parse(saved);
+
+  }
+  catch(error){
+
+    return null;
   }
 }
 
-/* UI REFRESH for like / save / comment count (no full re-render) */
-function refreshActionUI(id){
-  id = String(id);
-  const liked = myLikes.has(id);
-  const saved = savedSet.has(id);
-  const lc = likeCount[id] || 0;
-  const cc = commentCount[id] || 0;
 
-  document.querySelectorAll(`[data-like="${CSS.escape(id)}"]`).forEach(b=>{
-    b.classList.toggle("on", liked);
-    b.textContent = (liked ? "❤️ " : "🤍 ") + lc;
-  });
-  document.querySelectorAll(`[data-save="${CSS.escape(id)}"]`).forEach(b=>{
-    b.classList.toggle("on", saved);
-    b.textContent = saved ? "🔖 Saved" : "🔖 Save";
-  });
-  document.querySelectorAll(`[data-cmt="${CSS.escape(id)}"]`).forEach(b=>{
-    b.textContent = "💬 " + cc;
-  });
+function saveChannel(data){
 
-  if(currentVideo && String(currentVideo.id) === id){
-    const pl = document.getElementById("pLike");
-    pl.classList.toggle("on", liked);
-    pl.textContent = (liked ? "❤️ " : "🤍 ") + lc;
-    const ps = document.getElementById("pSave");
-    ps.classList.toggle("on", saved);
-    ps.textContent = saved ? "🔖 Saved" : "🔖 Save";
-    document.getElementById("cCount").textContent = "(" + cc + ")";
+  localStorage.setItem(
+    CHANNEL_STORAGE_KEY,
+    JSON.stringify(data)
+  );
+}
+
+
+/* =====================================================
+   INITIALIZE CHANNEL
+===================================================== */
+
+async function initializeSirChannel(){
+
+  if(!currentUser){
+    await loadCurrentUser();
   }
-}
 
-/* CARD HTML */
-function cardHtml(video, full){
-  const mine = currentUser && video.user_id && video.user_id === currentUser.id;
-  const id = escapeAttr(video.id);
-  const liked = myLikes.has(String(video.id));
-  const saved = savedSet.has(String(video.id));
-  return `
-    <div class="thumb" onclick="openPlayer('${id}')">
-      <video src="${escapeAttr(video.video_url)}#t=0.5" preload="metadata" muted playsinline></video>
-      <div class="play">▶</div>
-    </div>
-    <div class="card-content">
-      <div class="card-title">${escapeHtml(video.title)}</div>
-      ${full ? `<div class="card-description">${escapeHtml(video.description || "")}</div>` : ""}
-      ${full ? `
-      <div class="card-actions">
-        <button class="mini-btn ${liked?"on":""}" data-like="${id}" onclick="toggleLike('${id}')">${liked?"❤️":"🤍"} ${likeCount[String(video.id)]||0}</button>
-        <button class="mini-btn" data-cmt="${id}" onclick="openPlayer('${id}',true)">💬 ${commentCount[String(video.id)]||0}</button>
-        <button class="mini-btn ${saved?"on":""}" data-save="${id}" onclick="toggleSave('${id}')">${saved?"🔖 Saved":"🔖 Save"}</button>
-      </div>` : ""}
-      <div class="card-meta">
-        <span>👤 ${escapeHtml(video.username || "GyanSetu User")}
-        ${full ? " • " + formatDate(video.created_at) : ""}</span>
-        ${mine && full ? `<button class="del-btn" onclick="deleteVideo('${id}')">🗑 Delete</button>` : ""}
-      </div>
-    </div>`;
-}
+  if(!currentUser){
 
-/* RENDER */
-function renderVideos(list){
-  const feed = document.getElementById("feed");
-  feed.innerHTML = "";
-  if(!list.length){
-    let msg = `🎬 अजून videos post झालेले नाहीत.<br><br>वर "＋ Post" दाबून पहिला video टाका!`;
-    if(sortMode === "saved") msg = "🔖 अजून कोणताही video save केलेला नाही.";
-    else if(sortMode === "mine") msg = "🙋 तुम्ही अजून कोणताही video post केलेला नाही.";
-    else if(document.getElementById("searchInput").value.trim()) msg = "🔍 काहीही सापडले नाही.";
-    feed.innerHTML = `<div class="empty">${msg}</div>`;
+    $("sirSetup").classList.remove("hidden");
+
+    $("sirLiveArea").classList.add("hidden");
+
     return;
   }
-  list.forEach(video=>{
-    const card = document.createElement("div");
-    card.className = "video-card";
-    card.innerHTML = cardHtml(video, true);
-    feed.appendChild(card);
+
+  try{
+
+    const {data,error}=
+    await supabaseClient
+      .from("gs_channels")
+      .select("*")
+      .eq("owner_id",currentUser.id)
+      .maybeSingle();
+
+    if(error){
+      console.error("CHANNEL LOAD ERROR:",error);
+    }
+
+    if(data){
+
+      const channelData={
+        id:String(data.id),
+        name:data.channel_name || "GyanSetu Live Class",
+        owner_id:data.owner_id
+      };
+
+      saveChannel(channelData);
+
+      $("sirSetup").classList.add("hidden");
+
+      $("sirLiveArea").classList.remove("hidden");
+
+      $("sirChannelId").textContent=channelData.id;
+
+      $("sirChannelName").textContent=channelData.name;
+
+      ensureSirPeer(channelData.id);
+
+      return;
+    }
+
+    $("sirSetup").classList.remove("hidden");
+
+    $("sirLiveArea").classList.add("hidden");
+
+  }
+  catch(error){
+
+    console.error("INITIALIZE CHANNEL ERROR:",error);
+
+    $("sirSetup").classList.remove("hidden");
+
+    $("sirLiveArea").classList.add("hidden");
+  }
+}
+
+
+/* =====================================================
+   CREATE CHANNEL
+===================================================== */
+
+async function createSirChannel(){
+
+  if(!currentUser){
+    await loadCurrentUser();
+  }
+
+  if(!currentUser){
+
+    showMessage(
+      "Login Required",
+      "Channel तयार करण्यासाठी आधी GyanSetu Account मध्ये Login करा.",
+      "🔐"
+    );
+
+    return;
+  }
+
+  const name=$("createChannelName").value.trim();
+
+  const password=$("createChannelPassword").value;
+
+  if(name.length<2){
+
+    showMessage("Channel Name","Channel name टाका.","⚠️");
+
+    return;
+  }
+
+  if(password.length<4){
+
+    showMessage(
+      "Password",
+      "Channel password किमान 4 characters असावा.",
+      "⚠️"
+    );
+
+    return;
+  }
+
+  const button=$("createChannelBtn");
+
+  button.disabled=true;
+
+  button.textContent="Channel तयार होत आहे...";
+
+  try{
+
+    const {data:existing,error:existingError}=
+    await supabaseClient
+      .from("gs_channels")
+      .select("*")
+      .eq("owner_id",currentUser.id)
+      .maybeSingle();
+
+    if(existingError){
+      throw existingError;
+    }
+
+    if(existing){
+
+      const saved={
+        id:String(existing.id),
+        name:existing.channel_name || "GyanSetu Live Class",
+        owner_id:existing.owner_id
+      };
+
+      saveChannel(saved);
+
+      $("sirSetup").classList.add("hidden");
+
+      $("sirLiveArea").classList.remove("hidden");
+
+      $("sirChannelId").textContent=saved.id;
+
+      $("sirChannelName").textContent=saved.name;
+
+      ensureSirPeer(saved.id);
+
+      return;
+    }
+
+    const username=
+      currentUser.user_metadata?.username ||
+      localStorage.getItem("gyansetu_username") ||
+      "User";
+
+    const passwordHash=await hashText(password);
+
+    const {data,error}=
+    await supabaseClient
+      .from("gs_channels")
+      .insert({
+        owner_id:currentUser.id,
+        owner_username:username,
+        channel_name:name,
+        password_hash:passwordHash,
+        followers_count:0,
+        comments_enabled:true,
+        is_live:false
+      })
+      .select()
+      .single();
+
+    if(error){
+
+      if(error.code==="23505"){
+
+        const {data:existingAfterError}=
+        await supabaseClient
+          .from("gs_channels")
+          .select("*")
+          .eq("owner_id",currentUser.id)
+          .maybeSingle();
+
+        if(existingAfterError){
+
+          const saved={
+            id:String(existingAfterError.id),
+            name:existingAfterError.channel_name || "GyanSetu Live Class",
+            owner_id:existingAfterError.owner_id
+          };
+
+          saveChannel(saved);
+
+          $("sirSetup").classList.add("hidden");
+
+          $("sirLiveArea").classList.remove("hidden");
+
+          $("sirChannelId").textContent=saved.id;
+
+          $("sirChannelName").textContent=saved.name;
+
+          ensureSirPeer(saved.id);
+
+          return;
+        }
+      }
+
+      throw error;
+    }
+
+    const saved={
+      id:String(data.id),
+      name:data.channel_name,
+      owner_id:data.owner_id
+    };
+
+    saveChannel(saved);
+
+    $("createChannelName").value="";
+
+    $("createChannelPassword").value="";
+
+    $("sirSetup").classList.add("hidden");
+
+    $("sirLiveArea").classList.remove("hidden");
+
+    $("sirChannelId").textContent=saved.id;
+
+    $("sirChannelName").textContent=saved.name;
+
+    $("sirStatus").textContent=
+      "✅ Channel तयार झाला. आता Start Class करा.";
+
+    ensureSirPeer(saved.id);
+
+    showMessage(
+      "Channel Created",
+      "तुमचा GyanSetu Channel तयार झाला.\n\nSir / Channel ID:\n"+saved.id,
+      "🎉"
+    );
+
+  }
+  catch(error){
+
+    console.error("CREATE CHANNEL ERROR:",error);
+
+    showMessage(
+      "Channel तयार झाला नाही",
+      "Channel तयार करता आला नाही. Supabase RLS/SQL policies तपासा.",
+      "❌"
+    );
+
+  }
+  finally{
+
+    button.disabled=false;
+
+    button.textContent="🚀 Create My Channel";
+  }
+}
+
+
+/* =====================================================
+   EDIT CHANNEL
+===================================================== */
+
+function openEditChannelPopup(){
+
+  const saved=getSavedChannel();
+
+  if(!saved){
+    return;
+  }
+
+  $("channelNameInput").value=
+    saved.name || "GyanSetu Live Class";
+
+  $("channelEditOverlay").classList.remove("hidden");
+}
+
+
+function closeEditChannelPopup(){
+
+  $("channelEditOverlay").classList.add("hidden");
+}
+
+
+async function saveChannelName(){
+
+  if(!currentUser){
+    await loadCurrentUser();
+  }
+
+  const saved=getSavedChannel();
+
+  if(!saved){
+    return;
+  }
+
+  let name=
+    $("channelNameInput")
+      .value
+      .trim()
+      .replace(/\s+/g," ");
+
+  if(!name){
+    name="GyanSetu Live Class";
+  }
+
+  name=name.slice(0,80);
+
+  try{
+
+    const {data,error}=
+    await supabaseClient
+      .from("gs_channels")
+      .update({channel_name:name})
+      .eq("id",saved.id)
+      .eq("owner_id",currentUser.id)
+      .select()
+      .single();
+
+    if(error){
+      throw error;
+    }
+
+    saved.name=data.channel_name;
+
+    saveChannel(saved);
+
+    $("sirChannelName").textContent=saved.name;
+
+    closeEditChannelPopup();
+
+    showMessage("Updated","Channel Name बदलले.","✅");
+
+  }
+  catch(error){
+
+    console.error("EDIT CHANNEL ERROR:",error);
+
+    showMessage("Edit Error","Channel name बदलता आले नाही.","❌");
+  }
+}
+
+
+/* =====================================================
+   SIR PEER
+===================================================== */
+
+function ensureSirPeer(channelId){
+
+  if(
+    peer &&
+    !peer.destroyed &&
+    sirPeerId===String(channelId)
+  ){
+    return;
+  }
+
+  if(peer){
+
+    try{
+      peer.destroy();
+    }
+    catch(e){}
+
+    peer=null;
+  }
+
+  sirPeerId=String(channelId);
+
+  peer=new Peer(sirPeerId,{debug:1});
+
+  peer.on("open",function(id){
+
+    sirPeerId=id;
+
+    $("sirChannelId").textContent=id;
+  });
+
+  peer.on("connection",function(conn){
+    setupSirConnection(conn);
+  });
+
+  peer.on("call",function(call){
+    handleSirIncomingCall(call);
+  });
+
+  peer.on("error",function(error){
+    handleSirPeerError(error);
+  });
+
+  peer.on("disconnected",function(){
+
+    if(peer && !peer.destroyed){
+
+      try{
+        peer.reconnect();
+      }
+      catch(e){}
+    }
   });
 }
 
-/* SEARCH + SORT */
-function getVisibleList(){
-  const q = document.getElementById("searchInput").value.trim().toLowerCase();
-  let list = videos.slice();
 
-  if(q){
-    list = list.filter(v =>
-      String(v.title||"").toLowerCase().includes(q) ||
-      String(v.description||"").toLowerCase().includes(q) ||
-      String(v.username||"").toLowerCase().includes(q)
+/* =====================================================
+   SIR CONNECTION
+===================================================== */
+
+function cleanName(value){
+
+  const name=
+    String(value || "")
+      .replace(/\s+/g," ")
+      .trim()
+      .slice(0,30);
+
+  return name || "Student";
+}
+
+
+function setupSirConnection(conn){
+
+  if(!conn){
+    return;
+  }
+
+  sirConnections.push(conn);
+
+  conn.on("open",function(){
+    sendClassStatus(conn);
+  });
+
+  conn.on("data",function(data){
+
+    if(!data || typeof data!=="object"){
+      return;
+    }
+
+    if(data.type==="STUDENT_JOINED"){
+
+      const name=cleanName(data.name);
+
+      students.set(
+        conn.peer,
+        {
+          name:name,
+          conn:conn,
+          hand:false,
+          understand:null
+        }
+      );
+
+      updateStudentUI();
+
+      sendClassStatus(conn);
+
+      showToast("👨‍🎓 "+name+" Join झाला");
+
+      return;
+    }
+
+    if(data.type==="STUDENT_LEFT"){
+
+      removeStudent(conn.peer);
+
+      return;
+    }
+
+    const student=students.get(conn.peer);
+
+    if(!student){
+      return;
+    }
+
+    if(data.type==="CHAT"){
+
+      const text=String(data.text || "").trim().slice(0,300);
+
+      if(!text){
+        return;
+      }
+
+      const message={
+        type:"CHAT_MSG",
+        from:student.name,
+        text:text,
+        role:"student",
+        peerId:conn.peer,
+        time:Date.now()
+      };
+
+      appendChat("sirChatMessages",message,false);
+
+      broadcastToStudents(message);
+
+      return;
+    }
+
+    if(data.type==="HAND"){
+
+      student.hand=!!data.raised;
+
+      updateStudentUI();
+
+      if(student.hand){
+        showToast("✋ "+student.name+" ने Hand Raise केला");
+      }
+
+      return;
+    }
+
+    if(data.type==="UNDERSTAND"){
+
+      if(data.value==="yes" || data.value==="no"){
+
+        student.understand=data.value;
+
+        if(data.value==="no"){
+          showToast("❓ "+student.name+": नाही समजलं");
+        }
+
+      }
+      else{
+
+        student.understand=null;
+      }
+
+      updateStudentUI();
+    }
+  });
+
+  conn.on("close",function(){
+
+    removeStudent(conn.peer);
+
+    sirConnections=sirConnections.filter(c=>c!==conn);
+  });
+
+  conn.on("error",function(){
+    removeStudent(conn.peer);
+  });
+}
+
+
+/* =====================================================
+   INCOMING CALL
+===================================================== */
+
+function handleSirIncomingCall(call){
+
+  if(!isSirLive || !sirStream){
+
+    try{
+      call.close();
+    }
+    catch(e){}
+
+    return;
+  }
+
+  sirCalls.push(call);
+
+  try{
+    call.answer(sirStream);
+  }
+  catch(e){
+    console.error(e);
+  }
+
+  call.on("close",function(){
+    sirCalls=sirCalls.filter(c=>c!==call);
+  });
+}
+
+
+/* =====================================================
+   STUDENT UI (SIR SIDE)
+===================================================== */
+
+function updateStudentUI(){
+
+  $("studentCountBadge").textContent=
+    "Students: "+students.size;
+
+  let yes=0;
+
+  let no=0;
+
+  let hands=0;
+
+  students.forEach(function(student){
+
+    if(student.understand==="yes"){
+      yes++;
+    }
+
+    if(student.understand==="no"){
+      no++;
+    }
+
+    if(student.hand){
+      hands++;
+    }
+  });
+
+  $("feedbackSummary").textContent=
+    "✅ समजलं: "+yes+
+    " • ❓ नाही समजलं: "+no+
+    " • ✋ Hand: "+hands;
+
+  const list=$("studentList");
+
+  list.innerHTML="";
+
+  if(students.size===0){
+
+    const item=document.createElement("div");
+
+    item.className="student-item";
+
+    item.textContent="अजून कोणताही Student Join झालेला नाही.";
+
+    list.appendChild(item);
+
+    return;
+  }
+
+  const sorted=
+    Array.from(students.values()).sort(function(a,b){
+
+      return (b.hand ? 1 : 0)-(a.hand ? 1 : 0);
+    });
+
+  sorted.forEach(function(student,index){
+
+    const item=document.createElement("div");
+
+    item.className="student-item";
+
+    if(student.hand){
+      item.classList.add("hand-up");
+    }
+
+    item.textContent=
+      (index+1)+". "+student.name+
+      (student.hand ? " ✋" : "")+
+      (student.understand==="yes" ? " ✅" : "")+
+      (student.understand==="no" ? " ❓" : "");
+
+    list.appendChild(item);
+  });
+}
+
+
+function removeStudent(peerId){
+
+  const student=students.get(peerId);
+
+  students.delete(peerId);
+
+  updateStudentUI();
+
+  if(student){
+    showToast("🚪 "+student.name+" बाहेर पडला");
+  }
+}
+
+
+/* =====================================================
+   FEEDBACK RESET (SIR)
+===================================================== */
+
+function resetFeedback(){
+
+  students.forEach(function(student){
+
+    student.hand=false;
+
+    student.understand=null;
+  });
+
+  updateStudentUI();
+
+  broadcastToStudents({type:"RESET_FEEDBACK"});
+
+  showToast("🔄 Feedback reset झाला");
+}
+
+
+/* =====================================================
+   CHAT
+===================================================== */
+
+function appendChat(containerId,message,mine){
+
+  const container=$(containerId);
+
+  if(!container || !message){
+    return;
+  }
+
+  const text=String(message.text || "").slice(0,300);
+
+  if(!text){
+    return;
+  }
+
+  const bubble=document.createElement("div");
+
+  bubble.className="chat-msg";
+
+  if(mine){
+    bubble.classList.add("mine");
+  }
+
+  if(message.role==="sir"){
+    bubble.classList.add("sir");
+  }
+
+  const from=document.createElement("span");
+
+  from.className="chat-from";
+
+  from.textContent=String(message.from || "").slice(0,40);
+
+  const body=document.createElement("span");
+
+  body.textContent=text;
+
+  bubble.appendChild(from);
+
+  bubble.appendChild(body);
+
+  container.appendChild(bubble);
+
+  while(container.children.length>200){
+    container.removeChild(container.firstChild);
+  }
+
+  container.scrollTop=container.scrollHeight;
+
+  /* Chat sheet बंद असेल तर tab वर लाल ठिपका दाखवा */
+
+  if(!mine){
+
+    const sheetId=
+      containerId==="sirChatMessages"
+      ? "sirChatSheet"
+      : "studentChatSheet";
+
+    const dotId=
+      containerId==="sirChatMessages"
+      ? "sirChatDot"
+      : "studentChatDot";
+
+    const sheet=$(sheetId);
+
+    const dot=$(dotId);
+
+    if(sheet && dot && !sheet.classList.contains("open")){
+
+      dot.classList.remove("hidden");
+    }
+  }
+}
+
+
+function broadcastToStudents(data){
+
+  sirConnections.forEach(function(conn){
+
+    if(conn && conn.open){
+
+      try{
+        conn.send(data);
+      }
+      catch(e){}
+    }
+  });
+}
+
+
+function sendSirChat(){
+
+  const input=$("sirChatInput");
+
+  const text=input.value.trim().slice(0,300);
+
+  if(!text){
+    return;
+  }
+
+  const message={
+    type:"CHAT_MSG",
+    from:"Sir 👨‍🏫",
+    text:text,
+    role:"sir",
+    time:Date.now()
+  };
+
+  appendChat("sirChatMessages",message,true);
+
+  broadcastToStudents(message);
+
+  input.value="";
+}
+
+
+function sendStudentChat(){
+
+  const input=$("studentChatInput");
+
+  const text=input.value.trim().slice(0,300);
+
+  if(!text){
+    return;
+  }
+
+  if(sendToSir({type:"CHAT",text:text})){
+    input.value="";
+  }
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+async function copyChannelId(){
+
+  const id=$("sirChannelId").textContent;
+
+  if(!id || id==="---"){
+    return;
+  }
+
+  try{
+
+    await navigator.clipboard.writeText(id);
+
+    showMessage("Copied","Sir / Channel ID copy झाला.","📋");
+
+  }
+  catch(e){
+
+    const textarea=document.createElement("textarea");
+
+    textarea.value=id;
+
+    document.body.appendChild(textarea);
+
+    textarea.select();
+
+    document.execCommand("copy");
+
+    textarea.remove();
+
+    showMessage("Copied","Channel ID copy झाला.","📋");
+  }
+}
+
+
+/* =====================================================
+   SIR CAMERA
+===================================================== */
+
+async function startSirCamera(){
+
+  if(isSirLive){
+    return;
+  }
+
+  $("startCameraBtn").disabled=true;
+
+  $("startCameraBtn").textContent="Starting...";
+
+  try{
+
+    /* पहिली Class संपल्यावर peer बंद होतो,
+       म्हणून दुसऱ्या Class साठी तो पुन्हा तयार करतो */
+    const savedChannel=getSavedChannel();
+
+    if(savedChannel){
+      ensureSirPeer(savedChannel.id);
+    }
+
+    const stream=
+    await navigator.mediaDevices.getUserMedia({
+
+      video:{
+        width:{ideal:1280},
+        height:{ideal:720},
+        facingMode:"user"
+      },
+
+      audio:{
+        echoCancellation:true,
+        noiseSuppression:true,
+        autoGainControl:true
+      }
+    });
+
+    sirStream=stream;
+
+    $("sirVideo").srcObject=stream;
+
+    $("sirVideo").muted=true;
+
+    const audioTracks=stream.getAudioTracks();
+
+    if(audioTracks.length){
+
+      audioTracks.forEach(function(track){
+        track.enabled=true;
+      });
+
+      $("sirAudioBadge").classList.remove("hidden");
+    }
+
+    isSirLive=true;
+
+    classStartedAt=new Date();
+
+    startSirTimer();
+
+    $("sirLiveBadge").classList.remove("hidden");
+
+    $("startCameraBtn").classList.add("hidden");
+
+    $("endSirClass").classList.remove("hidden");
+
+    $("sirStatus").textContent="🔴 Live Class सुरू आहे • 🎤 Mic ON";
+
+    const saved=getSavedChannel();
+
+    if(saved){
+
+      await supabaseClient
+        .from("gs_channels")
+        .update({
+          is_live:true,
+          live_started_at:new Date().toISOString()
+        })
+        .eq("id",saved.id);
+    }
+
+    startSirRecording();
+
+    broadcastClassStatus();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    $("startCameraBtn").disabled=false;
+
+    $("startCameraBtn").textContent="▶️ Start Class";
+
+    showMessage(
+      "Camera / Microphone Error",
+      "Camera आणि Microphone permission Allow करा.",
+      "❌"
     );
   }
-
-  if(sortMode === "saved") list = list.filter(v => savedSet.has(String(v.id)));
-  if(sortMode === "mine")  list = list.filter(v => currentUser && v.user_id === currentUser.id);
-
-  const t = v => new Date(v.created_at || 0).getTime();
-  if(sortMode === "oldest") list.sort((a,b)=> t(a)-t(b));
-  else if(sortMode === "liked") list.sort((a,b)=> (likeCount[String(b.id)]||0)-(likeCount[String(a.id)]||0) || t(b)-t(a));
-  else list.sort((a,b)=> t(b)-t(a));
-
-  return list;
 }
 
-function searchVideos(){
-  renderVideos(getVisibleList());
-}
 
-/* UPLOAD */
-function openUpload(){
-  if(!currentUser){
-    showToast("Post करण्यासाठी Login करा");
-    return;
-  }
-  document.getElementById("uploadModal").classList.add("show");
-}
+/* =====================================================
+   MIME
+===================================================== */
 
-function closeUpload(){
-  document.getElementById("uploadModal").classList.remove("show");
-  document.getElementById("upTitle").value = "";
-  document.getElementById("upDesc").value = "";
-  document.getElementById("upFile").value = "";
-  const pv = document.getElementById("upPreview");
-  pv.pause(); pv.removeAttribute("src"); pv.style.display = "none";
-  const btn = document.getElementById("upSubmit");
-  btn.disabled = false; btn.textContent = "Post";
-}
+function getRecorderMimeType(){
 
-function previewFile(){
-  const f = document.getElementById("upFile").files[0];
-  const pv = document.getElementById("upPreview");
-  if(!f){ pv.style.display = "none"; return; }
-  pv.src = URL.createObjectURL(f);
-  pv.style.display = "block";
-}
-
-async function submitVideo(){
-  if(!currentUser){ showToast("Login required"); return; }
-
-  const title = document.getElementById("upTitle").value.trim();
-  const desc  = document.getElementById("upDesc").value.trim();
-  const file  = document.getElementById("upFile").files[0];
-
-  if(!title){ showToast("Title लिहा"); return; }
-  if(!file){ showToast("Video निवडा"); return; }
-  if(!file.type.startsWith("video/")){ showToast("फक्त video file चालेल"); return; }
-  if(file.size > MAX_MB*1024*1024){ showToast("Video "+MAX_MB+"MB पेक्षा लहान हवा"); return; }
-
-  const btn = document.getElementById("upSubmit");
-  btn.disabled = true;
-  btn.textContent = "Uploading...";
-
-  try{
-    const ext = (file.name.split(".").pop() || "mp4").toLowerCase();
-    const path = `${currentUser.id}/${Date.now()}.${ext}`;
-
-    const { error:upErr } = await supabaseClient.storage
-      .from(BUCKET)
-      .upload(path, file, { contentType:file.type, upsert:false });
-    if(upErr) throw upErr;
-
-    const { data:pub } = supabaseClient.storage.from(BUCKET).getPublicUrl(path);
-
-    const { error:insErr } = await supabaseClient.from("Videos").insert({
-      title: title,
-      description: desc,
-      video_url: pub.publicUrl,
-      username: currentName,
-      user_id: currentUser.id
-    });
-    if(insErr) throw insErr;
-
-    closeUpload();
-    showToast("✅ Video post झाला!");
-    await loadVideos();
-
-  }catch(err){
-    console.error(err);
-    showToast("Post failed: " + (err.message || "error"));
-    btn.disabled = false;
-    btn.textContent = "Post";
-  }
-}
-
-/* DELETE */
-async function deleteVideo(id){
-  const video = videos.find(v => String(v.id) === String(id));
-  if(!video || !currentUser) return;
-  if(!confirm("हा video delete करायचा?")) return;
-
-  // 1) first remove all likes/comments of this video (owner policy needs the Videos row to still exist)
-  try{ await supabaseClient.from("VideoLikes").delete().eq("video_id", String(video.id)); }catch(e){}
-  try{ await supabaseClient.from("VideoComments").delete().eq("video_id", String(video.id)); }catch(e){}
-
-  // 2) then delete the video itself
-  const { error } = await supabaseClient
-    .from("Videos").delete()
-    .eq("id", video.id)
-    .eq("user_id", currentUser.id);
-
-  if(error){
-    console.error(error);
-    showToast("Delete करता आला नाही");
-    return;
+  if(typeof MediaRecorder==="undefined"){
+    return "";
   }
 
-  // remove file from storage (best effort)
-  try{
-    const marker = `/${BUCKET}/`;
-    const idx = video.video_url.indexOf(marker);
-    if(idx > -1){
-      const p = decodeURIComponent(video.video_url.substring(idx + marker.length).split("?")[0]);
-      await supabaseClient.storage.from(BUCKET).remove([p]);
+  const types=[
+    "video/webm;codecs=vp9,opus",
+    "video/webm;codecs=vp8,opus",
+    "video/webm"
+  ];
+
+  for(const type of types){
+
+    if(MediaRecorder.isTypeSupported(type)){
+      return type;
     }
-  }catch(e){}
+  }
 
-  savedSet.delete(String(video.id));
-  lsSet("gs_saved_videos", Array.from(savedSet));
-
-  showToast("🗑 Video delete झाला");
-  loadVideos();
+  return "";
 }
 
-/* PLAYER */
-function openPlayer(id, scrollToComments){
-  const video = videos.find(v => String(v.id) === String(id));
-  if(!video) return;
-  currentVideo = video;
 
-  document.getElementById("playerTitle").textContent = video.title;
-  document.getElementById("playerSmallTitle").textContent = video.title;
-  document.getElementById("playerUser").textContent = "👤 " + (video.username || "GyanSetu User");
-  document.getElementById("playerDescription").textContent = video.description || "";
+/* =====================================================
+   SIR RECORDING
+===================================================== */
 
-  const main = document.getElementById("mainVideo");
-  main.src = video.video_url;
-  const sp = parseFloat(document.getElementById("speedSel").value) || 1;
-  main.playbackRate = sp;
-  main.play().catch(()=>{});
+function startSirRecording(){
 
-  document.getElementById("playerModal").classList.add("show");
-  document.body.style.overflow = "hidden";
-  renderRelated(video.id);
-  refreshActionUI(video.id);
-  loadComments(video.id);
+  if(!sirStream || typeof MediaRecorder==="undefined"){
+    return;
+  }
 
-  try{ history.replaceState(null, "", "?v=" + encodeURIComponent(video.id)); }catch(e){}
+  try{
 
-  if(scrollToComments){
-    setTimeout(()=>{
-      const c = document.querySelector(".comments");
-      if(c) document.getElementById("playerModal").scrollTo({ top: c.offsetTop - 60, behavior:"smooth" });
-    }, 250);
+    const mimeType=getRecorderMimeType();
+
+    const recorder=
+      mimeType
+      ? new MediaRecorder(sirStream,{mimeType:mimeType})
+      : new MediaRecorder(sirStream);
+
+    sirRecorder=recorder;
+
+    sirRecordingChunks=[];
+
+    recorder.ondataavailable=function(event){
+
+      if(event.data && event.data.size>0){
+        sirRecordingChunks.push(event.data);
+      }
+    };
+
+    recorder.onstop=function(){
+
+      if(!sirRecordingChunks.length){
+
+        if(sirRecorder===recorder){
+          sirRecorder=null;
+        }
+
+        return;
+      }
+
+      const blob=
+        new Blob(
+          sirRecordingChunks,
+          {type:recorder.mimeType || "video/webm"}
+        );
+
+      saveRecording(
+        "Sir Live Class - Video + Audio",
+        blob,
+        "sir"
+      );
+
+      sirRecordingChunks=[];
+
+      if(sirRecorder===recorder){
+        sirRecorder=null;
+      }
+    };
+
+    recorder.start(1000);
+
+  }
+  catch(error){
+
+    console.error("Sir recording error:",error);
   }
 }
 
-function closePlayer(){
-  const main = document.getElementById("mainVideo");
-  main.pause();
-  main.removeAttribute("src");
-  main.load();
-  document.getElementById("playerModal").classList.remove("show");
-  document.body.style.overflow = "";
-  currentVideo = null;
-  try{ history.replaceState(null, "", location.pathname); }catch(e){}
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+function sendClassStatus(conn){
+
+  if(!conn || !conn.open){
+    return;
+  }
+
+  try{
+
+    conn.send({
+
+      type:"CLASS_STATUS",
+
+      live:isSirLive,
+
+      hostId:sirPeerId,
+
+      channelName:
+        getSavedChannel()?.name ||
+        "GyanSetu Live Class",
+
+      startedAt:
+        classStartedAt
+        ? classStartedAt.toISOString()
+        : null
+    });
+
+  }
+  catch(e){}
 }
 
-/* RELATED */
-function renderRelated(currentId){
-  const box = document.getElementById("related");
-  box.innerHTML = "";
-  videos.filter(v => String(v.id) !== String(currentId)).slice(0,8).forEach(video=>{
-    const div = document.createElement("div");
-    div.className = "video-card";
-    div.innerHTML = cardHtml(video, false);
-    box.appendChild(div);
+
+function broadcastClassStatus(){
+
+  sirConnections.forEach(function(conn){
+    sendClassStatus(conn);
   });
-  document.getElementById("playerModal").scrollTo({ top:0 });
 }
 
-/* SHARE (original: send to all registered users in chat) */
-async function shareCurrentVideo(){
-  if(!currentVideo) return;
-  if(!currentUser){ showToast("Login required"); return; }
 
-  const { data:profiles, error } = await supabaseClient
-    .from("Profiles").select("id").neq("id", currentUser.id);
+/* =====================================================
+   END CONFIRM
+===================================================== */
 
-  if(error){
+function openEndConfirm(){
+
+  if(!isSirLive){
+    return;
+  }
+
+  $("endConfirmOverlay").classList.remove("hidden");
+}
+
+
+function closeEndConfirm(){
+
+  $("endConfirmOverlay").classList.add("hidden");
+}
+
+
+function confirmEndClass(){
+
+  closeEndConfirm();
+
+  endSirClass(true);
+}
+
+
+/* =====================================================
+   END SIR
+===================================================== */
+
+async function endSirClass(showPopup=true){
+
+  if(!isSirLive){
+    return;
+  }
+
+  sirConnections.forEach(function(conn){
+
+    if(conn && conn.open){
+
+      try{
+
+        conn.send({
+          type:"CLASS_ENDED",
+          message:"Sir ने Live Class समाप्त केली."
+        });
+
+      }
+      catch(e){}
+    }
+  });
+
+  const saved=getSavedChannel();
+
+  if(saved){
+
+    await supabaseClient
+      .from("gs_channels")
+      .update({
+        is_live:false,
+        live_started_at:null
+      })
+      .eq("id",saved.id);
+  }
+
+  stopSirRecording();
+
+  sirCalls.forEach(function(call){
+
+    try{
+      call.close();
+    }
+    catch(e){}
+  });
+
+  sirCalls=[];
+
+  sirConnections.forEach(function(conn){
+
+    try{
+      conn.close();
+    }
+    catch(e){}
+  });
+
+  sirConnections=[];
+
+  students.clear();
+
+  updateStudentUI();
+
+  $("sirChatMessages").innerHTML="";
+
+  closeAllSheets();
+
+  $("sirChatDot").classList.add("hidden");
+
+  stopSirMedia();
+
+  isSirLive=false;
+
+  classStartedAt=null;
+
+  stopSirTimer();
+
+  if(peer){
+
+    try{
+      peer.destroy();
+    }
+    catch(e){}
+
+    peer=null;
+  }
+
+  $("sirLiveBadge").classList.add("hidden");
+
+  $("sirAudioBadge").classList.add("hidden");
+
+  $("endSirClass").classList.add("hidden");
+
+  $("startCameraBtn").classList.remove("hidden");
+
+  $("startCameraBtn").disabled=false;
+
+  $("startCameraBtn").textContent="▶️ Start Class";
+
+  $("sirStatus").textContent=
+    "Class समाप्त झाली. Channel अजूनही तुमचाच आहे.";
+
+  if(showPopup){
+
+    setTimeout(function(){
+
+      showMessage(
+        "Class Ended",
+        "Live Class समाप्त झाली.\nRecording Video + Audio save होत आहे.",
+        "✅"
+      );
+
+    },500);
+  }
+}
+
+
+/* =====================================================
+   STOP RECORDING
+===================================================== */
+
+function stopSirRecording(){
+
+  if(!sirRecorder){
+    return;
+  }
+
+  const recorder=sirRecorder;
+
+  try{
+
+    if(recorder.state!=="inactive"){
+      recorder.stop();
+    }
+
+  }
+  catch(e){}
+}
+
+
+function stopSirMedia(){
+
+  if(sirStream){
+
+    sirStream.getTracks().forEach(function(track){
+
+      try{
+        track.stop();
+      }
+      catch(e){}
+    });
+
+    sirStream=null;
+  }
+
+  $("sirVideo").srcObject=null;
+}
+
+
+/* =====================================================
+   PEER ERROR
+===================================================== */
+
+function handleSirPeerError(error){
+
+  console.error("Sir Peer Error:",error);
+
+  let message="Connection मध्ये problem आली.";
+
+  if(error && error.type==="unavailable-id"){
+
+    message=
+      "हा Channel ID सध्या दुसऱ्या browser मध्ये वापरला जात आहे.";
+  }
+
+  if(error && error.type==="network"){
+
+    message="Internet connection तपासा.";
+  }
+
+  showMessage("Connection Error",message,"❌");
+}
+
+
+/* =====================================================
+   STUDENT JOIN
+===================================================== */
+
+function joinStudentClass(){
+
+  if(studentConnection || studentCall){
+    return;
+  }
+
+  const channel=$("channelInput").value.trim();
+
+  if(!channel){
+
+    showMessage(
+      "Channel ID",
+      "कृपया Sir चा Channel ID टाका.",
+      "⚠️"
+    );
+
+    return;
+  }
+
+  const typedName=
+    $("studentNameInput")
+      .value
+      .replace(/\s+/g," ")
+      .trim()
+      .slice(0,30);
+
+  studentName=typedName || "Student";
+
+  try{
+
+    localStorage.setItem("gyansetu_student_name",typedName);
+
+  }
+  catch(e){}
+
+  studentHostId=channel;
+
+  $("joinStudentBtn").disabled=true;
+
+  $("joinStudentBtn").textContent="Connecting...";
+
+  $("studentStatus").textContent=
+    "🔄 Sir च्या Channel ला connect होत आहे...";
+
+  try{
+
+    const player=$("studentVideoWrap");
+
+    if(player && player.requestFullscreen){
+
+      player.requestFullscreen().catch(function(){});
+    }
+
+  }
+  catch(e){}
+
+  peer=new Peer({debug:1});
+
+  peer.on("open",function(){
+    connectStudentToSir();
+  });
+
+  peer.on("error",function(error){
+
+    console.error("Student Peer Error:",error);
+
+    resetStudentJoinButton();
+
+    showMessage(
+      "Join Failed",
+      "Sir च्या Channel ला connect होता आले नाही.\nChannel ID तपासा.",
+      "❌"
+    );
+  });
+}
+
+
+/* =====================================================
+   STUDENT CONNECTION
+===================================================== */
+
+function sendToSir(data){
+
+  if(studentConnection && studentConnection.open){
+
+    try{
+
+      studentConnection.send(data);
+
+      return true;
+
+    }
+    catch(e){}
+  }
+
+  showToast("⚠️ Sir शी connection नाही");
+
+  return false;
+}
+
+
+function connectStudentToSir(){
+
+  if(!peer || !studentHostId){
+    return;
+  }
+
+  studentConnection=
+    peer.connect(studentHostId,{reliable:true});
+
+  studentConnection.on("open",function(){
+
+    $("studentStatus").textContent="✅ Sir ला connect झाले.";
+
+    try{
+
+      studentConnection.send({
+        type:"STUDENT_JOINED",
+        name:studentName
+      });
+
+    }
+    catch(e){}
+  });
+
+  studentConnection.on("data",function(data){
+    handleStudentData(data);
+  });
+
+  studentConnection.on("close",function(){
+
+    if(!studentCall){
+
+      resetStudentJoinButton();
+
+      $("studentStatus").textContent="❌ Sir connection बंद झाली.";
+    }
+  });
+
+  studentConnection.on("error",function(error){
     console.error(error);
-    showToast("Users load झाले नाहीत.");
+  });
+}
+
+
+/* =====================================================
+   STUDENT DATA
+===================================================== */
+
+function handleStudentData(data){
+
+  if(!data || typeof data!=="object"){
     return;
   }
-  if(!profiles || !profiles.length){
-    showToast("Share करण्यासाठी दुसरे registered users नाहीत.");
+
+  if(data.type==="CLASS_STATUS"){
+
+    if(data.live){
+
+      $("studentStatus").textContent=
+        "🔴 Live Class आहे. Video + Audio connect होत आहे...";
+
+      if(data.startedAt){
+
+        const started=new Date(data.startedAt);
+
+        if(
+          !isNaN(started.getTime()) &&
+          (
+            !studentClassStart ||
+            studentClassStart.getTime()!==started.getTime()
+          )
+        ){
+
+          studentClassStart=started;
+
+          startStudentTimer();
+        }
+      }
+
+      startStudentCall();
+
+    }
+    else{
+
+      $("studentStatus").textContent=
+        "⏳ Sir ने अजून Live Class सुरू केलेली नाही.";
+    }
+
     return;
   }
 
-  const message = "VIDEO:" + currentVideo.id + "|" + currentVideo.title;
-  const rows = profiles.map(p => ({
-    sender_id: currentUser.id,
-    receiver_id: p.id,
-    message: message,
-    is_read: false
-  }));
+  if(data.type==="CLASS_ENDED"){
 
-  const { error:sendError } = await supabaseClient.from("Messages").insert(rows);
-  if(sendError){
-    console.error(sendError);
-    showToast("Video share करता आला नाही.");
+    stopStudentClass(
+      data.message || "Sir ने Live Class समाप्त केली."
+    );
+
     return;
   }
-  showToast("✅ Video सर्व registered usersना share केला.");
+
+  if(data.type==="CHAT_MSG"){
+
+    const mine=
+      !!data.peerId &&
+      !!peer &&
+      data.peerId===peer.id;
+
+    appendChat("studentChatMessages",data,mine);
+
+    return;
+  }
+
+  if(data.type==="RESET_FEEDBACK"){
+
+    handRaised=false;
+
+    understandValue=null;
+
+    updateStudentFeedbackUI();
+
+    showToast("🔄 Sir ने Feedback reset केला");
+  }
 }
 
-/* HELPERS */
-function escapeHtml(text){
-  const div = document.createElement("div");
-  div.textContent = text ?? "";
-  return div.innerHTML;
+
+/* =====================================================
+   STUDENT FEEDBACK (HAND / UNDERSTAND)
+===================================================== */
+
+function updateStudentFeedbackUI(){
+
+  $("handBtn").textContent=
+    handRaised
+    ? "✋ Hand खाली करा"
+    : "✋ Hand Raise";
+
+  $("handBtn").classList.toggle("active",handRaised);
+
+  $("yesBtn").classList.toggle(
+    "active-yes",
+    understandValue==="yes"
+  );
+
+  $("noBtn").classList.toggle(
+    "active-no",
+    understandValue==="no"
+  );
 }
 
-function escapeAttr(text){
-  return String(text ?? "")
-    .replace(/&/g,"&amp;").replace(/"/g,"&quot;")
-    .replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+function toggleHand(){
+
+  const next=!handRaised;
+
+  if(sendToSir({type:"HAND",raised:next})){
+
+    handRaised=next;
+
+    updateStudentFeedbackUI();
+
+    showToast(
+      next
+      ? "✋ Sir ला कळवलं"
+      : "Hand खाली केला"
+    );
+  }
 }
 
-function formatDate(value){
-  if(!value) return "";
-  return new Date(value).toLocaleDateString([], { day:"numeric", month:"short", year:"numeric" });
+
+function setUnderstand(value){
+
+  const next=understandValue===value ? null : value;
+
+  if(sendToSir({type:"UNDERSTAND",value:next})){
+
+    understandValue=next;
+
+    updateStudentFeedbackUI();
+  }
 }
 
-/* KEYBOARD: Esc closes player / upload */
-document.addEventListener("keydown", e=>{
-  if(e.key !== "Escape") return;
-  if(document.getElementById("playerModal").classList.contains("show")) closePlayer();
-  else if(document.getElementById("uploadModal").classList.contains("show")) closeUpload();
+
+/* =====================================================
+   STUDENT NOTES
+===================================================== */
+
+function notesKey(){
+
+  return "GyanSetu_Notes_"+(studentHostId || "general");
+}
+
+
+function loadStudentNotes(){
+
+  try{
+
+    $("studentNotes").value=
+      localStorage.getItem(notesKey()) || "";
+
+  }
+  catch(e){}
+}
+
+
+function saveStudentNotes(){
+
+  try{
+
+    localStorage.setItem(
+      notesKey(),
+      $("studentNotes").value
+    );
+
+  }
+  catch(e){}
+}
+
+
+function downloadStudentNotes(){
+
+  const text=$("studentNotes").value.trim();
+
+  if(!text){
+
+    showToast("📝 Notes रिकाम्या आहेत");
+
+    return;
+  }
+
+  const blob=
+    new Blob(
+      ["GyanSetu Class Notes\n"+
+       formatDate(new Date())+
+       "\n\n"+text],
+      {type:"text/plain;charset=utf-8"}
+    );
+
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+
+  a.href=url;
+
+  a.download="GyanSetu Notes.txt";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  setTimeout(function(){
+
+    URL.revokeObjectURL(url);
+
+  },1000);
+}
+
+
+/* =====================================================
+   RECEIVE STREAM
+===================================================== */
+
+function createReceiveStream(){
+
+  try{
+
+    const canvas=document.createElement("canvas");
+
+    canvas.width=2;
+    canvas.height=2;
+
+    const context=canvas.getContext("2d");
+
+    context.fillStyle="#000";
+
+    context.fillRect(0,0,2,2);
+
+    const stream=canvas.captureStream(1);
+
+    const AudioContext=
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if(AudioContext){
+
+      studentAudioContext=new AudioContext();
+
+      if(studentAudioContext.state==="suspended"){
+
+        studentAudioContext.resume().catch(function(){});
+      }
+
+      const oscillator=studentAudioContext.createOscillator();
+
+      const gain=studentAudioContext.createGain();
+
+      const destination=
+        studentAudioContext.createMediaStreamDestination();
+
+      gain.gain.value=0;
+
+      oscillator.connect(gain);
+
+      gain.connect(destination);
+
+      oscillator.start();
+
+      const audioTrack=destination.stream.getAudioTracks()[0];
+
+      if(audioTrack){
+
+        audioTrack.enabled=true;
+
+        stream.addTrack(audioTrack);
+      }
+
+      studentOscillator=oscillator;
+    }
+
+    return stream;
+
+  }
+  catch(error){
+
+    console.error("Receive stream error:",error);
+
+    return new MediaStream();
+  }
+}
+
+
+/* =====================================================
+   STUDENT CALL
+===================================================== */
+
+function startStudentCall(){
+
+  if(!peer || !studentHostId || studentCall){
+    return;
+  }
+
+  const receiveStream=createReceiveStream();
+
+  try{
+
+    studentCall=peer.call(studentHostId,receiveStream);
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    showMessage(
+      "Live Error",
+      "Live connection सुरू करता आली नाही.",
+      "❌"
+    );
+
+    return;
+  }
+
+  if(!studentCall){
+    return;
+  }
+
+  studentCall.on("stream",function(remoteStream){
+
+    studentRemoteStream=remoteStream;
+
+    const video=$("studentVideo");
+
+    video.srcObject=remoteStream;
+
+    video.muted=false;
+
+    video.volume=1;
+
+    video.controls=true;
+
+    video.playsInline=true;
+
+    const audioTracks=remoteStream.getAudioTracks();
+
+    audioTracks.forEach(function(track){
+      track.enabled=true;
+    });
+
+    if(audioTracks.length>0){
+
+      $("studentAudioBadge").classList.remove("hidden");
+
+      $("studentLiveStatus").textContent=
+        "🔴 Live Class चालू आहे • 🔊 Sir Audio उपलब्ध";
+
+    }
+    else{
+
+      $("studentLiveStatus").textContent=
+        "🔴 Live Class चालू आहे • Audio track सापडला नाही";
+    }
+
+    $("studentJoinArea").classList.add("hidden");
+
+    $("studentLiveArea").classList.remove("hidden");
+
+    $("studentLiveBadge").classList.remove("hidden");
+
+    loadStudentNotes();
+
+    updateStudentFeedbackUI();
+
+    video.play()
+      .then(function(){
+
+        if(audioTracks.length>0){
+
+          $("enableAudioBtn").textContent="🔊 Sir Audio ON";
+        }
+      })
+      .catch(function(error){
+
+        console.log("Autoplay blocked:",error);
+
+        $("enableAudioBtn").classList.remove("hidden");
+      });
+
+    startStudentRecording(remoteStream);
+  });
+
+  studentCall.on("close",function(){
+
+    if(studentRemoteStream){
+
+      stopStudentClass("Live video connection बंद झाली.");
+    }
+  });
+
+  studentCall.on("error",function(error){
+
+    console.error("Student Call Error:",error);
+
+    stopStudentClass("Live video/audio connection बंद झाला.");
+
+    showMessage(
+      "Live Error",
+      "Sir चा Live video/audio connection बंद झाला.",
+      "❌"
+    );
+  });
+}
+
+
+/* =====================================================
+   STUDENT FULLSCREEN
+===================================================== */
+
+async function toggleStudentFullscreen(){
+
+  const player=$("studentVideoWrap");
+
+  const video=$("studentVideo");
+
+  try{
+
+    if(document.fullscreenElement){
+
+      await document.exitFullscreen();
+
+      return;
+    }
+
+    if(player && player.requestFullscreen){
+
+      await player.requestFullscreen();
+
+      return;
+    }
+
+    if(video && video.webkitEnterFullscreen){
+
+      video.webkitEnterFullscreen();
+
+      return;
+    }
+
+    if(video && video.webkitRequestFullscreen){
+
+      video.webkitRequestFullscreen();
+
+      return;
+    }
+
+  }
+  catch(error){
+
+    console.error("Fullscreen error:",error);
+  }
+}
+
+
+/* =====================================================
+   AUDIO
+===================================================== */
+
+function enableStudentAudio(){
+
+  const video=$("studentVideo");
+
+  if(!video){
+    return;
+  }
+
+  video.muted=false;
+
+  video.volume=1;
+
+  if(studentRemoteStream){
+
+    studentRemoteStream.getAudioTracks().forEach(function(track){
+      track.enabled=true;
+    });
+  }
+
+  video.play()
+    .then(function(){
+
+      $("enableAudioBtn").textContent="🔊 Sir Audio ON";
+
+      $("studentAudioBadge").classList.remove("hidden");
+
+      $("studentLiveStatus").textContent=
+        "🔴 Live Class चालू आहे • 🔊 Sir Audio ON";
+    })
+    .catch(function(error){
+
+      console.error("Audio error:",error);
+
+      showMessage(
+        "Audio सुरू झाला नाही",
+        "Video वर Play करा आणि फोनचा Media Volume वाढवा.",
+        "🔊"
+      );
+    });
+}
+
+
+/* =====================================================
+   STUDENT RECORDING
+===================================================== */
+
+function startStudentRecording(remoteStream){
+
+  if(!remoteStream || typeof MediaRecorder==="undefined"){
+    return;
+  }
+
+  if(studentRecorder){
+    return;
+  }
+
+  try{
+
+    const mimeType=getRecorderMimeType();
+
+    const recorder=
+      mimeType
+      ? new MediaRecorder(remoteStream,{mimeType:mimeType})
+      : new MediaRecorder(remoteStream);
+
+    studentRecorder=recorder;
+
+    studentRecordingChunks=[];
+
+    recorder.ondataavailable=function(event){
+
+      if(event.data && event.data.size>0){
+        studentRecordingChunks.push(event.data);
+      }
+    };
+
+    recorder.onstop=function(){
+
+      if(!studentRecordingChunks.length){
+
+        if(studentRecorder===recorder){
+          studentRecorder=null;
+        }
+
+        return;
+      }
+
+      const blob=
+        new Blob(
+          studentRecordingChunks,
+          {type:recorder.mimeType || "video/webm"}
+        );
+
+      saveRecording(
+        "Student Watched Class - Video + Audio",
+        blob,
+        "student"
+      );
+
+      studentRecordingChunks=[];
+
+      if(studentRecorder===recorder){
+        studentRecorder=null;
+      }
+    };
+
+    recorder.start(1000);
+
+  }
+  catch(error){
+
+    console.error("Student recording error:",error);
+  }
+}
+
+
+/* =====================================================
+   STOP STUDENT RECORDING
+===================================================== */
+
+function stopStudentRecording(){
+
+  if(!studentRecorder){
+    return;
+  }
+
+  const recorder=studentRecorder;
+
+  try{
+
+    if(recorder.state!=="inactive"){
+      recorder.stop();
+    }
+
+  }
+  catch(e){}
+}
+
+
+/* =====================================================
+   STOP STUDENT
+===================================================== */
+
+function stopStudentClass(message){
+
+  const hadClass=!!studentCall || !!studentRemoteStream;
+
+  saveStudentNotes();
+
+  stopStudentRecording();
+
+  if(studentCall){
+
+    try{
+      studentCall.close();
+    }
+    catch(e){}
+
+    studentCall=null;
+  }
+
+  if(studentRemoteStream){
+
+    studentRemoteStream.getTracks().forEach(function(track){
+
+      try{
+        track.stop();
+      }
+      catch(e){}
+    });
+
+    studentRemoteStream=null;
+  }
+
+  if(studentOscillator){
+
+    try{
+      studentOscillator.stop();
+    }
+    catch(e){}
+
+    studentOscillator=null;
+  }
+
+  if(studentAudioContext){
+
+    try{
+      studentAudioContext.close();
+    }
+    catch(e){}
+
+    studentAudioContext=null;
+  }
+
+  $("studentVideo").srcObject=null;
+
+  $("studentVideo").muted=false;
+
+  $("studentVideo").volume=1;
+
+  if(studentConnection){
+
+    try{
+      studentConnection.close();
+    }
+    catch(e){}
+
+    studentConnection=null;
+  }
+
+  if(peer){
+
+    try{
+      peer.destroy();
+    }
+    catch(e){}
+
+    peer=null;
+  }
+
+  studentHostId=null;
+
+  studentClassStart=null;
+
+  stopStudentTimer();
+
+  handRaised=false;
+
+  understandValue=null;
+
+  updateStudentFeedbackUI();
+
+  $("studentChatMessages").innerHTML="";
+
+  $("studentNotes").value="";
+
+  closeAllSheets();
+
+  $("studentChatDot").classList.add("hidden");
+
+  $("studentLiveBadge").classList.add("hidden");
+
+  $("studentAudioBadge").classList.add("hidden");
+
+  $("studentLiveArea").classList.add("hidden");
+
+  $("studentJoinArea").classList.remove("hidden");
+
+  $("enableAudioBtn").textContent="🔊 Enable Sir Audio";
+
+  resetStudentJoinButton();
+
+  $("studentStatus").textContent="Class बंद झाली.";
+
+  if(document.fullscreenElement){
+
+    document.exitFullscreen().catch(function(){});
+  }
+
+  if(hadClass){
+
+    setTimeout(function(){
+
+      loadRecordingsInto("recordingsPopupList");
+
+      if(message){
+
+        showMessage(
+          "Class Ended",
+          message+"\nVideo + Audio recording save होत आहे.",
+          "✅"
+        );
+      }
+
+    },500);
+  }
+}
+
+
+/* =====================================================
+   RESET STUDENT
+===================================================== */
+
+function resetStudentJoinButton(){
+
+  $("joinStudentBtn").disabled=false;
+
+  $("joinStudentBtn").textContent="▶️ Start Class";
+}
+
+
+/* =====================================================
+   LEAVE
+===================================================== */
+
+function notifyStudentLeft(){
+
+  if(studentConnection && studentConnection.open){
+
+    try{
+
+      studentConnection.send({type:"STUDENT_LEFT"});
+
+    }
+    catch(e){}
+  }
+}
+
+
+function leaveStudentClass(){
+
+  notifyStudentLeft();
+
+  stopStudentClass("तुम्ही Live Class मधून बाहेर पडलात.");
+}
+
+
+/* =====================================================
+   GENERAL FULLSCREEN
+===================================================== */
+
+async function toggleFullscreen(id){
+
+  const element=$(id);
+
+  if(!element){
+    return;
+  }
+
+  try{
+
+    if(document.fullscreenElement){
+
+      await document.exitFullscreen();
+
+      return;
+    }
+
+    if(element.requestFullscreen){
+
+      await element.requestFullscreen();
+
+      return;
+    }
+
+    if(element.webkitRequestFullscreen){
+
+      element.webkitRequestFullscreen();
+    }
+
+  }
+  catch(error){
+
+    console.error(error);
+  }
+}
+
+
+/* =====================================================
+   RECORDED
+===================================================== */
+
+function openRecordedPopup(){
+
+  $("recordedOverlay").classList.remove("hidden");
+
+  loadRecordingsInto("recordingsPopupList");
+}
+
+
+function closeRecordedPopup(){
+
+  $("recordedOverlay").classList.add("hidden");
+}
+
+
+/* =====================================================
+   DATABASE
+===================================================== */
+
+function openDatabase(){
+
+  return new Promise(function(resolve,reject){
+
+    if(db){
+
+      resolve(db);
+
+      return;
+    }
+
+    const request=indexedDB.open(DB_NAME,DB_VERSION);
+
+    request.onupgradeneeded=function(event){
+
+      const database=event.target.result;
+
+      if(!database.objectStoreNames.contains(STORE_NAME)){
+
+        const store=
+          database.createObjectStore(
+            STORE_NAME,
+            {keyPath:"id",autoIncrement:true}
+          );
+
+        store.createIndex(
+          "createdAt",
+          "createdAt",
+          {unique:false}
+        );
+      }
+    };
+
+    request.onsuccess=function(event){
+
+      db=event.target.result;
+
+      resolve(db);
+    };
+
+    request.onerror=function(){
+      reject(request.error);
+    };
+  });
+}
+
+
+/* =====================================================
+   SAVE RECORDING
+===================================================== */
+
+function saveRecording(title,blob,type){
+
+  if(!blob || blob.size===0){
+    return;
+  }
+
+  openDatabase()
+    .then(function(database){
+
+      return new Promise(function(resolve,reject){
+
+        const transaction=
+          database.transaction([STORE_NAME],"readwrite");
+
+        const store=transaction.objectStore(STORE_NAME);
+
+        store.add({
+          title:title,
+          blob:blob,
+          type:type,
+          createdAt:new Date().toISOString(),
+          size:blob.size
+        });
+
+        transaction.oncomplete=function(){
+          resolve();
+        };
+
+        transaction.onerror=function(){
+          reject(transaction.error);
+        };
+      });
+    })
+    .then(function(){
+
+      loadRecordingsInto("recordingsPopupList");
+    })
+    .catch(function(error){
+
+      console.error("Save recording error:",error);
+    });
+}
+
+
+/* =====================================================
+   GET RECORDINGS
+===================================================== */
+
+function getAllRecordings(){
+
+  return openDatabase().then(function(database){
+
+    return new Promise(function(resolve,reject){
+
+      const transaction=
+        database.transaction([STORE_NAME],"readonly");
+
+      const store=transaction.objectStore(STORE_NAME);
+
+      const request=store.getAll();
+
+      request.onsuccess=function(){
+
+        const records=request.result || [];
+
+        records.sort(function(a,b){
+
+          return new Date(b.createdAt)-new Date(a.createdAt);
+        });
+
+        resolve(records);
+      };
+
+      request.onerror=function(){
+        reject(request.error);
+      };
+    });
+  });
+}
+
+
+/* =====================================================
+   LOAD RECORDINGS
+===================================================== */
+
+function loadRecordingsInto(id){
+
+  getAllRecordings()
+    .then(function(records){
+
+      renderRecordingContainer($(id),records);
+    })
+    .catch(function(error){
+
+      console.error(error);
+    });
+}
+
+
+/* =====================================================
+   RENDER RECORDINGS
+===================================================== */
+
+function renderRecordingContainer(container,recordings){
+
+  if(!container){
+    return;
+  }
+
+  container.innerHTML="";
+
+  if(!recordings || recordings.length===0){
+
+    const empty=document.createElement("div");
+
+    empty.className="empty-recordings";
+
+    empty.textContent="अजून कोणतीही Recorded Class नाही.";
+
+    container.appendChild(empty);
+
+    return;
+  }
+
+  recordings.forEach(function(recording){
+
+    const card=document.createElement("div");
+
+    card.className="record-card";
+
+    const title=document.createElement("div");
+
+    title.className="record-title";
+
+    title.textContent=
+      recording.title || "GyanSetu Live Class";
+
+    const type=document.createElement("span");
+
+    type.className="record-type";
+
+    type.textContent=
+      recording.type==="sir"
+      ? "👨‍🏫 Sir Class • 🎤 Audio"
+      : "👨‍🎓 Student Class • 🔊 Audio";
+
+    const date=document.createElement("div");
+
+    date.className="record-date";
+
+    date.textContent=formatDate(recording.createdAt);
+
+    const size=document.createElement("div");
+
+    size.className="record-size";
+
+    size.textContent=
+      formatFileSize(
+        recording.size ||
+        recording.blob?.size ||
+        0
+      );
+
+    const actions=document.createElement("div");
+
+    actions.className="record-actions";
+
+    const watch=document.createElement("button");
+
+    watch.className="small-btn watch-btn";
+
+    watch.textContent="▶️ Watch";
+
+    watch.onclick=function(){
+      playRecording(recording);
+    };
+
+    const download=document.createElement("button");
+
+    download.className="small-btn download-btn";
+
+    download.textContent="⬇️ Download";
+
+    download.onclick=function(){
+      downloadRecording(recording);
+    };
+
+    const remove=document.createElement("button");
+
+    remove.className="small-btn delete-btn";
+
+    remove.textContent="🗑️ Delete";
+
+    remove.onclick=function(){
+      deleteRecording(recording.id);
+    };
+
+    actions.appendChild(watch);
+
+    actions.appendChild(download);
+
+    actions.appendChild(remove);
+
+    card.appendChild(title);
+
+    card.appendChild(type);
+
+    card.appendChild(date);
+
+    card.appendChild(size);
+
+    card.appendChild(actions);
+
+    container.appendChild(card);
+  });
+}
+
+
+/* =====================================================
+   PLAY RECORDING
+===================================================== */
+
+function playRecording(recording){
+
+  if(!recording || !recording.blob){
+
+    showMessage(
+      "Video Error",
+      "Recording file उपलब्ध नाही.",
+      "❌"
+    );
+
+    return;
+  }
+
+  if(currentPlaybackUrl){
+
+    URL.revokeObjectURL(currentPlaybackUrl);
+
+    currentPlaybackUrl=null;
+  }
+
+  currentPlaybackUrl=URL.createObjectURL(recording.blob);
+
+  $("recordingVideo").src=currentPlaybackUrl;
+
+  $("recordingVideo").muted=false;
+
+  $("recordingVideo").volume=1;
+
+  $("playerTitle").textContent=
+    recording.title || "🎬 Recorded Class";
+
+  $("playerOverlay").classList.remove("hidden");
+
+  $("recordingVideo").play().catch(function(){});
+}
+
+
+/* =====================================================
+   CLOSE PLAYER
+===================================================== */
+
+function closePlayerPopup(){
+
+  const video=$("recordingVideo");
+
+  try{
+    video.pause();
+  }
+  catch(e){}
+
+  video.removeAttribute("src");
+
+  video.load();
+
+  if(currentPlaybackUrl){
+
+    URL.revokeObjectURL(currentPlaybackUrl);
+
+    currentPlaybackUrl=null;
+  }
+
+  $("playerOverlay").classList.add("hidden");
+}
+
+
+/* =====================================================
+   DOWNLOAD
+===================================================== */
+
+function downloadRecording(recording){
+
+  if(!recording || !recording.blob){
+    return;
+  }
+
+  const url=URL.createObjectURL(recording.blob);
+
+  const a=document.createElement("a");
+
+  a.href=url;
+
+  a.download=
+    safeFileName(
+      recording.title ||
+      "GyanSetu Recorded Class"
+    )+".webm";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  setTimeout(function(){
+
+    URL.revokeObjectURL(url);
+
+  },1000);
+}
+
+
+/* =====================================================
+   DELETE
+===================================================== */
+
+function deleteRecording(id){
+
+  if(!id){
+    return;
+  }
+
+  openDatabase()
+    .then(function(database){
+
+      return new Promise(function(resolve,reject){
+
+        const transaction=
+          database.transaction([STORE_NAME],"readwrite");
+
+        const store=transaction.objectStore(STORE_NAME);
+
+        store.delete(id);
+
+        transaction.oncomplete=function(){
+          resolve();
+        };
+
+        transaction.onerror=function(){
+          reject(transaction.error);
+        };
+      });
+    })
+    .then(function(){
+
+      loadRecordingsInto("recordingsPopupList");
+    })
+    .catch(function(error){
+
+      console.error(error);
+    });
+}
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function formatDate(date){
+
+  try{
+
+    return new Date(date).toLocaleString(
+      "en-IN",
+      {dateStyle:"medium",timeStyle:"short"}
+    );
+
+  }
+  catch(e){
+
+    return String(date || "");
+  }
+}
+
+
+function formatFileSize(bytes){
+
+  if(!bytes || bytes<=0){
+    return "0 KB";
+  }
+
+  const units=["Bytes","KB","MB","GB"];
+
+  let index=0;
+
+  let size=bytes;
+
+  while(size>=1024 && index<units.length-1){
+
+    size/=1024;
+
+    index++;
+  }
+
+  return size.toFixed(index===0 ? 0 : 2)+" "+units[index];
+}
+
+
+function safeFileName(value){
+
+  return String(value || "recording")
+    .replace(/[<>:"/\\|?*\x00-\x1F]/g,"_")
+    .replace(/\s+/g," ")
+    .trim()
+    .slice(0,80);
+}
+
+
+/* =====================================================
+   INPUT EVENTS
+===================================================== */
+
+$("channelInput").addEventListener("input",function(){
+
+  this.value=this.value.trim().slice(0,100);
 });
 
-/* AUTOPLAY NEXT when video ends */
-document.getElementById("mainVideo").addEventListener("ended", playNext);
 
-/* START */
-async function start(){
-  // restore saved settings
-  loadSaved();
-  const sp = lsGet("gs_speed", "1");
-  document.getElementById("speedSel").value = sp;
-  document.getElementById("autoNext").checked = lsGet("gs_autonext", true);
+$("channelInput").addEventListener("keydown",function(event){
 
-  await getUser();
-  await loadVideos();
+  if(event.key==="Enter"){
+    joinStudentClass();
+  }
+});
 
-  // open a shared link like videos.html?v=123
-  const vid = new URLSearchParams(location.search).get("v");
-  if(vid) openPlayer(vid);
-}
-start();
+
+$("createChannelName").addEventListener("input",function(){
+
+  this.value=this.value.replace(/\s+/g," ").slice(0,80);
+});
+
+
+$("channelNameInput").addEventListener("input",function(){
+
+  this.value=this.value.replace(/\s+/g," ").slice(0,80);
+});
+
+
+$("sirChatInput").addEventListener("keydown",function(event){
+
+  if(event.key==="Enter"){
+    sendSirChat();
+  }
+});
+
+
+$("studentChatInput").addEventListener("keydown",function(event){
+
+  if(event.key==="Enter"){
+    sendStudentChat();
+  }
+});
+
+
+$("studentNotes").addEventListener("input",function(){
+
+  saveStudentNotes();
+});
+
+
+/* =====================================================
+   OUTSIDE CLICK
+===================================================== */
+
+$("roleOverlay").addEventListener("click",function(event){
+
+  if(event.target===$("roleOverlay")){
+    closeRolePopup();
+  }
+});
+
+
+$("recordedOverlay").addEventListener("click",function(event){
+
+  if(event.target===$("recordedOverlay")){
+    closeRecordedPopup();
+  }
+});
+
+
+$("playerOverlay").addEventListener("click",function(event){
+
+  if(event.target===$("playerOverlay")){
+    closePlayerPopup();
+  }
+});
+
+
+$("channelEditOverlay").addEventListener("click",function(event){
+
+  if(event.target===$("channelEditOverlay")){
+    closeEditChannelPopup();
+  }
+});
+
+
+$("liveChannelsOverlay").addEventListener("click",function(event){
+
+  if(event.target===$("liveChannelsOverlay")){
+    closeLiveChannels();
+  }
+});
+
+
+/* =====================================================
+   PAGE EXIT
+===================================================== */
+
+window.addEventListener("beforeunload",function(){
+
+  if(studentConnection){
+    notifyStudentLeft();
+  }
+});
+
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+supabaseClient.auth.onAuthStateChange(
+  async function(event,session){
+
+    currentUser=session?.user || null;
+  }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+document.addEventListener("DOMContentLoaded",async function(){
+
+  await loadCurrentUser();
+
+  try{
+
+    const savedName=
+      localStorage.getItem("gyansetu_student_name") ||
+      currentUser?.user_metadata?.username ||
+      localStorage.getItem("gyansetu_username") ||
+      "";
+
+    $("studentNameInput").value=
+      String(savedName).slice(0,30);
+
+  }
+  catch(e){}
+
+  updateStudentUI();
+
+  openDatabase()
+    .then(function(){
+
+      loadRecordingsInto("recordingsPopupList");
+    })
+    .catch(function(error){
+
+      console.error(error);
+    });
+});
+
 </script>
+
 </body>
 </html>
