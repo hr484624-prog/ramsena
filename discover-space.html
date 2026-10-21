@@ -1,497 +1,411 @@
 <!DOCTYPE html>
 <html lang="mr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>दोरवीर: रात्रीचं शहर</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;800&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>GyanSetu - Live Classes</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <style>
-:root{--bg:#0b0610;--ink:#f6ece4;--red:#ff3b4e;--panel:rgba(14,8,18,.72);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0610}}
-:root[data-theme="dark"]{--bg:#0b0610}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:'Baloo 2','Noto Sans Devanagari',sans-serif}
-canvas#c{position:fixed;inset:0;width:100%;height:100%}
-#hud{position:fixed;left:10px;top:calc(10px + env(safe-area-inset-top,0px));background:var(--panel);padding:8px 12px;border-radius:12px;min-width:150px}
-#hpbar{height:10px;background:#331018;border-radius:6px;overflow:hidden;margin:4px 0}
-#hp{height:100%;width:100%;background:var(--red)}
-#kills{position:fixed;right:10px;top:calc(10px + env(safe-area-inset-top,0px));background:var(--panel);padding:8px 12px;border-radius:12px;font-size:16px;text-align:right}
-#toast{position:fixed;left:50%;top:30%;transform:translateX(-50%);font-size:28px;font-weight:800;color:#ffd27a;text-shadow:0 2px 8px #000;opacity:0;transition:opacity .2s;pointer-events:none;text-align:center;white-space:nowrap}
-#joy{position:fixed;left:22px;bottom:calc(26px + env(safe-area-inset-bottom,0px));width:130px;height:130px;border-radius:50%;background:var(--panel);border:2px solid rgba(255,255,255,.2);display:none}
-#knob{position:absolute;left:40px;top:40px;width:50px;height:50px;border-radius:50%;background:rgba(255,59,78,.85)}
-#btns{position:fixed;right:16px;bottom:calc(26px + env(safe-area-inset-bottom,0px));display:none;gap:12px;align-items:flex-end}
-.btn{width:74px;height:74px;border-radius:50%;background:var(--panel);border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:800}
-.btn.big{width:96px;height:96px;font-size:24px;border-color:var(--red)}
-.btn.on{background:var(--red)}
-@media (pointer:coarse){#joy{display:block}#btns{display:flex}}
-#rot{position:fixed;inset:0;z-index:99;background:#0b0610;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:24px;font-weight:800;padding:20px}
-#rot span{font-size:70px;display:block;animation:tw 1.6s ease-in-out infinite}
-@keyframes tw{0%,30%{transform:rotate(0)}70%,100%{transform:rotate(-90deg)}}
-@media (orientation:portrait) and (pointer:coarse){#rot{display:flex}}
-#start{overflow:auto}
-#tod{position:fixed;left:50%;transform:translateX(-50%);top:calc(10px + env(safe-area-inset-top,0px));background:var(--panel);padding:6px 16px;border-radius:20px;font-weight:800;font-size:16px;border:2px solid rgba(255,255,255,.25)}
-@media (max-height:480px){#start{justify-content:flex-start}#start h1{font-size:34px}#start p{font-size:14px;margin:3px 0}#go{margin-top:8px;font-size:18px}}
-#start{position:fixed;inset:0;background:radial-gradient(circle at 50% 30%,#4a0f22,#0b0610 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
-#start h1{font-size:52px;margin:0;font-weight:800;color:var(--red);line-height:1}
-#start p{max-width:430px;margin:8px 0;font-size:17px}
-#go{margin-top:16px;font:800 22px 'Baloo 2',sans-serif;background:var(--red);color:#fff;border:0;border-radius:14px;padding:10px 36px}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial,sans-serif;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{height:100%;background:#0b0f17;color:#fff}
+input,textarea,button{font:inherit;font-size:16px}
+button{border:0;color:#fff;cursor:pointer}
+.hidden{display:none!important}
+header{height:56px;display:flex;align-items:center;gap:10px;padding:0 12px;background:linear-gradient(135deg,#0b0f17,#1b2a55);position:sticky;top:0;z-index:20}
+.ib{width:40px;height:40px;border-radius:50%;background:#1b2436;font-size:20px;flex:none}
+header h2{font-size:18px}
+main{max-width:720px;margin:auto;padding:14px 12px 40px}
+.pri{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#3d6cff,#6a4dff);font-weight:700}
+.sec{padding:12px;border-radius:12px;background:#1b2436;font-weight:700}
+.red{background:#ff3b5c}
+.card{position:relative;background:#131a26;border:1px solid #232d42;border-radius:16px;padding:14px;margin-top:10px}
+.ct{font-weight:700;font-size:17px;padding-right:44px}
+.sub{color:#8f9bb3;font-size:13px;margin-top:5px}
+.lvt{display:inline-block;margin-top:8px;background:#ff3b5c;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
+.ic{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:#1b2436}
+.empty{text-align:center;color:#6c778f;padding:26px}
+.inp{width:100%;margin-top:10px;padding:13px;border-radius:11px;border:1px solid #2c3850;background:#0b1018;color:#fff;outline:none}
+.chips{display:flex;gap:8px;margin-top:10px}.chips .sec{flex:1;padding:10px;font-size:14px}.chips .on{background:#3d6cff}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
+.pop{width:100%;max-width:480px;max-height:90vh;overflow:auto;background:#10151f;border:1px solid #2a3550;border-radius:20px;padding:20px}
+.pop p{color:#9aa6bd;margin-top:6px}
+.roles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.roles button{background:#151c28;border:1px solid #30394a;border-radius:16px;padding:24px 8px;font-weight:700}
+.roles span{display:block;font-size:38px;margin-bottom:8px}
+.room{position:fixed;inset:0;display:flex;flex-direction:column;background:#0b0f17;z-index:30}
+.rh{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#10151f}
+.rh small{display:block;color:#8f9bb3}
+.pl{position:relative;background:#000;aspect-ratio:16/9;max-height:42vh;width:100%;margin:auto;flex:none}
+.pl video{width:100%;height:100%;object-fit:contain;background:#000}
+.ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:#8f9bb3;background:#0a0e16;line-height:1.6}
+.lvb,.vcb{position:absolute;top:8px;padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;background:#ff3b5c}
+.lvb{left:8px}.vcb{left:86px;background:#000a}
+.pip{position:absolute;right:8px;top:8px;width:30%;border:2px solid #3d6cff;border-radius:10px;overflow:hidden;background:#000}
+.pip video{aspect-ratio:3/4;object-fit:cover}
+.pip small{position:absolute;bottom:0;left:0;right:0;background:#000a;font-size:11px;text-align:center}
+.fsb,.flip{position:absolute;bottom:8px;height:38px;min-width:38px;border-radius:9px;background:#000a}
+.fsb{right:8px}.flip{left:8px}
+.bar{display:flex;gap:8px;padding:8px 12px;align-items:center}.bar .pri{padding:11px}.bar .sec{flex:1}
+.tabs{display:flex;border-bottom:1px solid #232d42}
+.tabs button{flex:1;padding:11px 2px;background:none;font-size:14px;font-weight:700;color:#8f9bb3;border-bottom:3px solid transparent}
+.tabs .on{color:#fff;border-color:#3d6cff}
+.pane{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.m{background:#171e2c;border-radius:10px;padding:7px 10px;font-size:14px;word-break:break-word}.m.sir{border:1px solid #3d6cff}
+.m b{display:block;color:#8bb0ff;font-size:12px}.m i{float:right;font-style:normal}
+.send{display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}.send .inp{margin:0}.send button{width:48px;border-radius:11px;background:#3d6cff}
+.scroll{overflow:auto;padding:12px;line-height:1.7}
+.row{display:flex;gap:6px;align-items:center;background:#171e2c;border-radius:10px;padding:8px;margin-bottom:6px}.row span{flex:1}.row button{padding:7px 10px;border-radius:8px;background:#1b2436;font-size:13px}
+.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1f2937;border:1px solid #3d6cff;border-radius:12px;padding:10px 16px;z-index:500;font-size:14px;text-align:center;max-width:90%}
 </style>
 </head>
 <body>
-<canvas id="c"></canvas>
-<div id="hud"><div>आरोग्य &nbsp; गुण: <b id="score">0</b></div><div id="hpbar"><div id="hp"></div></div></div>
-<div id="kills">गुंडे संपवले: <b id="k">0</b></div>
-<div id="toast"></div>
-<div id="tod">रात्र 🌙</div>
-<div id="joy"><div id="knob"></div></div>
-<div id="btns">
-  <span class="btn" data-k="jump">उडी</span>
-  <span class="btn" data-k="punch">मार</span>
-  <span class="btn big" data-k="rope">दोरी</span>
+<div id="toast" class="toast hidden"></div>
+<header><button class="ib" onclick="back()">←</button><h2 id="ttl">🎥 GyanSetu Live</h2></header>
+<main id="view"></main>
+
+<div id="roleOv" class="ov">
+  <div class="pop">
+    <h2>🎓 Live Class</h2>
+    <p>तुम्ही कोण आहात?</p>
+    <div class="roles">
+      <button onclick="pickRole('sir')"><span>👨‍🏫</span>Sir</button>
+      <button onclick="pickRole('student')"><span>👨‍🎓</span>Student</button>
+    </div>
+  </div>
 </div>
-<div id="rot"><span>📱</span>खेळण्यासाठी फोन आडवा करा</div>
-<div id="start">
-  <h1>दोरवीर</h1>
-  <p>रात्रीच्या शहरात गुंडांचा सुळसुळाट झालाय. दोरीने इमारतींवरून झोके घ्या आणि सगळ्यांना धडा शिकवा.</p>
-  <p><b>दोरी बटण दाबून धरा</b> म्हणजे झोका सुरू. सोडलं की हवेत उडाल. वेगात झोका घेऊन गुंडाला धडकलात तर जोरदार लाथ बसते.</p>
-  <p>संगणक: WASD चाला, Space उडी, E दोरी (दाबून धरा), F मार, माउस ड्रॅग कॅमेरा. मोबाईल: डावीकडे जॉयस्टिक, उजवीकडे बटणं, स्क्रीन ड्रॅग करून कॅमेरा फिरवा.</p>
-  <button id="go">खेळ सुरू करा</button>
-</div>
+<div id="md" class="ov hidden" onclick="if(event.target===this)closeModal()"><div class="pop" id="mx"></div></div>
+
 <script>
-(function(){var b=document.getElementById('go');b.disabled=true;b.style.opacity=.6;b.textContent='लोड होत आहे…';
-setTimeout(function(){if(b.disabled)b.textContent='लोड झालं नाही, पेज रिफ्रेश करा';},15000);})();
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/SkeletonUtils.js"></script>
-<script>
-const T=THREE,V=(x,y,z)=>new T.Vector3(x,y,z),rnd=(a,b)=>a+Math.random()*(b-a),PI=Math.PI;
+const sb=supabase.createClient("https://eqglttfffhvoyvrclzse.supabase.co","sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb");
 const $=id=>document.getElementById(id);
-const R=new T.WebGLRenderer({canvas:$('c'),antialias:true});
-R.setPixelRatio(Math.min(devicePixelRatio||1,1.5));R.toneMapping=T.ACESFilmicToneMapping;R.toneMappingExposure=1.25;R.shadowMap.enabled=true;R.shadowMap.type=T.PCFSoftShadowMap;
-const sc=new T.Scene();sc.fog=new T.FogExp2(0x2a0a16,.0042);
-const cam=new T.PerspectiveCamera(70,1,.5,3000);
-function rs(){R.setSize(innerWidth,innerHeight);cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();}
-addEventListener('resize',rs);rs();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-// Lights
-const amb=new T.AmbientLight(0x6a4a7a,.9);sc.add(amb);
-const dl=new T.DirectionalLight(0xaab8ff,1.1);dl.castShadow=true;dl.shadow.mapSize.set(1024,1024);const sh=dl.shadow.camera;sh.left=sh.bottom=-70;sh.right=sh.top=70;sh.near=10;sh.far=420;dl.shadow.bias=-.0008;sc.add(dl);sc.add(dl.target);
-const dl2=new T.DirectionalLight(0xff4a3a,.55);dl2.position.set(200,40,200);sc.add(dl2);
-const hemi=new T.HemisphereLight(0x5a4a9a,0x2a0a14,.5);sc.add(hemi);
+let user=null,myName='Student',role=null,C={},saved=new Set(),sTab='all',q='',poll=null;
+let batch=null,mine=false,tab='chat',msgs=[],blocked=new Map(),ch=null;
+let peer=null,stream=null,live=false,conns=new Map(),calls=[],facing='user',t0=0,tmr=null;
+let sc=null,sirId='',gs=null,gcall=null,retry=null;
 
-// Sky, moon, stars
-const sk=document.createElement('canvas');sk.width=4;sk.height=256;
-const sg=sk.getContext('2d'),gr=sg.createLinearGradient(0,0,0,256);
-[[0,'#05010d'],[.35,'#1a0522'],[.47,'#7a1428'],[.5,'#d23a30'],[.52,'#3a0c16'],[1,'#14040a']].forEach(s=>gr.addColorStop(s[0],s[1]));
-sg.fillStyle=gr;sg.fillRect(0,0,4,256);
-const sky=new T.Mesh(new T.SphereGeometry(1500,24,16),new T.MeshBasicMaterial({map:new T.CanvasTexture(sk),side:T.BackSide,fog:false,toneMapped:false}));sc.add(sky);
-const moon=new T.Mesh(new T.SphereGeometry(55,20,14),new T.MeshBasicMaterial({color:0xffe2c4,fog:false,toneMapped:false}));moon.position.set(-420,380,-900);sc.add(moon);
-{const p=[];for(let i=0;i<500;i++){const a=rnd(0,PI*2),e=rnd(.15,1.3),r=1400;p.push(Math.cos(a)*Math.cos(e)*r,Math.sin(e)*r,Math.sin(a)*Math.cos(e)*r);}
-const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));
-sc.add(new T.Points(g,new T.PointsMaterial({color:0xffffff,size:3,fog:false})));}
+/* ---------- no zoom ---------- */
+['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
+document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault()},{passive:false});
 
-// City
-const CELL=64,B=[];
-const wc=document.createElement('canvas');wc.width=wc.height=128;const wx=wc.getContext('2d');
-wx.fillStyle='#0b0b12';wx.fillRect(0,0,128,128);
-for(let y=0;y<8;y++)for(let x=0;x<8;x++)if(Math.random()<.45){wx.fillStyle=['#ffb347','#ffd27a','#6fe3ff','#ff5ea8'][Math.floor(Math.random()*4)];wx.fillRect(x*16+3,y*16+4,10,8);}
-const wt=new T.CanvasTexture(wc);wt.wrapS=wt.wrapT=T.RepeatWrapping;wt.magFilter=T.NearestFilter;
-const mats=[0x9a8ab8,0x8a9ab8,0xb89a9a,0x7a7a90].map(c=>new T.MeshStandardMaterial({color:c,map:wt,emissive:0xffffff,emissiveMap:wt,emissiveIntensity:.9,roughness:.7,metalness:.2}));
-const ac=document.createElement('canvas');ac.width=ac.height=128;const ax=ac.getContext('2d');ax.fillStyle='#1a1820';ax.fillRect(0,0,128,128);
-for(let i=0;i<1800;i++){const v=20+Math.random()*30|0;ax.fillStyle=`rgb(${v},${v},${v+6})`;ax.fillRect(Math.random()*128,Math.random()*128,2,2);}
-const at=new T.CanvasTexture(ac);at.wrapS=at.wrapT=T.RepeatWrapping;at.repeat.set(60,60);
-const ground=new T.Mesh(new T.PlaneGeometry(700,700),new T.MeshStandardMaterial({map:at,roughness:.45,metalness:.25}));ground.rotation.x=-PI/2;ground.receiveShadow=true;sc.add(ground);
-const lineM=new T.MeshBasicMaterial({color:0x7a6420});
-for(let i=-5;i<=4;i++){const c=(i+.5)*CELL;
-  const a=new T.Mesh(new T.BoxGeometry(640,.06,.6),lineM);a.position.set(0,.04,c);sc.add(a);
-  const b=new T.Mesh(new T.BoxGeometry(.6,.06,640),lineM);b.position.set(c,.04,0);sc.add(b);}
-const baseG=new T.BoxGeometry(42,.8,42),baseM=new T.MeshStandardMaterial({color:0x3a3640,roughness:.9});
-const lampG=new T.CylinderGeometry(.12,.16,7,6),lampM=new T.MeshStandardMaterial({color:0x222226}),lampHG=new T.SphereGeometry(.45,8,6),lampHM=new T.MeshBasicMaterial({color:0xffd9a0});
-const neon=[0xff2e88,0x2ee6ff,0xffd23a,0x8aff4a];
-for(let i=-4;i<=4;i++)for(let j=-4;j<=4;j++){
-  const base=new T.Mesh(baseG,baseM);base.position.set(i*CELL,.4,j*CELL);base.receiveShadow=true;sc.add(base);
-  const lp=new T.Mesh(lampG,lampM);lp.position.set(i*CELL+22.5,3.5,j*CELL+22.5);sc.add(lp);const lh=new T.Mesh(lampHG,lampHM);lh.position.set(i*CELL+22.5,7.2,j*CELL+22.5);sc.add(lh);
-  for(let q=0;q<4;q++){
-    const w=rnd(15,19),d=rnd(15,19),h=rnd(30,150),x=i*CELL+(q%2?10.5:-10.5),z=j*CELL+(q>>1?10.5:-10.5);
-    const g=new T.BoxGeometry(w,h,d),uv=g.attributes.uv;
-    for(let k=0;k<uv.count;k++)uv.setXY(k,uv.getX(k)*(w+d)/48,uv.getY(k)*h/24);
-    const m=new T.Mesh(g,mats[Math.floor(Math.random()*4)]);m.position.set(x,h/2,z);m.castShadow=m.receiveShadow=true;sc.add(m);
-    B.push({x,z,w,d,h});m.userData.old=1;
-    if(h>95){const bc=new T.Mesh(new T.BoxGeometry(1.4,2.4,1.4),new T.MeshBasicMaterial({color:0xff2030}));bc.position.set(x,h+1.2,z);bc.userData.old=1;sc.add(bc);}
-    if(Math.random()<.28){const s=new T.Mesh(new T.BoxGeometry(.6,h*.35,3.2),new T.MeshBasicMaterial({color:neon[Math.floor(Math.random()*4)]}));s.position.set(x+w/2+.4,h*.62,z);s.userData.old=1;sc.add(s);}
+/* ---------- helpers ---------- */
+let tt;
+function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(tt);tt=setTimeout(()=>e.classList.add('hidden'),3000)}
+function modal(h){$('mx').innerHTML=h;$('md').classList.remove('hidden')}
+function closeModal(){$('md').classList.add('hidden')}
+function title(t){$('ttl').textContent=t}
+function back(){
+  if(role&&$('roleOv').classList.contains('hidden')){clearInterval(poll);role=null;$('view').innerHTML='';title('🎥 GyanSetu Live');$('roleOv').classList.remove('hidden')}
+  else location.href='home.html';
+}
+function pickRole(r){
+  if(!user){toast('आधी Login करा');return}
+  role=r;$('roleOv').classList.add('hidden');r==='sir'?showSir():showStudent();
+}
+
+/* ---------- batch card ---------- */
+function card(b,m){
+  return `<div class="card" onclick="openRoom('${b.id}')">
+    <div class="ct">${esc(b.name)}</div>
+    <div class="sub">📘 ${esc(b.subject||'-')} &nbsp; ⏰ ${esc(b.timings||'-')}</div>
+    <div class="sub">👨‍🏫 ${esc(b.owner_name||'Sir')}</div>
+    ${b.is_live?'<span class="lvt">🔴 LIVE</span>':''}
+    ${m?`<button class="ic" onclick="event.stopPropagation();batchForm('${b.id}')">✏️</button>`
+       :`<button class="ic" onclick="event.stopPropagation();toggleSave('${b.id}')">${saved.has(b.id)?'⭐':'☆'}</button>`}
+  </div>`;
+}
+
+/* ---------- SIR: my batches ---------- */
+async function showSir(){
+  title('👨‍🏫 माझ्या Batches');
+  $('view').innerHTML='<div class="empty">⏳ Loading...</div>';
+  const {data}=await sb.from('gs_batches').select('*').eq('owner_id',user.id).order('created_at',{ascending:false});
+  (data||[]).forEach(b=>C[b.id]=b);
+  $('view').innerHTML=`<button class="pri" onclick="batchForm()">➕ Add Batch</button>`+
+    ((data||[]).map(b=>card(b,true)).join('')||'<div class="empty">अजून Batch नाही.<br>➕ Add Batch वर क्लिक करा.</div>');
+}
+function batchForm(id){
+  const b=id?C[id]:{};
+  modal(`<h2>${id?'✏️ Batch Edit':'➕ नवी Batch'}</h2>
+  <input class="inp" id="bn" maxlength="80" placeholder="Batch नाव (उदा. 10वी Science)" value="${esc(b.name)}">
+  <input class="inp" id="bs" maxlength="80" placeholder="Subjects (उदा. Maths, Science)" value="${esc(b.subject)}">
+  <input class="inp" id="bt" maxlength="80" placeholder="Timings (उदा. सोम-शनि 6-8 PM)" value="${esc(b.timings)}">
+  <textarea class="inp" id="bd" rows="3" maxlength="500" placeholder="Batch बद्दल माहिती">${esc(b.description)}</textarea>
+  <button class="pri" style="margin-top:12px" onclick="saveBatch('${id||''}')">💾 Save</button>
+  ${id?`<button class="pri red" style="margin-top:8px" onclick="delBatch('${id}')">🗑️ Batch Delete</button>`:''}
+  <button class="pri" style="margin-top:8px;background:#1b2436" onclick="closeModal()">Cancel</button>`);
+}
+async function saveBatch(id){
+  const v={name:$('bn').value.trim(),subject:$('bs').value.trim(),timings:$('bt').value.trim(),description:$('bd').value.trim()};
+  if(!v.name){toast('Batch नाव टाका');return}
+  const r=id?await sb.from('gs_batches').update(v).eq('id',id)
+            :await sb.from('gs_batches').insert({...v,owner_id:user.id,owner_name:myName});
+  if(r.error){toast('Error: '+r.error.message);return}
+  closeModal();showSir();
+}
+async function delBatch(id){
+  if(!confirm('ही Batch कायमची delete करायची?'))return;
+  await sb.from('gs_batches').delete().eq('id',id);closeModal();showSir();
+}
+
+/* ---------- STUDENT: all batches ---------- */
+async function showStudent(){
+  title('👨‍🎓 Batches');
+  sTab='all';q='';
+  $('view').innerHTML=`<input class="inp" style="margin-top:0" id="sq" placeholder="🔍 Batch / Subject / Sir शोधा" oninput="q=this.value;renderList()">
+  <div class="chips"><button class="sec on" id="t_all" onclick="setST('all')">सर्व</button><button class="sec" id="t_live" onclick="setST('live')">🔴 Live</button><button class="sec" id="t_saved" onclick="setST('saved')">⭐ Saved</button></div>
+  <div id="bl"></div>`;
+  await loadAll();
+  clearInterval(poll);poll=setInterval(loadAll,8000);
+}
+async function loadAll(){
+  const [a,s]=await Promise.all([sb.from('gs_batches').select('*'),sb.from('gs_saved').select('batch_id').eq('user_id',user.id)]);
+  C={};(a.data||[]).forEach(b=>C[b.id]=b);
+  saved=new Set((s.data||[]).map(r=>r.batch_id));
+  renderList();
+}
+function setST(t){sTab=t;['all','live','saved'].forEach(x=>$('t_'+x).classList.toggle('on',x===t));renderList()}
+function renderList(){
+  if(!$('bl'))return;
+  const k=q.toLowerCase();
+  const a=Object.values(C).filter(b=>(sTab==='all'||(sTab==='live'&&b.is_live)||(sTab==='saved'&&saved.has(b.id)))
+    &&(!k||[b.name,b.subject,b.owner_name].join(' ').toLowerCase().includes(k)))
+    .sort((x,y)=>(y.is_live?1:0)-(x.is_live?1:0));
+  $('bl').innerHTML=a.map(b=>card(b,false)).join('')||'<div class="empty">Batch सापडली नाही.</div>';
+}
+async function toggleSave(id){
+  if(saved.has(id)){saved.delete(id);await sb.from('gs_saved').delete().eq('user_id',user.id).eq('batch_id',id)}
+  else{saved.add(id);await sb.from('gs_saved').insert({user_id:user.id,batch_id:id})}
+  renderList();
+}
+
+/* ---------- ROOM ---------- */
+async function openRoom(id){
+  clearInterval(poll);
+  batch=C[id];if(!batch)return;
+  mine=batch.owner_id===user.id;sirId='gs-'+batch.id;
+  msgs=[];conns=new Map();calls=[];live=false;tab='chat';
+  const w=document.createElement('div');w.className='room';w.id='room';
+  w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}</small></div></div>
+  <div class="pl" id="pl"><video id="vid" autoplay playsinline></video>
+    <div class="ph" id="ph">${mine?'📷<br>Start Class दाबा':'⏳<br>Class अजून सुरू नाही<br><small>Sir live आले की आपोआप दिसेल</small>'}</div>
+    <span id="lv" class="lvb hidden">🔴 LIVE</span><span id="vc" class="vcb hidden"></span>
+    <div id="pip" class="pip hidden"><video id="gv" autoplay playsinline></video><small id="gn"></small></div>
+    ${mine?'<button class="flip" onclick="flip()">🔄</button>':'<button id="snd" class="flip hidden" onclick="unmute()">🔊</button>'}
+    <button class="fsb" onclick="fs()">⛶</button></div>
+  <div class="bar">${mine?'<button id="gb" class="pri" onclick="toggleLive()">▶️ Start Class</button><span id="tm"></span>'
+    :'<button id="hb" class="sec" onclick="hand()">✋ Hand Raise</button><button id="mb" class="sec hidden" onclick="stopTalk()">🎤 बोलणे थांबवा</button>'}</div>
+  <div class="tabs" id="tabs"></div><div class="pane" id="pane"></div>`;
+  document.body.appendChild(w);
+  const {data:bl}=await sb.from('gs_blocks').select('user_id,user_name').eq('batch_id',batch.id);
+  blocked=new Map((bl||[]).map(r=>[r.user_id,r.user_name]));
+  const {data:ms}=await sb.from('gs_messages').select('*').eq('batch_id',batch.id).order('created_at',{ascending:false}).limit(150);
+  msgs=(ms||[]).reverse();
+  ch=sb.channel('m-'+batch.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'gs_messages',filter:'batch_id=eq.'+batch.id},p=>{if(!msgs.some(m=>m.id===p.new.id)){msgs.push(p.new);rMsgs()}})
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'gs_messages'},p=>{msgs=msgs.filter(m=>m.id!==p.old.id);rMsgs()})
+    .subscribe();
+  setTab('chat');
+  mine?initSir():initStudent();
+}
+function setTab(t){
+  tab=t;
+  const L=[['chat','💬 Chat'],['doubt','❓ Doubt'],['info','ℹ️ Info']];if(mine)L.push(['stu','👥 Students']);
+  $('tabs').innerHTML=L.map(x=>`<button class="${x[0]===t?'on':''}" onclick="setTab('${x[0]}')">${x[1]}</button>`).join('');
+  const p=$('pane');
+  if(t==='info'){
+    p.innerHTML=`<div class="scroll"><h3>${esc(batch.name)}</h3>📘 ${esc(batch.subject||'-')}<br>⏰ ${esc(batch.timings||'-')}<br>👨‍🏫 ${esc(batch.owner_name||'Sir')}<br><br>${esc(batch.description||'')}</div>`;
+  }else if(t==='stu'){p.innerHTML='<div class="scroll" id="sl"></div>';rStu()}
+  else{
+    p.innerHTML=`<div class="msgs" id="ml"></div><div class="send"><input class="inp" id="mi" maxlength="500" placeholder="${t==='chat'?'Message लिहा...':'तुमचा Doubt लिहा...'}" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">➤</button></div>`;
+    rMsgs();
   }
 }
-const LIM=CELL*4.5;
+function rMsgs(){
+  const e=$('ml');if(!e)return;
+  const l=msgs.filter(m=>m.kind===tab);
+  e.innerHTML=l.map(m=>`<div class="m ${m.is_sir?'sir':''}"><b>${esc(m.user_name)}${m.is_sir?' 👨‍🏫':''}${mine?`<i onclick="delMsg(${m.id})">🗑</i>`:''}</b>${esc(m.body)}</div>`).join('')||'<div class="empty">अजून काही नाही</div>';
+  e.scrollTop=e.scrollHeight;
+}
+async function sendMsg(){
+  const i=$('mi'),t=i.value.trim().slice(0,500);if(!t)return;
+  if(blocked.has(user.id)){toast('🚫 Sir ने तुम्हाला block केले आहे');return}
+  i.value='';
+  const {data,error}=await sb.from('gs_messages').insert({batch_id:batch.id,user_id:user.id,user_name:myName,kind:tab,body:t,is_sir:mine}).select().single();
+  if(error){toast('Message जात नाही');i.value=t;return}
+  if(!msgs.some(m=>m.id===data.id)){msgs.push(data);rMsgs()}
+}
+async function delMsg(id){await sb.from('gs_messages').delete().eq('id',id);msgs=msgs.filter(m=>m.id!==id);rMsgs()}
 
-// Characters
-function box(w,h,d,c,y,x,z,em){const m=new T.Mesh(new T.BoxGeometry(w,h,d),new T.MeshLambertMaterial({color:c,emissive:em||0}));m.position.set(x||0,y||0,z||0);return m;}
-function pivot(parent,x,y,z,mesh,off){const p=new T.Group();p.position.set(x,y,z);mesh.position.y=off;p.add(mesh);parent.add(p);return p;}
-function cyl(rt,rb,h,c,y,x,z,em){const m=new T.Mesh(new T.CylinderGeometry(rt,rb,h,14),new T.MeshStandardMaterial({color:c,roughness:.5,metalness:.2,emissive:em||0}));m.position.set(x||0,y||0,z||0);return m;}
-function ball(r,c,y,x,z,em){const m=new T.Mesh(new T.SphereGeometry(r,18,14),new T.MeshStandardMaterial({color:c,roughness:.45,metalness:.15,emissive:em||0}));m.position.set(x||0,y||0,z||0);return m;}
-function mkHero(){
-  const g=new T.Group();
-  g.add(cyl(.62,.42,1.5,0xb01830,2.25));g.add(cyl(.45,.45,.22,0x15151c,1.62));
-  g.add(ball(.42,0xb01830,3.28));
-  g.add(box(.2,.12,.05,0xffffff,3.32,-.17,.38,0xffffff));g.add(box(.2,.12,.05,0xffffff,3.32,.17,.38,0xffffff));
-  g.add(ball(.27,0xb01830,2.85,-.72));g.add(ball(.27,0xb01830,2.85,.72));
-  const legL=pivot(g,-.3,1.5,0,cyl(.23,.17,1.5,0x15151c),-.75),legR=pivot(g,.3,1.5,0,cyl(.23,.17,1.5,0x15151c),-.75);
-  const armL=pivot(g,-.78,2.8,0,cyl(.17,.14,1.3,0x15151c),-.55),armR=pivot(g,.78,2.8,0,cyl(.17,.14,1.3,0x15151c),-.55);
-  g.legL=legL;g.legR=legR;g.armL=armL;g.armR=armR;return g;
-}
-const ET=[{s:1,hp:100,sp:6,dm:9,sc:100},{s:1.45,hp:250,sp:4.5,dm:18,sc:300},{s:.9,hp:60,sp:9.5,dm:5,sc:150},{s:1.9,hp:600,sp:5,dm:25,sc:1000}];
-function mkEnemy(t){
-  const g=new T.Group(),c=t===1?0x7a1a1a:t===2?0x9a8a1a:t===3?0x4a1a6a:[0x3a5a2a,0x5a2a5a,0x2a4a6a][Math.floor(Math.random()*3)];
-  g.scale.setScalar(ET[t].s);
-  const body=cyl(.6,.5,1.7,c,1.9);g.add(body);g.add(ball(.4,0x8a6a50,3.1));
-  g.add(box(.5,.12,.05,0xff2020,3.15,0,.37,0xff2020));
-  g.add(cyl(.2,.16,1.1,0x222222,.55,-.3));g.add(cyl(.2,.16,1.1,0x222222,.55,.3));
-  g.add(cyl(.15,.12,1.2,c,2.2,-.78));g.add(cyl(.15,.12,1.2,c,2.2,.78));
-  if(t===3){g.add(cyl(.05,.14,.8,0xffd23a,3.8,-.25));g.add(cyl(.05,.14,.8,0xffd23a,3.8,.25));}
-  g.body=body;return g;
-}
-const hero=mkHero();sc.add(hero);hero.traverse(o=>{if(o.isMesh)o.castShadow=true;});
-const P={pos:V(CELL/2,0,CELL/2),vel:V(),face:0,hp:100,grounded:true,rope:null,ropeT:0,lock:false,punchT:0,pcd:0,hurt:0,ph:0,score:0,kills:0};
-const rope=new T.Line(new T.BufferGeometry().setFromPoints([V(),V()]),new T.LineBasicMaterial({color:0xffffff}));rope.frustumCulled=false;rope.visible=false;sc.add(rope);
-const hook=new T.Mesh(new T.SphereGeometry(.6,8,8),new T.MeshBasicMaterial({color:0xff5060}));hook.visible=false;sc.add(hook);
-const E=[];
-function spawnE(e){
-  let x,z;do{const r=(Math.floor(rnd(-5,5))+.5)*CELL,t=rnd(-LIM+10,LIM-10);if(Math.random()<.5){x=r;z=t;}else{x=t;z=r;}}while(Math.hypot(x-P.pos.x,z-P.pos.z)<70);
-  e.pos.set(x,0,z);e.hp=ET[e.t].hp;e.cd=0;e.flash=0;e.hitCd=0;e.dead=0;e.g.visible=true;
-}
-for(let i=0;i<14;i++){const t=i===13?3:i%7===0?1:i%5===0?2:0,e={t,g:mkEnemy(t),pos:V(),vel:V()};sc.add(e.g);e.g.traverse(o=>{if(o.isMesh)o.castShadow=true;});spawnE(e);E.push(e);}
+function fs(){const p=$('pl');(p.requestFullscreen||p.webkitRequestFullscreen).call(p)}
+function unmute(){const v=$('vid');v.muted=false;v.play();$('snd').classList.add('hidden')}
 
-// Civilians
-const C=[];
-function mkCiv(){
-  const g=new T.Group(),c=[0x3a6ea5,0xc9a227,0x8a3a6a,0x4a8a5a,0xd8d8d8,0xb85a2a][Math.floor(Math.random()*6)];
-  g.add(cyl(.5,.42,1.5,c,2.2));g.add(ball(.36,[0xd9a37a,0x8a5a3a,0xf0c8a0][Math.floor(Math.random()*3)],3.15));
-  g.legL=pivot(g,-.25,1.5,0,cyl(.2,.17,1.5,0x2a3a5a),-.75);g.legR=pivot(g,.25,1.5,0,cyl(.2,.17,1.5,0x2a3a5a),-.75);
-  return g;
-}
-for(let i=0;i<14;i++){
-  const g=mkCiv(),v=Math.random()<.5,rc=(Math.floor(rnd(-5,5))+.5)*CELL,side=Math.random()<.5?-8.5:8.5,t=rnd(-LIM+10,LIM-10);
-  const c={g,pos:V(v?rc+side:t,0,v?t:rc+side),v,d:Math.random()<.5?1:-1,ph:rnd(0,6),flee:0};
-  sc.add(g);g.traverse(o=>{if(o.isMesh)o.castShadow=true;});C.push(c);
-}
-function updateCivs(dt){
-  const sp=Math.hypot(P.vel.x,P.vel.z);
-  for(const c of C){
-    const dx=c.pos.x-P.pos.x,dz=c.pos.z-P.pos.z,d=Math.hypot(dx,dz)||1;
-    let vx=0,vz=0,s=2.2;
-    if(d<22&&(P.rope||sp>12)&&P.pos.y<14)c.flee=1.5;
-    c.flee-=dt;
-    if(c.flee>0){s=7;vx=dx/d;vz=dz/d;}
-    else{
-      const q=c.v?c.pos.z:c.pos.x;if(q>LIM-8)c.d=-1;else if(q<-LIM+8)c.d=1;
-      if(c.v)vz=c.d;else vx=c.d;
-    }
-    c.pos.x+=vx*s*dt;c.pos.z+=vz*s*dt;
-    collide(c.pos,.5,null);c.pos.y=0;
-    c.pos.x=Math.max(-LIM,Math.min(LIM,c.pos.x));c.pos.z=Math.max(-LIM,Math.min(LIM,c.pos.z));
-    c.g.position.copy(c.pos);
-    if(vx||vz)c.g.rotation.y=Math.atan2(vx,vz);
-    c.ph+=dt*s*2.4;const a=Math.sin(c.ph)*.8;c.g.legL.rotation.x=a;c.g.legR.rotation.x=-a;
-    c.g.visible=d<140;
-    if(c.mix&&d<140){const tg=c.flee>0?c.run:c.walk;if(c.cur!==tg){tg.reset().play();if(c.cur)c.cur.crossFadeTo(tg,.2,false);c.cur=tg;}c.mix.update(dt);}
-  }
-}
-
-// Input
-const keys={},act={jump:0,punch:0,rope:0};let jumpReq=0,punchReq=0,jx=0,jy=0;
-addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(e.repeat)return;keys[k]=1;if(k===' ')jumpReq=1;if(k==='f')punchReq=1;if(' '===k)e.preventDefault();});
-addEventListener('keyup',e=>{keys[e.key.toLowerCase()]=0;});
-document.querySelectorAll('.btn').forEach(b=>{
-  const k=b.dataset.k,on=v=>e=>{e.preventDefault();e.stopPropagation();act[k]=v;b.classList.toggle('on',!!v);if(v&&k==='jump')jumpReq=1;if(v&&k==='punch')punchReq=1;};
-  b.addEventListener('pointerdown',on(1));['pointerup','pointerleave','pointercancel'].forEach(t=>b.addEventListener(t,on(0)));
-});
-const joy=$('joy'),knob=$('knob');let jid=null;
-function jm(e){const r=joy.getBoundingClientRect(),dx=e.clientX-(r.left+65),dy=e.clientY-(r.top+65),l=Math.min(50,Math.hypot(dx,dy)),a=Math.atan2(dy,dx);
-  jx=Math.cos(a)*l/50;jy=Math.sin(a)*l/50;knob.style.transform=`translate(${Math.cos(a)*l}px,${Math.sin(a)*l}px)`;}
-joy.addEventListener('pointerdown',e=>{jid=e.pointerId;joy.setPointerCapture(jid);jm(e);});
-joy.addEventListener('pointermove',e=>{if(e.pointerId===jid)jm(e);});
-['pointerup','pointercancel'].forEach(t=>joy.addEventListener(t,e=>{if(e.pointerId===jid){jid=null;jx=jy=0;knob.style.transform='';}}));
-let yaw=0,pitch=.35,drag=null;
-$('c').addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY};$('c').setPointerCapture(e.pointerId);});
-$('c').addEventListener('pointermove',e=>{if(drag&&e.pointerId===drag.id){yaw-=(e.clientX-drag.x)*.006;pitch=Math.max(.02,Math.min(1.2,pitch+(e.clientY-drag.y)*.004));drag.x=e.clientX;drag.y=e.clientY;}});
-['pointerup','pointercancel'].forEach(t=>$('c').addEventListener(t,()=>{drag=null;}));
-
-let toastT=0;
-function toast(s){const e=$('toast');e.textContent=s;e.style.opacity=1;toastT=1.4;}
-const lerpA=(a,b,t)=>{let d=((b-a+PI)%(PI*2)+PI*2)%(PI*2)-PI;return a+d*t;};
-
-// Collision: returns floor height under p
-function collide(p,r,vel){
-  let floor=0;
-  for(const b of B){
-    const dx=p.x-b.x,dz=p.z-b.z,ox=b.w/2+r-Math.abs(dx),oz=b.d/2+r-Math.abs(dz);
-    if(ox>0&&oz>0){
-      if(p.y>=b.h-.6){if(b.h>floor)floor=b.h;}
-      else{
-        if(ox<oz){p.x+=(dx>=0?1:-1)*ox;if(vel)vel.x*=-.2;}else{p.z+=(dz>=0?1:-1)*oz;if(vel)vel.z*=-.2;}
-      }
-    }
-  }
-  return floor;
-}
-
-function attach(){
-  let fx=-Math.sin(yaw),fz=-Math.cos(yaw);
-  const sp=Math.hypot(P.vel.x,P.vel.z);if(sp>4){fx=P.vel.x/sp;fz=P.vel.z/sp;}
-  const a=V(P.pos.x+fx*22,P.pos.y+32,P.pos.z+fz*22);
-  P.rope={a,len:Math.max(16,a.distanceTo(P.pos)*.96)};P.ropeT=0;
-  if(P.grounded){P.vel.y=9;P.grounded=false;}
-  P.vel.x+=fx*5;P.vel.z+=fz*5;
-}
-function detach(boost){
-  if(!P.rope)return;P.rope=null;rope.visible=hook.visible=false;
-  if(boost){P.vel.multiplyScalar(1.08);P.vel.y+=3;}
-}
-
-function hitEnemy(e,dmg,kx,kz,msg){
-  e.hp-=dmg;e.flash=.12;e.pos.x+=kx*2/ET[e.t].s;e.pos.z+=kz*2/ET[e.t].s;
-  if(e.hp<=0){e.dead=e.t===3?20:3;e.g.visible=false;P.score+=ET[e.t].sc;P.kills++;toast(e.t===3?'म्होरक्या खल्लास! +1000':(msg||'गुंडा खल्लास! +'+ET[e.t].sc));}
-  else toast(msg||'दणका!');
-}
-
-function updatePlayer(dt){
-  const ropeHold=act.rope||keys['e'];
-  if(!ropeHold)P.lock=false;
-  if(ropeHold&&!P.rope&&!P.lock)attach();
-  else if(!ropeHold&&P.rope)detach(true);
-  // move input
-  let ix=(keys['d']?1:0)-(keys['a']?1:0)+jx,iy=(keys['w']?1:0)-(keys['s']?1:0)-jy;
-  const il=Math.hypot(ix,iy);if(il>1){ix/=il;iy/=il;}
-  const fx=-Math.sin(yaw),fz=-Math.cos(yaw),rx=Math.cos(yaw),rz=-Math.sin(yaw);
-  const mx=fx*iy+rx*ix,mz=fz*iy+rz*ix,mag=Math.min(1,il);
-  if(jumpReq){jumpReq=0;if(P.rope){P.lock=true;detach(true);P.vel.y+=9;}else if(P.grounded){P.vel.y=15;P.grounded=false;}}
-  if(P.rope){
-    P.ropeT+=dt;if(P.ropeT>3.2){P.lock=true;detach(true);}
-  }
-  const air=!P.grounded;
-  if(!P.rope&&P.grounded){
-    const k=Math.min(1,14*dt);
-    P.vel.x+=(mx*12-P.vel.x)*k;P.vel.z+=(mz*12-P.vel.z)*k;
-  }else{
-    P.vel.x+=mx*(P.rope?16:10)*dt;P.vel.z+=mz*(P.rope?16:10)*dt;
-  }
-  P.vel.y-=38*dt;
-  const sp=P.vel.length();if(sp>58)P.vel.multiplyScalar(58/sp);
-  P.pos.addScaledVector(P.vel,dt);
-  if(P.rope){
-    P.rope.len=Math.max(12,P.rope.len-2*dt);
-    const d=P.pos.clone().sub(P.rope.a),L=d.length();
-    if(L>P.rope.len){d.multiplyScalar(1/L);P.pos.copy(P.rope.a).addScaledVector(d,P.rope.len);const vr=P.vel.dot(d);if(vr>0)P.vel.addScaledVector(d,-vr);}
-  }
-  const fl=collide(P.pos,.7,P.vel);
-  if(P.pos.y<=fl){P.pos.y=fl;if(P.vel.y<0)P.vel.y=0;P.grounded=true;}else P.grounded=false;
-  P.pos.x=Math.max(-LIM,Math.min(LIM,P.pos.x));P.pos.z=Math.max(-LIM,Math.min(LIM,P.pos.z));
-  if(P.grounded&&P.rope&&P.pos.y<=fl+.01&&P.vel.y<=0&&P.ropeT>.4){/* keep rope while skimming ground */}
-  // facing
-  const hs=Math.hypot(P.vel.x,P.vel.z);
-  if(hs>1.5)P.face=lerpA(P.face,Math.atan2(P.vel.x,P.vel.z),Math.min(1,12*dt));
-  // combat
-  P.pcd-=dt;P.punchT=Math.max(0,P.punchT-dt);P.hurt-=dt;
-  if(punchReq){punchReq=0;if(P.pcd<=0){P.pcd=.35;P.punchT=.25;P.ps=P.ps?0:1;
-    let best=null,bd=4.2;for(const e of E){if(e.dead)continue;const d=Math.hypot(e.pos.x-P.pos.x,e.pos.z-P.pos.z);if(d<bd&&Math.abs(P.pos.y)<6){bd=d;best=e;}}
-    if(best){const dx=best.pos.x-P.pos.x,dz=best.pos.z-P.pos.z,l=Math.hypot(dx,dz)||1;P.face=Math.atan2(dx,dz);hitEnemy(best,40,dx/l,dz/l);}}}
-  if(P.hurt<-4&&P.hp<100)P.hp=Math.min(100,P.hp+3*dt);
-  if(P.hp<=0){P.hp=100;P.pos.set(CELL/2,0,CELL/2);P.vel.set(0,0,0);detach(false);P.score=Math.floor(P.score/2);toast('तुम्ही पडलात! पुन्हा उठा');}
-  // hero model
-  hero.position.copy(P.pos);hero.rotation.y=P.face;
-  P.ph+=hs*dt*.55;const run=Math.min(1,hs/8);
-  if(P.rope){
-    hero.armR.rotation.x=-2.7;hero.armL.rotation.x=.4;hero.legL.rotation.x=.5;hero.legR.rotation.x=-.3;hero.rotation.x=.35;
-    const dir=P.rope.a.clone().sub(P.pos);hero.rotation.z=0;
-  }else if(!P.grounded){
-    hero.armL.rotation.x=hero.armR.rotation.x=-2.2;hero.legL.rotation.x=.6;hero.legR.rotation.x=-.5;hero.rotation.x=0;
-  }else{
-    const s=Math.sin(P.ph)*.9*run;hero.legL.rotation.x=s;hero.legR.rotation.x=-s;hero.armL.rotation.x=-s;hero.armR.rotation.x=s;hero.rotation.x=.1*run;
-  }
-  if(P.punchT>0)hero.armR.rotation.x=-1.6;
-  if(P.hurt>0)hero.rotation.z=Math.sin(P.hurt*60)*.1;else hero.rotation.z=0;
-  P.kickT=Math.max(0,(P.kickT||0)-dt);
-  if(mixer){
-    if(P.hurt>0)play('HitRecieve',.05,true,1.4);
-    else if(P.kickT>0)play('Kick_Right',.05,true,1.8);
-    else if(P.punchT>0)play(P.ps?'Punch_Left':'Punch_Right',.08,true,2.2);
-    else if(P.rope)play('Idle_Gun_Pointing',.15);
-    else if(!P.grounded)play('Roll',.15,false,.7);
-    else if(hs>9)play('Run',.15,false,Math.min(1.5,hs/11));
-    else if(hs>1.5)play('Walk',.15,false,1.1);
-    else play('Idle_Neutral',.2);
-    mixer.update(dt);
-  }
-  // rope visual
-  if(P.rope){
-    const hand=V(P.pos.x,P.pos.y+2.9,P.pos.z);
-    const arr=rope.geometry.attributes.position;arr.setXYZ(0,hand.x,hand.y,hand.z);arr.setXYZ(1,P.rope.a.x,P.rope.a.y,P.rope.a.z);arr.needsUpdate=true;
-    rope.visible=hook.visible=true;hook.position.copy(P.rope.a);
-  }
-}
-
-function updateEnemies(dt){
-  for(const e of E){
-    if(e.dead>0){e.dead-=dt;if(e.dead<=0)spawnE(e);continue;}
-    const dx=P.pos.x-e.pos.x,dz=P.pos.z-e.pos.z,d=Math.hypot(dx,dz)||1;
-    if(d<60){
-      if(d>2.3*ET[e.t].s){e.pos.x+=dx/d*ET[e.t].sp*dt;e.pos.z+=dz/d*ET[e.t].sp*dt;}
-      e.g.rotation.y=Math.atan2(dx,dz);
-    }
-    e.cd-=dt;e.hitCd-=dt;
-    if(d<2.5*ET[e.t].s&&P.pos.y<3&&e.cd<=0){e.cd=1;P.hp-=ET[e.t].dm;P.hurt=.3;toast(e.t===3?'म्होरक्या मारतोय!':'गुंडा मारतोय!');}
-    // swing kick
-    const sp=Math.hypot(P.vel.x,P.vel.z);
-    if(P.rope&&sp>16&&e.hitCd<=0&&Math.hypot(dx,dz)<3.4&&P.pos.y<5){e.hitCd=.6;P.kickT=.45;hitEnemy(e,100,P.vel.x/sp,P.vel.z/sp,'झोक्याची लाथ! +100');}
-    collide(e.pos,.6,null);
-    e.pos.y=0;e.g.position.copy(e.pos);
-    e.flash=Math.max(0,e.flash-dt);e.g.body.material.emissive.setHex(e.flash>0?0xffffff:0);
-    e.g.position.y=Math.abs(Math.sin(performance.now()/160+e.pos.x))*.12;
-  }
-}
-
-function updateCam(dt){
-  const sp=Math.hypot(P.vel.x,P.vel.z);
-  if(!drag&&P.rope&&sp>8)yaw=lerpA(yaw,Math.atan2(-P.vel.x,-P.vel.z),Math.min(1,1.3*dt));
-  const dist=P.rope?15:10,tx=P.pos.x,ty=P.pos.y+2.6,tz=P.pos.z;
-  const cp=V(tx+Math.sin(yaw)*Math.cos(pitch)*dist,ty+Math.sin(pitch)*dist+1,tz+Math.cos(yaw)*Math.cos(pitch)*dist);
-  cam.position.lerp(cp,Math.min(1,8*dt));
-  if(cam.position.y<1.2)cam.position.y=1.2;
-  cam.lookAt(tx,ty,tz);
-  cam.fov+=((P.rope?78:70)-cam.fov)*Math.min(1,3*dt);cam.updateProjectionMatrix();
-  sky.position.copy(cam.position);
-  dl.target.position.copy(P.pos);dl.position.set(P.pos.x-90,P.pos.y+150,P.pos.z-60);dl.target.updateMatrixWorld();
-}
-
-const GLB_B64="...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...";
-let mixer=null,cur=null;const AN={};
-function play(n,fade,once,ts){const a=AN[n];if(!a)return;if(cur===a){a.timeScale=ts||1;return;}a.reset();a.setLoop(once?T.LoopOnce:T.LoopRepeat,Infinity);a.clampWhenFinished=!!once;a.timeScale=ts||1;a.play();if(cur)cur.crossFadeTo(a,fade||.2,false);cur=a;}
-const KB=["...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)..."],KL=["...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)..."];
-const TEXA="...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...",TEXB="...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...";
-function loadCity(){
-  if(!T.GLTFLoader)return;
-  const ld=u=>{const t=new T.TextureLoader().load(u);t.flipY=false;t.magFilter=t.minFilter=T.NearestFilter;t.generateMipmaps=false;return t;};
-  const texA=ld(TEXA),texB=ld(TEXB),full=[],low=[];let pend=KB.length+KL.length;
-  const fin=()=>{if(--pend===0)buildCity(full,low);};
-  const load=(b,out)=>{
-    new T.GLTFLoader().parse(b64buf(b),'',g=>{
-      const s=g.scene;s.updateMatrixWorld(true);
-      const bb=new T.Box3().setFromObject(s),sz=bb.getSize(new T.Vector3());
-      s.traverse(o=>{if(o.isMesh){const m=o.material;m.map=texA;m.emissive=new T.Color(0xffffff);m.emissiveMap=texA;m.emissiveIntensity=.35;m.roughness=.8;m.metalness=0;m.needsUpdate=true;}});
-      const sB=s.clone(true);
-      sB.traverse(o=>{if(o.isMesh){const m=o.material.clone();m.map=texB;m.emissiveMap=texB;o.material=m;}});
-      out.push({s,sB,w:sz.x,h:sz.y,d:sz.z});fin();
-    },e=>{console.error(e);fin();});
-  };
-  KB.forEach(b=>load(b,full));KL.forEach(b=>load(b,low));
-}
-function buildCity(mods,low){
-  if(!mods.length)return;
-  sc.children.filter(o=>o.userData.old).forEach(o=>sc.remove(o));
-  const bm=new T.MeshBasicMaterial({color:0xff2030}),bg=new T.BoxGeometry(1.4,2.4,1.4);
-  for(const b of B){
-    const r=Math.min(1,Math.hypot(b.x,b.z)/(LIM*1.1)),tgt=(125-r*95)*(.75+Math.random()*.5);
-    let best=null,bs=1e9,bsc=1;
-    for(const m of mods){const s=Math.min(b.w/m.w,b.d/m.d),q=Math.abs(m.h*s-tgt)*(1+Math.random()*.7);if(q<bs){bs=q;best=m;bsc=s;}}
-    const nat=best.h*bsc,ys=nat>40?Math.max(.8,Math.min(1.6,tgt/nat)):1,k=(Math.random()<.4?best.sB:best.s).clone(true);
-    k.scale.set(bsc,bsc*ys,bsc);k.position.set(b.x,.8,b.z);k.rotation.y=Math.random()<.5?0:PI;
-    k.traverse(o=>{if(o.isMesh){o.castShadow=o.receiveShadow=true;}});
-    sc.add(k);
-    b.w=best.w*bsc;b.d=best.d*bsc;b.h=nat*ys+.8;
-    if(b.h>95){const bc=new T.Mesh(bg,bm);bc.position.set(b.x,b.h+1.2,b.z);sc.add(bc);}
-    if(Math.random()<.28){const s=new T.Mesh(new T.BoxGeometry(.6,b.h*.35,3.2),new T.MeshBasicMaterial({color:neon[Math.floor(Math.random()*4)]}));s.position.set(b.x+b.w/2+.4,b.h*.62,b.z);sc.add(s);}
-  }
-  // distant skyline from the low-detail buildings
-  if(low&&low.length)for(let i=0;i<70;i++){
-    const a=i/70*PI*2+Math.random()*.08,rad=LIM+rnd(25,110),m=low[Math.floor(Math.random()*low.length)];
-    const k=m.s.clone(true),hh=rnd(70,180),sx=rnd(14,26)/Math.max(m.w,m.d);
-    k.scale.set(sx,hh/m.h,sx);k.position.set(Math.cos(a)*rad,0,Math.sin(a)*rad);k.rotation.y=rnd(0,PI);
-    sc.add(k);
-  }
-}
-setTimeout(loadCity,400);
-const CIV_B64=["...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)...","...(मॉडेलचा डेटा इथे आहे, वाचण्यासाठी काढला आहे)..."];
-function b64buf(s){const bin=atob(s),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return u.buffer;}
-function loadCivs(){
-  if(!T.GLTFLoader)return;
-  const src=[];let pending=CIV_B64.length;
-  const done=()=>{if(--pending>0)return;
-    const ok=src.filter(Boolean);if(!ok.length||!T.SkeletonUtils)return;
-    C.forEach(c=>{
-      const r=Math.random();let o=src[r<.5?0:r<.75?1:2]||ok[0];
-      const k=T.SkeletonUtils.clone(o.s);k.scale.multiplyScalar(.92+Math.random()*.13);
-      k.traverse(x=>{if(x.isMesh){x.frustumCulled=false;x.castShadow=false;x.material=x.material.clone();x.material.metalness=0;x.material.roughness=.7;
-        if(x.material.name==='Shirt')x.material.color.setHSL(Math.random(),.5,.45);
-        else if(x.material.name==='Pants')x.material.color.setHSL(.55+Math.random()*.1,.3,.15+Math.random()*.15);}});
-      while(c.g.children.length)c.g.remove(c.g.children[0]);
-      c.g.add(k);c.mix=new T.AnimationMixer(k);
-      c.walk=c.mix.clipAction(o.wk);c.run=c.mix.clipAction(o.rn);c.walk.time=Math.random()*o.wk.duration;
-    });
-  };
-  CIV_B64.forEach((b,i)=>{
-    new T.GLTFLoader().parse(b64buf(b),'',g=>{
-      const s=g.scene,holder=new T.Group();holder.add(s);holder.updateMatrixWorld(true);
-      const hb=s.getObjectByName('Head');
-      if(hb){const hy=new T.Vector3().setFromMatrixPosition(hb.matrixWorld).y;if(hy>.05)s.scale.setScalar(3.3/hy);}
-      const wk=g.animations.find(a=>/Walk$/.test(a.name)),rn=g.animations.find(a=>/\|(Man_)?Run$/.test(a.name));
-      if(wk&&rn)src[i]={s,wk,rn};
-      done();
-    },err=>{console.error(err);done();});
+/* ---------- SIR side ---------- */
+function initSir(){
+  peer=new Peer(sirId,{debug:1});
+  peer.on('connection',setupConn);
+  peer.on('call',call=>{
+    const s=conns.get(call.peer);
+    if(!s||!s.allowed){call.close();return}
+    call.answer();s.call=call;
+    call.on('stream',st=>{$('gv').srcObject=st;$('pip').classList.remove('hidden');$('gn').textContent=s.name});
+    call.on('close',hideGuest);
   });
+  peer.on('error',e=>{if(e.type==='unavailable-id')toast('ही Batch दुसऱ्या device वर आधीच उघडी आहे');else console.error(e)});
+  peer.on('disconnected',()=>{try{peer.reconnect()}catch(e){}});
 }
-setTimeout(function(){
-  if(!T.GLTFLoader)return;
-  const bin=atob(GLB_B64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
-  new T.GLTFLoader().parse(u.buffer,'',gltf=>{
-    const m=gltf.scene;
-    while(hero.children.length)hero.remove(hero.children[0]);
-    hero.add(m);hero.position.set(0,0,0);hero.rotation.set(0,0,0);hero.updateMatrixWorld(true);
-    const hb=m.getObjectByName('Head');
-    if(hb){const hy=new T.Vector3().setFromMatrixPosition(hb.matrixWorld).y;if(hy>.05)m.scale.setScalar(3.45/hy);}
-    m.traverse(o=>{if(o.isMesh){o.castShadow=true;o.frustumCulled=false;if(o.material){o.material.metalness=Math.min(o.material.metalness||0,.25);o.material.roughness=.6;}}});
-    mixer=new T.AnimationMixer(m);
-    gltf.animations.forEach(c=>{AN[c.name.split('|').pop()]=mixer.clipAction(c);});
-    play('Idle_Neutral',0);
-    loadCivs();
-  },err=>console.error(err));
-},150);
-let isNight=true,skyNight=sky.material.map,skyDay=null;
-function setTime(n){
-  isNight=n;
-  if(!skyDay){const c=document.createElement('canvas');c.width=4;c.height=256;const g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,256);
-    [[0,'#2f6fc4'],[.35,'#6aaee8'],[.47,'#b9dcf5'],[.5,'#e6f3fb'],[.52,'#6a7a6a'],[1,'#3a4a3a']].forEach(s=>gr.addColorStop(s[0],s[1]));g.fillStyle=gr;g.fillRect(0,0,4,256);skyDay=new T.CanvasTexture(c);}
-  sky.material.map=n?skyNight:skyDay;sky.material.needsUpdate=true;
-  sc.fog.color.setHex(n?0x2a0a16:0xb7cfe6);sc.fog.density=n?.0042:.0022;
-  dl.color.setHex(n?0xaab8ff:0xfff2d8);dl.intensity=n?1.1:1.6;
-  dl2.color.setHex(n?0xff4a3a:0x9fc0ff);dl2.intensity=n?.55:.2;
-  amb.color.setHex(n?0x6a4a7a:0xbfd4ff);amb.intensity=n?.9:.85;
-  hemi.color.setHex(n?0x5a4a9a:0xbfdcff);hemi.groundColor.setHex(n?0x2a0a14:0x6a6a60);hemi.intensity=n?.5:.8;
-  R.toneMappingExposure=n?1.25:1.0;
-  moon.material.color.setHex(n?0xffe2c4:0xfff0b0);
-  sc.children.forEach(o=>{if(o.isPoints)o.visible=n;});
-  sc.traverse(o=>{if(o.isMesh&&o.material&&o.material.emissiveMap){const m=o.material;if(m.userData.ei===undefined)m.userData.ei=m.emissiveIntensity;m.emissiveIntensity=n?m.userData.ei:.04;}});
-  $('tod').textContent=n?'रात्र 🌙':'दिवस ☀️';
-  try{localStorage.setItem('dorvir_night',n?'1':'0');}catch(e){}
+function setupConn(c){
+  c.on('data',d=>{
+    if(!d||typeof d!=='object')return;
+    if(d.t==='hi'){
+      if(blocked.has(d.uid)){try{c.send({t:'blocked'})}catch(e){}setTimeout(()=>c.close(),300);return}
+      const name=String(d.name||'Student').slice(0,30);
+      conns.set(c.peer,{conn:c,name,uid:d.uid,hand:false,allowed:false});
+      c.send({t:'live',v:live});if(live)callStudent(c.peer);
+      vcount();rStu();toast('👨‍🎓 '+name+' Join झाला');return;
+    }
+    const s=conns.get(c.peer);if(!s)return;
+    if(d.t==='hand'){s.hand=!!d.v;rStu();if(s.hand)toast('✋ '+s.name+' ने Hand Raise केला')}
+  });
+  c.on('close',()=>{const s=conns.get(c.peer);if(s&&s.allowed)hideGuest();conns.delete(c.peer);vcount();rStu()});
 }
-$('tod').addEventListener('pointerdown',e=>{e.stopPropagation();setTime(!isNight);});
-addEventListener('keydown',e=>{if(e.key==='t'||e.key==='T')setTime(!isNight);});
-let wantNight=true;try{wantNight=localStorage.getItem('dorvir_night')!=='0';}catch(e){}
-if(!wantNight)setTime(false);
-const _bc=buildCity;buildCity=function(...a){_bc(...a);setTime(isNight);};
-let last=0,running=false;
-function loop(t){
-  const dt=Math.min(.033,(t-last)/1000||0);last=t;
-  if(running&&!matchMedia('(orientation:portrait) and (pointer:coarse)').matches){
-    updatePlayer(dt);updateEnemies(dt);updateCivs(dt);
-    if(toastT>0){toastT-=dt;if(toastT<=0)$('toast').style.opacity=0;}
-    $('hp').style.width=Math.max(0,P.hp)+'%';$('score').textContent=P.score;$('k').textContent=P.kills;
-  }
-  updateCam(dt);
-  R.render(sc,cam);requestAnimationFrame(loop);
+function callStudent(pid){
+  if(!stream||!peer)return;
+  const call=peer.call(pid,stream);calls.push(call);
+  call.on('close',()=>{calls=calls.filter(x=>x!==call)});
 }
-cam.position.set(P.pos.x,8,P.pos.z+12);
-$('go').disabled=false;$('go').style.opacity=1;$('go').textContent='खेळ सुरू करा';
-$('go').onclick=()=>{$('start').style.display='none';running=true;try{const de=document.documentElement,f=de.requestFullscreen||de.webkitRequestFullscreen;if(f){Promise.resolve(f.call(de)).then(()=>screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape')).catch(()=>{});}}catch(e){}};
-requestAnimationFrame(loop);
+function bcast(d){conns.forEach(s=>{try{s.conn.open&&s.conn.send(d)}catch(e){}})}
+function vcount(){const e=$('vc');if(!e)return;e.textContent='👥 '+conns.size;e.classList.toggle('hidden',!live)}
+function rStu(){
+  const e=$('sl');if(!e)return;
+  let h=[...conns.entries()].map(([p,s])=>`<div class="row"><span>${esc(s.name)}${s.hand?' ✋':''}${s.allowed?' 🎤':''}</span><button onclick="allow('${p}')">${s.allowed?'⏹ Stop':'🎤 Allow'}</button><button onclick="blk('${p}')">🚫</button></div>`).join('');
+  if(!h)h='<div class="empty">कोणी Join झालेले नाही</div>';
+  if(blocked.size)h+='<h4 style="margin:12px 0 6px">🚫 Blocked</h4>'+[...blocked].map(([u,n])=>`<div class="row"><span>${esc(n||'Student')}</span><button onclick="unblk('${u}')">Unblock</button></div>`).join('');
+  e.innerHTML=h;
+}
+function hideGuest(){const p=$('pip');if(p)p.classList.add('hidden');const g=$('gv');if(g)g.srcObject=null}
+function allow(pid){
+  const s=conns.get(pid);if(!s)return;
+  if(s.allowed){s.allowed=false;try{s.conn.send({t:'revoke'})}catch(e){}if(s.call)s.call.close();hideGuest();rStu();return}
+  conns.forEach((o,p)=>{if(o.allowed){o.allowed=false;try{o.conn.send({t:'revoke'})}catch(e){}if(o.call)o.call.close()}});
+  hideGuest();s.allowed=true;s.conn.send({t:'allow'});rStu();toast('🎤 '+s.name+' ला allow केले');
+}
+async function blk(pid){
+  const s=conns.get(pid);if(!s)return;
+  if(!confirm(s.name+' ला block करायचे?'))return;
+  await sb.from('gs_blocks').insert({batch_id:batch.id,user_id:s.uid,user_name:s.name});
+  blocked.set(s.uid,s.name);try{s.conn.send({t:'blocked'})}catch(e){}
+  setTimeout(()=>s.conn.close(),300);rStu();
+}
+async function unblk(u){await sb.from('gs_blocks').delete().eq('batch_id',batch.id).eq('user_id',u);blocked.delete(u);rStu()}
+
+async function toggleLive(){
+  if(live){if(confirm('Live Class End करायची?'))endLive();return}
+  try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:{echoCancellation:true,noiseSuppression:true}})}
+  catch(e){toast('Camera आणि Mic permission द्या');return}
+  const v=$('vid');v.srcObject=stream;v.muted=true;v.style.transform=facing==='user'?'scaleX(-1)':'none';
+  $('ph').classList.add('hidden');$('lv').classList.remove('hidden');
+  live=true;t0=Date.now();
+  $('gb').textContent='⛔ End Class';$('gb').classList.add('red');
+  tmr=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('tm').textContent='⏱️ '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);
+  await sb.from('gs_batches').update({is_live:true,live_started_at:new Date().toISOString()}).eq('id',batch.id);
+  bcast({t:'live',v:true});conns.forEach((s,p)=>callStudent(p));vcount();
+}
+async function endLive(){
+  bcast({t:'end'});
+  calls.forEach(c=>{try{c.close()}catch(e){}});calls=[];
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  clearInterval(tmr);live=false;
+  await sb.from('gs_batches').update({is_live:false,live_started_at:null}).eq('id',batch.id);
+  const g=$('gb');if(g){g.textContent='▶️ Start Class';g.classList.remove('red');$('lv').classList.add('hidden');$('ph').classList.remove('hidden');$('vid').srcObject=null;$('tm').textContent='';vcount()}
+}
+async function flip(){
+  facing=facing==='user'?'environment':'user';
+  if(!stream){toast(facing==='user'?'🤳 Front camera':'📷 Back camera');return}
+  const old=stream.getVideoTracks()[0];if(old)old.stop();
+  try{
+    const n=(await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing}}})).getVideoTracks()[0];
+    if(old)stream.removeTrack(old);stream.addTrack(n);
+    $('vid').srcObject=stream;$('vid').style.transform=facing==='user'?'scaleX(-1)':'none';
+    calls.forEach(c=>{try{const s=c.peerConnection.getSenders().find(x=>x.track&&x.track.kind==='video');if(s)s.replaceTrack(n)}catch(e){}});
+  }catch(e){toast('Camera बदलता आला नाही')}
+}
+
+/* ---------- STUDENT side ---------- */
+function initStudent(){
+  if(blocked.has(user.id)){toast('🚫 Sir ने तुम्हाला block केले आहे')}
+  peer=new Peer({debug:1});
+  peer.on('open',()=>{connect();retry=setInterval(connect,6000)});
+  peer.on('call',call=>{
+    call.answer();
+    call.on('stream',st=>{
+      const v=$('vid');v.srcObject=st;v.muted=false;
+      $('ph').classList.add('hidden');$('lv').classList.remove('hidden');
+      v.play().catch(()=>{v.muted=true;v.play();$('snd').classList.remove('hidden')});
+    });
+    call.on('close',noLive);
+  });
+  peer.on('error',e=>{if(e.type==='peer-unavailable')sc=null;else console.error(e)});
+}
+function connect(){
+  if(!peer||!peer.open||sc||blocked.has(user.id))return;
+  sc=peer.connect(sirId,{reliable:true});
+  sc.on('open',()=>sc.send({t:'hi',name:myName,uid:user.id}));
+  sc.on('data',d=>{
+    if(!d||typeof d!=='object')return;
+    if(d.t==='live'&&!d.v)noLive();
+    if(d.t==='end'){noLive();toast('Sir ने Live Class संपवली')}
+    if(d.t==='blocked'){toast('🚫 Sir ने तुम्हाला block केले आहे');blocked.set(user.id,myName);leaveRoom()}
+    if(d.t==='allow')startTalk();
+    if(d.t==='revoke')stopTalk();
+  });
+  sc.on('close',()=>{sc=null;noLive()});
+}
+function noLive(){
+  const v=$('vid');if(!v)return;v.srcObject=null;
+  $('ph').classList.remove('hidden');$('lv').classList.add('hidden');
+}
+let handUp=false;
+function hand(){
+  if(!sc||!sc.open){toast('⚠️ Sir शी connection नाही');return}
+  handUp=!handUp;sc.send({t:'hand',v:handUp});
+  $('hb').textContent=handUp?'✋ Hand खाली करा':'✋ Hand Raise';
+}
+async function startTalk(){
+  try{
+    gs=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});
+    gcall=peer.call(sirId,gs);$('mb').classList.remove('hidden');toast('🎤 Sir ने तुम्हाला बोलायला allow केले');
+  }catch(e){toast('Camera आणि Mic permission द्या')}
+}
+function stopTalk(){
+  if(gs){gs.getTracks().forEach(t=>t.stop());gs=null}
+  try{if(gcall)gcall.close()}catch(e){}
+  gcall=null;const m=$('mb');if(m)m.classList.add('hidden');
+}
+
+/* ---------- leave ---------- */
+async function leaveRoom(){
+  if(mine&&live){if(!confirm('Class सुरू आहे. End करून बाहेर पडायचे?'))return;await endLive()}
+  stopTalk();clearInterval(retry);clearInterval(tmr);
+  if(sc){try{sc.close()}catch(e){}sc=null}
+  if(peer){try{peer.destroy()}catch(e){}peer=null}
+  if(ch){sb.removeChannel(ch);ch=null}
+  if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
+  const r=$('room');if(r)r.remove();
+  handUp=false;
+  mine?showSir():showStudent();
+}
+window.addEventListener('beforeunload',()=>{if(mine&&live)sb.from('gs_batches').update({is_live:false}).eq('id',batch.id)});
+
+/* ---------- start ---------- */
+document.addEventListener('DOMContentLoaded',async()=>{
+  const {data}=await sb.auth.getUser();user=data?.user||null;
+  if(!user){toast('आधी GyanSetu मध्ये Login करा');return}
+  myName=(user.user_metadata?.username||localStorage.getItem('gyansetu_username')||(user.email||'').split('@')[0]||'User').slice(0,30);
+});
 </script>
 </body>
 </html>
