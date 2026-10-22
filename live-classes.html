@@ -17,16 +17,22 @@ header{height:56px;display:flex;align-items:center;gap:10px;padding:0 12px;backg
 header h2{font-size:18px}
 main{max-width:720px;margin:auto;padding:14px 12px 40px}
 .pri{width:100%;padding:14px;border-radius:12px;background:linear-gradient(135deg,#3d6cff,#6a4dff);font-weight:700}
+.pri:disabled{opacity:.6}
 .sec{padding:12px;border-radius:12px;background:#1b2436;font-weight:700}
 .red{background:#ff3b5c}
 .card{position:relative;background:#131a26;border:1px solid #232d42;border-radius:16px;padding:14px;margin-top:10px}
+.cov{margin:-14px -14px 12px;border-radius:16px 16px 0 0;overflow:hidden;aspect-ratio:16/9;background:#0a0e16}
+.cov img{width:100%;height:100%;object-fit:cover;display:block}
 .ct{font-weight:700;font-size:17px;padding-right:44px}
 .sub{color:#8f9bb3;font-size:13px;margin-top:5px}
 .lvt{display:inline-block;margin-top:8px;background:#ff3b5c;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:700}
 .ic{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:#1b2436}
+.card .cov + .ct{padding-right:44px}
 .empty{text-align:center;color:#6c778f;padding:26px}
 .inp{width:100%;margin-top:10px;padding:13px;border-radius:11px;border:1px solid #2c3850;background:#0b1018;color:#fff;outline:none}
 .chips{display:flex;gap:8px;margin-top:10px}.chips .sec{flex:1;padding:10px;font-size:14px}.chips .on{background:#3d6cff}
+.pv{margin-top:10px;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#0a0e16;display:flex;align-items:center;justify-content:center;color:#6c778f;font-size:14px}
+.pv img{width:100%;height:100%;object-fit:cover}
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}
 .pop{width:100%;max-width:480px;max-height:90vh;overflow:auto;background:#10151f;border:1px solid #2a3550;border-radius:20px;padding:20px}
 .pop p{color:#9aa6bd;margin-top:6px}
@@ -86,6 +92,7 @@ let user=null,myName='Student',role=null,C={},saved=new Set(),sTab='all',q='',po
 let batch=null,mine=false,tab='chat',msgs=[],blocked=new Map(),ch=null;
 let peer=null,stream=null,live=false,conns=new Map(),calls=[],facing='user',t0=0,tmr=null;
 let sc=null,sirId='',gs=null,gcall=null,retry=null;
+let newPhoto=null,rmPhoto=false;
 
 /* ---------- no zoom ---------- */
 ['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
@@ -109,6 +116,7 @@ function pickRole(r){
 /* ---------- batch card ---------- */
 function card(b,m){
   return `<div class="card" onclick="openRoom('${b.id}')">
+    ${b.photo_url?`<div class="cov"><img src="${esc(b.photo_url)}" loading="lazy" alt=""></div>`:''}
     <div class="ct">${esc(b.name)}</div>
     <div class="sub">📘 ${esc(b.subject||'-')} &nbsp; ⏰ ${esc(b.timings||'-')}</div>
     <div class="sub">👨‍🏫 ${esc(b.owner_name||'Sir')}</div>
@@ -129,21 +137,56 @@ async function showSir(){
 }
 function batchForm(id){
   const b=id?C[id]:{};
+  newPhoto=null;rmPhoto=false;
   modal(`<h2>${id?'✏️ Batch Edit':'➕ नवी Batch'}</h2>
+  <div class="pv" id="pv">${b.photo_url?`<img src="${esc(b.photo_url)}">`:'🖼️ Batch Photo'}</div>
+  <div class="chips">
+    <button class="sec" onclick="$('pf').click()">📷 Photo निवडा</button>
+    ${b.photo_url?'<button class="sec" onclick="rmPh()">❌ Photo काढा</button>':''}
+  </div>
+  <input type="file" id="pf" accept="image/*" class="hidden" onchange="pickPhoto(this)">
   <input class="inp" id="bn" maxlength="80" placeholder="Batch नाव (उदा. 10वी Science)" value="${esc(b.name)}">
   <input class="inp" id="bs" maxlength="80" placeholder="Subjects (उदा. Maths, Science)" value="${esc(b.subject)}">
   <input class="inp" id="bt" maxlength="80" placeholder="Timings (उदा. सोम-शनि 6-8 PM)" value="${esc(b.timings)}">
   <textarea class="inp" id="bd" rows="3" maxlength="500" placeholder="Batch बद्दल माहिती">${esc(b.description)}</textarea>
-  <button class="pri" style="margin-top:12px" onclick="saveBatch('${id||''}')">💾 Save</button>
+  <button class="pri" id="sv" style="margin-top:12px" onclick="saveBatch('${id||''}')">💾 Save</button>
   ${id?`<button class="pri red" style="margin-top:8px" onclick="delBatch('${id}')">🗑️ Batch Delete</button>`:''}
   <button class="pri" style="margin-top:8px;background:#1b2436" onclick="closeModal()">Cancel</button>`);
 }
+function pickPhoto(inp){
+  const f=inp.files[0];if(!f)return;
+  if(!f.type.startsWith('image/')){toast('फक्त image निवडा');return}
+  const img=new Image(),u=URL.createObjectURL(f);
+  img.onload=()=>{
+    const W=1280,H=720,c=document.createElement('canvas');c.width=W;c.height=H;
+    const x=c.getContext('2d'),s=Math.max(W/img.width,H/img.height);
+    const w=img.width*s,h=img.height*s;
+    x.fillStyle='#fff';x.fillRect(0,0,W,H);
+    x.drawImage(img,(W-w)/2,(H-h)/2,w,h);
+    c.toBlob(bl=>{
+      if(!bl){toast('Photo process झाला नाही');return}
+      newPhoto=bl;rmPhoto=false;
+      $('pv').innerHTML=`<img src="${URL.createObjectURL(bl)}">`;
+    },'image/jpeg',0.85);
+    URL.revokeObjectURL(u);
+  };
+  img.onerror=()=>toast('Image उघडता आली नाही');
+  img.src=u;
+}
+function rmPh(){newPhoto=null;rmPhoto=true;$('pv').textContent='🖼️ Batch Photo'}
 async function saveBatch(id){
   const v={name:$('bn').value.trim(),subject:$('bs').value.trim(),timings:$('bt').value.trim(),description:$('bd').value.trim()};
   if(!v.name){toast('Batch नाव टाका');return}
+  const btn=$('sv');btn.disabled=true;btn.textContent='⏳ Saving...';
+  if(newPhoto){
+    const path=user.id+'/'+Date.now()+'.jpg';
+    const up=await sb.storage.from('batch-photos').upload(path,newPhoto,{contentType:'image/jpeg',cacheControl:'31536000'});
+    if(up.error){toast('Photo upload error: '+up.error.message);btn.disabled=false;btn.textContent='💾 Save';return}
+    v.photo_url=sb.storage.from('batch-photos').getPublicUrl(path).data.publicUrl;
+  }else if(rmPhoto){v.photo_url=null}
   const r=id?await sb.from('gs_batches').update(v).eq('id',id)
             :await sb.from('gs_batches').insert({...v,owner_id:user.id,owner_name:myName});
-  if(r.error){toast('Error: '+r.error.message);return}
+  if(r.error){toast('Error: '+r.error.message);btn.disabled=false;btn.textContent='💾 Save';return}
   closeModal();showSir();
 }
 async function delBatch(id){
@@ -217,7 +260,7 @@ function setTab(t){
   $('tabs').innerHTML=L.map(x=>`<button class="${x[0]===t?'on':''}" onclick="setTab('${x[0]}')">${x[1]}</button>`).join('');
   const p=$('pane');
   if(t==='info'){
-    p.innerHTML=`<div class="scroll"><h3>${esc(batch.name)}</h3>📘 ${esc(batch.subject||'-')}<br>⏰ ${esc(batch.timings||'-')}<br>👨‍🏫 ${esc(batch.owner_name||'Sir')}<br><br>${esc(batch.description||'')}</div>`;
+    p.innerHTML=`<div class="scroll">${batch.photo_url?`<div class="pv" style="margin:0 0 12px"><img src="${esc(batch.photo_url)}"></div>`:''}<h3>${esc(batch.name)}</h3>📘 ${esc(batch.subject||'-')}<br>⏰ ${esc(batch.timings||'-')}<br>👨‍🏫 ${esc(batch.owner_name||'Sir')}<br><br>${esc(batch.description||'')}</div>`;
   }else if(t==='stu'){p.innerHTML='<div class="scroll" id="sl"></div>';rStu()}
   else{
     p.innerHTML=`<div class="msgs" id="ml"></div><div class="send"><input class="inp" id="mi" maxlength="500" placeholder="${t==='chat'?'Message लिहा...':'तुमचा Doubt लिहा...'}" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">➤</button></div>`;
