@@ -92,6 +92,7 @@ let user=null,myName='Student',role=null,C={},saved=new Set(),sTab='all',q='',po
 let batch=null,mine=false,tab='chat',msgs=[],blocked=new Map(),ch=null;
 let peer=null,stream=null,live=false,conns=new Map(),calls=[],facing='user',t0=0,tmr=null;
 let sc=null,sirId='',gs=null,gcall=null,retry=null;
+let hid=null;
 let newPhoto=null,rmPhoto=false;
 
 /* ---------- no zoom ---------- */
@@ -230,7 +231,7 @@ async function openRoom(id){
   clearInterval(poll);
   batch=C[id];if(!batch)return;
   mine=batch.owner_id===user.id;sirId='gs-'+batch.id;
-  msgs=[];conns=new Map();calls=[];live=false;tab='chat';
+  msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;
   const w=document.createElement('div');w.className='room';w.id='room';
   w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}</small></div></div>
   <div class="pl" id="pl"><video id="vid" autoplay playsinline></video>
@@ -307,7 +308,7 @@ function setupConn(c){
       if(blocked.has(d.uid)){try{c.send({t:'blocked'})}catch(e){}setTimeout(()=>c.close(),300);return}
       const name=String(d.name||'Student').slice(0,30);
       conns.set(c.peer,{conn:c,name,uid:d.uid,hand:false,allowed:false});
-      c.send({t:'live',v:live});if(live)callStudent(c.peer);
+      c.send({t:'live',v:live,hid});if(live)callStudent(c.peer);
       vcount();rStu();toast('👨‍🎓 '+name+' Join झाला');return;
     }
     const s=conns.get(c.peer);if(!s)return;
@@ -352,13 +353,18 @@ async function toggleLive(){
   const v=$('vid');v.srcObject=stream;v.muted=true;v.style.transform=facing==='user'?'scaleX(-1)':'none';
   $('ph').classList.add('hidden');$('lv').classList.remove('hidden');
   live=true;t0=Date.now();
+  /* history record */
+  const ins=await sb.from('gs_class_history').insert({batch_id:String(batch.id),batch_name:batch.name,subject:batch.subject,owner_id:user.id,owner_name:myName}).select().single();
+  if(ins.error){toast('History save error: '+ins.error.message)}
+  hid=ins.data?ins.data.id:null;
   $('gb').textContent='⛔ End Class';$('gb').classList.add('red');
   tmr=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('tm').textContent='⏱️ '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);
   await sb.from('gs_batches').update({is_live:true,live_started_at:new Date().toISOString()}).eq('id',batch.id);
-  bcast({t:'live',v:true});conns.forEach((s,p)=>callStudent(p));vcount();
+  bcast({t:'live',v:true,hid});conns.forEach((s,p)=>callStudent(p));vcount();
 }
 async function endLive(){
   bcast({t:'end'});
+  if(hid){await sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid);hid=null}
   calls.forEach(c=>{try{c.close()}catch(e){}});calls=[];
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
   clearInterval(tmr);live=false;
@@ -399,13 +405,19 @@ function connect(){
   sc.on('open',()=>sc.send({t:'hi',name:myName,uid:user.id}));
   sc.on('data',d=>{
     if(!d||typeof d!=='object')return;
-    if(d.t==='live'&&!d.v)noLive();
+    if(d.t==='live'){if(d.v&&d.hid)markAttend(d.hid);else if(!d.v)noLive()}
     if(d.t==='end'){noLive();toast('Sir ने Live Class संपवली')}
     if(d.t==='blocked'){toast('🚫 Sir ने तुम्हाला block केले आहे');blocked.set(user.id,myName);leaveRoom()}
     if(d.t==='allow')startTalk();
     if(d.t==='revoke')stopTalk();
   });
   sc.on('close',()=>{sc=null;noLive()});
+}
+async function markAttend(h){
+  const r=await sb.from('gs_class_attendance').upsert(
+    {history_id:h,user_id:user.id,user_name:myName,owner_id:batch.owner_id},
+    {onConflict:'history_id,user_id',ignoreDuplicates:true});
+  if(r.error)console.error('attendance',r.error.message);
 }
 function noLive(){
   const v=$('vid');if(!v)return;v.srcObject=null;
@@ -441,7 +453,7 @@ async function leaveRoom(){
   handUp=false;
   mine?showSir():showStudent();
 }
-window.addEventListener('beforeunload',()=>{if(mine&&live)sb.from('gs_batches').update({is_live:false}).eq('id',batch.id)});
+window.addEventListener('beforeunload',()=>{if(mine&&live){sb.from('gs_batches').update({is_live:false}).eq('id',batch.id);if(hid)sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}});
 
 /* ---------- start ---------- */
 document.addEventListener('DOMContentLoaded',async()=>{
