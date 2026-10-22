@@ -93,6 +93,8 @@ let batch=null,mine=false,tab='chat',msgs=[],blocked=new Map(),ch=null;
 let peer=null,stream=null,live=false,conns=new Map(),calls=[],facing='user',t0=0,tmr=null;
 let sc=null,sirId='',gs=null,gcall=null,retry=null;
 let hid=null;
+let rec=null,segTimer=null,recPart=0,recMime='',upQ=Promise.resolve();
+const SEG_MS=8*60*1000;
 let newPhoto=null,rmPhoto=false;
 
 /* ---------- no zoom ---------- */
@@ -361,10 +363,12 @@ async function toggleLive(){
   tmr=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);$('tm').textContent='⏱️ '+String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')},1000);
   await sb.from('gs_batches').update({is_live:true,live_started_at:new Date().toISOString()}).eq('id',batch.id);
   bcast({t:'live',v:true,hid});conns.forEach((s,p)=>callStudent(p));vcount();
+  beginRec();
 }
 async function endLive(){
   bcast({t:'end'});
-  if(hid){await sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid);hid=null}
+  if(hid){await sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}
+  await endRec();hid=null;
   calls.forEach(c=>{try{c.close()}catch(e){}});calls=[];
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
   clearInterval(tmr);live=false;
@@ -380,7 +384,58 @@ async function flip(){
     if(old)stream.removeTrack(old);stream.addTrack(n);
     $('vid').srcObject=stream;$('vid').style.transform=facing==='user'?'scaleX(-1)':'none';
     calls.forEach(c=>{try{const s=c.peerConnection.getSenders().find(x=>x.track&&x.track.kind==='video');if(s)s.replaceTrack(n)}catch(e){}});
+    if(live&&hid){await stopRec();startRec()}
   }catch(e){toast('Camera बदलता आला नाही')}
+}
+
+/* ---------- RECORDING (Sir side) ---------- */
+function pickMime(){
+  if(!window.MediaRecorder)return '';
+  return ['video/webm;codecs=vp8,opus','video/webm','video/mp4'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+}
+function startRec(){
+  if(!window.MediaRecorder||!stream||!hid)return;
+  recMime=recMime||pickMime();
+  let r;
+  try{r=new MediaRecorder(stream,{mimeType:recMime||undefined,videoBitsPerSecond:500000,audioBitsPerSecond:64000})}
+  catch(e){toast('Recording सुरू होत नाही');return}
+  const chunks=[],part=++recPart,h=hid;
+  r.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  r.onstop=()=>{const b=new Blob(chunks,{type:r.mimeType||recMime||'video/webm'});if(b.size>1000)queueUpload(b,part,h)};
+  r.start(1000);
+  rec=r;
+}
+function stopRec(){
+  return new Promise(res=>{
+    if(!rec||rec.state==='inactive'){rec=null;res();return}
+    const r=rec,old=r.onstop;rec=null;
+    r.onstop=()=>{if(old)old();res()};
+    try{r.stop()}catch(e){res()}
+  });
+}
+function beginRec(){
+  recPart=0;
+  startRec();
+  clearInterval(segTimer);
+  segTimer=setInterval(async()=>{if(!live)return;await stopRec();startRec()},SEG_MS);
+}
+async function endRec(){
+  clearInterval(segTimer);segTimer=null;
+  toast('⏳ Recording save होत आहे, page बंद करू नका');
+  await stopRec();
+  await upQ;
+  toast('✅ Recording save झाली');
+}
+function queueUpload(blob,part,h){
+  upQ=upQ.then(async()=>{
+    const ext=blob.type.indexOf('mp4')>-1?'mp4':'webm';
+    const path=user.id+'/'+h+'/'+String(part).padStart(3,'0')+'.'+ext;
+    const up=await sb.storage.from('class-recordings').upload(path,blob,{contentType:blob.type.split(';')[0]});
+    if(up.error){toast('Recording upload error: '+up.error.message);return}
+    const url=sb.storage.from('class-recordings').getPublicUrl(path).data.publicUrl;
+    const ins=await sb.from('gs_class_recordings').insert({history_id:h,owner_id:user.id,part,url});
+    if(ins.error)toast('Recording save error: '+ins.error.message);
+  }).catch(e=>console.error(e));
 }
 
 /* ---------- STUDENT side ---------- */
