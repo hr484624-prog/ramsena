@@ -1,758 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Messages - GyanSetu</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f4f7fb;
-  color:#222;
-}
-
-.app{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-}
-
-.header{
-  height:60px;
-  flex-shrink:0;
-  background:linear-gradient(
-    135deg,
-    #1769e0,
-    #6c35d9
-  );
-  color:white;
-  display:flex;
-  align-items:center;
-  padding:0 13px;
-  gap:12px;
-}
-
-.back{
-  width:40px;
-  height:40px;
-  border:0;
-  border-radius:50%;
-  background:rgba(255,255,255,.16);
-  color:white;
-  font-size:25px;
-}
-
-.name{
-  font-weight:bold;
-  font-size:17px;
-}
-
-.chat{
-  flex:1;
-  overflow-y:auto;
-  padding:14px;
-}
-
-.empty{
-  text-align:center;
-  color:#777;
-  margin-top:45px;
-}
-
-.row{
-  display:flex;
-  margin-bottom:10px;
-}
-
-.row.sent{
-  justify-content:flex-end;
-}
-
-.row.received{
-  justify-content:flex-start;
-}
-
-.bubble{
-  max-width:82%;
-  background:white;
-  padding:10px;
-  border-radius:16px;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-.sent .bubble{
-  background:#2563eb;
-  color:white;
-  border-bottom-right-radius:4px;
-}
-
-.received .bubble{
-  border-bottom-left-radius:4px;
-}
-
-.time{
-  font-size:10px;
-  opacity:.6;
-  margin-top:5px;
-  text-align:right;
-}
-
-
-/* VIDEO MESSAGE */
-
-.video-message{
-  width:250px;
-  max-width:100%;
-  overflow:hidden;
-  border-radius:14px;
-  background:#09090f;
-  color:white;
-  cursor:pointer;
-}
-
-.video-message-top{
-  height:135px;
-  background:linear-gradient(
-    135deg,
-    #111,
-    #262040
-  );
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:48px;
-}
-
-.video-message-info{
-  padding:11px;
-}
-
-.video-message-title{
-  font-weight:bold;
-  line-height:1.35;
-}
-
-.video-message-open{
-  color:#ff42d6;
-  font-size:12px;
-  margin-top:7px;
-}
-
-.input{
-  display:flex;
-  gap:8px;
-  padding:8px;
-  background:white;
-  border-top:1px solid #ddd;
-}
-
-.input input{
-  flex:1;
-  border:1px solid #ccc;
-  border-radius:22px;
-  padding:11px 14px;
-  outline:none;
-  font-size:15px;
-}
-
-.send{
-  width:44px;
-  height:44px;
-  border:0;
-  border-radius:50%;
-  background:#2563eb;
-  color:white;
-  font-size:18px;
-}
-
-.toast{
-  position:fixed;
-  bottom:75px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#222;
-  color:white;
-  padding:10px 17px;
-  border-radius:20px;
-  display:none;
-}
-
-.toast.show{
-  display:block;
-}
-
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Arial,sans-serif;background:#eef2f9;color:#222}
+.app{height:100vh;height:100dvh;display:flex;flex-direction:column}
+.header{min-height:60px;flex-shrink:0;background:linear-gradient(135deg,#1769e0,#6c35d9);color:#fff;display:flex;align-items:center;padding:0 10px;gap:10px}
+.ib{width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:20px;flex-shrink:0}
+.avatar{width:40px;height:40px;border-radius:50%;background:#fff3;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:18px;flex-shrink:0;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.hinfo{flex:1;min-width:0}
+.name{font-weight:bold;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status{font-size:11px;opacity:.85;height:14px}
+.searchbar{display:none;padding:8px;background:#fff;border-bottom:1px solid #ddd}
+.searchbar.show{display:block}
+.searchbar input{width:100%;border:1px solid #ccc;border-radius:20px;padding:9px 14px;outline:none;font-size:14px}
+.chat{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch;position:relative}
+.empty{text-align:center;color:#777;margin-top:45px}
+.day{text-align:center;margin:12px 0}
+.day span{background:#dfe6f3;color:#555;font-size:11px;padding:4px 11px;border-radius:12px}
+.row{display:flex;margin-bottom:7px}
+.row.sent{justify-content:flex-end}
+.bubble{max-width:82%;background:#fff;padding:8px 10px 6px;border-radius:16px;box-shadow:0 1px 5px rgba(0,0,0,.08);word-break:break-word;font-size:15px;line-height:1.4;white-space:pre-wrap}
+.sent .bubble{background:#2563eb;color:#fff;border-bottom-right-radius:4px}
+.received .bubble{border-bottom-left-radius:4px}
+.bubble a{color:inherit;text-decoration:underline}
+.meta{font-size:10px;opacity:.7;margin-top:4px;text-align:right;white-space:normal}
+.tick.read{color:#7ee0ff;font-weight:bold}
+.reply{background:rgba(0,0,0,.08);border-left:3px solid #ff42d6;border-radius:8px;padding:5px 8px;margin-bottom:6px;font-size:12px;opacity:.9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.img{max-width:100%;width:240px;border-radius:12px;display:block;cursor:zoom-in;background:#0001;min-height:60px}
+.bubble video{width:250px;max-width:100%;border-radius:12px;display:block;background:#000}
+.bubble audio{width:230px;max-width:100%;height:40px}
+.file{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.08);border-radius:12px;padding:10px;text-decoration:none!important;color:inherit;min-width:190px}
+.file .ic{font-size:26px}
+.file .fn{font-weight:bold;font-size:13px;word-break:break-all}
+.file .fs{font-size:11px;opacity:.7}
+.video-message{width:250px;max-width:100%;overflow:hidden;border-radius:14px;background:#09090f;color:#fff;cursor:pointer;white-space:normal}
+.video-message-top{height:120px;background:linear-gradient(135deg,#111,#262040);display:flex;align-items:center;justify-content:center;font-size:44px}
+.video-message-info{padding:10px}
+.video-message-title{font-weight:bold;line-height:1.35}
+.video-message-open{color:#ff42d6;font-size:12px;margin-top:6px}
+.flash{animation:fl 1.2s}
+@keyframes fl{0%,60%{outline:3px solid #ff42d6}100%{outline:3px solid transparent}}
+.replybar{display:none;align-items:center;gap:8px;background:#fff;border-top:1px solid #ddd;padding:7px 12px;font-size:13px}
+.replybar.show{display:flex}
+.replybar div{flex:1;border-left:3px solid #ff42d6;padding-left:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#555}
+.replybar button{border:0;background:none;font-size:18px;color:#777}
+.emoji{display:none;grid-template-columns:repeat(8,1fr);background:#fff;border-top:1px solid #ddd;padding:6px;max-height:170px;overflow-y:auto}
+.emoji.show{display:grid}
+.emoji button{border:0;background:none;font-size:24px;padding:5px}
+.input{display:flex;align-items:center;gap:6px;padding:8px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));background:#fff;border-top:1px solid #ddd}
+.input .tool{width:38px;height:38px;border:0;border-radius:50%;background:#eef2f9;font-size:19px;flex-shrink:0}
+.input input[type=text]{flex:1;min-width:0;border:1px solid #ccc;border-radius:22px;padding:11px 14px;outline:none;font-size:16px}
+.send{width:44px;height:44px;border:0;border-radius:50%;background:#2563eb;color:#fff;font-size:18px;flex-shrink:0}
+.send.rec{background:#e11d48}
+.recbar{display:none;flex:1;align-items:center;gap:10px;color:#e11d48;font-weight:bold}
+.recbar .dot{width:10px;height:10px;border-radius:50%;background:#e11d48;animation:bl 1s infinite}
+@keyframes bl{50%{opacity:.2}}
+.recbar button{margin-left:auto;border:0;background:none;color:#777;font-size:14px}
+.input.recording input[type=text],.input.recording .tool{display:none}
+.input.recording .recbar{display:flex}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:flex-end;z-index:20}
+.sheet.show{display:flex}
+.sheet .box{width:100%;background:#fff;border-radius:20px 20px 0 0;padding:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.sheet .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.sheet .grid button{border:0;background:none;font-size:12px;color:#333}
+.sheet .grid b{display:block;width:54px;height:54px;line-height:54px;border-radius:50%;margin:0 auto 5px;font-size:24px;font-weight:normal;color:#fff}
+.sheet .act{display:block;width:100%;text-align:left;border:0;background:none;padding:14px 8px;font-size:16px;border-bottom:1px solid #eee}
+.sheet .act.del{color:#e11d48}
+.viewer{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;z-index:30}
+.viewer.show{display:flex}
+.viewer img{max-width:100%;max-height:100%}
+.down{position:fixed;right:14px;bottom:90px;width:40px;height:40px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 8px #0003;font-size:18px;display:none}
+.down.show{display:block}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 17px;border-radius:20px;display:none;z-index:40;font-size:14px}
+.toast.show{display:block}
 </style>
 </head>
-
 <body>
-
 <div class="app">
-
-<header class="header">
-
-<button
-  class="back"
-  onclick="goBack()">
-  ‹
-</button>
-
-<div
-  class="name"
-  id="receiverName">
-  Messages
+  <header class="header">
+    <button class="ib" onclick="goBack()">‹</button>
+    <div class="avatar" id="avatar">?</div>
+    <div class="hinfo"><div class="name" id="receiverName">Messages</div><div class="status" id="status"></div></div>
+    <button class="ib" onclick="toggleSearch()">🔍</button>
+  </header>
+  <div class="searchbar" id="searchbar"><input id="searchInput" type="text" placeholder="Search in chat..." autocomplete="off"></div>
+  <main class="chat" id="chat"><div class="empty">Loading messages...</div></main>
+  <button class="down" id="down" onclick="scrollBottom(true)">⬇</button>
+  <div class="replybar" id="replybar"><div id="replytext"></div><button onclick="setReply(null)">✕</button></div>
+  <div class="emoji" id="emoji"></div>
+  <div class="input" id="inputbar">
+    <button class="tool" onclick="toggleEmoji()">😊</button>
+    <button class="tool" onclick="openSheet('attach')">📎</button>
+    <input id="messageInput" type="text" placeholder="Type a message..." autocomplete="off">
+    <div class="recbar"><span class="dot"></span><span id="rectime">0:00</span><button onclick="stopRec(false)">Cancel</button></div>
+    <button class="send" id="sendBtn" onclick="mainAction()">🎤</button>
+  </div>
 </div>
 
-</header>
-
-
-<main
-  class="chat"
-  id="chat">
-
-<div class="empty">
-  Loading messages...
+<div class="sheet" id="attach" onclick="if(event.target===this)closeSheets()">
+  <div class="box"><div class="grid">
+    <button onclick="pick('fImg')"><b style="background:#8b5cf6">🖼️</b>Photo</button>
+    <button onclick="pick('fCam')"><b style="background:#ef4444">📷</b>Camera</button>
+    <button onclick="pick('fVid')"><b style="background:#f59e0b">🎬</b>Video</button>
+    <button onclick="pick('fDoc')"><b style="background:#2563eb">📄</b>File</button>
+  </div></div>
 </div>
-
-</main>
-
-
-<div class="input">
-
-<input
-  id="messageInput"
-  placeholder="Type a message..."
-  autocomplete="off">
-
-<button
-  class="send"
-  onclick="sendMessage()">
-  ➤
-</button>
-
+<div class="sheet" id="actions" onclick="if(event.target===this)closeSheets()">
+  <div class="box">
+    <button class="act" onclick="actReply()">↩️ Reply</button>
+    <button class="act" onclick="actCopy()">📋 Copy</button>
+    <button class="act del" id="actDel" onclick="actDelete()">🗑️ Delete</button>
+  </div>
 </div>
+<div class="viewer" id="viewer" onclick="this.classList.remove('show')"><img id="viewerImg"></div>
+<div class="toast" id="toast"></div>
 
-</div>
-
-
-<div
-  class="toast"
-  id="toast">
-</div>
-
+<input type="file" id="fImg" accept="image/*" multiple hidden>
+<input type="file" id="fCam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fVid" accept="video/*" hidden>
+<input type="file" id="fDoc" hidden multiple>
 
 <script>
+const SUPABASE_URL="https://eqglttfffhvoyvrclzse.supabase.co";
+const SUPABASE_KEY="sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+const BUCKET="chat-files"; // Supabase Storage bucket (public)
+const MAX_MB=25;
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
 
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
+let me=null,msgs=[],replyTo=null,selected=null,searchQ="",typingCh=null,typingTimer=null,lastTyping=0;
+const rid=new URLSearchParams(location.search).get("id");
 
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+function goBack(){location.href=rid?"user-profile.html?id="+encodeURIComponent(rid):"home.html"}
+let tt;
+function showToast(t,keep){const e=$("toast");e.textContent=t;e.classList.add("show");clearTimeout(tt);if(!keep)tt=setTimeout(hideToast,2300)}
+function hideToast(){$("toast").classList.remove("show")}
+function esc(t){const d=document.createElement("div");d.textContent=t??"";return d.innerHTML}
+function linkify(h){return h.replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')}
+function fmtSize(b){b=+b||0;return b>1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.round(b/1024))+" KB"}
 
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-let currentUser=null;
-let receiverId=null;
-
-
-/* URL */
-
-const params =
-new URLSearchParams(
-  location.search
-);
-
-receiverId =
-params.get("id");
-
-
-/* BACK */
-
-function goBack(){
-
-  if(receiverId){
-
-    location.href =
-      "user-profile.html?id=" +
-      encodeURIComponent(receiverId);
-
-  }else{
-
-    location.href="home.html";
-
+/* ---------- parse message ---------- */
+function parse(t){
+  t=t||"";let reply=null;
+  if(t.startsWith("RE:")){
+    const i=t.indexOf("\n");
+    if(i>0){const h=t.slice(3,i),p=h.indexOf("|");reply={id:h.slice(0,p),prev:h.slice(p+1)};t=t.slice(i+1)}
   }
-
+  return{reply,body:t};
+}
+function preview(body){
+  if(body.startsWith("IMG:"))return"📷 Photo";
+  if(body.startsWith("VID:"))return"🎬 Video";
+  if(body.startsWith("AUD:"))return"🎤 Voice message";
+  if(body.startsWith("FILE:"))return"📄 "+(body.slice(5).split("|")[1]||"File");
+  if(body.startsWith("VIDEO:"))return"🎬 GyanSetu video";
+  return body.slice(0,60);
+}
+function bodyHtml(b){
+  if(b.startsWith("IMG:"))return`<img class="img" loading="lazy" src="${esc(b.slice(4))}" data-view="1">`;
+  if(b.startsWith("VID:"))return`<video controls preload="metadata" src="${esc(b.slice(4).split("|")[0])}"></video>`;
+  if(b.startsWith("AUD:"))return`<audio controls preload="metadata" src="${esc(b.slice(4))}"></audio>`;
+  if(b.startsWith("FILE:")){
+    const [u,n,s]=b.slice(5).split("|");
+    return`<a class="file" href="${esc(u)}" target="_blank" rel="noopener" download><span class="ic">📄</span><span><div class="fn">${esc(n||"File")}</div><div class="fs">${fmtSize(s)} · Tap to open</div></span></a>`;
+  }
+  if(b.startsWith("VIDEO:")){
+    const v=b.slice(6),id=v.split("|")[0],title=v.split("|").slice(1).join("|");
+    return`<div class="video-message" data-vid="${esc(id)}"><div class="video-message-top">🎬</div><div class="video-message-info"><div class="video-message-title">${esc(title||"GyanSetu Video")}</div><div class="video-message-open">▶ Tap to watch video</div></div></div>`;
+  }
+  return linkify(esc(b));
 }
 
-
-/* TOAST */
-
-function showToast(text){
-
-  const toast =
-    document.getElementById("toast");
-
-  toast.textContent=text;
-  toast.classList.add("show");
-
-  setTimeout(()=>{
-    toast.classList.remove("show");
-  },2300);
-
+/* ---------- render ---------- */
+function dayLabel(d){
+  const t=new Date(),y=new Date(Date.now()-864e5);
+  if(d.toDateString()===t.toDateString())return"Today";
+  if(d.toDateString()===y.toDateString())return"Yesterday";
+  return d.toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"});
 }
-
-
-/* USER */
-
-async function getUser(){
-
-  const {
-    data
-  } =
-  await supabaseClient.auth.getUser();
-
-  currentUser =
-    data?.user || null;
-
+function render(stick){
+  const chat=$("chat");
+  const near=chat.scrollHeight-chat.scrollTop-chat.clientHeight<140;
+  let list=msgs;
+  if(searchQ){const q=searchQ.toLowerCase();list=msgs.filter(m=>preview(parse(m.message).body).toLowerCase().includes(q))}
+  if(!list.length){chat.innerHTML=`<div class="empty">${searchQ?"No results.":"No messages yet. Say hi 👋"}</div>`;return}
+  let html="",last="";
+  list.forEach(m=>{
+    const d=new Date(m.created_at),dl=dayLabel(d);
+    if(dl!==last){html+=`<div class="day"><span>${dl}</span></div>`;last=dl}
+    const mine=m.sender_id===me.id,p=parse(m.message);
+    const tm=d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+    html+=`<div class="row ${mine?"sent":"received"}" id="m${m.id}"><div class="bubble" data-id="${m.id}">`
+      +(p.reply?`<div class="reply" data-goto="${esc(p.reply.id)}">↩ ${esc(p.reply.prev)}</div>`:"")
+      +bodyHtml(p.body)
+      +`<div class="meta">${tm}${mine?` <span class="tick ${m.is_read?"read":""}">${m.is_read?"✓✓":"✓"}</span>`:""}</div></div></div>`;
+  });
+  chat.innerHTML=html;
+  if(stick||near)scrollBottom();
 }
+function scrollBottom(smooth){const c=$("chat");c.scrollTo({top:c.scrollHeight,behavior:smooth?"smooth":"auto"})}
+$("chat").addEventListener("scroll",()=>{const c=$("chat");$("down").classList.toggle("show",c.scrollHeight-c.scrollTop-c.clientHeight>300)});
 
+/* click handling inside chat */
+$("chat").addEventListener("click",e=>{
+  const t=e.target;
+  if(t.closest("a")||t.closest("audio")||t.closest("video"))return;
+  const g=t.closest("[data-goto]");
+  if(g){const el=$("m"+g.dataset.goto);if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1300)}else showToast("Original message not found");return}
+  const vm=t.closest("[data-vid]");
+  if(vm){location.href="video.html?id="+encodeURIComponent(vm.dataset.vid);return}
+  if(t.dataset.view){$("viewerImg").src=t.src;$("viewer").classList.add("show");return}
+  const b=t.closest(".bubble");
+  if(b)openActions(b.dataset.id);
+});
 
-/* RECEIVER */
-
+/* ---------- data ---------- */
 async function loadReceiver(){
-
-  if(!receiverId){
-    return;
-  }
-
-  const {
-    data
-  } =
-  await supabaseClient
-  .from("Profiles")
-  .select("*")
-  .eq("id",receiverId)
-  .maybeSingle();
-
-
+  if(!rid)return;
+  const{data}=await sb.from("Profiles").select("*").eq("id",rid).maybeSingle();
   if(data){
-
-    document.getElementById(
-      "receiverName"
-    ).textContent =
-      data.full_name ||
-      data.username ||
-      "Messages";
-
+    const n=data.full_name||data.username||"Messages";
+    $("receiverName").textContent=n;
+    const url=data.avatar_url||data.profile_photo||data.photo_url;
+    $("avatar").innerHTML=url?`<img src="${esc(url)}">`:esc(n.charAt(0).toUpperCase());
   }
-
 }
-
-
-/* VIDEO CHECK */
-
-function isVideoMessage(text){
-
-  return (
-    typeof text==="string" &&
-    text.startsWith("VIDEO:")
-  );
-
-}
-
-
-/* VIDEO DATA */
-
-function getVideoId(text){
-
-  const value =
-    text.substring(6);
-
-  return value.split("|")[0];
-
-}
-
-function getVideoTitle(text){
-
-  const value =
-    text.substring(6);
-
-  return value
-    .split("|")
-    .slice(1)
-    .join("|");
-
-}
-
-
-/* CREATE MESSAGE */
-
-function createMessage(message){
-
-  const row =
-    document.createElement("div");
-
-  row.className =
-    "row " +
-    (
-      message.sender_id === currentUser.id
-      ? "sent"
-      : "received"
-    );
-
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className="bubble";
-
-
-  if(isVideoMessage(message.message)){
-
-    const id =
-      getVideoId(message.message);
-
-    const title =
-      getVideoTitle(message.message);
-
-
-    const videoCard =
-      document.createElement("div");
-
-    videoCard.className=
-      "video-message";
-
-
-    videoCard.innerHTML=`
-
-      <div class="video-message-top">
-        🎬
-      </div>
-
-      <div class="video-message-info">
-
-        <div class="video-message-title">
-          ${escapeHtml(title || "GyanSetu Video")}
-        </div>
-
-        <div class="video-message-open">
-          ▶ Tap to watch video
-        </div>
-
-      </div>
-
-    `;
-
-
-    videoCard.onclick=function(){
-
-      location.href =
-        "video.html?id=" +
-        encodeURIComponent(id);
-
-    };
-
-
-    bubble.appendChild(
-      videoCard
-    );
-
-  }else{
-
-    const text =
-      document.createElement("div");
-
-    text.textContent =
-      message.message;
-
-    bubble.appendChild(text);
-
-  }
-
-
-  const time =
-    document.createElement("div");
-
-  time.className="time";
-
-  time.textContent =
-    new Date(
-      message.created_at
-    ).toLocaleTimeString(
-      [],
-      {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    );
-
-
-  bubble.appendChild(time);
-
-  row.appendChild(bubble);
-
-  return row;
-
-}
-
-
-/* LOAD */
-
 async function loadMessages(){
+  const{data,error}=await sb.from("Messages").select("id,sender_id,receiver_id,message,created_at,is_read")
+    .or(`and(sender_id.eq.${me.id},receiver_id.eq.${rid}),and(sender_id.eq.${rid},receiver_id.eq.${me.id})`)
+    .order("created_at",{ascending:true});
+  if(error){console.error(error);$("chat").innerHTML='<div class="empty">Could not load messages.</div>';return}
+  msgs=data||[];render(true);markRead();
+}
+async function markRead(){
+  if(!msgs.some(m=>m.sender_id===rid&&!m.is_read))return;
+  const{error}=await sb.from("Messages").update({is_read:true}).eq("sender_id",rid).eq("receiver_id",me.id).eq("is_read",false);
+  if(!error){msgs.forEach(m=>{if(m.sender_id===rid)m.is_read=true})}
+}
+function addMsg(m){
+  if(msgs.some(x=>x.id===m.id))return;
+  msgs.push(m);render(m.sender_id===me.id);
+  if(m.sender_id===rid)markRead();
+}
+async function insertMsg(text){
+  const{data,error}=await sb.from("Messages").insert({sender_id:me.id,receiver_id:rid,message:text,is_read:false}).select().single();
+  if(error){console.error(error);showToast("Message send failed.");return false}
+  addMsg(data);return true;
+}
 
-  if(!currentUser || !receiverId){
-    return;
-  }
+/* ---------- send ---------- */
+function withReply(text){
+  if(!replyTo)return text;
+  const r=`RE:${replyTo.id}|${replyTo.prev.replace(/[\n|]/g," ")}\n${text}`;
+  setReply(null);return r;
+}
+async function sendText(){
+  const inp=$("messageInput"),t=inp.value.trim();
+  if(!t)return;
+  inp.value="";updateBtn();
+  const ok=await insertMsg(withReply(t));
+  if(!ok)inp.value=t,updateBtn();
+}
+function mainAction(){
+  if(recorder){stopRec(true);return}
+  if($("messageInput").value.trim())sendText();else startRec();
+}
+function updateBtn(){$("sendBtn").textContent=$("messageInput").value.trim()?"➤":"🎤"}
+$("messageInput").addEventListener("input",()=>{updateBtn();sendTyping()});
+$("messageInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();sendText()}});
+$("messageInput").addEventListener("focus",()=>$("emoji").classList.remove("show"));
 
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-  .from("Messages")
-  .select(
-    "id,sender_id,receiver_id,message,created_at"
-  )
-  .or(
-    `and(sender_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`
-  )
-  .order(
-    "created_at",
-    {
-      ascending:true
+/* ---------- upload (photo / video / file) ---------- */
+async function uploadAndSend(file,kind,name){
+  if(file.size>MAX_MB*1048576){showToast("File too large (max "+MAX_MB+" MB)");return}
+  showToast("Uploading "+(name||file.name)+"...",true);
+  const ext=((name||file.name||"").split(".").pop()||"bin").replace(/[^a-z0-9]/gi,"").slice(0,6)||"bin";
+  const path=`${me.id}/${Date.now()}-${Math.random().toString(36).slice(2,7)}.${ext}`;
+  const{error}=await sb.storage.from(BUCKET).upload(path,file,{contentType:file.type||undefined});
+  if(error){console.error(error);hideToast();showToast("Upload failed. Check storage bucket '"+BUCKET+"'.");return}
+  const url=sb.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
+  const clean=(name||file.name||"file").replace(/[|\n]/g,"-");
+  let msg;
+  if(kind==="image")msg="IMG:"+url;
+  else if(kind==="video")msg=`VID:${url}|${clean}`;
+  else if(kind==="audio")msg="AUD:"+url;
+  else msg=`FILE:${url}|${clean}|${file.size}`;
+  hideToast();
+  await insertMsg(withReply(msg));
+}
+function pick(id){closeSheets();$(id).click()}
+["fImg","fCam","fVid","fDoc"].forEach(id=>{
+  $(id).addEventListener("change",async e=>{
+    for(const f of e.target.files){
+      const k=f.type.startsWith("image/")?"image":f.type.startsWith("video/")?"video":f.type.startsWith("audio/")?"audio":"file";
+      await uploadAndSend(f,k);
     }
-  );
-
-
-  if(error){
-
-    console.error(error);
-
-    return;
-
-  }
-
-
-  const chat =
-    document.getElementById("chat");
-
-  chat.innerHTML="";
-
-
-  if(!data || !data.length){
-
-    chat.innerHTML=
-      `<div class="empty">
-        No messages yet.
-      </div>`;
-
-    return;
-
-  }
-
-
-  data.forEach(message=>{
-
-    chat.appendChild(
-      createMessage(message)
-    );
-
+    e.target.value="";
   });
+});
 
+/* ---------- voice message ---------- */
+let recorder=null,recChunks=[],recStream=null,recStart=0,recInt=null,recSend=false;
+async function startRec(){
+  if(!navigator.mediaDevices||!window.MediaRecorder){showToast("Voice recording not supported");return}
+  try{recStream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){showToast("Microphone permission denied");return}
+  recChunks=[];recorder=new MediaRecorder(recStream);
+  recorder.ondataavailable=e=>{if(e.data.size)recChunks.push(e.data)};
+  recorder.onstop=async()=>{
+    recStream.getTracks().forEach(t=>t.stop());
+    clearInterval(recInt);$("inputbar").classList.remove("recording");
+    $("sendBtn").classList.remove("rec");updateBtn();
+    const send=recSend,type=recorder.mimeType||"audio/webm";recorder=null;
+    if(!send||!recChunks.length)return;
+    const ext=type.includes("mp4")?"m4a":type.includes("ogg")?"ogg":"webm";
+    const blob=new Blob(recChunks,{type});
+    await uploadAndSend(blob,"audio","voice."+ext);
+  };
+  recorder.start();recStart=Date.now();
+  $("inputbar").classList.add("recording");$("sendBtn").classList.add("rec");$("sendBtn").textContent="➤";
+  recInt=setInterval(()=>{const s=Math.floor((Date.now()-recStart)/1000);$("rectime").textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0")},500);
+}
+function stopRec(send){if(!recorder)return;recSend=send;recorder.stop()}
 
-  scrollBottom();
+/* ---------- emoji ---------- */
+"😀 😂 🤣 😊 😍 🥰 😘 😎 🤔 😅 😢 😭 😡 🥳 😴 🤗 👍 👎 👏 🙏 💪 🔥 ✨ 🎉 ❤️ 💙 💯 ✅ ❌ ⭐ 📚 ✏️ 📖 🧠 🎯 💡 ⏰ 📝 🙌 👌 🤝 😇 🤩 😜 🙈 😬 🤯 🥺".split(" ").forEach(e=>{
+  const b=document.createElement("button");b.textContent=e;
+  b.onclick=()=>{const i=$("messageInput");i.value+=e;updateBtn();i.focus({preventScroll:true})};
+  $("emoji").appendChild(b);
+});
+function toggleEmoji(){$("emoji").classList.toggle("show")}
 
+/* ---------- sheets / actions ---------- */
+function openSheet(id){$("emoji").classList.remove("show");$(id).classList.add("show")}
+function closeSheets(){document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("show"))}
+function openActions(id){
+  selected=msgs.find(m=>String(m.id)===String(id));if(!selected)return;
+  $("actDel").style.display=selected.sender_id===me.id?"block":"none";
+  openSheet("actions");
+}
+function setReply(r){
+  replyTo=r;$("replybar").classList.toggle("show",!!r);
+  if(r){$("replytext").textContent="Replying: "+r.prev;$("messageInput").focus()}
+}
+function actReply(){closeSheets();setReply({id:selected.id,prev:preview(parse(selected.message).body)})}
+async function actCopy(){
+  closeSheets();const b=parse(selected.message).body;
+  const txt=/^(IMG|VID|AUD|FILE):/.test(b)?b.slice(b.indexOf(":")+1).split("|")[0]:b;
+  try{await navigator.clipboard.writeText(txt);showToast("Copied")}catch(e){showToast("Copy failed")}
+}
+async function actDelete(){
+  closeSheets();if(!confirm("Delete this message?"))return;
+  const{error}=await sb.from("Messages").delete().eq("id",selected.id);
+  if(error){console.error(error);showToast("Delete failed (check RLS delete policy)");return}
+  msgs=msgs.filter(m=>m.id!==selected.id);render();
 }
 
+/* ---------- search ---------- */
+function toggleSearch(){
+  const s=$("searchbar");s.classList.toggle("show");
+  if(s.classList.contains("show"))$("searchInput").focus();else{searchQ="";$("searchInput").value="";render(true)}
+}
+$("searchInput").addEventListener("input",e=>{searchQ=e.target.value.trim();render()});
 
-/* SEND */
-
-async function sendMessage(){
-
-  const input =
-    document.getElementById(
-      "messageInput"
-    );
-
-  const text =
-    input.value.trim();
-
-
-  if(!text){
-    return;
-  }
-
-  if(!currentUser || !receiverId){
-    return;
-  }
-
-
-  const {
-    error
-  } =
-  await supabaseClient
-  .from("Messages")
-  .insert({
-
-    sender_id:
-      currentUser.id,
-
-    receiver_id:
-      receiverId,
-
-    message:
-      text,
-
-    is_read:false
-
-  });
-
-
-  if(error){
-
-    console.error(error);
-
-    showToast(
-      "Message send failed."
-    );
-
-    return;
-
-  }
-
-
-  input.value="";
-
-  await loadMessages();
-
+/* ---------- realtime + typing ---------- */
+function sendTyping(){
+  if(!typingCh||Date.now()-lastTyping<1500)return;
+  lastTyping=Date.now();
+  typingCh.send({type:"broadcast",event:"typing",payload:{from:me.id}});
+}
+function setupRealtime(){
+  sb.channel("msgs-"+me.id+"-"+rid)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"Messages"},p=>{
+      const m=p.new;
+      if((m.sender_id===me.id&&m.receiver_id===rid)||(m.sender_id===rid&&m.receiver_id===me.id))addMsg(m);
+    })
+    .on("postgres_changes",{event:"UPDATE",schema:"public",table:"Messages"},p=>{
+      const i=msgs.findIndex(x=>x.id===p.new.id);
+      if(i>-1){msgs[i]={...msgs[i],...p.new};render()}
+    })
+    .on("postgres_changes",{event:"DELETE",schema:"public",table:"Messages"},p=>{
+      const n=msgs.length;msgs=msgs.filter(x=>x.id!==p.old.id);if(msgs.length!==n)render();
+    })
+    .subscribe();
+  typingCh=sb.channel("typing-"+[me.id,rid].sort().join("-"),{config:{broadcast:{self:false}}})
+    .on("broadcast",{event:"typing"},({payload})=>{
+      if(payload.from!==rid)return;
+      $("status").textContent="typing...";
+      clearTimeout(typingTimer);typingTimer=setTimeout(()=>$("status").textContent="",2500);
+    })
+    .subscribe();
 }
 
-
-/* REALTIME */
-
-supabaseClient
-.channel(
-  "messages-" +
-  Math.random()
-)
-.on(
-  "postgres_changes",
-  {
-    event:"INSERT",
-    schema:"public",
-    table:"Messages"
-  },
-  payload=>{
-
-    const m =
-      payload.new;
-
-    if(
-      (
-        m.sender_id===currentUser?.id &&
-        m.receiver_id===receiverId
-      )
-      ||
-      (
-        m.sender_id===receiverId &&
-        m.receiver_id===currentUser?.id
-      )
-    ){
-
-      loadMessages();
-
-    }
-
-  }
-)
-.subscribe();
-
-
-/* ENTER */
-
-document
-.getElementById("messageInput")
-.addEventListener(
-  "keydown",
-  function(e){
-
-    if(
-      e.key==="Enter"
-    ){
-
-      e.preventDefault();
-      sendMessage();
-
-    }
-
-  }
-);
-
-
-/* SCROLL */
-
-function scrollBottom(){
-
-  const chat =
-    document.getElementById("chat");
-
-  setTimeout(()=>{
-    chat.scrollTop =
-      chat.scrollHeight;
-  },50);
-
-}
-
-
-/* ESCAPE */
-
-function escapeHtml(text){
-
-  const div =
-    document.createElement("div");
-
-  div.textContent =
-    text ?? "";
-
-  return div.innerHTML;
-
-}
-
-
-/* START */
-
+/* ---------- start ---------- */
 async function start(){
-
-  await getUser();
-
-  if(!currentUser){
-    return;
-  }
-
+  const{data}=await sb.auth.getUser();
+  me=data?.user||null;
+  if(!me){$("chat").innerHTML='<div class="empty">Please login first.</div>';return}
+  if(!rid){$("chat").innerHTML='<div class="empty">No user selected.</div>';return}
   await loadReceiver();
-
   await loadMessages();
-
+  setupRealtime();
 }
-
 start();
-
 </script>
-
 </body>
 </html>
