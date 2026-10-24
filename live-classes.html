@@ -84,6 +84,7 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
     </div>
   </div>
 </div>
+<div id="saveOv" class="ov hidden" style="z-index:200"><div class="pop" style="text-align:center"><h2>⏳ Recording save होत आहे</h2><p>कृपया page बंद करू नका...</p></div></div>
 <div id="md" class="ov hidden" onclick="if(event.target===this)closeModal()"><div class="pop" id="mx"></div></div>
 
 <script>
@@ -98,7 +99,7 @@ let sc=null,sirId='',gs=null,gcall=null,retry=null;
 let hid=null;
 let rec=null,segTimer=null,recPart=0,recMime='',upQ=Promise.resolve();
 const SEG_MS=8*60*1000;
-let newPhoto=null,rmPhoto=false;
+let newPhoto=null,rmPhoto=false,saving=false;
 const ver=new Set(); /* verified (blue tick) user ids */
 const fol=new Set(); /* Sir ids I follow */
 
@@ -398,7 +399,7 @@ async function blk(pid){
 async function unblk(u){await sb.from('gs_blocks').delete().eq('batch_id',batch.id).eq('user_id',u);blocked.delete(u);rStu()}
 
 async function toggleLive(){
-  if(live){if(confirm('Live Class End करायची?'))endLive();return}
+  if(live){if(confirm('Live Class End करायची? Recording save होईल.')){await endLive();await leaveRoom()}return}
   try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:{echoCancellation:true,noiseSuppression:true}})}
   catch(e){toast('Camera आणि Mic permission द्या');return}
   const v=$('vid');v.srcObject=stream;v.muted=true;v.style.transform=facing==='user'?'scaleX(-1)':'none';
@@ -470,9 +471,10 @@ function beginRec(){
 }
 async function endRec(){
   clearInterval(segTimer);segTimer=null;
-  toast('⏳ Recording save होत आहे, page बंद करू नका');
+  saving=true;$('saveOv').classList.remove('hidden');
   await stopRec();
   await upQ;
+  saving=false;$('saveOv').classList.add('hidden');
   toast('✅ Recording save झाली');
 }
 function queueUpload(blob,part,h){
@@ -557,7 +559,7 @@ async function leaveRoom(){
   handUp=false;
   mine?showSir():showStudent();
 }
-window.addEventListener('beforeunload',()=>{if(mine&&live){sb.from('gs_batches').update({is_live:false}).eq('id',batch.id);if(hid)sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}});
+window.addEventListener('beforeunload',e=>{if(saving){e.preventDefault();e.returnValue=''}if(mine&&live){sb.from('gs_batches').update({is_live:false}).eq('id',batch.id);if(hid)sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}});
 
 /* ---------- start ---------- */
 document.addEventListener('DOMContentLoaded',async()=>{
