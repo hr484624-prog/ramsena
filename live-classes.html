@@ -64,6 +64,8 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 .scroll{overflow:auto;padding:12px;line-height:1.7}
 .row{display:flex;gap:6px;align-items:center;background:#171e2c;border-radius:10px;padding:8px;margin-bottom:6px}.row span{flex:1}.row button{padding:7px 10px;border-radius:8px;background:#1b2436;font-size:13px}
 .toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1f2937;border:1px solid #3d6cff;border-radius:12px;padding:10px 16px;z-index:500;font-size:14px;text-align:center;max-width:90%}
+/* blue tick */
+.vt{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;margin-left:5px;vertical-align:middle;cursor:pointer}
 </style>
 </head>
 <body>
@@ -96,6 +98,7 @@ let hid=null;
 let rec=null,segTimer=null,recPart=0,recMime='',upQ=Promise.resolve();
 const SEG_MS=8*60*1000;
 let newPhoto=null,rmPhoto=false;
+const ver=new Set(); /* verified (blue tick) user ids */
 
 /* ---------- no zoom ---------- */
 ['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
@@ -116,13 +119,26 @@ function pickRole(r){
   role=r;$('roleOv').classList.add('hidden');r==='sir'?showSir():showStudent();
 }
 
+/* ---------- blue tick ---------- */
+const tk=id=>ver.has(id)?'<span class="vt" onclick="event.stopPropagation();tickInfo()">✓</span>':'';
+async function loadVer(ids){
+  ids=[...new Set(ids.filter(Boolean))];if(!ids.length)return;
+  const {data}=await sb.from('Profiles').select('id,is_verified').in('id',ids);
+  (data||[]).forEach(p=>{p.is_verified?ver.add(p.id):ver.delete(p.id)});
+}
+function tickInfo(){
+  modal(`<h2><span class="vt" style="margin:0 6px 0 0">✓</span>Blue Tick</h2>
+  <p>ज्या Sir चे <b>10 followers</b> होतात त्यांना Blue Tick आपोआप मिळतो.<br>Followers 10 पेक्षा कमी झाले तर तो जातो.</p>
+  <button class="pri" style="margin-top:14px" onclick="closeModal()">OK</button>`);
+}
+
 /* ---------- batch card ---------- */
 function card(b,m){
   return `<div class="card" onclick="openRoom('${b.id}')">
     ${b.photo_url?`<div class="cov"><img src="${esc(b.photo_url)}" loading="lazy" alt=""></div>`:''}
     <div class="ct">${esc(b.name)}</div>
     <div class="sub">📘 ${esc(b.subject||'-')} &nbsp; ⏰ ${esc(b.timings||'-')}</div>
-    <div class="sub">👨‍🏫 ${esc(b.owner_name||'Sir')}</div>
+    <div class="sub">👨‍🏫 ${esc(b.owner_name||'Sir')}${tk(b.owner_id)}</div>
     ${b.is_live?'<span class="lvt">🔴 LIVE</span>':''}
     ${m?`<button class="ic" onclick="event.stopPropagation();batchForm('${b.id}')">✏️</button>`
        :`<button class="ic" onclick="event.stopPropagation();toggleSave('${b.id}')">${saved.has(b.id)?'⭐':'☆'}</button>`}
@@ -133,9 +149,18 @@ function card(b,m){
 async function showSir(){
   title('👨‍🏫 माझ्या Batches');
   $('view').innerHTML='<div class="empty">⏳ Loading...</div>';
-  const {data}=await sb.from('gs_batches').select('*').eq('owner_id',user.id).order('created_at',{ascending:false});
+  const [r,fc]=await Promise.all([
+    sb.from('gs_batches').select('*').eq('owner_id',user.id).order('created_at',{ascending:false}),
+    sb.from('Follows').select('*',{count:'exact',head:true}).eq('following_id',user.id),
+    loadVer([user.id])
+  ]);
+  const data=r.data;
   (data||[]).forEach(b=>C[b.id]=b);
-  $('view').innerHTML=`<button class="pri" onclick="batchForm()">➕ Add Batch</button>`+
+  let st='';
+  if(!fc.error&&fc.count!=null){
+    st=`<div class="sub" style="text-align:center;margin-top:12px" onclick="tickInfo()">👥 ${fc.count} followers • ${ver.has(user.id)?'Blue Tick '+tk(user.id):'Blue Tick साठी अजून '+Math.max(0,10-fc.count)}</div>`;
+  }
+  $('view').innerHTML=`<button class="pri" onclick="batchForm()">➕ Add Batch</button>`+st+
     ((data||[]).map(b=>card(b,true)).join('')||'<div class="empty">अजून Batch नाही.<br>➕ Add Batch वर क्लिक करा.</div>');
 }
 function batchForm(id){
@@ -201,7 +226,8 @@ async function delBatch(id){
 async function showStudent(){
   title('👨‍🎓 Batches');
   sTab='all';q='';
-  $('view').innerHTML=`<input class="inp" style="margin-top:0" id="sq" placeholder="🔍 Batch / Subject / Sir शोधा" oninput="q=this.value;renderList()">
+  $('view').innerHTML=`<button class="pri" onclick="location.href='discover-space.html'">🧭 Discover Space</button>
+  <input class="inp" id="sq" placeholder="🔍 Batch / Subject / Sir शोधा" oninput="q=this.value;renderList()">
   <div class="chips"><button class="sec on" id="t_all" onclick="setST('all')">सर्व</button><button class="sec" id="t_live" onclick="setST('live')">🔴 Live</button><button class="sec" id="t_saved" onclick="setST('saved')">⭐ Saved</button></div>
   <div id="bl"></div>`;
   await loadAll();
@@ -211,6 +237,7 @@ async function loadAll(){
   const [a,s]=await Promise.all([sb.from('gs_batches').select('*'),sb.from('gs_saved').select('batch_id').eq('user_id',user.id)]);
   C={};(a.data||[]).forEach(b=>C[b.id]=b);
   saved=new Set((s.data||[]).map(r=>r.batch_id));
+  await loadVer(Object.values(C).map(b=>b.owner_id));
   renderList();
 }
 function setST(t){sTab=t;['all','live','saved'].forEach(x=>$('t_'+x).classList.toggle('on',x===t));renderList()}
@@ -234,8 +261,9 @@ async function openRoom(id){
   batch=C[id];if(!batch)return;
   mine=batch.owner_id===user.id;sirId='gs-'+batch.id;
   msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;
+  await loadVer([batch.owner_id]);
   const w=document.createElement('div');w.className='room';w.id='room';
-  w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}</small></div></div>
+  w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}${tk(batch.owner_id)}</small></div></div>
   <div class="pl" id="pl"><video id="vid" autoplay playsinline></video>
     <div class="ph" id="ph">${mine?'📷<br>Start Class दाबा':'⏳<br>Class अजून सुरू नाही<br><small>Sir live आले की आपोआप दिसेल</small>'}</div>
     <span id="lv" class="lvb hidden">🔴 LIVE</span><span id="vc" class="vcb hidden"></span>
@@ -263,7 +291,7 @@ function setTab(t){
   $('tabs').innerHTML=L.map(x=>`<button class="${x[0]===t?'on':''}" onclick="setTab('${x[0]}')">${x[1]}</button>`).join('');
   const p=$('pane');
   if(t==='info'){
-    p.innerHTML=`<div class="scroll">${batch.photo_url?`<div class="pv" style="margin:0 0 12px"><img src="${esc(batch.photo_url)}"></div>`:''}<h3>${esc(batch.name)}</h3>📘 ${esc(batch.subject||'-')}<br>⏰ ${esc(batch.timings||'-')}<br>👨‍🏫 ${esc(batch.owner_name||'Sir')}<br><br>${esc(batch.description||'')}</div>`;
+    p.innerHTML=`<div class="scroll">${batch.photo_url?`<div class="pv" style="margin:0 0 12px"><img src="${esc(batch.photo_url)}"></div>`:''}<h3>${esc(batch.name)}</h3>📘 ${esc(batch.subject||'-')}<br>⏰ ${esc(batch.timings||'-')}<br>👨‍🏫 ${esc(batch.owner_name||'Sir')}${tk(batch.owner_id)}<br><br>${esc(batch.description||'')}</div>`;
   }else if(t==='stu'){p.innerHTML='<div class="scroll" id="sl"></div>';rStu()}
   else{
     p.innerHTML=`<div class="msgs" id="ml"></div><div class="send"><input class="inp" id="mi" maxlength="500" placeholder="${t==='chat'?'Message लिहा...':'तुमचा Doubt लिहा...'}" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">➤</button></div>`;
@@ -273,7 +301,7 @@ function setTab(t){
 function rMsgs(){
   const e=$('ml');if(!e)return;
   const l=msgs.filter(m=>m.kind===tab);
-  e.innerHTML=l.map(m=>`<div class="m ${m.is_sir?'sir':''}"><b>${esc(m.user_name)}${m.is_sir?' 👨‍🏫':''}${mine?`<i onclick="delMsg(${m.id})">🗑</i>`:''}</b>${esc(m.body)}</div>`).join('')||'<div class="empty">अजून काही नाही</div>';
+  e.innerHTML=l.map(m=>`<div class="m ${m.is_sir?'sir':''}"><b>${esc(m.user_name)}${m.is_sir?' 👨‍🏫'+tk(batch.owner_id):''}${mine?`<i onclick="delMsg(${m.id})">🗑</i>`:''}</b>${esc(m.body)}</div>`).join('')||'<div class="empty">अजून काही नाही</div>';
   e.scrollTop=e.scrollHeight;
 }
 async function sendMsg(){
