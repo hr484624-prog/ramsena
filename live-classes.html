@@ -65,6 +65,7 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 .row{display:flex;gap:6px;align-items:center;background:#171e2c;border-radius:10px;padding:8px;margin-bottom:6px}.row span{flex:1}.row button{padding:7px 10px;border-radius:8px;background:#1b2436;font-size:13px}
 .toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1f2937;border:1px solid #3d6cff;border-radius:12px;padding:10px 16px;z-index:500;font-size:14px;text-align:center;max-width:90%}
 /* blue tick */
+.fb{margin-left:8px;padding:3px 10px;border-radius:14px;background:#3d6cff;font-size:12px;font-weight:700;vertical-align:middle}.fb.on{background:#1b2436;border:1px solid #3d6cff}
 .vt{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;margin-left:5px;vertical-align:middle;cursor:pointer}
 </style>
 </head>
@@ -99,6 +100,7 @@ let rec=null,segTimer=null,recPart=0,recMime='',upQ=Promise.resolve();
 const SEG_MS=8*60*1000;
 let newPhoto=null,rmPhoto=false;
 const ver=new Set(); /* verified (blue tick) user ids */
+const fol=new Set(); /* Sir ids I follow */
 
 /* ---------- no zoom ---------- */
 ['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
@@ -132,13 +134,32 @@ function tickInfo(){
   <button class="pri" style="margin-top:14px" onclick="closeModal()">OK</button>`);
 }
 
+/* ---------- follow Sir ---------- */
+async function loadFol(){
+  const {data}=await sb.from('Follows').select('following_id').eq('follower_id',user.id);
+  fol.clear();(data||[]).forEach(r=>fol.add(r.following_id));
+}
+const folBtn=id=>id===user.id?'':`<button class="fb ${fol.has(id)?'on':''}" onclick="event.stopPropagation();toggleFol('${id}')">${fol.has(id)?'✓ Following':'➕ Follow'}</button>`;
+function refreshFol(){
+  renderList();
+  const e=$('rfol');if(e&&batch)e.innerHTML=folBtn(batch.owner_id);
+}
+async function toggleFol(id){
+  const had=fol.has(id);
+  had?fol.delete(id):fol.add(id);refreshFol();
+  const r=had?await sb.from('Follows').delete().eq('follower_id',user.id).eq('following_id',id)
+             :await sb.from('Follows').insert({follower_id:user.id,following_id:id});
+  if(r.error){had?fol.add(id):fol.delete(id);refreshFol();toast('Follow error: '+r.error.message);return}
+  await loadVer([id]);refreshFol();
+}
+
 /* ---------- batch card ---------- */
 function card(b,m){
   return `<div class="card" onclick="openRoom('${b.id}')">
     ${b.photo_url?`<div class="cov"><img src="${esc(b.photo_url)}" loading="lazy" alt=""></div>`:''}
     <div class="ct">${esc(b.name)}</div>
     <div class="sub">📘 ${esc(b.subject||'-')} &nbsp; ⏰ ${esc(b.timings||'-')}</div>
-    <div class="sub">👨‍🏫 ${esc(b.owner_name||'Sir')}${tk(b.owner_id)}</div>
+    <div class="sub">👨‍🏫 ${esc(b.owner_name||'Sir')}${tk(b.owner_id)}${m?'':folBtn(b.owner_id)}</div>
     ${b.is_live?'<span class="lvt">🔴 LIVE</span>':''}
     ${m?`<button class="ic" onclick="event.stopPropagation();batchForm('${b.id}')">✏️</button>`
        :`<button class="ic" onclick="event.stopPropagation();toggleSave('${b.id}')">${saved.has(b.id)?'⭐':'☆'}</button>`}
@@ -237,7 +258,7 @@ async function loadAll(){
   const [a,s]=await Promise.all([sb.from('gs_batches').select('*'),sb.from('gs_saved').select('batch_id').eq('user_id',user.id)]);
   C={};(a.data||[]).forEach(b=>C[b.id]=b);
   saved=new Set((s.data||[]).map(r=>r.batch_id));
-  await loadVer(Object.values(C).map(b=>b.owner_id));
+  await Promise.all([loadVer(Object.values(C).map(b=>b.owner_id)),loadFol()]);
   renderList();
 }
 function setST(t){sTab=t;['all','live','saved'].forEach(x=>$('t_'+x).classList.toggle('on',x===t));renderList()}
@@ -263,7 +284,7 @@ async function openRoom(id){
   msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;
   await loadVer([batch.owner_id]);
   const w=document.createElement('div');w.className='room';w.id='room';
-  w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}${tk(batch.owner_id)}</small></div></div>
+  w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}${tk(batch.owner_id)}</small></div><span id="rfol" style="margin-left:auto">${folBtn(batch.owner_id)}</span></div>
   <div class="pl" id="pl"><video id="vid" autoplay playsinline></video>
     <div class="ph" id="ph">${mine?'📷<br>Start Class दाबा':'⏳<br>Class अजून सुरू नाही<br><small>Sir live आले की आपोआप दिसेल</small>'}</div>
     <span id="lv" class="lvb hidden">🔴 LIVE</span><span id="vc" class="vcb hidden"></span>
