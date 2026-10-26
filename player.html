@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>GyanSetu - Live Player</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+:root{--pk:#ff2d87;--bl:#3d6cff;--bg:#07070d;--card:#12121c;--g:linear-gradient(135deg,var(--pk),var(--bl))}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial,sans-serif;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+html,body{height:100%;background:var(--bg);color:#fff;overflow:hidden}
+input,button{font:inherit;font-size:16px}
+button{border:0;color:#fff;cursor:pointer;background:none}
+.hidden{display:none!important}
+#app{height:100dvh;display:flex;flex-direction:column;background:radial-gradient(circle at 80% -10%,#3d6cff33,transparent 50%),radial-gradient(circle at 0 110%,#ff2d8730,transparent 50%),var(--bg);position:relative}
+#app.pfs{position:fixed;inset:0;z-index:50}
+
+/* stage */
+#stage{position:relative;background:#000;aspect-ratio:16/9;width:100%;max-height:44vh;flex:none;margin:auto;overflow:hidden;border-bottom:2px solid transparent;border-image:var(--g) 1;box-shadow:0 6px 30px #ff2d8733}
+#vid{width:100%;height:100%;object-fit:contain;background:#000;display:block}
+.top{position:absolute;left:0;right:0;top:0;padding:calc(8px + env(safe-area-inset-top)) 12px 26px;display:flex;align-items:center;gap:10px;background:linear-gradient(#000d,transparent);transition:.3s;z-index:3}
+.top b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top small{color:#c9cfe4;font-size:12px}
+.top .tx{min-width:0;flex:1}
+.cb{width:38px;height:38px;border-radius:50%;background:#ffffff1f;backdrop-filter:blur(6px);font-size:18px;flex:none;display:flex;align-items:center;justify-content:center}
+.cb:active{background:var(--g)}
+.ctl{position:absolute;left:0;right:0;bottom:0;padding:26px 10px calc(8px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;background:linear-gradient(transparent,#000d);transition:.3s;z-index:3}
+.hideui .top,.hideui .ctl{opacity:0;pointer-events:none}
+.lvp{display:flex;align-items:center;gap:6px;background:var(--g);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:800;letter-spacing:.5px}
+.lvp i{width:8px;height:8px;border-radius:50%;background:#fff;animation:pl 1.2s infinite}
+@keyframes pl{50%{opacity:.25;transform:scale(.7)}}
+.sp{flex:1}
+.vol{width:70px;accent-color:var(--pk)}
+.hb.on{background:var(--g)}
+.wait,.tap,.end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;line-height:1.6;z-index:2;padding:16px}
+.wait{background:radial-gradient(circle,#1b1030,#05050a);color:#c9cfe4}
+.ring{width:46px;height:46px;border-radius:50%;border:4px solid #ffffff22;border-top-color:var(--pk);border-right-color:var(--bl);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.tap{background:#000a;z-index:4;font-weight:700}
+.end{background:#05050af2;z-index:6}
+.pri{padding:12px 22px;border-radius:12px;background:var(--g);font-weight:700}
+.badge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;border-radius:9px;background:var(--pk);font-size:11px;line-height:17px;font-weight:700}
+
+/* side (chat) */
+#side{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid #26263a}
+.tabs button{flex:1;padding:12px 2px;font-size:14px;font-weight:700;color:#8b8fa8;border-bottom:3px solid transparent}
+.tabs .on{color:#fff;border-image:var(--g) 1}
+.msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.m{background:#1a1a29;border-radius:12px;padding:7px 10px;font-size:14px;word-break:break-word}
+.m.sir{border:1px solid var(--bl);background:linear-gradient(135deg,#ff2d871a,#3d6cff1a)}
+.m b{display:block;color:#ff7ab4;font-size:12px}.m.sir b{color:#8bb0ff}
+.empty{text-align:center;color:#6c6f88;padding:26px}
+.scroll{overflow:auto;padding:14px;line-height:1.8;color:#d6d9ea}
+.send{display:flex;gap:8px;padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+.inp{flex:1;padding:12px;border-radius:12px;border:1px solid #32324a;background:#0c0c14;color:#fff;outline:none}
+.inp:focus{border-color:var(--pk)}
+.send button{width:48px;border-radius:12px;background:var(--g)}
+.vt{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;margin-left:5px;vertical-align:middle}
+.toast{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:#1c1c2c;border:1px solid var(--pk);border-radius:12px;padding:9px 16px;z-index:100;font-size:14px;text-align:center;max-width:90%}
+
+/* ---- FULLSCREEN: video full, chat becomes overlay ---- */
+.fs #stage{position:absolute;inset:0;max-height:none;aspect-ratio:auto;height:100%;border:0;box-shadow:none}
+.fs #side{position:absolute;right:0;top:0;bottom:0;width:min(340px,46%);background:#0a0a12ee;backdrop-filter:blur(10px);border-left:1px solid #ff2d8755;z-index:5;transform:translateX(100%);transition:.25s}
+.fs.chat #side{transform:none}
+.fs.chat .top,.fs.chat .ctl{right:min(340px,46%)}
+.fs.chat .top,.fs.chat .ctl{right:min(340px,46%)}
+#chb{display:none;position:relative}
+.fs #chb{display:flex}
+.fs .top{padding-top:calc(8px + env(safe-area-inset-top))}
+.fs .tabs button{padding:10px 2px}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="toast" class="toast hidden"></div>
+
+  <div id="stage" onclick="wake()">
+    <video id="vid" autoplay playsinline></video>
+
+    <div class="top">
+      <button class="cb" onclick="event.stopPropagation();goBack()">←</button>
+      <div class="tx"><b id="bn">GyanSetu Live</b><small id="sn"></small></div>
+    </div>
+
+    <div class="wait" id="wait"><div class="ring"></div><div id="wt">Sir शी connect होत आहे...</div></div>
+    <div class="tap hidden" id="tap" onclick="event.stopPropagation();unmute()"><div style="font-size:42px">🔊</div>Sound सुरू करण्यासाठी tap करा</div>
+    <div class="end hidden" id="endv"><div style="font-size:46px">🎓</div><h2>Live Class संपली</h2><p style="color:#9aa0bd">धन्यवाद! Recording नंतर History मध्ये मिळेल.</p><button class="pri" onclick="goBack()">← मागे जा</button></div>
+
+    <div class="ctl">
+      <button class="cb" id="pp" onclick="event.stopPropagation();playPause()">⏸</button>
+      <button class="cb" id="mu" onclick="event.stopPropagation();toggleMute()">🔊</button>
+      <input class="vol" id="vl" type="range" min="0" max="1" step="0.05" value="1" oninput="setVol(this.value)" onclick="event.stopPropagation()">
+      <span class="lvp"><i></i>LIVE</span>
+      <span class="sp"></span>
+      <button class="cb hb" id="hb" onclick="event.stopPropagation();hand()">✋</button>
+      <button class="cb hidden" id="mb" onclick="event.stopPropagation();stopTalk()">🎤</button>
+      <button class="cb" id="chb" onclick="event.stopPropagation();toggleChat()">💬<span class="badge hidden" id="bg"></span></button>
+      <button class="cb" id="fb" onclick="event.stopPropagation();toggleFs()">⛶</button>
+    </div>
+  </div>
+
+  <div id="side">
+    <div class="tabs" id="tabs"></div>
+    <div id="pane" style="flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden"></div>
+  </div>
+</div>
+
+<script>
+const sb=supabase.createClient("https://eqglttfffhvoyvrclzse.supabase.co","sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb");
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const bid=new URLSearchParams(location.search).get('b');
+let user,myName='Student',batch,peer,sc,retry,gs,gcall,ch,tab='chat',msgs=[],blocked=false,verified=false,handUp=false,unread=0,idle,attended=null,sirId='';
+['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
+
+let tt;
+function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(tt);tt=setTimeout(()=>e.classList.add('hidden'),3000)}
+function goBack(){cleanup();history.length>1?history.back():location.href='live.html'}
+function cleanup(){stopTalk();clearInterval(retry);try{peer&&peer.destroy()}catch(e){}if(ch)sb.removeChannel(ch)}
+window.addEventListener('pagehide',cleanup);
+
+/* ---------- player controls ---------- */
+const V=$('vid');
+function wake(){
+  const a=$('app');a.classList.remove('hideui');clearTimeout(idle);
+  idle=setTimeout(()=>{if(!V.paused)a.classList.add('hideui')},3500);
+}
+function playPause(){if(V.paused){V.play();$('pp').textContent='⏸'}else{V.pause();$('pp').textContent='▶️'}wake()}
+function toggleMute(){V.muted=!V.muted;$('mu').textContent=V.muted?'🔇':'🔊';wake()}
+function setVol(v){V.volume=v;V.muted=v==0;$('mu').textContent=V.muted?'🔇':'🔊'}
+function unmute(){V.muted=false;V.play();$('tap').classList.add('hidden');$('mu').textContent='🔊'}
+
+/* ---------- fullscreen (whole app, so chat/hand work inside) ---------- */
+const app=$('app');
+const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function setFs(on){
+  app.classList.toggle('fs',on);
+  if(!on){app.classList.remove('pfs','chat');unread=0;try{screen.orientation.unlock()}catch(e){}}
+  $('fb').textContent=on?'🗗':'⛶';wake();
+}
+async function toggleFs(){
+  if(app.classList.contains('fs')){
+    if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else setFs(false);
+    return;
+  }
+  const r=app.requestFullscreen||app.webkitRequestFullscreen;
+  if(r){try{await r.call(app)}catch(e){app.classList.add('pfs');setFs(true)}}
+  else{app.classList.add('pfs');setFs(true)}
+  try{await screen.orientation.lock('landscape')}catch(e){}
+}
+['fullscreenchange','webkitfullscreenchange'].forEach(e=>document.addEventListener(e,()=>setFs(!!fsEl())));
+function toggleChat(){app.classList.toggle('chat');unread=0;badge();if(app.classList.contains('chat'))rMsgs()}
+function badge(){const b=$('bg');b.textContent=unread;b.classList.toggle('hidden',!unread)}
+
+/* ---------- chat ---------- */
+const tk=()=>verified?'<span class="vt">✓</span>':'';
+function setTab(t){
+  tab=t;
+  $('tabs').innerHTML=[['chat','💬 Chat'],['doubt','❓ Doubt'],['info','ℹ️ Info']].map(x=>`<button class="${x[0]===t?'on':''}" onclick="setTab('${x[0]}')">${x[1]}</button>`).join('');
+  const p=$('pane');
+  if(t==='info'){
+    p.innerHTML=`<div class="scroll"><h3>${esc(batch.name)}</h3>📘 ${esc(batch.subject||'-')}<br>⏰ ${esc(batch.timings||'-')}<br>👨‍🏫 ${esc(batch.owner_name||'Sir')}${tk()}<br><br>${esc(batch.description||'')}</div>`;
+  }else{
+    p.innerHTML=`<div class="msgs" id="ml"></div><div class="send"><input class="inp" id="mi" maxlength="500" placeholder="${t==='chat'?'Message लिहा...':'तुमचा Doubt लिहा...'}" onkeydown="if(event.key==='Enter')sendMsg()"><button onclick="sendMsg()">➤</button></div>`;
+    rMsgs();
+  }
+}
+function rMsgs(){
+  const e=$('ml');if(!e)return;
+  const l=msgs.filter(m=>m.kind===tab);
+  e.innerHTML=l.map(m=>`<div class="m ${m.is_sir?'sir':''}"><b>${esc(m.user_name)}${m.is_sir?' 👨‍🏫'+tk():''}</b>${esc(m.body)}</div>`).join('')||'<div class="empty">अजून काही नाही</div>';
+  e.scrollTop=e.scrollHeight;
+}
+async function sendMsg(){
+  const i=$('mi'),t=i.value.trim().slice(0,500);if(!t)return;
+  if(blocked){toast('🚫 Sir ने तुम्हाला block केले आहे');return}
+  i.value='';
+  const {data,error}=await sb.from('gs_messages').insert({batch_id:batch.id,user_id:user.id,user_name:myName,kind:tab,body:t,is_sir:false}).select().single();
+  if(error){toast('Message जात नाही');i.value=t;return}
+  if(!msgs.some(m=>m.id===data.id)){msgs.push(data);rMsgs()}
+}
+
+/* ---------- connection to Sir (PeerJS) ---------- */
+function startPeer(){
+  sirId='gs-'+batch.id;
+  peer=new Peer({debug:1});
+  peer.on('open',()=>{connect();retry=setInterval(connect,6000)});
+  peer.on('call',call=>{
+    call.answer();
+    call.on('stream',st=>{
+      V.srcObject=st;V.muted=false;
+      $('wait').classList.add('hidden');$('endv').classList.add('hidden');wake();
+      V.play().catch(()=>{V.muted=true;V.play();$('tap').classList.remove('hidden')});
+    });
+    call.on('close',noLive);
+  });
+  peer.on('error',e=>{if(e.type==='peer-unavailable')sc=null;else console.error(e)});
+}
+function connect(){
+  if(!peer||!peer.open||sc||blocked)return;
+  sc=peer.connect(sirId,{reliable:true});
+  sc.on('open',()=>sc.send({t:'hi',name:myName,uid:user.id}));
+  sc.on('data',d=>{
+    if(!d||typeof d!=='object')return;
+    if(d.t==='live'){if(d.v&&d.hid)markAttend(d.hid);else if(!d.v)noLive()}
+    if(d.t==='end'){showEnd();toast('Sir ने Live Class संपवली')}
+    if(d.t==='blocked'){blocked=true;toast('🚫 Sir ने तुम्हाला block केले आहे');setTimeout(goBack,1500)}
+    if(d.t==='allow')startTalk();
+    if(d.t==='revoke')stopTalk();
+  });
+  sc.on('close',()=>{sc=null;noLive()});
+}
+async function markAttend(h){
+  if(attended===h)return;attended=h;
+  const r=await sb.from('gs_class_attendance').upsert({history_id:h,user_id:user.id,user_name:myName,owner_id:batch.owner_id},{onConflict:'history_id,user_id',ignoreDuplicates:true});
+  if(r.error)console.error('attendance',r.error.message);
+}
+function noLive(){V.srcObject=null;$('wait').classList.remove('hidden');$('wt').textContent='Sir शी पुन्हा connect होत आहे...'}
+function showEnd(){V.srcObject=null;$('wait').classList.add('hidden');$('endv').classList.remove('hidden');$('app').classList.remove('hideui')}
+
+/* ---------- hand raise / talk ---------- */
+function hand(){
+  if(!sc||!sc.open){toast('⚠️ Sir शी connection नाही');return}
+  handUp=!handUp;sc.send({t:'hand',v:handUp});
+  $('hb').classList.toggle('on',handUp);toast(handUp?'✋ Hand Raise केला':'Hand खाली केला');
+}
+async function startTalk(){
+  try{
+    gs=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:true});
+    gcall=peer.call(sirId,gs);$('mb').classList.remove('hidden');toast('🎤 Sir ने तुम्हाला बोलायला allow केले');
+  }catch(e){toast('Camera आणि Mic permission द्या')}
+}
+function stopTalk(){
+  if(gs){gs.getTracks().forEach(t=>t.stop());gs=null}
+  try{if(gcall)gcall.close()}catch(e){}
+  gcall=null;const m=$('mb');if(m)m.classList.add('hidden');
+}
+
+/* ---------- start ---------- */
+(async()=>{
+  wake();
+  const {data}=await sb.auth.getUser();user=data?.user||null;
+  if(!user||!bid){$('wt').textContent='आधी GyanSetu मध्ये Login करा';$('wait').querySelector('.ring').remove();return}
+  myName=(user.user_metadata?.username||localStorage.getItem('gyansetu_username')||(user.email||'').split('@')[0]||'User').slice(0,30);
+  const {data:b}=await sb.from('gs_batches').select('*').eq('id',bid).single();
+  if(!b){$('wt').textContent='Batch सापडली नाही';return}
+  batch=b;$('bn').textContent=b.name;
+  const [bl,ms,pf]=await Promise.all([
+    sb.from('gs_blocks').select('user_id').eq('batch_id',b.id),
+    sb.from('gs_messages').select('*').eq('batch_id',b.id).order('created_at',{ascending:false}).limit(150),
+    sb.from('Profiles').select('is_verified').eq('id',b.owner_id).maybeSingle()
+  ]);
+  verified=!!(pf.data&&pf.data.is_verified);
+  $('sn').innerHTML='👨‍🏫 '+esc(b.owner_name||'Sir')+tk();
+  if((bl.data||[]).some(r=>r.user_id===user.id)){blocked=true;$('wt').textContent='🚫 Sir ने तुम्हाला block केले आहे';$('wait').querySelector('.ring').remove();return}
+  msgs=(ms.data||[]).reverse();
+  ch=sb.channel('pm-'+b.id)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'gs_messages',filter:'batch_id=eq.'+b.id},p=>{
+      if(msgs.some(m=>m.id===p.new.id))return;
+      msgs.push(p.new);rMsgs();
+      if(app.classList.contains('fs')&&!app.classList.contains('chat')){unread++;badge()}
+    })
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'gs_messages'},p=>{msgs=msgs.filter(m=>m.id!==p.old.id);rMsgs()})
+    .subscribe();
+  setTab('chat');
+  startPeer();
+})();
+</script>
+</body>
+</html>
