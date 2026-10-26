@@ -25,7 +25,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .top .tx{min-width:0;flex:1}
 .cb{width:38px;height:38px;border-radius:50%;background:#ffffff1f;backdrop-filter:blur(6px);font-size:18px;flex:none;display:flex;align-items:center;justify-content:center}
 .cb:active{background:var(--g)}
-.ctl{position:absolute;left:0;right:0;bottom:0;padding:26px 10px calc(8px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:8px;background:linear-gradient(transparent,#000d);transition:.3s;z-index:3}
+.ctl{position:absolute;left:0;right:0;bottom:0;padding:26px 10px calc(8px + env(safe-area-inset-bottom));display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:linear-gradient(transparent,#000d);transition:.3s;z-index:3}
 .hideui .top,.hideui .ctl{opacity:0;pointer-events:none}
 .lvp{display:flex;align-items:center;gap:6px;background:var(--g);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:800;letter-spacing:.5px}
 .lvp i{width:8px;height:8px;border-radius:50%;background:#fff;animation:pl 1.2s infinite}
@@ -41,6 +41,21 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .end{background:#05050af2;z-index:6}
 .pri{padding:12px 22px;border-radius:12px;background:var(--g);font-weight:700}
 .badge{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;border-radius:9px;background:var(--pk);font-size:11px;line-height:17px;font-weight:700}
+
+/* recorded-mode only controls */
+.cb.ro{display:none}
+.rec .cb.ro{display:flex}
+.seekrow{display:none;width:100%;align-items:center;gap:8px;font-size:12px;color:#dfe3f5}
+.rec .seekrow{display:flex}
+.seekrow input{flex:1;min-width:0;accent-color:var(--pk)}
+.seekrow span{flex:none;min-width:38px;text-align:center;font-variant-numeric:tabular-nums}
+.rec .lo{display:none!important}
+.rec #chb{display:none!important}
+.recb{background:#ffffff26;border-radius:20px;padding:5px 12px;font-size:12px;font-weight:800;letter-spacing:.5px}
+.spd{width:auto;border-radius:19px;padding:0 12px;font-size:13px;font-weight:700}
+.pts{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pts button{padding:9px 14px;border-radius:10px;background:#1b2436;font-size:14px;font-weight:700}
+.pts .on{background:var(--g)}
 
 /* side (chat) */
 #side{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
@@ -65,7 +80,6 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .fs #side{position:absolute;right:0;top:0;bottom:0;width:min(340px,46%);background:#0a0a12ee;backdrop-filter:blur(10px);border-left:1px solid #ff2d8755;z-index:5;transform:translateX(100%);transition:.25s}
 .fs.chat #side{transform:none}
 .fs.chat .top,.fs.chat .ctl{right:min(340px,46%)}
-.fs.chat .top,.fs.chat .ctl{right:min(340px,46%)}
 #chb{display:none;position:relative}
 .fs #chb{display:flex}
 .fs .top{padding-top:calc(8px + env(safe-area-inset-top))}
@@ -86,16 +100,21 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 
     <div class="wait" id="wait"><div class="ring"></div><div id="wt">Sir शी connect होत आहे...</div></div>
     <div class="tap hidden" id="tap" onclick="event.stopPropagation();unmute()"><div style="font-size:42px">🔊</div>Sound सुरू करण्यासाठी tap करा</div>
-    <div class="end hidden" id="endv"><div style="font-size:46px">🎓</div><h2>Live Class संपली</h2><p style="color:#9aa0bd">धन्यवाद! Recording नंतर History मध्ये मिळेल.</p><button class="pri" onclick="goBack()">← मागे जा</button></div>
+    <div class="end hidden" id="endv"><div style="font-size:46px">🎓</div><h2 id="et">Live Class संपली</h2><p id="ep" style="color:#9aa0bd">धन्यवाद! Recording नंतर History मध्ये मिळेल.</p><button class="pri hidden" id="rp" onclick="event.stopPropagation();replay()">↺ पुन्हा बघा</button><button class="pri" onclick="goBack()">← मागे जा</button></div>
 
     <div class="ctl">
+      <div class="seekrow" id="sr"><span id="ct">0:00</span><input id="sk" type="range" min="0" max="0" step="0.1" value="0" onclick="event.stopPropagation()"><span id="dt">0:00</span></div>
+      <button class="cb ro" onclick="event.stopPropagation();skip(-10)">⏪</button>
       <button class="cb" id="pp" onclick="event.stopPropagation();playPause()">⏸</button>
+      <button class="cb ro" onclick="event.stopPropagation();skip(10)">⏩</button>
       <button class="cb" id="mu" onclick="event.stopPropagation();toggleMute()">🔊</button>
       <input class="vol" id="vl" type="range" min="0" max="1" step="0.05" value="1" oninput="setVol(this.value)" onclick="event.stopPropagation()">
-      <span class="lvp"><i></i>LIVE</span>
+      <span class="lvp lo"><i></i>LIVE</span>
+      <span class="recb ro hidden" id="pl"></span>
       <span class="sp"></span>
-      <button class="cb hb" id="hb" onclick="event.stopPropagation();hand()">✋</button>
-      <button class="cb hidden" id="mb" onclick="event.stopPropagation();stopTalk()">🎤</button>
+      <button class="cb ro spd" id="sd" onclick="event.stopPropagation();cycleSpeed()">1x</button>
+      <button class="cb hb lo" id="hb" onclick="event.stopPropagation();hand()">✋</button>
+      <button class="cb hidden lo" id="mb" onclick="event.stopPropagation();stopTalk()">🎤</button>
       <button class="cb" id="chb" onclick="event.stopPropagation();toggleChat()">💬<span class="badge hidden" id="bg"></span></button>
       <button class="cb" id="fb" onclick="event.stopPropagation();toggleFs()">⛶</button>
     </div>
@@ -111,13 +130,18 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 const sb=supabase.createClient("https://eqglttfffhvoyvrclzse.supabase.co","sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb");
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const bid=new URLSearchParams(location.search).get('b');
+const qs=new URLSearchParams(location.search);
+const bid=qs.get('b');
+const rid=qs.get('r');           // recorded class (gs_class_history.id)
+const REC=!!rid;
 let user,myName='Student',batch,peer,sc,retry,gs,gcall,ch,tab='chat',msgs=[],blocked=false,verified=false,handUp=false,unread=0,idle,attended=null,sirId='';
+let parts=[],pi=0,fixing=false,speeds=[1,1.25,1.5,2],si=0,seeking=false;
 ['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
+if(REC)document.body.classList.add('rec');
 
 let tt;
 function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(tt);tt=setTimeout(()=>e.classList.add('hidden'),3000)}
-function goBack(){cleanup();history.length>1?history.back():location.href='live.html'}
+function goBack(){cleanup();history.length>1?history.back():location.href=REC?'discover-space.html':'live.html'}
 function cleanup(){stopTalk();clearInterval(retry);try{peer&&peer.destroy()}catch(e){}if(ch)sb.removeChannel(ch)}
 window.addEventListener('pagehide',cleanup);
 
@@ -127,7 +151,13 @@ function wake(){
   const a=$('app');a.classList.remove('hideui');clearTimeout(idle);
   idle=setTimeout(()=>{if(!V.paused)a.classList.add('hideui')},3500);
 }
-function playPause(){if(V.paused){V.play();$('pp').textContent='⏸'}else{V.pause();$('pp').textContent='▶️'}wake()}
+function playPause(){
+  if(V.paused){
+    if(REC&&!$('endv').classList.contains('hidden')){replay();return}
+    V.play();$('pp').textContent='⏸'
+  }else{V.pause();$('pp').textContent='▶️'}
+  wake()
+}
 function toggleMute(){V.muted=!V.muted;$('mu').textContent=V.muted?'🔇':'🔊';wake()}
 function setVol(v){V.volume=v;V.muted=v==0;$('mu').textContent=V.muted?'🔇':'🔊'}
 function unmute(){V.muted=false;V.play();$('tap').classList.add('hidden');$('mu').textContent='🔊'}
@@ -238,11 +268,85 @@ function stopTalk(){
   gcall=null;const m=$('mb');if(m)m.classList.add('hidden');
 }
 
+/* ---------- RECORDED CLASS MODE (?r=history_id) ---------- */
+const fmtT=t=>{if(!isFinite(t)||t<0)t=0;const h=Math.floor(t/3600),m=Math.floor(t%3600/60),s=Math.floor(t%60);return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0')};
+function recFail(t){$('wt').textContent=t;const r=$('wait').querySelector('.ring');if(r)r.remove()}
+function setupSeek(){
+  const d=V.duration;
+  if(isFinite(d)&&d>0){$('sk').max=d;$('dt').textContent=fmtT(d)}
+  else{$('sk').max=0;$('dt').textContent='--:--'}
+}
+function playPart(i){
+  pi=i;
+  $('endv').classList.add('hidden');$('wait').classList.remove('hidden');$('wt').textContent='Recording लोड होत आहे...';
+  V.srcObject=null;V.src=parts[i].url;V.playbackRate=speeds[si];
+  V.play().then(()=>{$('pp').textContent='⏸'}).catch(()=>{$('pp').textContent='▶️';$('tap').classList.remove('hidden')});
+  const pl=$('pl');
+  if(parts.length>1){pl.textContent='भाग '+(i+1)+'/'+parts.length;pl.classList.remove('hidden')}
+  drawParts();
+}
+function drawParts(){
+  const e=$('pts');if(!e)return;
+  e.innerHTML=parts.length>1?parts.map((_,k)=>`<button class="${k===pi?'on':''}" onclick="playPart(${k})">भाग ${k+1}</button>`).join(''):'';
+}
+function skip(n){
+  const d=isFinite(V.duration)?V.duration:Infinity;
+  V.currentTime=Math.max(0,Math.min(d,V.currentTime+n));wake();
+}
+function cycleSpeed(){si=(si+1)%speeds.length;V.playbackRate=speeds[si];$('sd').textContent=speeds[si]+'x';wake()}
+function replay(){$('endv').classList.add('hidden');playPart(0);wake()}
+function recEnded(){
+  if(pi+1<parts.length){playPart(pi+1);return}
+  $('et').textContent='Recording संपली';
+  $('ep').textContent='पुन्हा बघायचे असेल तर खालील button दाबा.';
+  $('rp').classList.remove('hidden');
+  $('endv').classList.remove('hidden');$('app').classList.remove('hideui');$('pp').textContent='▶️';
+}
+if(REC){
+  V.addEventListener('loadedmetadata',()=>{
+    // MediaRecorder (webm) files often report duration=Infinity: force the browser to find it
+    if(V.duration===Infinity){fixing=true;V.currentTime=1e101}else setupSeek();
+  });
+  V.addEventListener('timeupdate',()=>{
+    if(fixing){fixing=false;V.currentTime=0;setupSeek();return}
+    if(!seeking){$('sk').value=V.currentTime}
+    $('ct').textContent=fmtT(V.currentTime);
+    if($('sk').max==0)setupSeek();
+  });
+  V.addEventListener('durationchange',()=>{if(!fixing)setupSeek()});
+  V.addEventListener('playing',()=>{$('wait').classList.add('hidden');$('tap').classList.add('hidden');$('pp').textContent='⏸'});
+  V.addEventListener('waiting',()=>{$('wait').classList.remove('hidden');$('wt').textContent='Buffering...'});
+  V.addEventListener('canplay',()=>$('wait').classList.add('hidden'));
+  V.addEventListener('pause',()=>{if(!V.ended)$('pp').textContent='▶️'});
+  V.addEventListener('ended',recEnded);
+  V.addEventListener('error',()=>{if(V.getAttribute('src'))recFail('Video चालत नाही. दुसरा browser (Chrome) वापरून बघा')});
+  const sk=$('sk');
+  sk.addEventListener('input',()=>{seeking=true;$('ct').textContent=fmtT(+sk.value);wake()});
+  sk.addEventListener('change',()=>{V.currentTime=+sk.value;seeking=false});
+}
+async function startRec(){
+  const {data:h}=await sb.from('gs_class_history').select('*').eq('id',rid).maybeSingle();
+  if(!h){recFail('Class सापडली नाही');return}
+  const {data:rs,error}=await sb.from('gs_class_recordings').select('part,url').eq('history_id',rid).order('part',{ascending:true});
+  if(error){recFail('Recording load झाली नाही');return}
+  parts=rs||[];
+  $('bn').textContent=h.batch_name||'Recording';
+  $('sn').textContent='👨‍🏫 '+(h.owner_name||'Sir')+' • 📘 '+(h.subject||'-');
+  const st=new Date(h.started_at);
+  let dur='';
+  if(h.ended_at){const m=Math.max(0,Math.round((new Date(h.ended_at)-st)/60000));dur=`<br>⏱️ ${m<1?'1 मिनिटापेक्षा कमी':(m>=60?Math.floor(m/60)+' तास ':'')+(m%60?m%60+' मि':'')}`}
+  $('tabs').innerHTML='<button class="on">ℹ️ Class Info</button>';
+  $('pane').innerHTML=`<div class="scroll"><h3>${esc(h.batch_name||'Batch')}</h3>📘 ${esc(h.subject||'-')}<br>👨‍🏫 ${esc(h.owner_name||'Sir')}<br>📅 ${esc(st.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}))}, ${esc(st.toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true}))}${dur}<div class="pts" id="pts"></div></div>`;
+  if(!parts.length){recFail(h.ended_at?'या class ची recording उपलब्ध नाही':'Class सुरू आहे, recording नंतर मिळेल');return}
+  playPart(0);
+}
+
 /* ---------- start ---------- */
 (async()=>{
   wake();
   const {data}=await sb.auth.getUser();user=data?.user||null;
-  if(!user||!bid){$('wt').textContent='आधी GyanSetu मध्ये Login करा';$('wait').querySelector('.ring').remove();return}
+  if(!user||(!bid&&!rid)){$('wt').textContent='आधी GyanSetu मध्ये Login करा';$('wait').querySelector('.ring').remove();return}
+  if(REC){$('wt').textContent='Recording लोड होत आहे...';await startRec();return}
   myName=(user.user_metadata?.username||localStorage.getItem('gyansetu_username')||(user.email||'').split('@')[0]||'User').slice(0,30);
   const {data:b}=await sb.from('gs_batches').select('*').eq('id',bid).single();
   if(!b){$('wt').textContent='Batch सापडली नाही';return}
