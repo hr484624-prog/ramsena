@@ -281,6 +281,8 @@ async function toggleSave(id){
 async function openRoom(id){
   clearInterval(poll);
   batch=C[id];if(!batch)return;
+  /* NEW: student + class LIVE => special player page */
+  if(batch.owner_id!==user.id&&batch.is_live){location.href='player.html?b='+batch.id;return}
   mine=batch.owner_id===user.id;sirId='gs-'+batch.id;
   msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;
   await loadVer([batch.owner_id]);
@@ -511,7 +513,8 @@ function connect(){
   sc.on('open',()=>sc.send({t:'hi',name:myName,uid:user.id}));
   sc.on('data',d=>{
     if(!d||typeof d!=='object')return;
-    if(d.t==='live'){if(d.v&&d.hid)markAttend(d.hid);else if(!d.v)noLive()}
+    /* NEW: Sir went live => open special player page */
+    if(d.t==='live'){if(d.v)location.href='player.html?b='+batch.id;else noLive()}
     if(d.t==='end'){noLive();toast('Sir ने Live Class संपवली')}
     if(d.t==='blocked'){toast('🚫 Sir ने तुम्हाला block केले आहे');blocked.set(user.id,myName);leaveRoom()}
     if(d.t==='allow')startTalk();
