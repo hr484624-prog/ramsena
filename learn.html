@@ -3,1372 +3,807 @@
 
 <head>
 
-  <meta charset="UTF-8">
-
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-  <title>GyanSetu - Learn</title>
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f5f7fb;
-      color: #222;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      margin: auto;
-      background: #f5f7fb;
-      padding-bottom: 85px;
-    }
-
-    /* =========================
-       HEADER
-    ========================= */
-
-    .header {
-      height: 70px;
-      background: white;
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .back-btn {
-      width: 42px;
-      height: 42px;
-      border: none;
-      border-radius: 50%;
-      background: #f1f3f8;
-      font-size: 22px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .header-title {
-      flex: 1;
-      text-align: center;
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    /* =========================
-       CODE ARENA BUTTON
-    ========================= */
-
-    .code-arena-btn {
-      width: 46px;
-      height: 42px;
-      border: 1px solid #00ff88;
-      border-radius: 12px;
-      background: #07140f;
-      color: #00ff88;
-      font-size: 17px;
-      font-weight: bold;
-      font-family: monospace;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(0,255,136,0.25);
-      transition: 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .code-arena-btn:active {
-      transform: scale(0.92);
-      box-shadow: 0 0 18px rgba(0,255,136,0.5);
-    }
-
-    /* =========================
-       CYBER SECURITY BUTTON
-    ========================= */
-
-    .hacker-btn {
-      width: 46px;
-      height: 42px;
-      margin-left: 7px;
-      border: 1px solid #c9a227;
-      border-radius: 12px;
-      background: #fffdf5;
-      color: #b08a00;
-      font-size: 21px;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(201,162,39,0.20);
-      transition: 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .hacker-btn:active {
-      transform: scale(0.92);
-      box-shadow: 0 0 18px rgba(201,162,39,0.40);
-    }
-
-    /* =========================
-       BOARD CLASSES AD BUTTON
-    ========================= */
-
-    .board-ad-btn {
-      display: block;
-      width: 100%;
-      margin: 0 0 12px 0;
-      padding: 15px 14px;
-      background: linear-gradient(
-        135deg,
-        #ff4f9a,
-        #6c63ff,
-        #2196f3
-      );
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 15px;
-      font-size: 16px;
-      font-weight: bold;
-      box-shadow: 0 5px 14px rgba(108,99,255,0.25);
-      border: 1px solid rgba(255,255,255,0.5);
-      transition: 0.2s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .board-ad-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* =========================
-       TEST BUTTON
-    ========================= */
-
-    .test-btn {
-      display: block;
-      width: 100%;
-      margin: 0 0 20px 0;
-      padding: 14px;
-      background: #6c63ff;
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 14px;
-      font-size: 16px;
-      font-weight: bold;
-      box-shadow: 0 4px 10px rgba(108,99,255,0.20);
-    }
-
-    .test-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* =========================
-       CONTENT
-    ========================= */
-
-    .content {
-      padding: 18px 16px;
-    }
-
-    .welcome {
-      margin-bottom: 18px;
-    }
-
-    .welcome h2 {
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-
-    .welcome p {
-      color: #777;
-      font-size: 14px;
-    }
-
-    /* =========================
-       SEARCH
-    ========================= */
-
-    .search-box {
-      background: white;
-      border-radius: 14px;
-      padding: 12px 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 22px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    .search-box span {
-      font-size: 20px;
-    }
-
-    .search-box input {
-      width: 100%;
-      border: none;
-      outline: none;
-      font-size: 15px;
-      background: transparent;
-    }
-
-    /* =========================
-       SECTION
-    ========================= */
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .section-title h3 {
-      font-size: 18px;
-    }
-
-    .section-title span {
-      font-size: 13px;
-      color: #777;
-    }
-
-    /* =========================
-       COLLEGE CARD
-    ========================= */
-
-    .college-card {
-      background: linear-gradient(
-        135deg,
-        #6c63ff,
-        #8f87ff
-      );
-
-      color: white;
-      border-radius: 18px;
-      padding: 18px;
-      margin-bottom: 24px;
-      cursor: pointer;
-      box-shadow: 0 6px 15px rgba(108,99,255,0.25);
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .college-card:active {
-      transform: scale(0.98);
-    }
-
-    .college-card .emoji {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .college-card h3 {
-      margin-bottom: 5px;
-      font-size: 19px;
-    }
-
-    .college-card p {
-      font-size: 13px;
-      opacity: 0.9;
-    }
-
-    /* =========================
-       SUBJECT GRID
-    ========================= */
-
-    .subjects-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 13px;
-      margin-bottom: 25px;
-    }
-
-    .subject-card {
-      background: white;
-      border-radius: 17px;
-      padding: 18px 14px;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-      transition: transform 0.15s;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .subject-card:active {
-      transform: scale(0.96);
-    }
-
-    .subject-icon {
-      font-size: 34px;
-      margin-bottom: 10px;
-    }
-
-    .subject-card h4 {
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
-
-    .subject-card p {
-      font-size: 12px;
-      color: #777;
-      line-height: 1.4;
-    }
-
-    /* =========================
-       CONTINUE LEARNING
-    ========================= */
-
-    .continue-card {
-      background: white;
-      border-radius: 17px;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    }
-
-    .continue-top {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .continue-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 13px;
-      background: #f0f1ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 25px;
-      flex-shrink: 0;
-    }
-
-    .continue-info {
-      flex: 1;
-    }
-
-    .continue-info h4 {
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
-
-    .continue-info p {
-      font-size: 12px;
-      color: #777;
-    }
-
-    .continue-btn {
-      width: 100%;
-      border: none;
-      background: #6c63ff;
-      color: white;
-      padding: 11px;
-      border-radius: 11px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .continue-btn:active {
-      transform: scale(0.98);
-    }
-
-    /* =========================
-       POPUP
-    ========================= */
-
-    .popup {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.55);
-      z-index: 100;
-      align-items: flex-end;
-      justify-content: center;
-    }
-
-    .popup-box {
-      width: 100%;
-      max-width: 430px;
-      background: white;
-      border-radius: 25px 25px 0 0;
-      padding: 22px 18px 30px;
-      animation: popupUp 0.25s ease;
-      max-height: 80vh;
-      overflow-y: auto;
-    }
-
-    @keyframes popupUp {
-
-      from {
-        transform: translateY(100%);
-      }
-
-      to {
-        transform: translateY(0);
-      }
-
-    }
-
-    .popup-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .popup-header h3 {
-      font-size: 19px;
-    }
-
-    .close-btn {
-      border: none;
-      background: #f1f3f8;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .class-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 11px;
-    }
-
-    .class-btn {
-      border: none;
-      background: #f2f3ff;
-      color: #4d46d8;
-      padding: 14px 10px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .class-btn:active {
-      transform: scale(0.96);
-    }
-
-    /* =========================
-       COLLEGE SUBJECT POPUP
-    ========================= */
-
-    .college-subject-btn {
-      background: #f2f3ff;
-      color: #4d46d8;
-      border: none;
-      padding: 15px 10px;
-      border-radius: 13px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* =========================
-       BOTTOM NAV
-    ========================= */
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 430px;
-      height: 68px;
-      background: white;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      box-shadow: 0 -3px 12px rgba(0,0,0,0.08);
-      z-index: 50;
-    }
-
-    .nav-item {
-      border: none;
-      background: transparent;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: #888;
-      font-size: 11px;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .nav-item span {
-      font-size: 22px;
-    }
-
-    .nav-item.active {
-      color: #6c63ff;
-      font-weight: bold;
-    }
-
-    /* =========================
-       SEARCH HIDDEN
-    ========================= */
-
-    .hidden-card {
-      display: none !important;
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GyanSetu - Learn</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#f5f7fb;
+  color:#222;
+}
+
+.app{
+  width:100%;
+  max-width:430px;
+  min-height:100vh;
+  margin:auto;
+  background:#f5f7fb;
+  padding-bottom:110px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  height:70px;
+  background:white;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.back-btn{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:50%;
+  background:#f1f3f8;
+  font-size:22px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.header-title{
+  flex:1;
+  text-align:center;
+  font-size:22px;
+  font-weight:bold;
+}
+
+/* CODE ARENA BUTTON */
+
+.code-arena-btn{
+  width:46px;
+  height:42px;
+  border:1px solid #00ff88;
+  border-radius:12px;
+  background:#07140f;
+  color:#00ff88;
+  font-size:17px;
+  font-weight:bold;
+  font-family:monospace;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(0,255,136,0.25);
+  transition:0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.code-arena-btn:active{
+  transform:scale(0.92);
+  box-shadow:0 0 18px rgba(0,255,136,0.5);
+}
+
+/* CYBER SECURITY BUTTON */
+
+.hacker-btn{
+  width:46px;
+  height:42px;
+  margin-left:7px;
+  border:1px solid #c9a227;
+  border-radius:12px;
+  background:#fffdf5;
+  color:#b08a00;
+  font-size:21px;
+  cursor:pointer;
+  box-shadow:0 0 10px rgba(201,162,39,0.20);
+  transition:0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.hacker-btn:active{
+  transform:scale(0.92);
+  box-shadow:0 0 18px rgba(201,162,39,0.40);
+}
+
+/* BOARD CLASSES AD BUTTON */
+
+.board-ad-btn{
+  display:block;
+  width:100%;
+  margin:0 0 12px 0;
+  padding:15px 14px;
+  background:linear-gradient(135deg,#ff4f9a,#6c63ff,#2196f3);
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  border-radius:15px;
+  font-size:16px;
+  font-weight:bold;
+  box-shadow:0 5px 14px rgba(108,99,255,0.25);
+  border:1px solid rgba(255,255,255,0.5);
+  transition:0.2s;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.board-ad-btn:active{transform:scale(0.98)}
+
+/* TEST BUTTON */
+
+.test-btn{
+  display:block;
+  width:100%;
+  margin:0 0 20px 0;
+  padding:14px;
+  background:#6c63ff;
+  color:white;
+  text-align:center;
+  text-decoration:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  box-shadow:0 4px 10px rgba(108,99,255,0.20);
+}
+
+.test-btn:active{transform:scale(0.98)}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content{padding:18px 16px}
+
+.welcome{margin-bottom:18px}
+
+.welcome h2{
+  font-size:22px;
+  margin-bottom:5px;
+}
+
+.welcome p{
+  color:#777;
+  font-size:14px;
+}
+
+/* SEARCH */
+
+.search-box{
+  background:white;
+  border-radius:14px;
+  padding:12px 15px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:22px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+.search-box span{font-size:20px}
+
+.search-box input{
+  width:100%;
+  border:none;
+  outline:none;
+  font-size:15px;
+  background:transparent;
+}
+
+/* SECTION */
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.section-title h3{font-size:18px}
+
+.section-title span{
+  font-size:13px;
+  color:#777;
+}
+
+/* COLLEGE CARD */
+
+.college-card{
+  background:linear-gradient(135deg,#6c63ff,#8f87ff);
+  color:white;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:24px;
+  cursor:pointer;
+  box-shadow:0 6px 15px rgba(108,99,255,0.25);
+  -webkit-tap-highlight-color:transparent;
+}
+
+.college-card:active{transform:scale(0.98)}
+
+.college-card .emoji{
+  font-size:32px;
+  margin-bottom:8px;
+}
+
+.college-card h3{
+  margin-bottom:5px;
+  font-size:19px;
+}
+
+.college-card p{
+  font-size:13px;
+  opacity:0.9;
+}
+
+/* SUBJECT GRID */
+
+.subjects-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+  margin-bottom:25px;
+}
+
+.subject-card{
+  background:white;
+  border-radius:17px;
+  padding:18px 14px;
+  cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,0.05);
+  transition:transform 0.15s;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.subject-card:active{transform:scale(0.96)}
+
+.subject-icon{
+  font-size:34px;
+  margin-bottom:10px;
+}
+
+.subject-card h4{
+  font-size:16px;
+  margin-bottom:5px;
+}
+
+.subject-card p{
+  font-size:12px;
+  color:#777;
+  line-height:1.4;
+}
+
+/* CONTINUE LEARNING */
+
+.continue-card{
+  background:white;
+  border-radius:17px;
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.05);
+}
+
+.continue-top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+.continue-icon{
+  width:48px;
+  height:48px;
+  border-radius:13px;
+  background:#f0f1ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  flex-shrink:0;
+}
+
+.continue-info{flex:1}
+
+.continue-info h4{
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.continue-info p{
+  font-size:12px;
+  color:#777;
+}
+
+.continue-btn{
+  width:100%;
+  border:none;
+  background:#6c63ff;
+  color:white;
+  padding:11px;
+  border-radius:11px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.continue-btn:active{transform:scale(0.98)}
+
+/* =========================
+   POPUP
+========================= */
+
+.popup{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  z-index:100;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.popup-box{
+  width:100%;
+  max-width:430px;
+  background:white;
+  border-radius:25px 25px 0 0;
+  padding:22px 18px 30px;
+  animation:popupUp 0.25s ease;
+  max-height:80vh;
+  overflow-y:auto;
+}
+
+@keyframes popupUp{
+  from{transform:translateY(100%)}
+  to{transform:translateY(0)}
+}
+
+.popup-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+
+.popup-header h3{font-size:19px}
+
+.close-btn{
+  border:none;
+  background:#f1f3f8;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.class-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+}
+
+.class-btn{
+  border:none;
+  background:#f2f3ff;
+  color:#4d46d8;
+  padding:14px 10px;
+  border-radius:12px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.class-btn:active{transform:scale(0.96)}
+
+/* COLLEGE SUBJECT POPUP */
+
+.college-subject-btn{
+  background:#f2f3ff;
+  color:#4d46d8;
+  border:none;
+  padding:15px 10px;
+  border-radius:13px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* =========================
+   BOTTOM NAV - LIQUID GLASS
+========================= */
+
+.nav{
+  position:fixed;
+  left:14px;
+  right:14px;
+  max-width:420px;
+  margin:0 auto;
+  bottom:calc(12px + env(safe-area-inset-bottom));
+  height:66px;
+  padding:6px;
+  display:flex;
+  border-radius:33px;
+  z-index:50;
+  background:rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 12px 32px rgba(61,108,255,.22),0 2px 8px rgba(255,45,135,.12),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4);
+}
+
+.nav .ind{
+  position:absolute;
+  top:6px;
+  bottom:6px;
+  left:6px;
+  width:calc((100% - 12px)/var(--n,5));
+  border-radius:27px;
+  background:linear-gradient(135deg,rgba(255,45,135,.20),rgba(61,108,255,.20));
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),inset 0 6px 10px rgba(255,255,255,.55),0 4px 14px rgba(61,108,255,.2);
+  transform:translateX(calc(var(--i,0)*100%));
+  transition:transform .42s cubic-bezier(.34,1.45,.64,1);
+}
+
+.nav.press .ind{
+  transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12);
+}
+
+.nav button{
+  position:relative;
+  z-index:1;
+  flex:1;
+  border:0;
+  background:none;
+  font:inherit;
+  cursor:pointer;
+  color:#6f7893;
+  font-size:11px;
+  font-weight:600;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  transition:color .25s;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.nav button span{
+  font-size:22px;
+  transition:transform .3s;
+}
+
+.nav button.active{color:#ff1493}
+
+.nav button.active span{
+  transform:translateY(-1px) scale(1.12);
+}
+
+/* SEARCH HIDDEN */
+
+.hidden-card{display:none !important}
+
+</style>
 
 </head>
 
 
 <body>
 
-
 <div class="app">
 
 
-  <!-- =========================
-       HEADER
-  ========================= -->
+<!-- =========================
+     HEADER
+========================= -->
 
-  <div class="header">
+<div class="header">
 
-    <button
-      type="button"
-      class="back-btn"
-      onclick="goHome()"
-    >
-      ←
-    </button>
+  <button type="button" class="back-btn" onclick="goHome()">←</button>
 
+  <div class="header-title">Learn</div>
 
-    <div class="header-title">
-      Learn
-    </div>
+  <!-- CODE ARENA BUTTON -->
+  <button type="button" class="code-arena-btn" onclick="goCodeArena()" title="code-arena.html">
+    &lt;/&gt;
+  </button>
 
-
-    <!-- CODE ARENA BUTTON -->
-
-    <button
-      type="button"
-      class="code-arena-btn"
-      onclick="goCodeArena()"
-      title="code-arena.html"
-    >
-      &lt;/&gt;
-    </button>
-
-
-    <!-- CYBER SECURITY BUTTON -->
-
-    <button
-      type="button"
-      class="hacker-btn"
-      onclick="goHackerCourse()"
-      title="Cyber Security Course"
-    >
-      🛡️
-    </button>
-
-  </div>
-
-
-
-  <!-- =========================
-       CONTENT
-  ========================= -->
-
-  <div class="content">
-
-
-    <!-- =========================
-         BOARD CLASSES AD
-    ========================= -->
-
-    <a
-      href="board-ai.html"
-      class="board-ad-btn"
-    >
-      🎓 📚 Board Classes • Navratri Special 🌸
-    </a>
-
-
-    <a
-      href="test.html"
-      class="test-btn"
-    >
-      📝 Basic Mathematics Test
-    </a>
-
-
-    <!-- WELCOME -->
-
-    <div class="welcome">
-
-      <h2>
-
-        Hello,
-
-        <span id="username">
-          Learner
-        </span>
-
-        👋
-
-      </h2>
-
-
-      <p>
-        What do you want to learn today?
-      </p>
-
-    </div>
-
-
-
-    <!-- SEARCH -->
-
-    <div class="search-box">
-
-      <span>
-        🔍
-      </span>
-
-
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search subjects..."
-        oninput="searchSubjects()"
-      >
-
-    </div>
-
-
-
-    <!-- =========================
-         COLLEGE
-    ========================= -->
-
-    <div class="section-title">
-
-      <h3>
-        College
-      </h3>
-
-    </div>
-
-
-    <div
-      class="college-card searchable-card"
-      data-name="college 11th 12th"
-      onclick="openCollegePopup()"
-    >
-
-      <div class="emoji">
-        🎓
-      </div>
-
-
-      <h3>
-        11th & 12th
-      </h3>
-
-
-      <p>
-        Higher secondary
-        subjects and learning
-      </p>
-
-    </div>
-
-
-
-    <!-- =========================
-         SUBJECTS
-    ========================= -->
-
-    <div class="section-title">
-
-      <h3>
-        Subjects
-      </h3>
-
-
-      <span>
-        Choose a subject
-      </span>
-
-    </div>
-
-
-
-    <div class="subjects-grid">
-
-
-      <!-- MATHEMATICS -->
-
-      <div
-        class="subject-card searchable-card"
-        data-name="mathematics maths math"
-        onclick="openMathPopup()"
-      >
-
-        <div class="subject-icon">
-          ➗
-        </div>
-
-
-        <h4>
-          Mathematics
-        </h4>
-
-
-        <p>
-          Numbers, formulas
-          & problems
-        </p>
-
-      </div>
-
-
-
-      <!-- SCIENCE -->
-
-      <div
-        class="subject-card searchable-card"
-        data-name="science physics chemistry biology"
-        onclick="openScienceGame()"
-      >
-
-        <div class="subject-icon">
-          🔬
-        </div>
-
-
-        <h4>
-          Science
-        </h4>
-
-
-        <p>
-          Explore the world
-          of science
-        </p>
-
-      </div>
-
-
-
-      <!-- SOCIAL SCIENCE -->
-
-      <div
-        class="subject-card searchable-card"
-        data-name="social science history geography civics"
-        onclick="openSocialStudy()"
-      >
-
-        <div class="subject-icon">
-          🌍
-        </div>
-
-
-        <h4>
-          Social Science
-        </h4>
-
-
-        <p>
-          History, Geography
-          & Civics
-        </p>
-
-      </div>
-
-
-
-      <!-- LANGUAGES -->
-
-      <div
-        class="subject-card searchable-card"
-        data-name="languages language english marathi hindi"
-        onclick="openLanguageStudy()"
-      >
-
-        <div class="subject-icon">
-          🗣️
-        </div>
-
-
-        <h4>
-          Languages
-        </h4>
-
-
-        <p>
-          English, Marathi
-          & Hindi
-        </p>
-
-      </div>
-
-
-    </div>
-
-
-
-    <!-- =========================
-         CONTINUE LEARNING
-    ========================= -->
-
-    <div class="section-title">
-
-      <h3>
-        Continue Learning
-      </h3>
-
-    </div>
-
-
-
-    <!-- MATHEMATICS -->
-
-    <div
-      class="continue-card searchable-card"
-      data-name="mathematics basics math"
-    >
-
-      <div class="continue-top">
-
-        <div class="continue-icon">
-          ➗
-        </div>
-
-
-        <div class="continue-info">
-
-          <h4>
-            Mathematics Basics
-          </h4>
-
-
-          <p>
-            Continue your
-            mathematics journey
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <button
-        type="button"
-        class="continue-btn"
-        onclick="startMathLesson()"
-      >
-        Continue Learning
-      </button>
-
-    </div>
-
-
-
-    <!-- SCIENCE -->
-
-    <div
-      class="continue-card searchable-card"
-      data-name="science explorer chemistry physics"
-    >
-
-      <div class="continue-top">
-
-        <div class="continue-icon">
-          🧪
-        </div>
-
-
-        <div class="continue-info">
-
-          <h4>
-            Science Explorer
-          </h4>
-
-
-          <p>
-            Discover science
-            through experiments
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <button
-        type="button"
-        class="continue-btn"
-        onclick="openScienceGame()"
-      >
-        Start Exploring
-      </button>
-
-    </div>
-
-
-  </div>
-
-
-
-  <!-- =====================================================
-       COLLEGE POPUP
-  ====================================================== -->
-
-  <div
-    class="popup"
-    id="collegePopup"
-    onclick="closePopupOutside(event, 'collegePopup')"
-  >
-
-    <div class="popup-box">
-
-
-      <div class="popup-header">
-
-        <h3>
-          🎓 Select Class
-        </h3>
-
-
-        <button
-          type="button"
-          class="close-btn"
-          onclick="closeCollegePopup()"
-        >
-          ✕
-        </button>
-
-      </div>
-
-
-
-      <div class="class-grid">
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openCollege11()"
-        >
-          11th Standard
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openCollege12()"
-        >
-          12th Standard
-        </button>
-
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       11TH COLLEGE SUBJECT POPUP
-  ====================================================== -->
-
-  <div
-    class="popup"
-    id="college11Popup"
-    onclick="closePopupOutside(event, 'college11Popup')"
-  >
-
-    <div class="popup-box">
-
-
-      <div class="popup-header">
-
-        <h3>
-          📚 11th Standard
-        </h3>
-
-
-        <button
-          type="button"
-          class="close-btn"
-          onclick="closeCollege11Popup()"
-        >
-          ✕
-        </button>
-
-      </div>
-
-
-      <div class="class-grid">
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-11-math.html')"
-        >
-          ➗ Mathematics
-        </button>
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-11-physics.html')"
-        >
-          ⚛️ Physics
-        </button>
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-11-chemistry.html')"
-        >
-          🧪 Chemistry
-        </button>
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-11-biology.html')"
-        >
-          🧬 Biology
-        </button>
-
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       12TH COLLEGE SUBJECT POPUP
-  ====================================================== -->
-
-  <div
-    class="popup"
-    id="college12Popup"
-    onclick="closePopupOutside(event, 'college12Popup')"
-  >
-
-    <div class="popup-box">
-
-
-      <div class="popup-header">
-
-        <h3>
-          📚 12th Standard
-        </h3>
-
-
-        <button
-          type="button"
-          class="close-btn"
-          onclick="closeCollege12Popup()"
-        >
-          ✕
-        </button>
-
-      </div>
-
-
-      <div class="class-grid">
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-12-math.html')"
-        >
-          ➗ Mathematics
-        </button>
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-12-physics.html')"
-        >
-          ⚛️ Physics
-        </button>
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-12-chemistry.html')"
-        >
-          🧪 Chemistry
-        </button>
-
-
-        <button
-          type="button"
-          class="college-subject-btn"
-          onclick="goTo('college-12-biology.html')"
-        >
-          🧬 Biology
-        </button>
-
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       MATHEMATICS POPUP
-  ====================================================== -->
-
-  <div
-    class="popup"
-    id="mathPopup"
-    onclick="closePopupOutside(event, 'mathPopup')"
-  >
-
-    <div class="popup-box">
-
-
-      <div class="popup-header">
-
-        <h3>
-          ➗ Mathematics
-        </h3>
-
-
-        <button
-          type="button"
-          class="close-btn"
-          onclick="closeMathPopup()"
-        >
-          ✕
-        </button>
-
-      </div>
-
-
-      <div class="class-grid">
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(1)"
-        >
-          1st Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(2)"
-        >
-          2nd Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(3)"
-        >
-          3rd Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(4)"
-        >
-          4th Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(5)"
-        >
-          5th Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(6)"
-        >
-          6th Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(7)"
-        >
-          7th Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(8)"
-        >
-          8th Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(9)"
-        >
-          9th Class
-        </button>
-
-
-        <button
-          type="button"
-          class="class-btn"
-          onclick="openMath(10)"
-        >
-          10th Class
-        </button>
-
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =====================================================
-       BOTTOM NAVIGATION
-  ====================================================== -->
-
-  <div class="bottom-nav">
-
-
-    <button
-      type="button"
-      class="nav-item"
-      onclick="goHome()"
-    >
-
-      <span>
-        🏠
-      </span>
-
-      Home
-
-    </button>
-
-
-
-    <button
-      type="button"
-      class="nav-item active"
-    >
-
-      <span>
-        📚
-      </span>
-
-      Learn
-
-    </button>
-
-
-
-    <button
-      type="button"
-      class="nav-item"
-      onclick="goCreate()"
-    >
-
-      <span>
-        ✨
-      </span>
-
-      Create
-
-    </button>
-
-
-
-    <button
-      type="button"
-      class="nav-item"
-      onclick="goRank()"
-    >
-
-      <span>
-        🔍
-      </span>
-
-      extra search 
-
-    </button>
-
-
-
-    <button
-      type="button"
-      class="nav-item"
-      onclick="goProfile()"
-    >
-
-      <span>
-        👤
-      </span>
-
-      Profile
-
-    </button>
-
-
-  </div>
-
+  <!-- CYBER SECURITY BUTTON -->
+  <button type="button" class="hacker-btn" onclick="goHackerCourse()" title="Cyber Security Course">
+    🛡️
+  </button>
 
 </div>
 
+
+<!-- =========================
+     CONTENT
+========================= -->
+
+<div class="content">
+
+  <!-- BOARD CLASSES AD -->
+  <a href="board-ai.html" class="board-ad-btn">
+    🎓 📚 Board Classes • Navratri Special 🌸
+  </a>
+
+  <a href="test.html" class="test-btn">
+    📝 Basic Mathematics Test
+  </a>
+
+  <!-- WELCOME -->
+  <div class="welcome">
+
+    <h2>
+      Hello,
+      <span id="username">Learner</span>
+      👋
+    </h2>
+
+    <p>What do you want to learn today?</p>
+
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-box">
+
+    <span>🔍</span>
+
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search subjects..."
+      oninput="searchSubjects()"
+    >
+
+  </div>
+
+  <!-- COLLEGE -->
+  <div class="section-title">
+    <h3>College</h3>
+  </div>
+
+  <div
+    class="college-card searchable-card"
+    data-name="college 11th 12th"
+    onclick="openCollegePopup()"
+  >
+
+    <div class="emoji">🎓</div>
+
+    <h3>11th &amp; 12th</h3>
+
+    <p>Higher secondary subjects and learning</p>
+
+  </div>
+
+  <!-- SUBJECTS -->
+  <div class="section-title">
+    <h3>Subjects</h3>
+    <span>Choose a subject</span>
+  </div>
+
+  <div class="subjects-grid">
+
+    <!-- MATHEMATICS -->
+    <div
+      class="subject-card searchable-card"
+      data-name="mathematics maths math"
+      onclick="openMathPopup()"
+    >
+      <div class="subject-icon">➗</div>
+      <h4>Mathematics</h4>
+      <p>Numbers, formulas &amp; problems</p>
+    </div>
+
+    <!-- SCIENCE -->
+    <div
+      class="subject-card searchable-card"
+      data-name="science physics chemistry biology"
+      onclick="openScienceGame()"
+    >
+      <div class="subject-icon">🔬</div>
+      <h4>Science</h4>
+      <p>Explore the world of science</p>
+    </div>
+
+    <!-- SOCIAL SCIENCE -->
+    <div
+      class="subject-card searchable-card"
+      data-name="social science history geography civics"
+      onclick="openSocialStudy()"
+    >
+      <div class="subject-icon">🌍</div>
+      <h4>Social Science</h4>
+      <p>History, Geography &amp; Civics</p>
+    </div>
+
+    <!-- LANGUAGES -->
+    <div
+      class="subject-card searchable-card"
+      data-name="languages language english marathi hindi"
+      onclick="openLanguageStudy()"
+    >
+      <div class="subject-icon">🗣️</div>
+      <h4>Languages</h4>
+      <p>English, Marathi &amp; Hindi</p>
+    </div>
+
+  </div>
+
+  <!-- CONTINUE LEARNING -->
+  <div class="section-title">
+    <h3>Continue Learning</h3>
+  </div>
+
+  <!-- MATHEMATICS -->
+  <div class="continue-card searchable-card" data-name="mathematics basics math">
+
+    <div class="continue-top">
+
+      <div class="continue-icon">➗</div>
+
+      <div class="continue-info">
+        <h4>Mathematics Basics</h4>
+        <p>Continue your mathematics journey</p>
+      </div>
+
+    </div>
+
+    <button type="button" class="continue-btn" onclick="startMathLesson()">
+      Continue Learning
+    </button>
+
+  </div>
+
+  <!-- SCIENCE -->
+  <div class="continue-card searchable-card" data-name="science explorer chemistry physics">
+
+    <div class="continue-top">
+
+      <div class="continue-icon">🧪</div>
+
+      <div class="continue-info">
+        <h4>Science Explorer</h4>
+        <p>Discover science through experiments</p>
+      </div>
+
+    </div>
+
+    <button type="button" class="continue-btn" onclick="openScienceGame()">
+      Start Exploring
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     COLLEGE POPUP
+====================================================== -->
+
+<div class="popup" id="collegePopup" onclick="closePopupOutside(event,'collegePopup')">
+
+  <div class="popup-box">
+
+    <div class="popup-header">
+      <h3>🎓 Select Class</h3>
+      <button type="button" class="close-btn" onclick="closeCollegePopup()">✕</button>
+    </div>
+
+    <div class="class-grid">
+      <button type="button" class="class-btn" onclick="openCollege11()">11th Standard</button>
+      <button type="button" class="class-btn" onclick="openCollege12()">12th Standard</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     11TH COLLEGE SUBJECT POPUP
+====================================================== -->
+
+<div class="popup" id="college11Popup" onclick="closePopupOutside(event,'college11Popup')">
+
+  <div class="popup-box">
+
+    <div class="popup-header">
+      <h3>📚 11th Standard</h3>
+      <button type="button" class="close-btn" onclick="closeCollege11Popup()">✕</button>
+    </div>
+
+    <div class="class-grid">
+      <button type="button" class="college-subject-btn" onclick="goTo('college-11-math.html')">➗ Mathematics</button>
+      <button type="button" class="college-subject-btn" onclick="goTo('college-11-physics.html')">⚛️ Physics</button>
+      <button type="button" class="college-subject-btn" onclick="goTo('college-11-chemistry.html')">🧪 Chemistry</button>
+      <button type="button" class="college-subject-btn" onclick="goTo('college-11-biology.html')">🧬 Biology</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     12TH COLLEGE SUBJECT POPUP
+====================================================== -->
+
+<div class="popup" id="college12Popup" onclick="closePopupOutside(event,'college12Popup')">
+
+  <div class="popup-box">
+
+    <div class="popup-header">
+      <h3>📚 12th Standard</h3>
+      <button type="button" class="close-btn" onclick="closeCollege12Popup()">✕</button>
+    </div>
+
+    <div class="class-grid">
+      <button type="button" class="college-subject-btn" onclick="goTo('college-12-math.html')">➗ Mathematics</button>
+      <button type="button" class="college-subject-btn" onclick="goTo('college-12-physics.html')">⚛️ Physics</button>
+      <button type="button" class="college-subject-btn" onclick="goTo('college-12-chemistry.html')">🧪 Chemistry</button>
+      <button type="button" class="college-subject-btn" onclick="goTo('college-12-biology.html')">🧬 Biology</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MATHEMATICS POPUP
+====================================================== -->
+
+<div class="popup" id="mathPopup" onclick="closePopupOutside(event,'mathPopup')">
+
+  <div class="popup-box">
+
+    <div class="popup-header">
+      <h3>➗ Mathematics</h3>
+      <button type="button" class="close-btn" onclick="closeMathPopup()">✕</button>
+    </div>
+
+    <div class="class-grid">
+      <button type="button" class="class-btn" onclick="openMath(1)">1st Class</button>
+      <button type="button" class="class-btn" onclick="openMath(2)">2nd Class</button>
+      <button type="button" class="class-btn" onclick="openMath(3)">3rd Class</button>
+      <button type="button" class="class-btn" onclick="openMath(4)">4th Class</button>
+      <button type="button" class="class-btn" onclick="openMath(5)">5th Class</button>
+      <button type="button" class="class-btn" onclick="openMath(6)">6th Class</button>
+      <button type="button" class="class-btn" onclick="openMath(7)">7th Class</button>
+      <button type="button" class="class-btn" onclick="openMath(8)">8th Class</button>
+      <button type="button" class="class-btn" onclick="openMath(9)">9th Class</button>
+      <button type="button" class="class-btn" onclick="openMath(10)">10th Class</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     BOTTOM NAVIGATION (liquid glass)
+====================================================== -->
+
+<nav class="nav" id="nav" style="--i:1;--n:5">
+  <span class="ind"></span>
+  <button aria-label="Home" onclick="navTo(0,'home.html')"><span>🏠</span>Home</button>
+  <button class="active" aria-label="Learn" aria-current="page" onclick="navTo(1,'learn.html')"><span>📚</span>Learn</button>
+  <button aria-label="Create" onclick="navTo(2,'create.html')"><span>➕</span>Create</button>
+  <button aria-label="Search" onclick="navTo(3,'leaderboard.html')"><span>🔍</span>Search</button>
+  <button aria-label="Profile" onclick="navTo(4,'profile.html')"><span>👤</span>Profile</button>
+</nav>
+
+
+</div>
 
 
 <!-- =====================================================
@@ -1377,358 +812,164 @@
 
 <script>
 
+/* =========================
+   NAVIGATION (liquid nav)
+========================= */
 
-  /* =========================
-     USERNAME
-  ========================= */
+function navTo(i,url){
+  const n=document.getElementById('nav');
+  if(n.style.getPropertyValue('--i')==String(i))return;
+  n.classList.add('press');
+  n.style.setProperty('--i',i);
+  [...n.querySelectorAll('button')].forEach((b,k)=>b.classList.toggle('active',k===i));
+  try{sessionStorage.setItem('navIdx',i)}catch(e){}
+  setTimeout(()=>n.classList.remove('press'),220);
+  setTimeout(()=>{location.href=url},250);
+}
 
-  try {
+/* नवीन page वर मागच्या जागेवरून pill सरकवतो */
+(function(){
+  const n=document.getElementById('nav');
+  const cur=n.style.getPropertyValue('--i').trim();
+  let prev=null;
+  try{prev=sessionStorage.getItem('navIdx')}catch(e){}
+  if(prev!==null && prev!==cur){
+    n.style.setProperty('--i',prev);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>n.style.setProperty('--i',cur)));
+  }
+  try{sessionStorage.setItem('navIdx',cur)}catch(e){}
+})();
 
-    const savedUsername =
-      localStorage.getItem(
-        "gyansetu_username"
-      );
 
-    if (savedUsername) {
+/* =========================
+   USERNAME
+========================= */
 
-      document
-        .getElementById("username")
-        .textContent =
-          savedUsername;
+try{
+  const savedUsername=localStorage.getItem("gyansetu_username");
+  if(savedUsername){
+    document.getElementById("username").textContent=savedUsername;
+  }
+}catch(error){
+  console.log("Username storage unavailable");
+}
 
+
+/* =========================
+   BASIC PAGE NAVIGATION
+========================= */
+
+function goTo(page){window.location.href=page}
+function goHome(){window.location.href="home.html"}
+function goCreate(){window.location.href="create.html"}
+function goRank(){window.location.href="leaderboard.html"}
+function goProfile(){window.location.href="profile.html"}
+function goCodeArena(){window.location.href="code-arena.html"}
+function goHackerCourse(){window.location.href="hacker-course.html"}
+function openLanguageStudy(){window.location.href="language-study.html"}
+function openSocialStudy(){window.location.href="history-civics-geography.html"}
+function openScienceGame(){window.location.href="science-game.html"}
+
+
+/* =========================
+   COLLEGE POPUPS
+========================= */
+
+function openCollegePopup(){
+  document.getElementById("collegePopup").style.display="flex";
+}
+
+function closeCollegePopup(){
+  document.getElementById("collegePopup").style.display="none";
+}
+
+function openCollege11(){
+  closeCollegePopup();
+  document.getElementById("college11Popup").style.display="flex";
+}
+
+function closeCollege11Popup(){
+  document.getElementById("college11Popup").style.display="none";
+}
+
+function openCollege12(){
+  closeCollegePopup();
+  document.getElementById("college12Popup").style.display="flex";
+}
+
+function closeCollege12Popup(){
+  document.getElementById("college12Popup").style.display="none";
+}
+
+
+/* =========================
+   MATHEMATICS POPUP
+========================= */
+
+function openMathPopup(){
+  document.getElementById("mathPopup").style.display="flex";
+}
+
+function closeMathPopup(){
+  document.getElementById("mathPopup").style.display="none";
+}
+
+function openMath(number){
+  window.location.href="math-"+number+".html";
+}
+
+function startMathLesson(){
+  window.location.href="Basic math.html";
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function searchSubjects(){
+
+  const input=document.getElementById("searchInput").value.toLowerCase().trim();
+
+  document.querySelectorAll(".searchable-card").forEach(function(card){
+
+    const name=card.getAttribute("data-name").toLowerCase();
+
+    if(input==="" || name.includes(input)){
+      card.classList.remove("hidden-card");
+    }else{
+      card.classList.add("hidden-card");
     }
 
-  } catch (error) {
+  });
 
-    console.log(
-      "Username storage unavailable"
-    );
+}
 
+
+/* =========================
+   CLOSE POPUP BY BACKGROUND
+========================= */
+
+function closePopupOutside(event,popupId){
+  if(event.target.id===popupId){
+    document.getElementById(popupId).style.display="none";
   }
+}
 
 
+/* =========================
+   ESC KEY CLOSE
+========================= */
 
-  /* =========================
-     BASIC PAGE NAVIGATION
-  ========================= */
-
-  function goTo(page) {
-
-    window.location.href = page;
-
-  }
-
-
-  function goHome() {
-
-    window.location.href =
-      "home.html";
-
-  }
-
-
-  function goCreate() {
-
-    window.location.href =
-      "create.html";
-
-  }
-
-
-  function goRank() {
-
-    window.location.href =
-      "leaderboard.html";
-
-  }
-
-
-  function goProfile() {
-
-    window.location.href =
-      "profile.html";
-
-  }
-
-
-
-  /* =========================
-     CODE ARENA
-  ========================= */
-
-  function goCodeArena() {
-
-    window.location.href =
-      "code-arena.html";
-
-  }
-
-
-
-  /* =========================
-     CYBER SECURITY COURSE
-  ========================= */
-
-  function goHackerCourse() {
-
-    window.location.href =
-      "hacker-course.html";
-
-  }
-
-
-
-  /* =========================
-     LANGUAGE STUDY
-  ========================= */
-
-  function openLanguageStudy() {
-
-    window.location.href =
-      "language-study.html";
-
-  }
-
-
-
-  /* =========================
-     SOCIAL SCIENCE
-  ========================= */
-
-  function openSocialStudy() {
-
-    window.location.href =
-      "history-civics-geography.html";
-
-  }
-
-
-
-  /* =========================
-     COLLEGE POPUP
-  ========================= */
-
-  function openCollegePopup() {
-
-    document
-      .getElementById("collegePopup")
-      .style.display = "flex";
-
-  }
-
-
-  function closeCollegePopup() {
-
-    document
-      .getElementById("collegePopup")
-      .style.display = "none";
-
-  }
-
-
-
-  /* =========================
-     11TH STANDARD
-  ========================= */
-
-  function openCollege11() {
-
-    closeCollegePopup();
-
-    document
-      .getElementById("college11Popup")
-      .style.display = "flex";
-
-  }
-
-
-  function closeCollege11Popup() {
-
-    document
-      .getElementById("college11Popup")
-      .style.display = "none";
-
-  }
-
-
-
-  /* =========================
-     12TH STANDARD
-  ========================= */
-
-  function openCollege12() {
-
-    closeCollegePopup();
-
-    document
-      .getElementById("college12Popup")
-      .style.display = "flex";
-
-  }
-
-
-  function closeCollege12Popup() {
-
-    document
-      .getElementById("college12Popup")
-      .style.display = "none";
-
-  }
-
-
-
-  /* =========================
-     MATHEMATICS POPUP
-  ========================= */
-
-  function openMathPopup() {
-
-    document
-      .getElementById("mathPopup")
-      .style.display = "flex";
-
-  }
-
-
-  function closeMathPopup() {
-
-    document
-      .getElementById("mathPopup")
-      .style.display = "none";
-
-  }
-
-
-  function openMath(number) {
-
-    window.location.href =
-      "math-" + number + ".html";
-
-  }
-
-
-  function startMathLesson() {
-
-    window.location.href =
-      "Basic math.html";
-
-  }
-
-
-
-  /* =========================
-     SCIENCE
-  ========================= */
-
-  function openScienceGame() {
-
-    window.location.href =
-      "science-game.html";
-
-  }
-
-
-
-  /* =========================
-     SEARCH
-  ========================= */
-
-  function searchSubjects() {
-
-    const input =
-      document
-        .getElementById("searchInput")
-        .value
-        .toLowerCase()
-        .trim();
-
-
-    const cards =
-      document.querySelectorAll(
-        ".searchable-card"
-      );
-
-
-    cards.forEach(function(card) {
-
-      const name =
-        card
-          .getAttribute("data-name")
-          .toLowerCase();
-
-
-      if (
-        input === "" ||
-        name.includes(input)
-      ) {
-
-        card.classList.remove(
-          "hidden-card"
-        );
-
-      } else {
-
-        card.classList.add(
-          "hidden-card"
-        );
-
-      }
-
+document.addEventListener("keydown",function(event){
+  if(event.key==="Escape"){
+    document.querySelectorAll(".popup").forEach(function(popup){
+      popup.style.display="none";
     });
-
   }
-
-
-
-  /* =========================
-     CLOSE POPUP BY BACKGROUND
-  ========================= */
-
-  function closePopupOutside(
-    event,
-    popupId
-  ) {
-
-    if (
-      event.target.id === popupId
-    ) {
-
-      document
-        .getElementById(popupId)
-        .style.display = "none";
-
-    }
-
-  }
-
-
-
-  /* =========================
-     ESC KEY CLOSE
-  ========================= */
-
-  document.addEventListener(
-    "keydown",
-    function(event) {
-
-      if (event.key === "Escape") {
-
-        document
-          .querySelectorAll(".popup")
-          .forEach(function(popup) {
-
-            popup.style.display = "none";
-
-          });
-
-      }
-
-    }
-  );
-
+});
 
 </script>
 
 </body>
-
 </html>
