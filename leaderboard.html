@@ -1,1145 +1,202 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<title>GyanSetu - All Features</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GyanSetu - Search</title>
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
-body{
-    background:#eef5ff;
-    color:#172554;
-    min-height:100vh;
-}
-
-.app{
-    width:100%;
-    max-width:430px;
-    margin:auto;
-    min-height:100vh;
-    background:#eef5ff;
-}
-
-/* HEADER */
-
-.header{
-    position:sticky;
-    top:0;
-    z-index:100;
-    background:linear-gradient(135deg,#1769e0,#4d9cff);
-    color:white;
-    padding:18px 18px 20px;
-    border-radius:0 0 25px 25px;
-    box-shadow:0 8px 25px rgba(23,105,224,.25);
-}
-
-.header-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.back{
-    width:42px;
-    height:42px;
-    border:none;
-    border-radius:14px;
-    background:rgba(255,255,255,.18);
-    color:white;
-    font-size:23px;
-    cursor:pointer;
-}
-
-.header-title{
-    flex:1;
-    margin-left:13px;
-}
-
-.header-title h1{
-    font-size:21px;
-}
-
-.header-title p{
-    font-size:12px;
-    opacity:.9;
-    margin-top:3px;
-}
-
-.count{
-    background:rgba(255,255,255,.2);
-    padding:8px 11px;
-    border-radius:13px;
-    font-size:12px;
-    font-weight:bold;
-}
-
-/* SEARCH */
-
-.search-box{
-    margin-top:17px;
-    position:relative;
-}
-
-.search-box input{
-    width:100%;
-    height:52px;
-    border:none;
-    outline:none;
-    border-radius:17px;
-    padding:0 48px 0 17px;
-    font-size:15px;
-    background:white;
-    color:#172554;
-    box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
-
-.search-icon{
-    position:absolute;
-    right:16px;
-    top:14px;
-    font-size:22px;
-}
-
-/* CONTENT */
-
-.content{
-    padding:18px 14px 35px;
-}
-
-.welcome{
-    background:white;
-    border-radius:20px;
-    padding:17px;
-    margin-bottom:20px;
-    box-shadow:0 5px 18px rgba(30,70,130,.08);
-}
-
-.welcome h2{
-    font-size:18px;
-    margin-bottom:6px;
-}
-
-.welcome p{
-    color:#64748b;
-    font-size:13px;
-    line-height:1.5;
-}
-
-/* CATEGORY */
-
-.category{
-    margin-bottom:23px;
-}
-
-.category-title{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:10px;
-}
-
-.category-title h3{
-    font-size:16px;
-}
-
-.category-title span{
-    font-size:11px;
-    color:#64748b;
-}
-
-/* GRID */
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:11px;
-}
-
-/* CARD */
-
-.card{
-    position:relative;
-    overflow:hidden;
-    background:white;
-    border-radius:19px;
-    padding:15px;
-    min-height:145px;
-    box-shadow:0 5px 17px rgba(30,70,130,.08);
-    cursor:pointer;
-    border:1px solid rgba(23,105,224,.05);
-    transition:.2s;
-}
-
-.card:active{
-    transform:scale(.96);
-}
-
-.card::after{
-    content:"";
-    position:absolute;
-    width:65px;
-    height:65px;
-    border-radius:50%;
-    background:#eaf3ff;
-    right:-22px;
-    bottom:-20px;
-}
-
-.icon{
-    width:48px;
-    height:48px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#edf5ff;
-    border-radius:15px;
-    font-size:25px;
-    margin-bottom:11px;
-}
-
-.card h4{
-    font-size:14px;
-    margin-bottom:5px;
-}
-
-.card p{
-    color:#718096;
-    font-size:11px;
-    line-height:1.35;
-    padding-right:4px;
-}
-
-.open{
-    position:absolute;
-    right:11px;
-    bottom:10px;
-    font-size:12px;
-    color:#1769e0;
-    font-weight:bold;
-}
-
-/* EMPTY */
-
-.no-result{
-    display:none;
-    text-align:center;
-    padding:45px 20px;
-}
-
-.no-result div{
-    font-size:45px;
-    margin-bottom:10px;
-}
-
-.no-result h3{
-    font-size:17px;
-}
-
-.no-result p{
-    color:#718096;
-    font-size:13px;
-    margin-top:6px;
-}
-
-/* FOOTER */
-
-.footer{
-    text-align:center;
-    padding:8px 20px 28px;
-    color:#94a3b8;
-    font-size:11px;
-}
-
-.footer b{
-    color:#1769e0;
-}
-
-/* MOBILE */
-
-@media(max-width:360px){
-
-    .grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+:root{--b:#2563eb;--ink:#0f172a;--mut:#64748b;--bg:#f1f5f9;--line:#e2e8f0}
+body{background:var(--bg);color:var(--ink);min-height:100vh}
+.app{max-width:430px;margin:auto;min-height:100vh;padding-bottom:30px}
+.top{position:sticky;top:0;z-index:50;background:var(--bg);padding:12px 16px 8px}
+.bar{display:flex;gap:8px;align-items:center}
+.ib{border:1px solid var(--line);background:#fff;width:42px;height:42px;border-radius:12px;font-size:18px;color:var(--ink);flex:none}
+.box{flex:1;display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:0 12px;height:46px}
+.box:focus-within{border-color:var(--b);box-shadow:0 0 0 3px #2563eb22}
+.box input{flex:1;border:0;outline:0;font-size:15px;background:none;color:var(--ink);min-width:0}
+.box button{border:0;background:none;font-size:18px;padding:4px}
+.chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 12px;font-size:12.5px;white-space:nowrap;color:var(--ink)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600}
+.sec{padding:6px 16px}
+.lbl{font-size:12px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;margin:12px 0 8px;display:flex;justify-content:space-between}
+.lbl a{color:var(--b);text-transform:none;letter-spacing:0;font-weight:600;cursor:pointer}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{border:1px solid var(--line);background:#fff;border-radius:20px;padding:8px 13px;font-size:13px;color:var(--ink)}
+.res{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:9px;text-decoration:none;color:var(--ink);animation:up .25s}
+@keyframes up{from{opacity:0;transform:translateY(8px)}}
+.res:active{background:#f8fafc}
+.ic{width:44px;height:44px;border-radius:12px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:22px;flex:none}
+.res div.t{flex:1;min-width:0}
+.res b{display:block;font-size:14px}
+.res small{display:block;color:var(--mut);font-size:12px;margin-top:2px;line-height:1.4}
+.cat{font-size:10px;background:#f1f5f9;color:var(--mut);padding:3px 8px;border-radius:8px;font-weight:700;white-space:nowrap}
+.soon{background:#fef3c7;color:#b45309}
+mark{background:#fde68a;color:inherit;border-radius:3px;padding:0 1px}
+.empty{text-align:center;color:var(--mut);padding:40px 20px;font-size:14px;line-height:1.6}
+.empty b{display:block;font-size:34px;margin-bottom:8px}
+.cnt{font-size:12px;color:var(--mut);margin:4px 0 10px}
 </style>
 </head>
-
 <body>
-
 <div class="app">
-
-<!-- HEADER -->
-
-<header class="header">
-
-    <div class="header-top">
-
-        <button class="back" onclick="goBack()">‹</button>
-
-        <div class="header-title">
-            <h1>GyanSetu ✨</h1>
-            <p>All Learning Features</p>
-        </div>
-
-        <div class="count">
-            <span id="totalCount">0</span>
-        </div>
-
+<div class="top">
+  <div class="bar">
+    <button class="ib" onclick="history.length>1?history.back():location.href='home.html'">‹</button>
+    <div class="box">
+      <span>🔍</span>
+      <input id="q" placeholder="App madhe kahihi shodha..." autocomplete="off" oninput="run()">
+      <button id="clr" onclick="clr()" style="display:none">✕</button>
+      <button onclick="voice()">🎤</button>
     </div>
-
-    <div class="search-box">
-
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="🔍 Search anything..."
-            oninput="searchFeatures()"
-        >
-
-        <span class="search-icon">⌕</span>
-
-    </div>
-
-</header>
-
-
-<!-- CONTENT -->
-
-<main class="content">
-
-    <div class="welcome">
-
-        <h2>🚀 Explore GyanSetu</h2>
-
-        <p>
-            Learn, practice, create and explore everything
-            in one place. Search any feature above.
-        </p>
-
-    </div>
-
-
-    <!-- LEARNING -->
-
-    <section class="category">
-
-        <div class="category-title">
-            <h3>📚 Learning</h3>
-            <span>Study & Learn</span>
-        </div>
-
-        <div class="grid">
-
-            <div class="card"
-                 data-search="learn learning study education"
-                 onclick="openPage('learn.html')">
-
-                <div class="icon">📚</div>
-
-                <h4>Learn</h4>
-
-                <p>
-                    Explore subjects, classes and learning
-                    resources.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="ai study artificial intelligence smart learning"
-                 onclick="openPage('ai-study.html')">
-
-                <div class="icon">🤖</div>
-
-                <h4>AI Study</h4>
-
-                <p>
-                    Learn with the help of AI-powered study tools.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="smart study focus preparation"
-                 onclick="openPage('smart-study.html')">
-
-                <div class="icon">🧠</div>
-
-                <h4>Smart Study</h4>
-
-                <p>
-                    Study smarter with useful learning tools.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="test exam practice questions"
-                 onclick="openPage('test.html')">
-
-                <div class="icon">📝</div>
-
-                <h4>Tests</h4>
-
-                <p>
-                    Practice questions and test your knowledge.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- MATHEMATICS -->
-
-    <section class="category">
-
-        <div class="category-title">
-            <h3>🧮 Mathematics</h3>
-            <span>Class 1–10</span>
-        </div>
-
-        <div class="grid">
-
-            <div class="card"
-                 data-search="basic mathematics basic math"
-                 onclick="openPage('basic-math.html')">
-
-                <div class="icon">➕</div>
-
-                <h4>Basic Mathematics</h4>
-
-                <p>
-                    Build strong mathematics fundamentals.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 1 first standard"
-                 onclick="openPage('math-1.html')">
-
-                <div class="icon">1️⃣</div>
-
-                <h4>इयत्ता 1ली गणित</h4>
-
-                <p>Mathematics for Class 1.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 2 second standard"
-                 onclick="openPage('math-2.html')">
-
-                <div class="icon">2️⃣</div>
-
-                <h4>इयत्ता 2री गणित</h4>
-
-                <p>Mathematics for Class 2.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 3 third standard"
-                 onclick="openPage('math-3.html')">
-
-                <div class="icon">3️⃣</div>
-
-                <h4>इयत्ता 3री गणित</h4>
-
-                <p>Mathematics for Class 3.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 4 fourth standard"
-                 onclick="openPage('math-4.html')">
-
-                <div class="icon">4️⃣</div>
-
-                <h4>इयत्ता 4थी गणित</h4>
-
-                <p>Mathematics for Class 4.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 5 fifth standard"
-                 onclick="openPage('math-5.html')">
-
-                <div class="icon">5️⃣</div>
-
-                <h4>इयत्ता 5वी गणित</h4>
-
-                <p>Mathematics for Class 5.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 6 sixth standard"
-                 onclick="openPage('math-6.html')">
-
-                <div class="icon">6️⃣</div>
-
-                <h4>इयत्ता 6वी गणित</h4>
-
-                <p>Mathematics for Class 6.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 7 seventh standard"
-                 onclick="openPage('math-7.html')">
-
-                <div class="icon">7️⃣</div>
-
-                <h4>इयत्ता 7वी गणित</h4>
-
-                <p>Mathematics for Class 7.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 8 eighth standard"
-                 onclick="openPage('math-8.html')">
-
-                <div class="icon">8️⃣</div>
-
-                <h4>इयत्ता 8वी गणित</h4>
-
-                <p>Mathematics for Class 8.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 9 ninth standard"
-                 onclick="openPage('math-9.html')">
-
-                <div class="icon">9️⃣</div>
-
-                <h4>इयत्ता 9वी गणित</h4>
-
-                <p>Mathematics for Class 9.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="math class 10 tenth standard"
-                 onclick="openPage('math-10.html')">
-
-                <div class="icon">🔟</div>
-
-                <h4>इयत्ता 10वी गणित</h4>
-
-                <p>Mathematics for Class 10.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- COLLEGE -->
-
-    <section class="category">
-
-        <div class="category-title">
-            <h3>🎓 College</h3>
-            <span>11th & 12th</span>
-        </div>
-
-        <div class="grid">
-
-            <div class="card"
-                 data-search="college 11 eleven"
-                 onclick="openPage('college-11.html')">
-
-                <div class="icon">🎓</div>
-
-                <h4>11वी College</h4>
-
-                <p>Explore Class 11 subjects.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="11 biology biology"
-                 onclick="openPage('college-11-biology.html')">
-
-                <div class="icon">🧬</div>
-
-                <h4>11वी Biology</h4>
-
-                <p>Class 11 Biology.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="11 chemistry"
-                 onclick="openPage('college-11-chemistry.html')">
-
-                <div class="icon">⚗️</div>
-
-                <h4>11वी Chemistry</h4>
-
-                <p>Class 11 Chemistry.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="11 physics"
-                 onclick="openPage('college-11-physics.html')">
-
-                <div class="icon">⚡</div>
-
-                <h4>11वी Physics</h4>
-
-                <p>Class 11 Physics.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="11 math mathematics"
-                 onclick="openPage('college-11-math.html')">
-
-                <div class="icon">📐</div>
-
-                <h4>11वी Mathematics</h4>
-
-                <p>Class 11 Mathematics.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="college 12 twelve"
-                 onclick="openPage('college-12.html')">
-
-                <div class="icon">🎓</div>
-
-                <h4>12वी College</h4>
-
-                <p>Explore Class 12 subjects.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="12 biology"
-                 onclick="openPage('college-12-biology.html')">
-
-                <div class="icon">🧬</div>
-
-                <h4>12वी Biology</h4>
-
-                <p>Class 12 Biology.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="12 chemistry"
-                 onclick="openPage('college-12-chemistry.html')">
-
-                <div class="icon">⚗️</div>
-
-                <h4>12वी Chemistry</h4>
-
-                <p>Class 12 Chemistry.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="12 physics"
-                 onclick="openPage('college-12-physics.html')">
-
-                <div class="icon">⚡</div>
-
-                <h4>12वी Physics</h4>
-
-                <p>Class 12 Physics.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="12 math mathematics"
-                 onclick="openPage('college-12-math.html')">
-
-                <div class="icon">📐</div>
-
-                <h4>12वी Mathematics</h4>
-
-                <p>Class 12 Mathematics.</p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- SKILLS -->
-
-    <section class="category">
-
-        <div class="category-title">
-            <h3>💻 Skills & Languages</h3>
-            <span>Build Skills</span>
-        </div>
-
-        <div class="grid">
-
-            <div class="card"
-                 data-search="coding programming code arena"
-                 onclick="openPage('code-arena.html')">
-
-                <div class="icon">💻</div>
-
-                <h4>Code Arena</h4>
-
-                <p>
-                    Practice coding and programming challenges.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="learn coding programming"
-                 onclick="openPage('learn-coding.html')">
-
-                <div class="icon">👨‍💻</div>
-
-                <h4>Learn Coding</h4>
-
-                <p>
-                    Learn programming step by step.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="language languages marathi hindi english"
-                 onclick="openPage('language-study.html')">
-
-                <div class="icon">🌐</div>
-
-                <h4>Language Study</h4>
-
-                <p>
-                    Learn and practice different languages.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="history civics geography social science"
-                 onclick="openPage('history-civics-geography.html')">
-
-                <div class="icon">🌍</div>
-
-                <h4>Social Science</h4>
-
-                <p>
-                    History, Civics and Geography learning.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- SPECIAL -->
-
-    <section class="category">
-
-        <div class="category-title">
-            <h3>🚀 Special Features</h3>
-            <span>Explore More</span>
-        </div>
-
-        <div class="grid">
-
-            <div class="card"
-                 data-search="science game science explorer chemistry"
-                 onclick="openPage('science-game.html')">
-
-                <div class="icon">🧪</div>
-
-                <h4>Science Explorer</h4>
-
-                <p>
-                    Learn science through an interactive game.
-                </p>
-
-                <span class="open">Play →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="notes create notes writing"
-                 onclick="openPage('create.html')">
-
-                <div class="icon">📝</div>
-
-                <h4>Notes</h4>
-
-                <p>
-                    Create and manage your learning notes.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="interview cricket drills ai interview job business career"
-                 onclick="openPage('cricket-drills.html')">
-
-                <div class="icon">🎤</div>
-
-                <h4>Interview</h4>
-
-                <p>
-                    Practice interviews and improve your confidence.
-                </p>
-
-                <span class="open">Start →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="live classes live class teacher"
-                 onclick="openPage('live-classes.html')">
-
-                <div class="icon">🔴</div>
-
-                <h4>Live Classes</h4>
-
-                <p>
-                    Access live learning sessions.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="cricket sports practice drills"
-                 onclick="openPage('cricket-drills.html')">
-
-                <div class="icon">🏏</div>
-
-                <h4>Cricket Drills</h4>
-
-                <p>
-                    Cricket practice and skill drills.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-
-            <div class="card"
-                 data-search="trading finance market learning"
-                 onclick="openPage('trading.html')">
-
-                <div class="icon">📈</div>
-
-                <h4>Trading</h4>
-
-                <p>
-                    Learn trading concepts and basics.
-                </p>
-
-                <span class="open">Learn →</span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- PROFILE -->
-
-    <section class="category">
-
-        <div class="category-title">
-            <h3>👤 Account</h3>
-            <span>Your Space</span>
-        </div>
-
-        <div class="grid">
-
-            <div class="card"
-                 data-search="profile account student"
-                 onclick="openPage('profile.html')">
-
-                <div class="icon">👤</div>
-
-                <h4>Profile</h4>
-
-                <p>
-                    Manage your GyanSetu profile and settings.
-                </p>
-
-                <span class="open">Open →</span>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- SEARCH EMPTY -->
-
-    <div class="no-result" id="noResult">
-
-        <div>🔍</div>
-
-        <h3>No feature found</h3>
-
-        <p>
-            Try searching another subject or feature.
-        </p>
-
-    </div>
-
-</main>
-
-
-<footer class="footer">
-
-    Made with ❤️ for <b>GyanSetu</b>
-
-</footer>
-
+  </div>
+  <div class="chips" id="cats"></div>
 </div>
 
+<div id="home">
+  <div class="sec">
+    <div class="lbl">Recent searches <a onclick="clearRecent()">Clear</a></div>
+    <div class="tags" id="recent"></div>
+    <div class="lbl">Popular</div>
+    <div class="tags" id="pop"></div>
+  </div>
+</div>
+<div class="sec" id="out"></div>
+</div>
 
 <script>
+/* =====================================================
+   APP INDEX: navin feature add karaychi tar ithe ek line add kara
+   t=naav, c=category, d=vivaran, k=keywords (Marathi/English/Roman),
+   u=page link (tumchya file nusar badla), i=icon,
+   soon:true = "Coming soon", hidden:true = search madhe disnar nahi
+===================================================== */
+const APP=[
+ // ---- Home ----
+ {t:"Interviews",c:"Career",i:"🎤",d:"Interview preparation aani mulakhat",k:"interview mulakhat mulakat job question answer",u:"interviews.html"},
+ {t:"Channels",c:"Videos",i:"📺",d:"Shaikshanik channels",k:"channel channels chaneel youtube",u:"channels.html"},
+ {t:"Videos",c:"Videos",i:"🎬",d:"Shikshanache video",k:"video videos vdo lecture",u:"videos.html"},
+ {t:"Live Classes",c:"Classes",i:"🔴",d:"Sir cha live class, hand raise, class chat, notes, timer",k:"live class classes vargat sir teacher camera hand raise chat timer",u:"liveclasses.html"},
+ {t:"AI Study",c:"AI",i:"✨",d:"Smart Study: AI Teacher, Smart Notes, Practice Quiz, Study Modes",k:"ai study smart teacher notes quiz practice abhyas",u:"smartstudy.html"},
+ {t:"Extra Search",c:"Tools",i:"🔎",d:"Adhik shodh aani mahiti",k:"extra search shodh mahiti information",u:"extrasearch.html"},
+ {t:"Skill Hub",c:"Career",i:"🛠️",d:"200+ skills shika",k:"skill skills hub kaushalya shikna course 200",u:"skillhub.html"},
+ {t:"Colleges",c:"Career",i:"🏫",d:"College mahiti aani admission",k:"college colleges mahavidyalay admission praveshan",u:"colleges.html"},
+ {t:"Trading Study",c:"Career",i:"📈",d:"Share market aani trading shika",k:"trading share market stock investment gunvanuk",u:"trading.html"},
+ {t:"App Info",c:"App",i:"ℹ️",d:"App chi mahiti",k:"app info about mahiti",u:"appinfo.html"},
+ {t:"AI Saathi",c:"AI",i:"🤖",d:"Tumcha AI sobati",k:"ai saathi sathi friend mitra chatbot",u:"aisaathi.html"},
+ // ---- Doubt ----
+ {t:"Doubt Desk",c:"AI",i:"🤔",d:"Koni pan doubt vichara: shala te padvi. Voice, code, short notes",k:"doubt shanka prashna question vichara solve samajla problem",u:"doubt.html"},
+ // ---- Education ----
+ {t:"Board Classes",c:"Education",i:"📚",d:"Board che vargh aani abhyas",k:"board class vargh ssc hsc 10 12 abhyas",u:"board.html"},
+ {t:"Basic Maths Test",c:"Education",i:"🧮",d:"Ganit chi basic test",k:"basic maths math ganit test pariksha",u:"mathtest.html"},
+ {t:"Class 11 & 12 Maths",c:"Education",i:"📐",d:"11vi 12vi cha purn Maths syllabus",k:"11 12 maths ganit syllabus bara akravi",u:"maths1112.html"},
+ {t:"Science Explore Game",c:"Education",i:"🔬",d:"Khel khelat vidnyan shika",k:"science vidnyan explore game khel",u:"scigame.html"},
+ {t:"Language Study",c:"Education",i:"🗣️",d:"Marathi, Hindi, English bhasha shika",k:"language bhasha marathi hindi english grammar vyakaran",u:"language.html"},
+ {t:"Basic Maths Study",c:"Education",i:"➕",d:"Ganit cha pahila abhyas",k:"basic maths ganit study berij vajabaki",u:"mathstudy.html"},
+ // ---- Social ----
+ {t:"My Profile",c:"Social",i:"👤",d:"Tumcha profile",k:"profile maza majha account user naav",u:"profile.html"},
+ {t:"Messages",c:"Social",i:"💬",d:"Mitrana message pathva",k:"message messages chat sandesh msg",u:"messages.html"},
+ {t:"Users",c:"Social",i:"👥",d:"Dusrya vaparkartyanche profile",k:"users students vidyarthi profiles friends mitra",u:"users.html"},
+ // ---- Special ----
+ {t:"Navratri Special",c:"Special",i:"🪔",d:"Navratri vishesh",k:"navratri special utsav festival",u:"navratri.html",soon:true},
+ {t:"Leaderboard",c:"Social",i:"🏆",d:"Top vidyarthi",k:"leaderboard rank top",u:"leaderboard.html",hidden:true}
+];
+const POP=["Live Classes","Doubt","Maths","Skill Hub","Interview","Videos"];
 
-/* OPEN PAGE */
+const $=id=>document.getElementById(id);
+const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+const norm=s=>String(s).toLowerCase().normalize("NFC").trim();
+const user=()=>localStorage.getItem("username")||"guest";
+let cat="All";
 
-function openPage(page){
+/* user che jun doubts pan search madhe yetat */
+function myDoubts(){
+  try{return JSON.parse(localStorage.getItem("gs_doubts_"+user())||"[]").map(x=>({t:x.question.slice(0,70),c:"My Doubts",i:"🕘",d:(x.subject||"")+" • tumcha doubt",k:x.question+" "+(x.subject||""),u:"doubt.html"}))}catch(e){return[]}
+}
+const all=()=>APP.filter(x=>!x.hidden).concat(myDoubts());
 
-    window.location.href = page;
-
+function score(x,toks){
+  const T=norm(x.t),K=norm(x.k),D=norm(x.d);let s=0;
+  for(const w of toks){
+    let h=0;
+    if(T.startsWith(w))h=10;else if(T.includes(w))h=7;
+    else if(K.split(/\s+/).some(k=>k.startsWith(w)))h=5;
+    else if(K.includes(w))h=3;else if(D.includes(w))h=2;
+    else if(w.length>3&&fuzzy(w,K.split(/\s+/)))h=1;
+    if(!h)return 0;s+=h;
+  }
+  return s;
+}
+function fuzzy(w,words){ // 1 akshar chukla tari sapadel
+  return words.some(k=>Math.abs(k.length-w.length)<=1&&lev(w,k)<=1);
+}
+function lev(a,b){const m=[];for(let i=0;i<=b.length;i++)m[i]=[i];for(let j=0;j<=a.length;j++)m[0][j]=j;
+  for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)m[i][j]=b[i-1]==a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1],m[i][j-1],m[i-1][j])+1;
+  return m[b.length][a.length]}
+function hl(text,toks){
+  let s=esc(text);
+  toks.forEach(w=>{if(!w)return;const r=new RegExp("("+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");s=s.replace(r,"<mark>$1</mark>")});
+  return s;
 }
 
-
-/* BACK */
-
-function goBack(){
-
-    if(document.referrer){
-
-        history.back();
-
-    }else{
-
-        window.location.href = "home.html";
-
-    }
-
+function run(save){
+  const v=$("q").value,q=norm(v);
+  $("clr").style.display=v?"block":"none";
+  if(!q){$("out").innerHTML="";$("home").style.display="block";drawHome();return}
+  $("home").style.display="none";
+  const toks=q.split(/\s+/);
+  let r=all().map(x=>({x,s:score(x,toks)})).filter(o=>o.s>0&&(cat=="All"||o.x.c==cat)).sort((a,b)=>b.s-a.s);
+  if(!r.length){
+    $("out").innerHTML=`<div class="empty"><b>🔍</b>"${esc(v)}" sathi kahi sapadla nahi.<br>Vegla shabd vaprun pahaa, udaharan: <i>maths, video, class, doubt</i></div>`;
+    return;
+  }
+  $("out").innerHTML=`<div class="cnt">${r.length} nikal</div>`+r.map(o=>{const x=o.x;
+    return `<a class="res" href="${esc(x.u)}" onclick="addRecent('${esc(v).replace(/'/g,"")}')">
+      <div class="ic">${x.i}</div>
+      <div class="t"><b>${hl(x.t,toks)}</b><small>${hl(x.d,toks)}</small></div>
+      <span class="cat ${x.soon?'soon':''}">${x.soon?'Soon':esc(x.c)}</span></a>`}).join("");
 }
 
-
-/* SEARCH */
-
-function searchFeatures(){
-
-    const input =
-        document.getElementById("searchInput")
-        .value
-        .toLowerCase()
-        .trim();
-
-    const cards =
-        document.querySelectorAll(".card");
-
-    let visible = 0;
-
-    cards.forEach(card => {
-
-        const text =
-            (
-                card.innerText +
-                " " +
-                card.dataset.search
-            ).toLowerCase();
-
-        if(text.includes(input)){
-
-            card.style.display = "";
-
-            visible++;
-
-        }else{
-
-            card.style.display = "none";
-
-        }
-
-    });
-
-
-    const categories =
-        document.querySelectorAll(".category");
-
-    categories.forEach(category => {
-
-        const visibleCards =
-            category.querySelectorAll(
-                ".card:not([style*='display: none'])"
-            ).length;
-
-        if(input && visibleCards === 0){
-
-            category.style.display = "none";
-
-        }else{
-
-            category.style.display = "";
-
-        }
-
-    });
-
-
-    const noResult =
-        document.getElementById("noResult");
-
-    if(input && visible === 0){
-
-        noResult.style.display = "block";
-
-    }else{
-
-        noResult.style.display = "none";
-
-    }
-
+/* categories */
+function drawCats(){
+  const cs=["All",...new Set(APP.filter(x=>!x.hidden).map(x=>x.c))];
+  $("cats").innerHTML=cs.map(c=>`<button class="chip ${c==cat?'on':''}" onclick="setCat('${c}')">${c}</button>`).join("");
+}
+function setCat(c){cat=c;drawCats();
+  if(!$("q").value.trim()&&c!="All"){ // search nasel tar tya category che sagle dakhva
+    $("home").style.display="none";
+    $("out").innerHTML=all().filter(x=>x.c==c).map(x=>`<a class="res" href="${esc(x.u)}"><div class="ic">${x.i}</div><div class="t"><b>${esc(x.t)}</b><small>${esc(x.d)}</small></div></a>`).join("");
+  }else if(!$("q").value.trim()){$("out").innerHTML="";$("home").style.display="block"}
+  else run();
 }
 
+/* recent + popular */
+const RK="gs_recent_search";
+const getR=()=>{try{return JSON.parse(localStorage.getItem(RK)||"[]")}catch(e){return[]}};
+function addRecent(v){if(!v)return;const a=getR().filter(x=>x!=v);a.unshift(v);localStorage.setItem(RK,JSON.stringify(a.slice(0,8)))}
+function clearRecent(){localStorage.removeItem(RK);drawHome()}
+function drawHome(){
+  const r=getR();
+  $("recent").innerHTML=r.length?r.map(x=>`<button class="tag" onclick="use('${esc(x)}')">🕘 ${esc(x)}</button>`).join(""):'<span style="color:var(--mut);font-size:13px">Ajun kahi nahi</span>';
+  $("pop").innerHTML=POP.map(x=>`<button class="tag" onclick="use('${x}')">🔥 ${x}</button>`).join("");
+}
+function use(v){$("q").value=v;run();$("q").focus()}
+function clr(){$("q").value="";run();$("q").focus()}
 
-/* TOTAL FEATURE COUNT */
+/* voice */
+function voice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("Voice ya browser madhe nahi");return}
+  const m={"हिंदी":"hi-IN","English":"en-IN"};
+  const r=new SR();r.lang=m[localStorage.getItem("studyLanguage")]||"mr-IN";
+  r.onresult=e=>{$("q").value=e.results[0][0].transcript;run()};
+  r.start();
+}
 
-document.addEventListener("DOMContentLoaded",function(){
-
-    const total =
-        document.querySelectorAll(".card").length;
-
-    document.getElementById("totalCount")
-        .innerText = total + "+";
-
-});
-
+drawCats();drawHome();
+if(location.hash.length>1){use(decodeURIComponent(location.hash.slice(1)))} // search.html#maths
 </script>
-
 </body>
 </html>
