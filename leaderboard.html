@@ -2,93 +2,561 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0f172a">
 <title>GyanSetu - AI Smart Search</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
-:root{--b:#2563eb;--ink:#0f172a;--mut:#64748b;--bg:#f1f5f9;--line:#e2e8f0}
-body{background:var(--bg);color:var(--ink);min-height:100vh}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif
+}
+
+:root{
+  --b:#2563eb;
+  --ink:#0f172a;
+  --mut:#64748b;
+  --bg:#f1f5f9;
+  --line:#e2e8f0
+}
+
+body{
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  -webkit-tap-highlight-color:transparent
+}
+
 button,input{font:inherit}
 button{cursor:pointer}
-.app{max-width:480px;margin:auto;min-height:100vh;padding-bottom:35px}
-.top{position:sticky;top:0;z-index:50;background:var(--bg);padding:12px 15px 8px}
-.bar{display:flex;gap:8px;align-items:center}
-.ib{border:1px solid var(--line);background:#fff;width:42px;height:42px;border-radius:12px;font-size:23px;color:var(--ink);flex:none}
-.box{flex:1;display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:15px;padding:0 10px;height:47px;gap:7px;min-width:0}
-.box:focus-within{border-color:var(--b);box-shadow:0 0 0 3px #2563eb20}
-.box input{flex:1;border:0;outline:0;font-size:14px;background:none;color:var(--ink);min-width:0}
-.box button{border:0;background:none;font-size:19px;padding:3px}
-.hero{margin:12px 15px 0;padding:19px;border-radius:20px;color:#fff;background:linear-gradient(135deg,#0f172a,#1e40af 65%,#3b82f6);box-shadow:0 10px 24px #1e3a8a24}
-.hero .ai{font-size:11px;background:#ffffff20;border:1px solid #ffffff30;padding:5px 9px;border-radius:20px;display:inline-block}
-.hero h1{font-size:23px;margin-top:11px}
-.hero p{font-size:13px;line-height:1.6;opacity:.88;margin-top:5px}
-.airow{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:12px;color:#dbeafe}
-.dot{height:8px;width:8px;border-radius:50%;background:#4ade80}
+
+.app{
+  max-width:480px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:115px
+}
+
+/* TOP SEARCH BAR */
+.top{
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:rgba(241,245,249,.88);
+  -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+  padding:12px 15px 8px
+}
+
+.bar{
+  display:flex;
+  gap:8px;
+  align-items:center
+}
+
+.ib{
+  border:1px solid var(--line);
+  background:#fff;
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  font-size:23px;
+  color:var(--ink);
+  flex:none
+}
+
+.box{
+  flex:1;
+  display:flex;
+  align-items:center;
+  background:#fff;
+  border:1.5px solid var(--line);
+  border-radius:15px;
+  padding:0 10px;
+  height:47px;
+  gap:7px;
+  min-width:0
+}
+
+.box:focus-within{
+  border-color:var(--b);
+  box-shadow:0 0 0 3px #2563eb20
+}
+
+.box input{
+  flex:1;
+  border:0;
+  outline:0;
+  font-size:14px;
+  background:none;
+  color:var(--ink);
+  min-width:0
+}
+
+.box button{
+  border:0;
+  background:none;
+  font-size:19px;
+  padding:3px
+}
+
+/* HERO */
+.hero{
+  margin:12px 15px 0;
+  padding:19px;
+  border-radius:20px;
+  color:#fff;
+  background:linear-gradient(135deg,#0f172a,#1e40af 65%,#3b82f6);
+  box-shadow:0 10px 24px #1e3a8a24
+}
+
+.hero .ai{
+  font-size:11px;
+  background:#ffffff20;
+  border:1px solid #ffffff30;
+  padding:5px 9px;
+  border-radius:20px;
+  display:inline-block
+}
+
+.hero h1{
+  font-size:23px;
+  margin-top:11px
+}
+
+.hero p{
+  font-size:13px;
+  line-height:1.6;
+  opacity:.88;
+  margin-top:5px
+}
+
+.airow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:14px;
+  font-size:12px;
+  color:#dbeafe
+}
+
+.dot{
+  height:8px;
+  width:8px;
+  border-radius:50%;
+  background:#4ade80
+}
+
+/* CATEGORIES */
 .sec{padding:6px 15px}
-.chips{display:flex;gap:7px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+
+.chips{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding:10px 0 4px;
+  scrollbar-width:none
+}
+
 .chips::-webkit-scrollbar{display:none}
-.chip{border:1px solid var(--line);background:#fff;border-radius:11px;padding:8px 12px;font-size:12px;white-space:nowrap;color:var(--ink)}
-.chip.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:700}
-.lbl{font-size:12px;font-weight:750;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin:17px 0 9px;display:flex;justify-content:space-between;align-items:center}
-.lbl button{color:var(--b);border:0;background:none;font-size:12px;font-weight:650}
-.tags{display:flex;flex-wrap:wrap;gap:7px}
-.tag{border:1px solid var(--line);background:#fff;border-radius:22px;padding:8px 12px;font-size:12px;color:var(--ink)}
-.card{margin:12px 15px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px}
-.res{display:flex;gap:11px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:9px;text-decoration:none;color:var(--ink);animation:up .2s}
-@keyframes up{from{opacity:0;transform:translateY(6px)}}
+
+.chip{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:11px;
+  padding:8px 12px;
+  font-size:12px;
+  white-space:nowrap;
+  color:var(--ink)
+}
+
+.chip.on{
+  background:var(--ink);
+  border-color:var(--ink);
+  color:#fff;
+  font-weight:700
+}
+
+.lbl{
+  font-size:12px;
+  font-weight:750;
+  color:var(--mut);
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin:17px 0 9px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.lbl button{
+  color:var(--b);
+  border:0;
+  background:none;
+  font-size:12px;
+  font-weight:650
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px
+}
+
+.tag{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:22px;
+  padding:8px 12px;
+  font-size:12px;
+  color:var(--ink)
+}
+
+/* PAGE CARDS */
+.card{
+  margin:12px 15px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:14px
+}
+
+.res{
+  display:flex;
+  gap:11px;
+  align-items:center;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:12px;
+  margin-bottom:9px;
+  text-decoration:none;
+  color:var(--ink);
+  animation:up .2s
+}
+
+@keyframes up{
+  from{opacity:0;transform:translateY(6px)}
+}
+
 .res:active{background:#f8fafc}
-.ic{width:45px;height:45px;border-radius:13px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:23px;flex:none}
-.res .t{flex:1;min-width:0}
-.res b{display:block;font-size:14px}
-.res small{display:block;color:var(--mut);font-size:12px;margin-top:3px;line-height:1.5}
-.cat{font-size:10px;background:#f1f5f9;color:var(--mut);padding:4px 7px;border-radius:8px;font-weight:700;white-space:nowrap}
-.empty{text-align:center;color:var(--mut);padding:30px 14px;font-size:13px;line-height:1.7}
-.empty b{display:block;font-size:32px;margin-bottom:6px}
-.cnt{font-size:12px;color:var(--mut);margin:9px 1px}
-.airesult{border:1px solid #bfdbfe;background:#eff6ff;border-radius:15px;padding:13px;margin:12px 0}
-.airesult h3{font-size:14px;color:#1d4ed8;margin-bottom:7px}
-.airesult p{font-size:13px;line-height:1.7;white-space:pre-wrap}
-.airesult button{margin-top:9px;background:#2563eb;color:#fff;border:0;border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700}
-.think{display:flex;gap:6px;justify-content:center;padding:22px}
-.think i{width:9px;height:9px;border-radius:50%;background:var(--b);animation:bn 1s infinite}
-.think i:nth-child(2){animation-delay:.15s}.think i:nth-child(3){animation-delay:.3s}
-@keyframes bn{50%{transform:translateY(-7px);opacity:.4}}
-.footer{text-align:center;color:var(--mut);font-size:11px;padding:20px 10px}
+
+.ic{
+  width:45px;
+  height:45px;
+  border-radius:13px;
+  background:#eff6ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  flex:none
+}
+
+.res .t{
+  flex:1;
+  min-width:0
+}
+
+.res b{
+  display:block;
+  font-size:14px
+}
+
+.res small{
+  display:block;
+  color:var(--mut);
+  font-size:12px;
+  margin-top:3px;
+  line-height:1.5
+}
+
+.cat{
+  font-size:10px;
+  background:#f1f5f9;
+  color:var(--mut);
+  padding:4px 7px;
+  border-radius:8px;
+  font-weight:700;
+  white-space:nowrap
+}
+
+.empty{
+  text-align:center;
+  color:var(--mut);
+  padding:30px 14px;
+  font-size:13px;
+  line-height:1.7
+}
+
+.empty b{
+  display:block;
+  font-size:32px;
+  margin-bottom:6px
+}
+
+.cnt{
+  font-size:12px;
+  color:var(--mut);
+  margin:9px 1px
+}
+
+/* AI RESULT */
+.airesult{
+  border:1px solid #bfdbfe;
+  background:#eff6ff;
+  border-radius:15px;
+  padding:13px;
+  margin:12px 0
+}
+
+.airesult h3{
+  font-size:14px;
+  color:#1d4ed8;
+  margin-bottom:7px
+}
+
+.airesult p{
+  font-size:13px;
+  line-height:1.7;
+  white-space:pre-wrap
+}
+
+.think{
+  display:flex;
+  gap:6px;
+  justify-content:center;
+  padding:22px
+}
+
+.think i{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--b);
+  animation:bn 1s infinite
+}
+
+.think i:nth-child(2){animation-delay:.15s}
+.think i:nth-child(3){animation-delay:.3s}
+
+@keyframes bn{
+  50%{transform:translateY(-7px);opacity:.4}
+}
+
+.footer{
+  text-align:center;
+  color:var(--mut);
+  font-size:11px;
+  padding:20px 10px
+}
+
 .hide{display:none!important}
-mark{background:#fef08a;color:inherit;border-radius:3px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:11px 16px;border-radius:12px;font-size:12px;z-index:100;display:none;max-width:90%;text-align:center}
+
+mark{
+  background:#fef08a;
+  color:inherit;
+  border-radius:3px
+}
+
+.toast{
+  position:fixed;
+  bottom:100px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0f172a;
+  color:#fff;
+  padding:11px 16px;
+  border-radius:12px;
+  font-size:12px;
+  z-index:1100;
+  display:none;
+  max-width:90%;
+  text-align:center
+}
+
+/* ===================================
+   LIQUID GLASS BOTTOM NAVIGATION
+=================================== */
+
+.bottom-nav{
+  position:fixed;
+  left:50%;
+  bottom:calc(12px + env(safe-area-inset-bottom));
+  transform:translateX(-50%);
+
+  width:calc(100% - 28px);
+  max-width:440px;
+  min-height:68px;
+  padding:7px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  gap:5px;
+
+  z-index:1000;
+
+  background:rgba(255,255,255,.70);
+  border:1px solid rgba(255,255,255,.88);
+  border-radius:25px;
+
+  -webkit-backdrop-filter:blur(28px) saturate(180%);
+  backdrop-filter:blur(28px) saturate(180%);
+
+  box-shadow:
+    0 8px 30px rgba(15,23,42,.16),
+    0 2px 7px rgba(15,23,42,.05),
+    inset 0 1px 1px rgba(255,255,255,.95);
+
+  isolation:isolate
+}
+
+.bottom-nav::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(
+    145deg,
+    rgba(255,255,255,.55),
+    rgba(255,255,255,.06) 55%,
+    rgba(147,197,253,.12)
+  );
+  z-index:-1
+}
+
+.bottom-nav button{
+  position:relative;
+  flex:1;
+  min-width:0;
+  height:53px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+
+  border:0;
+  border-radius:18px;
+  background:transparent;
+  color:#64748b;
+
+  font-size:10px;
+  font-weight:650;
+
+  transition:
+    background .22s ease,
+    transform .22s ease,
+    color .22s ease,
+    box-shadow .22s ease;
+
+  -webkit-tap-highlight-color:transparent
+}
+
+.bottom-nav .nav-icon{
+  font-size:22px;
+  line-height:1.1;
+  transition:transform .22s ease
+}
+
+.bottom-nav button.active{
+  color:#1d4ed8;
+  background:rgba(37,99,235,.13);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.8),
+    0 2px 8px rgba(37,99,235,.05)
+}
+
+.bottom-nav button.active .nav-icon{
+  transform:translateY(-2px) scale(1.08)
+}
+
+.bottom-nav button:active{
+  transform:scale(.92)
+}
+
+.bottom-nav button:focus-visible{
+  outline:2px solid #2563eb;
+  outline-offset:2px
+}
+
+@media(prefers-reduced-motion:reduce){
+  .bottom-nav button,
+  .bottom-nav .nav-icon,
+  .res{
+    transition:none;
+    animation:none
+  }
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <header class="top">
   <div class="bar">
-    <button class="ib" onclick="history.length>1?history.back():location.href='home.html'" aria-label="Back">‹</button>
+
+    <button class="ib"
+      onclick="history.length>1?history.back():location.href='home.html'"
+      aria-label="Back">‹</button>
+
     <div class="box">
       <span>🔍</span>
-      <input id="q" placeholder="काहीही विचारा किंवा शोधा..." autocomplete="off">
-      <button id="clr" class="hide" onclick="clearQuery()" aria-label="Clear">✕</button>
-      <button id="mic" onclick="voice()" aria-label="Voice search">🎤</button>
+
+      <input
+        id="q"
+        placeholder="काहीही विचारा किंवा शोधा..."
+        autocomplete="off"
+        aria-label="Search GyanSetu">
+
+      <button
+        id="clr"
+        class="hide"
+        onclick="clearQuery()"
+        aria-label="Clear">✕</button>
+
+      <button
+        id="mic"
+        onclick="voice()"
+        aria-label="Voice search">🎤</button>
     </div>
   </div>
 </header>
 
 <section class="hero">
   <span class="ai">✨ GYANSETU AI SEARCH</span>
+
   <h1>काय शोधायचं आहे?</h1>
-  <p>तुमचा प्रश्न तुमच्या भाषेत लिहा. AI तुमच्या गरजेनुसार GyanSetu वरील संबंधित Pages शोधण्याचा प्रयत्न करेल.</p>
-  <div class="airow"><span class="dot"></span><span>Smart Search · Education · AI · Career</span></div>
+
+  <p>
+    तुमचा प्रश्न तुमच्या भाषेत लिहा.
+    AI तुमच्या गरजेनुसार GyanSetu वरील
+    संबंधित Pages शोधण्याचा प्रयत्न करेल.
+  </p>
+
+  <div class="airow">
+    <span class="dot"></span>
+    <span>Smart Search · Education · AI · Career</span>
+  </div>
 </section>
 
 <section class="sec" id="home">
+
   <div class="lbl">Categories</div>
   <div class="chips" id="cats"></div>
 
-  <div class="lbl">🕘 Recent searches <button onclick="clearRecent()">Clear</button></div>
+  <div class="lbl">
+    🕘 Recent searches
+    <button onclick="clearRecent()">Clear</button>
+  </div>
+
   <div class="tags" id="recent"></div>
 
   <div class="lbl">🔥 Popular searches</div>
@@ -96,6 +564,7 @@ mark{background:#fef08a;color:inherit;border-radius:3px}
 
   <div class="lbl">🚀 Explore GyanSetu</div>
   <div id="featured"></div>
+
 </section>
 
 <section class="sec">
@@ -104,8 +573,63 @@ mark{background:#fef08a;color:inherit;border-radius:3px}
   <div id="out"></div>
 </section>
 
-<div class="footer">GyanSetu · Learn Something New Every Day 📚</div>
+<div class="footer">
+  GyanSetu · Learn Something New Every Day 📚
 </div>
+
+</div>
+
+<!-- LIQUID GLASS NAVIGATION -->
+
+<nav class="bottom-nav" aria-label="Main navigation">
+
+  <button
+    type="button"
+    onclick="goNav('home.html')"
+    aria-label="Home">
+
+    <span class="nav-icon">⌂</span>
+    <span>Home</span>
+  </button>
+
+  <button
+    type="button"
+    class="active"
+    aria-current="page"
+    aria-label="Search">
+
+    <span class="nav-icon">⌕</span>
+    <span>Search</span>
+  </button>
+
+  <button
+    type="button"
+    onclick="goNav('ai-study.html')"
+    aria-label="AI Study">
+
+    <span class="nav-icon">✧</span>
+    <span>AI Study</span>
+  </button>
+
+  <button
+    type="button"
+    onclick="goNav('live-classes.html')"
+    aria-label="Live Classes">
+
+    <span class="nav-icon">▣</span>
+    <span>Classes</span>
+  </button>
+
+  <button
+    type="button"
+    onclick="goNav('profile.html')"
+    aria-label="Profile">
+
+    <span class="nav-icon">♙</span>
+    <span>Profile</span>
+  </button>
+
+</nav>
 
 <div class="toast" id="toast"></div>
 
@@ -113,454 +637,816 @@ mark{background:#fef08a;color:inherit;border-radius:3px}
 "use strict";
 
 const $=id=>document.getElementById(id);
+
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
 }[c]));
 
 const norm=s=>String(s??"").toLowerCase()
- .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
- .replace(/[।,!?;:()[\]{}"'`]/g," ")
- .replace(/\s+/g," ").trim();
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g,"")
+  .replace(/[।,!?;:()[\]{}"'`]/g," ")
+  .replace(/\s+/g," ")
+  .trim();
 
-const user=()=>localStorage.getItem("username")||"guest";
 const RK="gs_recent_search";
+
 let category="All";
 let searchTimer=null;
 let requestNo=0;
 let recognition=null;
 let isListening=false;
 
+/* BOTTOM NAVIGATION */
+
+function goNav(page){
+  if(!page)return;
+  window.location.href=page;
+}
+
+/* TOAST */
+
 function toast(message){
- const el=$("toast");
- el.textContent=message;
- el.style.display="block";
- clearTimeout(toast.timer);
- toast.timer=setTimeout(()=>el.style.display="none",2300);
+  const el=$("toast");
+
+  el.textContent=message;
+  el.style.display="block";
+
+  clearTimeout(toast.timer);
+
+  toast.timer=setTimeout(()=>{
+    el.style.display="none";
+  },2300);
 }
 
 /*
- PAGE INDEX
- t = page title
- u = HTML filename
- c = category
- i = icon
- d = what the page does
- k = related words in multiple languages
+PAGE INDEX
+t = page title
+u = HTML filename
+c = category
+i = icon
+d = what the page does
+k = related words
 */
 
 const PAGES=[
- {t:"Home",u:"home.html",c:"App",i:"🏠",d:"GyanSetu चे मुख्य पान आणि सर्व फीचर्स",k:"home homepage main page ghar suruvat mukhya menu dashboard"},
- {t:"Basic Maths",u:"basic math.html",c:"Maths",i:"➕",d:"अगदी सुरुवातीपासून गणिताचा सराव आणि मूलभूत गणित शिकणे",k:"basic maths math ganit mathematics addition subtraction multiplication division berij vajabaki gunakar bhagakar basics practice"},
- {t:"Offline Study",u:"offline-study.html",c:"Education",i:"📴",d:"इंटरनेटशिवाय अभ्यास करण्याची सुविधा",k:"offline internet shivay without internet study abhyas"},
- {t:"Offline Maths",u:"offline-math.html",c:"Maths",i:"🧮",d:"ऑफलाइन गणिताचा अभ्यास",k:"offline maths ganit no internet"},
- {t:"Messages",u:"junkfile.html",c:"Social",i:"💬",d:"इतर वापरकर्त्यांना मेसेज पाठवणे आणि संवाद साधणे",k:"message messages chat msg sandesh mitra bolne communicate text"},
- {t:"Navratri Special",u:"navratrispacial.html",c:"Special",i:"🪔",d:"नवरात्री विशेष फीचर आणि काउंटडाउन टाइमर",k:"navratri navratri special garba festival countdown timer utsav"},
- {t:"AI Study",u:"ai-study.html",c:"AI",i:"🤖",d:"ChatGPT सारखा AI interface आणि AI सोबत संवाद",k:"ai artificial intelligence chatgpt chatbot ai teacher ask questions prashna assistant"},
- {t:"Board AI",u:"board-ai.html",c:"Education",i:"🎓",d:"दहावी बोर्ड परीक्षेची तयारी आणि शिकवणारा AI रोबोट",k:"10th tenth board ssc exam preparation pariksha board ai robot dahavi study"},
- {t:"Channels",u:"channel.html",c:"Social",i:"📢",d:"शिक्षक स्वतःचे Channels बनवून विद्यार्थ्यांना अपडेट्स देऊ शकतात",k:"channel channels teacher sir updates announcement notice broadcast students"},
- {t:"Code Arena",u:"code-arena.html",c:"Coding",i:"💻",d:"कोडिंगचा सराव आणि प्रोग्रामिंग प्रश्न",k:"code arena coding programming developer python javascript html css practice program"},
- {t:"Colleges",u:"colleges.html",c:"Career",i:"🏫",d:"AI च्या मदतीने योग्य कॉलेज शोधणे",k:"college colleges admission find college search course admission pravesh mahavidyalay"},
- {t:"Create Notes",u:"create.html",c:"Education",i:"📝",d:"स्वतःच्या नोट्स तयार करणे आणि सेव्ह करणे",k:"create notes note writing save notebook likhna notes maker"},
- {t:"Cricket Interview",u:"cricket-drills.html",c:"Cricket",i:"🏏",d:"AI तुमची मुलाखत घेतो आणि प्रश्न विचारतो",k:"cricket interview ai questions mock interview practice"},
- {t:"Discover Space",u:"discover-space.html",c:"Videos",i:"🎞️",d:"Live Class चे रेकॉर्डिंग जतन केलेले पाहणे",k:"recording recordings live class saved videos replay recorded lecture"},
- {t:"Cybersecurity Course",u:"hacker-course.html",c:"Coding",i:"🔐",d:"५० लेक्चर्सचा Cybersecurity अभ्यासक्रम",k:"cybersecurity cyber security ethical hacking hacker course 50 lectures internet safety"},
- {t:"History Civics Geography",u:"history-civics-geography.html",c:"Education",i:"🌍",d:"इतिहास, नागरिकशास्त्र आणि भूगोलाचा अभ्यास",k:"history itihas civics nagarikshastra geography bhugol social science"},
- {t:"Information",u:"information.html",c:"App",i:"ℹ️",d:"GyanSetu अॅपबद्दल माहिती",k:"information app info about gyansetu mahiti application"},
- {t:"Language Study",u:"language-study.html",c:"Education",i:"🗣️",d:"मराठी, हिंदी आणि इंग्रजी भाषा व अभ्यासक्रम",k:"language marathi hindi english grammar vyakaran bhasha syllabus vocabulary"},
- {t:"Learn",u:"learn.html",c:"Education",i:"📚",d:"विविध प्रकारच्या अभ्यासासाठी शैक्षणिक सामग्री",k:"learn learning study abhyas education lessons subjects learning material"},
- {t:"Learn Coding",u:"learn-coding.html",c:"Coding",i:"👨‍💻",d:"कोडिंग शिकणे आणि प्रोग्रामिंगचा सराव",k:"learn coding programming computer science html css javascript python code"},
- {t:"Live Classes",u:"live-classes.html",c:"Classes",i:"🔴",d:"बॅच तयार करून शिक्षक आणि विद्यार्थी Live अभ्यास करू शकतात",k:"live classes batch teacher sir student online class camera lecture teaching"},
- {t:"Math 1",u:"math-1.html",c:"Maths",i:"1️⃣",d:"पहिलीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 1 first class first standard"},
- {t:"Math 2",u:"math-2.html",c:"Maths",i:"2️⃣",d:"दुसरीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 2 second class"},
- {t:"Math 3",u:"math-3.html",c:"Maths",i:"3️⃣",d:"तिसरीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 3 third class"},
- {t:"Math 4",u:"math-4.html",c:"Maths",i:"4️⃣",d:"चौथीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 4 fourth class"},
- {t:"Math 5",u:"math-5.html",c:"Maths",i:"5️⃣",d:"पाचवीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 5 fifth class"},
- {t:"Math 6",u:"math-6.html",c:"Maths",i:"6️⃣",d:"सहावीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 6 sixth class"},
- {t:"Math 7",u:"math-7.html",c:"Maths",i:"7️⃣",d:"सातवीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 7 seventh class"},
- {t:"Math 8",u:"math-8.html",c:"Maths",i:"8️⃣",d:"आठवीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 8 eighth class"},
- {t:"Math 9",u:"math-9.html",c:"Maths",i:"9️⃣",d:"नववीच्या स्तराचा गणित अभ्यास",k:"math maths ganit 9 ninth class"},
- {t:"Math 10",u:"math-10.html",c:"Maths",i:"🔟",d:"दहावीच्या गणिताचा अभ्यास आणि बोर्ड तयारी",k:"math maths ganit 10 tenth class 10th ssc board"},
- {t:"Class 11 Biology",u:"college-11-biology.html",c:"11th-12th",i:"🧬",d:"अकरावी Biology अभ्यासक्रम आणि धडे",k:"11 11th eleventh biology जीवशास्त्र science"},
- {t:"Class 11 Physics",u:"college-11-physics.html",c:"11th-12th",i:"⚛️",d:"अकरावी Physics अभ्यासक्रम आणि धडे",k:"11 11th eleventh physics भौतिकशास्त्र science"},
- {t:"Class 11 Maths",u:"college-11-math.html",c:"11th-12th",i:"📐",d:"अकरावी Maths अभ्यासक्रम आणि गणित",k:"11 11th eleventh maths mathematics ganit"},
- {t:"Class 11 Chemistry",u:"college-11-chemistry.html",c:"11th-12th",i:"🧪",d:"अकरावी Chemistry अभ्यासक्रम आणि धडे",k:"11 11th eleventh chemistry rasayan science"},
- {t:"Class 11 HTML",u:"college-11-html.html",c:"11th-12th",i:"🌐",d:"अकरावीशी संबंधित HTML पेज",k:"11 11th html web"},
- {t:"Class 12 Biology",u:"college-12-biology.html",c:"11th-12th",i:"🧬",d:"बारावी Biology अभ्यासक्रम आणि धडे",k:"12 12th twelfth biology जीवशास्त्र science hsc"},
- {t:"Class 12 Physics",u:"college-12-physics.html",c:"11th-12th",i:"⚛️",d:"बारावी Physics अभ्यासक्रम आणि धडे",k:"12 12th twelfth physics भौतिकशास्त्र science hsc"},
- {t:"Class 12 Maths",u:"college-12-math.html",c:"11th-12th",i:"📐",d:"बारावी Maths अभ्यासक्रम आणि गणित",k:"12 12th twelfth maths mathematics ganit hsc"},
- {t:"Class 12 Chemistry",u:"college-12-chemistry.html",c:"11th-12th",i:"🧪",d:"बारावी Chemistry अभ्यासक्रम आणि धडे",k:"12 12th twelfth chemistry rasayan science hsc"},
- {t:"Class 12 HTML",u:"college-12-html.html",c:"11th-12th",i:"🌐",d:"बारावीशी संबंधित HTML पेज",k:"12 12th html web"},
- {t:"Profile",u:"profile.html",c:"Social",i:"👤",d:"स्वतःचे प्रोफाइल पाहणे",k:"profile my profile account majha account"},
- {t:"Science Game",u:"science-game.html",c:"Games",i:"🔬",d:"खेळातून विज्ञान शिकणे आणि Science Explore Game",k:"science game explore vidnyan experiment game learn"},
- {t:"Secret Admin",u:"secret-admin.html",c:"Tools",i:"⚙️",d:"अॅपमधील Admin संबंधित पेज",k:"admin administrator management"},
- {t:"Skills",u:"skills.html",c:"Career",i:"🛠️",d:"वेगवेगळी कौशल्ये शिकणे",k:"skills skill career kaushalya learn jobs"},
- {t:"Smart Study / Doubt Desk",u:"smart-study.html",c:"AI",i:"🧠",d:"Doubt विचारणे आणि अभ्यासात मदत मिळवणे",k:"doubt desk doubt solving shanka question answer ai study homework solve"},
- {t:"Start",u:"start.html",c:"App",i:"🚀",d:"अॅप सुरू करण्याचे पेज",k:"start welcome launch suruvat"},
- {t:"Starwalk",u:"starwalk.html",c:"Science",i:"🌌",d:"तारे, अंतराळ आणि खगोलशास्त्राशी संबंधित माहिती",k:"star stars space astronomy universe planet tara nakshatra"},
- {t:"Test",u:"test.html",c:"Education",i:"📋",d:"मोठी टेस्ट आणि प्रश्नांचा सराव",k:"test exam mock test practice questions pariksha quiz"},
- {t:"Trading",u:"trading.html",c:"Career",i:"📈",d:"शेअर मार्केट आणि Trading शिकणे",k:"trading share market stocks stock market investing finance learning"},
- {t:"User Profile",u:"user-profile.html",c:"Social",i:"🪪",d:"इतर वापरकर्त्याचे प्रोफाइल पाहणे",k:"user profile account student person"},
- {t:"Username / Logout",u:"username.html",c:"App",i:"🚪",d:"Username आणि Logout संबंधित पर्याय",k:"username logout log out sign out account exit"},
- {t:"Users",u:"users.html",c:"Social",i:"👥",d:"इतर वापरकर्त्यांची प्रोफाइल पाहणे",k:"users students people profiles friends vidyarthi"},
- {t:"Videos",u:"video.html",c:"Videos",i:"🎬",d:"व्हिडिओ पोस्ट करणे आणि पाहणे",k:"video videos post upload clip reels"},
- {t:"AI Study Chat",u:"ai-study.html",c:"AI",i:"✨",d:"AI सोबत अभ्यासविषयक प्रश्नांवर संवाद",k:"ai chat teacher explain question answer chatbot"}
+
+ {t:"Home",u:"home.html",c:"App",i:"🏠",
+  d:"GyanSetu चे मुख्य पान आणि सर्व फीचर्स",
+  k:"home homepage main page ghar suruvat mukhya menu dashboard"},
+
+ {t:"Basic Maths",u:"basic math.html",c:"Maths",i:"➕",
+  d:"अगदी सुरुवातीपासून गणिताचा सराव आणि मूलभूत गणित शिकणे",
+  k:"basic maths math ganit mathematics addition subtraction multiplication division berij vajabaki gunakar bhagakar basics practice"},
+
+ {t:"Offline Study",u:"offline-study.html",c:"Education",i:"📴",
+  d:"इंटरनेटशिवाय अभ्यास करण्याची सुविधा",
+  k:"offline internet shivay without internet study abhyas"},
+
+ {t:"Offline Maths",u:"offline-math.html",c:"Maths",i:"🧮",
+  d:"ऑफलाइन गणिताचा अभ्यास",
+  k:"offline maths ganit no internet"},
+
+ {t:"Messages",u:"junkfile.html",c:"Social",i:"💬",
+  d:"इतर वापरकर्त्यांना मेसेज पाठवणे आणि संवाद साधणे",
+  k:"message messages chat msg sandesh mitra bolne communicate text"},
+
+ {t:"Navratri Special",u:"navratrispacial.html",c:"Special",i:"🪔",
+  d:"नवरात्री विशेष फीचर आणि काउंटडाउन टाइमर",
+  k:"navratri navratri special garba festival countdown timer utsav"},
+
+ {t:"AI Study",u:"ai-study.html",c:"AI",i:"🤖",
+  d:"ChatGPT सारखा AI interface आणि AI सोबत संवाद",
+  k:"ai artificial intelligence chatgpt chatbot ai teacher ask questions prashna assistant"},
+
+ {t:"Board AI",u:"board-ai.html",c:"Education",i:"🎓",
+  d:"दहावी बोर्ड परीक्षेची तयारी आणि शिकवणारा AI रोबोट",
+  k:"10th tenth board ssc exam preparation pariksha board ai robot dahavi study"},
+
+ {t:"Channels",u:"channel.html",c:"Social",i:"📢",
+  d:"शिक्षक स्वतःचे Channels बनवून विद्यार्थ्यांना अपडेट्स देऊ शकतात",
+  k:"channel channels teacher sir updates announcement notice broadcast students"},
+
+ {t:"Code Arena",u:"code-arena.html",c:"Coding",i:"💻",
+  d:"कोडिंगचा सराव आणि प्रोग्रामिंग प्रश्न",
+  k:"code arena coding programming developer python javascript html css practice program"},
+
+ {t:"Colleges",u:"colleges.html",c:"Career",i:"🏫",
+  d:"AI च्या मदतीने योग्य कॉलेज शोधणे",
+  k:"college colleges admission find college search course admission pravesh mahavidyalay"},
+
+ {t:"Create Notes",u:"create.html",c:"Education",i:"📝",
+  d:"स्वतःच्या नोट्स तयार करणे आणि सेव्ह करणे",
+  k:"create notes note writing save notebook likhna notes maker"},
+
+ {t:"Cricket Interview",u:"cricket-drills.html",c:"Cricket",i:"🏏",
+  d:"AI तुमची मुलाखत घेतो आणि प्रश्न विचारतो",
+  k:"cricket interview ai questions mock interview practice"},
+
+ {t:"Discover Space",u:"discover-space.html",c:"Videos",i:"🎞️",
+  d:"Live Class चे रेकॉर्डिंग जतन केलेले पाहणे",
+  k:"recording recordings live class saved videos replay recorded lecture"},
+
+ {t:"Cybersecurity Course",u:"hacker-course.html",c:"Coding",i:"🔐",
+  d:"५० लेक्चर्सचा Cybersecurity अभ्यासक्रम",
+  k:"cybersecurity cyber security ethical hacking hacker course 50 lectures internet safety"},
+
+ {t:"History Civics Geography",u:"history-civics-geography.html",c:"Education",i:"🌍",
+  d:"इतिहास, नागरिकशास्त्र आणि भूगोलाचा अभ्यास",
+  k:"history itihas civics nagarikshastra geography bhugol social science"},
+
+ {t:"Information",u:"information.html",c:"App",i:"ℹ️",
+  d:"GyanSetu अॅपबद्दल माहिती",
+  k:"information app info about gyansetu mahiti application"},
+
+ {t:"Language Study",u:"language-study.html",c:"Education",i:"🗣️",
+  d:"मराठी, हिंदी आणि इंग्रजी भाषा व अभ्यासक्रम",
+  k:"language marathi hindi english grammar vyakaran bhasha syllabus vocabulary"},
+
+ {t:"Learn",u:"learn.html",c:"Education",i:"📚",
+  d:"विविध प्रकारच्या अभ्यासासाठी शैक्षणिक सामग्री",
+  k:"learn learning study abhyas education lessons subjects learning material"},
+
+ {t:"Learn Coding",u:"learn-coding.html",c:"Coding",i:"👨‍💻",
+  d:"कोडिंग शिकणे आणि प्रोग्रामिंगचा सराव",
+  k:"learn coding programming computer science html css javascript python code"},
+
+ {t:"Live Classes",u:"live-classes.html",c:"Classes",i:"🔴",
+  d:"बॅच तयार करून शिक्षक आणि विद्यार्थी Live अभ्यास करू शकतात",
+  k:"live classes batch teacher sir student online class camera lecture teaching"},
+
+ {t:"Math 1",u:"math-1.html",c:"Maths",i:"1️⃣",
+  d:"पहिलीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 1 first class first standard"},
+
+ {t:"Math 2",u:"math-2.html",c:"Maths",i:"2️⃣",
+  d:"दुसरीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 2 second class"},
+
+ {t:"Math 3",u:"math-3.html",c:"Maths",i:"3️⃣",
+  d:"तिसरीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 3 third class"},
+
+ {t:"Math 4",u:"math-4.html",c:"Maths",i:"4️⃣",
+  d:"चौथीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 4 fourth class"},
+
+ {t:"Math 5",u:"math-5.html",c:"Maths",i:"5️⃣",
+  d:"पाचवीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 5 fifth class"},
+
+ {t:"Math 6",u:"math-6.html",c:"Maths",i:"6️⃣",
+  d:"सहावीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 6 sixth class"},
+
+ {t:"Math 7",u:"math-7.html",c:"Maths",i:"7️⃣",
+  d:"सातवीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 7 seventh class"},
+
+ {t:"Math 8",u:"math-8.html",c:"Maths",i:"8️⃣",
+  d:"आठवीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 8 eighth class"},
+
+ {t:"Math 9",u:"math-9.html",c:"Maths",i:"9️⃣",
+  d:"नववीच्या स्तराचा गणित अभ्यास",
+  k:"math maths ganit 9 ninth class"},
+
+ {t:"Math 10",u:"math-10.html",c:"Maths",i:"🔟",
+  d:"दहावीच्या गणिताचा अभ्यास आणि बोर्ड तयारी",
+  k:"math maths ganit 10 tenth class 10th ssc board"},
+
+ {t:"Class 11 Biology",u:"college-11-biology.html",c:"11th-12th",i:"🧬",
+  d:"अकरावी Biology अभ्यासक्रम आणि धडे",
+  k:"11 11th eleventh biology जीवशास्त्र science"},
+
+ {t:"Class 11 Physics",u:"college-11-physics.html",c:"11th-12th",i:"⚛️",
+  d:"अकरावी Physics अभ्यासक्रम आणि धडे",
+  k:"11 11th eleventh physics भौतिकशास्त्र science"},
+
+ {t:"Class 11 Maths",u:"college-11-math.html",c:"11th-12th",i:"📐",
+  d:"अकरावी Maths अभ्यासक्रम आणि गणित",
+  k:"11 11th eleventh maths mathematics ganit"},
+
+ {t:"Class 11 Chemistry",u:"college-11-chemistry.html",c:"11th-12th",i:"🧪",
+  d:"अकरावी Chemistry अभ्यासक्रम आणि धडे",
+  k:"11 11th eleventh chemistry rasayan science"},
+
+ {t:"Class 11 HTML",u:"college-11-html.html",c:"11th-12th",i:"🌐",
+  d:"अकरावीशी संबंधित HTML पेज",
+  k:"11 11th html web"},
+
+ {t:"Class 12 Biology",u:"college-12-biology.html",c:"11th-12th",i:"🧬",
+  d:"बारावी Biology अभ्यासक्रम आणि धडे",
+  k:"12 12th twelfth biology जीवशास्त्र science hsc"},
+
+ {t:"Class 12 Physics",u:"college-12-physics.html",c:"11th-12th",i:"⚛️",
+  d:"बारावी Physics अभ्यासक्रम आणि धडे",
+  k:"12 12th twelfth physics भौतिकशास्त्र science hsc"},
+
+ {t:"Class 12 Maths",u:"college-12-math.html",c:"11th-12th",i:"📐",
+  d:"बारावी Maths अभ्यासक्रम आणि गणित",
+  k:"12 12th twelfth maths mathematics ganit hsc"},
+
+ {t:"Class 12 Chemistry",u:"college-12-chemistry.html",c:"11th-12th",i:"🧪",
+  d:"बारावी Chemistry अभ्यासक्रम आणि धडे",
+  k:"12 12th twelfth chemistry rasayan science hsc"},
+
+ {t:"Class 12 HTML",u:"college-12-html.html",c:"11th-12th",i:"🌐",
+  d:"बारावीशी संबंधित HTML पेज",
+  k:"12 12th html web"},
+
+ {t:"Profile",u:"profile.html",c:"Social",i:"👤",
+  d:"स्वतःचे प्रोफाइल पाहणे",
+  k:"profile my profile account majha account"},
+
+ {t:"Science Game",u:"science-game.html",c:"Games",i:"🔬",
+  d:"खेळातून विज्ञान शिकणे आणि Science Explore Game",
+  k:"science game explore vidnyan experiment game learn"},
+
+ {t:"Secret Admin",u:"secret-admin.html",c:"Tools",i:"⚙️",
+  d:"अॅपमधील Admin संबंधित पेज",
+  k:"admin administrator management"},
+
+ {t:"Skills",u:"skills.html",c:"Career",i:"🛠️",
+  d:"वेगवेगळी कौशल्ये शिकणे",
+  k:"skills skill career kaushalya learn jobs"},
+
+ {t:"Smart Study / Doubt Desk",u:"smart-study.html",c:"AI",i:"🧠",
+  d:"Doubt विचारणे आणि अभ्यासात मदत मिळवणे",
+  k:"doubt desk doubt solving shanka question answer ai study homework solve"},
+
+ {t:"Start",u:"start.html",c:"App",i:"🚀",
+  d:"अॅप सुरू करण्याचे पेज",
+  k:"start welcome launch suruvat"},
+
+ {t:"Starwalk",u:"starwalk.html",c:"Science",i:"🌌",
+  d:"तारे, अंतराळ आणि खगोलशास्त्राशी संबंधित माहिती",
+  k:"star stars space astronomy universe planet tara nakshatra"},
+
+ {t:"Test",u:"test.html",c:"Education",i:"📋",
+  d:"मोठी टेस्ट आणि प्रश्नांचा सराव",
+  k:"test exam mock test practice questions pariksha quiz"},
+
+ {t:"Trading",u:"trading.html",c:"Career",i:"📈",
+  d:"शेअर मार्केट आणि Trading शिकणे",
+  k:"trading share market stocks stock market investing finance learning"},
+
+ {t:"User Profile",u:"user-profile.html",c:"Social",i:"🪪",
+  d:"इतर वापरकर्त्याचे प्रोफाइल पाहणे",
+  k:"user profile account student person"},
+
+ {t:"Username / Logout",u:"username.html",c:"App",i:"🚪",
+  d:"Username आणि Logout संबंधित पर्याय",
+  k:"username logout log out sign out account exit"},
+
+ {t:"Users",u:"users.html",c:"Social",i:"👥",
+  d:"इतर वापरकर्त्यांची प्रोफाइल पाहणे",
+  k:"users students people profiles friends vidyarthi"},
+
+ {t:"Videos",u:"video.html",c:"Videos",i:"🎬",
+  d:"व्हिडिओ पोस्ट करणे आणि पाहणे",
+  k:"video videos post upload clip reels"},
+
+ {t:"AI Study Chat",u:"ai-study.html",c:"AI",i:"✨",
+  d:"AI सोबत अभ्यासविषयक प्रश्नांवर संवाद",
+  k:"ai chat teacher explain question answer chatbot"}
 ];
 
-/* 11वी/12वी फाइलची नावे तुझ्या प्रत्यक्ष project मध्ये वेगळी असतील तर
-   त्या दोन प्रकारांच्या u values बदल. */
+/* POPULAR SEARCHES */
 
 const POPULAR=[
- "गणित शिकायचं आहे",
- "10वी बोर्ड परीक्षा",
- "AI ला प्रश्न विचारायचा आहे",
- "Coding शिकायचं आहे",
- "कॉलेज शोधायचं आहे",
- "इंग्रजी शिकायचं आहे",
- "Live Class",
- "Science"
+  "गणित शिकायचं आहे",
+  "10वी बोर्ड परीक्षा",
+  "AI ला प्रश्न विचारायचा आहे",
+  "Coding शिकायचं आहे",
+  "कॉलेज शोधायचं आहे",
+  "इंग्रजी शिकायचं आहे",
+  "Live Class",
+  "Science"
 ];
 
+/* RECENT SEARCHES */
+
 const getRecent=()=>{
- try{return JSON.parse(localStorage.getItem(RK)||"[]")}
- catch(e){return[]}
+  try{
+    return JSON.parse(localStorage.getItem(RK)||"[]");
+  }catch(e){
+    return [];
+  }
 };
 
 function addRecent(q){
- if(!q)return;
- const a=getRecent().filter(x=>x!==q);
- a.unshift(q);
- localStorage.setItem(RK,JSON.stringify(a.slice(0,8)));
+  if(!q)return;
+
+  const a=getRecent().filter(x=>x!==q);
+  a.unshift(q);
+
+  localStorage.setItem(RK,JSON.stringify(a.slice(0,8)));
 }
 
 function clearRecent(){
- localStorage.removeItem(RK);
- drawHome();
- toast("Recent searches clear झाले");
+  localStorage.removeItem(RK);
+  drawHome();
+  toast("Recent searches clear झाले");
 }
+
+/* DRAW CATEGORIES */
 
 function drawCats(){
- const cats=["All",...new Set(PAGES.map(p=>p.c))];
- $("cats").innerHTML=cats.map(c=>
- `<button class="chip ${c===category?"on":""}" data-cat="${esc(c)}">${esc(c)}</button>`
- ).join("");
+  const cats=["All",...new Set(PAGES.map(p=>p.c))];
 
- $("cats").querySelectorAll("button").forEach(b=>{
-  b.addEventListener("click",()=>{
-   category=b.dataset.cat;
-   drawCats();
-   const q=$("q").value.trim();
-   if(q)runSearch();
-   else drawFeatured();
+  $("cats").innerHTML=cats.map(c=>
+    `<button class="chip ${c===category?"on":""}"
+      data-cat="${esc(c)}">${esc(c)}</button>`
+  ).join("");
+
+  $("cats").querySelectorAll("button").forEach(b=>{
+    b.addEventListener("click",()=>{
+      category=b.dataset.cat;
+      drawCats();
+
+      const q=$("q").value.trim();
+
+      if(q){
+        runSearch();
+      }else{
+        drawFeatured();
+      }
+    });
   });
- });
 }
+
+/* DRAW HOME */
 
 function drawHome(){
- const r=getRecent();
- $("recent").innerHTML=r.length?r.map(x=>
-  `<button class="tag" data-query="${esc(x)}">🕘 ${esc(x)}</button>`
- ).join(""):'<span style="font-size:12px;color:var(--mut)">अजून शोधलेले काही नाही.</span>';
+  const r=getRecent();
 
- $("popular").innerHTML=POPULAR.map(x=>
-  `<button class="tag" data-query="${esc(x)}">🔥 ${esc(x)}</button>`
- ).join("");
+  $("recent").innerHTML=r.length
+    ?r.map(x=>
+      `<button class="tag" data-query="${esc(x)}">🕘 ${esc(x)}</button>`
+    ).join("")
+    :'<span style="font-size:12px;color:var(--mut)">अजून शोधलेले काही नाही.</span>';
 
- document.querySelectorAll("[data-query]").forEach(b=>{
-  b.addEventListener("click",()=>useQuery(b.dataset.query));
- });
+  $("popular").innerHTML=POPULAR.map(x=>
+    `<button class="tag" data-query="${esc(x)}">🔥 ${esc(x)}</button>`
+  ).join("");
 
- drawFeatured();
+  document.querySelectorAll("[data-query]").forEach(b=>{
+    b.addEventListener("click",()=>{
+      useQuery(b.dataset.query);
+    });
+  });
+
+  drawFeatured();
 }
+
+/* FEATURED PAGES */
 
 function drawFeatured(){
- const items=PAGES.filter(p=>category==="All"||p.c===category).slice(0,8);
- $("featured").innerHTML=items.map(card).join("");
+  const items=PAGES
+    .filter(p=>category==="All"||p.c===category)
+    .slice(0,8);
+
+  $("featured").innerHTML=items.map(card).join("");
 }
+
+/* PAGE CARD */
 
 function card(p){
- return `<a class="res" href="${esc(p.u)}">
-  <div class="ic">${p.i}</div>
-  <div class="t"><b>${esc(p.t)}</b><small>${esc(p.d)}</small></div>
-  <span class="cat">${esc(p.c)}</span>
- </a>`;
+  return `
+    <a class="res" href="${esc(p.u)}">
+      <div class="ic">${p.i}</div>
+
+      <div class="t">
+        <b>${esc(p.t)}</b>
+        <small>${esc(p.d)}</small>
+      </div>
+
+      <span class="cat">${esc(p.c)}</span>
+    </a>
+  `;
 }
+
+/* CLEAR SEARCH */
 
 function clearQuery(){
- $("q").value="";
- $("clr").classList.add("hide");
- $("out").innerHTML="";
- $("aiout").innerHTML="";
- $("status").classList.add("hide");
- $("home").classList.remove("hide");
- category="All";
- drawCats();
- drawHome();
- $("q").focus();
+  $("q").value="";
+  $("clr").classList.add("hide");
+  $("out").innerHTML="";
+  $("aiout").innerHTML="";
+  $("status").classList.add("hide");
+  $("home").classList.remove("hide");
+
+  category="All";
+
+  drawCats();
+  drawHome();
+
+  $("q").focus();
 }
 
-/* Simple local matching as a fallback */
+/* LOCAL SEARCH */
+
 function tokens(q){
- return norm(q).split(/\s+/).filter(Boolean);
+  return norm(q).split(/\s+/).filter(Boolean);
 }
 
 function localScore(p,query){
- const q=norm(query);
- const words=tokens(query);
- const title=norm(p.t);
- const desc=norm(p.d);
- const keys=norm(p.k);
- let score=0;
+  const q=norm(query);
+  const words=tokens(query);
+  const title=norm(p.t);
+  const desc=norm(p.d);
+  const keys=norm(p.k);
 
- if(title===q)score+=40;
- if(title.includes(q))score+=22;
- if(q.includes(title)&&title.length>2)score+=12;
+  let score=0;
 
- for(const w of words){
-  if(w.length<2)continue;
-  if(title.split(/\s+/).some(t=>t===w))score+=12;
-  else if(title.includes(w))score+=7;
-  if(keys.includes(w))score+=4;
-  if(desc.includes(w))score+=3;
- }
+  if(title===q)score+=40;
+  if(title.includes(q))score+=22;
 
- const special=[
-  {words:["ganit","math","maths","mathematics","गणित"],cats:["Maths","11th-12th"]},
-  {words:["coding","code","programming","कोडिंग"],cats:["Coding"]},
-  {words:["college","colleges","कॉलेज","महाविद्यालय"],cats:["Career"]},
-  {words:["doubt","shanka","शंका","प्रश्न","question"],cats:["AI"]},
-  {words:["board","दहावी","10th","ssc"],cats:["Education"]},
-  {words:["live class","live classes","batch","lecture"],cats:["Classes"]},
-  {words:["video","videos","व्हिडिओ"],cats:["Videos"]},
-  {words:["star","space","अंतराळ","तारे"],cats:["Science"]},
-  {words:["message","messages","chat","मेसेज"],cats:["Social"]}
- ];
+  if(q.includes(title)&&title.length>2){
+    score+=12;
+  }
 
- for(const s of special){
-  if(s.words.some(w=>q.includes(norm(w)))&&s.cats.includes(p.c))score+=10;
- }
+  for(const w of words){
+    if(w.length<2)continue;
 
- if(category!=="All"&&p.c!==category)return 0;
- return score;
+    if(title.split(/\s+/).some(t=>t===w)){
+      score+=12;
+    }else if(title.includes(w)){
+      score+=7;
+    }
+
+    if(keys.includes(w))score+=4;
+    if(desc.includes(w))score+=3;
+  }
+
+  const special=[
+    {
+      words:["ganit","math","maths","mathematics","गणित"],
+      cats:["Maths","11th-12th"]
+    },
+    {
+      words:["coding","code","programming","कोडिंग"],
+      cats:["Coding"]
+    },
+    {
+      words:["college","colleges","कॉलेज","महाविद्यालय"],
+      cats:["Career"]
+    },
+    {
+      words:["doubt","shanka","शंका","प्रश्न","question"],
+      cats:["AI"]
+    },
+    {
+      words:["board","दहावी","10th","ssc"],
+      cats:["Education"]
+    },
+    {
+      words:["live class","live classes","batch","lecture"],
+      cats:["Classes"]
+    },
+    {
+      words:["video","videos","व्हिडिओ"],
+      cats:["Videos"]
+    },
+    {
+      words:["star","space","अंतराळ","तारे"],
+      cats:["Science"]
+    },
+    {
+      words:["message","messages","chat","मेसेज"],
+      cats:["Social"]
+    }
+  ];
+
+  for(const s of special){
+    if(
+      s.words.some(w=>q.includes(norm(w)))&&
+      s.cats.includes(p.c)
+    ){
+      score+=10;
+    }
+  }
+
+  if(category!=="All"&&p.c!==category){
+    return 0;
+  }
+
+  return score;
 }
 
+/* RENDER LOCAL RESULTS */
+
 function renderResults(query){
- const results=PAGES
-  .map(p=>({p,s:localScore(p,query)}))
-  .filter(x=>x.s>0)
-  .sort((a,b)=>b.s-a.s)
-  .slice(0,15);
+  const results=PAGES
+    .map(p=>({p,s:localScore(p,query)}))
+    .filter(x=>x.s>0)
+    .sort((a,b)=>b.s-a.s)
+    .slice(0,15);
 
- if(!results.length){
-  $("out").innerHTML=`<div class="empty"><b>🔍</b>या शब्दासाठी थेट Page सापडला नाही.<br>दुसरे शब्द वापरून पाहा किंवा AI Search वापरून पाहा.</div>`;
-  return;
- }
+  if(!results.length){
+    $("out").innerHTML=`
+      <div class="empty">
+        <b>🔍</b>
+        या शब्दासाठी थेट Page सापडला नाही.<br>
+        दुसरे शब्द वापरून पाहा किंवा AI Search वापरून पाहा.
+      </div>
+    `;
+    return;
+  }
 
- $("out").innerHTML=`<div class="cnt">📚 संबंधित Pages · ${results.length} परिणाम</div>`+
- results.map(x=>card(x.p)).join("");
+  $("out").innerHTML=
+    `<div class="cnt">📚 संबंधित Pages · ${results.length} परिणाम</div>`+
+    results.map(x=>card(x.p)).join("");
 }
 
 /*
- AI SEARCH
- Uses the existing endpoint from the supplied Doubt Desk code.
- The backend must support mode:"search" and return JSON.
- Expected response:
- {
-   "answer":"...optional explanation...",
-   "pages":["ai-study.html","basic math.html"]
- }
- It may also return:
- {"results":[{"url":"...","reason":"..."}]}
-*/
-async function aiSearch(query,id){
- const response=await fetch("/api/ai-study",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-   mode:"search",
-   question:
-    "You are GyanSetu's page-finding assistant. The user wants to find pages in the app. "+
-    "Understand their intent, including Marathi, Hindi, English and Roman Marathi. "+
-    "Use ONLY the supplied page directory. Do not invent pages or features. "+
-    "Return JSON only: {\"answer\":\"brief answer in the user's language\",\"pages\":[\"exact filename.html\"]}. "+
-    "Select up to 6 most relevant filenames. "+
-    "If uncertain, choose the closest pages. User query: "+query,
-   language:localStorage.getItem("studyLanguage")||"मराठी",
-   audience:"GyanSetu student",
-   style:"Return concise JSON only",
-   pages:PAGES.map(p=>({
-    title:p.t,
-    url:p.u,
-    category:p.c,
-    description:p.d,
-    keywords:p.k
-   }))
-  })
- });
+AI SEARCH
 
- if(!response.ok){
-  let msg="AI Search उपलब्ध नाही.";
-  try{const e=await response.json();if(e.error)msg=e.error}catch(_){}
-  throw new Error(msg);
- }
+हा कोड /api/ai-study endpoint वापरतो.
 
- const data=await response.json();
- if(id!==requestNo)return;
-
- let raw=data.answer||data.result||data.output||"";
- let parsed=null;
-
- if(typeof raw==="object"&&raw!==null){
-  parsed=raw;
- }else if(typeof raw==="string"){
-  try{
-   parsed=JSON.parse(raw.replace(/^```json\s*/i,"").replace(/\s*```$/,""));
-  }catch(_){}
- }
-
- if(!parsed&&Array.isArray(data.pages)){
-  parsed=data;
- }
- if(!parsed&&Array.isArray(data.results)){
-  parsed={answer:data.answer||"",pages:data.results.map(x=>x.url||x.filename||x.page).filter(Boolean)};
- }
-
- if(!parsed){
-  throw new Error("AI response format supported नाही.");
- }
-
- const allowed=new Map(PAGES.map(p=>[p.u,p]));
- const selected=[];
-
- for(const item of (parsed.pages||parsed.results||[])){
-  const url=typeof item==="string"?item:(item.url||item.filename||item.page||"");
-  const page=allowed.get(url);
-  if(page&&!selected.some(x=>x.u===page.u))selected.push(page);
- }
-
- if(category!=="All"){
-  const filtered=selected.filter(p=>p.c===category);
-  selected.length=0;
-  selected.push(...filtered);
- }
-
- $("aiout").innerHTML=`
- <div class="airesult">
-  <h3>✨ AI ने काय समजलं?</h3>
-  <p>${esc(parsed.answer||"तुमच्या प्रश्नानुसार संबंधित Pages शोधले आहेत.")}</p>
- </div>`;
-
- if(selected.length){
-  $("out").innerHTML=`<div class="cnt">🤖 AI ने निवडलेले Pages</div>`+
-   selected.map(card).join("");
- }else{
-  renderResults(query);
- }
+Backend ने mode:"search" सपोर्ट करणे आवश्यक आहे.
+Expected response:
+{
+  "answer":"...",
+  "pages":["ai-study.html","basic math.html"]
 }
+*/
+
+async function aiSearch(query,id){
+
+  const response=await fetch("/api/ai-study",{
+    method:"POST",
+
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+      mode:"search",
+
+      question:
+        "You are GyanSetu's page-finding assistant. "+
+        "The user wants to find pages in the app. "+
+        "Understand their intent, including Marathi, Hindi, English and Roman Marathi. "+
+        "Use ONLY the supplied page directory. Do not invent pages or features. "+
+        "Return JSON only: "+
+        "{\"answer\":\"brief answer in the user's language\","+
+        "\"pages\":[\"exact filename.html\"]}. "+
+        "Select up to 6 most relevant filenames. "+
+        "If uncertain, choose the closest pages. "+
+        "User query: "+query,
+
+      language:
+        localStorage.getItem("studyLanguage")||"मराठी",
+
+      audience:"GyanSetu student",
+
+      style:"Return concise JSON only",
+
+      pages:PAGES.map(p=>({
+        title:p.t,
+        url:p.u,
+        category:p.c,
+        description:p.d,
+        keywords:p.k
+      }))
+    })
+  });
+
+  if(!response.ok){
+    let msg="AI Search उपलब्ध नाही.";
+
+    try{
+      const e=await response.json();
+      if(e.error)msg=e.error;
+    }catch(_){}
+
+    throw new Error(msg);
+  }
+
+  const data=await response.json();
+
+  if(id!==requestNo)return;
+
+  let raw=data.answer||data.result||data.output||"";
+  let parsed=null;
+
+  if(typeof raw==="object"&&raw!==null){
+    parsed=raw;
+  }else if(typeof raw==="string"){
+    try{
+      parsed=JSON.parse(
+        raw.replace(/^```json\s*/i,"")
+           .replace(/\s*```$/,"")
+      );
+    }catch(_){}
+  }
+
+  if(!parsed&&Array.isArray(data.pages)){
+    parsed=data;
+  }
+
+  if(!parsed&&Array.isArray(data.results)){
+    parsed={
+      answer:data.answer||"",
+      pages:data.results.map(
+        x=>x.url||x.filename||x.page
+      ).filter(Boolean)
+    };
+  }
+
+  if(!parsed){
+    throw new Error("AI response format supported नाही.");
+  }
+
+  const allowed=new Map(PAGES.map(p=>[p.u,p]));
+  const selected=[];
+
+  for(const item of (parsed.pages||parsed.results||[])){
+    const url=typeof item==="string"
+      ?item
+      :(item.url||item.filename||item.page||"");
+
+    const page=allowed.get(url);
+
+    if(page&&!selected.some(x=>x.u===page.u)){
+      selected.push(page);
+    }
+  }
+
+  if(category!=="All"){
+    const filtered=selected.filter(p=>p.c===category);
+    selected.length=0;
+    selected.push(...filtered);
+  }
+
+  $("aiout").innerHTML=`
+    <div class="airesult">
+      <h3>✨ AI ने काय समजलं?</h3>
+      <p>${esc(parsed.answer||
+        "तुमच्या प्रश्नानुसार संबंधित Pages शोधले आहेत.")}</p>
+    </div>
+  `;
+
+  if(selected.length){
+    $("out").innerHTML=
+      `<div class="cnt">🤖 AI ने निवडलेले Pages</div>`+
+      selected.map(card).join("");
+  }else{
+    renderResults(query);
+  }
+}
+
+/* SEARCH */
 
 async function runSearch(){
- const query=$("q").value.trim();
- const id=++requestNo;
 
- $("clr").classList.toggle("hide",!query);
- $("aiout").innerHTML="";
- $("out").innerHTML="";
+  const query=$("q").value.trim();
+  const id=++requestNo;
 
- if(!query){
-  $("home").classList.remove("hide");
-  $("status").classList.add("hide");
-  drawHome();
-  return;
- }
+  $("clr").classList.toggle("hide",!query);
+  $("aiout").innerHTML="";
+  $("out").innerHTML="";
 
- $("home").classList.add("hide");
- $("status").classList.remove("hide");
- $("status").textContent="🔎 Pages शोधत आहे...";
- renderResults(query);
-
- clearTimeout(searchTimer);
-
- searchTimer=setTimeout(async()=>{
-  if(id!==requestNo)return;
-  $("status").textContent="🤖 AI तुमचा प्रश्न समजून घेत आहे...";
-  try{
-   await aiSearch(query,id);
-   if(id===requestNo){
-    $("status").textContent="AI Search पूर्ण";
-    addRecent(query);
-   }
-  }catch(error){
-   if(id!==requestNo)return;
-   $("status").textContent="Local Smart Search";
-   /* Local search remains available if the AI endpoint does not support search mode. */
-   renderResults(query);
+  if(!query){
+    $("home").classList.remove("hide");
+    $("status").classList.add("hide");
+    drawHome();
+    return;
   }
- },450);
+
+  $("home").classList.add("hide");
+  $("status").classList.remove("hide");
+  $("status").textContent="🔎 Pages शोधत आहे...";
+
+  /* Show local results first */
+  renderResults(query);
+
+  clearTimeout(searchTimer);
+
+  searchTimer=setTimeout(async()=>{
+    if(id!==requestNo)return;
+
+    $("status").textContent="🤖 AI तुमचा प्रश्न समजून घेत आहे...";
+
+    try{
+      await aiSearch(query,id);
+
+      if(id===requestNo){
+        $("status").textContent="AI Search पूर्ण";
+        addRecent(query);
+      }
+
+    }catch(error){
+
+      if(id!==requestNo)return;
+
+      $("status").textContent="Local Smart Search";
+
+      /* Fallback when the AI API is unavailable */
+      renderResults(query);
+    }
+
+  },450);
 }
+
+/* RECENT / POPULAR SEARCH CLICK */
 
 function useQuery(query){
- $("q").value=query;
- runSearch();
- $("q").focus();
+  $("q").value=query;
+  runSearch();
+  $("q").focus();
 }
+
+/* VOICE SEARCH */
 
 function voice(){
- const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SR){
-  toast("Voice Search या browser मध्ये उपलब्ध नाही.");
-  return;
- }
- if(isListening&&recognition){
-  recognition.stop();
-  return;
- }
 
- recognition=new SR();
- recognition.lang=({
-  "हिंदी":"hi-IN",
-  "Hindi":"hi-IN",
-  "English":"en-IN",
-  "मराठी":"mr-IN",
-  "Marathi":"mr-IN"
- })[localStorage.getItem("studyLanguage")]||"mr-IN";
- recognition.interimResults=false;
- recognition.maxAlternatives=1;
- isListening=true;
- $("mic").textContent="⏹️";
+  const SR=window.SpeechRecognition||
+           window.webkitSpeechRecognition;
 
- recognition.onresult=e=>{
-  $("q").value=e.results[0][0].transcript;
-  runSearch();
- };
- recognition.onerror=()=>{
-  toast("आवाज ओळखता आला नाही. पुन्हा प्रयत्न करा.");
- };
- recognition.onend=()=>{
-  isListening=false;
-  $("mic").textContent="🎤";
- };
- try{recognition.start()}catch(e){
-  isListening=false;
-  $("mic").textContent="🎤";
- }
+  if(!SR){
+    toast("Voice Search या browser मध्ये उपलब्ध नाही.");
+    return;
+  }
+
+  if(isListening&&recognition){
+    recognition.stop();
+    return;
+  }
+
+  recognition=new SR();
+
+  recognition.lang=({
+    "हिंदी":"hi-IN",
+    "Hindi":"hi-IN",
+    "English":"en-IN",
+    "मराठी":"mr-IN",
+    "Marathi":"mr-IN"
+  })[localStorage.getItem("studyLanguage")]||"mr-IN";
+
+  recognition.interimResults=false;
+  recognition.maxAlternatives=1;
+
+  isListening=true;
+  $("mic").textContent="⏹️";
+
+  recognition.onresult=e=>{
+    $("q").value=e.results[0][0].transcript;
+    runSearch();
+  };
+
+  recognition.onerror=()=>{
+    toast("आवाज ओळखता आला नाही. पुन्हा प्रयत्न करा.");
+  };
+
+  recognition.onend=()=>{
+    isListening=false;
+    $("mic").textContent="🎤";
+  };
+
+  try{
+    recognition.start();
+  }catch(e){
+    isListening=false;
+    $("mic").textContent="🎤";
+  }
 }
 
+/* INPUT EVENTS */
+
 $("q").addEventListener("input",runSearch);
+
 $("q").addEventListener("keydown",e=>{
- if(e.key==="Enter"){
-  e.preventDefault();
-  const q=$("q").value.trim();
-  if(q)addRecent(q);
-  runSearch();
- }
+  if(e.key==="Enter"){
+    e.preventDefault();
+
+    const q=$("q").value.trim();
+
+    if(q)addRecent(q);
+
+    runSearch();
+  }
 });
+
+/* INITIALIZE */
 
 drawCats();
 drawHome();
 
-/* Open a search directly: search.html#maths */
+/* Direct search: search.html#maths */
+
 if(location.hash.length>1){
- try{useQuery(decodeURIComponent(location.hash.slice(1)))}catch(e){}
+  try{
+    useQuery(decodeURIComponent(location.hash.slice(1)));
+  }catch(e){}
 }
 </script>
+
 </body>
 </html>
