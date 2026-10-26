@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="mr">
+<!DOCTYPE html><html lang="mr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0f172a">
-<title>GyanSetu - AI Smart Search</title>
-
-<style>
+<title>GyanSetu - AI Smart Search</title><style>
 *{
   box-sizing:border-box;
   margin:0;
@@ -40,6 +37,7 @@ button{cursor:pointer}
 }
 
 /* TOP SEARCH BAR */
+
 .top{
   position:sticky;
   top:0;
@@ -103,6 +101,7 @@ button{cursor:pointer}
 }
 
 /* HERO */
+
 .hero{
   margin:12px 15px 0;
   padding:19px;
@@ -150,6 +149,7 @@ button{cursor:pointer}
 }
 
 /* CATEGORIES */
+
 .sec{padding:6px 15px}
 
 .chips{
@@ -215,6 +215,7 @@ button{cursor:pointer}
 }
 
 /* PAGE CARDS */
+
 .card{
   margin:12px 15px;
   background:#fff;
@@ -304,6 +305,7 @@ button{cursor:pointer}
 }
 
 /* AI RESULT */
+
 .airesult{
   border:1px solid #bfdbfe;
   background:#eff6ff;
@@ -378,262 +380,224 @@ mark{
 }
 
 /* ===================================
-   LIQUID GLASS BOTTOM NAVIGATION
+   SAME LIQUID GLASS NAVIGATION
 =================================== */
 
-.bottom-nav{
+.nav{
   position:fixed;
-  left:50%;
+  left:14px;
+  right:14px;
+  max-width:420px;
+  margin:0 auto;
   bottom:calc(12px + env(safe-area-inset-bottom));
-  transform:translateX(-50%);
-
-  width:calc(100% - 28px);
-  max-width:440px;
-  min-height:68px;
-  padding:7px;
-
+  height:66px;
+  padding:6px;
   display:flex;
-  align-items:center;
-  justify-content:space-around;
-  gap:5px;
-
+  border-radius:33px;
   z-index:1000;
 
-  background:rgba(255,255,255,.70);
-  border:1px solid rgba(255,255,255,.88);
-  border-radius:25px;
+  background:rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  backdrop-filter:blur(22px) saturate(180%);
 
-  -webkit-backdrop-filter:blur(28px) saturate(180%);
-  backdrop-filter:blur(28px) saturate(180%);
+  border:1px solid rgba(255,255,255,.85);
 
   box-shadow:
-    0 8px 30px rgba(15,23,42,.16),
-    0 2px 7px rgba(15,23,42,.05),
-    inset 0 1px 1px rgba(255,255,255,.95);
-
-  isolation:isolate
+    0 12px 32px rgba(61,108,255,.22),
+    0 2px 8px rgba(255,45,135,.12),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(255,255,255,.4)
 }
 
-.bottom-nav::before{
-  content:"";
+.nav .ind{
   position:absolute;
-  inset:0;
-  border-radius:inherit;
-  pointer-events:none;
+  top:6px;
+  bottom:6px;
+  left:6px;
+  width:calc((100% - 12px)/var(--n,5));
+  border-radius:27px;
+
   background:linear-gradient(
-    145deg,
-    rgba(255,255,255,.55),
-    rgba(255,255,255,.06) 55%,
-    rgba(147,197,253,.12)
+    135deg,
+    rgba(255,45,135,.20),
+    rgba(61,108,255,.20)
   );
-  z-index:-1
+
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.8),
+    inset 0 6px 10px rgba(255,255,255,.55),
+    0 4px 14px rgba(61,108,255,.2);
+
+  transform:translateX(calc(var(--i,3)*100%));
+
+  transition:transform .42s cubic-bezier(.34,1.45,.64,1);
+
+  pointer-events:none
 }
 
-.bottom-nav button{
+.nav.press .ind{
+  transform:
+    translateX(calc(var(--i,3)*100%))
+    scale(1.08,1.12)
+}
+
+.nav button{
   position:relative;
+  z-index:1;
   flex:1;
   min-width:0;
-  height:53px;
+  border:0;
+  background:none;
+  font:inherit;
+  cursor:pointer;
+  color:#6f7893;
+  font-size:11px;
+  font-weight:600;
 
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:3px;
+  gap:2px;
 
-  border:0;
-  border-radius:18px;
-  background:transparent;
-  color:#64748b;
-
-  font-size:10px;
-  font-weight:650;
-
-  transition:
-    background .22s ease,
-    transform .22s ease,
-    color .22s ease,
-    box-shadow .22s ease;
+  transition:color .25s;
 
   -webkit-tap-highlight-color:transparent
 }
 
-.bottom-nav .nav-icon{
+.nav button span{
   font-size:22px;
   line-height:1.1;
-  transition:transform .22s ease
+  transition:transform .3s
 }
 
-.bottom-nav button.active{
-  color:#1d4ed8;
-  background:rgba(37,99,235,.13);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.8),
-    0 2px 8px rgba(37,99,235,.05)
+.nav button.active{
+  color:#ff1493
 }
 
-.bottom-nav button.active .nav-icon{
-  transform:translateY(-2px) scale(1.08)
+.nav button.active span{
+  transform:translateY(-1px) scale(1.12)
 }
 
-.bottom-nav button:active{
-  transform:scale(.92)
+.nav button:active{
+  transform:scale(.94)
 }
 
-.bottom-nav button:focus-visible{
-  outline:2px solid #2563eb;
-  outline-offset:2px
+.nav button:focus-visible{
+  outline:2px solid #6c63ff;
+  outline-offset:-2px;
+  border-radius:20px
 }
 
 @media(prefers-reduced-motion:reduce){
-  .bottom-nav button,
-  .bottom-nav .nav-icon,
+  .nav .ind,
+  .nav button,
+  .nav button span,
   .res{
     transition:none;
     animation:none
   }
 }
-</style>
-</head>
+</style></head><body><div class="app"><header class="top">
+  <div class="bar"><button
+  type="button"
+  class="ib"
+  onclick="history.length>1?history.back():location.href='home.html'"
+  aria-label="Back">‹</button>
 
-<body>
+<div class="box">
+  <span>🔍</span>
 
-<div class="app">
+  <input
+    id="q"
+    placeholder="काहीही विचारा किंवा शोधा..."
+    autocomplete="off"
+    aria-label="Search GyanSetu">
 
-<header class="top">
-  <div class="bar">
+  <button
+    type="button"
+    id="clr"
+    class="hide"
+    onclick="clearQuery()"
+    aria-label="Clear">✕</button>
 
-    <button class="ib"
-      onclick="history.length>1?history.back():location.href='home.html'"
-      aria-label="Back">‹</button>
+  <button
+    type="button"
+    id="mic"
+    onclick="voice()"
+    aria-label="Voice search">🎤</button>
+</div>
 
-    <div class="box">
-      <span>🔍</span>
-
-      <input
-        id="q"
-        placeholder="काहीही विचारा किंवा शोधा..."
-        autocomplete="off"
-        aria-label="Search GyanSetu">
-
-      <button
-        id="clr"
-        class="hide"
-        onclick="clearQuery()"
-        aria-label="Clear">✕</button>
-
-      <button
-        id="mic"
-        onclick="voice()"
-        aria-label="Voice search">🎤</button>
-    </div>
   </div>
-</header>
-
-<section class="hero">
-  <span class="ai">✨ GYANSETU AI SEARCH</span>
-
-  <h1>काय शोधायचं आहे?</h1>
-
-  <p>
+</header><section class="hero">
+  <span class="ai">✨ GYANSETU AI SEARCH</span>  <h1>काय शोधायचं आहे?</h1>  <p>
     तुमचा प्रश्न तुमच्या भाषेत लिहा.
     AI तुमच्या गरजेनुसार GyanSetu वरील
     संबंधित Pages शोधण्याचा प्रयत्न करेल.
-  </p>
-
-  <div class="airow">
+  </p>  <div class="airow">
     <span class="dot"></span>
     <span>Smart Search · Education · AI · Career</span>
   </div>
-</section>
-
-<section class="sec" id="home">
-
-  <div class="lbl">Categories</div>
-  <div class="chips" id="cats"></div>
-
-  <div class="lbl">
+</section><section class="sec" id="home">  <div class="lbl">Categories</div>
+  <div class="chips" id="cats"></div>  <div class="lbl">
     🕘 Recent searches
-    <button onclick="clearRecent()">Clear</button>
-  </div>
-
-  <div class="tags" id="recent"></div>
-
-  <div class="lbl">🔥 Popular searches</div>
-  <div class="tags" id="popular"></div>
-
-  <div class="lbl">🚀 Explore GyanSetu</div>
-  <div id="featured"></div>
-
-</section>
-
-<section class="sec">
+    <button type="button" onclick="clearRecent()">Clear</button>
+  </div>  <div class="tags" id="recent"></div>  <div class="lbl">🔥 Popular searches</div>
+  <div class="tags" id="popular"></div>  <div class="lbl">🚀 Explore GyanSetu</div>
+  <div id="featured"></div></section><section class="sec">
   <div id="status" class="cnt hide"></div>
   <div id="aiout"></div>
   <div id="out"></div>
-</section>
-
-<div class="footer">
+</section><div class="footer">
   GyanSetu · Learn Something New Every Day 📚
-</div>
+</div></div><!-- SAME LIQUID GLASS BOTTOM NAV --><nav class="nav" id="nav" style="--i:3;--n:5" aria-label="Main navigation"><span class="ind"></span>
 
-</div>
+<button
+type="button"
+aria-label="Home"
+onclick="navTo(0,'home.html')">
+<span>🏠</span>
+Home
+</button>
 
-<!-- LIQUID GLASS NAVIGATION -->
+<button
+type="button"
+aria-label="Learn"
+onclick="navTo(1,'learn.html')">
+<span>📚</span>
+Learn
+</button>
 
-<nav class="bottom-nav" aria-label="Main navigation">
+<button
+type="button"
+aria-label="Create"
+onclick="navTo(2,'create.html')">
+<span>➕</span>
+Create
+</button>
 
-  <button
-    type="button"
-    onclick="goNav('home.html')"
-    aria-label="Home">
+<button
+type="button"
+class="active"
+aria-current="page"
+aria-label="Search"
+onclick="navTo(3,'search.html')">
+<span>🔍</span>
+Search
+</button>
 
-    <span class="nav-icon">⌂</span>
-    <span>Home</span>
-  </button>
+<button
+type="button"
+aria-label="Profile"
+onclick="navTo(4,'profile.html')">
+<span>👤</span>
+Profile
+</button>
 
-  <button
-    type="button"
-    class="active"
-    aria-current="page"
-    aria-label="Search">
-
-    <span class="nav-icon">⌕</span>
-    <span>Search</span>
-  </button>
-
-  <button
-    type="button"
-    onclick="goNav('ai-study.html')"
-    aria-label="AI Study">
-
-    <span class="nav-icon">✧</span>
-    <span>AI Study</span>
-  </button>
-
-  <button
-    type="button"
-    onclick="goNav('live-classes.html')"
-    aria-label="Live Classes">
-
-    <span class="nav-icon">▣</span>
-    <span>Classes</span>
-  </button>
-
-  <button
-    type="button"
-    onclick="goNav('profile.html')"
-    aria-label="Profile">
-
-    <span class="nav-icon">♙</span>
-    <span>Profile</span>
-  </button>
-
-</nav>
-
-<div class="toast" id="toast"></div>
-
-<script>
+</nav><div class="toast" id="toast"></div><script>
 "use strict";
 
 const $=id=>document.getElementById(id);
@@ -661,12 +625,77 @@ let requestNo=0;
 let recognition=null;
 let isListening=false;
 
-/* BOTTOM NAVIGATION */
+/* ===================================
+   LIQUID GLASS NAVIGATION
+=================================== */
 
-function goNav(page){
-  if(!page)return;
-  window.location.href=page;
+function navTo(i,url){
+  const n=$("nav");
+
+  if(!n||!url)return;
+
+  if(n.style.getPropertyValue("--i").trim()===String(i)){
+    return;
+  }
+
+  n.classList.add("press");
+  n.style.setProperty("--i",i);
+
+  [...n.querySelectorAll("button")].forEach((b,k)=>{
+    b.classList.toggle("active",k===i);
+
+    if(k===i){
+      b.setAttribute("aria-current","page");
+    }else{
+      b.removeAttribute("aria-current");
+    }
+  });
+
+  try{
+    sessionStorage.setItem("navIdx",String(i));
+  }catch(e){}
+
+  setTimeout(()=>{
+    n.classList.remove("press");
+  },220);
+
+  setTimeout(()=>{
+    window.location.href=url;
+  },250);
 }
+
+/* Keep the same sliding-indicator behaviour */
+
+(function(){
+  const n=$("nav");
+  if(!n)return;
+
+  const cur=n.style.getPropertyValue("--i").trim();
+  let prev=null;
+
+  try{
+    prev=sessionStorage.getItem("navIdx");
+  }catch(e){}
+
+  /*
+    Search is the current page, so its indicator
+    must finish at index 3.
+  */
+
+  if(prev!==null&&prev!==cur){
+    n.style.setProperty("--i",prev);
+
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        n.style.setProperty("--i",cur);
+      });
+    });
+  }
+
+  try{
+    sessionStorage.setItem("navIdx",cur);
+  }catch(e){}
+})();
 
 /* TOAST */
 
@@ -942,14 +971,18 @@ const getRecent=()=>{
 function addRecent(q){
   if(!q)return;
 
-  const a=getRecent().filter(x=>x!==q);
-  a.unshift(q);
-
-  localStorage.setItem(RK,JSON.stringify(a.slice(0,8)));
+  try{
+    const a=getRecent().filter(x=>x!==q);
+    a.unshift(q);
+    localStorage.setItem(RK,JSON.stringify(a.slice(0,8)));
+  }catch(e){}
 }
 
 function clearRecent(){
-  localStorage.removeItem(RK);
+  try{
+    localStorage.removeItem(RK);
+  }catch(e){}
+
   drawHome();
   toast("Recent searches clear झाले");
 }
@@ -960,7 +993,7 @@ function drawCats(){
   const cats=["All",...new Set(PAGES.map(p=>p.c))];
 
   $("cats").innerHTML=cats.map(c=>
-    `<button class="chip ${c===category?"on":""}"
+    `<button type="button" class="chip ${c===category?"on":""}"
       data-cat="${esc(c)}">${esc(c)}</button>`
   ).join("");
 
@@ -987,12 +1020,12 @@ function drawHome(){
 
   $("recent").innerHTML=r.length
     ?r.map(x=>
-      `<button class="tag" data-query="${esc(x)}">🕘 ${esc(x)}</button>`
+      `<button type="button" class="tag" data-query="${esc(x)}">🕘 ${esc(x)}</button>`
     ).join("")
     :'<span style="font-size:12px;color:var(--mut)">अजून शोधलेले काही नाही.</span>';
 
   $("popular").innerHTML=POPULAR.map(x=>
-    `<button class="tag" data-query="${esc(x)}">🔥 ${esc(x)}</button>`
+    `<button type="button" class="tag" data-query="${esc(x)}">🔥 ${esc(x)}</button>`
   ).join("");
 
   document.querySelectorAll("[data-query]").forEach(b=>{
@@ -1164,18 +1197,7 @@ function renderResults(query){
     results.map(x=>card(x.p)).join("");
 }
 
-/*
-AI SEARCH
-
-हा कोड /api/ai-study endpoint वापरतो.
-
-Backend ने mode:"search" सपोर्ट करणे आवश्यक आहे.
-Expected response:
-{
-  "answer":"...",
-  "pages":["ai-study.html","basic math.html"]
-}
-*/
+/* AI SEARCH */
 
 async function aiSearch(query,id){
 
@@ -1201,8 +1223,13 @@ async function aiSearch(query,id){
         "If uncertain, choose the closest pages. "+
         "User query: "+query,
 
-      language:
-        localStorage.getItem("studyLanguage")||"मराठी",
+      language:(()=>{
+        try{
+          return localStorage.getItem("studyLanguage")||"मराठी";
+        }catch(e){
+          return "मराठी";
+        }
+      })(),
 
       audience:"GyanSetu student",
 
@@ -1324,7 +1351,6 @@ async function runSearch(){
   $("status").classList.remove("hide");
   $("status").textContent="🔎 Pages शोधत आहे...";
 
-  /* Show local results first */
   renderResults(query);
 
   clearTimeout(searchTimer);
@@ -1347,8 +1373,6 @@ async function runSearch(){
       if(id!==requestNo)return;
 
       $("status").textContent="Local Smart Search";
-
-      /* Fallback when the AI API is unavailable */
       renderResults(query);
     }
 
@@ -1382,13 +1406,19 @@ function voice(){
 
   recognition=new SR();
 
+  let lang="मराठी";
+
+  try{
+    lang=localStorage.getItem("studyLanguage")||"मराठी";
+  }catch(e){}
+
   recognition.lang=({
     "हिंदी":"hi-IN",
     "Hindi":"hi-IN",
     "English":"en-IN",
     "मराठी":"mr-IN",
     "Marathi":"mr-IN"
-  })[localStorage.getItem("studyLanguage")]||"mr-IN";
+  })[lang]||"mr-IN";
 
   recognition.interimResults=false;
   recognition.maxAlternatives=1;
@@ -1446,7 +1476,5 @@ if(location.hash.length>1){
     useQuery(decodeURIComponent(location.hash.slice(1)));
   }catch(e){}
 }
-</script>
-
-</body>
+</script></body>
 </html>
