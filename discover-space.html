@@ -53,14 +53,6 @@ main{max-width:720px;margin:auto;padding:12px 12px calc(40px + env(safe-area-ins
 .tag.live{background:#ff3b5c}
 .item{cursor:pointer}
 .tag.rec{background:#34c38f;color:#04140d}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:flex;align-items:center;justify-content:center;padding:12px}
-.pp{width:100%;max-width:720px}
-.pph{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
-.pph b{font-size:15px}
-.pp video{width:100%;max-height:70vh;background:#000;border-radius:12px}
-.pts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.pts button{padding:8px 12px;border-radius:10px;background:#1b2436;font-size:13px;font-weight:700}
-.pts .on{background:#3d6cff}
 .empty{text-align:center;color:#6c778f;padding:28px 10px;line-height:1.7}
 .toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1f2937;border:1px solid #3d6cff;border-radius:12px;padding:10px 16px;z-index:500;font-size:14px;text-align:center;max-width:90%}
 </style>
@@ -91,21 +83,13 @@ main{max-width:720px;margin:auto;padding:12px 12px calc(40px + env(safe-area-ins
   <div id="list"></div>
 </main>
 
-<div id="pov" class="ov hidden" onclick="if(event.target===this)closeRec()">
-  <div class="pp">
-    <div class="pph"><b id="mt"></b><button class="ib" onclick="closeRec()">✕</button></div>
-    <video id="pv" controls playsinline></video>
-    <div id="pts" class="pts"></div>
-  </div>
-</div>
-
 <script>
 const sb=supabase.createClient("https://eqglttfffhvoyvrclzse.supabase.co","sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb");
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const MONTHS=['जानेवारी','फेब्रुवारी','मार्च','एप्रिल','मे','जून','जुलै','ऑगस्ट','सप्टेंबर','ऑक्टोबर','नोव्हेंबर','डिसेंबर'];
 
-let user=null,all=[],byDay=new Map(),q='',recs=new Map(),curParts=[];
+let user=null,all=[],byDay=new Map(),q='',recs=new Map();
 const now=new Date();
 let vy=now.getFullYear(),vm=now.getMonth(),sel=key(now);
 
@@ -223,32 +207,14 @@ function onSearch(v){
 }
 function clearSearch(){$('q').value='';onSearch('')}
 
-/* ---------- recording player ---------- */
+/* ---------- recording -> opens in player.html ---------- */
 function openRec(id){
   const c=all.find(x=>x.id===id);
-  const p=recs.get(id)||[];
   if(!c)return;
+  const p=recs.get(id)||[];
   if(!p.length){toast(c.ended_at?'या class ची recording उपलब्ध नाही':'Class सुरू आहे, recording नंतर मिळेल');return}
-  curParts=p;
-  $('mt').textContent=(c.batch_name||'Batch')+' • '+fmtDate(c._d);
-  $('pov').classList.remove('hidden');
-  playPart(0);
+  location.href='player.html?r='+encodeURIComponent(id);
 }
-function playPart(i){
-  const v=$('pv');
-  v.dataset.i=i;
-  v.src=curParts[i].url;
-  v.play().catch(()=>{});
-  $('pts').innerHTML=curParts.length>1?curParts.map((_,k)=>`<button class="${k===i?'on':''}" onclick="playPart(${k})">भाग ${k+1}</button>`).join(''):'';
-}
-function closeRec(){
-  const v=$('pv');v.pause();v.removeAttribute('src');v.load();
-  $('pov').classList.add('hidden');
-}
-document.addEventListener('DOMContentLoaded',()=>{
-  $('pv').addEventListener('ended',()=>{const i=+$('pv').dataset.i+1;if(i<curParts.length)playPart(i)});
-  $('pv').addEventListener('error',()=>{if($('pv').getAttribute('src'))toast('Video चालत नाही. दुसरा browser (Chrome) वापरून बघा')});
-});
 
 /* ---------- start ---------- */
 document.addEventListener('DOMContentLoaded',async()=>{
