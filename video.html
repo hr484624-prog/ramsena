@@ -2,52 +2,76 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>Videos - GyanSetu</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh;padding-bottom:75px}
-.header{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;gap:10px;padding:0 12px;background:rgba(5,5,9,.96);border-bottom:1px solid #252533}
+:root{--pk:#ff2bd6;--bl:#416cff;--g:linear-gradient(135deg,#ff28cf,#416cff);--line:#252533}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:system-ui,Arial,sans-serif;background:#050509;color:#fff;min-height:100vh;padding-bottom:120px;
+  background-image:radial-gradient(600px 300px at 0% 0%,rgba(255,43,214,.10),transparent 70%),radial-gradient(600px 300px at 100% 0%,rgba(65,108,255,.12),transparent 70%);
+  background-repeat:no-repeat}
+button{font:inherit;cursor:pointer}
+.header{position:sticky;top:0;z-index:100;height:62px;display:flex;align-items:center;gap:10px;padding:0 12px;background:rgba(5,5,9,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .back{width:40px;height:40px;border:0;border-radius:50%;background:#171722;color:#fff;font-size:25px}
-.logo{font-size:21px;font-weight:800;background:linear-gradient(90deg,#ff2bd6,#4d7cff);-webkit-background-clip:text;color:transparent;flex:1}
-.post-btn{border:0;border-radius:20px;padding:10px 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
-.search-box{padding:12px 12px 8px;background:#09090f;position:sticky;top:62px;z-index:90}
-.search{width:100%;height:45px;border:1px solid #29293a;border-radius:14px;outline:none;background:#15151e;color:#fff;padding:0 15px;font-size:15px}
-.search:focus{border-color:#ff2bd6}
+.back:active{transform:scale(.92)}
+.logo{font-size:21px;font-weight:800;background:linear-gradient(90deg,#ff2bd6,#4d7cff);-webkit-background-clip:text;background-clip:text;color:transparent;flex:1}
+.icon-btn{width:40px;height:40px;border:0;border-radius:50%;background:#171722;color:#fff;font-size:18px}
+.post-btn{border:0;border-radius:20px;padding:10px 16px;font-weight:bold;color:#fff;background:var(--g);box-shadow:0 6px 18px rgba(255,43,214,.25)}
+.post-btn:active{transform:scale(.95)}
+.search-box{padding:12px 12px 8px;background:rgba(9,9,15,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);position:sticky;top:62px;z-index:90}
+.search{width:100%;height:45px;border:1px solid #29293a;border-radius:14px;outline:none;background:#15151e;color:#fff;padding:0 15px;font-size:16px}
+.search:focus{border-color:var(--pk)}
 
-/* FEATURE 3: sort / filter chips */
 .chips{display:flex;gap:8px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:0 0 auto;border:1px solid #2d2d40;background:#15151e;color:#bbb;border-radius:18px;padding:7px 14px;font-size:13px;cursor:pointer}
-.chip.active{background:linear-gradient(135deg,#ff28cf,#416cff);border-color:transparent;color:#fff;font-weight:bold}
+.chip{flex:0 0 auto;border:1px solid #2d2d40;background:#15151e;color:#bbb;border-radius:18px;padding:7px 14px;font-size:13px;transition:.2s}
+.chip.active{background:var(--g);border-color:transparent;color:#fff;font-weight:bold}
 
 .feed{max-width:650px;margin:auto;padding:10px}
-.video-card{background:#0e0e16;border:1px solid #222231;border-radius:16px;overflow:hidden;margin-bottom:16px;box-shadow:0 5px 25px rgba(0,0,0,.35)}
+.video-card{background:#0e0e16;border:1px solid #222231;border-radius:18px;overflow:hidden;margin-bottom:16px;box-shadow:0 5px 25px rgba(0,0,0,.35);animation:rise .4s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 .thumb{position:relative;width:100%;aspect-ratio:16/9;background:#111;cursor:pointer;overflow:hidden}
 .thumb video{width:100%;height:100%;object-fit:cover;pointer-events:none}
-.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,43,214,.9);display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 25px rgba(255,43,214,.4)}
+.thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 55%,rgba(0,0,0,.55));pointer-events:none}
+.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;background:rgba(255,43,214,.9);display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 25px rgba(255,43,214,.45);z-index:2;transition:transform .2s}
+.thumb:active .play{transform:translate(-50%,-50%) scale(.92)}
 .card-content{padding:12px}
 .card-title{font-size:17px;font-weight:bold;margin-bottom:7px}
-.card-description{color:#aaa;font-size:13px;line-height:1.5}
+.card-description{color:#aaa;font-size:13px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .card-meta{color:#777;font-size:11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.del-btn{border:0;background:#2a1520;color:#ff6b8a;border-radius:8px;padding:5px 10px;font-size:11px;cursor:pointer}
-.empty,.loader{text-align:center;padding:60px 20px;color:#777}
+.del-btn{border:0;background:#2a1520;color:#ff6b8a;border-radius:8px;padding:5px 10px;font-size:11px}
+.empty,.loader{text-align:center;padding:60px 20px;color:#777;line-height:1.7}
+.skel{height:250px;border-radius:18px;margin-bottom:16px;background:linear-gradient(90deg,#10101a 25%,#1a1a28 50%,#10101a 75%);background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
 
-/* FEATURE 1/2/4: card action row */
 .card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.mini-btn{border:1px solid #2d2d40;background:#15151e;color:#ddd;border-radius:20px;padding:7px 13px;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
-.mini-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
+.mini-btn{border:1px solid #2d2d40;background:#15151e;color:#ddd;border-radius:20px;padding:7px 13px;font-size:13px;display:inline-flex;align-items:center;gap:6px;transition:.2s}
+.mini-btn:active{transform:scale(.93)}
+.mini-btn.on{border-color:var(--pk);color:#ff6ee0;background:#24122a}
 
-.bottom{position:fixed;left:0;right:0;bottom:0;height:65px;background:#09090f;border-top:1px solid #252533;display:flex;justify-content:space-around;align-items:center;z-index:200}
-.nav{border:0;background:none;color:#777;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-.nav span{font-size:22px}
-.nav.active{color:#ff3bd4}
+/* ===== LIQUID GLASS BOTTOM NAV (same style as profile page) ===== */
+.nav{position:fixed;left:14px;right:14px;max-width:420px;margin:0 auto;bottom:calc(12px + env(safe-area-inset-bottom));height:66px;padding:6px;display:flex;border-radius:33px;z-index:200;
+  background:rgba(28,28,44,.45);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 12px 32px rgba(0,0,0,.55),0 2px 10px rgba(255,43,214,.18),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.06)}
+.nav .ind{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/4);border-radius:27px;
+  background:linear-gradient(135deg,rgba(255,43,214,.32),rgba(65,108,255,.32));
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.28),inset 0 6px 10px rgba(255,255,255,.14),0 4px 16px rgba(65,108,255,.3);
+  transform:translateX(calc(var(--i,0)*100%));
+  transition:transform .42s cubic-bezier(.34,1.45,.64,1)}
+.nav.press .ind{transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12)}
+.nav button{position:relative;z-index:1;flex:1;border:0;background:none;color:#8a90a8;font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:color .25s}
+.nav button span{font-size:22px;transition:transform .3s}
+.nav button.active{color:#ff6ee0}
+.nav button.active span{transform:translateY(-1px) scale(1.12)}
 
 /* PLAYER */
 .player-modal{position:fixed;inset:0;z-index:1000;display:none;background:#000;overflow-y:auto}
 .player-modal.show{display:block}
-.player-top{height:58px;display:flex;align-items:center;padding:0 12px;gap:10px;background:#07070b;border-bottom:1px solid #252533;position:sticky;top:0;z-index:5}
+.player-top{height:58px;display:flex;align-items:center;padding:0 12px;gap:10px;background:rgba(7,7,11,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
 .close-player{width:42px;height:42px;border:0;border-radius:50%;background:#191923;color:#fff;font-size:25px}
 .player-title-small{font-weight:bold;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .player-wrap{max-width:900px;margin:auto}
@@ -57,47 +81,43 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 .player-user{color:#ff54db;margin-top:7px;font-size:13px}
 .player-description{color:#bbb;line-height:1.6;margin-top:12px;white-space:pre-wrap}
 .player-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.action-btn{border:1px solid #343445;background:#15151e;color:#fff;border-radius:12px;padding:11px 17px;font-weight:bold;cursor:pointer}
-.action-btn.share{background:linear-gradient(135deg,#ff28cf,#416cff);border:0}
-.action-btn.on{border-color:#ff2bd6;color:#ff6ee0;background:#24122a}
-
-/* FEATURE 5: player controls */
+.action-btn{border:1px solid #343445;background:#15151e;color:#fff;border-radius:12px;padding:11px 17px;font-weight:bold}
+.action-btn.share{background:var(--g);border:0}
+.action-btn.on{border-color:var(--pk);color:#ff6ee0;background:#24122a}
 .player-tools{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap;color:#aaa;font-size:13px}
 .player-tools select{background:#15151e;color:#fff;border:1px solid #343445;border-radius:10px;padding:8px 10px;font-size:13px}
 .player-tools label{display:flex;align-items:center;gap:6px;cursor:pointer}
 
-/* FEATURE 2: comments */
-.comments{padding:15px;border-top:1px solid #252533}
+.comments{padding:15px;border-top:1px solid var(--line)}
 .comments h4{font-size:16px;margin-bottom:12px}
 .c-form{display:flex;gap:8px;margin-bottom:14px}
-.c-form input{flex:1;height:42px;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:0 12px;font-size:14px;outline:none}
-.c-form input:focus{border-color:#ff2bd6}
-.c-form button{border:0;border-radius:12px;padding:0 16px;font-weight:bold;color:#fff;background:linear-gradient(135deg,#ff28cf,#416cff);cursor:pointer}
+.c-form input{flex:1;height:42px;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:0 12px;font-size:16px;outline:none}
+.c-form input:focus{border-color:var(--pk)}
+.c-form button{border:0;border-radius:12px;padding:0 16px;font-weight:bold;color:#fff;background:var(--g)}
 .c-item{background:#0e0e16;border:1px solid #222231;border-radius:12px;padding:10px 12px;margin-bottom:8px}
 .c-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:#ff54db;margin-bottom:4px}
 .c-head small{color:#666;margin-left:6px}
 .c-text{font-size:14px;color:#ddd;line-height:1.5;word-break:break-word}
-.c-del{border:0;background:none;color:#ff6b8a;font-size:12px;cursor:pointer}
+.c-del{border:0;background:none;color:#ff6b8a;font-size:12px}
 .c-empty{color:#666;font-size:13px;padding:6px 0}
-
-.other-title{font-size:18px;font-weight:bold;padding:15px;border-top:1px solid #252533}
+.other-title{font-size:18px;font-weight:bold;padding:15px;border-top:1px solid var(--line)}
 .related{padding:0 10px 30px}
 
 /* UPLOAD */
-.upload-modal{position:fixed;inset:0;z-index:1500;display:none;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:16px}
+.upload-modal{position:fixed;inset:0;z-index:1500;display:none;background:rgba(0,0,0,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px}
 .upload-modal.show{display:flex}
-.upload-box{width:100%;max-width:450px;background:#0e0e16;border:1px solid #252533;border-radius:18px;padding:18px}
+.upload-box{width:100%;max-width:450px;max-height:92vh;overflow:auto;background:#0e0e16;border:1px solid var(--line);border-radius:20px;padding:18px}
 .upload-box h3{margin-bottom:14px}
-.upload-box input[type=text],.upload-box textarea{width:100%;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:12px;font-size:14px;margin-bottom:10px;outline:none;font-family:inherit}
+.upload-box input[type=text],.upload-box textarea{width:100%;background:#15151e;border:1px solid #29293a;border-radius:12px;color:#fff;padding:12px;font-size:16px;margin-bottom:10px;outline:none;font-family:inherit}
 .upload-box textarea{height:90px;resize:none}
 .upload-box input[type=file]{width:100%;margin-bottom:10px;color:#aaa;font-size:13px}
 .upload-preview{width:100%;max-height:200px;border-radius:12px;background:#000;margin-bottom:10px;display:none}
 .upload-row{display:flex;gap:10px}
-.upload-row button{flex:1;padding:12px;border-radius:12px;font-weight:bold;border:0;cursor:pointer;color:#fff}
+.upload-row button{flex:1;padding:12px;border-radius:12px;font-weight:bold;border:0;color:#fff}
 .btn-cancel{background:#1c1c28}
-.btn-submit{background:linear-gradient(135deg,#ff28cf,#416cff)}
+.btn-submit{background:var(--g)}
 .btn-submit:disabled{opacity:.5}
-.toast{position:fixed;left:50%;bottom:85px;transform:translateX(-50%);background:#20202a;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;font-size:13px;max-width:90%;text-align:center}
+.toast{position:fixed;left:50%;bottom:104px;transform:translateX(-50%);background:#20202a;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;font-size:13px;max-width:90%;text-align:center;border:1px solid #2d2d40}
 .toast.show{display:block}
 </style>
 </head>
@@ -106,6 +126,7 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 <header class="header">
   <button class="back" onclick="goHome()">‹</button>
   <div class="logo">🎬 GyanSetu</div>
+  <button class="icon-btn" onclick="goCreate()" title="Users">👥</button>
   <button class="post-btn" onclick="openUpload()">＋ Post</button>
 </header>
 
@@ -121,15 +142,16 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 </div>
 
 <main class="feed" id="feed">
-  <div class="loader">Loading videos...</div>
+  <div class="skel"></div><div class="skel"></div>
 </main>
 
-<nav class="bottom">
-  <button class="nav" onclick="goHome()"><span>🏠</span>Home</button>
-  <button class="nav active"><span>🎬</span>Videos</button>
-  <button class="nav" onclick="openUpload()"><span>➕</span>Post</button>
-  <button class="nav" onclick="goCreate()"><span>👥</span>Users</button>
-  <button class="nav" onclick="goProfile()"><span>👤</span>Profile</button>
+<!-- BOTTOM NAV (liquid glass) -->
+<nav class="nav" id="nav" style="--i:2">
+  <span class="ind"></span>
+  <button onclick="navTo(0,'home.html')"><span>🏠</span>Home</button>
+  <button onclick="navTo(1,'learn.html')"><span>📚</span>Learn</button>
+  <button class="active" onclick="navTo(2,'video.html')"><span>🎬</span>Videos</button>
+  <button onclick="navTo(3,'profile.html')"><span>👤</span>Profile</button>
 </nav>
 
 <!-- UPLOAD MODAL -->
@@ -200,8 +222,8 @@ body{font-family:Arial,sans-serif;background:#050509;color:#fff;min-height:100vh
 <script>
 const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
 const SUPABASE_KEY = "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-const BUCKET = "videos";          // Storage bucket name
-const MAX_MB = 50;                // max video size
+const BUCKET = "videos";
+const MAX_MB = 50;
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -210,12 +232,11 @@ let currentName = "GyanSetu User";
 let videos = [];
 let currentVideo = null;
 
-/* NEW STATE */
 let sortMode = "latest";
-let likeCount = {};          // video_id -> number
-let myLikes = new Set();     // video_ids liked by me
-let commentCount = {};       // video_id -> number
-let savedSet = new Set();    // bookmarks (stored in this browser)
+let likeCount = {};
+let myLikes = new Set();
+let commentCount = {};
+let savedSet = new Set();
 let likesReady = true;
 let commentsReady = true;
 
@@ -223,13 +244,24 @@ let commentsReady = true;
 function goHome(){ location.href = "home.html"; }
 function goProfile(){ location.href = "profile.html"; }
 function goCreate(){ location.href = "users.html"; }
+function navTo(i,url){
+  const n = document.getElementById("nav");
+  if(n.style.getPropertyValue("--i") == String(i)) return;
+  n.classList.add("press");
+  n.style.setProperty("--i", i);
+  [...n.querySelectorAll("button")].forEach((b,k)=>b.classList.toggle("active", k===i));
+  setTimeout(()=>n.classList.remove("press"), 220);
+  setTimeout(()=>{ location.href = url; }, 300);
+}
 
 /* TOAST */
+let toastTimer;
 function showToast(text){
   const t = document.getElementById("toast");
   t.textContent = text;
   t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"), 2600);
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove("show"), 2600);
 }
 
 /* LOCAL STORAGE HELPERS */
@@ -277,7 +309,7 @@ async function loadVideos(){
   searchVideos();
 }
 
-/* ============ FEATURE 1: LIKES ============ */
+/* LIKES */
 async function loadLikes(){
   likeCount = {}; myLikes = new Set();
   const { data, error } = await supabaseClient
@@ -298,7 +330,6 @@ async function toggleLike(id){
   if(!likesReady){ showToast("Likes table अजून तयार नाही (SQL चालवा)"); return; }
 
   const liked = myLikes.has(id);
-  // optimistic update
   if(liked){ myLikes.delete(id); likeCount[id] = Math.max(0,(likeCount[id]||1)-1); }
   else { myLikes.add(id); likeCount[id] = (likeCount[id]||0)+1; }
   refreshActionUI(id);
@@ -313,7 +344,6 @@ async function toggleLike(id){
   }
   if(error){
     console.error(error);
-    // roll back
     if(liked){ myLikes.add(id); likeCount[id]=(likeCount[id]||0)+1; }
     else { myLikes.delete(id); likeCount[id]=Math.max(0,(likeCount[id]||1)-1); }
     refreshActionUI(id);
@@ -321,7 +351,7 @@ async function toggleLike(id){
   }
 }
 
-/* ============ FEATURE 2: COMMENTS ============ */
+/* COMMENTS */
 async function loadCommentCounts(){
   commentCount = {};
   const { data, error } = await supabaseClient
@@ -346,7 +376,7 @@ async function loadComments(videoId){
     .eq("video_id", String(videoId))
     .order("created_at", { ascending:true });
 
-  if(!currentVideo || String(currentVideo.id) !== String(videoId)) return; // user moved on
+  if(!currentVideo || String(currentVideo.id) !== String(videoId)) return;
   if(error){
     list.innerHTML = `<div class="c-empty">Comments load झाले नाहीत.</div>`;
     return;
@@ -404,7 +434,7 @@ async function deleteComment(cid){
   loadComments(currentVideo.id);
 }
 
-/* ============ FEATURE 3: SORT / FILTER ============ */
+/* SORT / FILTER */
 function setSort(mode){
   sortMode = mode;
   document.querySelectorAll(".chip").forEach(c =>
@@ -412,7 +442,7 @@ function setSort(mode){
   searchVideos();
 }
 
-/* ============ FEATURE 4: SAVE / BOOKMARK ============ */
+/* SAVE */
 function loadSaved(){ savedSet = new Set((lsGet("gs_saved_videos", [])).map(String)); }
 
 function toggleSave(id){
@@ -425,7 +455,7 @@ function toggleSave(id){
   if(sortMode === "saved") searchVideos();
 }
 
-/* ============ FEATURE 5: PLAYER EXTRAS ============ */
+/* PLAYER EXTRAS */
 function setSpeed(v){
   document.getElementById("mainVideo").playbackRate = parseFloat(v) || 1;
   lsSet("gs_speed", v);
@@ -457,7 +487,7 @@ async function copyLink(){
   }
 }
 
-/* UI REFRESH for like / save / comment count (no full re-render) */
+/* UI REFRESH */
 function refreshActionUI(id){
   id = String(id);
   const liked = myLikes.has(id);
@@ -528,9 +558,10 @@ function renderVideos(list){
     feed.innerHTML = `<div class="empty">${msg}</div>`;
     return;
   }
-  list.forEach(video=>{
+  list.forEach((video,i)=>{
     const card = document.createElement("div");
     card.className = "video-card";
+    card.style.animationDelay = Math.min(i,6)*0.05 + "s";
     card.innerHTML = cardHtml(video, true);
     feed.appendChild(card);
   });
@@ -646,11 +677,9 @@ async function deleteVideo(id){
   if(!video || !currentUser) return;
   if(!confirm("हा video delete करायचा?")) return;
 
-  // 1) first remove all likes/comments of this video (owner policy needs the Videos row to still exist)
   try{ await supabaseClient.from("VideoLikes").delete().eq("video_id", String(video.id)); }catch(e){}
   try{ await supabaseClient.from("VideoComments").delete().eq("video_id", String(video.id)); }catch(e){}
 
-  // 2) then delete the video itself
   const { error } = await supabaseClient
     .from("Videos").delete()
     .eq("id", video.id)
@@ -662,7 +691,6 @@ async function deleteVideo(id){
     return;
   }
 
-  // remove file from storage (best effort)
   try{
     const marker = `/${BUCKET}/`;
     const idx = video.video_url.indexOf(marker);
@@ -736,7 +764,7 @@ function renderRelated(currentId){
   document.getElementById("playerModal").scrollTo({ top:0 });
 }
 
-/* SHARE (original: send to all registered users in chat) */
+/* SHARE */
 async function shareCurrentVideo(){
   if(!currentVideo) return;
   if(!currentUser){ showToast("Login required"); return; }
@@ -789,28 +817,30 @@ function formatDate(value){
   return new Date(value).toLocaleDateString([], { day:"numeric", month:"short", year:"numeric" });
 }
 
-/* KEYBOARD: Esc closes player / upload */
+/* ESC closes player / upload */
 document.addEventListener("keydown", e=>{
   if(e.key !== "Escape") return;
   if(document.getElementById("playerModal").classList.contains("show")) closePlayer();
   else if(document.getElementById("uploadModal").classList.contains("show")) closeUpload();
 });
 
-/* AUTOPLAY NEXT when video ends */
+/* tap outside upload box closes it */
+document.getElementById("uploadModal").addEventListener("click", e=>{
+  if(e.target.id === "uploadModal") closeUpload();
+});
+
+/* AUTOPLAY NEXT */
 document.getElementById("mainVideo").addEventListener("ended", playNext);
 
 /* START */
 async function start(){
-  // restore saved settings
   loadSaved();
-  const sp = lsGet("gs_speed", "1");
-  document.getElementById("speedSel").value = sp;
+  document.getElementById("speedSel").value = lsGet("gs_speed", "1");
   document.getElementById("autoNext").checked = lsGet("gs_autonext", true);
 
   await getUser();
   await loadVideos();
 
-  // open a shared link like videos.html?v=123
   const vid = new URLSearchParams(location.search).get("v");
   if(vid) openPlayer(vid);
 }
