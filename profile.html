@@ -8,7 +8,7 @@
 <style>
 :root{--pk:#ff2d87;--bl:#3d6cff;--g:linear-gradient(135deg,#ff2d87,#3d6cff);--ink:#182033;--mut:#7a8494;--line:#eceffa}
 *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
-body{background:#fff;color:var(--ink);min-height:100vh;padding-bottom:84px}
+body{background:#fff;color:var(--ink);min-height:100vh;padding-bottom:110px}
 button{font:inherit;border:0;cursor:pointer;background:none}
 .hidden{display:none!important}
 
@@ -63,11 +63,23 @@ button{font:inherit;border:0;cursor:pointer;background:none}
 .label{color:var(--mut);font-size:13px}
 .value{text-align:right;font-weight:600;max-width:62%;word-break:break-word;font-size:14px}
 
-/* bottom nav */
-.nav{position:fixed;bottom:0;left:0;right:0;height:68px;padding-bottom:env(safe-area-inset-bottom);background:#fff;box-shadow:0 -4px 20px rgba(61,108,255,.12);display:flex;justify-content:space-around;align-items:center;z-index:200}
-.nav button{color:#8b93a7;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
-.nav span{font-size:22px}
-.nav .active{color:var(--pk);font-weight:700}
+/* bottom nav - liquid glass */
+.nav{position:fixed;left:14px;right:14px;max-width:420px;margin:0 auto;bottom:calc(12px + env(safe-area-inset-bottom));height:66px;padding:6px;display:flex;border-radius:33px;z-index:200;
+  background:rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 12px 32px rgba(61,108,255,.22),0 2px 8px rgba(255,45,135,.12),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4)}
+.nav .ind{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/4);border-radius:27px;
+  background:linear-gradient(135deg,rgba(255,45,135,.20),rgba(61,108,255,.20));
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),inset 0 6px 10px rgba(255,255,255,.55),0 4px 14px rgba(61,108,255,.2);
+  transform:translateX(calc(var(--i,0)*100%));
+  transition:transform .42s cubic-bezier(.34,1.45,.64,1)}
+.nav.press .ind{transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12)}
+.nav button{position:relative;z-index:1;flex:1;color:#6f7893;font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:color .25s}
+.nav button span{font-size:22px;transition:transform .3s}
+.nav button.active{color:var(--pk)}
+.nav button.active span{transform:translateY(-1px) scale(1.12)}
 
 /* modals */
 .modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(10,15,40,.6)}
@@ -94,7 +106,7 @@ textarea{min-height:100px;resize:vertical}
 .vinfo{padding:12px 16px calc(16px + env(safe-area-inset-bottom));color:#e3e6f5;font-size:14px;line-height:1.6;max-height:30vh;overflow:auto;background:linear-gradient(transparent,#12142a)}
 .vinfo small{color:#8f96b4}
 
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;max-width:90%;text-align:center}
+.toast{position:fixed;left:50%;bottom:104px;transform:translateX(-50%);background:#222;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;max-width:90%;text-align:center}
 .toast.show{display:block}
 </style>
 </head>
@@ -164,12 +176,13 @@ textarea{min-height:100px;resize:vertical}
 
 </main>
 
-<!-- BOTTOM NAV -->
-<nav class="nav">
-  <button onclick="goHome()"><span>🏠</span>Home</button>
-  <button onclick="goLearn()"><span>📚</span>Learn</button>
-  <button onclick="goVideos()"><span>🎬</span>Videos</button>
-  <button class="active"><span>👤</span>Profile</button>
+<!-- BOTTOM NAV (liquid glass) -->
+<nav class="nav" id="nav" style="--i:3">
+  <span class="ind"></span>
+  <button onclick="navTo(0,'home.html')"><span>🏠</span>Home</button>
+  <button onclick="navTo(1,'learn.html')"><span>📚</span>Learn</button>
+  <button onclick="navTo(2,'video.html')"><span>🎬</span>Videos</button>
+  <button class="active" onclick="navTo(3,'profile.html')"><span>👤</span>Profile</button>
 </nav>
 
 <!-- VIDEO POST MODAL -->
@@ -233,6 +246,15 @@ function goHome(){location.href="home.html"}
 function goLearn(){location.href="learn.html"}
 function goVideos(){location.href="video.html"}
 function goJunkFile(){location.href="Junkfile.html"}
+function navTo(i,url){
+  const n=$('nav');
+  if(n.style.getPropertyValue('--i')==String(i))return;
+  n.classList.add('press');
+  n.style.setProperty('--i',i);
+  [...n.querySelectorAll('button')].forEach((b,k)=>b.classList.toggle('active',k===i));
+  setTimeout(()=>n.classList.remove('press'),220);
+  setTimeout(()=>{location.href=url},300);
+}
 
 /* ================= HELPERS ================= */
 let tt;
