@@ -1,1927 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 <title>My Profile - GyanSetu</title>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
+:root{--pk:#ff2d87;--bl:#3d6cff;--g:linear-gradient(135deg,#ff2d87,#3d6cff);--ink:#182033;--mut:#7a8494;--line:#eceffa}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:#fff;color:var(--ink);min-height:100vh;padding-bottom:84px}
+button{font:inherit;border:0;cursor:pointer;background:none}
+.hidden{display:none!important}
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
-}
+/* header */
+.header{height:56px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);display:flex;align-items:center;gap:6px;padding:0 10px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--line)}
+.hb{width:40px;height:40px;border-radius:50%;font-size:22px;color:var(--bl);flex:none}
+.hb:active{background:#eef2ff}
+.title{flex:1;text-align:center;font-size:18px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-body{
-  background:linear-gradient(135deg,#f5f8ff,#eef4ff);
-  color:#182033;
-  min-height:100vh;
-  padding-bottom:80px;
-}
+.container{max-width:600px;margin:auto}
 
-.header{
-  height:62px;
-  background:rgba(255,255,255,.94);
-  backdrop-filter:blur(12px);
-  display:flex;
-  align-items:center;
-  padding:0 12px;
-  position:sticky;
-  top:0;
-  z-index:100;
-  box-shadow:0 3px 18px rgba(30,80,150,.12);
-}
+/* top of profile */
+.top{padding:20px 16px 8px;background:linear-gradient(180deg,#fff0f7 0,#fff 70%)}
+.row1{display:flex;align-items:center;gap:20px}
+.ring{width:96px;height:96px;border-radius:50%;padding:3px;background:var(--g);flex:none}
+.avatar{width:100%;height:100%;border-radius:50%;border:3px solid #fff;background:linear-gradient(135deg,#ffd3e6,#cfdcff);color:var(--bl);display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:800;overflow:hidden;cursor:pointer}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.stats{flex:1;display:flex;justify-content:space-around;text-align:center;min-width:0}
+.stats div{min-width:0}
+.stats b{display:block;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats span{font-size:13px;color:var(--mut)}
+.bio{margin-top:12px;font-size:14px;line-height:1.5}
+.bio .name{font-weight:800;font-size:16px}
+.bio .sub{color:var(--mut)}
+.bio .goal{color:var(--bl);font-weight:600;margin-top:2px}
 
-.header button{
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:50%;
-  background:#eef4ff;
-  color:#1769d1;
-  font-size:24px;
-  cursor:pointer;
-}
+.btns{display:flex;gap:8px;margin-top:14px}
+.btns button{flex:1;padding:10px 6px;border-radius:10px;font-weight:700;font-size:14px}
+.b-main{background:var(--g);color:#fff;box-shadow:0 6px 16px rgba(255,45,135,.22)}
+.b-soft{background:#eef2ff;color:var(--bl)}
+.b-out{flex:none!important;width:44px;background:#fff3f5;color:#d92345}
+.btns button:active{transform:scale(.97)}
 
-.title{
-  flex:1;
-  text-align:center;
-  font-size:19px;
-  font-weight:bold;
-}
+/* tabs */
+.tabs{display:flex;margin-top:16px;border-top:1px solid var(--line)}
+.tabs button{flex:1;padding:12px 0;font-size:20px;color:#b3b9cc;border-top:2px solid transparent;margin-top:-1px}
+.tabs button.on{color:var(--pk);border-top-color:var(--pk)}
 
-.container{
-  max-width:600px;
-  margin:auto;
-  padding:18px 14px;
-}
+/* post grid */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.cell{position:relative;aspect-ratio:1;background:#f0f3fb;overflow:hidden;cursor:pointer}
+.cell video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.cell .pl{position:absolute;top:6px;right:6px;color:#fff;font-size:14px;text-shadow:0 1px 4px #0008}
+.cell .ct{position:absolute;left:0;right:0;bottom:0;padding:14px 6px 5px;background:linear-gradient(transparent,#000a);color:#fff;font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty{text-align:center;color:var(--mut);padding:44px 20px;line-height:1.7}
+.empty .big{font-size:44px}
+.empty button{margin-top:14px;padding:11px 22px;border-radius:12px;background:var(--g);color:#fff;font-weight:700}
 
-.profile-card{
-  background:white;
-  border-radius:25px;
-  padding:24px 18px;
-  box-shadow:0 8px 30px rgba(20,70,130,.12);
-}
+/* about */
+.about{padding:6px 16px}
+.arow{display:flex;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid var(--line)}
+.label{color:var(--mut);font-size:13px}
+.value{text-align:right;font-weight:600;max-width:62%;word-break:break-word;font-size:14px}
 
-.profile-top{
-  text-align:center;
-}
+/* bottom nav */
+.nav{position:fixed;bottom:0;left:0;right:0;height:68px;padding-bottom:env(safe-area-inset-bottom);background:#fff;box-shadow:0 -4px 20px rgba(61,108,255,.12);display:flex;justify-content:space-around;align-items:center;z-index:200}
+.nav button{color:#8b93a7;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav span{font-size:22px}
+.nav .active{color:var(--pk);font-weight:700}
 
-.avatar{
-  width:105px;
-  height:105px;
-  margin:auto;
-  border-radius:50%;
-  background:linear-gradient(135deg,#1976d2,#7c4dff);
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:40px;
-  font-weight:bold;
-  overflow:hidden;
-  border:5px solid #edf4ff;
-  cursor:pointer;
-}
+/* modals */
+.modal{position:fixed;inset:0;z-index:1000;display:none;align-items:flex-end;justify-content:center;background:rgba(10,15,40,.6)}
+.modal.show{display:flex}
+.modal-box{width:100%;max-width:600px;max-height:92vh;overflow:auto;background:#fff;border-radius:25px 25px 0 0;padding:20px}
+.modal-title{font-size:20px;font-weight:800;margin-bottom:18px}
+label{display:block;font-size:14px;font-weight:700;margin-bottom:7px}
+input,textarea{width:100%;padding:13px;border:1px solid #d9e0f2;border-radius:12px;outline:none;font:inherit;font-size:16px;margin-bottom:14px;background:#fff}
+input:focus,textarea:focus{border-color:var(--bl)}
+textarea{min-height:100px;resize:vertical}
+.primary{width:100%;padding:14px;border-radius:13px;background:var(--g);color:#fff;font-size:16px;font-weight:700}
+.primary:disabled{opacity:.6}
+.cancel{width:100%;padding:13px;border-radius:13px;background:#eef2ff;color:var(--bl);font-weight:700;margin-top:9px}
+.progress{display:none;margin-top:12px;text-align:center;color:#666;font-size:13px}
 
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
+/* post viewer */
+.viewer{position:fixed;inset:0;z-index:1500;background:#05060d;display:none;flex-direction:column}
+.viewer.show{display:flex}
+.vtop{display:flex;align-items:center;gap:8px;padding:10px;color:#fff}
+.vtop .t{flex:1;font-weight:700;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vtop button{width:40px;height:40px;border-radius:50%;background:#ffffff1f;color:#fff;font-size:18px}
+.vbody{flex:1;min-height:0;display:flex;align-items:center;justify-content:center}
+.vbody video{width:100%;max-height:100%;background:#000}
+.vinfo{padding:12px 16px calc(16px + env(safe-area-inset-bottom));color:#e3e6f5;font-size:14px;line-height:1.6;max-height:30vh;overflow:auto;background:linear-gradient(transparent,#12142a)}
+.vinfo small{color:#8f96b4}
 
-.name{
-  font-size:23px;
-  font-weight:bold;
-  margin-top:12px;
-}
-
-.email{
-  color:#777;
-  font-size:14px;
-  margin-top:4px;
-}
-
-.video-post-btn{
-  width:100%;
-  margin-top:20px;
-  padding:15px;
-  border:0;
-  border-radius:15px;
-  background:linear-gradient(135deg,#ff2bd6,#436cff);
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  box-shadow:0 8px 20px rgba(120,60,220,.25);
-  cursor:pointer;
-}
-
-.edit-btn{
-  width:100%;
-  margin-top:10px;
-  padding:13px;
-  border:1px solid #dbe7f7;
-  border-radius:14px;
-  background:#f7faff;
-  color:#1769d1;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-/* LOGOUT */
-
-.logout-btn{
-  width:100%;
-  margin-top:10px;
-  padding:13px;
-  border:1px solid #ffd5dc;
-  border-radius:14px;
-  background:#fff3f5;
-  color:#d92345;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.logout-btn:active{
-  transform:scale(.98);
-}
-
-.info{
-  margin-top:22px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:14px 0;
-  border-bottom:1px solid #edf0f5;
-}
-
-.label{
-  color:#7a8494;
-  font-size:13px;
-}
-
-.value{
-  text-align:right;
-  font-weight:600;
-  max-width:60%;
-  word-break:break-word;
-}
-
-.nav{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:68px;
-  background:white;
-  box-shadow:0 -5px 20px rgba(0,0,0,.1);
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:200;
-}
-
-.nav button{
-  border:0;
-  background:none;
-  color:#777;
-  font-size:11px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:4px;
-  cursor:pointer;
-}
-
-.nav span{
-  font-size:22px;
-}
-
-.nav .active{
-  color:#1976d2;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:none;
-  align-items:flex-end;
-  justify-content:center;
-  background:rgba(0,0,0,.6);
-}
-
-.modal.show{
-  display:flex;
-}
-
-.modal-box{
-  width:100%;
-  max-width:600px;
-  max-height:92vh;
-  overflow:auto;
-  background:white;
-  border-radius:25px 25px 0 0;
-  padding:20px;
-}
-
-.modal-title{
-  font-size:20px;
-  font-weight:bold;
-  margin-bottom:18px;
-}
-
-label{
-  display:block;
-  font-size:14px;
-  font-weight:bold;
-  margin-bottom:7px;
-}
-
-input,
-textarea{
-  width:100%;
-  padding:13px;
-  border:1px solid #d4deeb;
-  border-radius:12px;
-  outline:none;
-  font-size:15px;
-  margin-bottom:14px;
-}
-
-textarea{
-  min-height:110px;
-  resize:vertical;
-}
-
-.primary{
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:13px;
-  background:linear-gradient(135deg,#ff2bd6,#436cff);
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.cancel{
-  width:100%;
-  padding:13px;
-  border:0;
-  border-radius:13px;
-  background:#edf0f5;
-  margin-top:9px;
-  cursor:pointer;
-}
-
-.progress{
-  display:none;
-  margin-top:12px;
-  text-align:center;
-  color:#666;
-  font-size:13px;
-}
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:85px;
-  transform:translateX(-50%);
-  background:#222;
-  color:white;
-  padding:11px 18px;
-  border-radius:20px;
-  display:none;
-  z-index:3000;
-  max-width:90%;
-  text-align:center;
-}
-
-.toast.show{
-  display:block;
-}
-
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#222;color:#fff;padding:11px 18px;border-radius:20px;display:none;z-index:3000;max-width:90%;text-align:center}
+.toast.show{display:block}
 </style>
-
 </head>
-
-
 <body>
 
-
-<!-- HEADER -->
-
 <header class="header">
-
-<button onclick="goHome()">
-  ‹
-</button>
-
-<div class="title">
-  👤 My Profile
-</div>
-
-<button onclick="goJunkFile()">
-  🛄
-</button>
-
+  <button class="hb" onclick="goHome()">‹</button>
+  <div class="title" id="hname">My Profile</div>
+  <button class="hb" onclick="openVideoModal()">➕</button>
+  <button class="hb" onclick="goJunkFile()">🛄</button>
 </header>
-
-
-
-<!-- MAIN -->
 
 <main class="container">
 
-<div class="profile-card">
-
-
-  <!-- PROFILE TOP -->
-
-  <div class="profile-top">
-
-    <div
-      class="avatar"
-      id="avatar"
-      onclick="document.getElementById('photoInput').click()">
-
-      G
-
+  <section class="top">
+    <div class="row1">
+      <div class="ring"><div class="avatar" id="avatar" onclick="document.getElementById('photoInput').click()">G</div></div>
+      <div class="stats">
+        <div><b id="stPosts">0</b><span>Posts</span></div>
+        <div><b id="stClass">-</b><span>Class</span></div>
+        <div><b id="stMedium">-</b><span>Medium</span></div>
+      </div>
     </div>
 
-
-    <div
-      class="name"
-      id="name">
-
-      User
-
+    <div class="bio">
+      <div class="name" id="name">User</div>
+      <div class="sub" id="bioSchool"></div>
+      <div class="sub" id="bioCity"></div>
+      <div class="goal" id="bioGoal"></div>
     </div>
 
-
-    <div
-      class="email"
-      id="email">
-
-      -
-
+    <div class="btns">
+      <button class="b-soft" onclick="openEdit()">✏️ Edit Profile</button>
+      <button class="b-main" onclick="openVideoModal()">🎬 Post Video</button>
+      <button class="b-out" onclick="logoutUser()" title="Logout">🚪</button>
     </div>
+  </section>
 
+  <div class="tabs">
+    <button id="tabPosts" class="on" onclick="setTab('posts')">▦</button>
+    <button id="tabAbout" onclick="setTab('about')">ℹ️</button>
   </div>
 
-
-
-  <!-- VIDEO -->
-
-  <button
-    class="video-post-btn"
-    onclick="openVideoModal()">
-
-    🎬 Post a Video
-
-  </button>
-
-
-
-  <!-- EDIT -->
-
-  <button
-    class="edit-btn"
-    onclick="openEdit()">
-
-    ✏️ Edit Information
-
-  </button>
-
-
-
-  <!-- LOGOUT -->
-
-  <button
-    class="logout-btn"
-    onclick="logoutUser()">
-
-    🚪 Logout
-
-  </button>
-
-
-
-  <!-- INFORMATION -->
-
-  <div class="info">
-
-
-    <div class="row">
-
-      <span class="label">
-        Full Name
-      </span>
-
-      <span
-        class="value"
-        id="fullName">
-
-        -
-
-      </span>
-
+  <!-- POSTS -->
+  <section id="paneposts">
+    <div class="grid" id="grid"></div>
+    <div class="empty hidden" id="noPosts">
+      <div class="big">🎬</div>
+      अजून एकही post नाही.<br>तुमचा पहिला video post करा!
+      <br><button onclick="openVideoModal()">+ Post Video</button>
     </div>
+  </section>
 
-
-    <div class="row">
-
-      <span class="label">
-        Date of Birth
-      </span>
-
-      <span
-        class="value"
-        id="dob">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        School / College
-      </span>
-
-      <span
-        class="value"
-        id="school">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        Class
-      </span>
-
-      <span
-        class="value"
-        id="className">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        Medium
-      </span>
-
-      <span
-        class="value"
-        id="medium">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        City / Village
-      </span>
-
-      <span
-        class="value"
-        id="city">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        Career Goal
-      </span>
-
-      <span
-        class="value"
-        id="career">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        Mobile
-      </span>
-
-      <span
-        class="value"
-        id="mobile">
-
-        -
-
-      </span>
-
-    </div>
-
-
-    <div class="row">
-
-      <span class="label">
-        GyanSetu ID
-      </span>
-
-      <span
-        class="value"
-        id="gyanId">
-
-        -
-
-      </span>
-
-    </div>
-
-
-  </div>
-
-</div>
+  <!-- ABOUT -->
+  <section id="paneabout" class="about hidden">
+    <div class="arow"><span class="label">Full Name</span><span class="value" id="fullName">-</span></div>
+    <div class="arow"><span class="label">Email</span><span class="value" id="email">-</span></div>
+    <div class="arow"><span class="label">Date of Birth</span><span class="value" id="dob">-</span></div>
+    <div class="arow"><span class="label">School / College</span><span class="value" id="school">-</span></div>
+    <div class="arow"><span class="label">Class</span><span class="value" id="className">-</span></div>
+    <div class="arow"><span class="label">Medium</span><span class="value" id="medium">-</span></div>
+    <div class="arow"><span class="label">City / Village</span><span class="value" id="city">-</span></div>
+    <div class="arow"><span class="label">Career Goal</span><span class="value" id="career">-</span></div>
+    <div class="arow"><span class="label">Mobile</span><span class="value" id="mobile">-</span></div>
+    <div class="arow"><span class="label">GyanSetu ID</span><span class="value" id="gyanId" style="font-size:12px">-</span></div>
+  </section>
 
 </main>
 
-
-
-<!-- =========================
-     BOTTOM NAV
-========================== -->
-
+<!-- BOTTOM NAV -->
 <nav class="nav">
-
-
-<button onclick="goHome()">
-
-<span>
-  🏠
-</span>
-
-Home
-
-</button>
-
-
-<button onclick="goLearn()">
-
-<span>
-  📚
-</span>
-
-Learn
-
-</button>
-
-
-<button onclick="goVideos()">
-
-<span>
-  🎬
-</span>
-
-Videos
-
-</button>
-
-
-<button class="active">
-
-<span>
-  👤
-</span>
-
-Profile
-
-</button>
-
-
+  <button onclick="goHome()"><span>🏠</span>Home</button>
+  <button onclick="goLearn()"><span>📚</span>Learn</button>
+  <button onclick="goVideos()"><span>🎬</span>Videos</button>
+  <button class="active"><span>👤</span>Profile</button>
 </nav>
 
-
-
-<!-- =========================
-     VIDEO MODAL
-========================== -->
-
-<div
-  class="modal"
-  id="videoModal">
-
-<div class="modal-box">
-
-
-<div class="modal-title">
-  🎬 Post Video
+<!-- VIDEO POST MODAL -->
+<div class="modal" id="videoModal">
+  <div class="modal-box">
+    <div class="modal-title">🎬 Post Video</div>
+    <label>Select Video</label>
+    <input type="file" id="videoInput" accept="video/*">
+    <label>Video Title</label>
+    <input type="text" id="videoTitle" maxlength="150" placeholder="Video चे नाव">
+    <label>Description</label>
+    <textarea id="videoDescription" maxlength="2000" placeholder="या video बद्दल थोडी माहिती लिहा..."></textarea>
+    <button class="primary" id="uploadButton" onclick="uploadVideo()">🚀 Post Video</button>
+    <div class="progress" id="uploadProgress">Video upload होत आहे...</div>
+    <button class="cancel" onclick="closeVideoModal()">Cancel</button>
+  </div>
 </div>
 
-
-<label>
-  Select Video
-</label>
-
-<input
-  type="file"
-  id="videoInput"
-  accept="video/*"
->
-
-
-<label>
-  Video Title
-</label>
-
-<input
-  type="text"
-  id="videoTitle"
-  maxlength="150"
-  placeholder="Video चे नाव"
->
-
-
-<label>
-  Description
-</label>
-
-<textarea
-  id="videoDescription"
-  maxlength="2000"
-  placeholder="या video बद्दल थोडी माहिती लिहा...">
-</textarea>
-
-
-<button
-  class="primary"
-  id="uploadButton"
-  onclick="uploadVideo()">
-
-  🚀 Post Video
-
-</button>
-
-
-<div
-  class="progress"
-  id="uploadProgress">
-
-  Video upload होत आहे...
-
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+  <div class="modal-box">
+    <div class="modal-title">✏️ Edit Information</div>
+    <label>Full Name</label><input id="editFullName">
+    <label>Date of Birth</label><input type="date" id="editDob">
+    <label>School / College</label><input id="editSchool">
+    <label>Class</label><input id="editClass">
+    <label>Medium</label><input id="editMedium">
+    <label>City / Village</label><input id="editCity">
+    <label>Career Goal</label><input id="editCareer">
+    <label>Mobile</label><input id="editMobile">
+    <button class="primary" onclick="saveInformation()">Save Information</button>
+    <button class="cancel" onclick="closeEdit()">Cancel</button>
+  </div>
 </div>
 
-
-<button
-  class="cancel"
-  onclick="closeVideoModal()">
-
-  Cancel
-
-</button>
-
-
+<!-- POST VIEWER -->
+<div class="viewer" id="viewer">
+  <div class="vtop">
+    <button onclick="closeViewer()">←</button>
+    <div class="t" id="vTitle"></div>
+    <button id="vDel" onclick="deletePost()">🗑️</button>
+  </div>
+  <div class="vbody"><video id="vVideo" controls playsinline></video></div>
+  <div class="vinfo" id="vInfo"></div>
 </div>
 
-</div>
-
-
-
-<!-- =========================
-     EDIT MODAL
-========================== -->
-
-<div
-  class="modal"
-  id="editModal">
-
-<div class="modal-box">
-
-
-<div class="modal-title">
-  ✏️ Edit Information
-</div>
-
-
-<label>
-  Full Name
-</label>
-
-<input
-  id="editFullName"
->
-
-
-<label>
-  Date of Birth
-</label>
-
-<input
-  type="date"
-  id="editDob"
->
-
-
-<label>
-  School / College
-</label>
-
-<input
-  id="editSchool"
->
-
-
-<label>
-  Class
-</label>
-
-<input
-  id="editClass"
->
-
-
-<label>
-  Medium
-</label>
-
-<input
-  id="editMedium"
->
-
-
-<label>
-  City / Village
-</label>
-
-<input
-  id="editCity"
->
-
-
-<label>
-  Career Goal
-</label>
-
-<input
-  id="editCareer"
->
-
-
-<label>
-  Mobile
-</label>
-
-<input
-  id="editMobile"
->
-
-
-<button
-  class="primary"
-  onclick="saveInformation()">
-
-  Save Information
-
-</button>
-
-
-<button
-  class="cancel"
-  onclick="closeEdit()">
-
-  Cancel
-
-</button>
-
-
-</div>
-
-</div>
-
-
-
-<!-- PROFILE PHOTO -->
-
-<input
-  type="file"
-  id="photoInput"
-  accept="image/*"
-  style="display:none"
-  onchange="changePhoto(event)"
->
-
-
-
-<!-- TOAST -->
-
-<div
-  class="toast"
-  id="toast">
-</div>
-
-
+<input type="file" id="photoInput" accept="image/*" style="display:none" onchange="changePhoto(event)">
+<div class="toast" id="toast"></div>
 
 <script>
+/* ================= SUPABASE ================= */
+const SUPABASE_URL="https://eqglttfffhvoyvrclzse.supabase.co";
+const SUPABASE_KEY="sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 
-/* ==================================================
-   SUPABASE
-================================================== */
+let currentUser=null,posts=[],openId=null;
+const $=id=>document.getElementById(id);
 
-const SUPABASE_URL =
-"https://eqglttfffhvoyvrclzse.supabase.co";
+/* ================= NAVIGATION ================= */
+function goHome(){location.href="home.html"}
+function goLearn(){location.href="learn.html"}
+function goVideos(){location.href="video.html"}
+function goJunkFile(){location.href="Junkfile.html"}
 
-const SUPABASE_KEY =
-"sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+/* ================= HELPERS ================= */
+let tt;
+function showToast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('show'),2500)}
+function escapeAttr(t){return String(t||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function setText(id,v){$(id).textContent=v||"-"}
+function cleanValue(id){const v=$(id).textContent;return v==="-"?"":v}
 
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
-  }
-);
-
-
-let currentUser = null;
-
-
-
-/* ==================================================
-   NAVIGATION
-================================================== */
-
-function goHome(){
-
-  location.href =
-    "home.html";
-
+/* ================= TABS ================= */
+function setTab(t){
+  $('tabPosts').classList.toggle('on',t==='posts');
+  $('tabAbout').classList.toggle('on',t==='about');
+  $('paneposts').classList.toggle('hidden',t!=='posts');
+  $('paneabout').classList.toggle('hidden',t!=='about');
 }
 
-
-function goLearn(){
-
-  location.href =
-    "learn.html";
-
-}
-
-
-function goVideos(){
-
-  location.href =
-    "video.html";
-
-}
-
-
-function goJunkFile(){
-
-  location.href =
-    "Junkfile.html";
-
-}
-
-
-
-/* ==================================================
-   TOAST
-================================================== */
-
-function showToast(text){
-
-  const toast =
-    document.getElementById(
-      "toast"
-    );
-
-
-  toast.textContent =
-    text;
-
-
-  toast.classList.add(
-    "show"
-  );
-
-
-  setTimeout(
-    () => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    },
-    2500
-  );
-
-}
-
-
-
-/* ==================================================
-   LOAD PROFILE
-================================================== */
-
+/* ================= LOAD PROFILE ================= */
 async function loadProfile(){
-
   try{
+    const {data,error}=await supabaseClient.auth.getUser();
+    if(error||!data.user){location.href="username.html";return}
+    currentUser=data.user;
 
+    const {data:profile,error:pe}=await supabaseClient.from("Profiles").select("*").eq("id",currentUser.id).maybeSingle();
+    if(pe)console.error("PROFILE ERROR:",pe);
 
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.auth.getUser();
+    const md=currentUser.user_metadata||{};
+    const username=profile?.username||md.username||"User";
 
+    $('name').textContent=profile?.full_name||username;
+    $('hname').textContent=username;
+    $('email').textContent=currentUser.email||"-";
 
-    if(
-      error ||
-      !data.user
-    ){
+    setText("fullName",profile?.full_name);
+    setText("dob",profile?.dob);
+    setText("school",profile?.school);
+    setText("className",profile?.class_name);
+    setText("medium",profile?.medium);
+    setText("city",profile?.city);
+    setText("career",profile?.career_goal);
+    setText("mobile",profile?.mobile);
+    setText("gyanId",currentUser.id);
 
-      location.href =
-        "username.html";
+    $('stClass').textContent=profile?.class_name||"-";
+    $('stMedium').textContent=profile?.medium||"-";
+    $('bioSchool').textContent=profile?.school?"🏫 "+profile.school:"";
+    $('bioCity').textContent=profile?.city?"📍 "+profile.city:"";
+    $('bioGoal').textContent=profile?.career_goal?"🎯 "+profile.career_goal:"";
 
-      return;
+    const photo=localStorage.getItem("profilePhoto");
+    if(photo)$('avatar').innerHTML=`<img src="${escapeAttr(photo)}" alt="Profile">`;
+    else $('avatar').textContent=username.charAt(0).toUpperCase();
 
-    }
-
-
-    currentUser =
-      data.user;
-
-
-    const {
-      data:profile,
-      error:profileError
-    } =
-    await supabaseClient
-      .from("Profiles")
-      .select("*")
-      .eq(
-        "id",
-        currentUser.id
-      )
-      .maybeSingle();
-
-
-    if(profileError){
-
-      console.error(
-        "PROFILE ERROR:",
-        profileError
-      );
-
-    }
-
-
-    const metadata =
-      currentUser.user_metadata ||
-      {};
-
-
-    const username =
-      profile?.username ||
-      metadata.username ||
-      "User";
-
-
-    const email =
-      currentUser.email ||
-      "-";
-
-
-    document.getElementById(
-      "name"
-    ).textContent =
-      username;
-
-
-    document.getElementById(
-      "email"
-    ).textContent =
-      email;
-
-
-    setText(
-      "fullName",
-      profile?.full_name
-    );
-
-
-    setText(
-      "dob",
-      profile?.dob
-    );
-
-
-    setText(
-      "school",
-      profile?.school
-    );
-
-
-    setText(
-      "className",
-      profile?.class_name
-    );
-
-
-    setText(
-      "medium",
-      profile?.medium
-    );
-
-
-    setText(
-      "city",
-      profile?.city
-    );
-
-
-    setText(
-      "career",
-      profile?.career_goal
-    );
-
-
-    setText(
-      "mobile",
-      profile?.mobile
-    );
-
-
-    setText(
-      "gyanId",
-      currentUser.id
-    );
-
-
-    const photo =
-      localStorage.getItem(
-        "profilePhoto"
-      );
-
-
-    if(photo){
-
-      document.getElementById(
-        "avatar"
-      ).innerHTML =
-        `<img src="${escapeAttr(photo)}" alt="Profile">`;
-
-    }
-
-    else{
-
-      document.getElementById(
-        "avatar"
-      ).textContent =
-        username
-          .charAt(0)
-          .toUpperCase();
-
-    }
-
-
+    loadPosts();
+  }catch(e){
+    console.error("LOAD PROFILE ERROR:",e);
+    location.href="username.html";
   }
-  catch(error){
-
-    console.error(
-      "LOAD PROFILE ERROR:",
-      error
-    );
-
-    location.href =
-      "username.html";
-
-  }
-
 }
 
-
-
-/* ==================================================
-   SET TEXT
-================================================== */
-
-function setText(
-  id,
-  value
-){
-
-  document.getElementById(
-    id
-  ).textContent =
-    value ||
-    "-";
-
+/* ================= MY POSTS ================= */
+async function loadPosts(){
+  const {data,error}=await supabaseClient.from("Videos").select("*").eq("user_id",currentUser.id);
+  if(error){console.error("POSTS ERROR:",error);showToast("Posts load झाले नाहीत");return}
+  posts=(data||[]).sort((a,b)=>{
+    const x=new Date(b.created_at||0)-new Date(a.created_at||0);
+    return x||String(b.id).localeCompare(String(a.id));
+  });
+  drawGrid();
+}
+function drawGrid(){
+  $('stPosts').textContent=posts.length;
+  $('noPosts').classList.toggle('hidden',posts.length>0);
+  $('grid').innerHTML=posts.map((p,i)=>`<div class="cell" onclick="openPost(${i})">
+      <video src="${escapeAttr(p.video_url)}#t=0.5" preload="metadata" muted playsinline></video>
+      <span class="pl">▶</span>
+      <div class="ct">${escapeAttr(p.title)}</div>
+    </div>`).join('');
 }
 
-
-
-/* ==================================================
-   VIDEO MODAL
-================================================== */
-
-function openVideoModal(){
-
-  document.getElementById(
-    "videoModal"
-  ).classList.add(
-    "show"
-  );
-
+/* ---- viewer ---- */
+function openPost(i){
+  const p=posts[i];if(!p)return;
+  openId=p.id;
+  $('vTitle').textContent=p.title||"";
+  const d=p.created_at?new Date(p.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):"";
+  const info=$('vInfo');
+  info.textContent="";
+  const b=document.createElement('b');b.textContent=p.title||"";
+  info.appendChild(b);
+  if(d){info.appendChild(document.createElement('br'));const s=document.createElement('small');s.textContent=d;info.appendChild(s)}
+  if(p.description){info.appendChild(document.createElement('br'));info.appendChild(document.createTextNode(p.description))}
+  const v=$('vVideo');v.src=p.video_url;
+  $('viewer').classList.add('show');
+  v.play().catch(()=>{});
+}
+function closeViewer(){
+  const v=$('vVideo');v.pause();v.removeAttribute('src');v.load();
+  $('viewer').classList.remove('show');openId=null;
+}
+async function deletePost(){
+  const p=posts.find(x=>x.id===openId);if(!p)return;
+  if(!confirm("हा video delete करायचा आहे का?"))return;
+  const {error}=await supabaseClient.from("Videos").delete().eq("id",p.id).eq("user_id",currentUser.id);
+  if(error){console.error(error);showToast("Delete झाले नाही");return}
+  // remove file from storage too (best effort)
+  try{
+    const m=String(p.video_url).split("/videos/")[1];
+    if(m)await supabaseClient.storage.from("videos").remove([decodeURIComponent(m.split("?")[0])]);
+  }catch(e){}
+  closeViewer();
+  posts=posts.filter(x=>x.id!==p.id);drawGrid();
+  showToast("Video delete झाला");
 }
 
-
-function closeVideoModal(){
-
-  document.getElementById(
-    "videoModal"
-  ).classList.remove(
-    "show"
-  );
-
-}
-
-
-
-/* ==================================================
-   UPLOAD VIDEO
-================================================== */
+/* ================= VIDEO MODAL ================= */
+function openVideoModal(){$('videoModal').classList.add("show")}
+function closeVideoModal(){$('videoModal').classList.remove("show")}
 
 async function uploadVideo(){
+  if(!currentUser){showToast("Please login first.");return}
+  const file=$('videoInput').files[0];
+  const title=$('videoTitle').value.trim();
+  const description=$('videoDescription').value.trim();
 
-  if(!currentUser){
+  if(!file){showToast("Video select करा.");return}
+  if(!file.type.startsWith("video/")){showToast("फक्त video file निवडा.");return}
+  if(!title){showToast("Video title टाका.");return}
+  if(file.size>100*1024*1024){showToast("Video 100 MB पेक्षा कमी असावा.");return}
 
-    showToast(
-      "Please login first."
-    );
-
-    return;
-
-  }
-
-
-  const file =
-    document.getElementById(
-      "videoInput"
-    ).files[0];
-
-
-  const title =
-    document.getElementById(
-      "videoTitle"
-    ).value.trim();
-
-
-  const description =
-    document.getElementById(
-      "videoDescription"
-    ).value.trim();
-
-
-  if(!file){
-
-    showToast(
-      "Video select करा."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !file.type.startsWith(
-      "video/"
-    )
-  ){
-
-    showToast(
-      "फक्त video file निवडा."
-    );
-
-    return;
-
-  }
-
-
-  if(!title){
-
-    showToast(
-      "Video title टाका."
-    );
-
-    return;
-
-  }
-
-
-  if(
-    file.size >
-    100 *
-    1024 *
-    1024
-  ){
-
-    showToast(
-      "Video 100 MB पेक्षा कमी असावा."
-    );
-
-    return;
-
-  }
-
-
-  const button =
-    document.getElementById(
-      "uploadButton"
-    );
-
-
-  const progress =
-    document.getElementById(
-      "uploadProgress"
-    );
-
-
-  button.disabled =
-    true;
-
-
-  button.textContent =
-    "Uploading...";
-
-
-  progress.style.display =
-    "block";
-
+  const button=$('uploadButton'),progress=$('uploadProgress');
+  button.disabled=true;button.textContent="Uploading...";progress.style.display="block";
 
   try{
+    const extension=file.name.split(".").pop().toLowerCase()||"mp4";
+    const path=currentUser.id+"/"+Date.now()+"-"+Math.random().toString(36).substring(2,8)+"."+extension;
 
+    const {error:uploadError}=await supabaseClient.storage.from("videos").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+    if(uploadError)throw uploadError;
 
-    const extension =
-      file.name
-        .split(".")
-        .pop()
-        .toLowerCase() ||
-      "mp4";
+    const {data:urlData}=supabaseClient.storage.from("videos").getPublicUrl(path);
+    const username=$('hname').textContent;
 
+    const {error:dbError}=await supabaseClient.from("Videos").insert({
+      user_id:currentUser.id,username:username,title:title,description:description,video_url:urlData.publicUrl
+    });
+    if(dbError)throw dbError;
 
-    const path =
-      currentUser.id +
-      "/" +
-      Date.now() +
-      "-" +
-      Math.random()
-        .toString(36)
-        .substring(2,8) +
-      "." +
-      extension;
-
-
-    const {
-      error:uploadError
-    } =
-    await supabaseClient
-      .storage
-      .from("videos")
-      .upload(
-        path,
-        file,
-        {
-          cacheControl:"3600",
-          upsert:false,
-          contentType:file.type
-        }
-      );
-
-
-    if(uploadError){
-
-      throw uploadError;
-
-    }
-
-
-    const {
-      data:urlData
-    } =
-    supabaseClient
-      .storage
-      .from("videos")
-      .getPublicUrl(
-        path
-      );
-
-
-    const videoUrl =
-      urlData.publicUrl;
-
-
-    const username =
-      document.getElementById(
-        "name"
-      ).textContent;
-
-
-    const {
-      error:dbError
-    } =
-    await supabaseClient
-      .from("Videos")
-      .insert({
-
-        user_id:
-          currentUser.id,
-
-        username:
-          username,
-
-        title:
-          title,
-
-        description:
-          description,
-
-        video_url:
-          videoUrl
-
-      });
-
-
-    if(dbError){
-
-      throw dbError;
-
-    }
-
-
-    showToast(
-      "✅ Video successfully posted!"
-    );
-
-
-    document.getElementById(
-      "videoInput"
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "videoTitle"
-    ).value =
-      "";
-
-
-    document.getElementById(
-      "videoDescription"
-    ).value =
-      "";
-
-
-    setTimeout(
-      () => {
-
-        closeVideoModal();
-
-        location.href =
-          "video.html";
-
-      },
-      700
-    );
-
-
+    showToast("✅ Video successfully posted!");
+    $('videoInput').value="";$('videoTitle').value="";$('videoDescription').value="";
+    closeVideoModal();
+    setTab('posts');
+    await loadPosts();
+  }catch(e){
+    console.error("VIDEO UPLOAD ERROR:",e);
+    showToast("Video upload failed.");
+  }finally{
+    button.disabled=false;button.textContent="🚀 Post Video";progress.style.display="none";
   }
-  catch(error){
-
-    console.error(
-      "VIDEO UPLOAD ERROR:",
-      error
-    );
-
-
-    showToast(
-      "Video upload failed."
-    );
-
-  }
-  finally{
-
-    button.disabled =
-      false;
-
-
-    button.textContent =
-      "🚀 Post Video";
-
-
-    progress.style.display =
-      "none";
-
-  }
-
 }
 
-
-
-/* ==================================================
-   EDIT PROFILE
-================================================== */
-
+/* ================= EDIT PROFILE ================= */
 function openEdit(){
-
-  document.getElementById(
-    "editFullName"
-  ).value =
-    cleanValue(
-      "fullName"
-    );
-
-
-  document.getElementById(
-    "editDob"
-  ).value =
-    cleanValue(
-      "dob"
-    );
-
-
-  document.getElementById(
-    "editSchool"
-  ).value =
-    cleanValue(
-      "school"
-    );
-
-
-  document.getElementById(
-    "editClass"
-  ).value =
-    cleanValue(
-      "className"
-    );
-
-
-  document.getElementById(
-    "editMedium"
-  ).value =
-    cleanValue(
-      "medium"
-    );
-
-
-  document.getElementById(
-    "editCity"
-  ).value =
-    cleanValue(
-      "city"
-    );
-
-
-  document.getElementById(
-    "editCareer"
-  ).value =
-    cleanValue(
-      "career"
-    );
-
-
-  document.getElementById(
-    "editMobile"
-  ).value =
-    cleanValue(
-      "mobile"
-    );
-
-
-  document.getElementById(
-    "editModal"
-  ).classList.add(
-    "show"
-  );
-
+  $('editFullName').value=cleanValue("fullName");
+  $('editDob').value=cleanValue("dob");
+  $('editSchool').value=cleanValue("school");
+  $('editClass').value=cleanValue("className");
+  $('editMedium').value=cleanValue("medium");
+  $('editCity').value=cleanValue("city");
+  $('editCareer').value=cleanValue("career");
+  $('editMobile').value=cleanValue("mobile");
+  $('editModal').classList.add("show");
 }
-
-
-
-function cleanValue(
-  id
-){
-
-  const value =
-    document.getElementById(
-      id
-    ).textContent;
-
-
-  return value === "-"
-    ? ""
-    : value;
-
-}
-
-
-
-function closeEdit(){
-
-  document.getElementById(
-    "editModal"
-  ).classList.remove(
-    "show"
-  );
-
-}
-
-
-
-/* ==================================================
-   SAVE INFORMATION
-================================================== */
+function closeEdit(){$('editModal').classList.remove("show")}
 
 async function saveInformation(){
-
-  if(!currentUser){
-
-    showToast(
-      "Please login first."
-    );
-
-    return;
-
-  }
-
-
-  const data = {
-
-    full_name:
-      document.getElementById(
-        "editFullName"
-      ).value.trim(),
-
-    dob:
-      document.getElementById(
-        "editDob"
-      ).value ||
-      null,
-
-    school:
-      document.getElementById(
-        "editSchool"
-      ).value.trim(),
-
-    class_name:
-      document.getElementById(
-        "editClass"
-      ).value.trim(),
-
-    medium:
-      document.getElementById(
-        "editMedium"
-      ).value.trim(),
-
-    city:
-      document.getElementById(
-        "editCity"
-      ).value.trim(),
-
-    career_goal:
-      document.getElementById(
-        "editCareer"
-      ).value.trim(),
-
-    mobile:
-      document.getElementById(
-        "editMobile"
-      ).value.trim(),
-
-    email:
-      currentUser.email
-
+  if(!currentUser){showToast("Please login first.");return}
+  const data={
+    full_name:$('editFullName').value.trim(),
+    dob:$('editDob').value||null,
+    school:$('editSchool').value.trim(),
+    class_name:$('editClass').value.trim(),
+    medium:$('editMedium').value.trim(),
+    city:$('editCity').value.trim(),
+    career_goal:$('editCareer').value.trim(),
+    mobile:$('editMobile').value.trim(),
+    email:currentUser.email
   };
-
-
-  const {
-    error
-  } =
-  await supabaseClient
-    .from("Profiles")
-    .update(data)
-    .eq(
-      "id",
-      currentUser.id
-    );
-
-
-  if(error){
-
-    console.error(
-      "SAVE PROFILE ERROR:",
-      error
-    );
-
-
-    showToast(
-      "Information save झाली नाही."
-    );
-
-    return;
-
-  }
-
-
+  const {error}=await supabaseClient.from("Profiles").update(data).eq("id",currentUser.id);
+  if(error){console.error("SAVE PROFILE ERROR:",error);showToast("Information save झाली नाही.");return}
   closeEdit();
-
-
   await loadProfile();
-
-
-  showToast(
-    "Information saved."
-  );
-
+  showToast("Information saved.");
 }
 
-
-
-/* ==================================================
-   PROFILE PHOTO
-================================================== */
-
-function changePhoto(
-  event
-){
-
-  const file =
-    event.target.files[0];
-
-
-  if(!file){
-
-    return;
-
-  }
-
-
-  if(
-    !file.type.startsWith(
-      "image/"
-    )
-  ){
-
-    showToast(
-      "फक्त image select करा."
-    );
-
-    return;
-
-  }
-
-
-  const reader =
-    new FileReader();
-
-
-  reader.onload =
-    function(e){
-
-      localStorage.setItem(
-        "profilePhoto",
-        e.target.result
-      );
-
-
-      document.getElementById(
-        "avatar"
-      ).innerHTML =
-        `<img src="${escapeAttr(e.target.result)}" alt="Profile">`;
-
-
-      showToast(
-        "Profile photo updated."
-      );
-
-    };
-
-
-  reader.readAsDataURL(
-    file
-  );
-
+/* ================= PROFILE PHOTO ================= */
+function changePhoto(event){
+  const file=event.target.files[0];
+  if(!file)return;
+  if(!file.type.startsWith("image/")){showToast("फक्त image select करा.");return}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    localStorage.setItem("profilePhoto",e.target.result);
+    $('avatar').innerHTML=`<img src="${escapeAttr(e.target.result)}" alt="Profile">`;
+    showToast("Profile photo updated.");
+  };
+  reader.readAsDataURL(file);
 }
 
-
-
-/* ==================================================
-   LOGOUT
-================================================== */
-
+/* ================= LOGOUT ================= */
 async function logoutUser(){
-
-  const confirmed =
-    confirm(
-      "तुम्हाला GyanSetu मधून logout करायचे आहे का?"
-    );
-
-
-  if(!confirmed){
-
-    return;
-
-  }
-
-
+  if(!confirm("तुम्हाला GyanSetu मधून logout करायचे आहे का?"))return;
   try{
-
-
-    const {
-      error
-    } =
-    await supabaseClient
-      .auth
-      .signOut();
-
-
-    if(error){
-
-      console.error(
-        "LOGOUT ERROR:",
-        error
-      );
-
-
-      showToast(
-        "Logout failed."
-      );
-
-      return;
-
-    }
-
-
-    /*
-      Local profile/session cache clear
-    */
-
-    localStorage.removeItem(
-      "gyansetu_username"
-    );
-
-    localStorage.removeItem(
-      "gyansetu_email"
-    );
-
-    localStorage.removeItem(
-      "gyansetu_user_id"
-    );
-
-    localStorage.removeItem(
-      "profilePhoto"
-    );
-
-
-    /*
-      Account list पूर्णपणे delete
-      करत नाही, कारण saved accounts
-      feature वापरत असशील.
-    */
-
-
-    location.href =
-      "username.html";
-
-
+    const {error}=await supabaseClient.auth.signOut();
+    if(error){console.error("LOGOUT ERROR:",error);showToast("Logout failed.");return}
+    localStorage.removeItem("gyansetu_username");
+    localStorage.removeItem("gyansetu_email");
+    localStorage.removeItem("gyansetu_user_id");
+    localStorage.removeItem("profilePhoto");
+    location.href="username.html";
+  }catch(e){
+    console.error("LOGOUT ERROR:",e);
+    showToast("Logout failed.");
   }
-  catch(error){
-
-    console.error(
-      "LOGOUT ERROR:",
-      error
-    );
-
-
-    showToast(
-      "Logout failed."
-    );
-
-  }
-
 }
 
+/* ================= MODAL BACKDROP ================= */
+document.addEventListener("click",function(e){
+  if(e.target.classList.contains("modal"))e.target.classList.remove("show");
+});
 
-
-/* ==================================================
-   ESCAPE ATTRIBUTE
-================================================== */
-
-function escapeAttr(
-  text
-){
-
-  return String(
-    text || ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  );
-
-}
-
-
-
-/* ==================================================
-   MODAL BACKDROP
-================================================== */
-
-document.addEventListener(
-  "click",
-  function(event){
-
-    if(
-      event.target.classList.contains(
-        "modal"
-      )
-    ){
-
-      event.target.classList.remove(
-        "show"
-      );
-
-    }
-
-  }
-);
-
-
-
-/* ==================================================
-   START
-================================================== */
-
+/* ================= START ================= */
 loadProfile();
-
 </script>
-
 </body>
 </html>
