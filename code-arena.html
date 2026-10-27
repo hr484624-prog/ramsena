@@ -3,1883 +3,512 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>GyanSetu • Code Lab</title>
-
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial,Helvetica,sans-serif;
-}
-
-:root{
-  --bg:#080b12;
-  --panel:#10151f;
-  --panel2:#151c28;
-  --border:#263244;
-  --text:#f4f7fb;
-  --muted:#8d99aa;
-  --gold:#d7ad55;
-  --gold2:#f0cf7a;
-  --blue:#3b82f6;
-  --green:#22c55e;
-  --red:#ef4444;
-}
-
-body{
-  background:
-    radial-gradient(circle at top,#182033 0,#080b12 42%,#05070b 100%);
-  color:var(--text);
-  min-height:100vh;
-}
-
-.app{
-  width:100%;
-  max-width:480px;
-  min-height:100vh;
-  margin:auto;
-  background:rgba(7,10,16,.96);
-  position:relative;
-  overflow:hidden;
-}
-
-/* HEADER */
-
-.header{
-  height:68px;
-  padding:0 12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:
-    linear-gradient(180deg,#151c28,#0c1119);
-  border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  z-index:20;
-}
-
-.back{
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  border:1px solid #303b4d;
-  background:#121925;
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:25px;
-  cursor:pointer;
-  flex-shrink:0;
-}
-
-.logo{
-  width:39px;
-  height:39px;
-  border-radius:12px;
-  background:linear-gradient(135deg,#b78b32,#f2d17d);
-  color:#17120a;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:20px;
-  font-weight:bold;
-  box-shadow:0 0 20px rgba(215,173,85,.18);
-  flex-shrink:0;
-}
-
-.headerText{
-  flex:1;
-  min-width:0;
-}
-
-.headerText h1{
-  font-size:16px;
-  letter-spacing:.3px;
-  white-space:nowrap;
-}
-
-.headerText p{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-  white-space:nowrap;
-}
-
-/* BASIC BUTTON */
-
-.basicBtn{
-  height:39px;
-  padding:0 11px;
-  border-radius:11px;
-  border:1px solid #7d622f;
-  background:
-    linear-gradient(135deg,#241d10,#17130b);
-  color:var(--gold2);
-  font-size:10px;
-  font-weight:bold;
-  letter-spacing:.7px;
-  cursor:pointer;
-  box-shadow:0 0 12px rgba(215,173,85,.10);
-  flex-shrink:0;
-}
-
-.basicBtn:active{
-  transform:scale(.94);
-  background:#2a2110;
-}
-
-.status{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px var(--green);
-  flex-shrink:0;
-}
-
-/* HOME */
-
-.home{
-  padding:18px;
-}
-
-.hero{
-  padding:22px;
-  border-radius:22px;
-  background:
-    linear-gradient(145deg,#171e2b,#0d121b);
-  border:1px solid #2c3748;
-  box-shadow:0 15px 45px rgba(0,0,0,.28);
-  position:relative;
-  overflow:hidden;
-}
-
-.hero:after{
-  content:"";
-  position:absolute;
-  width:170px;
-  height:170px;
-  right:-80px;
-  top:-80px;
-  border-radius:50%;
-  background:rgba(215,173,85,.08);
-}
-
-.crown{
-  color:var(--gold2);
-  font-size:25px;
-  margin-bottom:10px;
-}
-
-.hero h2{
-  font-size:25px;
-  margin-bottom:7px;
-}
-
-.hero p{
-  color:#aab4c3;
-  font-size:13px;
-  line-height:1.6;
-}
-
-.sectionTitle{
-  margin:24px 0 13px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.sectionTitle h3{
-  font-size:17px;
-}
-
-.sectionTitle span{
-  color:var(--gold);
-  font-size:11px;
-  letter-spacing:1px;
-}
-
-/* LANGUAGES */
-
-.languages{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:11px;
-}
-
-.language{
-  min-height:100px;
-  padding:15px;
-  border:1px solid #273244;
-  border-radius:18px;
-  background:
-    linear-gradient(145deg,#141b27,#0d131d);
-  cursor:pointer;
-  transition:.2s;
-  position:relative;
-  overflow:hidden;
-}
-
-.language:hover{
-  transform:translateY(-2px);
-  border-color:#8d6c2f;
-}
-
-.language:active{
-  transform:scale(.97);
-}
-
-.langIcon{
-  font-size:27px;
-  margin-bottom:9px;
-}
-
-.language h4{
-  font-size:15px;
-}
-
-.language p{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
-}
-
-.arrow{
-  position:absolute;
-  right:13px;
-  bottom:13px;
-  color:var(--gold);
-}
-
-/* EDITOR */
-
-.editorPage{
-  display:none;
-  min-height:calc(100vh - 68px);
-}
-
-.editorTop{
-  padding:13px 15px;
-  background:#0c1119;
-  border-bottom:1px solid var(--border);
-}
-
-.editorLanguage{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.editorLanguage strong{
-  font-size:16px;
-}
-
-.badge{
-  color:var(--gold2);
-  border:1px solid #6b5328;
-  background:#211a0e;
-  border-radius:20px;
-  padding:5px 9px;
-  font-size:10px;
-}
-
-.fileBar{
-  margin-top:12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.file{
-  background:#161e2b;
-  border:1px solid #2a3546;
-  padding:8px 12px;
-  border-radius:8px 8px 0 0;
-  color:#c9d2df;
-  font-size:12px;
-}
-
-.fileActions{
-  display:flex;
-  gap:7px;
-}
-
-.smallBtn{
-  border:1px solid #2b3749;
-  background:#121925;
-  color:#cdd5e0;
-  padding:7px 10px;
-  border-radius:8px;
-  font-size:11px;
-  cursor:pointer;
-}
-
-/* CODE AREA */
-
-.editorWrap{
-  margin:0 15px;
-  border:1px solid #283446;
-  border-radius:0 0 15px 15px;
-  overflow:hidden;
-  background:#090d13;
-  box-shadow:inset 0 0 30px rgba(0,0,0,.3);
-}
-
-.editor{
-  width:100%;
-  min-height:360px;
-  display:flex;
-}
-
-.lineNumbers{
-  width:43px;
-  padding:15px 8px;
-  text-align:right;
-  color:#4e5b6d;
-  background:#0c1118;
-  font:13px/1.6 monospace;
-  user-select:none;
-  overflow:hidden;
-}
-
-#code{
-  flex:1;
-  min-width:0;
-  min-height:360px;
-  resize:none;
-  border:0;
-  outline:none;
-  padding:15px 12px;
-  background:#090d13;
-  color:#e5e7eb;
-  font:13px/1.6 monospace;
-  tab-size:2;
-  white-space:pre;
-  overflow:auto;
-}
-
-#code::selection{
-  background:#334155;
-}
-
-/* TOOLBAR */
-
-.toolbar{
-  padding:12px 15px;
-  display:flex;
-  gap:9px;
-  background:#0c1119;
-  border-bottom:1px solid var(--border);
-}
-
-.run{
-  flex:1;
-  border:0;
-  border-radius:11px;
-  padding:12px;
-  background:linear-gradient(135deg,#d7ad55,#f1d27e);
-  color:#17120a;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.clear{
-  border:1px solid #344052;
-  border-radius:11px;
-  padding:12px 14px;
-  background:#141b26;
-  color:#d0d7e2;
-  cursor:pointer;
-}
-
-/* OUTPUT */
-
-.outputSection{
-  padding:15px;
-}
-
-.outputHeader{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:9px;
-}
-
-.outputHeader strong{
-  font-size:14px;
-}
-
-.outputHeader span{
-  color:var(--muted);
-  font-size:10px;
-}
-
-.output{
-  min-height:130px;
-  max-height:260px;
-  overflow:auto;
-  border:1px solid #283446;
-  border-radius:14px;
-  padding:14px;
-  background:#05080d;
-  color:#cbd5e1;
-  font:12px/1.6 monospace;
-  white-space:pre-wrap;
-}
-
-.output.success{
-  color:#b9f6c9;
-}
-
-.output.error{
-  color:#ffb4b4;
-}
-
-/* INFO */
-
-.info{
-  margin:0 15px 20px;
-  padding:13px;
-  border-radius:13px;
-  border:1px solid #273244;
-  background:#0f151f;
-  color:#8f9bac;
-  font-size:11px;
-  line-height:1.6;
-}
-
-/* PRACTICE */
-
-.practice{
-  margin:0 15px 25px;
-  padding:17px;
-  border-radius:17px;
-  background:linear-gradient(145deg,#141c28,#0d131d);
-  border:1px solid #283446;
-}
-
-.practice h3{
-  font-size:15px;
-  margin-bottom:8px;
-}
-
-.practice p{
-  color:#909bab;
-  font-size:12px;
-  line-height:1.5;
-}
-
-.practice button{
-  margin-top:12px;
-  border:1px solid #735a2c;
-  background:#20190e;
-  color:var(--gold2);
-  padding:9px 13px;
-  border-radius:9px;
-  font-size:11px;
-  cursor:pointer;
-}
-
-/* SEARCH */
-
-.search{
-  width:100%;
-  margin-top:16px;
-  background:#0d131d;
-  border:1px solid #2a3546;
-  border-radius:12px;
-  padding:12px 13px;
-  color:white;
-  outline:none;
-}
-
-.search::placeholder{
-  color:#667386;
-}
-
-/* DESKTOP */
-
-@media(min-width:700px){
-
-  .app{
-    max-width:900px;
-  }
-
-  .languages{
-    grid-template-columns:repeat(4,1fr);
-  }
-
-  .editorPage{
-    padding-bottom:30px;
-  }
-
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+:root{--bg:#0b0e14;--panel:#111621;--panel2:#161c29;--line:#242d3d;--text:#e6eaf2;--muted:#8793a6;--gold:#d7ad55;--gold2:#f0cf7a;--green:#34d399;--red:#f87171;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:1100px;margin:auto;min-height:100vh}
+button{cursor:pointer;font-family:inherit}
+/* header */
+.header{height:60px;padding:0 14px;display:flex;align-items:center;gap:12px;background:#0d111a;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.iconBtn{width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--panel);color:var(--text);font-size:20px}
+.logo{font:700 13px var(--mono);color:#16110a;background:linear-gradient(135deg,#b78b32,#f2d17d);border-radius:9px;padding:8px 9px}
+.ht{flex:1;min-width:0}.ht h1{font-size:15px;font-weight:600}.ht p{font-size:11px;color:var(--muted);margin-top:2px}
+.basic{height:34px;padding:0 14px;border-radius:9px;border:1px solid #6b5328;background:#1b150b;color:var(--gold2);font-size:11px;font-weight:600;letter-spacing:.8px}
+/* home */
+.home{padding:20px 16px 40px}
+.hero{padding:22px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,#141a27,#0e131d)}
+.hero h2{font-size:22px;font-weight:650}.hero p{color:var(--muted);font-size:13px;line-height:1.6;margin:6px 0 14px}
+.search{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--text);outline:none;font-size:14px}
+.search:focus{border-color:#7d622f}
+.sec{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px}.sec h3{font-size:15px;font-weight:600}.sec span{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.card{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);cursor:pointer;transition:.15s}
+.card:hover{border-color:#7d622f;background:var(--panel2)}
+.badge{display:inline-block;font:700 12px var(--mono);color:var(--gold2);background:#1d1709;border:1px solid #5a4623;border-radius:7px;padding:5px 8px}
+.card h4{font-size:14px;font-weight:600;margin-top:10px}.card p{font-size:11px;color:var(--muted);margin-top:3px}
+.run-tag{display:inline-block;margin-top:9px;font-size:10px;padding:2px 7px;border-radius:20px;border:1px solid var(--line);color:var(--muted)}
+.run-tag.on{color:var(--green);border-color:#1f5c47}
+/* editor */
+.lab{display:none;padding:14px 16px 40px}
+.labTop{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.labTop strong{font-size:16px}.labTop .sp{flex:1}
+.chip{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);color:var(--muted)}
+.chip.ok{color:var(--green);border-color:#1f5c47}.chip.bad{color:var(--red);border-color:#6b2b2b}.chip.run{color:var(--gold2);border-color:#6b5328}
+.cols{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:860px){.cols{grid-template-columns:1.25fr 1fr}.grid{grid-template-columns:repeat(4,1fr)}}
+.box{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden}
+.boxHead{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);background:#0e131c;font-size:12px;color:var(--muted)}
+.boxHead .sp{flex:1}
+.sm{border:1px solid var(--line);background:var(--panel);color:var(--text);padding:6px 10px;border-radius:7px;font-size:11px}
+.sm:hover{border-color:#7d622f}
+.ed{display:flex;height:380px;background:#0a0d13}
+.ln{width:42px;padding:14px 8px;text-align:right;color:#4b586b;background:#0c1017;font:13px/1.6 var(--mono);overflow:hidden;white-space:pre;user-select:none}
+#code{flex:1;min-width:0;resize:none;border:0;outline:0;padding:14px 12px;background:transparent;color:#e5e7eb;font:13px/1.6 var(--mono);tab-size:2;white-space:pre;overflow:auto}
+.bar{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.runBtn{flex:1;border:0;border-radius:9px;padding:11px;background:linear-gradient(135deg,#d7ad55,#f1d27e);color:#17120a;font-weight:700;font-size:13px}
+.runBtn:disabled{opacity:.6}
+.clr{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:9px;padding:0 16px;font-size:12px}
+.tabs{display:flex;gap:4px}.tab{border:0;background:none;color:var(--muted);font-size:12px;padding:5px 10px;border-radius:6px}
+.tab.on{background:var(--panel2);color:var(--gold2)}
+.out{height:230px;overflow:auto;padding:12px;background:#07090e;font:12px/1.6 var(--mono);white-space:pre-wrap;color:#cbd5e1}
+.out.success{color:#b9f6c9}.out.error{color:#fecaca}
+#preview{display:none;width:100%;height:230px;border:0;background:#fff}
+.ch{margin-top:14px}.chBody{padding:12px;font-size:13px;line-height:1.6}
+select{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:9px;font-size:13px;margin-bottom:10px}
+.exp{font:12px var(--mono);background:#07090e;border:1px solid var(--line);border-radius:8px;padding:9px;margin:8px 0;white-space:pre-wrap;color:#b9c3d3}
+.res{font-size:12px;margin-top:8px;min-height:18px}
+.res.ok{color:var(--green)}.res.bad{color:var(--red)}
+.note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
 </style>
 </head>
-
 <body>
-
 <div class="app">
 
-<!-- HEADER -->
-
 <header class="header">
-
-  <!-- BACK BUTTON -->
-  <!-- आता थेट learn.html वर जाईल -->
-
-  <button
-    class="back"
-    onclick="goToLearn()">
-    ‹
-  </button>
-
-  <div class="logo">
-    &lt;/&gt;
-  </div>
-
-  <div class="headerText">
-
-    <h1>GyanSetu Code Lab</h1>
-
-    <p>Professional Coding Practice</p>
-
-  </div>
-
-  <!-- BASIC CODING BUTTON -->
-
-  <button
-    class="basicBtn"
-    onclick="openBasicLearning()"
-    title="Basic Coding Learning">
-
-    BASIC
-
-  </button>
-
-  <div class="status"></div>
-
+  <button class="iconBtn" onclick="goToLearn()" aria-label="Back">‹</button>
+  <div class="logo">&lt;/&gt;</div>
+  <div class="ht"><h1>GyanSetu Code Lab</h1><p>Write, run and practise real code</p></div>
+  <button class="basic" onclick="openBasicLearning()">BASIC</button>
 </header>
 
-
-<!-- LANGUAGE HOME -->
-
-<main
-  class="home"
-  id="homePage">
-
+<main class="home" id="homePage">
   <section class="hero">
-
-    <div class="crown">
-      ♛
-    </div>
-
-    <h2>
-      Code. Build. Master.
-    </h2>
-
-    <p>
-      Choose your programming language and start
-      practising in a focused coding environment.
-    </p>
-
-    <input
-      class="search"
-      id="languageSearch"
-      type="text"
-      placeholder="Search language..."
-      oninput="searchLanguage()"
-    >
-
+    <h2>Code Lab</h2>
+    <p>Pick a language and run code instantly. Python, JavaScript, HTML, CSS and SQL run right in your browser; other languages use a cloud runner.</p>
+    <input class="search" id="languageSearch" type="text" placeholder="Search language..." oninput="searchLanguage()">
   </section>
-
-  <div class="sectionTitle">
-
-    <h3>
-      Programming Languages
-    </h3>
-
-    <span>
-      CODE LAB
-    </span>
-
-  </div>
-
-  <section
-    class="languages"
-    id="languages">
-
-    <!-- PYTHON -->
-
-    <div
-      class="language"
-      data-name="python"
-      onclick="openEditor('Python','python')">
-
-      <div class="langIcon">
-        🐍
-      </div>
-
-      <h4>
-        Python
-      </h4>
-
-      <p>
-        Programming Language
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- JAVASCRIPT -->
-
-    <div
-      class="language"
-      data-name="javascript"
-      onclick="openEditor('JavaScript','javascript')">
-
-      <div class="langIcon">
-        JS
-      </div>
-
-      <h4>
-        JavaScript
-      </h4>
-
-      <p>
-        Web Programming
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- HTML -->
-
-    <div
-      class="language"
-      data-name="html"
-      onclick="openEditor('HTML','html')">
-
-      <div class="langIcon">
-        🌐
-      </div>
-
-      <h4>
-        HTML
-      </h4>
-
-      <p>
-        Web Structure
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- CSS -->
-
-    <div
-      class="language"
-      data-name="css"
-      onclick="openEditor('CSS','css')">
-
-      <div class="langIcon">
-        🎨
-      </div>
-
-      <h4>
-        CSS
-      </h4>
-
-      <p>
-        Web Styling
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- C -->
-
-    <div
-      class="language"
-      data-name="c"
-      onclick="openEditor('C','c')">
-
-      <div class="langIcon">
-        C
-      </div>
-
-      <h4>
-        C
-      </h4>
-
-      <p>
-        Programming Language
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- C++ -->
-
-    <div
-      class="language"
-      data-name="c++"
-      onclick="openEditor('C++','cpp')">
-
-      <div class="langIcon">
-        C+
-      </div>
-
-      <h4>
-        C++
-      </h4>
-
-      <p>
-        Programming Language
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- JAVA -->
-
-    <div
-      class="language"
-      data-name="java"
-      onclick="openEditor('Java','java')">
-
-      <div class="langIcon">
-        ☕
-      </div>
-
-      <h4>
-        Java
-      </h4>
-
-      <p>
-        Programming Language
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- SQL -->
-
-    <div
-      class="language"
-      data-name="sql"
-      onclick="openEditor('SQL','sql')">
-
-      <div class="langIcon">
-        🗄️
-      </div>
-
-      <h4>
-        SQL
-      </h4>
-
-      <p>
-        Database Language
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- TYPESCRIPT -->
-
-    <div
-      class="language"
-      data-name="typescript"
-      onclick="openEditor('TypeScript','typescript')">
-
-      <div class="langIcon">
-        TS
-      </div>
-
-      <h4>
-        TypeScript
-      </h4>
-
-      <p>
-        Typed JavaScript
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- PHP -->
-
-    <div
-      class="language"
-      data-name="php"
-      onclick="openEditor('PHP','php')">
-
-      <div class="langIcon">
-        PHP
-      </div>
-
-      <h4>
-        PHP
-      </h4>
-
-      <p>
-        Server Programming
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- KOTLIN -->
-
-    <div
-      class="language"
-      data-name="kotlin"
-      onclick="openEditor('Kotlin','kotlin')">
-
-      <div class="langIcon">
-        K
-      </div>
-
-      <h4>
-        Kotlin
-      </h4>
-
-      <p>
-        Modern Programming
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-
-    <!-- SWIFT -->
-
-    <div
-      class="language"
-      data-name="swift"
-      onclick="openEditor('Swift','swift')">
-
-      <div class="langIcon">
-        S
-      </div>
-
-      <h4>
-        Swift
-      </h4>
-
-      <p>
-        Apple Development
-      </p>
-
-      <div class="arrow">
-        →
-      </div>
-
-    </div>
-
-  </section>
-
+  <div class="sec"><h3>Languages</h3><span id="solvedTotal"></span></div>
+  <section class="grid" id="languages"></section>
 </main>
 
+<section class="lab" id="editorPage">
+  <div class="labTop">
+    <button class="iconBtn" onclick="goHome()" aria-label="Languages">‹</button>
+    <strong id="editorTitle">Python</strong>
+    <span class="sp"></span>
+    <span class="chip" id="runStatus">Ready</span>
+  </div>
 
-<!-- EDITOR PAGE -->
-
-<section
-  class="editorPage"
-  id="editorPage">
-
-  <div class="editorTop">
-
-    <div class="editorLanguage">
-
-      <strong id="editorTitle">
-        Python
-      </strong>
-
-      <span class="badge">
-        PRACTICE
-      </span>
-
+  <div class="cols">
+    <div>
+      <div class="box">
+        <div class="boxHead"><span id="fileName">main.py</span><span class="sp"></span>
+          <button class="sm" onclick="copyCode()">Copy</button>
+          <button class="sm" onclick="resetCode()">Reset</button>
+        </div>
+        <div class="ed">
+          <div class="ln" id="lineNumbers">1</div>
+          <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off" oninput="onEdit()" onscroll="syncScroll()" onkeydown="handleKey(event)"></textarea>
+        </div>
+        <div class="bar">
+          <button class="runBtn" id="runBtn" onclick="runCode()">▶ Run (Ctrl+Enter)</button>
+          <button class="clr" onclick="clearCode()">Clear</button>
+        </div>
+      </div>
     </div>
 
-
-    <div class="fileBar">
-
-      <div class="file">
-        main.code
+    <div>
+      <div class="box">
+        <div class="boxHead">
+          <div class="tabs">
+            <button class="tab on" id="tabOut" onclick="showTab('out')">Output</button>
+            <button class="tab" id="tabPrev" onclick="showTab('prev')">Preview</button>
+          </div>
+        </div>
+        <div class="out" id="output">Press Run to see the output here.</div>
+        <iframe id="preview" sandbox="allow-scripts allow-modals" title="Preview"></iframe>
       </div>
 
-      <div class="fileActions">
-
-        <button
-          class="smallBtn"
-          onclick="copyCode()">
-
-          Copy
-
-        </button>
-
-        <button
-          class="smallBtn"
-          onclick="resetCode()">
-
-          Reset
-
-        </button>
-
+      <div class="box ch" id="practiceBox">
+        <div class="boxHead"><span>Practice challenges</span><span class="sp"></span><span id="solvedCount"></span></div>
+        <div class="chBody">
+          <select id="chSelect" onchange="pickChallenge()"></select>
+          <div id="chDesc"></div>
+          <div class="exp" id="chExp"></div>
+          <div style="display:flex;gap:8px">
+            <button class="sm" onclick="showHint()">Hint</button>
+            <button class="sm" onclick="insertStarter()">Starter code</button>
+          </div>
+          <div class="res" id="chRes"></div>
+        </div>
       </div>
-
+      <p class="note" id="languageInfo"></p>
     </div>
-
   </div>
-
-
-  <!-- EDITOR -->
-
-  <div class="editorWrap">
-
-    <div class="editor">
-
-      <div
-        class="lineNumbers"
-        id="lineNumbers">
-
-        1
-
-      </div>
-
-      <textarea
-        id="code"
-        spellcheck="false"
-        oninput="updateLines()"
-        onkeydown="handleTab(event)"
-      ></textarea>
-
-    </div>
-
-  </div>
-
-
-  <!-- TOOLBAR -->
-
-  <div class="toolbar">
-
-    <button
-      class="run"
-      onclick="runCode()">
-
-      ▶ Run Code
-
-    </button>
-
-    <button
-      class="clear"
-      onclick="clearCode()">
-
-      Clear
-
-    </button>
-
-  </div>
-
-
-  <!-- OUTPUT -->
-
-  <div class="outputSection">
-
-    <div class="outputHeader">
-
-      <strong>
-        Terminal / Output
-      </strong>
-
-      <span id="runStatus">
-        Ready
-      </span>
-
-    </div>
-
-    <div
-      class="output"
-      id="output">
-
-      Click "Run Code" to execute your program.
-
-    </div>
-
-  </div>
-
-
-  <!-- INFO -->
-
-  <div
-    class="info"
-    id="languageInfo">
-
-    JavaScript, HTML and CSS can run directly
-    in your browser. Other languages require
-    a compiler/runtime backend.
-
-  </div>
-
-
-  <!-- PRACTICE -->
-
-  <div class="practice">
-
-    <h3>
-      ♛ Practice Mode
-    </h3>
-
-    <p id="practiceText">
-
-      Write your own code, run it and experiment
-      with different concepts.
-
-    </p>
-
-    <button onclick="insertStarter()">
-
-      Insert Starter Code
-
-    </button>
-
-  </div>
-
 </section>
-
 </div>
 
-
 <script>
+/* ===== CONFIG =====
+   Cloud runner for C, C++, Java, PHP, Kotlin, Swift, TypeScript.
+   Piston-compatible API. Replace with your own server URL if needed. */
+const RUNNER_URL = "https://emkc.org/api/v2/piston/execute";
 
-let currentLanguage = "";
-let currentKey = "";
+function goToLearn(){ window.location.href = "learn.html"; }
+function openBasicLearning(){ window.location.href = "learn-coding.html"; }
 
-
-/* =========================
-   BACK TO LEARN.HTML
-========================= */
-
-function goToLearn(){
-
-  window.location.href = "learn.html";
-
-}
-
-
-/* =========================
-   BASIC CODING PAGE
-========================= */
-
-function openBasicLearning(){
-
-  window.location.href = "learn-coding.html";
-
-}
-
-
-/* =========================
-   STARTER CODE
-========================= */
+const LANGS = [
+  {key:"python",name:"Python",tag:"PY",sub:"General purpose",mode:"browser",file:"main.py"},
+  {key:"javascript",name:"JavaScript",tag:"JS",sub:"Web programming",mode:"browser",file:"main.js"},
+  {key:"html",name:"HTML",tag:"HTML",sub:"Web structure",mode:"browser",file:"index.html"},
+  {key:"css",name:"CSS",tag:"CSS",sub:"Web styling",mode:"browser",file:"style.css"},
+  {key:"sql",name:"SQL",tag:"SQL",sub:"Database queries",mode:"browser",file:"query.sql"},
+  {key:"c",name:"C",tag:"C",sub:"Systems programming",mode:"cloud",file:"main.c",api:"c"},
+  {key:"cpp",name:"C++",tag:"C++",sub:"Systems programming",mode:"cloud",file:"main.cpp",api:"c++"},
+  {key:"java",name:"Java",tag:"JAVA",sub:"Object oriented",mode:"cloud",file:"Main.java",api:"java"},
+  {key:"typescript",name:"TypeScript",tag:"TS",sub:"Typed JavaScript",mode:"cloud",file:"main.ts",api:"typescript"},
+  {key:"php",name:"PHP",tag:"PHP",sub:"Server scripting",mode:"cloud",file:"main.php",api:"php"},
+  {key:"kotlin",name:"Kotlin",tag:"KT",sub:"Modern JVM",mode:"cloud",file:"main.kt",api:"kotlin"},
+  {key:"swift",name:"Swift",tag:"SWIFT",sub:"Apple platforms",mode:"cloud",file:"main.swift",api:"swift"}
+];
 
 const starterCode = {
-
-python:
-`# GyanSetu Code Lab
-
+python:`# Python
 name = "GyanSetu"
-
 print("Hello,", name)
 `,
-
-javascript:
-`// GyanSetu Code Lab
-
+javascript:`// JavaScript
 const name = "GyanSetu";
-
 console.log("Hello, " + name);
 `,
-
-html:
-`<!DOCTYPE html>
+html:`<!DOCTYPE html>
 <html>
-<head>
-  <title>My Page</title>
-</head>
-
+<head><title>My Page</title></head>
 <body>
-
   <h1>Hello GyanSetu!</h1>
   <p>My first web page.</p>
-
 </body>
 </html>
 `,
-
-css:
-`body {
-  background: #111827;
-  color: white;
-  font-family: Arial;
-}
-
-h1 {
-  color: gold;
-}
+css:`body { background: #111827; color: white; font-family: Arial; padding: 20px; }
+h1 { color: gold; }
+button { padding: 10px 18px; border-radius: 8px; border: 0; }
 `,
-
-c:
-`#include <stdio.h>
+sql:`-- Table: students(id, name, marks, city)
+SELECT name, marks
+FROM students
+WHERE marks >= 60
+ORDER BY marks DESC;
+`,
+c:`#include <stdio.h>
 
 int main() {
-
-    printf("Hello, GyanSetu!");
-
+    printf("Hello, GyanSetu!\\n");
     return 0;
 }
 `,
-
-cpp:
-`#include <iostream>
+cpp:`#include <iostream>
 using namespace std;
 
 int main() {
-
-    cout << "Hello, GyanSetu!";
-
+    cout << "Hello, GyanSetu!" << endl;
     return 0;
 }
 `,
-
-java:
-`public class Main {
-
+java:`public class Main {
     public static void main(String[] args) {
-
         System.out.println("Hello, GyanSetu!");
-
     }
 }
 `,
-
-sql:
-`-- GyanSetu SQL Practice
-
-SELECT 'Hello, GyanSetu' AS message;
-`,
-
-typescript:
-`const message: string = "Hello, GyanSetu";
-
+typescript:`const message: string = "Hello, GyanSetu";
 console.log(message);
 `,
-
-php:
-`<?php
-
+php:`<?php
 $name = "GyanSetu";
-
-echo "Hello, " . $name;
-
-?>
+echo "Hello, " . $name . "\\n";
 `,
-
-kotlin:
-`fun main() {
-
+kotlin:`fun main() {
     println("Hello, GyanSetu!")
-
 }
 `,
-
-swift:
-`import Foundation
+swift:`import Foundation
 
 let message = "Hello, GyanSetu"
-
 print(message)
-`
+`};
 
+const SQL_SEED = `CREATE TABLE students(id INTEGER, name TEXT, marks INTEGER, city TEXT);
+INSERT INTO students VALUES (1,'Aarav',78,'Pune'),(2,'Sneha',91,'Mumbai'),(3,'Rohan',55,'Nashik'),(4,'Isha',66,'Pune'),(5,'Kabir',84,'Nagpur');`;
+
+const FIZZ = Array.from({length:15},(_,i)=>{i++;return i%15==0?"FizzBuzz":i%3==0?"Fizz":i%5==0?"Buzz":String(i)}).join("\n");
+const CH = [
+ {t:"Hello, GyanSetu",d:"Print exactly the text below.",e:"Hello, GyanSetu!",h:"Use print / console.log / cout / println for your language."},
+ {t:"Sum of 1 to 10",d:"Print the sum of all numbers from 1 to 10.",e:"55",h:"Use a loop with a running total."},
+ {t:"Even numbers",d:"Print the even numbers from 1 to 10, one per line.",e:"2\n4\n6\n8\n10",h:"A number n is even when n % 2 == 0."},
+ {t:"Factorial of 5",d:"Print 5! = 5 × 4 × 3 × 2 × 1.",e:"120",h:"Start with result = 1 and multiply by each number from 1 to 5."},
+ {t:"Reverse a word",d:"Reverse the word GyanSetu and print it.",e:"uteSnayG",h:"Loop from the last character to the first, or use a built-in reverse."},
+ {t:"FizzBuzz (1 to 15)",d:"For 1 to 15 print Fizz for multiples of 3, Buzz for multiples of 5, FizzBuzz for both, otherwise the number.",e:FIZZ,h:"Check the multiple of 15 first."}
+];
+
+let cur = LANGS[0], chIdx = 0, busy = false;
+const $ = id => document.getElementById(id);
+const store = {
+  get(k,f){ try{ const v = localStorage.getItem(k); return v===null ? f : v; }catch(e){ return f; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 };
+const solved = () => { try{ return JSON.parse(store.get("gs_solved","{}")); }catch(e){ return {}; } };
 
-
-/* =========================
-   LANGUAGE OPEN
-========================= */
-
-function openEditor(name,key){
-
-  currentLanguage = name;
-  currentKey = key;
-
-  document.getElementById("homePage").style.display =
-    "none";
-
-  document.getElementById("editorPage").style.display =
-    "block";
-
-  document.getElementById("editorTitle").textContent =
-    name;
-
-  document.getElementById("code").value =
-    starterCode[key] || "";
-
-  document.getElementById("output").textContent =
-    'Click "Run Code" to execute your program.';
-
-  document.getElementById("output").className =
-    "output";
-
-  document.getElementById("runStatus").textContent =
-    "Ready";
-
-  updateLines();
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
+/* ===== HOME ===== */
+function renderLangs(){
+  $("languages").innerHTML = LANGS.map(l =>
+    `<div class="card" data-name="${l.name.toLowerCase()} ${l.key}" onclick="openEditor('${l.key}')">
+      <span class="badge">${l.tag}</span><h4>${l.name}</h4><p>${l.sub}</p>
+      <span class="run-tag ${l.mode==='browser'?'on':''}">${l.mode==='browser'?'Runs in browser':'Cloud runner'}</span>
+    </div>`).join("");
+  const n = Object.keys(solved()).length;
+  $("solvedTotal").textContent = n ? n + " solved" : "";
 }
-
-
-/* =========================
-   HOME
-========================= */
-
-function goHome(){
-
-  document.getElementById("editorPage").style.display =
-    "none";
-
-  document.getElementById("homePage").style.display =
-    "block";
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
 function searchLanguage(){
-
-  const query =
-    document.getElementById("languageSearch")
-    .value
-    .toLowerCase()
-    .trim();
-
-  const cards =
-    document.querySelectorAll(".language");
-
-  cards.forEach(card=>{
-
-    const name =
-      card.dataset.name.toLowerCase();
-
-    card.style.display =
-      name.includes(query)
-      ? ""
-      : "none";
-
-  });
-
+  const q = $("languageSearch").value.toLowerCase().trim();
+  document.querySelectorAll(".card").forEach(c => c.style.display = c.dataset.name.includes(q) ? "" : "none");
 }
 
-
-/* =========================
-   LINE NUMBERS
-========================= */
-
+/* ===== EDITOR ===== */
+function openEditor(key){
+  cur = LANGS.find(l => l.key === key);
+  $("homePage").style.display = "none";
+  $("editorPage").style.display = "block";
+  $("editorTitle").textContent = cur.name;
+  $("fileName").textContent = cur.file;
+  $("code").value = store.get("gs_code_" + key, starterCode[key]);
+  const practice = !["html","css","sql"].includes(key);
+  $("practiceBox").style.display = practice ? "" : "none";
+  $("languageInfo").textContent =
+    key==="sql" ? "Runs in your browser on a sample table: students(id, name, marks, city). Each run starts with fresh data."
+    : cur.mode==="browser" ? "This language runs directly in your browser."
+    : "This language runs on a cloud runner, so an internet connection is required.";
+  if(practice){
+    chIdx = 0; renderSelect(); pickChallenge();
+  }
+  showTab(key==="html"||key==="css" ? "prev" : "out");
+  setOut(key==="html"||key==="css" ? "Press Run to update the preview." : "Press Run to see the output here.");
+  setStatus("Ready","");
+  updateLines();
+  window.scrollTo({top:0});
+}
+function goHome(){
+  $("editorPage").style.display = "none";
+  $("homePage").style.display = "block";
+  renderLangs(); searchLanguage();
+  window.scrollTo({top:0});
+}
+function onEdit(){ store.set("gs_code_" + cur.key, $("code").value); updateLines(); }
 function updateLines(){
-
-  const code =
-    document.getElementById("code").value;
-
-  const count =
-    code.split("\n").length;
-
-  let numbers = "";
-
-  for(let i=1;i<=count;i++){
-
-    numbers += i + "\n";
-
-  }
-
-  document.getElementById("lineNumbers").textContent =
-    numbers;
-
+  const n = $("code").value.split("\n").length;
+  let s = ""; for(let i=1;i<=n;i++) s += i + "\n";
+  $("lineNumbers").textContent = s;
+  syncScroll();
 }
-
-
-/* =========================
-   TAB SUPPORT
-========================= */
-
-function handleTab(event){
-
-  if(event.key !== "Tab") return;
-
-  event.preventDefault();
-
-  const textarea =
-    document.getElementById("code");
-
-  const start =
-    textarea.selectionStart;
-
-  const end =
-    textarea.selectionEnd;
-
-  textarea.value =
-    textarea.value.substring(0,start) +
-    "  " +
-    textarea.value.substring(end);
-
-  textarea.selectionStart =
-    textarea.selectionEnd =
-    start + 2;
-
-  updateLines();
-
+function syncScroll(){ $("lineNumbers").scrollTop = $("code").scrollTop; }
+function handleKey(e){
+  if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); runCode(); return; }
+  if(e.key !== "Tab") return;
+  e.preventDefault();
+  const t = $("code"), s = t.selectionStart;
+  t.value = t.value.slice(0,s) + "  " + t.value.slice(t.selectionEnd);
+  t.selectionStart = t.selectionEnd = s + 2;
+  onEdit();
 }
-
-
-/* =========================
-   CLEAR
-========================= */
-
-function clearCode(){
-
-  document.getElementById("code").value = "";
-
-  updateLines();
-
-  document.getElementById("output").className =
-    "output";
-
-  document.getElementById("output").textContent =
-    "Editor cleared.";
-
-  document.getElementById("runStatus").textContent =
-    "Ready";
-
-}
-
-
-/* =========================
-   RESET
-========================= */
-
-function resetCode(){
-
-  document.getElementById("code").value =
-    starterCode[currentKey] || "";
-
-  updateLines();
-
-  document.getElementById("output").className =
-    "output";
-
-  document.getElementById("output").textContent =
-    "Code reset.";
-
-  document.getElementById("runStatus").textContent =
-    "Ready";
-
-}
-
-
-/* =========================
-   COPY
-========================= */
-
+function clearCode(){ $("code").value = ""; onEdit(); setOut("Editor cleared."); setStatus("Ready",""); }
+function resetCode(){ $("code").value = starterCode[cur.key]; onEdit(); setOut("Code reset to starter."); setStatus("Ready",""); }
+function insertStarter(){ resetCode(); }
 async function copyCode(){
+  try{ await navigator.clipboard.writeText($("code").value); setStatus("Copied","ok"); }
+  catch(e){ setStatus("Copy failed","bad"); }
+}
+function setStatus(t,c){ const s = $("runStatus"); s.textContent = t; s.className = "chip " + c; }
+function setOut(t,kind){ const o = $("output"); o.textContent = t; o.className = "out " + (kind||""); }
+function showTab(w){
+  const prev = w === "prev";
+  $("output").style.display = prev ? "none" : "block";
+  $("preview").style.display = prev ? "block" : "none";
+  $("tabOut").classList.toggle("on",!prev);
+  $("tabPrev").classList.toggle("on",prev);
+}
 
-  const code =
-    document.getElementById("code").value;
+/* ===== PRACTICE ===== */
+function renderSelect(){
+  const s = solved();
+  $("chSelect").innerHTML = CH.map((c,i) => `<option value="${i}">${s[i]?"✓ ":""}${i+1}. ${c.t}</option>`).join("");
+  $("chSelect").value = chIdx;
+  $("solvedCount").textContent = Object.keys(s).length + " / " + CH.length + " solved";
+}
+function pickChallenge(){
+  chIdx = +$("chSelect").value;
+  const c = CH[chIdx];
+  $("chDesc").textContent = c.d;
+  $("chExp").textContent = "Expected output:\n" + c.e;
+  $("chRes").textContent = ""; $("chRes").className = "res";
+}
+function showHint(){ $("chRes").className = "res"; $("chRes").textContent = "Hint: " + CH[chIdx].h; }
+const norm = s => String(s).replace(/\r/g,"").split("\n").map(x => x.trimEnd()).join("\n").trim();
+function checkChallenge(out){
+  if(["html","css","sql"].includes(cur.key)) return;
+  const r = $("chRes");
+  if(norm(out) === norm(CH[chIdx].e)){
+    r.className = "res ok"; r.textContent = "Correct! Challenge solved.";
+    const s = solved(); s[chIdx] = 1; store.set("gs_solved", JSON.stringify(s));
+    renderSelect();
+  }else{
+    r.className = "res bad"; r.textContent = "Output does not match yet. Compare it with the expected output and try again.";
+  }
+}
 
+/* ===== RUN ===== */
+async function runCode(){
+  if(busy) return;
+  const code = $("code").value;
+  if(!code.trim()){ setOut("Error: the editor is empty.","error"); setStatus("Error","bad"); return; }
+  busy = true; $("runBtn").disabled = true; setStatus("Running...","run");
   try{
-
-    await navigator.clipboard.writeText(code);
-
-    document.getElementById("runStatus").textContent =
-      "Copied";
-
-  }catch(error){
-
-    document.getElementById("runStatus").textContent =
-      "Copy failed";
-
-  }
-
-}
-
-
-/* =========================
-   STARTER
-========================= */
-
-function insertStarter(){
-
-  document.getElementById("code").value =
-    starterCode[currentKey] || "";
-
-  updateLines();
-
-}
-
-
-/* =========================
-   RUN CODE
-========================= */
-
-function runCode(){
-
-  const code =
-    document.getElementById("code").value;
-
-  const output =
-    document.getElementById("output");
-
-  const status =
-    document.getElementById("runStatus");
-
-
-  if(!code.trim()){
-
-    output.className =
-      "output error";
-
-    output.textContent =
-      "Error: Code editor is empty.";
-
-    status.textContent =
-      "Error";
-
-    return;
-
-  }
-
-
-  status.textContent =
-    "Running...";
-
-  output.className =
-    "output";
-
-
-  /* JAVASCRIPT */
-
-  if(currentKey === "javascript"){
-
-    runJavaScript(code);
-
-    return;
-
-  }
-
-
-  /* HTML */
-
-  if(currentKey === "html"){
-
-    runHTML(code);
-
-    return;
-
-  }
-
-
-  /* CSS */
-
-  if(currentKey === "css"){
-
-    runCSS(code);
-
-    return;
-
-  }
-
-
-  /* OTHER LANGUAGES */
-
-  output.className =
-    "output error";
-
-  output.textContent =
-`Runtime not connected for ${currentLanguage}.
-
-The editor is ready, but ${currentLanguage}
-needs a compiler/runtime backend to execute
-the code safely.
-
-Browser execution is currently available for:
-• JavaScript
-• HTML
-• CSS`;
-
-  status.textContent =
-    "Runtime required";
-
-}
-
-
-/* =========================
-   JAVASCRIPT RUNNER
-========================= */
-
-function runJavaScript(code){
-
-  const output =
-    document.getElementById("output");
-
-  const status =
-    document.getElementById("runStatus");
-
-  let logs = [];
-
-  const originalLog =
-    console.log;
-
-  const originalWarn =
-    console.warn;
-
-  const originalError =
-    console.error;
-
-
-  console.log = function(...args){
-
-    logs.push(
-      args.map(formatValue).join(" ")
-    );
-
-  };
-
-
-  console.warn = function(...args){
-
-    logs.push(
-      "⚠ " +
-      args.map(formatValue).join(" ")
-    );
-
-  };
-
-
-  console.error = function(...args){
-
-    logs.push(
-      "❌ " +
-      args.map(formatValue).join(" ")
-    );
-
-  };
-
-
-  try{
-
-    const result =
-      Function(
-        '"use strict";\n' + code
-      )();
-
-
-    if(result !== undefined){
-
-      logs.push(
-        formatValue(result)
-      );
-
+    let r;
+    switch(cur.key){
+      case "javascript": r = await runJS(code); break;
+      case "html": r = runHTML(code); break;
+      case "css": r = runCSS(code); break;
+      case "python": r = await runPython(code); break;
+      case "sql": r = await runSQL(code); break;
+      default: r = await runCloud(code);
     }
-
-
-    output.className =
-      "output success";
-
-    output.textContent =
-      logs.length
-      ? logs.join("\n")
-      : "✓ Code executed successfully.";
-
-    status.textContent =
-      "Success";
-
-  }catch(error){
-
-    output.className =
-      "output error";
-
-    output.textContent =
-      error.toString();
-
-    status.textContent =
-      "Error";
-
+    showResult(r);
+  }catch(e){
+    setOut(String(e && e.message || e),"error"); setStatus("Error","bad");
   }finally{
-
-    console.log =
-      originalLog;
-
-    console.warn =
-      originalWarn;
-
-    console.error =
-      originalError;
-
+    busy = false; $("runBtn").disabled = false;
   }
-
+}
+function showResult(r){
+  if(r.preview){ showTab("prev"); setOut(r.out,"success"); setStatus("Success","ok"); return; }
+  showTab("out");
+  const text = [r.out, r.err].filter(Boolean).join(r.out && r.err ? "\n\n" : "");
+  if(r.err){ setOut(text,"error"); setStatus("Error","bad"); }
+  else{ setOut(r.out || "Code ran successfully (no output).","success"); setStatus("Success","ok"); }
+  if(!r.err) checkChallenge(r.out || "");
+  else if(!["html","css","sql"].includes(cur.key)){ $("chRes").className = "res bad"; $("chRes").textContent = "Fix the error first, then run again."; }
 }
 
-
-/* =========================
-   FORMAT VALUE
-========================= */
-
-function formatValue(value){
-
-  if(
-    typeof value === "object" &&
-    value !== null
-  ){
-
-    try{
-
-      return JSON.stringify(
-        value,
-        null,
-        2
-      );
-
-    }catch(e){
-
-      return String(value);
-
-    }
-
-  }
-
-  return String(value);
-
+/* JavaScript: sandboxed iframe */
+function runJS(code){
+  return new Promise(res => {
+    const f = document.createElement("iframe");
+    f.sandbox = "allow-scripts"; f.style.display = "none";
+    const logs = []; let done = false;
+    const finish = err => {
+      if(done) return; done = true;
+      window.removeEventListener("message",h); clearTimeout(t); f.remove();
+      res({out:logs.join("\n"),err:err||""});
+    };
+    const h = e => {
+      if(e.source !== f.contentWindow) return;
+      const d = e.data || {};
+      if(d.t === "log") logs.push(d.m);
+      else if(d.t === "done") finish();
+      else if(d.t === "err") finish(d.m);
+    };
+    window.addEventListener("message",h);
+    const t = setTimeout(() => finish("Timeout: the code ran for more than 8 seconds."),8000);
+    const safe = JSON.stringify(code).replace(/</g,"\\u003c");
+    f.srcdoc = `<script>
+const fm=v=>typeof v==="object"&&v!==null?JSON.stringify(v,null,2):String(v);
+["log","info","warn","error"].forEach(k=>console[k]=(...a)=>parent.postMessage({t:"log",m:(k==="error"?"Error: ":k==="warn"?"Warning: ":"")+a.map(fm).join(" ")},"*"));
+window.onerror=m=>{parent.postMessage({t:"err",m:String(m)},"*")};
+window.onunhandledrejection=e=>{parent.postMessage({t:"err",m:"Unhandled promise: "+e.reason},"*")};
+try{(new Function(${safe}))();setTimeout(()=>parent.postMessage({t:"done"},"*"),400)}catch(e){parent.postMessage({t:"err",m:String(e)},"*")}
+<\/script>`;
+    document.body.appendChild(f);
+  });
 }
 
-
-/* =========================
-   HTML RUNNER
-========================= */
-
+/* HTML / CSS: live preview inside the page */
 function runHTML(code){
-
-  const output =
-    document.getElementById("output");
-
-  const status =
-    document.getElementById("runStatus");
-
-
-  const win =
-    window.open(
-      "",
-      "_blank"
-    );
-
-
-  if(!win){
-
-    output.className =
-      "output error";
-
-    output.textContent =
-      "Popup blocked. Allow popups to preview HTML.";
-
-    status.textContent =
-      "Blocked";
-
-    return;
-
-  }
-
-
-  win.document.open();
-
-  win.document.write(code);
-
-  win.document.close();
-
-
-  output.className =
-    "output success";
-
-  output.textContent =
-    "✓ HTML preview opened in a new tab.";
-
-  status.textContent =
-    "Success";
-
+  $("preview").srcdoc = code;
+  return {preview:true,out:"HTML preview updated. See the Preview tab."};
 }
-
-
-/* =========================
-   CSS RUNNER
-========================= */
-
 function runCSS(code){
-
-  const output =
-    document.getElementById("output");
-
-  const status =
-    document.getElementById("runStatus");
-
-
-  const win =
-    window.open(
-      "",
-      "_blank"
-    );
-
-
-  if(!win){
-
-    output.className =
-      "output error";
-
-    output.textContent =
-      "Popup blocked. Allow popups to preview CSS.";
-
-    status.textContent =
-      "Blocked";
-
-    return;
-
-  }
-
-
-  win.document.open();
-
-  win.document.write(`
-<!DOCTYPE html>
-
-<html>
-
-<head>
-
-<meta charset="UTF-8">
-
-<title>CSS Preview</title>
-
-<style>
-
-${code}
-
-</style>
-
-</head>
-
-<body>
-
-<h1>
-GyanSetu CSS Preview
-</h1>
-
-<p>
-This is your CSS practice preview.
-</p>
-
-<button>
-Sample Button
-</button>
-
-</body>
-
-</html>
-`);
-
-  win.document.close();
-
-
-  output.className =
-    "output success";
-
-  output.textContent =
-    "✓ CSS preview opened in a new tab.";
-
-  status.textContent =
-    "Success";
-
+  $("preview").srcdoc = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${code}</style></head><body>
+<h1>Heading</h1><p>This is a paragraph for your CSS practice.</p>
+<button>Sample button</button><ul><li>Item one</li><li>Item two</li><li>Item three</li></ul>
+<div class="box">A div with class "box"</div></body></html>`;
+  return {preview:true,out:"CSS applied to a sample page. See the Preview tab."};
 }
 
+/* Script loader */
+const loaded = {};
+function loadScript(src){
+  return loaded[src] || (loaded[src] = new Promise((ok,no) => {
+    const s = document.createElement("script"); s.src = src;
+    s.onload = ok; s.onerror = () => { delete loaded[src]; no(new Error("Could not load the runtime. Check your internet connection.")); };
+    document.head.appendChild(s);
+  }));
+}
 
-/* =========================
-   INITIALIZE
-========================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  function(){
-
-    updateLines();
-
+/* Python: Pyodide */
+let pyodide = null;
+async function runPython(code){
+  if(!pyodide){
+    setOut("Loading Python runtime (first time only, a few seconds)...");
+    await loadScript("https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js");
+    pyodide = await loadPyodide();
   }
-);
+  let out = "";
+  pyodide.setStdout({batched:s => out += s + "\n"});
+  pyodide.setStderr({batched:s => out += s + "\n"});
+  try{
+    await pyodide.runPythonAsync(code);
+    return {out:out.trimEnd(),err:""};
+  }catch(e){
+    const lines = String(e.message).trim().split("\n");
+    return {out:out.trimEnd(),err:lines.slice(-4).join("\n")};
+  }
+}
 
+/* SQL: sql.js */
+let SQLlib = null;
+async function runSQL(code){
+  if(!SQLlib){
+    setOut("Loading SQL engine...");
+    await loadScript("https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js");
+    SQLlib = await initSqlJs({locateFile:f => "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/" + f});
+  }
+  const db = new SQLlib.Database();
+  try{
+    db.run(SQL_SEED);
+    const sets = db.exec(code);
+    if(!sets.length) return {out:"Query ran successfully (no rows returned).",err:""};
+    const out = sets.map(s => {
+      const w = s.columns.map((c,i) => Math.max(c.length,...s.values.map(r => String(r[i]).length)));
+      const line = r => r.map((v,i) => String(v).padEnd(w[i])).join(" | ");
+      return [line(s.columns), w.map(x => "-".repeat(x)).join("-+-"), ...s.values.map(line), "(" + s.values.length + " rows)"].join("\n");
+    }).join("\n\n");
+    return {out,err:""};
+  }catch(e){
+    return {out:"",err:"SQL error: " + e.message};
+  }finally{ db.close(); }
+}
+
+/* Cloud runner: C, C++, Java, TypeScript, PHP, Kotlin, Swift */
+async function runCloud(code){
+  setOut("Running on cloud runner...");
+  let res;
+  try{
+    res = await fetch(RUNNER_URL,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({language:cur.api,version:"*",files:[{name:cur.file,content:code}]})
+    });
+  }catch(e){
+    return {out:"",err:"Could not reach the cloud runner. Check your internet connection or the RUNNER_URL setting."};
+  }
+  if(!res.ok) return {out:"",err:"Cloud runner is unavailable right now (status " + res.status + ").\nSet your own runner in RUNNER_URL to use " + cur.name + " reliably."};
+  const d = await res.json();
+  if(d.compile && d.compile.code !== 0) return {out:"",err:(d.compile.stderr || d.compile.output || "Compile error").trim()};
+  const r = d.run || {};
+  return {out:(r.stdout || "").trimEnd(),err:r.code !== 0 ? (r.stderr || "Program exited with an error.").trim() : ""};
+}
+
+renderLangs();
 </script>
-
 </body>
 </html>
