@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>GyanSetu AI College Finder</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033;padding-bottom:110px}
 header{background:#fff;border-bottom:1px solid #e5e7eb;padding:15px 5%;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .logo{font-size:27px;font-weight:800;color:#2563eb}
 .logo span{color:#111827}
@@ -58,6 +58,72 @@ header{background:#fff;border-bottom:1px solid #e5e7eb;padding:15px 5%;display:f
 .more-btn{display:block;width:100%;height:46px;margin-top:16px;border:1px solid #2563eb;color:#2563eb;background:#fff;border-radius:11px;font-weight:700;font-size:15px;cursor:pointer}
 .empty{background:#fff;border:1px solid #e4e7ec;border-radius:15px;padding:40px 20px;text-align:center;color:#667085}
 footer{text-align:center;color:#667085;font-size:13px;padding:35px 10px}
+
+/* =========================
+   BOTTOM NAV - LIQUID GLASS
+========================= */
+.nav{
+  position:fixed;
+  left:14px;
+  right:14px;
+  max-width:420px;
+  margin:0 auto;
+  bottom:calc(12px + env(safe-area-inset-bottom));
+  height:66px;
+  padding:6px;
+  display:flex;
+  border-radius:33px;
+  z-index:200;
+  background:rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(22px) saturate(180%);
+  backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:0 12px 32px rgba(61,108,255,.22),0 2px 8px rgba(255,45,135,.12),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4);
+}
+.nav .ind{
+  position:absolute;
+  top:6px;
+  bottom:6px;
+  left:6px;
+  width:calc((100% - 12px)/var(--n,5));
+  border-radius:27px;
+  background:linear-gradient(135deg,rgba(255,45,135,.20),rgba(61,108,255,.20));
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),inset 0 6px 10px rgba(255,255,255,.55),0 4px 14px rgba(61,108,255,.2);
+  transform:translateX(calc(var(--i,0)*100%));
+  transition:transform .42s cubic-bezier(.34,1.45,.64,1);
+}
+.nav.press .ind{
+  transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12);
+}
+.nav button{
+  position:relative;
+  z-index:1;
+  flex:1;
+  border:0;
+  background:none;
+  font:inherit;
+  cursor:pointer;
+  color:#6f7893;
+  font-size:11px;
+  font-weight:600;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  transition:color .25s;
+}
+.nav button span{
+  font-size:22px;
+  transition:transform .3s;
+}
+.nav button.active{color:#ff1493}
+.nav button.active span{
+  transform:translateY(-1px) scale(1.12);
+}
+
 @media(max-width:650px){
 header{padding:13px 4%}
 .logo{font-size:24px}
@@ -175,7 +241,48 @@ header{padding:13px 4%}
 
 <footer>© <span id="year"></span> GyanSetu • AI College Discovery</footer>
 
+
+<!-- =========================
+     BOTTOM NAV (liquid glass)
+========================= -->
+<nav class="nav" id="nav" style="--i:3;--n:5">
+  <span class="ind"></span>
+  <button aria-label="Home" onclick="navTo(0,'home.html')"><span>🏠</span>Home</button>
+  <button aria-label="Learn" onclick="navTo(1,'learn.html')"><span>📚</span>Learn</button>
+  <button aria-label="Create" onclick="navTo(2,'create.html')"><span>➕</span>Create</button>
+  <button class="active" aria-label="Search" aria-current="page" onclick="navTo(3,'leaderboard.html')"><span>🔍</span>Search</button>
+  <button aria-label="Profile" onclick="navTo(4,'profile.html')"><span>👤</span>Profile</button>
+</nav>
+
+
 <script>
+/* =========================
+   NAVIGATION (liquid nav)
+========================= */
+function navTo(i,url){
+  const n=document.getElementById('nav');
+  if(n.style.getPropertyValue('--i')==String(i))return;
+  n.classList.add('press');
+  n.style.setProperty('--i',i);
+  [...n.querySelectorAll('button')].forEach((b,k)=>b.classList.toggle('active',k===i));
+  try{sessionStorage.setItem('navIdx',i)}catch(e){}
+  setTimeout(()=>n.classList.remove('press'),220);
+  setTimeout(()=>{location.href=url},250);
+}
+
+(function(){
+  const n=document.getElementById('nav');
+  const cur=n.style.getPropertyValue('--i').trim();
+  let prev=null;
+  try{prev=sessionStorage.getItem('navIdx')}catch(e){}
+  if(prev!==null && prev!==cur){
+    n.style.setProperty('--i',prev);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>n.style.setProperty('--i',cur)));
+  }
+  try{sessionStorage.setItem('navIdx',cur)}catch(e){}
+})();
+
+
 /* राज्य आणि त्यांच्या data फाईल्स (data/ फोल्डरमध्ये) */
 const META = [["Andaman and Nicobar Islands","andaman-and-nicobar-islands.js"],["Andhra Pradesh","andhra-pradesh.js"],["Arunachal Pradesh","arunachal-pradesh.js"],["Assam","assam.js"],["Bihar","bihar.js"],["Chandigarh","chandigarh.js"],["Chhattisgarh","chhattisgarh.js"],["Delhi","delhi.js"],["Goa","goa.js"],["Gujarat","gujarat.js"],["Haryana","haryana.js"],["Himachal Pradesh","himachal-pradesh.js"],["Jammu and Kashmir","jammu-and-kashmir.js"],["Jharkhand","jharkhand.js"],["Karnataka","karnataka.js"],["Kerala","kerala.js"],["Ladakh","ladakh.js"],["Lakshadweep","lakshadweep.js"],["Madhya Pradesh","madhya-pradesh.js"],["Maharashtra","maharashtra.js"],["Manipur","manipur.js"],["Meghalaya","meghalaya.js"],["Mizoram","mizoram.js"],["Nagaland","nagaland.js"],["Odisha","odisha.js"],["Puducherry","puducherry.js"],["Punjab","punjab.js"],["Rajasthan","rajasthan.js"],["Sikkim","sikkim.js"],["Tamil Nadu","tamil-nadu.js"],["Telangana","telangana.js"],["The Dadra and Nagar Haveli and Daman and Diu","the-dadra-and-nagar-haveli-and-daman-and-diu.js"],["Tripura","tripura.js"],["Uttar Pradesh","uttar-pradesh.js"],["Uttarakhand","uttarakhand.js"],["West Bengal","west-bengal.js"]];
 let DATA = null;
