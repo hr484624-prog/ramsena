@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
 
 <title>GyanSetu - Skills</title>
 
@@ -13,12 +13,13 @@
     margin:0;
     padding:0;
     font-family:Arial,sans-serif;
+    -webkit-tap-highlight-color:transparent;
 }
 
 body{
     background:#f4f6f8;
     color:#111;
-    padding-bottom:40px;
+    padding-bottom:110px;
 }
 
 /* HEADER */
@@ -276,6 +277,78 @@ header{
     margin-bottom:12px;
 }
 
+/* =====================================================
+BOTTOM NAV - LIQUID GLASS
+===================================================== */
+
+.nav{
+    position:fixed;
+    left:14px;
+    right:14px;
+    max-width:420px;
+    margin:0 auto;
+    bottom:calc(12px + env(safe-area-inset-bottom));
+    height:66px;
+    padding:6px;
+    display:flex;
+    border-radius:33px;
+    z-index:200;
+    background:rgba(255,255,255,.5);
+    -webkit-backdrop-filter:blur(22px) saturate(180%);
+    backdrop-filter:blur(22px) saturate(180%);
+    border:1px solid rgba(255,255,255,.85);
+    box-shadow:0 12px 32px rgba(61,108,255,.22),0 2px 8px rgba(255,45,135,.12),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4);
+}
+
+.nav .ind{
+    position:absolute;
+    top:6px;
+    bottom:6px;
+    left:6px;
+    width:calc((100% - 12px)/var(--n,5));
+    border-radius:27px;
+    background:linear-gradient(135deg,rgba(255,45,135,.20),rgba(61,108,255,.20));
+    -webkit-backdrop-filter:blur(8px);
+    backdrop-filter:blur(8px);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),inset 0 6px 10px rgba(255,255,255,.55),0 4px 14px rgba(61,108,255,.2);
+    transform:translateX(calc(var(--i,0)*100%));
+    transition:transform .42s cubic-bezier(.34,1.45,.64,1);
+}
+
+.nav.press .ind{
+    transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12);
+}
+
+.nav button{
+    position:relative;
+    z-index:1;
+    flex:1;
+    border:0;
+    background:none;
+    font:inherit;
+    cursor:pointer;
+    color:#6f7893;
+    font-size:11px;
+    font-weight:600;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    transition:color .25s;
+}
+
+.nav button span{
+    font-size:22px;
+    transition:transform .3s;
+}
+
+.nav button.active{color:#ff1493}
+
+.nav button.active span{
+    transform:translateY(-1px) scale(1.12);
+}
+
 /* RESPONSIVE */
 
 @media(min-width:700px){
@@ -409,7 +482,49 @@ SKILL DETAIL PAGE
 </div>
 
 
+<!-- =====================================================
+BOTTOM NAV (liquid glass)
+===================================================== -->
+
+<nav class="nav" id="nav" style="--i:1;--n:5">
+    <span class="ind"></span>
+    <button aria-label="Home" onclick="navTo(0,'home.html')"><span>🏠</span>Home</button>
+    <button class="active" aria-label="Learn" aria-current="page" onclick="navTo(1,'learn.html')"><span>📚</span>Learn</button>
+    <button aria-label="Create" onclick="navTo(2,'create.html')"><span>➕</span>Create</button>
+    <button aria-label="Search" onclick="navTo(3,'leaderboard.html')"><span>🔍</span>Search</button>
+    <button aria-label="Profile" onclick="navTo(4,'profile.html')"><span>👤</span>Profile</button>
+</nav>
+
+
 <script>
+
+
+/* =====================================================
+NAVIGATION (liquid nav)
+===================================================== */
+
+function navTo(i,url){
+    const n=document.getElementById('nav');
+    if(n.style.getPropertyValue('--i')==String(i))return;
+    n.classList.add('press');
+    n.style.setProperty('--i',i);
+    [...n.querySelectorAll('button')].forEach((b,k)=>b.classList.toggle('active',k===i));
+    try{sessionStorage.setItem('navIdx',i)}catch(e){}
+    setTimeout(()=>n.classList.remove('press'),220);
+    setTimeout(()=>{location.href=url},250);
+}
+
+(function(){
+    const n=document.getElementById('nav');
+    const cur=n.style.getPropertyValue('--i').trim();
+    let prev=null;
+    try{prev=sessionStorage.getItem('navIdx')}catch(e){}
+    if(prev!==null && prev!==cur){
+        n.style.setProperty('--i',prev);
+        requestAnimationFrame(()=>requestAnimationFrame(()=>n.style.setProperty('--i',cur)));
+    }
+    try{sessionStorage.setItem('navIdx',cur)}catch(e){}
+})();
 
 
 /* =====================================================
