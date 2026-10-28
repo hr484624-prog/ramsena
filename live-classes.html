@@ -67,6 +67,19 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 /* blue tick */
 .fb{margin-left:8px;padding:3px 10px;border-radius:14px;background:#3d6cff;font-size:12px;font-weight:700;vertical-align:middle}.fb.on{background:#1b2436;border:1px solid #3d6cff}
 .vt{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;margin-left:5px;vertical-align:middle;cursor:pointer}
+/* BOARD (Sir) */
+#board{position:fixed;inset:0;z-index:150;background:#0b0f17;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.bbar{display:flex;align-items:center;gap:8px;padding:8px 12px;flex:none}
+.bbar b{font-size:15px;flex:1}
+.btools{display:flex;gap:8px;align-items:center;padding:0 12px 8px;overflow-x:auto;flex:none}
+.btools button{width:36px;height:36px;border-radius:50%;border:2px solid #ffffff44;background:#1b2436;flex:none;font-size:16px}
+.btools button.on{border-color:#3d6cff;box-shadow:0 0 0 2px #3d6cff88}
+.bmain{flex:1;min-height:0;display:flex;gap:8px;padding:0 8px calc(8px + env(safe-area-inset-bottom))}
+#bwrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
+#bc{border-radius:8px;border:2px solid #3d6cff88;touch-action:none;cursor:crosshair}
+#bside{width:30%;max-width:220px;flex:none;display:flex;flex-direction:column;gap:6px}
+#bvid video{width:100%;height:auto;aspect-ratio:16/9;border-radius:10px;border:1px solid #3d6cff88;background:#000;object-fit:cover}
+.bnote{font-size:12px;color:#8f9bb3;text-align:center}
 </style>
 </head>
 <body>
@@ -86,6 +99,15 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 </div>
 <div id="saveOv" class="ov hidden" style="z-index:200"><div class="pop" style="text-align:center"><h2>⏳ Recording save होत आहे</h2><p>कृपया page बंद करू नका...</p></div></div>
 <div id="md" class="ov hidden" onclick="if(event.target===this)closeModal()"><div class="pop" id="mx"></div></div>
+
+<div id="board" class="hidden">
+  <div class="bbar"><button class="ib" onclick="stopBoard()">←</button><b id="bt">📝 Board</b></div>
+  <div class="btools" id="bpal"></div>
+  <div class="bmain">
+    <div id="bwrap"><canvas id="bc"></canvas></div>
+    <div id="bside"><div id="bvid"></div><div class="bnote">👨‍🏫 तुमचा Cam • ← दाबल्यास Board बंद</div></div>
+  </div>
+</div>
 
 <script>
 const sb=supabase.createClient("https://eqglttfffhvoyvrclzse.supabase.co","sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb");
@@ -281,7 +303,7 @@ async function toggleSave(id){
 async function openRoom(id){
   clearInterval(poll);
   batch=C[id];if(!batch)return;
-  /* NEW: student + class LIVE => special player page */
+  /* student + class LIVE => special player page */
   if(batch.owner_id!==user.id&&batch.is_live){location.href='player.html?b='+batch.id;return}
   mine=batch.owner_id===user.id;sirId='gs-'+batch.id;
   msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;
@@ -294,7 +316,7 @@ async function openRoom(id){
     <div id="pip" class="pip hidden"><video id="gv" autoplay playsinline></video><small id="gn"></small></div>
     ${mine?'<button class="flip" onclick="flip()">🔄</button>':'<button id="snd" class="flip hidden" onclick="unmute()">🔊</button>'}
     <button class="fsb" onclick="fs()">⛶</button></div>
-  <div class="bar">${mine?'<button id="gb" class="pri" onclick="toggleLive()">▶️ Start Class</button><span id="tm"></span>'
+  <div class="bar">${mine?'<button id="gb" class="pri" onclick="toggleLive()">▶️ Start Class</button><button id="bdb" class="sec hidden" onclick="boardMenu()">📝 Board</button><span id="tm"></span>'
     :'<button id="hb" class="sec" onclick="hand()">✋ Hand Raise</button><button id="mb" class="sec hidden" onclick="stopTalk()">🎤 बोलणे थांबवा</button>'}</div>
   <div class="tabs" id="tabs"></div><div class="pane" id="pane"></div>`;
   document.body.appendChild(w);
@@ -341,6 +363,86 @@ async function delMsg(id){await sb.from('gs_messages').delete().eq('id',id);msgs
 function fs(){const p=$('pl');(p.requestFullscreen||p.webkitRequestFullscreen).call(p)}
 function unmute(){const v=$('vid');v.muted=false;v.play();$('snd').classList.add('hidden')}
 
+/* ---------- BOARD (Sir draws, students view) ---------- */
+let bLive=false,bmode='black',bstrokes=[],bmap={},pen='#ffffff',bw=0.004,bdraw=null,bbuf=[],bbid='',bsid=0,bft=null;
+const bcv=$('bc'),bx=bcv.getContext('2d');
+const bbg=()=>bmode==='white'?'#ffffff':'#111111';
+const bcol=c=>c==='erase'?bbg():c;
+const bdef=()=>bmode==='white'?'#111111':'#ffffff';
+function boardMenu(){
+  if(!live){toast('आधी Class सुरू करा');return}
+  if(bLive){stopBoard();return}
+  modal(`<h2>📝 Board</h2><p>कोणता Board चालू करायचा?</p>
+  <button class="pri" style="margin-top:14px;background:#111;border:1px solid #444" onclick="startBoard('black')">⬛ Black Board</button>
+  <button class="pri" style="margin-top:10px;background:#fff;color:#111" onclick="startBoard('white')">⬜ White Board</button>
+  <button class="pri" style="margin-top:10px;background:#1b2436" onclick="closeModal()">Cancel</button>`);
+}
+function bpal(){
+  const cols=[bdef(),'#ffd400','#00c8ff','#ff2d87','#3ddc84'];
+  $('bpal').innerHTML=cols.map(c=>`<button data-c="${c}" style="background:${c}" class="${pen===c?'on':''}" onclick="setPen('${c}')"></button>`).join('')
+   +`<button class="${pen==='erase'?'on':''}" onclick="setPen('erase')">🧽</button><button onclick="bclear()">🗑</button>`;
+}
+function setPen(c){pen=c;bw=c==='erase'?0.03:0.004;bpal()}
+function bfit(){
+  const w=$('bwrap'),cw=Math.max(50,Math.min(w.clientWidth,w.clientHeight*16/9)),dpr=window.devicePixelRatio||1;
+  bcv.style.width=cw+'px';bcv.style.height=cw*9/16+'px';
+  bcv.width=Math.round(cw*dpr);bcv.height=Math.round(cw*9/16*dpr);
+  bredraw();
+}
+function bseg(s,i){
+  const a=s.p[i-1]||s.p[i],b=s.p[i],W=bcv.width,H=bcv.height;
+  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,s.w*W);bx.lineCap='round';bx.lineJoin='round';
+  bx.beginPath();bx.moveTo(a[0]*W,a[1]*H);bx.lineTo(b[0]*W,b[1]*H);bx.stroke();
+}
+function bredraw(){
+  bx.fillStyle=bbg();bx.fillRect(0,0,bcv.width,bcv.height);
+  bstrokes.forEach(s=>{for(let i=0;i<s.p.length;i++)bseg(s,i)});
+}
+function startBoard(mode){
+  closeModal();if(!live)return;
+  bmode=mode;bLive=true;bstrokes=[];bmap={};pen=bdef();bw=0.004;
+  $('bt').textContent=mode==='white'?'📝 White Board':'📝 Black Board';
+  $('board').classList.remove('hidden');
+  $('bvid').appendChild($('vid'));$('vid').play().catch(()=>{});
+  bpal();bfit();
+  bcast({t:'board',v:true,mode});
+}
+function stopBoard(){
+  if(!bLive)return;
+  bflush();bLive=false;bdraw=null;
+  $('board').classList.add('hidden');
+  const p=$('pl');if(p){p.insertBefore($('vid'),p.firstChild);$('vid').play().catch(()=>{})}
+  bcast({t:'board',v:false});
+  bstrokes=[];bmap={};
+}
+function bclear(){bstrokes=[];bmap={};bredraw();bcast({t:'bclr'})}
+function bpt(e){
+  const r=bcv.getBoundingClientRect();
+  return [Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))].map(v=>+v.toFixed(4));
+}
+function bflush(){
+  clearTimeout(bft);bft=null;
+  if(!bbuf.length)return;
+  const p=bbuf;bbuf=[];
+  const s=bmap[bbid];if(!s)return;
+  bcast({t:'bp',id:bbid,c:s.c,w:s.w,p});
+}
+function badd(pt){
+  const s=bdraw;s.p.push(pt);bseg(s,s.p.length-1);bbuf.push(pt);
+  if(!bft)bft=setTimeout(bflush,40);
+}
+bcv.addEventListener('pointerdown',e=>{
+  if(!bLive)return;e.preventDefault();
+  try{bcv.setPointerCapture(e.pointerId)}catch(x){}
+  bflush();
+  bbid='s'+Date.now()+'_'+(++bsid);
+  const s={c:pen,w:bw,p:[]};bmap[bbid]=s;bstrokes.push(s);bdraw=s;
+  badd(bpt(e));
+});
+bcv.addEventListener('pointermove',e=>{if(bdraw){e.preventDefault();badd(bpt(e))}});
+['pointerup','pointercancel'].forEach(n=>bcv.addEventListener(n,()=>{if(bdraw){bflush();bdraw=null}}));
+window.addEventListener('resize',()=>{if(bLive)bfit()});
+
 /* ---------- SIR side ---------- */
 function initSir(){
   peer=new Peer(sirId,{debug:1});
@@ -363,6 +465,8 @@ function setupConn(c){
       const name=String(d.name||'Student').slice(0,30);
       conns.set(c.peer,{conn:c,name,uid:d.uid,hand:false,allowed:false});
       c.send({t:'live',v:live,hid});if(live)callStudent(c.peer);
+      /* late joiner: send current board */
+      if(bLive){c.send({t:'board',v:true,mode:bmode});c.send({t:'bfull',mode:bmode,strokes:bstrokes})}
       vcount();rStu();toast('👨‍🎓 '+name+' Join झाला');return;
     }
     const s=conns.get(c.peer);if(!s)return;
@@ -407,6 +511,7 @@ async function toggleLive(){
   const v=$('vid');v.srcObject=stream;v.muted=true;v.style.transform=facing==='user'?'scaleX(-1)':'none';
   $('ph').classList.add('hidden');$('lv').classList.remove('hidden');
   live=true;t0=Date.now();
+  $('bdb').classList.remove('hidden');
   /* history record */
   const ins=await sb.from('gs_class_history').insert({batch_id:String(batch.id),batch_name:batch.name,subject:batch.subject,owner_id:user.id,owner_name:myName}).select().single();
   if(ins.error){toast('History save error: '+ins.error.message)}
@@ -418,6 +523,7 @@ async function toggleLive(){
   beginRec();
 }
 async function endLive(){
+  stopBoard();
   bcast({t:'end'});
   if(hid){await sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}
   await endRec();hid=null;
@@ -425,7 +531,7 @@ async function endLive(){
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
   clearInterval(tmr);live=false;
   await sb.from('gs_batches').update({is_live:false,live_started_at:null}).eq('id',batch.id);
-  const g=$('gb');if(g){g.textContent='▶️ Start Class';g.classList.remove('red');$('lv').classList.add('hidden');$('ph').classList.remove('hidden');$('vid').srcObject=null;$('tm').textContent='';vcount()}
+  const g=$('gb');if(g){g.textContent='▶️ Start Class';g.classList.remove('red');$('bdb').classList.add('hidden');$('lv').classList.add('hidden');$('ph').classList.remove('hidden');$('vid').srcObject=null;$('tm').textContent='';vcount()}
 }
 async function flip(){
   facing=facing==='user'?'environment':'user';
@@ -513,7 +619,6 @@ function connect(){
   sc.on('open',()=>sc.send({t:'hi',name:myName,uid:user.id}));
   sc.on('data',d=>{
     if(!d||typeof d!=='object')return;
-    /* NEW: Sir went live => open special player page */
     if(d.t==='live'){if(d.v)location.href='player.html?b='+batch.id;else noLive()}
     if(d.t==='end'){noLive();toast('Sir ने Live Class संपवली')}
     if(d.t==='blocked'){toast('🚫 Sir ने तुम्हाला block केले आहे');blocked.set(user.id,myName);leaveRoom()}
