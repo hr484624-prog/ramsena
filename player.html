@@ -84,6 +84,17 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .fs #chb{display:flex}
 .fs .top{padding-top:calc(8px + env(safe-area-inset-top))}
 .fs .tabs button{padding:10px 2px}
+
+/* ---- BOARD (Sir controlled, full screen overlay) ---- */
+#board{position:fixed;inset:0;z-index:90;background:var(--bg);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
+.bbar{display:flex;align-items:center;gap:10px;padding:8px 12px;flex:none}
+.bbar b{font-size:15px}
+.bmain{flex:1;min-height:0;display:flex;gap:8px;padding:0 8px calc(8px + env(safe-area-inset-bottom))}
+#bwrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
+#bc{border-radius:8px;border:2px solid #ff2d8766;touch-action:none}
+#bside{width:30%;max-width:220px;flex:none;display:flex;flex-direction:column;gap:6px}
+#bvid #vid{height:auto;aspect-ratio:16/9;border-radius:10px;border:1px solid #3d6cff88}
+.bnote{font-size:12px;color:#9aa0bd;text-align:center}
 </style>
 </head>
 <body>
@@ -113,6 +124,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
       <span class="recb ro hidden" id="pl"></span>
       <span class="sp"></span>
       <button class="cb ro spd" id="sd" onclick="event.stopPropagation();cycleSpeed()">1x</button>
+      <button class="cb hidden lo" id="bdb" onclick="event.stopPropagation();openBoard()">📝</button>
       <button class="cb hb lo" id="hb" onclick="event.stopPropagation();hand()">✋</button>
       <button class="cb hidden lo" id="mb" onclick="event.stopPropagation();stopTalk()">🎤</button>
       <button class="cb" id="chb" onclick="event.stopPropagation();toggleChat()">💬<span class="badge hidden" id="bg"></span></button>
@@ -123,6 +135,19 @@ button{border:0;color:#fff;cursor:pointer;background:none}
   <div id="side">
     <div class="tabs" id="tabs"></div>
     <div id="pane" style="flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden"></div>
+  </div>
+</div>
+
+<div id="board" class="hidden">
+  <div class="bbar">
+    <button class="cb" onclick="closeBoard()">←</button>
+    <b id="bt">📝 Board</b>
+    <span class="sp"></span>
+    <button class="cb" id="bmu" onclick="toggleMute()">🔊</button>
+  </div>
+  <div class="bmain">
+    <div id="bwrap"><canvas id="bc"></canvas></div>
+    <div id="bside"><div id="bvid"></div><div class="bnote">👨‍🏫 Sir</div></div>
   </div>
 </div>
 
@@ -158,9 +183,10 @@ function playPause(){
   }else{V.pause();$('pp').textContent='▶️'}
   wake()
 }
-function toggleMute(){V.muted=!V.muted;$('mu').textContent=V.muted?'🔇':'🔊';wake()}
-function setVol(v){V.volume=v;V.muted=v==0;$('mu').textContent=V.muted?'🔇':'🔊'}
-function unmute(){V.muted=false;V.play();$('tap').classList.add('hidden');$('mu').textContent='🔊'}
+function muteIcon(){const i=V.muted?'🔇':'🔊';$('mu').textContent=i;$('bmu').textContent=i}
+function toggleMute(){V.muted=!V.muted;muteIcon();wake()}
+function setVol(v){V.volume=v;V.muted=v==0;muteIcon()}
+function unmute(){V.muted=false;V.play();$('tap').classList.add('hidden');muteIcon()}
 
 /* ---------- fullscreen (whole app, so chat/hand work inside) ---------- */
 const app=$('app');
@@ -212,6 +238,70 @@ async function sendMsg(){
   if(!msgs.some(m=>m.id===data.id)){msgs.push(data);rMsgs()}
 }
 
+/* ---------- BOARD (Sir draws, students only view) ---------- */
+let bLive=false,bOpen=false,bmode='black',bstrokes=[],bmap={};
+const bc=$('bc'),bx=bc.getContext('2d');
+const bbg=()=>bmode==='white'?'#ffffff':'#111111';
+const bcol=c=>c==='erase'?bbg():c;
+function bfit(){
+  const w=$('bwrap'),cw=Math.max(50,Math.min(w.clientWidth,w.clientHeight*16/9)),dpr=window.devicePixelRatio||1;
+  bc.style.width=cw+'px';bc.style.height=cw*9/16+'px';
+  bc.width=Math.round(cw*dpr);bc.height=Math.round(cw*9/16*dpr);
+  bredraw();
+}
+function bseg(s,i){
+  const a=s.p[i-1]||s.p[i],b=s.p[i],W=bc.width,H=bc.height;
+  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,(s.w||0.004)*W);bx.lineCap='round';bx.lineJoin='round';
+  bx.beginPath();bx.moveTo(a[0]*W,a[1]*H);bx.lineTo(b[0]*W,b[1]*H);bx.stroke();
+}
+function bredraw(){
+  bx.fillStyle=bbg();bx.fillRect(0,0,bc.width,bc.height);
+  bstrokes.forEach(s=>{for(let i=0;i<s.p.length;i++)bseg(s,i)});
+}
+function openBoard(){
+  if(!bLive)return;
+  bOpen=true;$('board').classList.remove('hidden');
+  $('bt').textContent=bmode==='white'?'📝 White Board':'📝 Black Board';
+  $('bvid').appendChild(V);V.play().catch(()=>{});
+  bfit();
+}
+function closeBoard(){
+  bOpen=false;$('board').classList.add('hidden');
+  $('stage').insertBefore(V,$('stage').firstChild);V.play().catch(()=>{});
+}
+function stopBoard(){
+  const was=bLive;bLive=false;
+  if(bOpen)closeBoard();
+  $('bdb').classList.add('hidden');
+  bstrokes=[];bmap={};
+  if(was)toast('Sir ने Board बंद केला');
+}
+function startBoard(mode){
+  bmode=mode==='white'?'white':'black';
+  const first=!bLive;bLive=true;
+  $('bdb').classList.remove('hidden');
+  if(first){bstrokes=[];bmap={};openBoard();toast('📝 Sir ने Board सुरू केला')}
+  else{$('bt').textContent=bmode==='white'?'📝 White Board':'📝 Black Board';if(bOpen)bredraw()}
+}
+function boardMsg(d){
+  if(d.t==='board'){d.v?startBoard(d.mode):stopBoard();return true}
+  if(!bLive&&(d.t==='bfull'||d.t==='bp'))startBoard(d.mode||bmode);
+  if(d.t==='bmode'){bmode=d.mode==='white'?'white':'black';$('bt').textContent=bmode==='white'?'📝 White Board':'📝 Black Board';bredraw();return true}
+  if(d.t==='bfull'){
+    if(d.mode)bmode=d.mode==='white'?'white':'black';
+    bstrokes=(d.strokes||[]).map(s=>({c:s.c,w:s.w,p:s.p||[]}));bmap={};bredraw();return true;
+  }
+  if(d.t==='bclr'){bstrokes=[];bmap={};bredraw();return true}
+  if(d.t==='bp'&&Array.isArray(d.p)){
+    let s=bmap[d.id];
+    if(!s){s={c:d.c,w:d.w,p:[]};bmap[d.id]=s;bstrokes.push(s)}
+    d.p.forEach(pt=>{s.p.push(pt);if(bOpen)bseg(s,s.p.length-1)});
+    return true;
+  }
+  return false;
+}
+window.addEventListener('resize',()=>{if(bOpen)bfit()});
+
 /* ---------- connection to Sir (PeerJS) ---------- */
 function startPeer(){
   sirId='gs-'+batch.id;
@@ -234,8 +324,9 @@ function connect(){
   sc.on('open',()=>sc.send({t:'hi',name:myName,uid:user.id}));
   sc.on('data',d=>{
     if(!d||typeof d!=='object')return;
+    if(boardMsg(d))return;
     if(d.t==='live'){if(d.v&&d.hid)markAttend(d.hid);else if(!d.v)noLive()}
-    if(d.t==='end'){showEnd();toast('Sir ने Live Class संपवली')}
+    if(d.t==='end'){stopBoard();showEnd();toast('Sir ने Live Class संपवली')}
     if(d.t==='blocked'){blocked=true;toast('🚫 Sir ने तुम्हाला block केले आहे');setTimeout(goBack,1500)}
     if(d.t==='allow')startTalk();
     if(d.t==='revoke')stopTalk();
@@ -247,7 +338,7 @@ async function markAttend(h){
   const r=await sb.from('gs_class_attendance').upsert({history_id:h,user_id:user.id,user_name:myName,owner_id:batch.owner_id},{onConflict:'history_id,user_id',ignoreDuplicates:true});
   if(r.error)console.error('attendance',r.error.message);
 }
-function noLive(){V.srcObject=null;$('wait').classList.remove('hidden');$('wt').textContent='Sir शी पुन्हा connect होत आहे...'}
+function noLive(){stopBoard();V.srcObject=null;$('wait').classList.remove('hidden');$('wt').textContent='Sir शी पुन्हा connect होत आहे...'}
 function showEnd(){V.srcObject=null;$('wait').classList.add('hidden');$('endv').classList.remove('hidden');$('app').classList.remove('hideui')}
 
 /* ---------- hand raise / talk ---------- */
