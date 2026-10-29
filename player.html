@@ -35,6 +35,8 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .hb.on{background:var(--g)}
 .wait,.tap,.end{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;line-height:1.6;z-index:2;padding:16px}
 .wait{background:radial-gradient(circle,#1b1030,#05050a);color:#c9cfe4}
+.camoff{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;text-align:center;background:#0a0a14;color:#9aa0bd;line-height:1.8;font-size:14px}
+.camoff span{display:block;font-size:34px}
 .ring{width:46px;height:46px;border-radius:50%;border:4px solid #ffffff22;border-top-color:var(--pk);border-right-color:var(--bl);animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .tap{background:#000a;z-index:4;font-weight:700}
@@ -73,7 +75,17 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .inp:focus{border-color:var(--pk)}
 .send button{width:48px;border-radius:12px;background:var(--g)}
 .vt{display:inline-block;width:16px;height:16px;line-height:16px;text-align:center;border-radius:50%;background:#1d9bf0;color:#fff;font-size:11px;font-weight:700;margin-left:5px;vertical-align:middle}
-.toast{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:#1c1c2c;border:1px solid var(--pk);border-radius:12px;padding:9px 16px;z-index:100;font-size:14px;text-align:center;max-width:90%}
+.toast{position:absolute;top:70px;left:50%;transform:translateX(-50%);background:#1c1c2c;border:1px solid var(--pk);border-radius:12px;padding:9px 16px;z-index:300;font-size:14px;text-align:center;max-width:90%}
+
+/* poll overlay */
+.pov{position:absolute;inset:0;z-index:200;background:#000b;display:flex;align-items:center;justify-content:center;padding:16px}
+.pbox{width:100%;max-width:420px;max-height:100%;overflow:auto;background:#12121c;border:1px solid var(--bl);border-radius:16px;padding:16px}
+.po{position:relative;display:block;width:100%;margin-top:8px;padding:12px;border-radius:10px;background:#1b2436;overflow:hidden;text-align:left;border:2px solid transparent}
+.po.on{border-color:var(--pk)}
+.po:disabled{opacity:.9}
+.pf{position:absolute;left:0;top:0;bottom:0;background:#3d6cff55;transition:width .3s}
+.pt,.pn{position:relative}
+.pn{float:right;font-size:13px;color:#c9cfe4}
 
 /* ---- FULLSCREEN: video full, chat becomes overlay ---- */
 .fs #stage{position:absolute;inset:0;max-height:none;aspect-ratio:auto;height:100%;border:0;box-shadow:none}
@@ -90,16 +102,18 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .bbar{display:flex;align-items:center;gap:10px;padding:8px 12px;flex:none}
 .bbar b{font-size:15px}
 .bmain{flex:1;min-height:0;display:flex;gap:8px;padding:0 8px calc(8px + env(safe-area-inset-bottom))}
-#bwrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
+#bwrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:8px}
 #bc{border-radius:8px;border:2px solid #ff2d8766;touch-action:none}
 #bside{width:30%;max-width:220px;flex:none;display:flex;flex-direction:column;gap:6px}
 #bvid #vid{height:auto;aspect-ratio:16/9;border-radius:10px;border:1px solid #3d6cff88}
 .bnote{font-size:12px;color:#9aa0bd;text-align:center}
-/* BOARD FULLSCREEN: canvas takes the whole screen, Sir cam becomes a small overlay */
+/* BOARD FULLSCREEN: canvas = पूर्ण phone screen, Sir cam small overlay */
 #board.bfs{padding-top:0}
-#board.bfs .bbar{padding:4px 10px}
-#board.bfs .bmain{padding:0;position:relative}
-#board.bfs #bc{border-radius:0;border-width:1px}
+#board.bfs .bbar{position:absolute;top:4px;right:4px;padding:0;gap:6px;z-index:8}
+#board.bfs .bbar b,#board.bfs .bbar .sp{display:none}
+#board.bfs .bmain{position:absolute;inset:0;padding:0}
+#board.bfs #bwrap{border-radius:0}
+#board.bfs #bc{border-radius:0;border-width:0}
 #board.bfs #bside{position:absolute;right:8px;bottom:8px;width:22%;max-width:170px;z-index:5}
 #board.bfs .bnote{display:none}
 </style>
@@ -116,6 +130,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
       <div class="tx"><b id="bn">GyanSetu Live</b><small id="sn"></small></div>
     </div>
 
+    <div class="camoff hidden" id="camoff"><div><span>📷</span>Sir ने Camera बंद केला आहे</div></div>
     <div class="wait" id="wait"><div class="ring"></div><div id="wt">Sir शी connect होत आहे...</div></div>
     <div class="tap hidden" id="tap" onclick="event.stopPropagation();unmute()"><div style="font-size:42px">🔊</div>Sound सुरू करण्यासाठी tap करा</div>
     <div class="end hidden" id="endv"><div style="font-size:46px">🎓</div><h2 id="et">Live Class संपली</h2><p id="ep" style="color:#9aa0bd">धन्यवाद! Recording नंतर History मध्ये मिळेल.</p><button class="pri hidden" id="rp" onclick="event.stopPropagation();replay()">↺ पुन्हा बघा</button><button class="pri" onclick="goBack()">← मागे जा</button></div>
@@ -132,6 +147,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
       <span class="sp"></span>
       <button class="cb ro spd" id="sd" onclick="event.stopPropagation();cycleSpeed()">1x</button>
       <button class="cb hidden lo" id="bdb" onclick="event.stopPropagation();openBoard()">📝</button>
+      <button class="cb hidden lo" id="plb" onclick="event.stopPropagation();pollOpen_()">📊</button>
       <button class="cb hb lo" id="hb" onclick="event.stopPropagation();hand()">✋</button>
       <button class="cb hidden lo" id="mb" onclick="event.stopPropagation();stopTalk()">🎤</button>
       <button class="cb" id="chb" onclick="event.stopPropagation();toggleChat()">💬<span class="badge hidden" id="bg"></span></button>
@@ -143,6 +159,8 @@ button{border:0;color:#fff;cursor:pointer;background:none}
     <div class="tabs" id="tabs"></div>
     <div id="pane" style="flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden"></div>
   </div>
+
+  <div id="pollA" class="pov hidden"></div>
 </div>
 
 <div id="board" class="hidden">
@@ -150,6 +168,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
     <button class="cb" onclick="closeBoard()">←</button>
     <b id="bt">📝 Board</b>
     <span class="sp"></span>
+    <button class="cb" onclick="bsave()">💾</button>
     <button class="cb" id="bmu" onclick="toggleMute()">🔊</button>
     <button class="cb" id="bfsb" onclick="toggleBoardFs()">⛶</button>
   </div>
@@ -157,6 +176,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
     <div id="bwrap"><canvas id="bc"></canvas></div>
     <div id="bside"><div id="bvid"></div><div class="bnote">👨‍🏫 Sir</div></div>
   </div>
+  <div id="pollB" class="pov hidden"></div>
 </div>
 
 <script>
@@ -251,32 +271,101 @@ async function sendMsg(){
   if(!msgs.some(m=>m.id===data.id)){msgs.push(data);rMsgs()}
 }
 
+/* ---------- camera off overlay ---------- */
+function camShow(v){$('camoff').classList.toggle('hidden',v!==false)}
+
+/* ---------- POLL (student votes) ---------- */
+let poll=null,myVote=null,pollOn=false;
+function pollDraw(){
+  const show=!!poll&&pollOn;
+  let h='';
+  if(poll){
+    const tot=poll.c.reduce((a,b)=>a+b,0);
+    h=`<div class="pbox"><h3>📊 ${esc(poll.q)}</h3>`
+    +poll.o.map((o,i)=>{const pc=tot?Math.round(poll.c[i]*100/tot):0;return `<button class="po ${myVote===i?'on':''}" ${poll.open?'':'disabled'} onclick="vote(${i})"><span class="pf" style="width:${pc}%"></span><span class="pn">${poll.c[i]} • ${pc}%</span><span class="pt">${esc(o)}</span></button>`}).join('')
+    +`<p style="color:#9aa0bd;margin-top:10px;font-size:13px">${poll.open?(myVote==null?'एक option निवडा':'तुमचा vote नोंदला • बदलू शकता'):'Poll संपला'} • ${tot} votes</p>`
+    +`<button class="pri" style="margin-top:10px;width:100%" onclick="pollClose()">${poll.open?'✕ बंद करा':'OK'}</button></div>`;
+  }
+  ['pollA','pollB'].forEach(i=>{const e=$(i);e.innerHTML=h;e.classList.toggle('hidden',!show)});
+  $('plb').classList.toggle('hidden',!poll);
+}
+function pollRecv(d){
+  if(!poll||poll.id!==d.id){myVote=null;pollOn=true;if(d.open)toast('📊 नवा Poll आला')}
+  poll=d;pollDraw();
+}
+function vote(i){
+  if(!poll||!poll.open)return;
+  if(!sc||!sc.open){toast('⚠️ Sir शी connection नाही');return}
+  myVote=i;sc.send({t:'vote',id:poll.id,i});pollDraw();
+}
+function pollClose(){pollOn=false;pollDraw()}
+function pollOpen_(){pollOn=true;pollDraw()}
+
 /* ---------- BOARD (Sir draws, students only view) ---------- */
-let bLive=false,bOpen=false,bmode='black',bstrokes=[],bmap={};
-const bc=$('bc'),bx=bc.getContext('2d');
+let bLive=false,bOpen=false,bmode='black',bobjs=[],bmap={},bview={z:1,x:0,y:0},ba=0.5625,lz=null,bpv=null,bpg=0,bn=1;
+const bcv=$('bc'),bx=bcv.getContext('2d');
 const bbg=()=>bmode==='white'?'#ffffff':'#111111';
 const bcol=c=>c==='erase'?bbg():c;
+const tr=p=>{const W=bcv.width,z=bview.z;return [(p[0]-bview.x)*z*W,(p[1]-bview.y)*z*W]};
+function btitle(){$('bt').textContent=(bmode==='white'?'📝 White Board':'📝 Black Board')+(bn>1?' • '+(bpg+1)+'/'+bn:'')}
 function bfit(){
-  const w=$('bwrap'),cw=Math.max(50,Math.min(w.clientWidth,w.clientHeight*16/9)),dpr=window.devicePixelRatio||1;
-  bc.style.width=cw+'px';bc.style.height=cw*9/16+'px';
-  bc.width=Math.round(cw*dpr);bc.height=Math.round(cw*9/16*dpr);
+  const w=$('bwrap'),cw=Math.max(50,Math.min(w.clientWidth,w.clientHeight/ba)),dpr=window.devicePixelRatio||1;
+  bcv.style.width=cw+'px';bcv.style.height=cw*ba+'px';
+  bcv.width=Math.round(cw*dpr);bcv.height=Math.round(cw*ba*dpr);
   bredraw();
 }
 function bseg(s,i){
-  const a=s.p[i-1]||s.p[i],b=s.p[i],W=bc.width,H=bc.height;
-  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,(s.w||0.004)*W);bx.lineCap='round';bx.lineJoin='round';
-  bx.beginPath();bx.moveTo(a[0]*W,a[1]*H);bx.lineTo(b[0]*W,b[1]*H);bx.stroke();
+  const a=tr(s.p[i-1]||s.p[i]),b=tr(s.p[i]);
+  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,(s.w||0.004)*bview.z*bcv.width);bx.lineCap='round';bx.lineJoin='round';
+  bx.beginPath();bx.moveTo(a[0],a[1]);bx.lineTo(b[0],b[1]);bx.stroke();
+}
+function barrow(x1,y1,x2,y2){
+  const an=Math.atan2(y2-y1,x2-x1),h=12*(window.devicePixelRatio||1);
+  bx.moveTo(x1,y1);bx.lineTo(x2,y2);
+  [2.7,-2.7].forEach(d=>{bx.moveTo(x2,y2);bx.lineTo(x2+h*Math.cos(an+d),y2+h*Math.sin(an+d))});
+}
+function bobj(s){
+  if(!s.k||s.k==='pen'){for(let i=0;i<s.p.length;i++)bseg(s,i);return}
+  if(s.k==='i'){
+    if(!s.im){s.im=new Image();s.im.onload=bredraw;s.im.src=s.src}
+    else if(s.im.complete&&s.im.naturalWidth){const a=tr(s.p[0]),b=tr(s.p[1]);bx.drawImage(s.im,a[0],a[1],b[0]-a[0],b[1]-a[1])}
+    return;
+  }
+  if(s.k==='t'){
+    const a=tr(s.p[0]);bx.fillStyle=bcol(s.c);bx.font='600 '+Math.max(8,s.w*bview.z*bcv.width)+'px system-ui,Arial';bx.textBaseline='top';bx.fillText(s.tx||'',a[0],a[1]);return;
+  }
+  const a=tr(s.p[0]),b=tr(s.p[s.p.length-1]);
+  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,s.w*bview.z*bcv.width);bx.lineCap='round';bx.lineJoin='round';bx.beginPath();
+  if(s.k==='l'){bx.moveTo(a[0],a[1]);bx.lineTo(b[0],b[1])}
+  else if(s.k==='r')bx.rect(a[0],a[1],b[0]-a[0],b[1]-a[1]);
+  else if(s.k==='c')bx.ellipse((a[0]+b[0])/2,(a[1]+b[1])/2,Math.abs(b[0]-a[0])/2,Math.abs(b[1]-a[1])/2,0,0,7);
+  else if(s.k==='a'){
+    const cx=(a[0]+b[0])/2,cy=(a[1]+b[1])/2;
+    barrow(cx,cy,b[0],cy);barrow(cx,cy,a[0],cy);barrow(cx,cy,cx,a[1]);barrow(cx,cy,cx,b[1]);
+  }
+  bx.stroke();
 }
 function bredraw(){
-  bx.fillStyle=bbg();bx.fillRect(0,0,bc.width,bc.height);
-  bstrokes.forEach(s=>{for(let i=0;i<s.p.length;i++)bseg(s,i)});
+  const w=$('bwrap');if(w)w.style.background=bbg();
+  bx.fillStyle=bbg();bx.fillRect(0,0,bcv.width,bcv.height);
+  bobjs.forEach(bobj);if(bpv)bobj(bpv);
+  if(lz){const x=lz[0]*bcv.width,y=lz[1]*bcv.height,r=9*(window.devicePixelRatio||1);bx.fillStyle='#ff2d2d';bx.shadowColor='#ff2d2d';bx.shadowBlur=r*2;bx.beginPath();bx.arc(x,y,r,0,7);bx.fill();bx.shadowBlur=0}
+}
+function bsave(){
+  bcv.toBlob(async bl=>{
+    if(!bl){toast('Save झाले नाही');return}
+    const f=new File([bl],'board-'+(bpg+1)+'.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});return}catch(e){if(e&&e.name==='AbortError')return}}
+    const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('💾 Board save झाला');
+  },'image/png');
 }
 
-/* ---- board fullscreen ---- */
+/* ---- board fullscreen: canvas = पूर्ण phone screen ---- */
 function bfsUpdate(on){
   $('board').classList.toggle('bfs',on);
   $('bfsb').textContent=on?'🗗':'⛶';
-  setTimeout(()=>{if(bOpen)bfit()},150);
+  [100,350,800].forEach(ms=>setTimeout(()=>{if(bOpen)bfit()},ms));
 }
 async function toggleBoardFs(){
   const b=$('board');
@@ -286,9 +375,9 @@ async function toggleBoardFs(){
     try{screen.orientation.unlock()}catch(e){}
     return;
   }
+  bfsUpdate(true); /* iPhone वर browser fullscreen नसले तरी पूर्ण screen layout लगेच लागू */
   const r=b.requestFullscreen||b.webkitRequestFullscreen;
   if(r){try{await r.call(b)}catch(e){}}
-  bfsUpdate(true); /* browser fullscreen नसेल तरी (iPhone) पूर्ण screen layout लागू होतो */
   try{await screen.orientation.lock('landscape')}catch(e){}
 }
 
@@ -298,7 +387,7 @@ function openBoard(){
   const f=fsEl();
   if(f&&f.id!=='board'){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}
   bOpen=true;$('board').classList.remove('hidden');
-  $('bt').textContent=bmode==='white'?'📝 White Board':'📝 Black Board';
+  btitle();
   $('bvid').appendChild(V);V.play().catch(()=>{});
   bfit();
 }
@@ -313,28 +402,38 @@ function stopBoard(){
   const was=bLive;bLive=false;
   if(bOpen)closeBoard();
   $('bdb').classList.add('hidden');
-  bstrokes=[];bmap={};
+  bobjs=[];bmap={};bview={z:1,x:0,y:0};lz=null;bpg=0;bn=1;
   if(was)toast('Sir ने Board बंद केला');
 }
 function startBoard(mode){
   bmode=mode==='white'?'white':'black';
   const first=!bLive;bLive=true;
   $('bdb').classList.remove('hidden');
-  if(first){bstrokes=[];bmap={};openBoard();toast('📝 Sir ने Board सुरू केला')}
-  else{$('bt').textContent=bmode==='white'?'📝 White Board':'📝 Black Board';if(bOpen)bredraw()}
+  if(first){bobjs=[];bmap={};bview={z:1,x:0,y:0};lz=null;openBoard();toast('📝 Sir ने Board सुरू केला')}
+  else{btitle();if(bOpen)bredraw()}
 }
 function boardMsg(d){
   if(d.t==='board'){d.v?startBoard(d.mode):stopBoard();return true}
-  if(!bLive&&(d.t==='bfull'||d.t==='bp'))startBoard(d.mode||bmode);
-  if(d.t==='bmode'){bmode=d.mode==='white'?'white':'black';$('bt').textContent=bmode==='white'?'📝 White Board':'📝 Black Board';bredraw();return true}
+  if(d.t==='basp'){ba=+d.a>0?+d.a:0.5625;if(bOpen)bfit();return true}
+  if(d.t==='bview'){bview={z:d.z||1,x:d.x||0,y:d.y||0};if(bOpen)bredraw();return true}
+  if(d.t==='lz'){lz=Array.isArray(d.p)?d.p:null;if(bOpen)bredraw();return true}
+  if(d.t==='cam'){camShow(d.v);return true}
+  if(d.t==='poll'){pollRecv(d);return true}
+  if(!['bfull','bp','add','bclr','bmode'].includes(d.t))return false;
+  if(!bLive&&(d.t==='bfull'||d.t==='bp'||d.t==='add'))startBoard(d.mode||bmode);
+  if(d.t==='bmode'){bmode=d.mode==='white'?'white':'black';btitle();bredraw();return true}
   if(d.t==='bfull'){
     if(d.mode)bmode=d.mode==='white'?'white':'black';
-    bstrokes=(d.strokes||[]).map(s=>({c:s.c,w:s.w,p:s.p||[]}));bmap={};bredraw();return true;
+    if(d.a>0)ba=d.a;
+    bpg=d.pg||0;bn=d.n||1;
+    bobjs=(d.strokes||[]).map(s=>({...s,p:s.p||[]}));bmap={};
+    btitle();if(bOpen){bfit()}return true;
   }
-  if(d.t==='bclr'){bstrokes=[];bmap={};bredraw();return true}
+  if(d.t==='bclr'){bobjs=[];bmap={};bredraw();return true}
+  if(d.t==='add'&&d.o){bobjs.push(d.o);if(bOpen)bobj(d.o);return true}
   if(d.t==='bp'&&Array.isArray(d.p)){
     let s=bmap[d.id];
-    if(!s){s={c:d.c,w:d.w,p:[]};bmap[d.id]=s;bstrokes.push(s)}
+    if(!s){s={k:'pen',c:d.c,w:d.w,p:[]};bmap[d.id]=s;bobjs.push(s)}
     d.p.forEach(pt=>{s.p.push(pt);if(bOpen)bseg(s,s.p.length-1)});
     return true;
   }
@@ -366,7 +465,7 @@ function connect(){
     if(!d||typeof d!=='object')return;
     if(boardMsg(d))return;
     if(d.t==='live'){if(d.v&&d.hid)markAttend(d.hid);else if(!d.v)noLive()}
-    if(d.t==='end'){stopBoard();showEnd();toast('Sir ने Live Class संपवली')}
+    if(d.t==='end'){stopBoard();poll=null;pollDraw();camShow(true);showEnd();toast('Sir ने Live Class संपवली')}
     if(d.t==='blocked'){blocked=true;toast('🚫 Sir ने तुम्हाला block केले आहे');setTimeout(goBack,1500)}
     if(d.t==='allow')startTalk();
     if(d.t==='revoke')stopTalk();
@@ -378,7 +477,7 @@ async function markAttend(h){
   const r=await sb.from('gs_class_attendance').upsert({history_id:h,user_id:user.id,user_name:myName,owner_id:batch.owner_id},{onConflict:'history_id,user_id',ignoreDuplicates:true});
   if(r.error)console.error('attendance',r.error.message);
 }
-function noLive(){stopBoard();V.srcObject=null;$('wait').classList.remove('hidden');$('wt').textContent='Sir शी पुन्हा connect होत आहे...'}
+function noLive(){stopBoard();camShow(true);V.srcObject=null;$('wait').classList.remove('hidden');$('wt').textContent='Sir शी पुन्हा connect होत आहे...'}
 function showEnd(){V.srcObject=null;$('wait').classList.add('hidden');$('endv').classList.remove('hidden');$('app').classList.remove('hideui')}
 
 /* ---------- hand raise / talk ---------- */
