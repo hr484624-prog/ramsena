@@ -52,7 +52,7 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 .pip small{position:absolute;bottom:0;left:0;right:0;background:#000a;font-size:11px;text-align:center}
 .fsb,.flip{position:absolute;bottom:8px;height:38px;min-width:38px;border-radius:9px;background:#000a}
 .fsb{right:8px}.flip{left:8px}
-.bar{display:flex;gap:8px;padding:8px 12px;align-items:center}.bar .pri{padding:11px}.bar .sec{flex:1}
+.bar{display:flex;flex-wrap:wrap;gap:8px;padding:8px 12px;align-items:center}.bar .pri{padding:11px}.bar .sec{flex:1;min-width:80px}
 .tabs{display:flex;border-bottom:1px solid #232d42}
 .tabs button{flex:1;padding:11px 2px;background:none;font-size:14px;font-weight:700;color:#8f9bb3;border-bottom:3px solid transparent}
 .tabs .on{color:#fff;border-color:#3d6cff}
@@ -71,21 +71,26 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 #board{position:fixed;inset:0;z-index:150;background:#0b0f17;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top)}
 .bbar{display:flex;align-items:center;gap:8px;padding:8px 12px;flex:none}
 .bbar b{font-size:15px;flex:1}
+#bth{display:none}
 .btools{display:flex;gap:8px;align-items:center;padding:0 12px 8px;overflow-x:auto;flex:none}
 .btools button{width:36px;height:36px;border-radius:50%;border:2px solid #ffffff44;background:#1b2436;flex:none;font-size:16px}
 .btools button.on{border-color:#3d6cff;box-shadow:0 0 0 2px #3d6cff88}
 .bmain{flex:1;min-height:0;display:flex;gap:8px;padding:0 8px calc(8px + env(safe-area-inset-bottom))}
-#bwrap{flex:1;min-width:0;display:flex;align-items:center;justify-content:center}
-#bc{border-radius:8px;border:2px solid #3d6cff88;touch-action:none;cursor:crosshair}
+#bwrap{flex:1;min-width:0;position:relative;overflow:hidden;border-radius:8px;border:2px solid #3d6cff88}
+#bc{position:absolute;left:0;top:0;touch-action:none;cursor:crosshair}
 #bside{width:30%;max-width:220px;flex:none;display:flex;flex-direction:column;gap:6px}
 #bvid video{width:100%;height:auto;aspect-ratio:16/9;border-radius:10px;border:1px solid #3d6cff88;background:#000;object-fit:cover}
 .bnote{font-size:12px;color:#8f9bb3;text-align:center}
-/* BOARD FULLSCREEN: canvas takes the whole screen, Sir cam becomes a small overlay */
+/* BOARD FULLSCREEN: canvas = पूर्ण phone screen, tools/cam overlay */
 #board.bfs{padding-top:0}
-#board.bfs .bbar{padding:4px 10px}
-#board.bfs .btools{padding:0 10px 4px}
-#board.bfs .bmain{padding:0;position:relative}
-#board.bfs #bc{border-radius:0;border-width:1px}
+#board.bfs .bbar{position:absolute;top:4px;right:4px;padding:0;gap:6px;z-index:8}
+#board.bfs .bbar b{display:none}
+#board.bfs #bth{display:block}
+#board.bfs .btools{position:absolute;left:4px;top:4px;bottom:4px;width:42px;flex-direction:column;padding:0;gap:6px;overflow-y:auto;overflow-x:hidden;z-index:7}
+#board.bfs .btools button{width:34px;height:34px;font-size:15px;opacity:.92}
+#board.bfs.thide .btools{display:none}
+#board.bfs .bmain{position:absolute;inset:0;padding:0}
+#board.bfs #bwrap{border:0;border-radius:0}
 #board.bfs #bside{position:absolute;right:8px;bottom:8px;width:22%;max-width:170px;z-index:5}
 #board.bfs .bnote{display:none}
 </style>
@@ -109,12 +114,13 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 <div id="md" class="ov hidden" onclick="if(event.target===this)closeModal()"><div class="pop" id="mx"></div></div>
 
 <div id="board" class="hidden">
-  <div class="bbar"><button class="ib" onclick="stopBoard()">←</button><b id="bt">📝 Board</b><button class="ib" id="bfsb" onclick="toggleBoardFs()">⛶</button></div>
+  <div class="bbar"><button class="ib" onclick="stopBoard()">←</button><b id="btt">📝 Board</b><button class="ib" id="bth" onclick="$('board').classList.toggle('thide')">🎛</button><button class="ib" id="bfsb" onclick="toggleBoardFs()">⛶</button></div>
   <div class="btools" id="bpal"></div>
   <div class="bmain">
     <div id="bwrap"><canvas id="bc"></canvas></div>
     <div id="bside"><div id="bvid"></div><div class="bnote">👨‍🏫 तुमचा Cam • ← दाबल्यास Board बंद</div></div>
   </div>
+  <input type="file" id="bimg" accept="image/*" class="hidden" onchange="bimgPick(this)">
 </div>
 
 <script>
@@ -132,6 +138,7 @@ const SEG_MS=8*60*1000;
 let newPhoto=null,rmPhoto=false,saving=false;
 const ver=new Set(); /* verified (blue tick) user ids */
 const fol=new Set(); /* Sir ids I follow */
+let pol=null,pollShown=false; /* live poll (Sir side) */
 
 /* ---------- no zoom ---------- */
 ['gesturestart','gesturechange','gestureend'].forEach(e=>document.addEventListener(e,x=>x.preventDefault()));
@@ -140,8 +147,8 @@ document.addEventListener('touchmove',e=>{if(e.touches.length>1)e.preventDefault
 /* ---------- helpers ---------- */
 let tt;
 function toast(t){const e=$('toast');e.textContent=t;e.classList.remove('hidden');clearTimeout(tt);tt=setTimeout(()=>e.classList.add('hidden'),3000)}
-function modal(h){$('mx').innerHTML=h;$('md').classList.remove('hidden')}
-function closeModal(){$('md').classList.add('hidden')}
+function modal(h){pollShown=false;$('mx').innerHTML=h;$('md').classList.remove('hidden')}
+function closeModal(){pollShown=false;$('md').classList.add('hidden')}
 function title(t){$('ttl').textContent=t}
 function back(){
   if(role&&$('roleOv').classList.contains('hidden')){clearInterval(poll);role=null;$('view').innerHTML='';title('🎥 GyanSetu Live');$('roleOv').classList.remove('hidden')}
@@ -314,7 +321,7 @@ async function openRoom(id){
   /* student + class LIVE => special player page */
   if(batch.owner_id!==user.id&&batch.is_live){location.href='player.html?b='+batch.id;return}
   mine=batch.owner_id===user.id;sirId='gs-'+batch.id;
-  msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;
+  msgs=[];conns=new Map();calls=[];live=false;tab='chat';hid=null;pol=null;camOn=true;micOn=true;
   await loadVer([batch.owner_id]);
   const w=document.createElement('div');w.className='room';w.id='room';
   w.innerHTML=`<div class="rh"><button class="ib" onclick="leaveRoom()">←</button><div><b>${esc(batch.name)}</b><small>${esc(batch.subject||'')} • ${esc(batch.owner_name||'Sir')}${tk(batch.owner_id)}</small></div><span id="rfol" style="margin-left:auto">${folBtn(batch.owner_id)}</span></div>
@@ -324,7 +331,7 @@ async function openRoom(id){
     <div id="pip" class="pip hidden"><video id="gv" autoplay playsinline></video><small id="gn"></small></div>
     ${mine?'<button class="flip" onclick="flip()">🔄</button>':'<button id="snd" class="flip hidden" onclick="unmute()">🔊</button>'}
     <button class="fsb" onclick="fs()">⛶</button></div>
-  <div class="bar">${mine?'<button id="gb" class="pri" onclick="toggleLive()">▶️ Start Class</button><button id="bdb" class="sec hidden" onclick="boardMenu()">📝 Board</button><span id="tm"></span>'
+  <div class="bar">${mine?'<button id="gb" class="pri" onclick="toggleLive()">▶️ Start Class</button><button id="bdb" class="sec hidden" onclick="boardMenu()">📝 Board</button><button id="cmb" class="sec hidden" onclick="togCam()">📷 Cam</button><button id="mcb" class="sec hidden" onclick="togMic()">🎤 Mic</button><button id="plb" class="sec hidden" onclick="pollUI()">📊 Poll</button><span id="tm"></span>'
     :'<button id="hb" class="sec" onclick="hand()">✋ Hand Raise</button><button id="mb" class="sec hidden" onclick="stopTalk()">🎤 बोलणे थांबवा</button>'}</div>
   <div class="tabs" id="tabs"></div><div class="pane" id="pane"></div>`;
   document.body.appendChild(w);
@@ -371,19 +378,115 @@ async function delMsg(id){await sb.from('gs_messages').delete().eq('id',id);msgs
 function fs(){const p=$('pl');(p.requestFullscreen||p.webkitRequestFullscreen).call(p)}
 function unmute(){const v=$('vid');v.muted=false;v.play();$('snd').classList.add('hidden')}
 
+/* ---------- CAM / MIC on-off (Sir) ---------- */
+let camOn=true,micOn=true;
+function updCam(){
+  const c=$('cmb');if(c)c.textContent=(camOn?'📷':'🚫')+' Cam';
+  const m=$('mcb');if(m)m.textContent=(micOn?'🎤':'🔇')+' Mic';
+  const b=$('bcam');if(b)b.textContent=camOn?'📷':'🚫';
+  const bm=$('bmic');if(bm)bm.textContent=micOn?'🎤':'🔇';
+}
+function togCam(){
+  const t=stream&&stream.getVideoTracks()[0];if(!t)return;
+  camOn=!camOn;t.enabled=camOn;bcast({t:'cam',v:camOn});updCam();
+  toast(camOn?'📷 Camera चालू':'🚫 Camera बंद');
+}
+function togMic(){
+  const t=stream&&stream.getAudioTracks()[0];if(!t)return;
+  micOn=!micOn;t.enabled=micOn;updCam();
+  toast(micOn?'🎤 Mic चालू':'🔇 Mic बंद');
+}
+
+/* ---------- POLL (Sir) ---------- */
+const polCounts=()=>{const c=pol.o.map(()=>0);pol.votes.forEach(i=>{if(c[i]!=null)c[i]++});return c};
+const polMsg=()=>({t:'poll',id:pol.id,q:pol.q,o:pol.o,open:pol.open,c:polCounts()});
+function pollUI(){
+  if(!live){toast('आधी Class सुरू करा');return}
+  if(!pol){pollNew();return}
+  const c=polCounts(),tot=c.reduce((a,b)=>a+b,0);
+  modal(`<h2>📊 Poll</h2><p><b style="color:#fff">${esc(pol.q)}</b></p>`
+  +pol.o.map((o,i)=>{const pc=tot?Math.round(c[i]*100/tot):0;return `<div style="margin-top:10px"><div style="display:flex;justify-content:space-between"><span>${esc(o)}</span><span>${c[i]} • ${pc}%</span></div><div style="height:8px;background:#1b2436;border-radius:6px;margin-top:4px"><div style="height:8px;width:${pc}%;background:#3d6cff;border-radius:6px"></div></div></div>`}).join('')
+  +`<p>${pol.open?'🟢 Poll चालू आहे':'🔴 Poll संपला'} • एकूण ${tot} votes</p>`
+  +(pol.open?`<button class="pri red" style="margin-top:14px" onclick="pollEnd()">⏹ Poll संपवा</button>`:'')
+  +`<button class="pri" style="margin-top:8px" onclick="pollNew()">➕ नवा Poll</button><button class="pri" style="margin-top:8px;background:#1b2436" onclick="closeModal()">Close</button>`);
+  pollShown=true;
+}
+function pollNew(){
+  modal(`<h2>📊 नवा Poll</h2>
+  <input class="inp" id="pq" maxlength="120" placeholder="प्रश्न (उदा. हा topic समजला का?)">
+  <input class="inp pop_" maxlength="50" placeholder="Option 1">
+  <input class="inp pop_" maxlength="50" placeholder="Option 2">
+  <input class="inp pop_" maxlength="50" placeholder="Option 3 (ऐच्छिक)">
+  <input class="inp pop_" maxlength="50" placeholder="Option 4 (ऐच्छिक)">
+  <button class="pri" style="margin-top:12px" onclick="pollStart()">🚀 Poll सुरू करा</button>
+  <button class="pri" style="margin-top:8px;background:#1b2436" onclick="closeModal()">Cancel</button>`);
+}
+function pollStart(){
+  const qq=$('pq').value.trim(),o=[...document.querySelectorAll('.pop_')].map(x=>x.value.trim()).filter(Boolean);
+  if(!qq||o.length<2){toast('प्रश्न आणि किमान 2 options टाका');return}
+  pol={id:Date.now(),q:qq,o,open:true,votes:new Map()};
+  bcast(polMsg());pollUI();
+}
+function pollEnd(){if(!pol)return;pol.open=false;bcast(polMsg());pollUI()}
+
 /* ---------- BOARD (Sir draws, students view) ---------- */
-let bLive=false,bmode='black',bstrokes=[],bmap={},pen='#ffffff',bw=0.004,bdraw=null,bbuf=[],bbid='',bsid=0,bft=null;
+let bLive=false,bmode='black',pages=[[]],pg=0,bobjs=pages[0],rdo=[],pen='#ffffff',tool='pen',bsi=0,bw=0.003;
+let bdraw=null,bpv=null,bbuf=[],bbid='',bsid=0,bft=null,bvt=null,lzt=null,bact=null,gest=null,lz=null,bview={z:1,x:0,y:0},ba=0.5625;
+const BW=[0.003,0.006,0.012],ptrs=new Map();
 const bcv=$('bc'),bx=bcv.getContext('2d');
 const bbg=()=>bmode==='white'?'#ffffff':'#111111';
 const bcol=c=>c==='erase'?bbg():c;
 const bdef=()=>bmode==='white'?'#111111':'#ffffff';
+const SER=s=>{const {im,...r}=s;return r};
+const bfullData=()=>({mode:bmode,a:ba,pg,n:pages.length,strokes:bobjs.map(SER)});
 
-/* ---- board fullscreen ---- */
+/* ---- drawing (world coords: x = px/width, y = px/width; zoom/pan via bview) ---- */
+const tr=p=>{const W=bcv.width,z=bview.z;return [(p[0]-bview.x)*z*W,(p[1]-bview.y)*z*W]};
+function bclamp(){const v=bview;v.z=Math.min(5,Math.max(1,v.z));v.x=Math.min(Math.max(0,v.x),1-1/v.z);v.y=Math.min(Math.max(0,v.y),Math.max(0,ba-ba/v.z))}
+function bseg(s,i){
+  const a=tr(s.p[i-1]||s.p[i]),b=tr(s.p[i]);
+  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,(s.w||0.004)*bview.z*bcv.width);bx.lineCap='round';bx.lineJoin='round';
+  bx.beginPath();bx.moveTo(a[0],a[1]);bx.lineTo(b[0],b[1]);bx.stroke();
+}
+function barrow(x1,y1,x2,y2){
+  const an=Math.atan2(y2-y1,x2-x1),h=12*(window.devicePixelRatio||1);
+  bx.moveTo(x1,y1);bx.lineTo(x2,y2);
+  [2.7,-2.7].forEach(d=>{bx.moveTo(x2,y2);bx.lineTo(x2+h*Math.cos(an+d),y2+h*Math.sin(an+d))});
+}
+function bobj(s){
+  if(!s.k||s.k==='pen'){for(let i=0;i<s.p.length;i++)bseg(s,i);return}
+  if(s.k==='i'){
+    if(!s.im){s.im=new Image();s.im.onload=bredraw;s.im.src=s.src}
+    else if(s.im.complete&&s.im.naturalWidth){const a=tr(s.p[0]),b=tr(s.p[1]);bx.drawImage(s.im,a[0],a[1],b[0]-a[0],b[1]-a[1])}
+    return;
+  }
+  if(s.k==='t'){
+    const a=tr(s.p[0]);bx.fillStyle=bcol(s.c);bx.font='600 '+Math.max(8,s.w*bview.z*bcv.width)+'px system-ui,Arial';bx.textBaseline='top';bx.fillText(s.tx||'',a[0],a[1]);return;
+  }
+  const a=tr(s.p[0]),b=tr(s.p[s.p.length-1]);
+  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,s.w*bview.z*bcv.width);bx.lineCap='round';bx.lineJoin='round';bx.beginPath();
+  if(s.k==='l'){bx.moveTo(a[0],a[1]);bx.lineTo(b[0],b[1])}
+  else if(s.k==='r')bx.rect(a[0],a[1],b[0]-a[0],b[1]-a[1]);
+  else if(s.k==='c')bx.ellipse((a[0]+b[0])/2,(a[1]+b[1])/2,Math.abs(b[0]-a[0])/2,Math.abs(b[1]-a[1])/2,0,0,7);
+  else if(s.k==='a'){
+    const cx=(a[0]+b[0])/2,cy=(a[1]+b[1])/2;
+    barrow(cx,cy,b[0],cy);barrow(cx,cy,a[0],cy);barrow(cx,cy,cx,a[1]);barrow(cx,cy,cx,b[1]);
+  }
+  bx.stroke();
+}
+function bredraw(){
+  const w=$('bwrap');if(w)w.style.background=bbg();
+  bx.fillStyle=bbg();bx.fillRect(0,0,bcv.width,bcv.height);
+  bobjs.forEach(bobj);if(bpv)bobj(bpv);
+  if(lz){const x=lz[0]*bcv.width,y=lz[1]*bcv.height,r=9*(window.devicePixelRatio||1);bx.fillStyle='#ff2d2d';bx.shadowColor='#ff2d2d';bx.shadowBlur=r*2;bx.beginPath();bx.arc(x,y,r,0,7);bx.fill();bx.shadowBlur=0}
+}
+
+/* ---- board fullscreen: canvas = पूर्ण phone screen ---- */
 const fsE=()=>document.fullscreenElement||document.webkitFullscreenElement;
 function bfsUpdate(on){
-  const b=$('board');b.classList.toggle('bfs',on);
+  const b=$('board');b.classList.toggle('bfs',on);if(!on)b.classList.remove('thide');
   $('bfsb').textContent=on?'🗗':'⛶';
-  setTimeout(()=>{if(bLive)bfit()},150);
+  [100,350,800].forEach(ms=>setTimeout(()=>{if(bLive)bfit()},ms));
 }
 async function toggleBoardFs(){
   const b=$('board');
@@ -393,9 +496,9 @@ async function toggleBoardFs(){
     try{screen.orientation.unlock()}catch(e){}
     return;
   }
+  bfsUpdate(true); /* iPhone वर browser fullscreen नसले तरी पूर्ण screen layout लगेच लागू */
   const r=b.requestFullscreen||b.webkitRequestFullscreen;
   if(r){try{await r.call(b)}catch(e){}}
-  bfsUpdate(true); /* browser fullscreen नसेल तरी (iPhone) पूर्ण screen layout लागू होतो */
   try{await screen.orientation.lock('landscape')}catch(e){}
 }
 ['fullscreenchange','webkitfullscreenchange'].forEach(e=>document.addEventListener(e,()=>{
@@ -412,73 +515,166 @@ function boardMenu(){
   <button class="pri" style="margin-top:10px;background:#fff;color:#111" onclick="startBoard('white')">⬜ White Board</button>
   <button class="pri" style="margin-top:10px;background:#1b2436" onclick="closeModal()">Cancel</button>`);
 }
+function btitle(){$('btt').textContent=(bmode==='white'?'📝 White Board':'📝 Black Board')+(pages.length>1?' • '+(pg+1)+'/'+pages.length:'')}
 function bpal(){
   const cols=[bdef(),'#ffd400','#00c8ff','#ff2d87','#3ddc84'];
-  $('bpal').innerHTML=cols.map(c=>`<button data-c="${c}" style="background:${c}" class="${pen===c?'on':''}" onclick="setPen('${c}')"></button>`).join('')
-   +`<button class="${pen==='erase'?'on':''}" onclick="setPen('erase')">🧽</button><button onclick="bclear()">🗑</button>`;
+  const T=(t,l)=>`<button class="${tool===t?'on':''}" onclick="setTool('${t}')">${l}</button>`;
+  $('bpal').innerHTML=cols.map(c=>`<button style="background:${c}" class="${tool==='pen'&&pen===c?'on':''}" onclick="setPen('${c}')"></button>`).join('')
+   +`<button onclick="cycleW()">✏${bsi+1}</button>`
+   +T('erase','🧽')+`<button onclick="bundo()">↩</button><button onclick="brdo()">↪</button>`
+   +T('l','╱')+T('r','▭')+T('c','◯')+T('a','📈')+T('text','🔤')
+   +`<button onclick="$('bimg').click()">🖼</button>`+T('laser','🔴')
+   +`<button onclick="bzoom(1.4)">＋</button><button onclick="bzoom(1/1.4)">－</button>`
+   +`<button onclick="bpage(-1)">◀</button><button style="width:auto;padding:0 8px;border-radius:18px">${pg+1}/${pages.length}</button><button onclick="bpage(1)">▶</button><button onclick="bnew()">➕</button>`
+   +`<button onclick="bclear()">🗑</button><button onclick="bsave()">💾</button>`
+   +`<button id="bcam" onclick="togCam()">${camOn?'📷':'🚫'}</button><button id="bmic" onclick="togMic()">${micOn?'🎤':'🔇'}</button>`;
 }
-function setPen(c){pen=c;bw=c==='erase'?0.03:0.004;bpal()}
+function setTool(t){tool=t;bpal()}
+function setPen(c){pen=c;if(tool==='erase'||tool==='laser')tool='pen';bpal()}
+function cycleW(){bsi=(bsi+1)%BW.length;bw=BW[bsi];bpal()}
 function bfit(){
-  const w=$('bwrap'),cw=Math.max(50,Math.min(w.clientWidth,w.clientHeight*16/9)),dpr=window.devicePixelRatio||1;
-  bcv.style.width=cw+'px';bcv.style.height=cw*9/16+'px';
-  bcv.width=Math.round(cw*dpr);bcv.height=Math.round(cw*9/16*dpr);
-  bredraw();
+  const w=$('bwrap'),cw=Math.max(60,w.clientWidth),chh=Math.max(60,w.clientHeight),dpr=window.devicePixelRatio||1;
+  bcv.style.width=cw+'px';bcv.style.height=chh+'px';
+  bcv.width=Math.round(cw*dpr);bcv.height=Math.round(chh*dpr);
+  ba=chh/cw;bclamp();bredraw();bcast({t:'basp',a:ba});
 }
-function bseg(s,i){
-  const a=s.p[i-1]||s.p[i],b=s.p[i],W=bcv.width,H=bcv.height;
-  bx.strokeStyle=bcol(s.c);bx.lineWidth=Math.max(1,s.w*W);bx.lineCap='round';bx.lineJoin='round';
-  bx.beginPath();bx.moveTo(a[0]*W,a[1]*H);bx.lineTo(b[0]*W,b[1]*H);bx.stroke();
+function bsync(){bredraw();bcast({t:'bfull',...bfullData()});bpal();btitle()}
+function bundo(){const o=bobjs.pop();if(o){rdo.push(o);bsync()}}
+function brdo(){const o=rdo.pop();if(o){bobjs.push(o);bsync()}}
+function bclear(){if(!bobjs.length)return;if(!confirm('हा page पुसायचा?'))return;pages[pg]=bobjs=[];rdo=[];bsync()}
+function bgo(i){pg=i;bobjs=pages[pg];rdo=[];bview={z:1,x:0,y:0};bsync();bcast({t:'bview',...bview})}
+function bpage(d){const n=pg+d;if(n<0||n>=pages.length)return;bgo(n)}
+function bnew(){pages.splice(pg+1,0,[]);bgo(pg+1)}
+function bviewSend(){if(!bvt)bvt=setTimeout(()=>{bvt=null;bcast({t:'bview',z:bview.z,x:bview.x,y:bview.y})},50)}
+function bzoom(f){
+  const v=bview,cx=v.x+0.5/v.z,cy=v.y+ba/2/v.z;
+  v.z=Math.min(5,Math.max(1,v.z*f));v.x=cx-0.5/v.z;v.y=cy-ba/2/v.z;
+  bclamp();bredraw();bviewSend();
 }
-function bredraw(){
-  bx.fillStyle=bbg();bx.fillRect(0,0,bcv.width,bcv.height);
-  bstrokes.forEach(s=>{for(let i=0;i<s.p.length;i++)bseg(s,i)});
+function bpush(s){bobjs.push(s);rdo=[];bredraw();bcast({t:'add',o:SER(s)});bpal()}
+function bimgPick(inp){
+  const f=inp.files[0];inp.value='';
+  if(!f||!f.type.startsWith('image/')){toast('फक्त image निवडा');return}
+  const img=new Image(),u=URL.createObjectURL(f);
+  img.onload=()=>{
+    const m=900,sc=Math.min(1,m/Math.max(img.width,img.height)),c=document.createElement('canvas');
+    c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+    const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
+    URL.revokeObjectURL(u);
+    const src=c.toDataURL('image/jpeg',0.7),v=bview;
+    let w=0.5/v.z,h=w*c.height/c.width;if(h>ba*0.8/v.z){h=ba*0.8/v.z;w=h*c.width/c.height}
+    const cx=v.x+0.5/v.z,cy=v.y+ba/2/v.z;
+    bpush({k:'i',src,p:[[cx-w/2,cy-h/2],[cx+w/2,cy+h/2]].map(p=>p.map(n=>+n.toFixed(4)))});
+  };
+  img.onerror=()=>toast('Image उघडता आली नाही');
+  img.src=u;
+}
+function bsave(){
+  bcv.toBlob(async bl=>{
+    if(!bl){toast('Save झाले नाही');return}
+    const f=new File([bl],'board-'+(pg+1)+'.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]});return}catch(e){if(e&&e.name==='AbortError')return}}
+    const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('💾 Board save झाला');
+  },'image/png');
 }
 function startBoard(mode){
   closeModal();if(!live)return;
-  bmode=mode;bLive=true;bstrokes=[];bmap={};pen=bdef();bw=0.004;
-  $('bt').textContent=mode==='white'?'📝 White Board':'📝 Black Board';
+  bmode=mode;bLive=true;pages=[[]];pg=0;bobjs=pages[0];rdo=[];bview={z:1,x:0,y:0};pen=bdef();tool='pen';bsi=0;bw=BW[0];lz=null;
   $('board').classList.remove('hidden');
   $('bvid').appendChild($('vid'));$('vid').play().catch(()=>{});
-  bpal();bfit();
   bcast({t:'board',v:true,mode});
+  btitle();bpal();bfit();
 }
 function stopBoard(){
   if(!bLive)return;
-  bflush();bLive=false;bdraw=null;
+  bflush();bLive=false;bdraw=null;bpv=null;lz=null;gest=null;ptrs.clear();bact=null;
   if(fsE()){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}
   try{screen.orientation.unlock()}catch(e){}
-  $('board').classList.remove('bfs');$('bfsb').textContent='⛶';
+  $('board').classList.remove('bfs','thide');$('bfsb').textContent='⛶';
   $('board').classList.add('hidden');
   const p=$('pl');if(p){p.insertBefore($('vid'),p.firstChild);$('vid').play().catch(()=>{})}
   bcast({t:'board',v:false});
-  bstrokes=[];bmap={};
+  pages=[[]];pg=0;bobjs=pages[0];rdo=[];
 }
-function bclear(){bstrokes=[];bmap={};bredraw();bcast({t:'bclr'})}
 function bpt(e){
-  const r=bcv.getBoundingClientRect();
-  return [Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))].map(v=>+v.toFixed(4));
+  const r=bcv.getBoundingClientRect(),z=bview.z;
+  const fx=Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),fy=Math.min(1,Math.max(0,(e.clientY-r.top)/r.height));
+  return [fx/z+bview.x,fy*ba/z+bview.y].map(v=>+v.toFixed(4));
 }
 function bflush(){
   clearTimeout(bft);bft=null;
-  if(!bbuf.length)return;
+  if(!bbuf.length||!bdraw)return;
   const p=bbuf;bbuf=[];
-  const s=bmap[bbid];if(!s)return;
-  bcast({t:'bp',id:bbid,c:s.c,w:s.w,p});
+  bcast({t:'bp',id:bbid,c:bdraw.c,w:bdraw.w,p});
 }
 function badd(pt){
-  const s=bdraw;s.p.push(pt);bseg(s,s.p.length-1);bbuf.push(pt);
+  bdraw.p.push(pt);bseg(bdraw,bdraw.p.length-1);bbuf.push(pt);
   if(!bft)bft=setTimeout(bflush,40);
+}
+function lzSend(e){
+  const r=bcv.getBoundingClientRect();
+  lz=[Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))];
+  bredraw();
+  if(!lzt)lzt=setTimeout(()=>{lzt=null;bcast({t:'lz',p:lz})},40);
+}
+function bstart(e){
+  const p=bpt(e);
+  if(tool==='laser'){bact='laser';lzSend(e);return}
+  if(tool==='text'){
+    ptrs.clear();
+    const t=prompt('Board वर काय लिहायचे?');
+    if(t&&t.trim())bpush({k:'t',c:pen,w:0.03,p:[p],tx:t.trim().slice(0,120)});
+    return;
+  }
+  rdo=[];
+  if(tool==='pen'||tool==='erase'){
+    bact='pen';bbid='s'+Date.now()+'_'+(++bsid);
+    bdraw={k:'pen',c:tool==='erase'?'erase':pen,w:tool==='erase'?0.03:bw,p:[]};
+    bobjs.push(bdraw);badd(p);
+  }else{bact='shape';bpv={k:tool,c:pen,w:bw,p:[p,p]}}
+}
+function bcancel(){
+  if(bact==='pen'&&bdraw){bflush();bdraw=null}
+  if(bact==='shape'){bpv=null;bredraw()}
+  if(bact==='laser'){lz=null;bredraw();bcast({t:'lz',p:null})}
+  bact=null;
+}
+function gm(){const a=[...ptrs.values()];return {d:Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1])||1,x:(a[0][0]+a[1][0])/2,y:(a[0][1]+a[1][1])/2}}
+function doGest(){
+  const m=gm(),r=bcv.getBoundingClientRect(),g=gest,z=Math.min(5,Math.max(1,g.v.z*m.d/g.d));
+  const wx=(g.x-r.left)/r.width/g.v.z+g.v.x,wy=(g.y-r.top)/r.height*ba/g.v.z+g.v.y;
+  bview.z=z;bview.x=wx-(m.x-r.left)/r.width/z;bview.y=wy-(m.y-r.top)/r.height*ba/z;
+  bclamp();bredraw();bviewSend();
 }
 bcv.addEventListener('pointerdown',e=>{
   if(!bLive)return;e.preventDefault();
   try{bcv.setPointerCapture(e.pointerId)}catch(x){}
-  bflush();
-  bbid='s'+Date.now()+'_'+(++bsid);
-  const s={c:pen,w:bw,p:[]};bmap[bbid]=s;bstrokes.push(s);bdraw=s;
-  badd(bpt(e));
+  ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===2){bcancel();gest={...gm(),v:{...bview}};return}
+  if(ptrs.size>2||gest)return;
+  bstart(e);
 });
-bcv.addEventListener('pointermove',e=>{if(bdraw){e.preventDefault();badd(bpt(e))}});
-['pointerup','pointercancel'].forEach(n=>bcv.addEventListener(n,()=>{if(bdraw){bflush();bdraw=null}}));
+bcv.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId))return;
+  ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(gest){e.preventDefault();doGest();return}
+  if(bact==='pen'&&bdraw){e.preventDefault();badd(bpt(e))}
+  else if(bact==='shape'&&bpv){e.preventDefault();bpv.p[1]=bpt(e);bredraw()}
+  else if(bact==='laser'){e.preventDefault();lzSend(e)}
+});
+function bend(e){
+  if(!ptrs.delete(e.pointerId))return;
+  if(gest){if(ptrs.size<2)gest=null;return}
+  if(bact==='pen'&&bdraw){bflush();bdraw=null}
+  else if(bact==='shape'&&bpv){
+    const s=bpv;bpv=null;
+    if(Math.hypot(s.p[1][0]-s.p[0][0],s.p[1][1]-s.p[0][1])>0.005)bpush(s);else bredraw();
+  }
+  else if(bact==='laser'){lz=null;bredraw();bcast({t:'lz',p:null})}
+  bact=null;
+}
+['pointerup','pointercancel'].forEach(n=>bcv.addEventListener(n,bend));
 window.addEventListener('resize',()=>{if(bLive)bfit()});
 
 /* ---------- SIR side ---------- */
@@ -502,13 +698,17 @@ function setupConn(c){
       if(blocked.has(d.uid)){try{c.send({t:'blocked'})}catch(e){}setTimeout(()=>c.close(),300);return}
       const name=String(d.name||'Student').slice(0,30);
       conns.set(c.peer,{conn:c,name,uid:d.uid,hand:false,allowed:false});
-      c.send({t:'live',v:live,hid});if(live)callStudent(c.peer);
-      /* late joiner: send current board */
-      if(bLive){c.send({t:'board',v:true,mode:bmode});c.send({t:'bfull',mode:bmode,strokes:bstrokes})}
+      c.send({t:'live',v:live,hid});if(live){callStudent(c.peer);c.send({t:'cam',v:camOn})}
+      /* late joiner: current board + poll */
+      if(bLive){c.send({t:'board',v:true,mode:bmode});c.send({t:'basp',a:ba});c.send({t:'bfull',...bfullData()});c.send({t:'bview',z:bview.z,x:bview.x,y:bview.y})}
+      if(pol)c.send(polMsg());
       vcount();rStu();toast('👨‍🎓 '+name+' Join झाला');return;
     }
     const s=conns.get(c.peer);if(!s)return;
     if(d.t==='hand'){s.hand=!!d.v;rStu();if(s.hand)toast('✋ '+s.name+' ने Hand Raise केला')}
+    if(d.t==='vote'&&pol&&pol.open&&d.id===pol.id&&Number.isInteger(d.i)&&d.i>=0&&d.i<pol.o.length){
+      pol.votes.set(s.uid,d.i);bcast(polMsg());if(pollShown)pollUI();
+    }
   });
   c.on('close',()=>{const s=conns.get(c.peer);if(s&&s.allowed)hideGuest();conns.delete(c.peer);vcount();rStu()});
 }
@@ -548,8 +748,8 @@ async function toggleLive(){
   catch(e){toast('Camera आणि Mic permission द्या');return}
   const v=$('vid');v.srcObject=stream;v.muted=true;v.style.transform=facing==='user'?'scaleX(-1)':'none';
   $('ph').classList.add('hidden');$('lv').classList.remove('hidden');
-  live=true;t0=Date.now();
-  $('bdb').classList.remove('hidden');
+  live=true;t0=Date.now();camOn=true;micOn=true;pol=null;
+  ['bdb','cmb','mcb','plb'].forEach(i=>$(i).classList.remove('hidden'));updCam();
   /* history record */
   const ins=await sb.from('gs_class_history').insert({batch_id:String(batch.id),batch_name:batch.name,subject:batch.subject,owner_id:user.id,owner_name:myName}).select().single();
   if(ins.error){toast('History save error: '+ins.error.message)}
@@ -564,12 +764,12 @@ async function endLive(){
   stopBoard();
   bcast({t:'end'});
   if(hid){await sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}
-  await endRec();hid=null;
+  await endRec();hid=null;pol=null;
   calls.forEach(c=>{try{c.close()}catch(e){}});calls=[];
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
   clearInterval(tmr);live=false;
   await sb.from('gs_batches').update({is_live:false,live_started_at:null}).eq('id',batch.id);
-  const g=$('gb');if(g){g.textContent='▶️ Start Class';g.classList.remove('red');$('bdb').classList.add('hidden');$('lv').classList.add('hidden');$('ph').classList.remove('hidden');$('vid').srcObject=null;$('tm').textContent='';vcount()}
+  const g=$('gb');if(g){g.textContent='▶️ Start Class';g.classList.remove('red');['bdb','cmb','mcb','plb'].forEach(i=>$(i).classList.add('hidden'));$('lv').classList.add('hidden');$('ph').classList.remove('hidden');$('vid').srcObject=null;$('tm').textContent='';vcount()}
 }
 async function flip(){
   facing=facing==='user'?'environment':'user';
@@ -577,6 +777,7 @@ async function flip(){
   const old=stream.getVideoTracks()[0];if(old)old.stop();
   try{
     const n=(await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:facing}}})).getVideoTracks()[0];
+    n.enabled=camOn;
     if(old)stream.removeTrack(old);stream.addTrack(n);
     $('vid').srcObject=stream;$('vid').style.transform=facing==='user'?'scaleX(-1)':'none';
     calls.forEach(c=>{try{const s=c.peerConnection.getSenders().find(x=>x.track&&x.track.kind==='video');if(s)s.replaceTrack(n)}catch(e){}});
@@ -702,7 +903,7 @@ async function leaveRoom(){
   if(ch){sb.removeChannel(ch);ch=null}
   if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}
   const r=$('room');if(r)r.remove();
-  handUp=false;
+  handUp=false;pol=null;
   mine?showSir():showStudent();
 }
 window.addEventListener('beforeunload',e=>{if(saving){e.preventDefault();e.returnValue=''}if(mine&&live){sb.from('gs_batches').update({is_live:false}).eq('id',batch.id);if(hid)sb.from('gs_class_history').update({ended_at:new Date().toISOString()}).eq('id',hid)}});
