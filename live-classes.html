@@ -80,6 +80,14 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 #bside{width:30%;max-width:220px;flex:none;display:flex;flex-direction:column;gap:6px}
 #bvid video{width:100%;height:auto;aspect-ratio:16/9;border-radius:10px;border:1px solid #3d6cff88;background:#000;object-fit:cover}
 .bnote{font-size:12px;color:#8f9bb3;text-align:center}
+/* BOARD FULLSCREEN: canvas takes the whole screen, Sir cam becomes a small overlay */
+#board.bfs{padding-top:0}
+#board.bfs .bbar{padding:4px 10px}
+#board.bfs .btools{padding:0 10px 4px}
+#board.bfs .bmain{padding:0;position:relative}
+#board.bfs #bc{border-radius:0;border-width:1px}
+#board.bfs #bside{position:absolute;right:8px;bottom:8px;width:22%;max-width:170px;z-index:5}
+#board.bfs .bnote{display:none}
 </style>
 </head>
 <body>
@@ -101,7 +109,7 @@ main{max-width:720px;margin:auto;padding:14px 12px 40px}
 <div id="md" class="ov hidden" onclick="if(event.target===this)closeModal()"><div class="pop" id="mx"></div></div>
 
 <div id="board" class="hidden">
-  <div class="bbar"><button class="ib" onclick="stopBoard()">←</button><b id="bt">📝 Board</b></div>
+  <div class="bbar"><button class="ib" onclick="stopBoard()">←</button><b id="bt">📝 Board</b><button class="ib" id="bfsb" onclick="toggleBoardFs()">⛶</button></div>
   <div class="btools" id="bpal"></div>
   <div class="bmain">
     <div id="bwrap"><canvas id="bc"></canvas></div>
@@ -369,6 +377,33 @@ const bcv=$('bc'),bx=bcv.getContext('2d');
 const bbg=()=>bmode==='white'?'#ffffff':'#111111';
 const bcol=c=>c==='erase'?bbg():c;
 const bdef=()=>bmode==='white'?'#111111':'#ffffff';
+
+/* ---- board fullscreen ---- */
+const fsE=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function bfsUpdate(on){
+  const b=$('board');b.classList.toggle('bfs',on);
+  $('bfsb').textContent=on?'🗗':'⛶';
+  setTimeout(()=>{if(bLive)bfit()},150);
+}
+async function toggleBoardFs(){
+  const b=$('board');
+  if(b.classList.contains('bfs')){
+    if(fsE()){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){bfsUpdate(false)}}
+    else bfsUpdate(false);
+    try{screen.orientation.unlock()}catch(e){}
+    return;
+  }
+  const r=b.requestFullscreen||b.webkitRequestFullscreen;
+  if(r){try{await r.call(b)}catch(e){}}
+  bfsUpdate(true); /* browser fullscreen नसेल तरी (iPhone) पूर्ण screen layout लागू होतो */
+  try{await screen.orientation.lock('landscape')}catch(e){}
+}
+['fullscreenchange','webkitfullscreenchange'].forEach(e=>document.addEventListener(e,()=>{
+  const f=fsE();
+  if(f&&f.id==='board')bfsUpdate(true);
+  else if(!f&&$('board').classList.contains('bfs'))bfsUpdate(false);
+}));
+
 function boardMenu(){
   if(!live){toast('आधी Class सुरू करा');return}
   if(bLive){stopBoard();return}
@@ -410,6 +445,9 @@ function startBoard(mode){
 function stopBoard(){
   if(!bLive)return;
   bflush();bLive=false;bdraw=null;
+  if(fsE()){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}
+  try{screen.orientation.unlock()}catch(e){}
+  $('board').classList.remove('bfs');$('bfsb').textContent='⛶';
   $('board').classList.add('hidden');
   const p=$('pl');if(p){p.insertBefore($('vid'),p.firstChild);$('vid').play().catch(()=>{})}
   bcast({t:'board',v:false});
