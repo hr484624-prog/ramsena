@@ -87,6 +87,25 @@ button{border:0;color:#fff;cursor:pointer;background:none}
 .pt,.pn{position:relative}
 .pn{float:right;font-size:13px;color:#c9cfe4}
 
+/* ---- NOTES popup (class चालू असताना Note लिहा) ---- */
+.nov{position:fixed;inset:0;z-index:250;background:#000b;display:flex;align-items:flex-end;justify-content:center}
+.nbox{width:100%;max-width:460px;max-height:100%;overflow:auto;background:#12121c;border:1px solid var(--bl);border-bottom:0;border-radius:20px 20px 0 0;padding:14px 14px calc(14px + env(safe-area-inset-bottom))}
+.nhead{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.nhead h3{flex:1;font-size:17px}
+.nsub{font-size:12px;color:#9aa0bd;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nchips{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}
+.nchips::-webkit-scrollbar{display:none}
+.nchips button{flex:none;padding:7px 12px;border-radius:18px;background:#1b2436;font-size:13px;font-weight:700}
+.nchips .on{background:var(--g)}
+.ninp{width:100%;padding:11px;border-radius:12px;border:1px solid #32324a;background:#0c0c14;color:#fff;outline:none;margin-bottom:8px;font-size:16px}
+.ninp:focus{border-color:var(--pk)}
+textarea.ninp{min-height:130px;resize:none;line-height:1.5;display:block}
+.nmsg{min-height:18px;font-size:12px;color:#ff7ab4;margin-bottom:6px}
+.nrow{display:flex;gap:8px}
+.nrow .pri{flex:1}
+.nrow .sec{padding:12px 14px;border-radius:12px;background:#1b2436;font-weight:700;font-size:14px}
+@media(max-height:480px){.nov{align-items:center}.nbox{border-radius:16px;border-bottom:1px solid var(--bl)}textarea.ninp{min-height:64px}}
+
 /* ---- FULLSCREEN: video full, chat becomes overlay ---- */
 .fs #stage{position:absolute;inset:0;max-height:none;aspect-ratio:auto;height:100%;border:0;box-shadow:none}
 .fs #side{position:absolute;right:0;top:0;bottom:0;width:min(340px,46%);background:#0a0a12ee;backdrop-filter:blur(10px);border-left:1px solid #ff2d8755;z-index:5;transform:translateX(100%);transition:.25s}
@@ -149,6 +168,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
       <button class="cb hidden lo" id="bdb" onclick="event.stopPropagation();openBoard()">📝</button>
       <button class="cb hidden lo" id="plb" onclick="event.stopPropagation();pollOpen_()">📊</button>
       <button class="cb hb lo" id="hb" onclick="event.stopPropagation();hand()">✋</button>
+      <button class="cb" id="nb" onclick="event.stopPropagation();openNote()" aria-label="My Notes">🗒️</button>
       <button class="cb hidden lo" id="mb" onclick="event.stopPropagation();stopTalk()">🎤</button>
       <button class="cb" id="chb" onclick="event.stopPropagation();toggleChat()">💬<span class="badge hidden" id="bg"></span></button>
       <button class="cb" id="fb" onclick="event.stopPropagation();toggleFs()">⛶</button>
@@ -161,6 +181,25 @@ button{border:0;color:#fff;cursor:pointer;background:none}
   </div>
 
   <div id="pollA" class="pov hidden"></div>
+
+  <!-- NOTES POPUP (fullscreen / board मध्ये गेल्यावर JS हा तिथे हलवतो) -->
+  <div id="nov" class="nov hidden" onclick="if(event.target===this)closeNote()">
+    <div class="nbox">
+      <div class="nhead">
+        <h3>🗒️ Class Note</h3>
+        <button class="cb" onclick="closeNote()">✕</button>
+      </div>
+      <div class="nsub" id="nsub"></div>
+      <div class="nchips" id="nchips"></div>
+      <input class="ninp" id="nti" maxlength="100" placeholder="Note चे नाव...">
+      <textarea class="ninp" id="ntx" placeholder="Sir काय शिकवत आहेत ते इथे लिहा..." oninput="$('nmsg').textContent=''"></textarea>
+      <div class="nmsg" id="nmsg"></div>
+      <div class="nrow">
+        <button class="sec" onclick="insTime()">⏱ वेळ</button>
+        <button class="pri" onclick="saveClassNote()">💾 Save Note</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="board" class="hidden">
@@ -168,6 +207,7 @@ button{border:0;color:#fff;cursor:pointer;background:none}
     <button class="cb" onclick="closeBoard()">←</button>
     <b id="bt">📝 Board</b>
     <span class="sp"></span>
+    <button class="cb" onclick="openNote()" aria-label="My Notes">🗒️</button>
     <button class="cb" onclick="bsave()">💾</button>
     <button class="cb" id="bmu" onclick="toggleMute()">🔊</button>
     <button class="cb" id="bfsb" onclick="toggleBoardFs()">⛶</button>
@@ -270,6 +310,48 @@ async function sendMsg(){
   if(error){toast('Message जात नाही');i.value=t;return}
   if(!msgs.some(m=>m.id===data.id)){msgs.push(data);rMsgs()}
 }
+
+/* ---------- NOTES: class बघताना Note लिहा → My Notes page वर दिसेल ---------- */
+const NOTES_KEY='gyansetu_notes';
+const NTAGS=[['general','🗒️ सामान्य'],['math','➗ Math'],['science','🔬 Science'],['social','🌍 Social'],['lang','🗣️ Language'],['exam','🎯 Exam']];
+let ntag='general';
+function drawNTags(){$('nchips').innerHTML=NTAGS.map(t=>`<button class="${t[0]===ntag?'on':''}" onclick="pickNTag('${t[0]}')">${t[1]}</button>`).join('')}
+function pickNTag(k){ntag=k;drawNTags()}
+function classLabel(){return ($('bn').textContent||'GyanSetu')+(REC?' • Recording':' • Live')}
+function openNote(){
+  /* fullscreen / board मध्ये फक्त तोच element दिसतो, म्हणून popup तिथे हलवतो */
+  const host=!$('board').classList.contains('hidden')?$('board'):app;
+  host.appendChild($('nov'));
+  if(!$('nti').value.trim()){
+    const d=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+    $('nti').value=($('bn').textContent||'Class')+' • '+d;
+  }
+  $('nsub').textContent='🎥 '+classLabel();
+  $('nmsg').textContent='';
+  drawNTags();
+  $('nov').classList.remove('hidden');
+  setTimeout(()=>$('ntx').focus(),80);
+}
+function closeNote(){$('nov').classList.add('hidden')}
+function insTime(){
+  const t=REC?fmtT(V.currentTime):new Date().toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit',hour12:true});
+  const a=$('ntx'),s=a.selectionStart??a.value.length,e=a.selectionEnd??s,ins='['+t+'] ';
+  a.value=a.value.slice(0,s)+ins+a.value.slice(e);
+  a.focus();a.selectionStart=a.selectionEnd=s+ins.length;
+}
+function saveClassNote(){
+  const ti=$('nti').value.trim(),tx=$('ntx').value.trim();
+  if(!tx){$('nmsg').textContent='✍️ आधी Note लिहा.';return}
+  let arr=[];
+  try{arr=JSON.parse(localStorage.getItem(NOTES_KEY))||[]}catch(e){arr=[]}
+  const now=Date.now();
+  arr.unshift({id:now,title:ti||'Class Note',text:tx,tag:ntag,pinned:false,created:now,updated:now,src:classLabel()});
+  try{localStorage.setItem(NOTES_KEY,JSON.stringify(arr))}
+  catch(e){$('nmsg').textContent='⚠️ Storage भरलं आहे, Note save झाली नाही.';return}
+  $('ntx').value='';$('nti').value='';ntag='general';
+  closeNote();toast('✅ Note save झाली — My Notes मध्ये बघा');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeNote()});
 
 /* ---------- camera off overlay ---------- */
 function camShow(v){$('camoff').classList.toggle('hidden',v!==false)}
@@ -386,6 +468,7 @@ function openBoard(){
   /* video player fullscreen मध्ये असेल तर board दिसणार नाही, म्हणून आधी बाहेर पडा */
   const f=fsEl();
   if(f&&f.id!=='board'){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}
+  closeNote();app.appendChild($('nov'));
   bOpen=true;$('board').classList.remove('hidden');
   btitle();
   $('bvid').appendChild(V);V.play().catch(()=>{});
@@ -394,6 +477,7 @@ function openBoard(){
 function closeBoard(){
   if(fsEl()){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}
   try{screen.orientation.unlock()}catch(e){}
+  closeNote();app.appendChild($('nov'));
   $('board').classList.remove('bfs');$('bfsb').textContent='⛶';
   bOpen=false;$('board').classList.add('hidden');
   $('stage').insertBefore(V,$('stage').firstChild);V.play().catch(()=>{});
