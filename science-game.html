@@ -1,1 +1,424 @@
-hello my name is hitesh
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GyanSetu Virtual Lab</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;800&display=swap">
+<style>
+:root{--ink:#14213d;--paper:#f2f5fa;--card:#fff;--line:#d5deeb;--teal:#0b8f8f;--saf:#f59e0b;--mut:#56627f;--sky:#eaf4fc;--grid:#cddbea;--ground:#b9c9a7;--red:#e5484d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--ink:#e8eefc;--paper:#0d1424;--card:#151f38;--line:#2a3757;--teal:#37c6c6;--saf:#fbbf24;--mut:#9aa8c9;--sky:#101c34;--grid:#223250;--ground:#27382f;--red:#ff6b70;color-scheme:dark}}
+:root[data-theme="dark"]{--ink:#e8eefc;--paper:#0d1424;--card:#151f38;--line:#2a3757;--teal:#37c6c6;--saf:#fbbf24;--mut:#9aa8c9;--sky:#101c34;--grid:#223250;--ground:#27382f;--red:#ff6b70;color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Mukta","Noto Sans Devanagari",system-ui,sans-serif;font-size:16px;line-height:1.4;max-width:680px;margin:0 auto;padding:0 12px 90px;touch-action:manipulation}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 0 4px;gap:8px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:17px}
+.brand small{display:block;font-weight:600;color:var(--mut);font-size:12px;line-height:1}
+.lang{display:flex;gap:4px}
+button{font:inherit;color:var(--ink)}
+.lang button{border:1.5px solid var(--line);background:var(--card);font-weight:600;padding:4px 10px;border-radius:999px;min-height:36px}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:6px 0 8px;scrollbar-width:none}
+.tabs button{flex:none;min-height:42px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-weight:600;white-space:nowrap}
+.tabs button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+.stage{border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:var(--sky)}
+canvas{display:block;width:100%;height:min(50vh,340px);min-height:250px;touch-action:none}
+#rd{display:grid;grid-template-columns:repeat(auto-fit,minmax(76px,1fr));gap:6px;margin:8px 0}
+.tile{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:5px 8px}
+.tile small{display:block;color:var(--mut);font-size:12px}
+.tile b{font-size:16px;font-variant-numeric:tabular-nums}
+.panel{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:10px 14px}
+.row{display:flex;justify-content:space-between;align-items:baseline;font-weight:600;margin-top:4px}
+.row output{color:var(--teal);font-weight:800;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;height:34px;accent-color:var(--teal)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 6px}
+.chips button{flex:1;min-width:84px;min-height:42px;border:1.5px solid var(--line);background:var(--paper);font-weight:600;border-radius:12px}
+.chips button[aria-pressed="true"]{border-color:var(--teal);background:var(--teal);color:#fff}
+.hint{color:var(--mut);font-size:14px;margin:8px 2px}
+.bar{position:sticky;bottom:0;display:flex;gap:8px;padding:10px 0 12px;background:linear-gradient(transparent,var(--paper) 28%)}
+.bar button{min-height:52px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);font-weight:800;font-size:16px}
+#go{flex:2;background:var(--saf);color:#14213d;border-color:var(--saf)}
+#rs,#hw{flex:1}
+dialog{border:none;border-radius:18px;padding:18px;max-width:420px;width:calc(100% - 28px);background:var(--card);color:var(--ink)}
+dialog::backdrop{background:rgba(10,15,30,.6)}
+dialog h2{margin:0 0 8px;font-size:20px}
+dialog ol{padding-left:20px;margin:0 0 12px}
+dialog li{margin-bottom:6px}
+dialog button{width:100%;min-height:48px;border-radius:12px;border:0;background:var(--ink);color:var(--paper);font-weight:800}
+.chg{border:1.5px solid var(--line);background:var(--card);font-weight:600;padding:4px 12px;border-radius:999px;min-height:36px}
+.back{margin:4px 0;min-height:40px;border:0;background:none;font-weight:800;color:var(--teal);padding:0}
+.ex{display:block;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;min-height:60px}
+.ex b{display:block;font-size:17px}.ex span{color:var(--mut);font-size:14px}
+.ex.soon{opacity:.65}.badge{float:right;font-size:12px;font-weight:600;font-style:normal;color:var(--teal)}
+dialog .pk{display:flex;align-items:center;gap:12px;text-align:left;background:var(--paper);color:var(--ink);border:1.5px solid var(--line);margin-bottom:8px;min-height:64px;padding:0 14px;font-size:18px}
+dialog .pk span{font-size:26px}
+.ex[hidden]{display:none}
+.ex{min-height:48px;padding:10px 14px;margin-bottom:6px}.ex b{display:inline;font-size:16px}
+summary{font-weight:800;padding:10px 2px;cursor:pointer}
+.q{width:100%;min-height:44px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;padding:0 12px;margin-bottom:6px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#14213d"/><path d="M5 23 Q15 0 25 23" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/><circle cx="25" cy="23" r="2.6" fill="#37c6c6"/></svg>
+    <div>GyanSetu Lab<small id="u_sub"></small></div>
+  </div>
+  <button class="chg" id="chg">Change lab</button>
+</header>
+<div id="home" hidden></div>
+<div id="lab" hidden><button class="back" id="back">← All experiments</button>
+<div class="tabs" id="tabs"></div>
+<div class="stage"><canvas id="cv"></canvas></div>
+<div id="rd"></div>
+<div class="panel" id="ctl"></div>
+<p class="hint" id="u_hint"></p>
+<div class="bar"><button id="go"></button><button id="rs"></button><button id="hw"></button></div>
+</div>
+<dialog id="pick"><h2>Choose your lab</h2><button class="pk" data-s="math"><span>➗</span>Math Lab</button><button class="pk" data-s="physics"><span>⚛️</span>Physics Lab</button><button class="pk" data-s="chemistry"><span>🧪</span>Chemistry Lab</button></dialog>
+<dialog id="dlg"><h2 id="d_t"></h2><ol id="d_l"></ol><button id="d_c"></button></dialog>
+
+<script>
+const $=id=>document.getElementById(id);
+const LI=2;
+const tr=s=>{const a=s.split("|");return a[LI]||a[a.length-1]};
+const U={start:"सुरू|शुरू|Start",pause:"थांबा|रोकें|Pause",resume:"पुढे|आगे|Resume",reset:"रीसेट|रीसेट|Reset",guide:"सूचना|निर्देश|Guide",close:"समजले|समझ गया|Got it",sub:"भौतिकशास्त्र प्रयोगशाळा|भौतिकी प्रयोगशाला|Physics Lab",hint:"स्लायडर हलवा आणि निकाल बदलताना पाहा.|स्लाइडर हिलाएँ और परिणाम बदलते देखें।|Move the sliders and watch the results change.",gt:"प्रयोग कसा करावा|प्रयोग कैसे करें|How to do it"};
+let c,C,W,H,dpr=1,cpos=null;
+const L=(a,b,x,y)=>{c.beginPath();c.moveTo(a,b);c.lineTo(x,y);c.stroke()};
+const B=(x,y,r,f)=>{c.beginPath();c.arc(x,y,r,0,7);if(f){c.fillStyle=f;c.fill()}};
+const DS=a=>c.setLineDash(a||[]);
+const A=(a,b,x,y,col)=>{c.strokeStyle=col;c.fillStyle=col;c.lineWidth=3;L(a,b,x,y);const g=Math.atan2(y-b,x-a);c.beginPath();c.moveTo(x,y);c.lineTo(x-9*Math.cos(g-.4),y-9*Math.sin(g-.4));c.lineTo(x-9*Math.cos(g+.4),y-9*Math.sin(g+.4));c.fill()};
+const GG=[9.8,1.6,3.7,24.8];
+const gRaw=(g,q,vt)=>vt?(vt*vt/g)*Math.log(Math.cosh(g*q/vt)):.5*g*q*q;
+const gT=(p,vt)=>{const g=GG[p.g];let q=0;while(gRaw(g,q,vt)<p.h&&q<60)q+=.02;return q};
+const PL=["पृथ्वी|पृथ्वी|Earth","चंद्र|चंद्रमा|Moon","मंगळ|मंगल|Mars","गुरू|बृहस्पति|Jupiter"];
+
+const E=[
+{n:"विद्युत मंडल|विद्युत परिपथ|Circuit",
+ p:[{k:"V",l:"बॅटरी|बैटरी|Battery",min:1,max:12,step:1,v:6,u:"V"},{k:"R1",l:"बल्ब १ रोध|बल्ब 1 प्रतिरोध|Bulb 1 resistance",min:1,max:20,step:1,v:5,u:"Ω"},{k:"R2",l:"बल्ब २ रोध|बल्ब 2 प्रतिरोध|Bulb 2 resistance",min:1,max:20,step:1,v:5,u:"Ω"},{k:"m",l:"जोडणी|जोड़|Wiring",o:["श्रेणी|श्रेणी|Series","समांतर|समानांतर|Parallel"],v:0},{k:"s",l:"स्विच|स्विच|Switch",o:["OFF|OFF|OFF","ON|ON|ON"],v:1}],
+ how:"बॅटरी व्होल्टेज आणि बल्बचा रोध बदला.~श्रेणी किंवा समांतर जोडणी निवडा आणि स्विच ON/OFF करा.~चमक, विद्युतधारा (I) आणि व्होल्टेज (V) पाहा.|बैटरी वोल्टेज और बल्ब का प्रतिरोध बदलें।~श्रेणी या समानांतर जोड़ चुनें और स्विच ON/OFF करें।~चमक, धारा (I) और वोल्टेज (V) देखें।|Change the battery voltage and bulb resistance.~Choose series or parallel wiring and flip the switch.~Watch the brightness, current (I) and voltage (V).",
+ d(p,t){
+  const{V,R1,R2}=p,par=p.m,on=p.s;let I1=0,I2=0;
+  if(on){if(par){I1=V/R1;I2=V/R2}else I1=I2=V/(R1+R2)}
+  const I=par?I1+I2:I1,V1=on?(par?V:I1*R1):0,V2=on?(par?V:I2*R2):0;
+  const x0=W*.12,x1=W*.88,y0=H*.22,y1=H*.78,ym=H/2,w=x1-x0,h=y1-y0;
+  c.strokeStyle=C.ink;c.lineWidth=3;c.beginPath();c.moveTo(x0,ym-6);c.lineTo(x0,y0);c.lineTo(x1,y0);c.lineTo(x1,y1);c.lineTo(x0,y1);c.lineTo(x0,ym+6);c.stroke();
+  if(par)L(W*.6,y0,W*.6,y1);
+  L(x0-18,ym-6,x0+18,ym-6);L(x0-10,ym+6,x0+10,ym+6);c.fillStyle=C.ink;c.fillText("+",x0+24,ym-3);
+  const sx=W*.27,sw=W*.09;c.fillStyle=C.sky;c.fillRect(sx-4,y0-5,sw+8,10);B(sx,y0,4,C.ink);B(sx+sw,y0,4,C.ink);c.strokeStyle=C.ink;L(sx,y0,on?sx+sw:sx+sw*.8,on?y0:y0-24);
+  const bu=(x,y,q)=>{B(x,y,17,C.sky);B(x,y,17,"rgba(245,158,11,"+Math.min(1,Math.sqrt(q/6))+")");c.strokeStyle=C.ink;c.lineWidth=2;c.beginPath();c.arc(x,y,17,0,7);c.stroke();L(x-6,y+6,x-3,y-4);L(x-3,y-4,x+3,y+4);L(x+3,y+4,x+6,y-6)};
+  const b=par?[[W*.6,ym],[x1,ym]]:[[W*.5,y0],[W*.72,y0]];bu(b[0][0],b[0][1],I1*V1);bu(b[1][0],b[1][1],I2*V2);
+  if(I>0){const per=2*(w+h);for(let i=0;i<14;i++){const d=((i/14+t*.15*Math.min(I,4))%1)*per;let x,y;if(d<w){x=x0+d;y=y0}else if(d<w+h){x=x1;y=y0+d-w}else if(d<2*w+h){x=x1-(d-w-h);y=y1}else{x=x0;y=y1-(d-2*w-h)}B(x,y,3.5,C.teal)}}
+  return[["I (A)",I.toFixed(2)],["V₁ (V)",V1.toFixed(1)],["V₂ (V)",V2.toFixed(1)],["P (W)",(I1*V1+I2*V2).toFixed(1)]]}},
+
+{n:"प्रकाश अपवर्तन|प्रकाश अपवर्तन|Refraction",
+ p:[{k:"i",l:"आपात कोन|आपतन कोण|Incident angle",min:0,max:85,step:1,v:40,u:"°"},{k:"n",l:"काचेचा n|काँच का n|Glass n",min:1,max:2.4,step:.1,v:1.5,u:""},{k:"d",l:"दिशा|दिशा|Direction",o:["हवा → काच|हवा → काँच|Air → Glass","काच → हवा|काँच → हवा|Glass → Air"],v:0}],
+ how:"आपात कोन बदलून परावर्तित व अपवर्तित किरण पाहा.~काचेचा n वाढवा: किरण जास्त वाकतो.~‘काच → हवा’ निवडा आणि कोन वाढवा: पूर्ण आंतर परावर्तन (TIR) दिसेल.|आपतन कोण बदलकर परावर्तित व अपवर्तित किरण देखें।~काँच का n बढ़ाएँ: किरण अधिक मुड़ती है।~‘काँच → हवा’ चुनें और कोण बढ़ाएँ: पूर्ण आंतरिक परावर्तन (TIR) दिखेगा।|Change the incident angle and see the reflected and refracted rays.~Raise glass n: the ray bends more.~Pick Glass → Air and raise the angle: total internal reflection (TIR) appears.",
+ d(p,t){
+  const cx=W/2,cy=H/2,Ln=Math.min(W,H)*.42,i=p.i*Math.PI/180,na=p.d?p.n:1,nb=p.d?1:p.n,s=na/nb*Math.sin(i),tir=s>1,r=tir?0:Math.asin(s);
+  c.fillStyle=C.teal;c.globalAlpha=.1+.07*(p.n-1);c.fillRect(0,p.d?0:cy,W,H/2);c.globalAlpha=1;
+  c.strokeStyle=C.mut;c.lineWidth=1.5;L(0,cy,W,cy);DS([4,5]);L(cx,cy-Ln,cx,cy+Ln);
+  c.lineWidth=4;DS([12,8]);c.lineDashOffset=-t*40;
+  c.strokeStyle=C.saf;L(cx-Ln*Math.sin(i),cy-Ln*Math.cos(i),cx,cy);
+  c.strokeStyle=C.teal;L(cx,cy,cx+Ln*Math.sin(i),cy-Ln*Math.cos(i));
+  if(!tir){c.strokeStyle=C.red;L(cx,cy,cx+Ln*Math.sin(r),cy+Ln*Math.cos(r))}
+  DS();c.lineDashOffset=0;c.fillStyle=C.ink;c.fillText("n = "+(p.d?p.n:1).toFixed(1),8,18);c.fillText("n = "+(p.d?1:p.n).toFixed(1),8,H-8);
+  return[["∠i (°)",p.i],["∠r (°)",p.i],["∠t (°)",tir?"TIR":(r*180/Math.PI).toFixed(1)],["n₂/n₁",(nb/na).toFixed(2)]]}},
+
+{n:"भिंग व आरसा|लेंस व दर्पण|Lens & Mirror",
+ p:[{k:"ty",l:"साधन|साधन|Device",o:["उत्तल भिंग|उत्तल लेंस|Convex lens","अवतल भिंग|अवतल लेंस|Concave lens","अवतल आरसा|अवतल दर्पण|Concave mirror","उत्तल आरसा|उत्तल दर्पण|Convex mirror"],v:0},{k:"f",l:"नाभीय अंतर|फोकस दूरी|Focal length",min:5,max:15,step:1,v:10,u:"cm"},{k:"u",l:"वस्तू अंतर|वस्तु दूरी|Object distance",min:5,max:40,step:1,v:25,u:"cm"}],
+ how:"साधन निवडा: भिंग किंवा आरसा.~वस्तू अंतर (u) आणि नाभीय अंतर (f) बदला.~प्रतिमेचे अंतर (v), मोठेपणा (m) आणि प्रकार पाहा.|साधन चुनें: लेंस या दर्पण।~वस्तु दूरी (u) और फोकस दूरी (f) बदलें।~प्रतिबिंब की दूरी (v), आवर्धन (m) और प्रकार देखें।|Choose a lens or a mirror.~Change the object distance (u) and focal length (f).~Watch the image distance (v), magnification (m) and its nature.",
+ d(p,t){
+  const ty=p.ty,mir=ty>1,sg=mir?-1:1,F=p.f,u=p.u,fs=(ty===0||ty===2)?F:-F,inv=1/fs-1/u,v=Math.abs(inv)<1e-9?Infinity:1/inv,m=-v/u;
+  const cx=W/2,ay=H/2,s=(W*.46)/42,ho=6*s,xo=cx-u*s,yo=ay-ho,xe=sg>0?W:0;
+  c.strokeStyle=C.mut;c.lineWidth=1;L(0,ay,W,ay);c.fillStyle=C.mut;c.textAlign="center";
+  (mir?[fs>0?-1:1]:[-1,1]).forEach(z=>{B(cx+z*F*s,ay,3,C.mut);c.fillText("F",cx+z*F*s,ay+16)});
+  const tp=ay-H*.36,bt=ay+H*.36;c.strokeStyle=C.ink;c.lineWidth=3;
+  if(!mir){L(cx,tp,cx,bt);const e=ty===0?1:-1;[tp,bt].forEach((y,i)=>{const d2=(i?-1:1)*e*9;c.beginPath();c.moveTo(cx-6,y+d2);c.lineTo(cx,y);c.lineTo(cx+6,y+d2);c.stroke()})}
+  else{c.beginPath();c.moveTo(cx,tp);c.quadraticCurveTo(cx+(ty===2?18:-18),ay,cx,bt);c.stroke()}
+  const xi=cx+sg*v*s,yi=ay+(v/u)*ho,fin=isFinite(v);
+  c.strokeStyle=C.saf;c.lineWidth=2;L(xo,yo,cx,yo);L(xo,yo,cx,ay);
+  let ux,uy;if(!fin){ux=sg*F*s;uy=ay-yo}else if(v>0){ux=xi-cx;uy=yi-yo}else{ux=cx-xi;uy=yo-yi}
+  L(cx,yo,xe,yo+uy*(xe-cx)/ux);const m1=(ay-yo)/(cx-xo);L(cx,ay,xe,ay+m1*sg*(xe-cx));
+  if(fin&&v<0){DS([5,5]);c.strokeStyle=C.red;L(cx,yo,xi,yi);L(cx,ay,xi,yi);DS()}
+  A(xo,ay,xo,yo,C.ink);
+  if(fin&&xi>0&&xi<W){if(v<0)DS([4,4]);A(xi,ay,xi,yi,C.red);DS()}
+  c.textAlign="left";
+  return[["v (cm)",fin?Math.abs(v).toFixed(1):"∞"],["m",fin?m.toFixed(2):"∞"],[tr("प्रतिमा|प्रतिबिंब|Image"),fin?(v>0?tr("वास्तविक, उलटी|वास्तविक, उल्टा|Real, inverted"):tr("आभासी, सुलटी|आभासी, सीधा|Virtual, erect")):"—"],["f (cm)",F]]}},
+
+{n:"प्रक्षेप गती|प्रक्षेप्य गति|Projectile",
+ p:[{k:"a",l:"कोन|कोण|Angle",min:5,max:85,step:1,v:45,u:"°"},{k:"v",l:"वेग|चाल|Speed",min:5,max:30,step:1,v:20,u:"m/s"},{k:"g",l:"ग्रह|ग्रह|Planet",o:PL.slice(0,3),v:0}],
+ dur:p=>Math.min(2*p.v*Math.sin(p.a*Math.PI/180)/GG[p.g],6),
+ how:"कोन आणि वेग ठरवा; ठिपक्यांची रेषा अंदाजित मार्ग आहे.~ग्रह बदला: गुरुत्वाकर्षण बदलले की पल्ला बदलतो.~‘सुरू’ दाबा. ४५° ला पल्ला सर्वाधिक असतो.|कोण और चाल तय करें; बिंदुओं वाली रेखा अनुमानित पथ है।~ग्रह बदलें: गुरुत्वाकर्षण बदलते ही परास बदलता है।~‘शुरू’ दबाएँ। 45° पर परास सबसे अधिक होती है।|Set the angle and speed; the dotted line is the predicted path.~Change the planet: the range changes with gravity.~Press Start. The range is greatest at 45°.",
+ d(p,t){
+  const g=GG[p.g],r=p.a*Math.PI/180,T=2*p.v*Math.sin(r)/g,R=p.v*p.v*Math.sin(2*r)/g,Hm=Math.pow(p.v*Math.sin(r),2)/(2*g),k=Math.max(1,T/6),tt=Math.min(t*k,T);
+  const s=Math.min((W-40)/Math.max(R*1.1,15),(H-60)/Math.max(Hm*1.3,8)),X=x=>24+x*s,Y=y=>H-26-y*s,P=q=>[X(p.v*Math.cos(r)*q),Y(p.v*Math.sin(r)*q-.5*g*q*q)];
+  c.fillStyle=C.ground;c.fillRect(0,H-26,W,26);
+  c.strokeStyle=C.teal;c.lineWidth=2;DS([5,6]);c.beginPath();for(let i=0;i<=50;i++){const q=P(T*i/50);i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])}c.stroke();DS();
+  c.lineWidth=3.5;c.beginPath();for(let i=0;i<=50;i++){const q=P(tt*i/50);i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1])}c.stroke();
+  c.strokeStyle=C.ink;c.lineWidth=9;c.lineCap="round";L(24,H-26,24+Math.cos(r)*30,H-26-Math.sin(r)*30);c.lineCap="butt";B(24,H-26,10,C.ink);
+  const q=P(tt),x=p.v*Math.cos(r)*tt,y=Math.max(0,p.v*Math.sin(r)*tt-.5*g*tt*tt);B(q[0],Math.min(q[1],H-33),7,C.saf);c.strokeStyle=C.ink;c.lineWidth=2;c.stroke();
+  return[["x (m)",x.toFixed(1)],["y (m)",y.toFixed(1)],["R (m)",R.toFixed(1)],["H max (m)",Hm.toFixed(1)]]}},
+
+{n:"बल व गती|बल व गति|Force",
+ p:[{k:"F",l:"लावलेले बल|लगाया बल|Applied force",min:0,max:100,step:5,v:40,u:"N"},{k:"m",l:"वस्तुमान|द्रव्यमान|Mass",min:1,max:20,step:1,v:5,u:"kg"},{k:"mu",l:"घर्षण μ|घर्षण μ|Friction μ",min:0,max:.6,step:.05,v:.2,u:""}],
+ how:"बल, वस्तुमान आणि घर्षण बदला.~बल घर्षणापेक्षा कमी असेल तर पेटी हलत नाही.~‘सुरू’ दाबा: त्वरण a = (F − f) ÷ m.|बल, द्रव्यमान और घर्षण बदलें।~बल घर्षण से कम हो तो पेटी नहीं हिलती।~‘शुरू’ दबाएँ: त्वरण a = (F − f) ÷ m.|Change force, mass and friction.~If the force is below friction the box does not move.~Press Start: acceleration a = (F − f) ÷ m.",
+ d(p,t){
+  const N=p.m*9.8,mx=p.mu*N,mov=p.F>mx,a=mov?(p.F-mx)/p.m:0,fr=mov?mx:p.F,v=a*t,x=.5*a*t*t;
+  const gy=H*.7,bw=36+p.m*2.2,bh=bw*.8,bx=W*.5-bw/2,sc=26;
+  c.fillStyle=C.ground;c.fillRect(0,gy,W,H-gy);c.strokeStyle=C.mut;c.lineWidth=2;c.fillStyle=C.mut;c.textAlign="center";
+  for(let k=-8;k<=8;k++){const mm=Math.floor(x)+k,px=W/2+(mm-x)*sc;L(px,gy,px,gy+8);if(mm%5===0)c.fillText(mm+" m",px,gy+22)}
+  c.fillStyle=C.ink;c.fillRect(bx,gy-bh,bw,bh);c.fillStyle=C.sky;c.fillText(p.m+" kg",W/2,gy-bh/2+4);
+  if(p.F>0)A(bx-6-p.F*1.1,gy-bh/2,bx-6,gy-bh/2,C.saf);
+  if(fr>0)A(bx+bw+Math.min(fr,100)*1.1,gy-bh*.15,bx+bw,gy-bh*.15,C.red);
+  c.fillStyle=C.saf;c.fillText("F",bx-14-p.F*1.1,gy-bh/2+4);c.fillStyle=C.red;c.fillText("f",bx+bw+Math.min(fr,100)*1.1+10,gy-bh*.15+4);c.textAlign="left";
+  return[["a (m/s²)",a.toFixed(2)],["v (m/s)",v.toFixed(1)],["x (m)",x.toFixed(1)],["f (N)",fr.toFixed(1)]]}},
+
+{n:"गुरुत्वाकर्षण|गुरुत्वाकर्षण|Gravity",
+ p:[{k:"h",l:"उंची|ऊँचाई|Height",min:10,max:100,step:5,v:50,u:"m"},{k:"g",l:"ग्रह|ग्रह|Planet",o:PL,v:0},{k:"a",l:"माध्यम|माध्यम|Medium",o:["निर्वात|निर्वात|Vacuum","हवा|हवा|Air"],v:0}],
+ dur:p=>Math.max(gT(p,p.a?60:0),gT(p,p.a?3:0))+.4,
+ how:"उंची आणि ग्रह निवडा.~निर्वातात दगड आणि पीस एकत्र पडतात.~‘हवा’ निवडा: पीस हळू पडते. g जास्त असेल तर वेग वाढतो.|ऊँचाई और ग्रह चुनें।~निर्वात में पत्थर और पंख साथ गिरते हैं।~‘हवा’ चुनें: पंख धीरे गिरता है। g अधिक हो तो चाल बढ़ती है।|Pick a height and a planet.~In a vacuum the stone and the feather fall together.~Choose Air: the feather falls slowly. Higher g means faster fall.",
+ d(p,t){
+  const g=GG[p.g],h=p.h,fs=p.a?60:0,ff=p.a?3:0,Ts=gT(p,fs),tt=Math.min(t,Ts);
+  const ds=Math.min(h,gRaw(g,t,fs)),df=Math.min(h,gRaw(g,t,ff)),top=26,bot=H-30,s=(bot-top)/h;
+  c.fillStyle=C.ground;c.fillRect(0,bot,W,30);c.strokeStyle=C.grid;c.lineWidth=1;c.fillStyle=C.mut;
+  for(let k=0;k<=5;k++){const y=top+(bot-top)*k/5;L(0,y,W,y);c.fillText((h*(1-k/5)).toFixed(0)+" m",6,y-3)}
+  B(W*.35,top+ds*s,11,C.ink);c.fillStyle=C.teal;c.beginPath();c.ellipse(W*.65,top+df*s,13,5,.6,0,7);c.fill();
+  c.fillStyle=C.ink;c.textAlign="center";c.fillText(tr("दगड|पत्थर|Stone"),W*.35,bot+18);c.fillText(tr("पीस|पंख|Feather"),W*.65,bot+18);c.textAlign="left";
+  const v=fs?60*Math.tanh(g*tt/60):g*tt;
+  return[["g (m/s²)",g],["t (s)",tt.toFixed(1)],["v (m/s)",v.toFixed(1)],["Δ (m)",(ds-df).toFixed(1)]]}},
+
+{n:"चुंबकत्व|चुंबकत्व|Magnet",
+ p:[{k:"s",l:"चुंबक शक्ती|चुंबक शक्ति|Strength",min:1,max:10,step:1,v:5,u:""},{k:"o",l:"डावा ध्रुव|बायाँ ध्रुव|Left pole",o:["N|N|N","S|S|S"],v:0}],
+ how:"होकायंत्र बोटाने ओढून चुंबकाभोवती फिरवा.~सुई नेहमी क्षेत्र रेषेच्या दिशेने वळते.~शक्ती किंवा ध्रुव बदला आणि रेषा पाहा.|कम्पास को उँगली से खींचकर चुंबक के पास घुमाएँ।~सुई हमेशा क्षेत्र रेखा की दिशा में मुड़ती है।~शक्ति या ध्रुव बदलकर रेखाएँ देखें।|Drag the compass around the magnet with your finger.~The needle always turns along the field line.~Change the strength or poles and watch the lines.",
+ d(p,t){
+  const cx=W/2,cy=H/2,Lm=Math.min(W*.14,50),sg=p.o?-1:1,pl=[{x:cx-Lm,y:cy,q:sg},{x:cx+Lm,y:cy,q:-sg}],pos=pl.find(o=>o.q>0),neg=pl.find(o=>o.q<0);
+  const fld=(x,y)=>{let bx=0,by=0;pl.forEach(o=>{const dx=x-o.x,dy=y-o.y,r2=dx*dx+dy*dy+1,r3=r2*Math.sqrt(r2);bx+=o.q*dx/r3;by+=o.q*dy/r3});return[bx,by]};
+  const n=4+p.s*2;c.lineWidth=1.5;c.strokeStyle=C.teal;DS([6,6]);c.lineDashOffset=-t*30;
+  for(let k=0;k<n;k++){const an=2*Math.PI*k/n;let x=pos.x+10*Math.cos(an),y=pos.y+10*Math.sin(an);c.beginPath();c.moveTo(x,y);for(let i=0;i<260;i++){const f=fld(x,y),m=Math.hypot(f[0],f[1]);x+=f[0]/m*5;y+=f[1]/m*5;c.lineTo(x,y);if(Math.hypot(x-neg.x,y-neg.y)<9||x<0||x>W||y<0||y>H)break}c.stroke()}
+  DS();c.lineDashOffset=0;
+  const bw=Lm+18;c.fillStyle=pl[0].q>0?"#e5484d":"#3b82f6";c.fillRect(cx-bw,cy-14,bw,28);c.fillStyle=pl[0].q>0?"#3b82f6":"#e5484d";c.fillRect(cx,cy-14,bw,28);
+  c.fillStyle="#fff";c.font="800 15px Mukta,sans-serif";c.textAlign="center";c.fillText(pl[0].q>0?"N":"S",cx-bw/2,cy+5);c.fillText(pl[0].q>0?"S":"N",cx+bw/2,cy+5);
+  const cp=cpos||{x:W*.75,y:H*.25},f=fld(cp.x,cp.y),an=Math.atan2(f[1],f[0]),ex=Math.cos(an)*17,ey=Math.sin(an)*17;
+  B(cp.x,cp.y,24,C.sky);c.strokeStyle=C.ink;c.lineWidth=2;c.beginPath();c.arc(cp.x,cp.y,24,0,7);c.stroke();
+  c.lineWidth=5;c.strokeStyle="#e5484d";L(cp.x,cp.y,cp.x+ex,cp.y+ey);c.strokeStyle="#3b82f6";L(cp.x,cp.y,cp.x-ex,cp.y-ey);
+  c.font="12px Mukta,sans-serif";c.fillStyle=C.mut;c.fillText(tr("होकायंत्र ओढा|कम्पास खींचें|Drag the compass"),W/2,H-8);c.textAlign="left";
+  return[["B (a.u.)",(p.s*Math.hypot(f[0],f[1])*2000).toFixed(1)],["θ (°)",(an*-180/Math.PI).toFixed(0)],[tr("शक्ती|शक्ति|Strength"),p.s]]}},
+
+{n:"ध्वनी लहरी|ध्वनि तरंग|Waves",
+ p:[{k:"f",l:"वारंवारता|आवृत्ति|Frequency",min:100,max:1000,step:10,v:440,u:"Hz"},{k:"A",l:"आयाम|आयाम|Amplitude",min:1,max:10,step:1,v:5,u:""},{k:"m",l:"माध्यम|माध्यम|Medium",o:["हवा|हवा|Air","पाणी|पानी|Water"],v:0}],
+ how:"‘सुरू’ दाबा: लहर चालते आणि आवाज ऐकू येतो.~वारंवारता वाढवली की तरंगलांबी λ कमी होते व आवाज तीक्ष्ण होतो.~आयाम वाढवा: आवाज मोठा होतो. माध्यम बदला: वेग बदलतो.|‘शुरू’ दबाएँ: तरंग चलती है और आवाज़ सुनाई देती है।~आवृत्ति बढ़ाने पर तरंगदैर्ध्य λ घटता है और स्वर तीखा होता है।~आयाम बढ़ाएँ: आवाज़ तेज़ होती है। माध्यम बदलें: चाल बदलती है।|Press Start: the wave moves and you hear the sound.~Higher frequency means a shorter wavelength λ and a higher pitch.~More amplitude is louder. Change the medium to change the speed.",
+ d(p,t){
+  const v=p.m?1480:340,lam=v/p.f,T=1000/p.f,k=2*Math.PI/lam,w=2*Math.PI*p.f/80,Ap=6+p.A*3.2,pxm=W/5,y1=H*.3,y2=H*.74;
+  c.strokeStyle=C.grid;c.lineWidth=1;L(0,y1,W,y1);c.strokeStyle=C.teal;c.lineWidth=3;c.beginPath();
+  for(let x=0;x<=W;x+=3){const y=y1-Ap*Math.sin(k*x/pxm-w*t);x?c.lineTo(x,y):c.moveTo(x,y)}c.stroke();
+  for(let i=0;i<70;i++){const x0=(i+.5)*W/70,dx=Ap*.45*Math.sin(k*x0/pxm-w*t);[-14,0,14].forEach(r=>B(x0+dx,y2+r,3,C.saf))}
+  const lw=Math.min(lam*pxm,W-20);c.strokeStyle=C.ink;c.lineWidth=2;L(10,y1+Ap+16,10+lw,y1+Ap+16);c.fillStyle=C.ink;c.fillText("λ",14,y1+Ap+32);
+  c.fillStyle=C.mut;c.fillText(tr("लहरीचा आकार|तरंग आकृति|Wave shape"),8,16);c.fillText(tr("माध्यमाचे कण|माध्यम के कण|Medium particles"),8,y2-28);
+  return[["f (Hz)",p.f],["λ (m)",lam.toFixed(2)],["T (ms)",T.toFixed(1)],["v (m/s)",v]]}},
+{s:"physics",n:"Ohm's Law",
+ p:[{k:"V",l:"Voltage",min:1,max:12,step:1,v:6,u:"V"},{k:"R",l:"Resistance",min:1,max:20,step:1,v:10,u:"Ω"}],
+ how:"Change the voltage (V) and the resistance (R).~Watch the point move along the V–I line.~Lower R makes the line steeper: more current for the same voltage.",
+ d(p,t){
+  const I=p.V/p.R,x0=44,y0=H-34,gw=W-64,gh=H-60,X=v=>x0+v/12*gw,Y=i=>y0-i/12*gh;
+  c.strokeStyle=C.grid;c.lineWidth=1;c.fillStyle=C.mut;
+  for(let k=0;k<=12;k+=2){L(X(k),y0,X(k),y0-gh);L(x0,Y(k),x0+gw,Y(k));c.textAlign="center";c.fillText(k,X(k),y0+16);c.textAlign="right";c.fillText(k,x0-6,Y(k)+4)}
+  c.strokeStyle=C.ink;c.lineWidth=2;L(x0,y0,x0+gw,y0);L(x0,y0,x0,y0-gh);c.textAlign="left";c.fillStyle=C.ink;c.fillText("V (volts)",x0+gw-50,y0-6);c.fillText("I (amps)",x0+6,y0-gh+12);
+  c.strokeStyle=C.teal;c.lineWidth=3;L(X(0),Y(0),X(12),Y(12/p.R));
+  c.strokeStyle=C.saf;c.lineWidth=1.5;DS([4,4]);L(X(p.V),y0,X(p.V),Y(I));L(x0,Y(I),X(p.V),Y(I));DS();B(X(p.V),Y(I),8,C.saf);
+  return[["I (A)",I.toFixed(2)],["R (Ω)",p.R],["V (V)",p.V],["P (W)",(p.V*I).toFixed(1)]]}},
+{s:"physics",n:"Pendulum Lab",
+ p:[{k:"L",l:"String length",min:.2,max:2,step:.1,v:1,u:"m"},{k:"a",l:"Start angle",min:5,max:60,step:5,v:30,u:"°"},{k:"m",l:"Mass",min:1,max:5,step:1,v:2,u:"kg"},{k:"g",l:"Planet",o:PL,v:0}],
+ how:"Press Start and watch the pendulum swing.~Make the string longer: the period T grows.~Change the mass: nothing happens to T. Change the planet: it does.",
+ d(p,t){
+  const g=GG[p.g],th0=p.a*Math.PI/180,T=2*Math.PI*Math.sqrt(p.L/g)*(1+th0*th0/16),th=th0*Math.cos(2*Math.PI*t/T),s=(H-80)/2.1,px=W/2,py=30,bx=px+p.L*s*Math.sin(th),by=py+p.L*s*Math.cos(th);
+  c.strokeStyle=C.mut;c.lineWidth=1.5;DS([4,5]);c.beginPath();c.arc(px,py,p.L*s,Math.PI/2-th0,Math.PI/2+th0);c.stroke();DS();
+  c.strokeStyle=C.ink;c.lineWidth=5;L(px-30,py-4,px+30,py-4);c.lineWidth=2;L(px,py,bx,by);B(bx,by,8+p.m*3,C.ink);B(bx-3,by-3,3,C.sky);
+  return[["T (s)",T.toFixed(2)],["f (Hz)",(1/T).toFixed(2)],["θ (°)",(th*180/Math.PI).toFixed(0)],["Swings",Math.floor(t/T)]]}},
+{s:"chemistry",n:"pH Scale",
+ p:[{k:"l",l:"Liquid",o:["Lemon juice","Vinegar","Orange juice","Coffee","Milk","Pure water","Blood","Baking soda","Soap","Bleach"],v:0},{k:"w",l:"Water added (cups)",min:0,max:10,step:1,v:0,u:""}],
+ how:"Pick a liquid and see its pH on the scale.~Add water: acids and bases move toward 7 (neutral).~Red means strongly acidic, green neutral, purple strongly basic.",
+ d(p,t){
+  const p0=PHV[p.l],D=1+p.w,sh=Math.log10(D),ph=p0<7?Math.min(7,p0+sh):p0>7?Math.max(7,p0-sh):7;
+  const col=q=>"hsl("+(q<7?q/7*120:120+(q-7)/7*150)+",80%,55%)";
+  const bw=W*.34,bx=W/2-bw/2,by=H*.08,bh=H*.52,lv=Math.min(.95,.5+.045*p.w)*bh;
+  c.fillStyle=col(ph);c.fillRect(bx,by+bh-lv,bw,lv);
+  c.strokeStyle=C.ink;c.lineWidth=3;c.beginPath();c.moveTo(bx,by);c.lineTo(bx,by+bh);c.lineTo(bx+bw,by+bh);c.lineTo(bx+bw,by);c.stroke();
+  c.fillStyle=C.ink;c.textAlign="center";c.font="700 14px Mukta,sans-serif";c.fillText(E[10].p[0].o[p.l],W/2,by+bh+18);c.font="12px Mukta,sans-serif";
+  const sx=20,sw=W-40,sy=H*.78;for(let i=0;i<28;i++){c.fillStyle=col(i/2);c.fillRect(sx+i*sw/28,sy,sw/28+1,18)}
+  const mx=sx+ph/14*sw;c.fillStyle=C.ink;c.beginPath();c.moveTo(mx,sy-2);c.lineTo(mx-8,sy-14);c.lineTo(mx+8,sy-14);c.fill();
+  c.fillStyle=C.mut;c.fillText("0",sx,sy+32);c.fillText("7",W/2,sy+32);c.fillText("14",sx+sw,sy+32);c.fillText("Acid",sx+sw*.18,sy+32);c.fillText("Base",sx+sw*.82,sy+32);
+  return[["pH",ph.toFixed(1)],["[H⁺] mol/L",Math.pow(10,-ph).toExponential(1)],["Type",ph<6.95?"Acid":ph>7.05?"Base":"Neutral"],["Dilution","×"+D]]}},
+{s:"math",n:"Graphing Lines",
+ p:[{k:"m",l:"Slope (m)",min:-5,max:5,step:.5,v:1,u:""},{k:"b",l:"Y-intercept (c)",min:-8,max:8,step:.5,v:1,u:""}],
+ how:"Change the slope m: the line tilts steeper or flatter.~Change c: the line moves up or down.~The orange dot is the y-intercept; the red dot is where the line crosses the x-axis.",
+ d(p,t){
+  const n=10,s=Math.min(W,H)/(2*n+1),cx=W/2,cy=H/2,X=x=>cx+x*s,Y=y=>cy-y*s;
+  c.strokeStyle=C.grid;c.lineWidth=1;for(let k=-n;k<=n;k++){L(X(k),Y(-n),X(k),Y(n));L(X(-n),Y(k),X(n),Y(k))}
+  c.strokeStyle=C.ink;c.lineWidth=2;L(X(-n),cy,X(n),cy);L(cx,Y(-n),cx,Y(n));c.fillStyle=C.mut;c.textAlign="center";[-10,-5,5,10].forEach(k=>{c.fillText(k,X(k),cy+14);c.fillText(k,cx-12,Y(k)+4)});
+  c.save();c.beginPath();c.rect(X(-n),Y(n),2*n*s,2*n*s);c.clip();c.strokeStyle=C.teal;c.lineWidth=3;L(X(-n),Y(-n*p.m+p.b),X(n),Y(n*p.m+p.b));c.restore();
+  c.strokeStyle=C.saf;c.lineWidth=2;DS([4,4]);L(X(0),Y(p.b),X(1),Y(p.b));L(X(1),Y(p.b),X(1),Y(p.b+p.m));DS();
+  B(X(0),Y(p.b),6,C.saf);if(p.m!==0)B(X(-p.b/p.m),Y(0),6,C.red);
+  return[["Equation","y = "+p.m+"x "+(p.b<0?"− ":"+ ")+Math.abs(p.b)],["Slope",p.m],["Y-intercept",p.b],["X-intercept",p.m?(-p.b/p.m).toFixed(2):"none"]]}},
+{s:"math",n:"Build a Fraction",
+ p:[{k:"n",l:"Shaded parts",min:0,max:12,step:1,v:3,u:""},{k:"d",l:"Total parts",min:1,max:12,step:1,v:4,u:""},{k:"sh",l:"Shape",o:["Pie","Bar"],v:0}],
+ how:"Choose the total parts (denominator).~Shade parts (numerator) to build a fraction.~Compare the fraction, decimal and percent, and see the simplest form.",
+ d(p,t){
+  const d=p.d,n=Math.min(p.n,d),g=(a,b)=>b?g(b,a%b):a,gc=g(n,d)||1;
+  if(p.sh===0){const r=Math.min(W,H)*.34,cx=W/2,cy=H*.44;for(let i=0;i<d;i++){const a0=-Math.PI/2+i*2*Math.PI/d,a1=a0+2*Math.PI/d;c.beginPath();c.moveTo(cx,cy);c.arc(cx,cy,r,a0,a1);c.closePath();c.fillStyle=i<n?C.saf:C.sky;c.fill();c.strokeStyle=C.ink;c.lineWidth=2;c.stroke()}}
+  else{const bw=W*.84,bh=H*.3,x0=W*.08,y0=H*.28;for(let i=0;i<d;i++){c.fillStyle=i<n?C.saf:C.sky;c.fillRect(x0+i*bw/d,y0,bw/d,bh);c.strokeStyle=C.ink;c.lineWidth=2;c.strokeRect(x0+i*bw/d,y0,bw/d,bh)}}
+  c.fillStyle=C.ink;c.textAlign="center";c.font="800 24px Mukta,sans-serif";c.fillText(n+" / "+d,W/2,H-14);
+  return[["Fraction",n+"/"+d],["Decimal",(n/d).toFixed(3)],["Percent",(n/d*100).toFixed(1)+"%"],["Simplest",(n/gc)+"/"+(d/gc)]]}},
+{s:"physics chemistry",n:"Build an Atom",
+ p:[{k:"p",l:"Protons",min:1,max:18,step:1,v:6,u:""},{k:"n",l:"Neutrons",min:0,max:20,step:1,v:6,u:""},{k:"e",l:"Electrons",min:0,max:18,step:1,v:6,u:""}],
+ how:"Add or remove protons: the element changes.~Neutrons change the mass number (isotopes).~Electrons decide if the atom is neutral or an ion.",
+ d(p,t){
+  const EL=["H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"],NM=["Hydrogen","Helium","Lithium","Beryllium","Boron","Carbon","Nitrogen","Oxygen","Fluorine","Neon","Sodium","Magnesium","Aluminium","Silicon","Phosphorus","Sulfur","Chlorine","Argon"];
+  const cx=W/2,cy=H/2-8,ch=p.p-p.e,rr=[30,60,90];
+  c.strokeStyle=C.grid;c.lineWidth=1.5;rr.forEach(r=>{c.beginPath();c.arc(cx,cy,r,0,7);c.stroke()});
+  for(let i=0;i<p.p+p.n;i++){const a=i*2.4,r=Math.min(20,3.2*Math.sqrt(i));B(cx+r*Math.cos(a),cy+r*Math.sin(a),5,i<p.p?C.red:C.mut)}
+  let left=p.e;[2,8,8].forEach((cap,k)=>{const nn=Math.min(cap,left);left-=nn;for(let i=0;i<nn;i++){const a=i*2*Math.PI/nn+t*(1.6-k*.4);B(cx+rr[k]*Math.cos(a),cy+rr[k]*Math.sin(a),4.5,C.teal)}});
+  c.fillStyle=C.ink;c.font="800 22px Mukta,sans-serif";c.fillText(EL[p.p-1]+(ch?(ch>0?"+"+ch:ch):""),10,26);c.font="12px Mukta,sans-serif";
+  B(W-92,H-40,5,C.red);c.fillText("proton",W-84,H-36);B(W-92,H-24,5,C.mut);c.fillText("neutron",W-84,H-20);B(W-92,H-8,5,C.teal);c.fillText("electron",W-84,H-4);
+  return[["Element",NM[p.p-1]],["Mass number",p.p+p.n],["Charge",ch>0?"+"+ch:ch],["Type",ch===0?"Neutral atom":ch>0?"Positive ion":"Negative ion"]]}},
+{s:"chemistry",n:"Balancing Chemical Equations",
+ p:[{k:"rx",l:"Reaction",o:["H₂ + O₂ → H₂O","N₂ + H₂ → NH₃","Mg + O₂ → MgO","Fe + O₂ → Fe₂O₃","Al + O₂ → Al₂O₃"],v:0},{k:"a",l:"Coefficient of 1st",min:1,max:6,step:1,v:1,u:""},{k:"b",l:"Coefficient of 2nd",min:1,max:6,step:1,v:1,u:""},{k:"c",l:"Coefficient of 3rd",min:1,max:6,step:1,v:1,u:""}],
+ how:"Pick a reaction.~Change the coefficients so each element has the same number of atoms on both sides.~When every bar turns green, the equation is balanced.",
+ d(p,t){
+  const r=RX[p.rx],k=[p.a,p.b,p.c],el=[...new Set(r.flatMap(x=>Object.keys(x[1])))],rowH=Math.min(46,(H-100)/el.length),sc=(W*.4-30)/24;
+  c.fillStyle=C.ink;c.textAlign="center";c.font="800 20px Mukta,sans-serif";c.fillText(k[0]+" "+r[0][0]+" + "+k[1]+" "+r[1][0]+" → "+k[2]+" "+r[2][0],W/2,32);c.font="12px Mukta,sans-serif";
+  c.fillStyle=C.mut;c.fillText("Reactants",W*.25,54);c.fillText("Products",W*.75,54);
+  let ok=true,sl=0,sr=0;
+  el.forEach((e,i)=>{const l=(r[0][1][e]||0)*k[0]+(r[1][1][e]||0)*k[1],q=(r[2][1][e]||0)*k[2],y=64+i*rowH;sl+=l;sr+=q;if(l!==q)ok=false;
+   c.fillStyle=C.ink;c.textAlign="center";c.fillText(e,W/2,y+13);c.fillStyle=l===q?C.teal:C.red;c.fillRect(W/2-18-l*sc,y,l*sc,18);c.fillRect(W/2+18,y,q*sc,18);
+   c.fillStyle=C.ink;c.textAlign="right";c.fillText(l,W/2-22-l*sc,y+13);c.textAlign="left";c.fillText(q,W/2+22+q*sc,y+13)});
+  c.textAlign="center";c.fillStyle=ok?C.teal:C.mut;c.font="800 15px Mukta,sans-serif";c.fillText(ok?"Balanced ✓":"Not balanced yet",W/2,H-10);c.textAlign="left";
+  return[["Balanced?",ok?"Yes ✓":"Not yet"],["Atoms (left)",sl],["Atoms (right)",sr]]}},
+{s:"chemistry",n:"Molecule Shapes",
+ p:[{k:"b",l:"Bonding groups",min:2,max:6,step:1,v:4,u:""},{k:"l",l:"Lone pairs",min:0,max:3,step:1,v:0,u:""}],
+ how:"Add bonding groups and lone pairs around the central atom.~Electron groups spread as far apart as possible.~Read the molecule shape and bond angle.",
+ d(p,t){
+  const b=p.b,l=Math.min(p.l,6-b),N=b+l,cx=W/2,cy=H/2,R=Math.min(W,H)*.34,sh=MS[b+","+l]||["—","—"];
+  for(let i=0;i<N;i++){const a=-Math.PI/2+i*2*Math.PI/N+t*.4,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);
+   if(i<b){c.strokeStyle=C.ink;c.lineWidth=4;L(cx,cy,x,y);B(x,y,14,C.saf);c.stroke()}
+   else{c.fillStyle=C.teal;c.globalAlpha=.55;c.beginPath();c.ellipse(cx+R*.6*Math.cos(a),cy+R*.6*Math.sin(a),20,10,a,0,7);c.fill();c.globalAlpha=1}}
+  B(cx,cy,18,C.red);c.fillStyle=C.mut;c.fillText("2D view",8,16);
+  return[["Shape",sh[0]],["Bond angle",sh[1]+"°"],["Groups",N],["Bonds / lone",b+" / "+l]]}},
+{s:"chemistry",n:"Concentration",
+ p:[{k:"mol",l:"Solute amount",min:.05,max:1,step:.05,v:.3,u:"mol"},{k:"v",l:"Water volume",min:.2,max:1,step:.1,v:.5,u:"L"},{k:"c",l:"Solute",o:["Cobalt chloride","Copper sulfate","Permanganate"],v:1}],
+ how:"Add more solute: the colour gets darker.~Add more water: the solution gets paler.~Molarity M = moles ÷ litres.",
+ d(p,t){
+  const M=p.mol/p.v,hue=[340,205,285][p.c],al=Math.min(.9,.12+M*.35),bw=W*.42,bx=W/2-bw/2,by=H*.08,bh=H*.78,lv=bh*(.15+p.v*.8),ly=by+bh-lv,n=Math.round(p.mol*100);
+  c.fillStyle="hsla("+hue+",80%,50%,"+al+")";c.fillRect(bx,ly,bw,lv);
+  c.fillStyle="hsl("+hue+",80%,30%)";const f=q=>q-Math.floor(q);
+  for(let i=0;i<n;i++){const x=bx+8+f(Math.sin(i*12.99)*43758.5)*(bw-16)+Math.sin(t*2+i)*3,y=ly+8+f(Math.sin(i*78.23)*24634.6)*(lv-16)+Math.cos(t*2+i*1.3)*3;B(x,y,2.5,"hsl("+hue+",80%,30%)")}
+  c.strokeStyle=C.ink;c.lineWidth=3;c.beginPath();c.moveTo(bx,by);c.lineTo(bx,by+bh);c.lineTo(bx+bw,by+bh);c.lineTo(bx+bw,by);c.stroke();
+  c.lineWidth=1.5;c.fillStyle=C.mut;[.2,.4,.6,.8,1].forEach(v=>{const y=by+bh-bh*(.15+v*.8);L(bx+bw,y,bx+bw+8,y);c.fillText(v+" L",bx+bw+12,y+4)});
+  return[["Molarity (M)",M.toFixed(2)],["Moles",p.mol],["Volume (L)",p.v],["Particles",n]]}},
+{s:"math",n:"Graphing Quadratics",
+ p:[{k:"a",l:"a (opening)",min:-3,max:3,step:.5,v:1,u:""},{k:"h",l:"h (move right)",min:-5,max:5,step:.5,v:0,u:""},{k:"k",l:"k (move up)",min:-5,max:5,step:.5,v:-3,u:""}],
+ how:"The graph is y = a(x − h)² + k.~Change a: the parabola opens up or down and gets wider or narrower.~Change h and k to move the vertex.",
+ d(p,t){
+  const n=10,s=Math.min(W,H)/(2*n+1),cx=W/2,cy=H/2,X=x=>cx+x*s,Y=y=>cy-y*s;
+  c.strokeStyle=C.grid;c.lineWidth=1;for(let q=-n;q<=n;q++){L(X(q),Y(-n),X(q),Y(n));L(X(-n),Y(q),X(n),Y(q))}
+  c.strokeStyle=C.ink;c.lineWidth=2;L(X(-n),cy,X(n),cy);L(cx,Y(-n),cx,Y(n));
+  c.save();c.beginPath();c.rect(X(-n),Y(n),2*n*s,2*n*s);c.clip();c.strokeStyle=C.mut;c.lineWidth=1.5;DS([5,5]);L(X(p.h),Y(-n),X(p.h),Y(n));DS();
+  c.strokeStyle=C.teal;c.lineWidth=3;c.beginPath();for(let x=-n;x<=n+.01;x+=.1){const y=p.a*(x-p.h)*(x-p.h)+p.k;x>-n?c.lineTo(X(x),Y(y)):c.moveTo(X(x),Y(y))}c.stroke();c.restore();
+  B(X(p.h),Y(p.k),6,C.saf);
+  const q=p.a?-p.k/p.a:-1,rt=p.a&&q>=0?(q===0?[p.h]:[p.h-Math.sqrt(q),p.h+Math.sqrt(q)]):[];rt.forEach(x=>B(X(x),Y(0),5,C.red));
+  return[["Vertex","("+p.h+", "+p.k+")"],["Opens",p.a>0?"Up":p.a<0?"Down":"Flat line"],["Y-intercept",(p.a*p.h*p.h+p.k).toFixed(1)],["X-intercepts",rt.length?rt.map(x=>x.toFixed(1)).join(", "):"none"]]}},
+{s:"math",n:"Area Builder",
+ p:[{k:"w",l:"Width",min:2,max:12,step:1,v:6,u:""},{k:"h",l:"Height",min:2,max:10,step:1,v:4,u:""},{k:"n",l:"Corner cut",min:0,max:5,step:1,v:0,u:""}],
+ how:"Change the width and height: count the unit squares.~Area = width × height.~Cut a corner: the area drops but the perimeter stays the same!",
+ d(p,t){
+  const w=p.w,h=p.h,nn=Math.min(p.n,Math.min(w,h)-1),s=Math.min((W-40)/12,(H-60)/10),x0=(W-w*s)/2,y0=(H-h*s)/2;
+  for(let i=0;i<w;i++)for(let j=0;j<h;j++){if(i>=w-nn&&j<nn)continue;c.globalAlpha=.55;c.fillStyle=C.saf;c.fillRect(x0+i*s,y0+j*s,s,s);c.globalAlpha=1;c.strokeStyle=C.ink;c.lineWidth=1;c.strokeRect(x0+i*s,y0+j*s,s,s)}
+  c.fillStyle=C.ink;c.textAlign="center";c.fillText(w+" units",W/2,y0-8);c.fillText(h,x0-14,H/2+4);c.textAlign="left";
+  return[["Area",w*h-nn*nn],["Perimeter",2*(w+h)],["Size",w+" × "+h],["Corner cut",nn+" × "+nn]]}},
+{s:"math physics",n:"Vector Addition",
+ p:[{k:"am",l:"Vector A length",min:0,max:10,step:1,v:6,u:""},{k:"aa",l:"Vector A angle",min:0,max:360,step:15,v:30,u:"°"},{k:"bm",l:"Vector B length",min:0,max:10,step:1,v:5,u:""},{k:"ba",l:"Vector B angle",min:0,max:360,step:15,v:120,u:"°"}],
+ how:"Set the length and angle of vectors A and B.~B is drawn from the tip of A (tip-to-tail).~The red arrow is the resultant R = A + B.",
+ d(p,t){
+  const r=Math.PI/180,ax=p.am*Math.cos(p.aa*r),ay=p.am*Math.sin(p.aa*r),bx=p.bm*Math.cos(p.ba*r),by=p.bm*Math.sin(p.ba*r),rx=ax+bx,ry=ay+by,s=(Math.min(W,H)/2-22)/20,ox=W/2,oy=H/2,X=x=>ox+x*s,Y=y=>oy-y*s;
+  c.strokeStyle=C.grid;c.lineWidth=1;for(let q=-20;q<=20;q+=5){L(X(q),0,X(q),H);L(0,Y(q),W,Y(q))}c.strokeStyle=C.ink;c.lineWidth=1.5;L(0,oy,W,oy);L(ox,0,ox,H);
+  A(X(0),Y(0),X(ax),Y(ay),C.saf);A(X(ax),Y(ay),X(rx),Y(ry),C.teal);A(X(0),Y(0),X(rx),Y(ry),C.red);
+  c.font="800 14px Mukta,sans-serif";c.fillStyle=C.saf;c.fillText("A",X(ax/2)+6,Y(ay/2)-6);c.fillStyle=C.teal;c.fillText("B",X(ax+bx/2)+6,Y(ay+by/2)-6);c.fillStyle=C.red;c.fillText("R",X(rx/2)-14,Y(ry/2)+14);
+  return[["R length",Math.hypot(rx,ry).toFixed(2)],["R angle",((Math.atan2(ry,rx)/r+360)%360).toFixed(0)+"°"],["Rx",rx.toFixed(2)],["Ry",ry.toFixed(2)]]}}
+];
+const PHV=[2,2.9,3.5,5,6.5,7,7.4,8.3,10,12.5];
+const RX=[{s:[["H₂",{H:2}],["O₂",{O:2}],["H₂O",{H:2,O:1}]]},{s:[["N₂",{N:2}],["H₂",{H:2}],["NH₃",{N:1,H:3}]]},{s:[["Mg",{Mg:1}],["O₂",{O:2}],["MgO",{Mg:1,O:1}]]},{s:[["Fe",{Fe:1}],["O₂",{O:2}],["Fe₂O₃",{Fe:2,O:3}]]},{s:[["Al",{Al:1}],["O₂",{O:2}],["Al₂O₃",{Al:2,O:3}]]}].map(x=>x.s);
+const MS={"2,0":["Linear",180],"3,0":["Trigonal planar",120],"2,1":["Bent",118],"4,0":["Tetrahedral",109.5],"3,1":["Trigonal pyramidal",107],"2,2":["Bent",104.5],"5,0":["Trigonal bipyramidal","90 / 120"],"6,0":["Octahedral",90],"4,1":["Seesaw","90 / 120"],"3,2":["T-shaped",90],"2,3":["Linear",180],"5,1":["Square pyramidal",90],"4,2":["Square planar",90]};
+
+let subj=null,ei=0,P={},t=0,run=false,last=0,lastH="",ac,osc,gn;
+const cur=()=>E[ei];
+function snd(on,f,a){try{if(on){if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();if(ac.state==="suspended")ac.resume();if(!osc){osc=ac.createOscillator();gn=ac.createGain();osc.connect(gn);gn.connect(ac.destination);osc.start()}osc.frequency.value=f;gn.gain.value=a}else if(osc){osc.stop();osc.disconnect();osc=null}}catch(e){}}
+function defaults(){P={};cur().p.forEach(q=>P[q.k]=q.v)}
+function tabs(){$("tabs").innerHTML=E.map((e,i)=>(e.s||"physics").includes(subj)?`<button data-i="${i}" aria-pressed="${i===ei}">${tr(e.n)}</button>`:"").join("")}
+function ctrls(){$("ctl").innerHTML=cur().p.map(q=>q.o?`<div class="row"><span>${tr(q.l)}</span></div><div class="chips" data-k="${q.k}">${q.o.map((o,i)=>`<button data-i="${i}" aria-pressed="${P[q.k]===i}">${tr(o)}</button>`).join("")}</div>`:`<div class="row"><span>${tr(q.l)}</span><output id="o_${q.k}">${P[q.k]} ${q.u||""}</output></div><input type="range" data-k="${q.k}" min="${q.min}" max="${q.max}" step="${q.step}" value="${P[q.k]}">`).join("")}
+function lab(){$("go").textContent=tr(run?U.pause:t>0&&!(cur().dur&&t>=cur().dur(P))?U.resume:U.start)}
+function text(){$("u_sub").textContent=subj?SUB[subj].t:"Virtual Lab";$("u_hint").textContent=tr(U.hint);$("rs").textContent=tr(U.reset);$("hw").textContent=tr(U.guide);$("d_t").textContent=tr(U.gt);$("d_c").textContent=tr(U.close);document.querySelectorAll("#lang button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.l===LI));document.documentElement.lang=["mr","hi","en"][LI];tabs();ctrls();lab()}
+function sel(i){ei=i;t=0;run=false;cpos=null;defaults();tabs();ctrls();lab();lastH=""}
+function resetAll(){t=0;run=false;cpos=null;defaults();ctrls();lab()}
+function go(){if(run){run=false}else{const d=cur().dur;if(d&&t>=d(P))t=0;run=true}lab()}
+function size(){dpr=window.devicePixelRatio||1;const cv=$("cv");W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr}
+function frame(ts){
+  const dt=Math.min(.05,(ts-last)/1000||0);last=ts;const e=cur();if($("lab").hidden){requestAnimationFrame(frame);return}
+  if(run){t+=dt;if(e.dur&&t>=e.dur(P)){t=e.dur(P);run=false;lab()}}
+  const cs=getComputedStyle(document.documentElement),g=n=>cs.getPropertyValue(n).trim();
+  C={ink:g("--ink"),mut:g("--mut"),teal:g("--teal"),saf:g("--saf"),sky:g("--sky"),grid:g("--grid"),ground:g("--ground"),red:g("--red")};
+  c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);c.lineCap="butt";c.setLineDash([]);c.textAlign="left";c.font="12px Mukta,sans-serif";c.globalAlpha=1;c.lineDashOffset=0;
+  const rd=e.d(P,t),h=rd.map(r=>`<div class="tile"><small>${r[0]}</small><b>${r[1]}</b></div>`).join("");
+  if(h!==lastH){$("rd").innerHTML=h;lastH=h}
+  snd(run&&ei===7,P.f,(P.A||0)*.02);
+  requestAnimationFrame(frame)
+}
+$("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(b)sel(+b.dataset.i)});
+const LIVE={"Battery-Resistor Circuit":0,"Bending Light":1,"Geometric Optics":2,"Projectile Motion":3,"Friction":4,"Free Fall on Planets":5,"Magnet and Compass":6,"Sound Waves":7,"Ohm's Law":8,"Pendulum Lab":9,"pH Scale":10,"Graphing Lines":11,"Build a Fraction":12,"Circuit Construction Kit: DC":0,"Build an Atom":13,"Balancing Chemical Equations":14,"Molecule Shapes":15,"Concentration":16,"Graphing Quadratics":17,"Area Builder":18,"Vector Addition":19};
+const STAR=new Set(["physicsCircuit Construction Kit: DC","physicsProjectile Motion","physicsPendulum Lab","physicsOhm's Law","physicsBending Light","chemistryBuild an Atom","chemistryBalancing Chemical Equations","chemistrypH Scale","chemistryMolecule Shapes","chemistryConcentration","mathGraphing Lines","mathGraphing Quadratics","mathFraction Matcher","mathArea Builder","mathVector Addition"]);
+const cat=(n,s)=>[n,s.split("|")];
+const SUB={
+physics:{t:"Physics Lab",cats:[
+cat("Motion, Force & Mechanics","Projectile Motion|Projectile Data Lab|Collision Lab|Forces and Motion|Forces and Motion: Basics|Forces in 1 Dimension|Friction|Ramp: Forces and Motion|The Ramp|Motion in 2D|Ladybug Motion 2D|Ladybug Revolution|Lunar Lander|Balancing Act|Torque|Hooke's Law|Masses and Springs|Masses and Springs: Basics|Pendulum Lab|Energy Skate Park|Energy Skate Park: Basics|Under Pressure|Buoyancy|Buoyancy: Basics|Density|Fluid Pressure and Flow"),
+cat("Electricity & Magnetism","Circuit Construction Kit: DC|Circuit Construction Kit: DC - Virtual Lab|Circuit Construction Kit: AC|Circuit Construction Kit: AC - Virtual Lab|Ohm's Law|Resistance in a Wire|Battery-Resistor Circuit|Battery Voltage|Capacitor Lab|Capacitor Lab: Basics|Charges and Fields|Coulomb's Law|Electric Field of Dreams|Electric Field Hockey|Magnet and Compass|Magnets and Electromagnets|Faraday's Law|Faraday's Electromagnetic Lab|Generator|Conductivity|Balloons and Static Electricity|John Travoltage|Radiating Charge|Signal Circuit"),
+cat("Light, Optics & Waves","Bending Light|Geometric Optics|Geometric Optics: Basics|Color Vision|Wave on a String|Waves Intro|Wave Interference|Sound Waves|Fourier: Making Waves|Normal Modes|Resonance|Photoelectric Effect|Blackbody Spectrum|Molecules and Light|Lasers|Microwaves"),
+cat("Gravity & Space","Free Fall on Planets|Gravity Force Lab|Gravity Force Lab: Basics|Gravity and Orbits|Kepler's Laws|My Solar System"),
+cat("Modern & Nuclear Physics","Build an Atom|Build a Nucleus|Models of the Hydrogen Atom|Rutherford Scattering|Isotopes and Atomic Mass|Alpha Decay|Beta Decay|Nuclear Fission|Quantum Tunneling and Wave Packets|Quantum Wave Interference|Quantum Measurement|Quantum Coin Toss|Quantum Bound States|Particle in a Box|Bound State Superposition|Stern-Gerlach Experiment|Davisson-Germer: Electron Diffraction|Simplified MRI|Neon Lights & Other Discharge Lamps|Semiconductors|Band Structure|Double Wells and Covalent Bonds|Optical Quantum Control")]},
+chemistry:{t:"Chemistry Lab",cats:[
+cat("Atomic Structure & Molecules","Build an Atom|Isotopes and Atomic Mass|Build a Molecule|Molecule Shapes|Molecule Shapes: Basics|Molecule Polarity|Atomic Interactions|Models of the Hydrogen Atom|Build a Nucleus|Rutherford Scattering|Band Structure|Particle in a Box|Quantum Bound States|Double Wells and Covalent Bonds"),
+cat("Chemical Reactions","Balancing Chemical Equations|Reactants, Products and Leftovers|Reactions & Rates|Reversible Reactions|Salts & Solubility|Acid-Base Solutions|pH Scale|pH Scale: Basics|Concentration|Molarity|Beer's Law Lab|Sugar and Salt Solutions"),
+cat("States of Matter & Gas","States of Matter|States of Matter: Basics|Gases Intro|Gas Properties|Diffusion|Density|Energy Forms and Changes|Molecules and Light"),
+cat("Quantum Chemistry","Quantum Wave Interference|Quantum Measurement|Quantum Coin Toss|Quantum Tunneling and Wave Packets|Bound State Superposition|Optical Quantum Control")]},
+math:{t:"Math Lab",cats:[
+cat("Basic Maths & Numbers","Arithmetic|Number Pairs|Number Compare|Number Play|Make a Ten|Number Line: Distance|Number Line: Operations|Number Line: Integers|Estimation|Unit Rates|Ratio and Proportion|Proportion Playground"),
+cat("Fractions & Decimals","Fractions: Intro|Fractions: Mixed Numbers|Build a Fraction|Fractions: Equality|Fraction Matcher|Area Model Decimals|Area Model Multiplication|Area Model Introduction"),
+cat("Algebra","Area Model Algebra|Equality Explorer|Equality Explorer: Basics|Equality Explorer: Two Variables|Expression Exchange|Function Builder|Function Builder: Basics"),
+cat("Graphs & Functions","Graphing Lines|Graphing Slope-Intercept|Graphing Quadratics|Calculus Grapher|Curve Fitting|Least-Squares Regression"),
+cat("Geometry","Area Builder|Quadrilateral|Trig Tour"),
+cat("Statistics & Probability","Mean: Share and Balance|Center and Variability|Plinko Probability|Projectile Sampling Distributions|Projectile Data Lab"),
+cat("Vectors","Vector Addition|Vector Addition: Equations")]}};
+function showHome(){run=false;snd(false);$("lab").hidden=true;$("home").hidden=false;const s=SUB[subj],seen=new Set();let n=0,lv=0;
+ const body=s.cats.map(([cn,arr])=>{const it=arr.filter(x=>!seen.has(x)&&seen.add(x));n+=it.length;
+  return `<details open><summary>${cn} (${it.length})</summary>`+it.map(x=>{const i=LIVE[x],ok=i!==undefined&&(E[i].s||"physics").includes(subj);if(ok)lv++;return `<button class="ex${ok?"":" soon"}"${ok?` data-i="${i}"`:" disabled"} data-n="${x.toLowerCase()}">${STAR.has(subj+x)?"⭐ ":""}<b>${x}</b><i class="badge">${ok?"Live":"Soon"}</i></button>`}).join("")+`</details>`}).join("");
+ $("home").innerHTML=`<h1 style="font-size:24px;margin:10px 0 2px">${s.t}</h1><p class="hint" style="margin:0 2px 8px">${n} experiments · ${lv} live now · ⭐ start here</p><input id="q" class="q" type="search" placeholder="Search experiments">`+body;text()}
+$("home").addEventListener("input",e=>{if(e.target.id!=="q")return;const v=e.target.value.toLowerCase();document.querySelectorAll("#home .ex").forEach(b=>b.hidden=!b.dataset.n.includes(v))});
+function openExp(i){$("home").hidden=true;$("lab").hidden=false;size();sel(i)}
+$("home").addEventListener("click",e=>{const b=e.target.closest(".ex");if(b&&!b.disabled)openExp(+b.dataset.i)});
+$("back").addEventListener("click",showHome);
+$("chg").addEventListener("click",()=>{if(!$("pick").open)$("pick").showModal()});
+$("pick").addEventListener("click",e=>{const b=e.target.closest(".pk");if(!b)return;subj=b.dataset.s;$("pick").close();showHome()});
+$("pick").addEventListener("cancel",e=>{if(!subj)e.preventDefault()});
+$("ctl").addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;P[k]=+e.target.value;const q=cur().p.find(z=>z.k===k);$("o_"+k).textContent=P[k]+" "+(q.u||"");if(cur().dur){t=0;run=false;lab()}});
+$("ctl").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;P[b.parentNode.dataset.k]=+b.dataset.i;if(cur().dur){t=0;run=false;lab()}ctrls()});
+$("go").addEventListener("click",go);$("rs").addEventListener("click",resetAll);
+$("hw").addEventListener("click",()=>{$("d_l").innerHTML=tr(cur().how).split("~").map(s=>`<li>${s}</li>`).join("");$("dlg").showModal()});
+$("d_c").addEventListener("click",()=>$("dlg").close());
+const cvs=$("cv");let drag=false;
+const mv=e=>{if(ei!==6||!drag)return;const r=cvs.getBoundingClientRect();cpos={x:e.clientX-r.left,y:e.clientY-r.top}};
+cvs.addEventListener("pointerdown",e=>{drag=true;cvs.setPointerCapture(e.pointerId);mv(e)});
+cvs.addEventListener("pointermove",mv);cvs.addEventListener("pointerup",()=>drag=false);cvs.addEventListener("pointercancel",()=>drag=false);
+window.addEventListener("resize",size);
+c=cvs.getContext("2d");size();defaults();text();requestAnimationFrame(frame);$("pick").showModal();
+</script>
+</body>
+</html>
