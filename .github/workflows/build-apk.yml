@@ -7,9 +7,7 @@ on:
       - main
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -17,24 +15,16 @@ jobs:
       # ==================================================
       # CHECKOUT
       # ==================================================
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-
       # ==================================================
-      # NODE
+      # NODE + JAVA
       # ==================================================
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-
-
-      # ==================================================
-      # JAVA
-      # ==================================================
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -42,60 +32,61 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      # ==================================================
+      # CHECK REQUIRED FILES
+      # ==================================================
+      - name: Check required files
+        run: |
+          for f in google-services.json index.html file_00000000333c82089b2140630d08f97c.png; do
+            if [ ! -f "$f" ]; then
+              echo "ERROR: $f not found in repository root."
+              exit 1
+            fi
+          done
+          echo "All required files found."
 
       # ==================================================
       # INSTALL CAPACITOR + ONESIGNAL
+      # (Capacitor sathi official package: onesignal-cordova-plugin)
       # ==================================================
-
       - name: Install Capacitor and OneSignal
         run: |
-          npm init -y
-
+          [ -f package.json ] || npm init -y
           npm install \
             @capacitor/core@7 \
             @capacitor/cli@7 \
             @capacitor/android@7 \
-            @onesignal/capacitor-plugin@latest
-
+            onesignal-cordova-plugin@5
+          npm install --save-dev esbuild
 
       # ==================================================
-      # CREATE WWW
+      # CREATE WWW (sarva files + folders, android/node_modules vagale)
       # ==================================================
-
       - name: Create www folder
         run: |
           rm -rf www
           mkdir -p www
-
-          find . -maxdepth 1 -type f \( \
-            -name "*.html" \
-            -o -name "*.css" \
-            -o -name "*.js" \
-            -o -name "*.png" \
-            -o -name "*.jpg" \
-            -o -name "*.jpeg" \
-            -o -name "*.webp" \
-          \) -exec cp {} www/ \;
-
-
-      # ==================================================
-      # CHECK FIREBASE
-      # ==================================================
-
-      - name: Check Firebase configuration
-        run: |
-          if [ ! -f "google-services.json" ]; then
-            echo "ERROR: google-services.json not found in repository root."
-            exit 1
-          fi
-
-          echo "Firebase google-services.json found."
-
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='android' \
+            --exclude='www' \
+            --exclude='package.json' \
+            --exclude='package-lock.json' \
+            --exclude='capacitor.config.json' \
+            --exclude='google-services.json' \
+            --exclude='onesignal-init.js' \
+            --exclude='*.yml' \
+            --exclude='*.yaml' \
+            --exclude='*.md' \
+            ./ www/
+          echo "www contents:"
+          ls -la www
 
       # ==================================================
       # CAPACITOR CONFIG
       # ==================================================
-
       - name: Create Capacitor config
         run: |
           cat > capacitor.config.json <<'EOF'
@@ -109,214 +100,142 @@ jobs:
           }
           EOF
 
-
       # ==================================================
       # ADD ANDROID
       # ==================================================
-
       - name: Add Android
         run: |
+          rm -rf android
           npx cap add android
 
-
       # ==================================================
-      # GS APP ICON
+      # FIREBASE / GOOGLE SERVICES
       # ==================================================
-
-      - name: Create GyanSetu GS App Icon
-        run: |
-
-          echo "Checking GS logo..."
-
-          if [ ! -f "file_00000000333c82089b2140630d08f97c.png" ]; then
-            echo "ERROR: GS logo file not found!"
-            exit 1
-          fi
-
-          echo "GS logo found."
-
-          mkdir -p android/app/src/main/res/drawable-nodpi
-
-          # Copy GS logo as Android launcher icon
-          cp \
-            file_00000000333c82089b2140630d08f97c.png \
-            android/app/src/main/res/drawable-nodpi/gs_icon.png
-
-          echo "GS icon copied."
-
-
-      # ==================================================
-      # FIREBASE
-      # ==================================================
-
       - name: Add Firebase google-services.json
         run: |
           cp google-services.json android/app/google-services.json
 
-
-      # ==================================================
-      # GOOGLE SERVICES
-      # ==================================================
-
-      - name: Configure Google Services
+      - name: Configure Google Services (only if missing)
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
+          # Project level: classpath fakt tevha taka jevha nasel
           project_gradle = Path("android/build.gradle")
-
           text = project_gradle.read_text()
 
           if "com.google.gms:google-services" not in text:
+              text = re.sub(
+                  r"(classpath\s+['\"]com\.android\.tools\.build:gradle:[^'\"]+['\"])",
+                  r"\1\n        classpath 'com.google.gms:google-services:4.4.2'",
+                  text,
+                  count=1,
+              )
+              project_gradle.write_text(text)
+              print("Added google-services classpath")
+          else:
+              print("google-services classpath already present")
 
-              text += """
-
-          buildscript {
-              dependencies {
-                  classpath 'com.google.gms:google-services:4.4.4'
-              }
-          }
-          """
-
-          project_gradle.write_text(text)
-
-
+          # App level: plugin fakt tevha apply kara jevha nasel
           app_gradle = Path("android/app/build.gradle")
-
           text = app_gradle.read_text()
 
           if "com.google.gms.google-services" not in text:
-
-              text += """
-
-          apply plugin: 'com.google.gms.google-services'
-          """
-
-          app_gradle.write_text(text)
-
+              text += "\napply plugin: 'com.google.gms.google-services'\n"
+              app_gradle.write_text(text)
+              print("Applied google-services plugin")
+          else:
+              print("google-services plugin already applied")
           PY
 
-
       # ==================================================
-      # SET GS ICON IN ANDROID MANIFEST
+      # GS APP ICON (proper launcher icons: legacy + adaptive)
       # ==================================================
-
-      - name: Set GyanSetu Launcher Icon
+      - name: Create GyanSetu launcher icons
         run: |
+          pip install pillow
           python3 - <<'PY'
           from pathlib import Path
+          from PIL import Image
 
-          manifest = Path(
-              "android/app/src/main/AndroidManifest.xml"
-          )
+          src = Image.open("file_00000000333c82089b2140630d08f97c.png").convert("RGBA")
+          res = Path("android/app/src/main/res")
 
-          text = manifest.read_text()
+          legacy = {"mdpi": 48, "hdpi": 72, "xhdpi": 96, "xxhdpi": 144, "xxxhdpi": 192}
+          foreground = {"mdpi": 108, "hdpi": 162, "xhdpi": 216, "xxhdpi": 324, "xxxhdpi": 432}
 
-          # Set normal launcher icon
-          text = text.replace(
-              'android:icon="@mipmap/ic_launcher"',
-              'android:icon="@drawable/gs_icon"'
-          )
+          for d, size in legacy.items():
+              folder = res / f"mipmap-{d}"
+              folder.mkdir(parents=True, exist_ok=True)
+              img = src.resize((size, size), Image.LANCZOS)
+              img.save(folder / "ic_launcher.png")
+              img.save(folder / "ic_launcher_round.png")
 
-          # Set round launcher icon
-          text = text.replace(
-              'android:roundIcon="@mipmap/ic_launcher_round"',
-              'android:roundIcon="@drawable/gs_icon"'
-          )
+          for d, size in foreground.items():
+              folder = res / f"mipmap-{d}"
+              folder.mkdir(parents=True, exist_ok=True)
+              canvas = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+              inner = int(size * 0.60)  # adaptive icon safe zone
+              logo = src.resize((inner, inner), Image.LANCZOS)
+              offset = (size - inner) // 2
+              canvas.paste(logo, (offset, offset), logo)
+              canvas.save(folder / "ic_launcher_foreground.png")
 
-          manifest.write_text(text)
-
-          print("GyanSetu GS launcher icon configured.")
-
+          print("GyanSetu icons created.")
           PY
-
 
       # ==================================================
       # ANDROID PERMISSIONS
       # ==================================================
-
       - name: Add Android permissions
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import re
 
-          manifest = Path(
-              "android/app/src/main/AndroidManifest.xml"
-          )
-
+          manifest = Path("android/app/src/main/AndroidManifest.xml")
           text = manifest.read_text()
 
           permissions = [
-
               "android.permission.INTERNET",
-
               "android.permission.ACCESS_NETWORK_STATE",
-
               "android.permission.CAMERA",
-
               "android.permission.RECORD_AUDIO",
-
               "android.permission.MODIFY_AUDIO_SETTINGS",
-
               "android.permission.POST_NOTIFICATIONS",
-
-              "android.permission.VIBRATE"
-
+              "android.permission.VIBRATE",
           ]
 
-          match = re.search(
-              r'(<manifest\b[^>]*>)',
-              text
-          )
+          # <manifest ...> chya nantar nahi, <application chya adhi taka
+          additions = [
+              f'    <uses-permission android:name="{p}" />'
+              for p in permissions
+              if p not in text
+          ]
 
-          if match:
-
-              additions = []
-
-              for permission in permissions:
-
-                  if permission not in text:
-
-                      additions.append(
-                          f'    <uses-permission '
-                          f'android:name="{permission}" />'
-                      )
-
-              if additions:
-
-                  text = (
-                      text[:match.end()]
-                      + "\n"
-                      + "\n".join(additions)
-                      + "\n"
-                      + text[match.end():]
-                  )
+          if additions:
+              idx = text.index("<application")
+              text = text[:idx] + "\n".join(additions).lstrip() + "\n\n    " + text[idx:]
 
           manifest.write_text(text)
-
+          print(text)
           PY
 
-
       # ==================================================
-      # CAMERA + MICROPHONE WEBVIEW
+      # MAINACTIVITY (Capacitor cha swatacha WebChromeClient todu nako)
+      # Camera/mic permission Capacitor swatah handle karto.
       # ==================================================
-
-      - name: Configure WebView camera microphone
+      - name: Write MainActivity
         run: |
-
           mkdir -p android/app/src/main/java/com/ramsena/xi
 
           cat > android/app/src/main/java/com/ramsena/xi/MainActivity.java <<'EOF'
-
           package com.ramsena.xi;
 
           import android.Manifest;
           import android.content.pm.PackageManager;
           import android.os.Bundle;
-          import android.webkit.PermissionRequest;
-          import android.webkit.WebChromeClient;
-          import android.webkit.WebView;
 
           import androidx.core.app.ActivityCompat;
           import androidx.core.content.ContextCompat;
@@ -327,421 +246,157 @@ jobs:
 
               private static final int REQUEST_MEDIA = 1001;
 
-
               @Override
               public void onCreate(Bundle savedInstanceState) {
-
                   super.onCreate(savedInstanceState);
 
+                  if (this.bridge != null && this.bridge.getWebView() != null) {
+                      this.bridge.getWebView()
+                          .getSettings()
+                          .setMediaPlaybackRequiresUserGesture(false);
+                  }
+
                   requestMediaPermissions();
-
-                  WebView webView =
-                      this.bridge.getWebView();
-
-
-                  webView.getSettings()
-                      .setJavaScriptEnabled(true);
-
-
-                  webView.getSettings()
-                      .setMediaPlaybackRequiresUserGesture(false);
-
-
-                  webView.setWebChromeClient(
-                      new WebChromeClient() {
-
-                          @Override
-                          public void onPermissionRequest(
-                              PermissionRequest request
-                          ) {
-
-                              runOnUiThread(() -> {
-
-                                  boolean camera =
-                                      ContextCompat.checkSelfPermission(
-                                          MainActivity.this,
-                                          Manifest.permission.CAMERA
-                                      ) == PackageManager.PERMISSION_GRANTED;
-
-
-                                  boolean microphone =
-                                      ContextCompat.checkSelfPermission(
-                                          MainActivity.this,
-                                          Manifest.permission.RECORD_AUDIO
-                                      ) == PackageManager.PERMISSION_GRANTED;
-
-
-                                  if (
-                                      camera &&
-                                      microphone
-                                  ) {
-
-                                      request.grant(
-                                          request.getResources()
-                                      );
-
-                                  }
-
-                                  else {
-
-                                      request.deny();
-
-                                  }
-
-                              });
-
-                          }
-
-                      }
-                  );
-
               }
 
-
               private void requestMediaPermissions() {
+                  boolean needCamera =
+                      ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                          != PackageManager.PERMISSION_GRANTED;
 
-                  boolean camera =
-                      ContextCompat.checkSelfPermission(
-                          this,
-                          Manifest.permission.CAMERA
-                      ) != PackageManager.PERMISSION_GRANTED;
+                  boolean needMic =
+                      ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                          != PackageManager.PERMISSION_GRANTED;
 
-
-                  boolean microphone =
-                      ContextCompat.checkSelfPermission(
-                          this,
-                          Manifest.permission.RECORD_AUDIO
-                      ) != PackageManager.PERMISSION_GRANTED;
-
-
-                  if (
-                      camera ||
-                      microphone
-                  ) {
-
+                  if (needCamera || needMic) {
                       ActivityCompat.requestPermissions(
                           this,
                           new String[] {
-
                               Manifest.permission.CAMERA,
-
                               Manifest.permission.RECORD_AUDIO
-
                           },
-
                           REQUEST_MEDIA
                       );
-
                   }
-
               }
-
-
-              @Override
-              public void onRequestPermissionsResult(
-                  int requestCode,
-                  String[] permissions,
-                  int[] grantResults
-              ) {
-
-                  super.onRequestPermissionsResult(
-                      requestCode,
-                      permissions,
-                      grantResults
-                  );
-
-
-                  if (
-                      requestCode ==
-                      REQUEST_MEDIA
-                  ) {
-
-                      if (
-                          this.bridge != null &&
-                          this.bridge.getWebView() != null
-                      ) {
-
-                          this.bridge
-                              .getWebView()
-                              .reload();
-
-                      }
-
-                  }
-
-              }
-
           }
-
           EOF
-
 
       # ==================================================
       # ONESIGNAL INITIALIZATION
       # ==================================================
-
       - name: Create OneSignal initialization
         run: |
-
           cat > onesignal-init.js <<'EOF'
+          import OneSignal from "onesignal-cordova-plugin";
 
-          import OneSignal from "@onesignal/capacitor-plugin";
+          const ONESIGNAL_APP_ID = "b09e5ecd-3f5e-4030-8ddf-96a8f1645e6e";
 
-
-          const ONESIGNAL_APP_ID =
-            "b09e5ecd-3f5e-4030-8ddf-96a8f1645e6e";
-
-
-          async function initOneSignal() {
-
-              try {
-
-                  await OneSignal.initialize({
-
-                      appId:
-                        ONESIGNAL_APP_ID
-
-                  });
-
-
-                  console.log(
-                      "OneSignal initialized"
-                  );
-
-
-                  const hasPermission =
-                      await OneSignal
-                          .Notifications
-                          .hasPermission();
-
-
-                  if (!hasPermission) {
-
-                      await OneSignal
-                          .Notifications
-                          .requestPermission(true);
-
-                  }
-
-
-                  const waitForSupabase =
-                      setInterval(
-                          async () => {
-
-                              try {
-
-                                  if (
-                                      typeof window.supabaseClient ===
-                                      "undefined"
-                                  ) {
-
-                                      return;
-
-                                  }
-
-
-                                  const {
-                                      data
-                                  } =
-                                      await window
-                                          .supabaseClient
-                                          .auth
-                                          .getSession();
-
-
-                                  if (
-                                      data &&
-                                      data.session &&
-                                      data.session.user
-                                  ) {
-
-                                      await OneSignal.login(
-
-                                          data
-                                              .session
-                                              .user
-                                              .id
-
-                                      );
-
-
-                                      console.log(
-                                          "OneSignal user linked:",
-                                          data.session.user.id
-                                      );
-
-
-                                      clearInterval(
-                                          waitForSupabase
-                                      );
-
-                                  }
-
-                              }
-
-                              catch(error) {
-
-                                  console.error(
-                                      "OneSignal Supabase sync error:",
-                                      error
-                                  );
-
-                              }
-
-                          },
-                          1000
-                      );
-
-
-                  setTimeout(
-                      () => {
-
-                          clearInterval(
-                              waitForSupabase
-                          );
-
-                      },
-                      30000
-                  );
-
-
-              }
-
-              catch(error) {
-
-                  console.error(
-                      "OneSignal initialization error:",
-                      error
-                  );
-
-              }
-
+          function isNativeApp() {
+            return !!(
+              window.Capacitor &&
+              typeof window.Capacitor.isNativePlatform === "function" &&
+              window.Capacitor.isNativePlatform()
+            );
           }
 
+          function linkSupabaseUser() {
+            const timer = setInterval(async () => {
+              try {
+                if (typeof window.supabaseClient === "undefined") return;
 
-          initOneSignal();
+                const { data } = await window.supabaseClient.auth.getSession();
 
+                if (data && data.session && data.session.user) {
+                  OneSignal.login(data.session.user.id);
+                  console.log("OneSignal user linked:", data.session.user.id);
+                  clearInterval(timer);
+                }
+              } catch (error) {
+                console.error("OneSignal Supabase sync error:", error);
+              }
+            }, 1000);
+
+            setTimeout(() => clearInterval(timer), 30000);
+          }
+
+          function initOneSignal() {
+            try {
+              OneSignal.initialize(ONESIGNAL_APP_ID);
+              console.log("OneSignal initialized");
+
+              OneSignal.Notifications.requestPermission(true);
+
+              linkSupabaseUser();
+            } catch (error) {
+              // OneSignal madhe error aala tari app crash hou naye
+              console.error("OneSignal initialization error:", error);
+            }
+          }
+
+          // Fakt Android app madhe chalva, browser madhe nahi
+          if (isNativeApp()) {
+            // Native bridge tayar hoyla thoda vel dya
+            window.addEventListener("load", () => setTimeout(initOneSignal, 1500));
+          }
           EOF
-
-
-      # ==================================================
-      # ESBUILD
-      # ==================================================
-
-      - name: Install esbuild
-        run: |
-          npm install --save-dev esbuild
-
-
-      # ==================================================
-      # BUILD ONESIGNAL
-      # ==================================================
 
       - name: Build OneSignal bundle
         run: |
-
           npx esbuild onesignal-init.js \
             --bundle \
-            --format=esm \
+            --format=iife \
             --platform=browser \
             --outfile=www/onesignal-init.bundle.js
 
-
-      # ==================================================
-      # INJECT ONESIGNAL
-      # ==================================================
-
       - name: Inject OneSignal into HTML pages
         run: |
-
           python3 - <<'PY'
-
           from pathlib import Path
 
+          script = '\n<script src="/onesignal-init.bundle.js"></script>\n'
 
-          for html in Path("www").glob("*.html"):
+          for html in Path("www").rglob("*.html"):
+              text = html.read_text(encoding="utf-8")
 
-              text = html.read_text(
-                  encoding="utf-8"
-              )
+              if "onesignal-init.bundle.js" in text:
+                  continue
 
+              if "</body>" in text:
+                  text = text.replace("</body>", script + "</body>", 1)
+              else:
+                  text += script
 
-              script = (
-                  '\n<script type="module" '
-                  'src="onesignal-init.bundle.js"></script>\n'
-              )
-
-
-              if (
-                  "onesignal-init.bundle.js"
-                  not in text
-              ):
-
-                  if "</body>" in text:
-
-                      text = text.replace(
-                          "</body>",
-                          script + "</body>"
-                      )
-
-                  else:
-
-                      text += script
-
-
-                  html.write_text(
-                      text,
-                      encoding="utf-8"
-                  )
-
+              html.write_text(text, encoding="utf-8")
+              print("Injected:", html)
           PY
-
 
       # ==================================================
       # SYNC CAPACITOR
       # ==================================================
-
       - name: Sync Capacitor
         run: |
-
           npx cap sync android
-
 
       # ==================================================
       # BUILD APK
       # ==================================================
-
       - name: Build APK
         run: |
-
           cd android
-
           chmod +x gradlew
-
-          ./gradlew assembleDebug
-
-
-      # ==================================================
-      # CHECK APK
-      # ==================================================
+          ./gradlew assembleDebug --stacktrace
 
       - name: Check APK
         run: |
-
-          ls -lh \
-            android/app/build/outputs/apk/debug/app-debug.apk
-
+          ls -lh android/app/build/outputs/apk/debug/app-debug.apk
 
       # ==================================================
       # UPLOAD APK
       # ==================================================
-
       - name: Upload APK
         uses: actions/upload-artifact@v4
-
         with:
-
           name: GYANSETU-APK
-
-          path:
-            android/app/build/outputs/apk/debug/app-debug.apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
