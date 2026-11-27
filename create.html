@@ -1,716 +1,219 @@
 <!DOCTYPE html>
 <html lang="mr">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>GyanSetu - Notes</title>
-
 <style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Arial,sans-serif;background:#eef4ff;color:#0f172a}
+.app{width:100%;max-width:430px;min-height:100vh;margin:auto;background:#f8fbff;padding-bottom:110px}
+button{font-family:inherit}
 
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#eef4ff;
-  color:#0f172a;
-}
-
-.app{
-  width:100%;
-  max-width:430px;
-  min-height:100vh;
-  margin:auto;
-  background:#f8fbff;
-  padding-bottom:110px;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-  background:linear-gradient(135deg,#155eef,#38bdf8);
-  color:white;
-  padding:18px 16px 22px;
-  border-radius:0 0 24px 24px;
-  box-shadow:0 8px 25px rgba(37,99,235,.20);
-}
-
-.header-top{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.back-btn{
-  width:42px;
-  height:42px;
-  border:0;
-  border-radius:50%;
-  background:rgba(255,255,255,.20);
-  color:white;
-  font-size:23px;
-  cursor:pointer;
-}
-
+/* HEADER */
+.header{position:relative;overflow:hidden;background:linear-gradient(135deg,#155eef,#38bdf8);color:#fff;padding:18px 16px 70px;border-radius:0 0 28px 28px;box-shadow:0 8px 25px rgba(37,99,235,.2)}
+.header:before,.header:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12)}
+.header:before{width:150px;height:150px;right:-40px;top:-50px}
+.header:after{width:90px;height:90px;left:-30px;bottom:-30px}
+.header-top{position:relative;display:flex;align-items:center;gap:12px;z-index:1}
+.back-btn{width:42px;height:42px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:23px;cursor:pointer}
 .header-title{flex:1}
-
-.header-title h2{
-  margin:0;
-  font-size:22px;
-}
-
-.header-title p{
-  margin:4px 0 0;
-  font-size:13px;
-  opacity:.9;
-}
-
+.header-title h2{margin:0;font-size:22px}
+.header-title p{margin:4px 0 0;font-size:13px;opacity:.9}
 .header-icon{font-size:31px}
+.quote{position:relative;z-index:1;margin-top:16px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);border-radius:14px;padding:10px 13px;font-size:13px;line-height:1.5}
 
-/* =========================
-   CONTENT
-========================= */
+/* STATS (header वर तरंगणारे) */
+.content{padding:0 17px 17px}
+.stats{display:flex;gap:9px;margin:-46px 0 18px;position:relative;z-index:2}
+.stat{flex:1;background:#fff;border-radius:16px;padding:12px 6px;text-align:center;box-shadow:0 8px 22px rgba(15,23,42,.09);border:1px solid #e5edf8}
+.stat b{display:block;font-size:22px;color:#155eef}
+.stat span{font-size:11px;color:#64748b}
 
-.content{padding:17px}
-
-/* =========================
-   EDITOR
-========================= */
-
-.editor-card{
-  background:white;
-  border-radius:22px;
-  padding:17px;
-  box-shadow:0 8px 25px rgba(15,23,42,.07);
-  border:1px solid #e5edf8;
-  margin-bottom:18px;
-}
-
-.editor-card.editing{
-  border-color:#3b82f6;
-  box-shadow:0 8px 25px rgba(59,130,246,.22);
-}
-
-.editor-heading{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-bottom:14px;
-}
-
-.editor-heading .icon{
-  width:42px;
-  height:42px;
-  border-radius:13px;
-  background:#e8f1ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-}
-
-.editor-heading h3{
-  margin:0;
-  font-size:17px;
-}
-
-.editor-heading p{
-  margin:3px 0 0;
-  font-size:12px;
-  color:#64748b;
-}
-
-.label{
-  font-size:12px;
-  font-weight:bold;
-  color:#64748b;
-  margin:0 0 7px;
-}
-
-/* TAG PICKER */
-
-.chips{
-  display:flex;
-  gap:7px;
-  overflow-x:auto;
-  padding-bottom:4px;
-  margin-bottom:12px;
-  scrollbar-width:none;
-}
-
+/* CHIPS */
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid #dce5f1;background:#fff;color:#475569;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:bold;cursor:pointer}
+.chip.on{background:linear-gradient(135deg,#155eef,#0ea5e9);border-color:transparent;color:#fff}
 
-.chip{
-  flex:none;
-  border:1px solid #dce5f1;
-  background:white;
-  color:#475569;
-  padding:8px 12px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-  cursor:pointer;
-  font-family:inherit;
-}
+/* SEARCH + SORT */
+.tools{display:flex;gap:8px;margin-bottom:12px}
+.search-box{position:relative;flex:1}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:17px}
+.search{width:100%;padding:13px 13px 13px 42px;border:1px solid #dce5f1;border-radius:14px;outline:none;font-size:14px;background:#fff}
+.sort{border:1px solid #dce5f1;border-radius:14px;background:#fff;font-size:13px;padding:0 8px;color:#475569;outline:none}
+.saved-top{display:flex;align-items:center;justify-content:space-between;margin:4px 0 12px}
+.saved-heading{font-size:18px;font-weight:bold}
+.note-count{background:#e8f1ff;color:#155eef;padding:5px 10px;border-radius:20px;font-size:12px;font-weight:bold}
 
-.chip.on{
-  background:linear-gradient(135deg,#155eef,#0ea5e9);
-  border-color:transparent;
-  color:white;
-}
-
-/* INPUT */
-
-.note-title{
-  width:100%;
-  border:2px solid #e5eaf2;
-  border-radius:14px;
-  padding:13px;
-  font-size:16px;
-  outline:none;
-  margin-bottom:10px;
-  background:#fbfdff;
-  font-family:Arial,sans-serif;
-}
-
-.note-text{
-  width:100%;
-  min-height:145px;
-  border:2px solid #e5eaf2;
-  border-radius:14px;
-  padding:13px;
-  font-size:15px;
-  outline:none;
-  resize:vertical;
-  font-family:Arial,sans-serif;
-  line-height:1.6;
-  background:#fbfdff;
-}
-
-.note-title:focus,
-.note-text:focus{
-  border-color:#3b82f6;
-  background:white;
-}
-
-.editor-meta{
-  display:flex;
-  justify-content:space-between;
-  margin-top:7px;
-  font-size:11px;
-  color:#94a3b8;
-}
-
-.draft-msg{color:#16a34a;font-weight:bold}
-
-/* BUTTONS */
-
-.editor-actions{
-  display:flex;
-  gap:8px;
-  margin-top:12px;
-}
-
-.save-btn{
-  flex:1;
-  border:0;
-  padding:14px;
-  border-radius:14px;
-  background:linear-gradient(135deg,#155eef,#0ea5e9);
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  box-shadow:0 7px 16px rgba(37,99,235,.22);
-  cursor:pointer;
-}
-
-.save-btn:active{transform:scale(.98)}
-
-.cancel-btn{
-  border:0;
-  padding:14px 16px;
-  border-radius:14px;
-  background:#f1f5f9;
-  color:#475569;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-/* =========================
-   SEARCH
-========================= */
-
-.search-box{
-  position:relative;
-  margin-bottom:12px;
-}
-
-.search-icon{
-  position:absolute;
-  left:14px;
-  top:50%;
-  transform:translateY(-50%);
-  font-size:18px;
-}
-
-.search{
-  width:100%;
-  padding:13px 13px 13px 43px;
-  border:1px solid #dce5f1;
-  border-radius:14px;
-  outline:none;
-  font-size:14px;
-  background:white;
-  box-shadow:0 5px 16px rgba(15,23,42,.04);
-}
-
-.filters{margin-bottom:14px}
-
-/* =========================
-   SAVED HEADING
-========================= */
-
-.saved-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-
-.saved-heading{
-  font-size:18px;
-  font-weight:bold;
-}
-
-.note-count{
-  background:#e8f1ff;
-  color:#155eef;
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:bold;
-}
-
-/* =========================
-   NOTE CARD
-========================= */
-
-.note-card{
-  background:white;
-  border-radius:18px;
-  padding:16px;
-  margin-bottom:12px;
-  border:1px solid #e3eaf4;
-  box-shadow:0 6px 20px rgba(15,23,42,.06);
-}
-
-.note-card.pinned{
-  border-color:#fbbf24;
-  background:#fffdf5;
-}
-
-.note-card-top{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-}
-
-.note-small-icon{
-  width:38px;
-  height:38px;
-  min-width:38px;
-  border-radius:11px;
-  background:#eff6ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:19px;
-}
-
-.note-info{
-  flex:1;
-  min-width:0;
-}
-
-.note-card h3{
-  margin:0;
-  font-size:16px;
-  word-break:break-word;
-}
-
-.note-date{
-  margin-top:4px;
-  color:#94a3b8;
-  font-size:11px;
-}
-
-.pin-btn{
-  border:0;
-  background:#f1f5f9;
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  font-size:16px;
-  cursor:pointer;
-  flex:none;
-  filter:grayscale(1);
-  opacity:.7;
-}
-
-.pin-btn.on{
-  background:#fef3c7;
-  filter:none;
-  opacity:1;
-}
-
-.tag-badge{
-  display:inline-block;
-  margin-top:8px;
-  padding:4px 10px;
-  border-radius:20px;
-  background:#e8f1ff;
-  color:#155eef;
-  font-size:11px;
-  font-weight:bold;
-}
-
-.note-body{
-  margin:12px 0 0;
-  color:#475569;
-  font-size:14px;
-  line-height:1.65;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-.note-body.clamp{
-  display:-webkit-box;
-  -webkit-line-clamp:5;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-
-.more-btn{
-  border:0;
-  background:none;
-  color:#155eef;
-  font-size:13px;
-  font-weight:bold;
-  padding:6px 0 0;
-  cursor:pointer;
-}
-
-.note-foot{
-  margin-top:10px;
-  font-size:11px;
-  color:#94a3b8;
-}
-
-.note-actions{
-  display:flex;
-  gap:7px;
-  margin-top:14px;
-}
-
-.note-actions button{
-  flex:1;
-  border:0;
-  padding:10px 4px;
-  border-radius:11px;
-  font-size:12px;
-  font-weight:bold;
-  cursor:pointer;
-}
-
+/* NOTE CARD — रंगीत spine */
+.note-card{position:relative;background:#fff;border-radius:18px;padding:15px 15px 13px 21px;margin-bottom:12px;border:1px solid #e3eaf4;box-shadow:0 6px 20px rgba(15,23,42,.06);overflow:hidden;animation:pop .35s ease both}
+.note-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--c)}
+.note-card.pinned{background:#fffdf5;border-color:#fbbf24}
+@keyframes pop{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
+.note-top{display:flex;align-items:flex-start;gap:10px;cursor:pointer}
+.note-info{flex:1;min-width:0}
+.note-card h3{margin:0;font-size:16px;word-break:break-word}
+.note-date{margin-top:4px;color:#94a3b8;font-size:11px}
+.pin-btn{border:0;background:#f1f5f9;width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer;flex:none;filter:grayscale(1);opacity:.7}
+.pin-btn.on{background:#fef3c7;filter:none;opacity:1}
+.tag-badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:20px;background:var(--c);color:#fff;font-size:11px;font-weight:bold}
+.read{font-size:11px;color:#94a3b8;margin-left:8px}
+.src{display:block;margin-top:8px;width:fit-content;max-width:100%;font-size:11px;font-weight:bold;color:#155eef;background:#eef4ff;border-radius:8px;padding:4px 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note-body{margin:10px 0 0;color:#475569;font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.note-actions{display:flex;gap:7px;margin-top:12px}
+.note-actions button{flex:1;border:0;padding:10px 4px;border-radius:11px;font-size:12px;font-weight:bold;cursor:pointer}
 .edit-btn{background:#e8f1ff;color:#155eef}
 .share-btn{background:#ecfdf5;color:#059669}
 .delete-btn{background:#fff0f0;color:#e53935}
 
-/* =========================
-   EMPTY
-========================= */
+.empty{background:#fff;border-radius:20px;padding:35px 15px;text-align:center;border:1px solid #e3eaf4}
+.empty-icon{width:65px;height:65px;margin:auto;border-radius:20px;background:#e8f1ff;display:flex;align-items:center;justify-content:center;font-size:32px}
+.empty h3{margin:13px 0 5px;font-size:17px}
+.empty p{margin:0;color:#94a3b8;font-size:13px}
 
-.empty{
-  background:white;
-  border-radius:20px;
-  padding:35px 15px;
-  text-align:center;
-  border:1px solid #e3eaf4;
-}
+/* FAB (nav च्या वर) */
+.fab{position:fixed;right:max(18px,calc(50% - 197px));bottom:calc(92px + env(safe-area-inset-bottom));z-index:40;height:54px;padding:0 20px;border:0;border-radius:27px;background:linear-gradient(135deg,#155eef,#0ea5e9);color:#fff;font-size:15px;font-weight:bold;box-shadow:0 10px 24px rgba(37,99,235,.4);cursor:pointer}
+.fab:active{transform:scale(.95)}
 
-.empty-icon{
-  width:65px;
-  height:65px;
-  margin:auto;
-  border-radius:20px;
-  background:#e8f1ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:32px;
-}
+/* POPUPS */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(15,23,42,.5);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center}
+.ov.show{display:flex;animation:fade .2s}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+@keyframes zoom{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.sheet{width:100%;max-width:430px;max-height:92vh;overflow-y:auto;background:#fff;border-radius:26px 26px 0 0;padding:10px 18px calc(22px + env(safe-area-inset-bottom));animation:up .32s cubic-bezier(.2,.9,.3,1)}
+.grab{width:44px;height:5px;border-radius:3px;background:#d5deea;margin:0 auto 14px}
+.sheet h3{margin:0 0 3px;font-size:19px}
+.sheet .sub{margin:0 0 14px;font-size:12px;color:#64748b}
+.label{font-size:12px;font-weight:bold;color:#64748b;margin:0 0 7px}
+.note-title,.note-text{width:100%;border:2px solid #e5eaf2;border-radius:14px;padding:13px;outline:none;background:#fbfdff;font-family:Arial,sans-serif}
+.note-title{font-size:16px;margin-bottom:10px}
+.note-text{min-height:150px;font-size:15px;line-height:1.6;resize:vertical}
+.note-title:focus,.note-text:focus{border-color:#3b82f6;background:#fff}
+.editor-meta{display:flex;justify-content:space-between;margin-top:7px;font-size:11px;color:#94a3b8}
+.draft-msg{color:#16a34a;font-weight:bold}
+.editor-actions{display:flex;gap:8px;margin-top:14px}
+.save-btn{flex:1;border:0;padding:14px;border-radius:14px;background:linear-gradient(135deg,#155eef,#0ea5e9);color:#fff;font-size:16px;font-weight:bold;box-shadow:0 7px 16px rgba(37,99,235,.22);cursor:pointer}
+.cancel-btn{border:0;padding:14px 16px;border-radius:14px;background:#f1f5f9;color:#475569;font-size:14px;font-weight:bold;cursor:pointer}
+.view-body{white-space:pre-wrap;word-break:break-word;line-height:1.75;font-size:15px;color:#334155;margin:12px 0 4px}
 
-.empty h3{
-  margin:13px 0 5px;
-  font-size:17px;
-}
+.dialog{width:calc(100% - 44px);max-width:340px;margin:auto;background:#fff;border-radius:24px;padding:24px 20px 18px;text-align:center;animation:zoom .25s cubic-bezier(.3,1.4,.5,1)}
+.ov.center{align-items:center}
+.dialog .big{font-size:42px}
+.dialog h3{margin:8px 0 6px}
+.dialog p{margin:0 0 18px;color:#64748b;font-size:14px;line-height:1.5}
+.dialog .row{display:flex;gap:8px}
+.dialog .row button{flex:1;border:0;padding:13px;border-radius:13px;font-weight:bold;font-size:14px;cursor:pointer}
+.no{background:#f1f5f9;color:#475569}
+.yes{background:#e53935;color:#fff}
 
-.empty p{
-  margin:0;
-  color:#94a3b8;
-  font-size:13px;
-}
+/* TOAST */
+.toast{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(30px);width:calc(100% - 35px);max-width:395px;background:#0f172a;color:#fff;padding:12px 16px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:14px;box-shadow:0 10px 30px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:.3s;z-index:9999}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.toast button{border:0;background:rgba(255,255,255,.18);color:#7dd3fc;font-weight:bold;font-size:13px;padding:6px 12px;border-radius:9px;cursor:pointer}
 
-/* =========================
-   TOAST (nav च्या वर)
-========================= */
-
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:calc(98px + env(safe-area-inset-bottom));
-  transform:translateX(-50%) translateY(30px);
-  width:calc(100% - 35px);
-  max-width:395px;
-  background:#0f172a;
-  color:white;
-  padding:12px 16px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:14px;
-  font-size:14px;
-  box-shadow:0 10px 30px rgba(0,0,0,.20);
-  opacity:0;
-  pointer-events:none;
-  transition:.3s;
-  z-index:9999;
-}
-
-.toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
-  pointer-events:auto;
-}
-
-.toast button{
-  border:0;
-  background:rgba(255,255,255,.18);
-  color:#7dd3fc;
-  font-weight:bold;
-  font-size:13px;
-  padding:6px 12px;
-  border-radius:9px;
-  cursor:pointer;
-}
-
-/* =========================
-   BOTTOM NAV - LIQUID GLASS
-========================= */
-
-.nav{
-  position:fixed;
-  left:14px;
-  right:14px;
-  max-width:420px;
-  margin:0 auto;
-  bottom:calc(12px + env(safe-area-inset-bottom));
-  height:66px;
-  padding:6px;
-  display:flex;
-  border-radius:33px;
-  z-index:50;
-  background:rgba(255,255,255,.5);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-  backdrop-filter:blur(22px) saturate(180%);
-  border:1px solid rgba(255,255,255,.85);
-  box-shadow:0 12px 32px rgba(61,108,255,.22),0 2px 8px rgba(255,45,135,.12),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4);
-}
-
-.nav .ind{
-  position:absolute;
-  top:6px;
-  bottom:6px;
-  left:6px;
-  width:calc((100% - 12px)/var(--n,5));
-  border-radius:27px;
-  background:linear-gradient(135deg,rgba(255,45,135,.20),rgba(61,108,255,.20));
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),inset 0 6px 10px rgba(255,255,255,.55),0 4px 14px rgba(61,108,255,.2);
-  transform:translateX(calc(var(--i,0)*100%));
-  transition:transform .42s cubic-bezier(.34,1.45,.64,1);
-}
-
-.nav.press .ind{
-  transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12);
-}
-
-.nav button{
-  position:relative;
-  z-index:1;
-  flex:1;
-  border:0;
-  background:none;
-  font:inherit;
-  cursor:pointer;
-  color:#6f7893;
-  font-size:11px;
-  font-weight:600;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:2px;
-  transition:color .25s;
-}
-
-.nav button span{
-  font-size:22px;
-  transition:transform .3s;
-}
-
+/* BOTTOM NAV - LIQUID GLASS (जसाच्या तसा) */
+.nav{position:fixed;left:14px;right:14px;max-width:420px;margin:0 auto;bottom:calc(12px + env(safe-area-inset-bottom));height:66px;padding:6px;display:flex;border-radius:33px;z-index:50;background:rgba(255,255,255,.5);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.85);box-shadow:0 12px 32px rgba(61,108,255,.22),0 2px 8px rgba(255,45,135,.12),inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.4)}
+.nav .ind{position:absolute;top:6px;bottom:6px;left:6px;width:calc((100% - 12px)/var(--n,5));border-radius:27px;background:linear-gradient(135deg,rgba(255,45,135,.20),rgba(61,108,255,.20));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),inset 0 6px 10px rgba(255,255,255,.55),0 4px 14px rgba(61,108,255,.2);transform:translateX(calc(var(--i,0)*100%));transition:transform .42s cubic-bezier(.34,1.45,.64,1)}
+.nav.press .ind{transform:translateX(calc(var(--i,0)*100%)) scale(1.08,1.12)}
+.nav button{position:relative;z-index:1;flex:1;border:0;background:none;font:inherit;cursor:pointer;color:#6f7893;font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:color .25s}
+.nav button span{font-size:22px;transition:transform .3s}
 .nav button.active{color:#ff1493}
-
-.nav button.active span{
-  transform:translateY(-1px) scale(1.12);
-}
-
+.nav button.active span{transform:translateY(-1px) scale(1.12)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
-
 </head>
-
-
 <body>
-
 <div class="app">
 
-
-<!-- =========================
-     HEADER
-========================= -->
-
 <div class="header">
-
   <div class="header-top">
-
     <button class="back-btn" onclick="history.back()">←</button>
-
     <div class="header-title">
       <h2>📝 My Notes</h2>
       <p>तुमच्या Notes तयार करा आणि जतन करा</p>
     </div>
-
     <div class="header-icon">📚</div>
-
   </div>
-
+  <div class="quote" id="quote"></div>
 </div>
-
 
 <div class="content">
 
+  <div class="stats">
+    <div class="stat"><b id="sNotes">0</b><span>Notes</span></div>
+    <div class="stat"><b id="sWords">0</b><span>एकूण शब्द</span></div>
+    <div class="stat"><b id="sPins">0</b><span>📌 Pinned</span></div>
+  </div>
 
-<!-- =========================
-     NOTE EDITOR
-========================= -->
-
-<div class="editor-card" id="editorCard">
-
-  <div class="editor-heading">
-
-    <div class="icon">✍️</div>
-
-    <div>
-      <h3 id="editorHeading">नवीन Note</h3>
-      <p>तुमचे महत्त्वाचे विचार इथे लिहा</p>
+  <div class="tools">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchNotes" class="search" placeholder="Notes शोधा..." oninput="displayNotes()">
     </div>
-
+    <select class="sort" id="sortMode" onchange="displayNotes()" aria-label="Sort">
+      <option value="new">🕒 नवीन</option>
+      <option value="old">⏳ जुनी</option>
+      <option value="az">🔤 A-Z</option>
+    </select>
   </div>
 
-  <div class="label">विषय निवडा</div>
-  <div class="chips" id="tagPicker"></div>
+  <div class="chips" id="filterChips"></div>
 
-  <input
-    type="text"
-    id="noteTitle"
-    class="note-title"
-    maxlength="100"
-    placeholder="Note चे नाव..."
-    oninput="onEditorInput()">
-
-  <textarea
-    id="noteText"
-    class="note-text"
-    placeholder="तुमची Note इथे लिहा..."
-    oninput="onEditorInput()"></textarea>
-
-  <div class="editor-meta">
-    <span id="counter">0 शब्द • 0 अक्षरे</span>
-    <span id="draftMsg" class="draft-msg"></span>
+  <div class="saved-top">
+    <div class="saved-heading">📚 Saved Notes</div>
+    <div class="note-count" id="noteCount">0 Notes</div>
   </div>
+  <div id="notesList"></div>
+</div>
 
-  <div class="editor-actions">
+<button class="fab" onclick="openEditor()">✍️ नवीन Note</button>
 
-    <button class="save-btn" id="saveBtn" onclick="saveNote()">💾 Save Note</button>
-
-    <button class="cancel-btn" id="cancelBtn" style="display:none" onclick="cancelEdit()">Cancel</button>
-
+<!-- EDITOR POPUP -->
+<div class="ov" id="editorOv" onclick="if(event.target===this)closeEditor()">
+  <div class="sheet" id="editorCard">
+    <div class="grab"></div>
+    <h3 id="editorHeading">नवीन Note</h3>
+    <p class="sub">तुमचे महत्त्वाचे विचार इथे लिहा</p>
+    <div class="label">विषय निवडा</div>
+    <div class="chips" id="tagPicker"></div>
+    <input type="text" id="noteTitle" class="note-title" maxlength="100" placeholder="Note चे नाव..." oninput="onEditorInput()">
+    <textarea id="noteText" class="note-text" placeholder="तुमची Note इथे लिहा..." oninput="onEditorInput()"></textarea>
+    <div class="editor-meta"><span id="counter">0 शब्द • 0 अक्षरे</span><span id="draftMsg" class="draft-msg"></span></div>
+    <div class="editor-actions">
+      <button class="save-btn" id="saveBtn" onclick="saveNote()">💾 Save Note</button>
+      <button class="cancel-btn" onclick="closeEditor()">बंद</button>
+    </div>
   </div>
-
 </div>
 
-
-<!-- =========================
-     SEARCH + FILTER
-========================= -->
-
-<div class="search-box">
-
-  <span class="search-icon">🔍</span>
-
-  <input
-    type="text"
-    id="searchNotes"
-    class="search"
-    placeholder="तुमच्या Notes शोधा..."
-    oninput="displayNotes()">
-
+<!-- VIEW POPUP -->
+<div class="ov" id="viewOv" onclick="if(event.target===this)closeView()">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h3 id="vTitle"></h3>
+    <div><span class="tag-badge" id="vTag"></span><span class="read" id="vMeta"></span></div>
+    <div class="view-body" id="vBody"></div>
+    <div class="editor-actions">
+      <button class="save-btn" id="vEdit">✏️ Edit</button>
+      <button class="cancel-btn" onclick="closeView()">बंद</button>
+    </div>
+  </div>
 </div>
 
-<div class="chips filters" id="filterChips"></div>
-
-
-<!-- =========================
-     SAVED NOTES
-========================= -->
-
-<div class="saved-top">
-
-  <div class="saved-heading">📚 Saved Notes</div>
-
-  <div class="note-count" id="noteCount">0 Notes</div>
-
+<!-- DELETE CONFIRM POPUP -->
+<div class="ov center" id="delOv" onclick="if(event.target===this)closeDel()">
+  <div class="dialog">
+    <div class="big">🗑️</div>
+    <h3>Note Delete करायची?</h3>
+    <p id="delName"></p>
+    <div class="row">
+      <button class="no" onclick="closeDel()">नको</button>
+      <button class="yes" id="delYes">हो, Delete</button>
+    </div>
+  </div>
 </div>
-
-<div id="notesList"></div>
-
-
-</div>
-
-
-<!-- =========================
-     BOTTOM NAV (liquid glass)
-========================= -->
 
 <nav class="nav" id="nav" style="--i:2;--n:5">
   <span class="ind"></span>
@@ -721,20 +224,12 @@ body{
   <button aria-label="Profile" onclick="navTo(4,'profile.html')"><span>👤</span>Profile</button>
 </nav>
 
-
 </div>
 
-
-<!-- TOAST -->
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
 
-
 <script>
-
-/* =========================
-   NAVIGATION (liquid nav)
-========================= */
-
+/* NAVIGATION (liquid nav) */
 function navTo(i,url){
   const n=document.getElementById('nav');
   if(n.style.getPropertyValue('--i')==String(i))return;
@@ -745,7 +240,6 @@ function navTo(i,url){
   setTimeout(()=>n.classList.remove('press'),220);
   setTimeout(()=>{location.href=url},250);
 }
-
 (function(){
   const n=document.getElementById('nav');
   const cur=n.style.getPropertyValue('--i').trim();
@@ -758,473 +252,250 @@ function navTo(i,url){
   try{sessionStorage.setItem('navIdx',cur)}catch(e){}
 })();
 
-
-/* =========================
-   DATA
-========================= */
-
-const NOTES_KEY="gyansetu_notes";
-const DRAFT_KEY="gyansetu_note_draft";
-
+/* DATA */
+const NOTES_KEY="gyansetu_notes",DRAFT_KEY="gyansetu_note_draft";
 const TAGS=[
-  {k:"general",l:"🗒️ सामान्य"},
-  {k:"math",l:"➗ Math"},
-  {k:"science",l:"🔬 Science"},
-  {k:"social",l:"🌍 Social"},
-  {k:"lang",l:"🗣️ Language"},
-  {k:"exam",l:"🎯 Exam"}
+  {k:"general",l:"🗒️ सामान्य",c:"#64748b"},
+  {k:"math",l:"➗ Math",c:"#f59e0b"},
+  {k:"science",l:"🔬 Science",c:"#10b981"},
+  {k:"social",l:"🌍 Social",c:"#8b5cf6"},
+  {k:"lang",l:"🗣️ Language",c:"#ec4899"},
+  {k:"exam",l:"🎯 Exam",c:"#ef4444"}
 ];
-
-function tagLabel(k){
-  const t=TAGS.find(x=>x.k===k);
-  return t?t.l:TAGS[0].l;
-}
+const QUOTES=[
+  "📖 रोज थोडं लिहा, खूप शिका.",
+  "✨ लिहिलेलं लक्षात राहतं.",
+  "🌱 छोट्या Notes मधूनच मोठं ज्ञान तयार होतं.",
+  "🎯 आजची Note, उद्याच्या परीक्षेची तयारी.",
+  "💡 एक चांगला विचार लगेच जतन करा."
+];
+const tagOf=k=>TAGS.find(x=>x.k===k)||TAGS[0];
 
 function loadNotes(){
   let arr=[];
   try{arr=JSON.parse(localStorage.getItem(NOTES_KEY))||[]}catch(e){arr=[]}
-  /* जुन्या notes साठी नवीन fields भरतो */
-  return arr.map(function(n){
-    return {
-      id:n.id,
-      title:n.title||"Untitled Note",
-      text:n.text||"",
-      tag:n.tag||"general",
-      pinned:!!n.pinned,
-      created:n.created||n.id,
-      updated:n.updated||n.id
-    };
-  });
+  return arr.map(n=>({id:n.id,title:n.title||"Untitled Note",text:n.text||"",tag:n.tag||"general",pinned:!!n.pinned,created:n.created||n.id,updated:n.updated||n.id,src:n.src||""}));
 }
-
 function persist(){
-  try{localStorage.setItem(NOTES_KEY,JSON.stringify(notes))}catch(e){
-    showToast("⚠️ Storage भरलं आहे, Note save झाली नाही.");
-  }
+  try{localStorage.setItem(NOTES_KEY,JSON.stringify(notes))}catch(e){showToast("⚠️ Storage भरलं आहे, Note save झाली नाही.")}
 }
+let notes=loadNotes(),editingId=null,selectedTag="general",filterTag="all",lastDeleted=null,delId=null;
 
-let notes=loadNotes();
-let editingId=null;
-let selectedTag="general";
-let filterTag="all";
-let expanded=new Set();
-let lastDeleted=null;
-
-
-/* =========================
-   TOAST
-========================= */
-
+/* TOAST */
 let toastTimer;
-
 function showToast(message,actionLabel,actionFn){
   const toast=document.getElementById("toast");
   toast.innerHTML="";
-  const s=document.createElement("span");
-  s.textContent=message;
-  toast.appendChild(s);
+  const s=document.createElement("span");s.textContent=message;toast.appendChild(s);
   if(actionLabel){
-    const b=document.createElement("button");
-    b.textContent=actionLabel;
-    b.onclick=function(){
-      toast.classList.remove("show");
-      actionFn();
-    };
+    const b=document.createElement("button");b.textContent=actionLabel;
+    b.onclick=function(){toast.classList.remove("show");actionFn()};
     toast.appendChild(b);
   }
   toast.classList.add("show");
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(function(){
-    toast.classList.remove("show");
-  },actionLabel?5000:2200);
+  toastTimer=setTimeout(()=>toast.classList.remove("show"),actionLabel?5000:2200);
 }
 
+/* POPUP HELPERS */
+const $=id=>document.getElementById(id);
+const open_=id=>$(id).classList.add("show"),close_=id=>$(id).classList.remove("show");
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeEditor();closeView();closeDel()}});
 
-/* =========================
-   TAG PICKER + FILTERS
-========================= */
-
+/* CHIPS */
 function drawTagPicker(){
-  document.getElementById("tagPicker").innerHTML=TAGS.map(function(t){
-    return '<button type="button" class="chip'+(t.k===selectedTag?' on':'')+'" onclick="pickTag(\''+t.k+'\')">'+t.l+'</button>';
-  }).join("");
+  $("tagPicker").innerHTML=TAGS.map(t=>'<button type="button" class="chip'+(t.k===selectedTag?' on':'')+'" onclick="pickTag(\''+t.k+'\')">'+t.l+'</button>').join("");
 }
-
-function pickTag(k){
-  selectedTag=k;
-  drawTagPicker();
-  onEditorInput();
-}
-
+function pickTag(k){selectedTag=k;drawTagPicker();onEditorInput()}
 function drawFilters(){
   const all=[{k:"all",l:"सर्व"},{k:"pinned",l:"📌 Pinned"}].concat(TAGS);
-  document.getElementById("filterChips").innerHTML=all.map(function(t){
-    return '<button type="button" class="chip'+(t.k===filterTag?' on':'')+'" onclick="setFilter(\''+t.k+'\')">'+t.l+'</button>';
-  }).join("");
+  $("filterChips").innerHTML=all.map(t=>'<button type="button" class="chip'+(t.k===filterTag?' on':'')+'" onclick="setFilter(\''+t.k+'\')">'+t.l+'</button>').join("");
 }
+function setFilter(k){filterTag=k;drawFilters();displayNotes()}
 
-function setFilter(k){
-  filterTag=k;
-  drawFilters();
-  displayNotes();
-}
-
-
-/* =========================
-   EDITOR HELPERS
-========================= */
-
+/* EDITOR */
 function updateCounter(){
-  const text=document.getElementById("noteText").value;
-  const words=text.trim()?text.trim().split(/\s+/).length:0;
-  document.getElementById("counter").textContent=words+" शब्द • "+text.length+" अक्षरे";
+  const text=$("noteText").value;
+  $("counter").textContent=wordCount(text)+" शब्द • "+text.length+" अक्षरे";
 }
-
 let draftTimer;
-
 function onEditorInput(){
   updateCounter();
   if(editingId!==null)return;
-  /* नवीन note चा draft आपोआप save होतो */
   clearTimeout(draftTimer);
   draftTimer=setTimeout(function(){
-    const title=document.getElementById("noteTitle").value;
-    const text=document.getElementById("noteText").value;
+    const title=$("noteTitle").value,text=$("noteText").value;
     try{
       if(title.trim()||text.trim()){
         localStorage.setItem(DRAFT_KEY,JSON.stringify({title:title,text:text,tag:selectedTag}));
-        const m=document.getElementById("draftMsg");
-        m.textContent="✓ Draft saved";
-        setTimeout(function(){m.textContent=""},1500);
-      }else{
-        localStorage.removeItem(DRAFT_KEY);
-      }
+        const m=$("draftMsg");m.textContent="✓ Draft saved";
+        setTimeout(()=>m.textContent="",1500);
+      }else localStorage.removeItem(DRAFT_KEY);
     }catch(e){}
   },500);
 }
-
-function restoreDraft(){
+function openEditor(){
+  clearEditor();
   try{
     const d=JSON.parse(localStorage.getItem(DRAFT_KEY));
     if(d&&(d.title||d.text)){
-      document.getElementById("noteTitle").value=d.title||"";
-      document.getElementById("noteText").value=d.text||"";
-      selectedTag=d.tag||"general";
+      $("noteTitle").value=d.title||"";$("noteText").value=d.text||"";
+      selectedTag=d.tag||"general";drawTagPicker();updateCounter();
       showToast("📝 तुमचा अपूर्ण Draft परत आणला.");
     }
   }catch(e){}
+  open_("editorOv");
 }
-
-
-/* =========================
-   SAVE
-========================= */
+function closeEditor(){close_("editorOv")}
 
 function saveNote(){
-
-  const title=document.getElementById("noteTitle").value.trim();
-  const text=document.getElementById("noteText").value.trim();
-
-  if(!title&&!text){
-    showToast("✍️ आधी काहीतरी लिहा.");
-    return;
-  }
-
+  const title=$("noteTitle").value.trim(),text=$("noteText").value.trim();
+  if(!title&&!text){showToast("✍️ आधी काहीतरी लिहा.");return}
   const now=Date.now();
-
   if(editingId!==null){
     const n=notes.find(x=>x.id===editingId);
-    if(n){
-      n.title=title||"Untitled Note";
-      n.text=text;
-      n.tag=selectedTag;
-      n.updated=now;
-    }
+    if(n){n.title=title||"Untitled Note";n.text=text;n.tag=selectedTag;n.updated=now}
     showToast("✅ Note Update झाली.");
   }else{
-    notes.unshift({
-      id:now,
-      title:title||"Untitled Note",
-      text:text,
-      tag:selectedTag,
-      pinned:false,
-      created:now,
-      updated:now
-    });
-    showToast("💾 Note Save झाली.");
+    notes.unshift({id:now,title:title||"Untitled Note",text:text,tag:selectedTag,pinned:false,created:now,updated:now});
+    showToast("🎉 Note Save झाली!");
   }
-
   persist();
   try{localStorage.removeItem(DRAFT_KEY)}catch(e){}
-  clearEditor();
-  displayNotes();
+  clearEditor();closeEditor();displayNotes();
+}
+function clearEditor(){
+  $("noteTitle").value="";$("noteText").value="";
+  $("editorHeading").textContent="नवीन Note";
+  $("saveBtn").textContent="💾 Save Note";
+  editingId=null;selectedTag="general";drawTagPicker();updateCounter();
+}
+function editNote(id){
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  closeView();
+  $("noteTitle").value=n.title;$("noteText").value=n.text;
+  selectedTag=n.tag;editingId=id;
+  drawTagPicker();updateCounter();
+  $("editorHeading").textContent="Note Edit करा";
+  $("saveBtn").textContent="✏️ Update Note";
+  open_("editorOv");
 }
 
-
-/* =========================
-   DISPLAY
-========================= */
-
+/* DISPLAY */
 function fmtDate(ts){
   try{return new Date(ts).toLocaleString("mr-IN",{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"})}
   catch(e){return new Date(ts).toLocaleString()}
 }
+function wordCount(t){t=t.trim();return t?t.split(/\s+/).length:0}
+function readTime(t){return Math.max(1,Math.round(wordCount(t)/120))+" मिनिट वाचन"}
+
+function updateStats(){
+  $("sNotes").textContent=notes.length;
+  $("sWords").textContent=notes.reduce((a,n)=>a+wordCount(n.text),0);
+  $("sPins").textContent=notes.filter(n=>n.pinned).length;
+}
 
 function displayNotes(){
-
-  const list=document.getElementById("notesList");
-  const q=document.getElementById("searchNotes").value.toLowerCase().trim();
-
-  let filtered=notes.filter(function(n){
+  const list=$("notesList"),q=$("searchNotes").value.toLowerCase().trim(),mode=$("sortMode").value;
+  updateStats();
+  let f=notes.filter(function(n){
     if(filterTag==="pinned"&&!n.pinned)return false;
     if(filterTag!=="all"&&filterTag!=="pinned"&&n.tag!==filterTag)return false;
-    return !q||n.title.toLowerCase().includes(q)||n.text.toLowerCase().includes(q);
+    return !q||n.title.toLowerCase().includes(q)||n.text.toLowerCase().includes(q)||(n.src||"").toLowerCase().includes(q);
   });
-
-  /* Pinned आधी, मग नवीनतम */
-  filtered.sort(function(a,b){
+  f.sort(function(a,b){
     if(a.pinned!==b.pinned)return a.pinned?-1:1;
+    if(mode==="old")return a.updated-b.updated;
+    if(mode==="az")return a.title.localeCompare(b.title);
     return b.updated-a.updated;
   });
-
-  document.getElementById("noteCount").textContent=
-    filtered.length+(filtered.length===1?" Note":" Notes");
-
-  if(filtered.length===0){
-    list.innerHTML=`
-      <div class="empty">
-        <div class="empty-icon">📝</div>
-        <h3>${(q||filterTag!=="all")?"काहीही सापडलं नाही":"अजून कोणतीही Note नाही"}</h3>
-        <p>${(q||filterTag!=="all")?"दुसरा शब्द किंवा filter वापरून बघा.":"वरून तुमची पहिली Note लिहायला सुरुवात करा."}</p>
-      </div>`;
+  $("noteCount").textContent=f.length+(f.length===1?" Note":" Notes");
+  if(!f.length){
+    const s=q||filterTag!=="all";
+    list.innerHTML='<div class="empty"><div class="empty-icon">📝</div><h3>'+(s?"काहीही सापडलं नाही":"अजून कोणतीही Note नाही")+'</h3><p>'+(s?"दुसरा शब्द किंवा filter वापरून बघा.":"खालच्या ✍️ बटणावर टॅप करून पहिली Note लिहा.")+'</p></div>';
     return;
   }
-
-  list.innerHTML=filtered.map(function(n){
-
-    const long=n.text.length>220||n.text.split("\n").length>5;
-    const open=expanded.has(n.id);
-    const edited=n.updated!==n.created?" • ✏️ Edited":"";
-
-    return `
-      <div class="note-card${n.pinned?" pinned":""}">
-
-        <div class="note-card-top">
-
-          <div class="note-small-icon">${n.pinned?"📌":"📝"}</div>
-
-          <div class="note-info">
-            <h3>${escapeHTML(n.title)}</h3>
-            <div class="note-date">🕒 ${escapeHTML(fmtDate(n.updated))}${edited}</div>
-          </div>
-
-          <button class="pin-btn${n.pinned?" on":""}" onclick="togglePin(${n.id})" aria-label="Pin">📌</button>
-
-        </div>
-
-        <span class="tag-badge">${escapeHTML(tagLabel(n.tag))}</span>
-
-        <p class="note-body${long&&!open?" clamp":""}">${escapeHTML(n.text)}</p>
-
-        ${long?`<button class="more-btn" onclick="toggleMore(${n.id})">${open?"कमी दाखवा ▲":"अधिक वाचा ▼"}</button>`:""}
-
-        <div class="note-foot">${wordCount(n.text)} शब्द</div>
-
-        <div class="note-actions">
-          <button class="edit-btn" onclick="editNote(${n.id})">✏️ Edit</button>
-          <button class="share-btn" onclick="shareNote(${n.id})">📤 Share</button>
-          <button class="delete-btn" onclick="deleteNote(${n.id})">🗑️ Delete</button>
-        </div>
-
-      </div>`;
-
+  list.innerHTML=f.map(function(n){
+    const t=tagOf(n.tag),edited=n.updated!==n.created?" • ✏️ Edited":"";
+    return '<div class="note-card'+(n.pinned?" pinned":"")+'" style="--c:'+t.c+'">'
+    +'<div class="note-top" onclick="viewNote('+n.id+')"><div class="note-info"><h3>'+escapeHTML(n.title)+'</h3><div class="note-date">🕒 '+escapeHTML(fmtDate(n.updated))+edited+'</div></div>'
+    +'<button class="pin-btn'+(n.pinned?" on":"")+'" onclick="event.stopPropagation();togglePin('+n.id+')" aria-label="Pin">📌</button></div>'
+    +'<span class="tag-badge">'+escapeHTML(t.l)+'</span><span class="read">'+wordCount(n.text)+' शब्द • '+readTime(n.text)+'</span>'
+    +(n.src?'<span class="src">🎥 '+escapeHTML(n.src)+'</span>':'')
+    +'<p class="note-body" onclick="viewNote('+n.id+')">'+escapeHTML(n.text)+'</p>'
+    +'<div class="note-actions"><button class="edit-btn" onclick="editNote('+n.id+')">✏️ Edit</button><button class="share-btn" onclick="shareNote('+n.id+')">📤 Share</button><button class="delete-btn" onclick="askDelete('+n.id+')">🗑️ Delete</button></div></div>';
   }).join("");
-
-}
-
-function wordCount(t){
-  t=t.trim();
-  return t?t.split(/\s+/).length:0;
-}
-
-function toggleMore(id){
-  if(expanded.has(id))expanded.delete(id);else expanded.add(id);
-  displayNotes();
 }
 
 function togglePin(id){
-  const n=notes.find(x=>x.id===id);
-  if(!n)return;
-  n.pinned=!n.pinned;
-  persist();
-  displayNotes();
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  n.pinned=!n.pinned;persist();displayNotes();
   showToast(n.pinned?"📌 Note वर pin केली.":"Pin काढली.");
 }
 
-
-/* =========================
-   EDIT
-========================= */
-
-function editNote(id){
-
-  const n=notes.find(x=>x.id===id);
-  if(!n)return;
-
-  document.getElementById("noteTitle").value=n.title;
-  document.getElementById("noteText").value=n.text;
-  selectedTag=n.tag;
-  editingId=id;
-
-  drawTagPicker();
-  updateCounter();
-
-  document.getElementById("editorHeading").textContent="Note Edit करा";
-  document.getElementById("saveBtn").textContent="✏️ Update Note";
-  document.getElementById("cancelBtn").style.display="block";
-  document.getElementById("editorCard").classList.add("editing");
-
-  window.scrollTo({top:0,behavior:"smooth"});
-  showToast("✏️ Note Edit Mode सुरू.");
-
+/* VIEW POPUP */
+function viewNote(id){
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  const t=tagOf(n.tag);
+  $("vTitle").textContent=n.title;
+  $("vTag").textContent=t.l;$("vTag").style.setProperty("--c",t.c);
+  $("vMeta").textContent=wordCount(n.text)+" शब्द • "+readTime(n.text)+(n.src?" • 🎥 "+n.src:"");
+  $("vBody").textContent=n.text||"(रिकामी Note)";
+  $("vEdit").onclick=()=>editNote(id);
+  open_("viewOv");
 }
+function closeView(){close_("viewOv")}
 
-function cancelEdit(){
-  clearEditor();
-  restoreDraftSilently();
-  showToast("Edit रद्द केलं.");
+/* DELETE POPUP (Undo सह) */
+function askDelete(id){
+  const n=notes.find(x=>x.id===id);if(!n)return;
+  delId=id;$("delName").textContent="“"+n.title+"” कायमची काढली जाईल. (नंतर Undo करता येईल)";
+  $("delYes").onclick=function(){const i=delId;closeDel();deleteNote(i)};
+  open_("delOv");
 }
-
-function restoreDraftSilently(){
-  try{
-    const d=JSON.parse(localStorage.getItem(DRAFT_KEY));
-    if(d){
-      document.getElementById("noteTitle").value=d.title||"";
-      document.getElementById("noteText").value=d.text||"";
-      selectedTag=d.tag||"general";
-      drawTagPicker();
-      updateCounter();
-    }
-  }catch(e){}
-}
-
-
-/* =========================
-   DELETE (Undo सह)
-========================= */
-
+function closeDel(){close_("delOv");delId=null}
 function deleteNote(id){
-
-  const i=notes.findIndex(x=>x.id===id);
-  if(i===-1)return;
-
-  lastDeleted=notes[i];
-  notes.splice(i,1);
-
-  if(editingId===id)clearEditor();
-
-  persist();
-  displayNotes();
-
+  const i=notes.findIndex(x=>x.id===id);if(i===-1)return;
+  lastDeleted=notes[i];notes.splice(i,1);
+  persist();displayNotes();
   showToast("🗑️ Note Delete झाली.","Undo",function(){
-    if(lastDeleted){
-      notes.push(lastDeleted);
-      lastDeleted=null;
-      persist();
-      displayNotes();
-      showToast("↩️ Note परत आली.");
-    }
+    if(lastDeleted){notes.push(lastDeleted);lastDeleted=null;persist();displayNotes();showToast("↩️ Note परत आली.")}
   });
-
 }
 
-
-/* =========================
-   SHARE / COPY
-========================= */
-
+/* SHARE */
 async function shareNote(id){
-
-  const n=notes.find(x=>x.id===id);
-  if(!n)return;
-
+  const n=notes.find(x=>x.id===id);if(!n)return;
   const body=n.title+"\n\n"+n.text+"\n\n— GyanSetu";
-
   if(navigator.share){
-    try{
-      await navigator.share({title:n.title,text:body});
-      return;
-    }catch(e){
-      if(e&&e.name==="AbortError")return;
-    }
+    try{await navigator.share({title:n.title,text:body});return}
+    catch(e){if(e&&e.name==="AbortError")return}
   }
-
-  try{
-    await navigator.clipboard.writeText(body);
-    showToast("📋 Note copy झाली.");
-  }catch(e){
+  try{await navigator.clipboard.writeText(body);showToast("📋 Note copy झाली.")}
+  catch(e){
     const t=document.createElement("textarea");
-    t.value=body;
-    t.style.position="fixed";
-    t.style.opacity="0";
-    document.body.appendChild(t);
-    t.select();
-    try{document.execCommand("copy");showToast("📋 Note copy झाली.")}
-    catch(err){showToast("Copy करता आलं नाही.")}
+    t.value=body;t.style.position="fixed";t.style.opacity="0";
+    document.body.appendChild(t);t.select();
+    try{document.execCommand("copy");showToast("📋 Note copy झाली.")}catch(err){showToast("Copy करता आलं नाही.")}
     document.body.removeChild(t);
   }
-
 }
-
-
-/* =========================
-   CLEAR EDITOR
-========================= */
-
-function clearEditor(){
-
-  document.getElementById("noteTitle").value="";
-  document.getElementById("noteText").value="";
-  document.getElementById("editorHeading").textContent="नवीन Note";
-  document.getElementById("saveBtn").textContent="💾 Save Note";
-  document.getElementById("cancelBtn").style.display="none";
-  document.getElementById("editorCard").classList.remove("editing");
-
-  editingId=null;
-  selectedTag="general";
-
-  drawTagPicker();
-  updateCounter();
-
-}
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
 
 function escapeHTML(text){
-  return String(text)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  return String(text).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
 
+/* Live Class मधून आलेल्या नवीन Notes आपोआप दिसण्यासाठी */
+function reloadNotes(){
+  if(editingId!==null||$("editorOv").classList.contains("show"))return;
+  notes=loadNotes();displayNotes();
+}
+document.addEventListener("visibilitychange",function(){if(!document.hidden)reloadNotes()});
+window.addEventListener("pageshow",reloadNotes);
 
-/* =========================
-   LOAD
-========================= */
-
-drawTagPicker();
-drawFilters();
-restoreDraft();
-drawTagPicker();
-updateCounter();
-displayNotes();
-
+/* LOAD */
+$("quote").textContent=QUOTES[new Date().getDate()%QUOTES.length];
+drawTagPicker();drawFilters();updateCounter();displayNotes();
 </script>
-
 </body>
 </html>
