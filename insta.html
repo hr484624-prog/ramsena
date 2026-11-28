@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>My Profile - GyanSetu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#000;--tx:#f5f5f5;--mu:#a8a8a8;--ln:#262626;--cd:#1a1a1a;--bl:#0095f6;--ig:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)}
+[data-theme=light]{--bg:#fff;--tx:#262626;--mu:#737373;--ln:#dbdbdb;--cd:#efefef}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,Roboto,Arial,sans-serif;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:var(--tx);outline:0}
+svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.hidden{display:none!important}
+.hdr{position:sticky;top:0;z-index:50;height:52px;display:flex;align-items:center;gap:4px;padding:0 10px 0 14px;background:var(--bg)}
+.hdr .un{flex:1;font-size:21px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.hdr .un small{font-size:14px;margin-left:4px}
+.hdr button{padding:7px}
+.wrap{max-width:600px;margin:auto}
+.top{padding:6px 16px 0}
+.r1{display:flex;align-items:center;gap:24px}
+.avw{position:relative;flex-shrink:0}
+.ring{padding:3px;border-radius:50%;background:var(--ig);display:inline-flex}
+.av{width:86px;height:86px;border-radius:50%;border:3px solid var(--bg);background:linear-gradient(135deg,#ff28cf,#416cff);color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:700;overflow:hidden;cursor:pointer}
+.av img{width:100%;height:100%;object-fit:cover}
+.pl{position:absolute;right:0;bottom:2px;width:24px;height:24px;border-radius:50%;background:var(--bl);color:#fff;border:3px solid var(--bg);font-size:16px;line-height:16px;text-align:center}
+.stats{flex:1;display:flex;justify-content:space-around;text-align:center}
+.stats b{display:block;font-size:17px}.stats span{font-size:13.5px}
+.bio{margin-top:12px;font-size:14px;line-height:1.45}.bio b{font-size:14.5px}.bio .mu{color:var(--mu)}.bio .gl{color:#4aa8ff}
+.btns{display:flex;gap:6px;margin-top:14px}
+.btns button{flex:1;padding:8px 6px;border-radius:8px;background:var(--cd);font-weight:600;font-size:14px}
+.btns .sq{flex:none;width:38px;display:flex;align-items:center;justify-content:center}.btns .sq svg{width:20px;height:20px}
+.tabs{display:flex;margin-top:14px;border-top:1px solid var(--ln)}
+.tabs button{flex:1;padding:11px 0;display:flex;justify-content:center;color:var(--mu);border-top:1.5px solid transparent;margin-top:-1px}
+.tabs button.on{color:var(--tx);border-top-color:var(--tx)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.cell{position:relative;aspect-ratio:3/4;background:#111;overflow:hidden;cursor:pointer}
+.cell video{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none}
+.cell .pi{position:absolute;top:6px;right:6px;color:#fff;filter:drop-shadow(0 1px 3px #000)}.cell .pi svg{width:18px;height:18px;fill:#fff}
+.cell .ct{position:absolute;left:6px;bottom:5px;color:#fff;font-size:12px;font-weight:600;text-shadow:0 1px 3px #000}
+.empty{text-align:center;color:var(--mu);padding:50px 24px;line-height:1.7}.empty .big{font-size:46px}
+.empty button{margin-top:14px;padding:10px 22px;border-radius:8px;background:var(--bl);color:#fff;font-weight:700}
+.about{padding:4px 16px}.arow{display:flex;justify-content:space-between;gap:15px;padding:14px 0;border-bottom:1px solid var(--ln);font-size:14px}.arow span:first-child{color:var(--mu)}.arow span:last-child{text-align:right;font-weight:600;max-width:62%;word-break:break-word}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:100;height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;background:var(--bg);border-top:1px solid var(--ln)}
+.nav button{flex:1;display:flex;align-items:center;justify-content:center;opacity:.65}.nav button.on{opacity:1}
+.nav .av2{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#ff28cf,#416cff);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid var(--tx);overflow:hidden}.nav .av2 img{width:100%;height:100%;object-fit:cover}
+.sbg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center}.sbg.show{display:flex}
+.sheet{width:100%;max-width:520px;max-height:90vh;overflow-y:auto;background:var(--bg);border-radius:18px 18px 0 0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));border:1px solid var(--ln)}
+.sheet::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--ln);margin:6px auto 12px}
+.sheet h3{font-size:16px;text-align:center;margin-bottom:10px}.sheet p{font-size:13.5px;line-height:1.6;color:var(--mu);margin:8px 0}
+.row{display:flex;align-items:center;gap:12px;padding:13px 4px;font-size:15px;width:100%;text-align:left;border-bottom:1px solid var(--ln)}.row small{color:var(--mu);margin-left:auto}
+.sheet label{display:block;font-size:12.5px;color:var(--mu);margin:8px 0 4px}
+.sheet input,.sheet textarea{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--ln);background:var(--cd);font-size:16px}.sheet textarea{height:80px;resize:none}
+.pbtn{width:100%;padding:12px;border-radius:10px;background:var(--bl);color:#fff;font-weight:700;margin-top:14px}.pbtn:disabled{opacity:.5}
+.cbtn{width:100%;padding:12px;border-radius:10px;background:var(--cd);font-weight:600;margin-top:8px}
+.viewer{position:fixed;inset:0;z-index:300;background:#000;color:#fff;display:none;flex-direction:column}.viewer.show{display:flex}
+.vtop{display:flex;align-items:center;gap:8px;padding:8px 10px;font-weight:700}.vtop .t{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.vtop button{padding:7px;color:#fff}
+.vbody{flex:1;min-height:0;display:flex;align-items:center}.vbody video{width:100%;max-height:100%;background:#000}
+.vinfo{padding:10px 16px calc(14px + env(safe-area-inset-bottom));font-size:14px;line-height:1.5;max-height:34vh;overflow:auto}.vinfo small{color:#a8a8a8}
+.vcnt{display:flex;gap:18px;margin:6px 0 8px;font-size:14px;align-items:center}.vcnt a{margin-left:auto;color:#4aa8ff;font-weight:600;cursor:pointer}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--cd);color:var(--tx);padding:10px 18px;border-radius:12px;display:none;z-index:900;font-size:13px;max-width:90%;text-align:center}.toast.show{display:block}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div class="un" onclick="openMenu()"><span id="hname">Profile</span><small>⌄</small></div>
+  <button onclick="openVideoModal()" id="bP"></button>
+  <button onclick="openMenu()" id="bX"></button>
+</header>
+
+<main class="wrap">
+  <section class="top">
+    <div class="r1">
+      <div class="avw"><div class="ring"><div class="av" id="avatar" onclick="$('photoInput').click()">G</div></div><div class="pl" onclick="$('photoInput').click()">+</div></div>
+      <div class="stats">
+        <div><b id="stPosts">0</b><span>Posts</span></div>
+        <div><b id="stLikes">0</b><span>Likes</span></div>
+        <div><b id="stCom">0</b><span>Comments</span></div>
+      </div>
+    </div>
+    <div class="bio">
+      <b id="name">User</b>
+      <div class="mu" id="bioSchool"></div><div class="mu" id="bioCity"></div><div class="gl" id="bioGoal"></div>
+    </div>
+    <div class="btns">
+      <button onclick="openEdit()">Edit profile</button>
+      <button onclick="shareProfile()">Share profile</button>
+      <button class="sq" onclick="openVideoModal()" id="bA"></button>
+    </div>
+  </section>
+
+  <div class="tabs" id="tabs"></div>
+  <section id="paneposts">
+    <div class="grid" id="grid"></div>
+    <div class="empty hidden" id="noPosts"><div class="big">🎬</div><span id="noTxt"></span><br><button id="noBtn" onclick="openVideoModal()">Share your first video</button></div>
+  </section>
+  <section id="paneabout" class="about hidden"></section>
+</main>
+
+<nav class="nav" id="nav"></nav>
+
+<div class="viewer" id="viewer">
+  <div class="vtop"><button onclick="closeViewer()" id="vBack"></button><div class="t" id="vTitle"></div><button id="vDel" onclick="deletePost()"></button></div>
+  <div class="vbody"><video id="vVideo" controls playsinline></video></div>
+  <div class="vinfo" id="vInfo"></div>
+</div>
+
+<div class="sbg" id="sbg" onclick="if(event.target.id==='sbg')closeSheet()"><div class="sheet" id="sheet"></div></div>
+<input type="file" id="photoInput" accept="image/*" style="display:none" onchange="changePhoto(event)">
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL="https://eqglttfffhvoyvrclzse.supabase.co";
+const SUPABASE_KEY="sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const escA=t=>String(t??"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let tt;function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),2600)}
+document.documentElement.dataset.theme=lsGet("gs_theme","dark");
+
+const P={home:'<path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',plus:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/>',reel:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 9h18M9 3l3 6M15 3l3 6"/><path d="M10 13l5 3-5 3z"/>',heart:'<path d="M12 21s-8-5.5-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 5.5-8 11-8 11z"/>',chat:'<path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6A8 8 0 1121 12z"/>',send:'<path d="M22 3L9.500 13.500M22 3l-7 18-5.500-7.500L2 9z"/>',mark:'<path d="M6 3h12v18l-6-5-6 5z"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',back:'<path d="M15 5l-7 7 7 7"/>',trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>',grid:'<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.500v.1"/>',userplus:'<circle cx="10" cy="8" r="4"/><path d="M3 21a7 7 0 0114 0M19 8v6M16 11h6"/>'};
+const ic=n=>`<svg viewBox="0 0 24 24">${P[n]}</svg>`;
+$("bP").innerHTML=ic("plus");$("bX").innerHTML=ic("menu");$("bA").innerHTML=ic("userplus");$("vBack").innerHTML=ic("back");$("vDel").innerHTML=ic("trash");
+
+let me=null,PR={},uname="User",posts=[],saved=[],shown=[],LK={},CC={},tab="posts",openId=null;
+
+/* NAV (Instagram layout) */
+function photoHtml(){const ph=localStorage.getItem("profilePhoto");return ph?`<img src="${escA(ph)}">`:escA(uname.charAt(0).toUpperCase())}
+function buildNav(){$("nav").innerHTML=`<button onclick="location.href='video.html'">${ic("home")}</button><button onclick="location.href='video.html?tab=reels'">${ic("reel")}</button><button onclick="location.href='Junkfile.html'">${ic("send")}</button><button onclick="location.href='video.html?tab=search'">${ic("search")}</button><button class="on"><div class="av2">${photoHtml()}</div></button>`}
+buildNav();
+
+/* TABS */
+function drawTabs(){$("tabs").innerHTML=[["posts","grid"],["saved","mark"],["about","info"]].map(t=>`<button class="${tab===t[0]?"on":""}" onclick="setTab('${t[0]}')">${ic(t[1])}</button>`).join("")}
+async function setTab(t){tab=t;drawTabs();$("paneposts").classList.toggle("hidden",t==="about");$("paneabout").classList.toggle("hidden",t!=="about");if(t==="saved")await loadSaved();draw()}
+
+/* LOAD */
+async function loadProfile(){
+  try{
+    const {data,error}=await supabaseClient.auth.getUser();
+    if(error||!data.user){location.href="username.html";return}
+    me=data.user;
+    const {data:pr,error:pe}=await supabaseClient.from("Profiles").select("*").eq("id",me.id).maybeSingle();
+    if(pe)console.error("PROFILE ERROR:",pe);
+    PR=pr||{};uname=PR.username||(me.user_metadata||{}).username||"User";
+    $("hname").textContent=uname;$("name").textContent=PR.full_name||uname;
+    $("bioSchool").textContent=PR.school?"🏫 "+PR.school+(PR.class_name?" • "+PR.class_name:"")+(PR.medium?" • "+PR.medium:""):"";
+    $("bioCity").textContent=PR.city?"📍 "+PR.city:"";$("bioGoal").textContent=PR.career_goal?"🎯 "+PR.career_goal:"";
+    const ph=localStorage.getItem("profilePhoto");$("avatar").innerHTML=ph?`<img src="${escA(ph)}">`:escA(uname.charAt(0).toUpperCase());
+    const rows=[["Full Name",PR.full_name],["Email",me.email],["Date of Birth",PR.dob],["School / College",PR.school],["Class",PR.class_name],["Medium",PR.medium],["City / Village",PR.city],["Career Goal",PR.career_goal],["Mobile",PR.mobile],["GyanSetu ID",me.id]];
+    $("paneabout").innerHTML=rows.map(r=>`<div class="arow"><span>${r[0]}</span><span>${escA(r[1]||"-")}</span></div>`).join("");
+    buildNav();drawTabs();loadPosts();
+  }catch(e){console.error("LOAD PROFILE ERROR:",e);location.href="username.html"}
+}
+async function loadPosts(){
+  const {data,error}=await supabaseClient.from("Videos").select("*").eq("user_id",me.id);
+  if(error){console.error(error);return toast("Posts load झाले नाहीत")}
+  posts=(data||[]).sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+  const ids=posts.map(p=>String(p.id));LK={};CC={};
+  if(ids.length){
+    const [l,c]=await Promise.all([supabaseClient.from("VideoLikes").select("video_id").in("video_id",ids),supabaseClient.from("VideoComments").select("video_id").in("video_id",ids)]);
+    (l.data||[]).forEach(r=>{const k=String(r.video_id);LK[k]=(LK[k]||0)+1});(c.data||[]).forEach(r=>{const k=String(r.video_id);CC[k]=(CC[k]||0)+1});
+  }
+  draw();
+}
+async function loadSaved(){
+  const ids=lsGet("gs_saved_videos",[]);if(!ids.length){saved=[];return}
+  const {data}=await supabaseClient.from("Videos").select("*").in("id",ids);
+  saved=(data||[]).sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+}
+function draw(){
+  $("stPosts").textContent=posts.length;
+  $("stLikes").textContent=posts.reduce((a,p)=>a+(LK[String(p.id)]||0),0);
+  $("stCom").textContent=posts.reduce((a,p)=>a+(CC[String(p.id)]||0),0);
+  if(tab==="about")return;
+  shown=tab==="saved"?saved:posts;
+  $("noPosts").classList.toggle("hidden",shown.length>0);
+  $("noTxt").textContent=tab==="saved"?"अजून काहीही save केलेले नाही.":"अजून एकही post नाही.";
+  $("noBtn").style.display=tab==="saved"?"none":"";
+  $("grid").innerHTML=shown.map((p,i)=>`<div class="cell" onclick="openPost(${i})"><video src="${escA(p.video_url)}#t=0.5" preload="metadata" muted playsinline></video><span class="pi">${ic("reel")}</span><div class="ct">♥ ${LK[String(p.id)]||0}</div></div>`).join("");
+}
+
+/* VIEWER */
+function openPost(i){
+  const p=shown[i];if(!p)return;openId=p.id;
+  const mine=p.user_id===me.id,k=String(p.id);
+  $("vTitle").textContent=p.username||uname;$("vDel").style.display=mine?"":"none";
+  const d=p.created_at?new Date(p.created_at).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"}):"";
+  $("vInfo").innerHTML=`<div class="vcnt"><span>❤️ ${LK[k]||0}</span><span>💬 ${CC[k]||0}</span><a onclick="location.href='video.html?v=${encodeURIComponent(p.id)}'">Comments बघा</a></div><b>${escA(p.title||"")}</b>${p.description?"<br>"+escA(p.description):""}<br><small>${d}</small>`;
+  const v=$("vVideo");v.src=p.video_url;$("viewer").classList.add("show");v.play().catch(()=>{});
+}
+function closeViewer(){const v=$("vVideo");v.pause();v.removeAttribute("src");v.load();$("viewer").classList.remove("show");openId=null}
+async function deletePost(){
+  const p=posts.find(x=>x.id===openId);if(!p||!confirm("हा video delete करायचा आहे का?"))return;
+  try{await supabaseClient.from("VideoLikes").delete().eq("video_id",String(p.id))}catch(e){}
+  try{await supabaseClient.from("VideoComments").delete().eq("video_id",String(p.id))}catch(e){}
+  const {error}=await supabaseClient.from("Videos").delete().eq("id",p.id).eq("user_id",me.id);
+  if(error){console.error(error);return toast("Delete झाले नाही")}
+  try{const m=String(p.video_url).split("/videos/")[1];if(m)await supabaseClient.storage.from("videos").remove([decodeURIComponent(m.split("?")[0])])}catch(e){}
+  closeViewer();posts=posts.filter(x=>x.id!==p.id);draw();toast("Video delete झाला");
+}
+
+/* SHEETS */
+function openSheet(h){$("sheet").innerHTML=h;$("sbg").classList.add("show")}
+function closeSheet(){$("sbg").classList.remove("show")}
+function openMenu(){
+  const dark=document.documentElement.dataset.theme!=="light";
+  openSheet(`<h3>${escA(uname)}</h3>
+  <button class="row" onclick="openEdit()">✏️ Edit profile</button>
+  <button class="row" onclick="closeSheet();openVideoModal()">🎬 Video post करा</button>
+  <button class="row" onclick="closeSheet();setTab('saved')">🔖 Saved</button>
+  <button class="row" onclick="location.href='home.html'">🏠 GyanSetu Home</button>
+  <button class="row" onclick="location.href='learn.html'">📚 Learn</button>
+  <button class="row" onclick="toggleTheme()">🌗 Theme <small>${dark?"Dark":"Light"}</small></button>
+  <button class="row" onclick="privacySheet()">🛡️ Privacy Policy</button>
+  <button class="row" style="color:#ff5470" onclick="logoutUser()">🚪 Logout</button>`);
+}
+function toggleTheme(){const t=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=t;lsSet("gs_theme",t);openMenu()}
+function privacySheet(){openSheet(`<h3>🛡️ Privacy Policy</h3><p><b>आम्ही काय साठवतो:</b> तुमचे email/username, profile माहिती (नाव, शाळा, शहर, इ.), तुम्ही post केलेले videos, likes आणि comments.</p><p><b>कुठे:</b> हा data Supabase वर साठवला जातो. आम्ही तो कोणाला विकत नाही.</p><p><b>Public content:</b> तुमचे videos आणि comments इतरांना दिसतात. फोन नंबर, पैसे, पासवर्ड किंवा खाजगी माहिती टाकू नका.</p><p><b>तुमचे नियंत्रण:</b> तुम्ही तुमची माहिती edit करू शकता आणि videos/comments कधीही delete करू शकता.</p><p><b>फोनवर साठवलेले:</b> Profile photo, Saved videos, Theme फक्त तुमच्या browser मध्ये साठवले जातात.</p><p><b>नियम:</b> अश्लील, त्रासदायक किंवा बेकायदेशीर content ला परवानगी नाही.</p><p style="font-size:11.5px">हा सामान्य मसुदा आहे; app प्रसिद्ध करण्यापूर्वी आपला संपर्क/email जोडा आणि कायदेशीर तपासणी करा.</p><button class="pbtn" onclick="closeSheet()">ठीक आहे</button>`)}
+async function shareProfile(){
+  const url=location.href,t=uname+" - GyanSetu";
+  try{if(navigator.share){await navigator.share({title:t,url});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{await navigator.clipboard.writeText(url);toast("✅ Link copy झाली")}catch(e){prompt("Link copy करा:",url)}
+}
+
+/* UPLOAD */
+function openVideoModal(){
+  openSheet(`<h3>नवीन Video</h3><label>Video निवडा</label><input type="file" id="videoInput" accept="video/*"><label>Title</label><input id="videoTitle" maxlength="150" placeholder="Video चे नाव"><label>Caption</label><textarea id="videoDescription" maxlength="2000" placeholder="या video बद्दल थोडी माहिती लिहा..."></textarea><button class="pbtn" id="uploadButton" onclick="uploadVideo()">Share</button><button class="cbtn" onclick="closeSheet()">Cancel</button>`);
+}
+async function uploadVideo(){
+  if(!me)return toast("Please login first.");
+  const file=$("videoInput").files[0],title=$("videoTitle").value.trim(),description=$("videoDescription").value.trim();
+  if(!file)return toast("Video select करा.");if(!file.type.startsWith("video/"))return toast("फक्त video file निवडा.");
+  if(!title)return toast("Video title टाका.");if(file.size>100*1024*1024)return toast("Video 100 MB पेक्षा कमी असावा.");
+  const b=$("uploadButton");b.disabled=true;b.textContent="Uploading...";
+  try{
+    const ext=file.name.split(".").pop().toLowerCase()||"mp4",path=me.id+"/"+Date.now()+"-"+Math.random().toString(36).substring(2,8)+"."+ext;
+    const {error:u}=await supabaseClient.storage.from("videos").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});if(u)throw u;
+    const {data:ud}=supabaseClient.storage.from("videos").getPublicUrl(path);
+    const {error:d}=await supabaseClient.from("Videos").insert({user_id:me.id,username:uname,title,description,video_url:ud.publicUrl});if(d)throw d;
+    closeSheet();toast("✅ Video post झाला!");await setTab("posts");await loadPosts();
+  }catch(e){console.error("VIDEO UPLOAD ERROR:",e);toast("Video upload failed.");b.disabled=false;b.textContent="Share"}
+}
+
+/* EDIT PROFILE */
+function openEdit(){
+  const f=(id,l,v,t)=>`<label>${l}</label><input id="${id}" type="${t||"text"}" value="${escA(v||"")}">`;
+  openSheet(`<h3>Edit profile</h3>${f("eFull","Full Name",PR.full_name)}${f("eDob","Date of Birth",PR.dob,"date")}${f("eSchool","School / College",PR.school)}${f("eClass","Class",PR.class_name)}${f("eMed","Medium",PR.medium)}${f("eCity","City / Village",PR.city)}${f("eCareer","Career Goal",PR.career_goal)}${f("eMob","Mobile",PR.mobile)}<button class="pbtn" onclick="saveInformation()">Save</button><button class="cbtn" onclick="closeSheet()">Cancel</button>`);
+}
+async function saveInformation(){
+  if(!me)return toast("Please login first.");
+  const d={full_name:$("eFull").value.trim(),dob:$("eDob").value||null,school:$("eSchool").value.trim(),class_name:$("eClass").value.trim(),medium:$("eMed").value.trim(),city:$("eCity").value.trim(),career_goal:$("eCareer").value.trim(),mobile:$("eMob").value.trim(),email:me.email};
+  const {error}=await supabaseClient.from("Profiles").update(d).eq("id",me.id);
+  if(error){console.error("SAVE PROFILE ERROR:",error);return toast("Information save झाली नाही.")}
+  closeSheet();await loadProfile();toast("Information saved.");
+}
+function changePhoto(ev){
+  const f=ev.target.files[0];if(!f)return;if(!f.type.startsWith("image/"))return toast("फक्त image select करा.");
+  const r=new FileReader();r.onload=e=>{localStorage.setItem("profilePhoto",e.target.result);$("avatar").innerHTML=`<img src="${escA(e.target.result)}">`;buildNav();toast("Profile photo updated.")};r.readAsDataURL(f);
+}
+async function logoutUser(){
+  if(!confirm("तुम्हाला GyanSetu मधून logout करायचे आहे का?"))return;
+  try{
+    const {error}=await supabaseClient.auth.signOut();if(error){console.error(error);return toast("Logout failed.")}
+    ["gyansetu_username","gyansetu_email","gyansetu_user_id","profilePhoto"].forEach(k=>localStorage.removeItem(k));
+    location.href="username.html";
+  }catch(e){console.error(e);toast("Logout failed.")}
+}
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if($("viewer").classList.contains("show"))closeViewer();else closeSheet()});
+loadProfile();
+</script>
+</body>
+</html>
