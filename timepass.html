@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Videos - GyanSetu</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#000;--tx:#f5f5f5;--mu:#a8a8a8;--ln:#262626;--cd:#1a1a1a;--bl:#0095f6;--ig:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)}
+[data-theme=light]{--bg:#fff;--tx:#262626;--mu:#737373;--ln:#dbdbdb;--cd:#efefef}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,Roboto,Arial,sans-serif;padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:var(--tx);outline:0}
+svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.hdr{position:sticky;top:0;z-index:50;height:52px;display:flex;align-items:center;gap:4px;padding:0 10px 0 14px;background:var(--bg);border-bottom:1px solid var(--ln)}
+.logo{flex:1;font:italic 30px 'Grand Hotel','Brush Script MT',cursive}
+.hdr button{position:relative;padding:7px}.hdr i{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;background:#ff3040;display:none}
+.av{border-radius:50%;background:linear-gradient(135deg,#ff28cf,#416cff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+.ring{padding:2.5px;border-radius:50%;background:var(--ig);display:inline-flex;flex-shrink:0;position:relative}.ring.seen{background:var(--ln)}.ring .av{border:2.5px solid var(--bg)}
+.stories{display:flex;gap:14px;padding:10px 12px;overflow-x:auto;border-bottom:1px solid var(--ln)}.stories::-webkit-scrollbar{display:none}
+.sti{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;width:68px;position:relative;padding-top:20px}
+.sti small{font-size:11.5px;max-width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.note{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--cd);border-radius:14px;padding:3px 8px;font-size:10px;white-space:nowrap;max-width:80px;overflow:hidden;text-overflow:ellipsis;z-index:1}
+.plus{position:absolute;right:2px;bottom:20px;width:20px;height:20px;border-radius:50%;background:var(--bl);color:#fff;border:2px solid var(--bg);font-size:14px;line-height:15px;text-align:center}
+.post{padding-bottom:6px}
+.ph{display:flex;align-items:center;gap:10px;padding:8px 12px}.ph b{flex:1;font-size:14px}
+.pv,.rt{position:relative;background:#000}.pv{aspect-ratio:1/1}.pv video,.reel video{width:100%;height:100%;object-fit:contain;display:block}
+.hrt{position:absolute;left:50%;top:50%;font-size:90px;transform:translate(-50%,-50%) scale(0);pointer-events:none;z-index:3}
+.hrt.pop{animation:pop .7s ease}@keyframes pop{0%{transform:translate(-50%,-50%) scale(0);opacity:1}30%{transform:translate(-50%,-50%) scale(1.2)}80%{opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+.act{display:flex;gap:16px;padding:10px 12px 4px}.act .r{margin-left:auto}
+.act .on svg{fill:#ff3040;stroke:#ff3040}.act .r.on svg{fill:currentColor;stroke:currentColor}
+.lk{padding:2px 12px;font-weight:600;font-size:14px}.cap{padding:2px 12px;font-size:14px;line-height:1.45}.cap span{color:var(--mu);display:block}
+.vc{padding:3px 12px;color:var(--mu);font-size:14px;cursor:pointer}.dt{padding:2px 12px;color:var(--mu);font-size:11px;text-transform:uppercase}
+.empty{text-align:center;color:var(--mu);padding:70px 24px;line-height:1.7}
+.sbx{padding:10px 12px 4px}.sbx input{width:100%;padding:10px 14px;border-radius:10px;border:0;background:var(--cd);font-size:16px}
+.chips{display:flex;gap:8px;padding:8px 12px;overflow-x:auto}.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:7px 14px;border-radius:9px;background:var(--cd);font-size:13px;font-weight:600}.chip.on{background:var(--tx);color:var(--bg)}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}.gi{aspect-ratio:3/4;position:relative;background:#000;overflow:hidden}.gi video{width:100%;height:100%;object-fit:cover;pointer-events:none}.gi span{position:absolute;left:6px;bottom:5px;color:#fff;font-size:12px;font-weight:600;text-shadow:0 1px 3px #000}
+.rl{position:fixed;left:0;right:0;top:52px;bottom:calc(56px + env(safe-area-inset-bottom));overflow-y:scroll;scroll-snap-type:y mandatory;background:#000;z-index:5}.rl::-webkit-scrollbar{display:none}
+.reel{height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;color:#fff}
+.reel .rt{position:absolute;inset:0}
+.rr{position:absolute;right:8px;bottom:24px;z-index:4}.rr .act{flex-direction:column;gap:22px;padding:0;align-items:center}.rr .act .r{margin:0}
+.rb{position:absolute;left:12px;right:70px;bottom:22px;z-index:4;text-shadow:0 1px 4px #000}.rb p{font-size:13px;margin-top:6px;line-height:1.4}
+.rg{position:absolute;inset:auto 0 0 0;height:50%;background:linear-gradient(transparent,rgba(0,0,0,.7));pointer-events:none}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:100;height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;background:var(--bg);border-top:1px solid var(--ln)}
+.nav button{flex:1;display:flex;align-items:center;justify-content:center;color:var(--tx);opacity:.65}.nav button.on{opacity:1}.nav button.on svg{stroke-width:2.8}
+.ov{position:fixed;inset:0;z-index:300;background:var(--bg);display:none;overflow-y:auto}.ov.show{display:block}
+.ptop{position:sticky;top:0;z-index:5;height:50px;display:flex;align-items:center;gap:10px;padding:0 10px;background:var(--bg);border-bottom:1px solid var(--ln);font-weight:700}
+#mv{width:100%;max-height:68vh;background:#000;display:block}
+.pi{padding:4px 0}.cm{padding:8px 14px 90px}.ci{display:flex;gap:10px;margin:12px 0;font-size:14px;line-height:1.4}.ci small{color:var(--mu);margin-left:6px}.ci button{color:var(--mu);font-size:12px;margin-left:8px}
+.cf{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--ln)}
+.cf input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--ln);background:none}.cf button{color:var(--bl);font-weight:700}
+.sbg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center}.sbg.show{display:flex}
+.sheet{width:100%;max-width:520px;max-height:85vh;overflow-y:auto;background:var(--bg);border-radius:18px 18px 0 0;padding:8px 16px calc(20px + env(safe-area-inset-bottom));border:1px solid var(--ln)}
+.sheet::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--ln);margin:6px auto 12px}
+.sheet h3{font-size:16px;text-align:center;margin-bottom:10px}.row{display:flex;align-items:center;gap:12px;padding:13px 4px;font-size:15px;width:100%;text-align:left;border-bottom:1px solid var(--ln)}.row small{color:var(--mu);margin-left:auto}
+.sheet p{font-size:13.5px;line-height:1.6;color:var(--mu);margin:8px 0}.sheet .bl{color:var(--bl);font-weight:700;margin-left:auto}
+.sheet input[type=text],.sheet textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--ln);background:var(--cd);margin-bottom:10px;font-size:16px}.sheet textarea{height:80px;resize:none}
+.pbtn{width:100%;padding:12px;border-radius:10px;background:var(--bl);color:#fff;font-weight:700;margin-top:6px}.pbtn:disabled{opacity:.5}
+#up video{width:100%;max-height:200px;border-radius:10px;background:#000;margin-bottom:10px;display:none}
+#st{position:fixed;inset:0;z-index:600;background:#000;color:#fff;display:none;flex-direction:column}#st.show{display:flex}
+#st .bar{height:3px;background:#555;margin:8px 10px;border-radius:3px;overflow:hidden}#st .bar i{display:block;height:100%;width:0;background:#fff}
+#st .sh{display:flex;align-items:center;gap:8px;padding:2px 12px}#st .sh small{flex:1;opacity:.7}
+#st .sb{flex:1;position:relative;min-height:0}#st video{width:100%;height:100%;object-fit:contain}#st .z{position:absolute;top:0;bottom:0;width:35%}
+#st .sf{display:flex;align-items:center;gap:14px;padding:12px 14px calc(12px + env(safe-area-inset-bottom))}#st .sf span{flex:1;font-size:14px}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--cd);color:var(--tx);padding:10px 18px;border-radius:12px;display:none;z-index:900;font-size:13px;max-width:90%;text-align:center}.toast.show{display:block}
+
+.logo{text-align:center;cursor:pointer}.logo small{font:600 14px system-ui;vertical-align:middle}
+.pv{aspect-ratio:4/5}
+.act button{display:flex;align-items:center;gap:6px}.act em{font-style:normal;font-size:14px}
+.rl{top:0}
+.rr{display:flex;flex-direction:column;align-items:center;gap:22px;color:#fff}.rr .act{gap:22px}.rr .act button{flex-direction:column;gap:4px}.rr .act em{font-size:12px}.rr .act .r{display:none}.rr>button{color:#fff}
+.aud{width:30px;height:30px;border-radius:8px;border:2px solid #fff;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.mp{display:inline-block;margin-top:8px;font-size:12px;background:rgba(255,255,255,.18);border-radius:14px;padding:3px 10px}
+.rtop{position:fixed;top:0;left:0;right:0;z-index:60;height:52px;display:none;align-items:center;justify-content:space-between;padding:0 14px;color:#fff;font-size:22px;font-weight:700;background:linear-gradient(rgba(0,0,0,.55),transparent)}.rtop button{color:#fff}
+.dk .rtop{display:flex}.dk .hdr{display:none}.dk .nav{background:#000;border-color:#000}.dk .nav button{color:#fff}
+.nav .av{border:2px solid transparent}.nav button.on .av{border-color:var(--tx)}
+.cf2{display:flex;gap:10px;padding:10px 0 0;position:sticky;bottom:-4px;background:var(--bg);border-top:1px solid var(--ln);margin-top:8px}.cf2 input{flex:1;padding:10px 14px;border-radius:20px;border:1px solid var(--ln);background:none;font-size:16px}.cf2 button{color:var(--bl);font-weight:700}
+</style>
+</head>
+<body>
+<header class="hdr" id="hdr">
+  <button onclick="openUpload()" id="bP"></button>
+  <div class="logo" onclick="openMenu()">GyanSetu <small>⌄</small></div>
+  <button onclick="openNotif()" id="bN"></button>
+</header>
+<div class="rtop" id="rTop"><span>Reels</span><button onclick="openUpload()" id="bC"></button></div>
+<div class="stories" id="stories"></div>
+<main id="main"></main>
+<nav class="nav" id="nav"></nav>
+
+<div class="ov" id="pl">
+  <div class="ptop"><button onclick="closePlayer()" id="pBack"></button>Video</div>
+  <video id="mv" controls playsinline></video>
+  <div class="pi" id="pInfo"></div>
+</div>
+
+<div id="st">
+  <div class="bar"><i id="stB"></i></div>
+  <div class="sh" id="stN"></div>
+  <div class="sb"><video id="stV" playsinline></video><div class="z" style="left:0" onclick="stepStory(-1)"></div><div class="z" style="right:0" onclick="stepStory(1)"></div></div>
+  <div class="sf"><span id="stT"></span><button id="stL" onclick="stLike()"></button></div>
+</div>
+
+<div class="sbg" id="sbg" onclick="if(event.target.id==='sbg')closeSheet()"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL="https://eqglttfffhvoyvrclzse.supabase.co";
+const SUPABASE_KEY="sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
+const BUCKET="videos",MAX_MB=50;
+const supabaseClient=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+const esc=t=>{const d=document.createElement("div");d.textContent=t??"";return d.innerHTML};
+const escA=t=>String(t??"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/'/g,"&#39;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const fmt=v=>v?new Date(v).toLocaleDateString([],{day:"numeric",month:"short",year:"numeric"}):"";
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+let tt0;function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(tt0);tt0=setTimeout(()=>t.classList.remove("show"),2600)}
+
+/* ICONS */
+const P={home:'<path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',plus:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/>',reel:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 9h18M9 3l3 6M15 3l3 6"/><path d="M10 13l5 3-5 3z"/>',heart:'<path d="M12 21s-8-5.5-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 10c0 5.5-8 11-8 11z"/>',chat:'<path d="M21 12a8 8 0 01-11.5 7.2L3 21l1.8-6A8 8 0 1121 12z"/>',send:'<path d="M22 3L9.500 13.500M22 3l-7 18-5.500-7.500L2 9z"/>',mark:'<path d="M6 3h12v18l-6-5-6 5z"/>',user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',more:'<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>',back:'<path d="M15 5l-7 7 7 7"/>',x:'<path d="M5 5l14 14M19 5L5 19"/>',cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'};
+const ic=n=>`<svg viewBox="0 0 24 24">${P[n]}</svg>`;
+const ava=(n,s)=>`<div class="av" style="width:${s}px;height:${s}px;font-size:${s*.42}px">${esc(String(n||"?")[0].toUpperCase())}</div>`;
+const ring=(n,s,seen)=>`<div class="ring ${seen?"seen":""}">${ava(n,s)}</div>`;
+
+/* STATE */
+let currentUser=null,currentName="GyanSetu User",videos=[],currentVideo=null;
+let T="feed",sortMode="latest",SQ="",MUTE=true;
+let likeCount={},myLikes=new Set(),commentCount={},savedSet=new Set(),CM=[],likesReady=true,commentsReady=true;
+let SEEN=new Set(lsGet("gs_seen",[]));
+document.documentElement.dataset.theme=lsGet("gs_theme","dark");
+
+$("bN").innerHTML=ic("heart")+'<i id="nd"></i>';$("bP").innerHTML=ic("plus");$("bC").innerHTML=ic("cam");$("pBack").innerHTML=ic("back");
+function buildNav(){$("nav").innerHTML=`<button data-t="feed" onclick="setTab('feed')">${ic("home")}</button><button data-t="reels" onclick="setTab('reels')">${ic("reel")}</button><button onclick="location.href='Junkfile.html'">${ic("send")}</button><button data-t="search" onclick="setTab('search')">${ic("search")}</button><button onclick="location.href='insta.html'">${ava(currentName,26)}</button>`;document.querySelectorAll("#nav [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===T))}buildNav();
+
+/* USER + DATA */
+async function getUser(){
+  const {data}=await supabaseClient.auth.getUser();currentUser=data?.user||null;if(!currentUser)return;
+  currentName=currentUser.user_metadata?.username||currentUser.user_metadata?.name||(currentUser.email?currentUser.email.split("@")[0]:"GyanSetu User");
+  try{const {data:p}=await supabaseClient.from("Profiles").select("username").eq("id",currentUser.id).maybeSingle();if(p?.username)currentName=p.username}catch(e){}
+}
+async function loadVideos(){
+  const {data,error}=await supabaseClient.from("Videos").select("*").order("created_at",{ascending:false});
+  if(error){$("main").innerHTML=`<div class="empty">Videos load झाले नाहीत.<br><small>${esc(error.message)}</small></div>`;return}
+  videos=data||[];
+  const [l,c]=await Promise.all([supabaseClient.from("VideoLikes").select("video_id,user_id"),supabaseClient.from("VideoComments").select("*").order("created_at",{ascending:false})]);
+  likesReady=!l.error;commentsReady=!c.error;CM=c.data||[];
+  likeCount={};myLikes=new Set();(l.data||[]).forEach(r=>{const k=String(r.video_id);likeCount[k]=(likeCount[k]||0)+1;if(currentUser&&r.user_id===currentUser.id)myLikes.add(k)});
+  commentCount={};CM.forEach(r=>{const k=String(r.video_id);commentCount[k]=(commentCount[k]||0)+1});
+  render();notifDot();
+}
+function getList(q,mode){
+  let L=videos.slice();q=(q||"").trim().toLowerCase();
+  if(q)L=L.filter(v=>[v.title,v.description,v.username].some(x=>String(x||"").toLowerCase().includes(q)));
+  if(mode==="saved")L=L.filter(v=>savedSet.has(String(v.id)));
+  if(mode==="mine")L=L.filter(v=>currentUser&&v.user_id===currentUser.id);
+  const t=v=>new Date(v.created_at||0).getTime();
+  if(mode==="oldest")L.sort((a,b)=>t(a)-t(b));
+  else if(mode==="liked")L.sort((a,b)=>(likeCount[String(b.id)]||0)-(likeCount[String(a.id)]||0)||t(b)-t(a));
+  else L.sort((a,b)=>t(b)-t(a));
+  return L;
+}
+
+/* ACTIONS */
+async function toggleLike(id){
+  id=String(id);
+  if(!currentUser)return toast("Like करण्यासाठी Login करा");
+  if(!likesReady)return toast("Likes table तयार नाही (SQL चालवा)");
+  const liked=myLikes.has(id);
+  if(liked){myLikes.delete(id);likeCount[id]=Math.max(0,(likeCount[id]||1)-1)}else{myLikes.add(id);likeCount[id]=(likeCount[id]||0)+1}
+  refresh(id);
+  const q=supabaseClient.from("VideoLikes");
+  const {error}=liked?await q.delete().eq("video_id",id).eq("user_id",currentUser.id):await q.insert({video_id:id,user_id:currentUser.id});
+  if(error){if(liked){myLikes.add(id);likeCount[id]=(likeCount[id]||0)+1}else{myLikes.delete(id);likeCount[id]=Math.max(0,(likeCount[id]||1)-1)}refresh(id);toast("Like बदलता आला नाही")}
+}
+function toggleSave(id){
+  id=String(id);if(savedSet.has(id)){savedSet.delete(id);toast("Saved मधून काढला")}else{savedSet.add(id);toast("🔖 Save झाला")}
+  lsSet("gs_saved_videos",[...savedSet]);refresh(id);if(T==="search"&&sortMode==="saved")res();
+}
+function refresh(id){
+  id=String(id);const q=a=>document.querySelectorAll(`[data-${a}="${CSS.escape(id)}"]`),c=commentCount[id]||0;
+  q("like").forEach(b=>b.classList.toggle("on",myLikes.has(id)));
+  q("lcn").forEach(b=>b.textContent=likeCount[id]||0);q("ccn").forEach(b=>b.textContent=c);
+  q("save").forEach(b=>b.classList.toggle("on",savedSet.has(id)));
+  q("cc").forEach(b=>b.textContent=c?`सर्व ${c} comments बघा`:"Comment करा");
+  const sl=$("stL");if(sl&&stCur&&String(stCur.id)===id)sl.className=myLikes.has(id)?"on":"";
+}
+const acts=id=>{const s=String(id),a=escA(id);return`<div class="act"><button data-like="${a}" class="${myLikes.has(s)?"on":""}" onclick="toggleLike('${a}')">${ic("heart")}<em data-lcn="${a}">${likeCount[s]||0}</em></button><button onclick="openComments('${a}')">${ic("chat")}<em data-ccn="${a}">${commentCount[s]||0}</em></button><button onclick="openShare('${a}')">${ic("send")}</button><button class="r ${savedSet.has(s)?"on":""}" data-save="${a}" onclick="toggleSave('${a}')">${ic("mark")}</button></div>`};
+
+/* TAP = double-tap like, single tap mute */
+let lt=0,tp;
+function tap(id,el){
+  const n=Date.now();
+  if(n-lt<320){clearTimeout(tp);lt=0;const h=el.querySelector(".hrt");h.classList.remove("pop");void h.offsetWidth;h.classList.add("pop");if(!myLikes.has(String(id)))toggleLike(id)}
+  else{lt=n;tp=setTimeout(()=>{MUTE=!MUTE;document.querySelectorAll("main video").forEach(v=>v.muted=MUTE);toast(MUTE?"🔇 Muted":"🔊 Sound on")},320)}
+}
+const IO=new IntersectionObserver(es=>es.forEach(en=>{const v=en.target;if(en.isIntersecting&&en.intersectionRatio>.6){v.muted=MUTE;v.play().catch(()=>{})}else v.pause()}),{threshold:[0,.6]});
+
+/* RENDER */
+function setTab(t){T=t;render()}
+function render(){
+  IO.disconnect();
+  document.querySelectorAll("#nav [data-t]").forEach(b=>b.classList.toggle("on",b.dataset.t===T));
+  document.body.classList.toggle("dk",T==="reels");const m=$("main");m.className=T==="reels"?"rl":"";$("stories").style.display=T==="feed"?"flex":"none";
+  if(T==="feed"){stories();const L=getList("","latest");m.innerHTML=L.length?L.map(post).join(""):'<div class="empty">🎬 अजून videos नाहीत.<br>खालच्या ＋ ने पहिला video टाका!</div>'}
+  else if(T==="search"){
+    m.innerHTML=`<div class="sbx"><input id="q" placeholder="🔍 Search" value="${escA(SQ)}" oninput="SQ=this.value;res()"></div><div class="chips">${[["latest","🆕 Latest"],["liked","🔥 Most liked"],["oldest","🕰 Oldest"],["mine","🙋 My videos"],["saved","🔖 Saved"]].map(c=>`<button class="chip ${sortMode===c[0]?"on":""}" onclick="sortMode='${c[0]}';render()">${c[1]}</button>`).join("")}</div><div id="res"></div>`;res()}
+  else{const L=getList("","latest");m.innerHTML=L.length?L.map(reel).join(""):'<div class="empty">Reels नाहीत</div>'}
+  m.querySelectorAll("video").forEach(v=>{if(T!=="search")IO.observe(v)});
+}
+function res(){
+  const L=getList(SQ,sortMode);
+  $("res").innerHTML=L.length?`<div class="g3">`+L.map(v=>`<div class="gi" onclick="openPlayer('${escA(v.id)}')"><video src="${escA(v.video_url)}#t=0.5" preload="metadata" muted playsinline></video><span>♥ ${likeCount[String(v.id)]||0}</span></div>`).join("")+`</div>`:'<div class="empty">🔍 काहीही सापडले नाही</div>';
+}
+function post(v){
+  const a=escA(v.id),s=String(v.id),mine=currentUser&&v.user_id===currentUser.id,c=commentCount[s]||0;
+  return`<article class="post"><div class="ph">${ring(v.username,34)}<b>${esc(v.username||"GyanSetu User")} <span style="font-weight:400;color:var(--mu)">• ${fmt(v.created_at)}</span></b><button onclick="openMore('${a}')">${ic("more")}</button></div>
+  <div class="pv" onclick="tap('${a}',this)"><video src="${escA(v.video_url)}#t=0.1" muted loop playsinline preload="metadata"></video><div class="hrt">❤️</div></div>
+  ${acts(v.id)}
+  <div class="cap"><b>${esc(v.username||"")}</b> ${esc(v.title)}${v.description?`<span>${esc(v.description)}</span>`:""}</div>
+  <div class="vc" data-cc="${a}" onclick="openComments('${a}')">${c?`सर्व ${c} comments बघा`:"Comment करा"}</div></article>`;
+}
+function reel(v){
+  const a=escA(v.id),n=esc(v.username||"GyanSetu User");
+  return`<section class="reel"><div class="rt" onclick="tap('${a}',this)"><video src="${escA(v.video_url)}" muted loop playsinline preload="metadata"></video><div class="hrt">❤️</div></div><div class="rg"></div>
+  <div class="rr">${acts(v.id)}<button onclick="openMore('${a}')">${ic("more")}</button><div class="aud">${ava(v.username,26)}</div></div>
+  <div class="rb"><div style="display:flex;align-items:center;gap:8px">${ava(v.username,32)}<b>${n}</b></div><p>${esc(v.title)}${v.description?" — "+esc(v.description):""}</p><div class="mp">♪ ${n} · Original audio</div></div></section>`;
+}
+
+/* STORIES (har user che latest videos) + NOTE */
+function groups(){const g={};videos.forEach(v=>{const k=String(v.user_id||v.username);(g[k]=g[k]||{key:k,name:v.username||"User",vids:[]}).vids.push(v)});return Object.values(g).map(x=>({...x,vids:x.vids.slice(0,5)}))}
+let SG=[],gi=0,vi=0,stCur=null;
+function stories(){
+  SG=groups();const n=lsGet("gs_note","");
+  $("stories").innerHTML=`<div class="sti" onclick="openUpload()">${n?`<i class="note">${esc(n)}</i>`:""}${ring(currentName,62,1)}<b class="plus">+</b><small>तुमची story</small></div>`+
+  SG.map((g,i)=>`<div class="sti" onclick="openStory(${i})">${ring(g.name,62,SEEN.has(g.key))}<small>${esc(g.name)}</small></div>`).join("");
+}
+function openStory(i){gi=i;vi=0;$("st").classList.add("show");playStory()}
+function playStory(){
+  const g=SG[gi];if(!g)return closeStory();const v=g.vids[vi];stCur=v;SEEN.add(g.key);lsSet("gs_seen",[...SEEN]);
+  $("stN").innerHTML=ava(g.name,32)+`<b>${esc(g.name)}</b><small>${fmt(v.created_at)}</small><button onclick="closeStory()">${ic("x")}</button>`;
+  $("stT").textContent=v.title;$("stL").innerHTML=ic("heart");refresh(v.id);$("stB").style.width="0";
+  const el=$("stV");el.src=v.video_url;el.muted=false;el.play().catch(()=>{el.muted=true;el.play().catch(()=>{})});
+}
+function stepStory(d){const g=SG[gi];if(!g)return;vi+=d;if(vi<0){gi=Math.max(0,gi-1);vi=0}else if(vi>=g.vids.length){gi++;vi=0}if(gi>=SG.length)return closeStory();playStory()}
+function closeStory(){$("st").classList.remove("show");const el=$("stV");el.pause();el.removeAttribute("src");stCur=null;render()}
+function stLike(){if(stCur)toggleLike(stCur.id)}
+$("stV").addEventListener("timeupdate",e=>{$("stB").style.width=(e.target.currentTime/(e.target.duration||1)*100)+"%"});
+$("stV").addEventListener("ended",()=>stepStory(1));
+
+/* PLAYER + COMMENTS */
+function openPlayer(id,toC){
+  const v=videos.find(x=>String(x.id)===String(id));if(!v)return;currentVideo=v;
+  $("pInfo").innerHTML=`<div class="ph">${ring(v.username,34)}<b>${esc(v.username||"GyanSetu User")}</b></div>${acts(v.id)}<div class="cap"><b>${esc(v.title)}</b><span>${esc(v.description||"")}</span></div><div class="dt">${fmt(v.created_at)}</div>`;
+  const mv=$("mv");mv.src=v.video_url;mv.play().catch(()=>{});
+  $("pl").classList.add("show");document.body.style.overflow="hidden";refresh(v.id);
+  try{history.replaceState(null,"","?v="+encodeURIComponent(v.id))}catch(e){}
+  if(toC)openComments(v.id);else $("pl").scrollTo({top:0});
+}
+function closePlayer(){const mv=$("mv");mv.pause();mv.removeAttribute("src");mv.load();$("pl").classList.remove("show");document.body.style.overflow="";currentVideo=null;try{history.replaceState(null,"",location.pathname)}catch(e){}}
+async function loadComments(id){
+  const L=$("cList");if(!commentsReady){L.innerHTML='<p class="empty">Comments साठी SQL चालवा.</p>';return}
+  const {data,error}=await supabaseClient.from("VideoComments").select("*").eq("video_id",String(id)).order("created_at",{ascending:true});
+  if(!currentVideo||String(currentVideo.id)!==String(id))return;
+  if(error){L.innerHTML='<p class="empty">Comments load झाले नाहीत.</p>';return}
+  commentCount[String(id)]=(data||[]).length;refresh(id);
+  L.innerHTML=(data||[]).length?data.map(c=>`<div class="ci">${ava(c.username,32)}<div style="flex:1"><b>${esc(c.username||"User")}</b><small>${fmt(c.created_at)}</small>${currentUser&&c.user_id===currentUser.id?`<button onclick="delComment('${escA(c.id)}')">Delete</button>`:""}<br>${esc(c.text)}</div></div>`).join(""):'<p class="empty" style="padding:30px 0">अजून comments नाहीत.<br>पहिला तुमचा!</p>';
+}
+async function sendComment(){
+  if(!currentVideo)return;if(!currentUser)return toast("Comment साठी Login करा");if(!commentsReady)return toast("Comments table तयार नाही");
+  const i=$("cIn"),text=i.value.trim();if(!text)return;
+  const {error}=await supabaseClient.from("VideoComments").insert({video_id:String(currentVideo.id),user_id:currentUser.id,username:currentName,text});
+  if(error)return toast("Comment पाठवता आला नाही");
+  i.value="";loadComments(currentVideo.id);
+}
+async function delComment(cid){
+  if(!currentUser||!confirm("हा comment delete करायचा?"))return;
+  const {error}=await supabaseClient.from("VideoComments").delete().eq("id",cid).eq("user_id",currentUser.id);
+  if(error)return toast("Delete करता आला नाही");loadComments(currentVideo.id);
+}
+
+/* COMMENTS SHEET + MORE */
+function openComments(id){
+  const v=videos.find(x=>String(x.id)===String(id));if(!v)return;currentVideo=v;
+  openSheet(`<h3>Comments</h3><div id="cList"></div><div class="cf2">${ava(currentName,34)}<input id="cIn" maxlength="300" placeholder="${escA(currentName)} म्हणून comment जोडा..." onkeydown="if(event.key==='Enter')sendComment()"><button onclick="sendComment()">Post</button></div>`,true);
+  loadComments(id);
+}
+function openMore(id){
+  const v=videos.find(x=>String(x.id)===String(id));if(!v)return;const a=escA(id),mine=currentUser&&v.user_id===currentUser.id;
+  openSheet(`<button class="row" onclick="closeSheet();toggleSave('${a}')">🔖 ${savedSet.has(String(id))?"Unsave":"Save"}</button><button class="row" onclick="closeSheet();openShare('${a}')">✈️ Share</button><button class="row" onclick="closeSheet();shareLink('${a}')">🔗 Link copy</button>${mine?`<button class="row" style="color:#ff5470" onclick="closeSheet();deleteVideo('${a}')">🗑 Delete</button>`:""}<button class="row" onclick="closeSheet()">Cancel</button>`);
+}
+/* SHEETS */
+function openSheet(h,tall){$("sheet").innerHTML=h;$("sheet").style.height=tall?"72vh":"";$("sbg").classList.add("show")}
+function closeSheet(){$("sbg").classList.remove("show")}
+async function openShare(id){
+  const v=videos.find(x=>String(x.id)===String(id));if(!v)return;
+  openSheet(`<h3>Share</h3><button class="row" onclick="shareLink('${escA(id)}')">🔗 Link share / copy</button><div id="shU"><p>Users load होत आहेत...</p></div>`);
+  if(!currentUser){$("shU").innerHTML="<p>Message पाठवण्यासाठी Login करा.</p>";return}
+  const {data,error}=await supabaseClient.from("Profiles").select("id,username").neq("id",currentUser.id).limit(50);
+  $("shU").innerHTML=error||!data||!data.length?"<p>दुसरे users सापडले नाहीत.</p>":data.map(p=>`<div class="row">${ava(p.username,36)}<b style="font-weight:600">${esc(p.username||"User")}</b><button class="bl" onclick="sendTo('${escA(p.id)}','${escA(id)}',this)">Send</button></div>`).join("");
+}
+async function sendTo(uid,vid,btn){
+  const v=videos.find(x=>String(x.id)===String(vid));if(!v)return;btn.disabled=true;
+  const {error}=await supabaseClient.from("Messages").insert({sender_id:currentUser.id,receiver_id:uid,message:"VIDEO:"+v.id+"|"+v.title,is_read:false});
+  if(error){btn.disabled=false;return toast("पाठवता आला नाही")}btn.textContent="Sent ✓";
+}
+async function shareLink(id){
+  const v=videos.find(x=>String(x.id)===String(id));if(!v)return;const url=location.origin+location.pathname+"?v="+encodeURIComponent(v.id);
+  try{if(navigator.share){await navigator.share({title:v.title,url});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{await navigator.clipboard.writeText(url);toast("✅ Link copy झाली")}catch(e){prompt("Link copy करा:",url)}
+}
+function notifSeen(){return lsGet("gs_nseen",0)}
+function myComments(){const m=new Set(videos.filter(v=>currentUser&&v.user_id===currentUser.id).map(v=>String(v.id)));return CM.filter(c=>m.has(String(c.video_id))&&c.user_id!==currentUser.id)}
+function notifDot(){if(!currentUser)return;$("nd").style.display=myComments().some(c=>new Date(c.created_at).getTime()>notifSeen())?"block":"none"}
+function openNotif(){
+  if(!currentUser)return toast("Login करा");
+  const C=myComments().slice(0,25),Lk=videos.filter(v=>v.user_id===currentUser.id&&(likeCount[String(v.id)]||0)>0);
+  openSheet(`<h3>Notifications</h3>`+(Lk.length||C.length?Lk.map(v=>`<div class="row" onclick="closeSheet();openPlayer('${escA(v.id)}')">❤️ <span><b>${likeCount[String(v.id)]}</b> जणांना तुमचा "${esc(v.title)}" आवडला</span></div>`).join("")+C.map(c=>{const v=videos.find(x=>String(x.id)===String(c.video_id));return`<div class="row" onclick="closeSheet();openPlayer('${escA(c.video_id)}',1)">${ava(c.username,36)}<span><b>${esc(c.username||"User")}</b> ने comment केले: ${esc(c.text)}</span></div>`}).join(""):'<div class="empty">अजून काही नाही 💫</div>'));
+  lsSet("gs_nseen",Date.now());$("nd").style.display="none";
+}
+function openMenu(){
+  const dark=document.documentElement.dataset.theme!=="light";
+  openSheet(`<h3>Menu</h3>
+  <button class="row" onclick="location.href='home.html'">🏠 GyanSetu Home</button>
+  <button class="row" onclick="location.href='learn.html'">📚 Learn</button>
+  <button class="row" onclick="location.href='Junkfile.html'">✈️ Messages / Users</button>
+  <button class="row" onclick="noteSheet()">📝 Note <small>${esc(lsGet("gs_note","")||"सेट करा")}</small></button>
+  <button class="row" onclick="toggleTheme()">🌗 Theme <small>${dark?"Dark":"Light"}</small></button>
+  <button class="row" onclick="MUTE=!MUTE;closeSheet();toast(MUTE?'Default: Muted':'Default: Sound on')">🔊 Video sound <small>${MUTE?"Muted":"On"}</small></button>
+  <button class="row" onclick="if(confirm('Saved videos साफ करायचे?')){savedSet.clear();lsSet('gs_saved_videos',[]);closeSheet();render()}">🔖 Saved साफ करा</button>
+  <button class="row" onclick="privacySheet()">🛡️ Privacy Policy</button>
+  ${currentUser?`<button class="row" style="color:#ff5470" onclick="logout()">🚪 Logout</button>`:""}`);
+}
+function toggleTheme(){const t=document.documentElement.dataset.theme==="light"?"dark":"light";document.documentElement.dataset.theme=t;lsSet("gs_theme",t);openMenu()}
+function noteSheet(){openSheet(`<h3>📝 Note</h3><p>छोटा note (60 अक्षरे) तुमच्या story वर दिसेल. हा फक्त या फोनवर साठवला जातो.</p><input type="text" id="nIn" maxlength="60" placeholder="उदा. 🎵 आज अभ्यास mode" value="${escA(lsGet("gs_note",""))}"><button class="pbtn" onclick="lsSet('gs_note',$('nIn').value.trim());closeSheet();render()">Save</button>`)}
+function privacySheet(){openSheet(`<h3>🛡️ Privacy Policy</h3><p><b>आम्ही काय साठवतो:</b> तुमचे email/username, तुम्ही post केलेले videos, likes आणि comments.</p><p><b>कुठे:</b> हा data Supabase वर साठवला जातो. आम्ही तो कोणाला विकत नाही.</p><p><b>Public content:</b> तुमचे videos आणि comments इतरांना दिसतात. फोन नंबर, पैसे, पासवर्ड किंवा खाजगी माहिती टाकू नका.</p><p><b>तुमचे नियंत्रण:</b> तुम्ही तुमचे videos आणि comments कधीही delete करू शकता.</p><p><b>फोनवर साठवलेले:</b> Saved videos, Note, Theme आणि पाहिलेल्या stories फक्त तुमच्या browser मध्ये साठवल्या जातात.</p><p><b>नियम:</b> अश्लील, त्रासदायक किंवा बेकायदेशीर content ला परवानगी नाही; असे content काढले जाऊ शकते.</p><p><b>लहान मुले:</b> पालकांनी मुलांच्या वापरावर लक्ष ठेवावे.</p><p style="font-size:11.5px">हा सामान्य मसुदा आहे; app प्रसिद्ध करण्यापूर्वी आपला संपर्क/email आणि कायदेशीर तपासणी जोडा.</p><button class="pbtn" onclick="closeSheet()">ठीक आहे</button>`)}
+async function logout(){await supabaseClient.auth.signOut();location.reload()}
+
+/* UPLOAD */
+function openUpload(){
+  if(!currentUser)return toast("Post करण्यासाठी Login करा");
+  openSheet(`<h3>नवीन Video</h3><div id="up"><input type="text" id="upTitle" placeholder="Title" maxlength="120"><textarea id="upDesc" placeholder="Caption / Description (optional)"></textarea><input type="file" id="upFile" accept="video/*" onchange="previewFile()" style="width:100%;margin-bottom:10px;color:var(--mu)"><video id="upPreview" controls playsinline></video><button class="pbtn" id="upSubmit" onclick="submitVideo()">Share</button></div>`);
+}
+function previewFile(){const f=$("upFile").files[0],pv=$("upPreview");if(!f){pv.style.display="none";return}pv.src=URL.createObjectURL(f);pv.style.display="block"}
+async function submitVideo(){
+  if(!currentUser)return toast("Login required");
+  const title=$("upTitle").value.trim(),desc=$("upDesc").value.trim(),file=$("upFile").files[0];
+  if(!title)return toast("Title लिहा");if(!file)return toast("Video निवडा");
+  if(!file.type.startsWith("video/"))return toast("फक्त video file चालेल");
+  if(file.size>MAX_MB*1024*1024)return toast("Video "+MAX_MB+"MB पेक्षा लहान हवा");
+  const btn=$("upSubmit");btn.disabled=true;btn.textContent="Uploading...";
+  try{
+    const ext=(file.name.split(".").pop()||"mp4").toLowerCase(),path=`${currentUser.id}/${Date.now()}.${ext}`;
+    const {error:u}=await supabaseClient.storage.from(BUCKET).upload(path,file,{contentType:file.type,upsert:false});if(u)throw u;
+    const {data:pub}=supabaseClient.storage.from(BUCKET).getPublicUrl(path);
+    const {error:i}=await supabaseClient.from("Videos").insert({title,description:desc,video_url:pub.publicUrl,username:currentName,user_id:currentUser.id});if(i)throw i;
+    closeSheet();toast("✅ Video post झाला!");await loadVideos();
+  }catch(err){console.error(err);toast("Post failed: "+(err.message||"error"));btn.disabled=false;btn.textContent="Share"}
+}
+async function deleteVideo(id){
+  const v=videos.find(x=>String(x.id)===String(id));if(!v||!currentUser||!confirm("हा video delete करायचा?"))return;
+  try{await supabaseClient.from("VideoLikes").delete().eq("video_id",String(v.id))}catch(e){}
+  try{await supabaseClient.from("VideoComments").delete().eq("video_id",String(v.id))}catch(e){}
+  const {error}=await supabaseClient.from("Videos").delete().eq("id",v.id).eq("user_id",currentUser.id);
+  if(error){console.error(error);return toast("Delete करता आला नाही")}
+  try{const mk=`/${BUCKET}/`,ix=v.video_url.indexOf(mk);if(ix>-1)await supabaseClient.storage.from(BUCKET).remove([decodeURIComponent(v.video_url.substring(ix+mk.length).split("?")[0])])}catch(e){}
+  savedSet.delete(String(v.id));lsSet("gs_saved_videos",[...savedSet]);toast("🗑 Video delete झाला");loadVideos();
+}
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if($("st").classList.contains("show"))closeStory();else if($("sbg").classList.contains("show"))closeSheet();else if($("pl").classList.contains("show"))closePlayer()});
+
+/* START */
+async function start(){
+  savedSet=new Set(lsGet("gs_saved_videos",[]).map(String));
+  {const tb=new URLSearchParams(location.search).get("tab");if(tb==="reels"||tb==="search")T=tb}render();await getUser();buildNav();await loadVideos();
+  const vid=new URLSearchParams(location.search).get("v");if(vid)openPlayer(vid);
+}
+start();
+</script>
+</body>
+</html>
