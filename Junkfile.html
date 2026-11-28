@@ -10,7 +10,7 @@
 [data-theme=light]{--bg:#fff;--tx:#262626;--mu:#737373;--ln:#dbdbdb;--cd:#efefef}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,Roboto,Arial,sans-serif;padding-bottom:calc(64px + env(safe-area-inset-bottom));overflow-x:hidden}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,Roboto,Arial,sans-serif;padding-bottom:calc(96px + env(safe-area-inset-bottom));overflow-x:hidden}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 input,textarea{font:inherit;color:var(--tx);outline:0}
 svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
@@ -38,8 +38,6 @@ svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--bl);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .empty,.error,.loading{text-align:center;color:var(--mu);padding:60px 24px;line-height:1.7}.error{color:#ff5470}
 .loader{width:30px;height:30px;margin:0 auto 12px;border-radius:50%;border:3px solid var(--ln);border-top-color:var(--bl);animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
-.nav{position:fixed;left:0;right:0;bottom:0;z-index:100;height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;background:var(--bg);border-top:1px solid var(--ln)}
-.nav button{flex:1;display:flex;align-items:center;justify-content:center;color:var(--tx);opacity:.65}.nav button.on{opacity:1}.nav button.on svg{stroke-width:2.8}
 .nav .av{border:2px solid transparent}
 .overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center}.overlay.show{display:flex}
 .sheet{width:100%;max-width:560px;height:85vh;background:var(--bg);border-radius:18px 18px 0 0;border:1px solid var(--ln);display:flex;flex-direction:column}
@@ -65,7 +63,27 @@ svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .composer{padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--ln);flex-shrink:0}
 .composer textarea{flex:1;resize:none;max-height:110px;padding:11px 16px;background:none;border:1px solid var(--ln);border-radius:22px;font-size:16px}
 .send{color:var(--bl);font-weight:700;padding:10px 6px}
-.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:900;background:var(--cd);color:var(--tx);padding:10px 18px;border-radius:12px;font-size:13px;max-width:90%;display:none;text-align:center}.toast.show{display:block}
+.toast{position:fixed;left:50%;bottom:104px;transform:translateX(-50%);z-index:900;background:var(--cd);color:var(--tx);padding:10px 18px;border-radius:12px;font-size:13px;max-width:90%;display:none;text-align:center}.toast.show{display:block}
+
+/* LIQUID GLASS NAV */
+.nav{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92vw,420px);height:64px;padding:6px;display:flex;align-items:center;border-radius:34px;z-index:100;isolation:isolate;
+ background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.05));
+ -webkit-backdrop-filter:blur(24px) saturate(190%);backdrop-filter:blur(24px) saturate(190%);
+ border:1px solid rgba(255,255,255,.24);
+ box-shadow:0 14px 34px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.4),inset 0 -1px 0 rgba(255,255,255,.07),inset 0 0 18px rgba(255,255,255,.05)}
+.nav::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(120% 100% at 15% 0%,rgba(255,255,255,.3),transparent 52%);opacity:.55;pointer-events:none;z-index:0}
+.nav button{position:relative;z-index:2;flex:1;height:100%;display:flex;align-items:center;justify-content:center;color:var(--tx);opacity:.72;transition:opacity .25s,transform .2s;border-radius:28px}
+.nav button:active{transform:scale(.88)}
+.nav button.on{opacity:1}.nav button.on svg{stroke-width:2.6}
+.nav .ind{position:absolute;top:6px;bottom:6px;left:0;width:0;border-radius:28px;z-index:1;pointer-events:none;
+ background:linear-gradient(180deg,rgba(255,255,255,.36),rgba(255,255,255,.12));
+ border:1px solid rgba(255,255,255,.3);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 -6px 12px rgba(255,255,255,.06),0 4px 14px rgba(0,0,0,.28);
+ transition:transform .5s cubic-bezier(.34,1.45,.5,1),width .5s cubic-bezier(.34,1.45,.5,1)}
+[data-theme=light] .nav{background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5));border-color:rgba(255,255,255,.9);box-shadow:0 12px 30px rgba(0,0,0,.16),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.05)}
+[data-theme=light] .nav::before{opacity:.35}
+[data-theme=light] .nav .ind{background:linear-gradient(180deg,rgba(0,0,0,.09),rgba(0,0,0,.04));border-color:rgba(0,0,0,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 3px 10px rgba(0,0,0,.1)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.nav{background:rgba(28,28,30,.92)}[data-theme=light] .nav{background:rgba(255,255,255,.95)}}
 </style>
 </head>
 <body>
@@ -112,7 +130,7 @@ const $=id=>document.getElementById(id);
 const P={home:'<path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',reel:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 9h18M9 3l3 6M15 3l3 6"/><path d="M10 13l5 3-5 3z"/>',send:'<path d="M22 3L9.500 13.500M22 3l-7 18-5.500-7.500L2 9z"/>',back:'<path d="M15 5l-7 7 7 7"/>',x:'<path d="M5 5l14 14M19 5L5 19"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',check:'<path d="M2 13l4 4L14 8M10 15l2 2L21 8"/>'};
 const ic=n=>`<svg viewBox="0 0 24 24">${P[n]}</svg>`;
 $("bBack").innerHTML=ic("back");$("bRead").innerHTML=ic("check");$("bNew").innerHTML=ic("edit");$("bX").innerHTML=ic("x");$("gBack").innerHTML=ic("back");
-function buildNav(name){$("nav").innerHTML=`<button onclick="location.href='timepass.html'">${ic("home")}</button><button onclick="location.href='timepass.html?tab=reels'">${ic("reel")}</button><button class="on">${ic("send")}</button><button onclick="location.href='timepass.html?tab=search'">${ic("search")}</button><button onclick="location.href='insta.html'"><div class="av" style="width:26px;height:26px;font-size:11px;background:linear-gradient(135deg,#ff28cf,#416cff)">${esc(String(name||"?")[0].toUpperCase())}</div></button>`}
+function buildNav(name){$("nav").innerHTML=`<button onclick="location.href='timepass.html'">${ic("home")}</button><button onclick="location.href='reels.html'">${ic("reel")}</button><button class="on">${ic("send")}</button><button onclick="location.href='vibesearch.html'">${ic("search")}</button><button onclick="location.href='insta.html'"><div class="av" style="width:26px;height:26px;font-size:11px;background:linear-gradient(135deg,#ff28cf,#416cff)">${esc(String(name||"?")[0].toUpperCase())}</div></button>`}
 buildNav("?");
 
 /* STATE */
@@ -297,6 +315,14 @@ function startRealtime(){
 function goBack(){if(openGroupId){closeGroupChat();return}if(document.referrer)history.back();else location.href="timepass.html"}
 
 (async function(){await getCurrentUser();if(!me){$("list").innerHTML=`<div class="error">🔐 Login required.</div>`;return}await refreshAll();startRealtime()})();
+</script>
+<script>
+(function(){const n=document.getElementById("nav");if(!n)return;
+function go(){let i=n.querySelector(".ind");if(!i){i=document.createElement("i");i.className="ind";n.prepend(i)}
+const b=n.querySelector("button.on");if(!b){i.style.width="0";return}
+i.style.width=(b.offsetWidth-6)+"px";i.style.transform="translateX("+(b.offsetLeft+3)+"px)"}
+new MutationObserver(go).observe(n,{childList:true,subtree:true,attributes:true,attributeFilter:["class"]});
+addEventListener("resize",go);addEventListener("load",go);go()})();
 </script>
 </body>
 </html>
