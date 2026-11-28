@@ -2,850 +2,301 @@
 <html lang="mr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#07070f">
-<title>GyanSetu - Chats</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>GyanSetu - Messages</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{
-  --bg:#07070f;
-  --bg2:#0e0e1a;
-  --card:#141426;
-  --card2:#1b1b33;
-  --line:#26264a;
-  --text:#f1f3ff;
-  --muted:#8a8fb0;
-  --pink:#ff2d95;
-  --blue:#2979ff;
-  --grad:linear-gradient(135deg,#ff2d95,#7b3ff2 50%,#2979ff);
-  --grad2:linear-gradient(135deg,#ff2d95,#2979ff);
-  --green:#22e08a;
-}
+:root{--bg:#000;--tx:#f5f5f5;--mu:#a8a8a8;--ln:#262626;--cd:#262626;--bl:#0095f6;--gr:#2ee26b;--ig:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)}
+[data-theme=light]{--bg:#fff;--tx:#262626;--mu:#737373;--ln:#dbdbdb;--cd:#efefef}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{
-  font-family:Roboto,Arial,sans-serif;
-  background:
-    radial-gradient(600px 300px at 0% 0%,rgba(255,45,149,.14),transparent 60%),
-    radial-gradient(600px 400px at 100% 100%,rgba(41,121,255,.16),transparent 60%),
-    var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-button{font-family:inherit}
-
-/* HEADER */
-.header{
-  position:sticky;top:0;z-index:50;
-  height:64px;padding:0 14px;
-  display:flex;align-items:center;gap:10px;
-  background:rgba(7,7,15,.88);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-}
-.header::after{
-  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
-  background:var(--grad);
-}
-.icon-btn{
-  width:40px;height:40px;border:0;border-radius:50%;
-  background:var(--card2);color:var(--text);
-  font-size:22px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;
-}
-.icon-btn:active{transform:scale(.92)}
-.h-info{flex:1;min-width:0}
-.h-title{
-  font-size:20px;font-weight:800;
-  background:var(--grad2);-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-.h-sub{font-size:11px;color:var(--muted);margin-top:1px}
-
-/* SEARCH */
-.search-area{padding:12px 14px 6px}
-.search{
-  width:100%;padding:13px 16px;font-size:15px;color:var(--text);
-  background:var(--card);border:1.5px solid var(--line);
-  border-radius:16px;outline:none;transition:.2s;
-}
-.search::placeholder{color:var(--muted)}
-.search:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(255,45,149,.12)}
-
-/* TABS */
-.tabs{display:flex;gap:8px;padding:8px 14px 4px;overflow-x:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{
-  border:1.5px solid var(--line);background:var(--card);color:var(--muted);
-  padding:8px 16px;border-radius:30px;font-size:13px;font-weight:700;
-  cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;
-}
-.tab.active{background:var(--grad2);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(255,45,149,.25)}
-.tab .cnt{
-  min-width:18px;height:18px;padding:0 5px;border-radius:12px;
-  background:rgba(255,255,255,.22);font-size:10px;
-  display:flex;align-items:center;justify-content:center;
-}
-
-/* LIST */
-#list{padding:8px 14px 110px}
-.item{
-  display:flex;align-items:center;gap:13px;
-  padding:12px;margin-bottom:9px;
-  background:var(--card);border:1px solid var(--line);
-  border-radius:18px;cursor:pointer;transition:transform .12s,border-color .2s;
-}
-.item:active{transform:scale(.985);border-color:var(--pink)}
+body{background:var(--bg);color:var(--tx);font-family:-apple-system,system-ui,Roboto,Arial,sans-serif;padding-bottom:calc(64px + env(safe-area-inset-bottom));overflow-x:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:var(--tx);outline:0}
+svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.hdr{position:sticky;top:0;z-index:50;height:52px;display:flex;align-items:center;gap:6px;padding:0 10px;background:var(--bg)}
+.hdr h1{flex:1;font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hdr button{padding:7px}
+.sbx{padding:4px 14px 8px}.sbx input{width:100%;padding:10px 14px;border-radius:12px;border:0;background:var(--cd);font-size:16px}.sbx input::placeholder{color:var(--mu)}
+.act-row{display:flex;gap:14px;padding:6px 14px 12px;overflow-x:auto}.act-row::-webkit-scrollbar{display:none}
+.ao{display:flex;flex-direction:column;align-items:center;gap:4px;width:66px;flex-shrink:0;cursor:pointer;font-size:12px}
+.ao span{max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mu)}
+.tabs{display:flex;gap:6px;padding:0 14px 8px;overflow-x:auto;border-bottom:1px solid var(--ln)}.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 14px;border-radius:9px;background:var(--cd);font-size:13px;font-weight:600;display:flex;gap:6px;align-items:center}
+.tab.active{background:var(--tx);color:var(--bg)}
+.tab .cnt{background:var(--bl);color:#fff;border-radius:10px;min-width:17px;height:17px;padding:0 5px;font-size:10px;display:flex;align-items:center;justify-content:center}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
 .av-wrap{position:relative;flex-shrink:0}
-.av{
-  width:54px;height:54px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;font-weight:800;color:#fff;
-  border:2px solid var(--bg2);
-}
-.av.group{border-radius:18px}
-.dot-online{
-  position:absolute;right:0;bottom:1px;width:14px;height:14px;
-  border-radius:50%;background:var(--green);border:2.5px solid var(--card);
-  box-shadow:0 0 8px var(--green);
-}
+.dot-online{position:absolute;right:1px;bottom:1px;width:15px;height:15px;border-radius:50%;background:var(--gr);border:3px solid var(--bg)}
+.item{display:flex;align-items:center;gap:12px;padding:10px 14px;cursor:pointer}.item:active{background:var(--cd)}
 .mid{flex:1;min-width:0}
-.row1{display:flex;align-items:center;gap:6px}
-.name{font-size:16px;font-weight:700;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;flex:1}
-.tag{
-  font-size:9px;font-weight:800;padding:2px 6px;border-radius:8px;
-  background:rgba(41,121,255,.2);color:#7fb0ff;flex-shrink:0;
-}
-.sub{
-  margin-top:5px;font-size:13px;color:var(--muted);
-  overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
-}
-.sub.unread-txt{color:var(--text);font-weight:600}
-.sub .ok{color:var(--blue)}
-.right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
-.time{font-size:11px;color:var(--muted)}
-.time.hot{color:var(--pink);font-weight:700}
-.badge{
-  min-width:22px;height:22px;padding:0 6px;border-radius:12px;
-  background:var(--grad2);color:#fff;font-size:11px;font-weight:800;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(255,45,149,.35);
-}
-
-/* STATES */
-.loading,.empty,.error{text-align:center;padding:45px 20px;color:var(--muted);line-height:1.6}
-.loader{
-  width:36px;height:36px;margin:0 auto 12px;border-radius:50%;
-  border:3px solid var(--line);border-top-color:var(--pink);
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty-icon{font-size:42px;margin-bottom:10px}
-.error{color:#ff7a9c;background:rgba(255,45,149,.08);border:1px solid rgba(255,45,149,.3);border-radius:16px;margin-top:20px}
-
-/* FAB */
-.fab{
-  position:fixed;right:18px;bottom:22px;z-index:60;
-  width:60px;height:60px;border:0;border-radius:20px;
-  background:var(--grad);color:#fff;font-size:30px;cursor:pointer;
-  box-shadow:0 10px 28px rgba(255,45,149,.45),0 0 0 1px rgba(255,255,255,.08) inset;
-  display:flex;align-items:center;justify-content:center;
-}
-.fab:active{transform:scale(.92) rotate(90deg)}
-
-/* SHEET (new group) */
-.overlay{
-  position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.65);
-  display:none;align-items:flex-end;justify-content:center;
-}
-.overlay.show{display:flex}
-.sheet{
-  width:100%;max-width:560px;max-height:90vh;
-  background:var(--bg2);border-radius:26px 26px 0 0;
-  border:1px solid var(--line);border-bottom:0;
-  display:flex;flex-direction:column;
-  animation:up .25s ease;
-}
-@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
-.sheet-head{padding:18px 18px 8px;display:flex;align-items:center;justify-content:space-between}
-.sheet-head h3{font-size:19px;font-weight:800}
-.field{
-  width:calc(100% - 36px);margin:8px 18px;padding:13px 15px;
-  background:var(--card);border:1.5px solid var(--line);border-radius:14px;
-  color:var(--text);font-size:15px;outline:none;
-}
-.field:focus{border-color:var(--blue)}
-.chips{display:flex;gap:6px;flex-wrap:wrap;padding:2px 18px}
-.chip{
-  background:var(--card2);border:1px solid var(--line);color:var(--text);
-  border-radius:20px;padding:5px 10px;font-size:12px;
-  display:flex;align-items:center;gap:6px;
-}
-.chip b{color:var(--pink);cursor:pointer}
-.pick-list{flex:1;overflow-y:auto;padding:6px 18px}
-.pick{
-  display:flex;align-items:center;gap:12px;padding:9px 0;
-  border-bottom:1px solid var(--line);cursor:pointer;
-}
-.pick .av{width:42px;height:42px;font-size:17px}
-.pick .pn{flex:1;font-weight:600;font-size:15px}
-.check{
-  width:24px;height:24px;border-radius:8px;border:2px solid var(--line);
-  display:flex;align-items:center;justify-content:center;color:transparent;font-size:15px;
-}
-.pick.sel .check{background:var(--grad2);border-color:transparent;color:#fff}
-.sheet-foot{padding:14px 18px 18px}
-.btn{
-  width:100%;padding:15px;border:0;border-radius:16px;cursor:pointer;
-  background:var(--grad);color:#fff;font-size:16px;font-weight:800;
-  box-shadow:0 8px 22px rgba(255,45,149,.3);
-}
-.btn:disabled{opacity:.4;box-shadow:none;cursor:not-allowed}
-
-/* GROUP CHAT SCREEN */
-.gchat{
-  position:fixed;inset:0;z-index:300;background:var(--bg);
-  display:none;flex-direction:column;
-}
-.gchat.show{display:flex}
-.g-head{
-  height:64px;padding:0 12px;display:flex;align-items:center;gap:10px;
-  background:var(--bg2);position:relative;flex-shrink:0;
-}
-.g-head::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--grad)}
-.g-head .av{width:42px;height:42px;font-size:18px}
-.g-title{font-weight:800;font-size:16px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.g-members{font-size:11px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.msgs{
-  flex:1;overflow-y:auto;padding:14px 12px;
-  display:flex;flex-direction:column;gap:6px;
-  background:
-    radial-gradient(500px 300px at 100% 0%,rgba(41,121,255,.10),transparent 60%),
-    radial-gradient(500px 300px at 0% 100%,rgba(255,45,149,.10),transparent 60%);
-}
-.bub{
-  max-width:80%;padding:8px 12px 6px;border-radius:16px;
-  font-size:15px;line-height:1.4;word-wrap:break-word;overflow-wrap:anywhere;
-}
-.bub.me{
-  align-self:flex-end;background:var(--grad2);color:#fff;
-  border-bottom-right-radius:5px;
-}
-.bub.other{
-  align-self:flex-start;background:var(--card2);border:1px solid var(--line);
-  border-bottom-left-radius:5px;
-}
-.bub .who{font-size:12px;font-weight:800;margin-bottom:3px}
-.bub .t{font-size:10px;opacity:.65;text-align:right;margin-top:3px}
-.day-sep{
-  align-self:center;font-size:11px;color:var(--muted);
-  background:var(--card);border:1px solid var(--line);
-  padding:4px 12px;border-radius:12px;margin:6px 0;
-}
-.composer{
-  padding:10px;display:flex;gap:8px;align-items:flex-end;
-  background:var(--bg2);border-top:1px solid var(--line);flex-shrink:0;
-}
-.composer textarea{
-  flex:1;resize:none;max-height:110px;padding:12px 15px;
-  background:var(--card);border:1.5px solid var(--line);border-radius:22px;
-  color:var(--text);font-size:15px;font-family:inherit;outline:none;
-}
-.composer textarea:focus{border-color:var(--pink)}
-.send{
-  width:46px;height:46px;border:0;border-radius:50%;flex-shrink:0;
-  background:var(--grad);color:#fff;font-size:20px;cursor:pointer;
-}
-.send:active{transform:scale(.9)}
-
-.toast{
-  position:fixed;left:50%;bottom:95px;transform:translateX(-50%);z-index:500;
-  background:var(--card2);border:1px solid var(--pink);color:var(--text);
-  padding:11px 18px;border-radius:14px;font-size:14px;max-width:88%;
-  display:none;text-align:center;
-}
-.toast.show{display:block}
+.name{font-size:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;display:flex;gap:6px;align-items:center}
+.tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:6px;background:var(--cd);color:var(--mu)}
+.sub{margin-top:2px;font-size:14px;color:var(--mu);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.sub.hot{color:var(--tx);font-weight:700}
+.right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.badge{min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--bl);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.empty,.error,.loading{text-align:center;color:var(--mu);padding:60px 24px;line-height:1.7}.error{color:#ff5470}
+.loader{width:30px;height:30px;margin:0 auto 12px;border-radius:50%;border:3px solid var(--ln);border-top-color:var(--bl);animation:spin .8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:100;height:calc(56px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;background:var(--bg);border-top:1px solid var(--ln)}
+.nav button{flex:1;display:flex;align-items:center;justify-content:center;color:var(--tx);opacity:.65}.nav button.on{opacity:1}.nav button.on svg{stroke-width:2.8}
+.nav .av{border:2px solid transparent}
+.overlay{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.65);display:none;align-items:flex-end;justify-content:center}.overlay.show{display:flex}
+.sheet{width:100%;max-width:560px;height:85vh;background:var(--bg);border-radius:18px 18px 0 0;border:1px solid var(--ln);display:flex;flex-direction:column}
+.sheet-head{padding:16px 16px 6px;display:flex;align-items:center;justify-content:space-between}.sheet-head h3{font-size:16px}
+.field{width:calc(100% - 32px);margin:8px 16px;padding:12px;background:var(--cd);border:0;border-radius:10px;font-size:16px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px}
+.chip{background:var(--cd);border-radius:16px;padding:5px 10px;font-size:12px;display:flex;gap:6px}.chip b{color:#ff5470;cursor:pointer}
+.pick-list{flex:1;overflow-y:auto;padding:6px 16px}
+.pick{display:flex;align-items:center;gap:12px;padding:8px 0;cursor:pointer}.pick .pn{flex:1;font-size:15px}
+.check{width:22px;height:22px;border-radius:50%;border:2px solid var(--ln);display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px}
+.pick.sel .check{background:var(--bl);border-color:var(--bl);color:#fff}
+.sheet-foot{padding:12px 16px calc(16px + env(safe-area-inset-bottom))}
+.btn{width:100%;padding:13px;border-radius:10px;background:var(--bl);color:#fff;font-weight:700}.btn:disabled{opacity:.4}
+.gchat{position:fixed;inset:0;z-index:300;background:var(--bg);display:none;flex-direction:column}.gchat.show{display:flex}
+.g-head{height:56px;padding:0 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--ln);flex-shrink:0}
+.g-title{font-weight:700;font-size:15px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.g-members{font-size:12px;color:var(--mu);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:4px}
+.bub{max-width:78%;padding:9px 13px;border-radius:20px;font-size:15px;line-height:1.4;overflow-wrap:anywhere}
+.bub.me{align-self:flex-end;background:linear-gradient(135deg,#3797f0,#7b3ff2);color:#fff}
+.bub.other{align-self:flex-start;background:var(--cd)}
+.bub .who{font-size:11px;font-weight:700;margin-bottom:2px}.bub .t{font-size:10px;opacity:.6;text-align:right;margin-top:2px}
+.day-sep{align-self:center;font-size:11px;color:var(--mu);margin:8px 0}
+.composer{padding:10px 12px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:flex-end;border-top:1px solid var(--ln);flex-shrink:0}
+.composer textarea{flex:1;resize:none;max-height:110px;padding:11px 16px;background:none;border:1px solid var(--ln);border-radius:22px;font-size:16px}
+.send{color:var(--bl);font-weight:700;padding:10px 6px}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:900;background:var(--cd);color:var(--tx);padding:10px 18px;border-radius:12px;font-size:13px;max-width:90%;display:none;text-align:center}.toast.show{display:block}
 </style>
 </head>
 <body>
-
-<header class="header">
-  <button class="icon-btn" onclick="goBack()">‹</button>
-  <div class="h-info">
-    <div class="h-title">GyanSetu Chats</div>
-    <div class="h-sub" id="hSub">Connect &amp; message</div>
-  </div>
-  <button class="icon-btn" onclick="markAllRead()" title="सर्व वाचले">✓✓</button>
-  <button class="icon-btn" onclick="refreshAll()" aria-label="Refresh">↻</button>
+<header class="hdr">
+  <button onclick="goBack()" id="bBack"></button>
+  <h1 id="hTitle">Messages</h1>
+  <button onclick="markAllRead()" id="bRead"></button>
+  <button onclick="openNewGroup()" id="bNew"></button>
 </header>
-
-<div class="search-area">
-  <input class="search" id="searchInput" type="text" placeholder="🔍 User किंवा Group शोधा..." autocomplete="off">
-</div>
-
+<div class="sbx"><input id="searchInput" type="text" placeholder="🔍 Search" autocomplete="off"></div>
+<div class="act-row" id="actRow" style="display:none"></div>
 <div class="tabs" id="tabs">
   <button class="tab active" data-tab="all">सर्व</button>
   <button class="tab" data-tab="unread">Unread <span class="cnt" id="cntUnread" style="display:none">0</span></button>
   <button class="tab" data-tab="groups">Groups</button>
   <button class="tab" data-tab="online">🟢 Online</button>
 </div>
+<div id="list"><div class="loading"><div class="loader"></div>Loading...</div></div>
+<nav class="nav" id="nav"></nav>
 
-<div id="list">
-  <div class="loading"><div class="loader"></div>Loading...</div>
-</div>
+<div class="overlay" id="groupOverlay"><div class="sheet">
+  <div class="sheet-head"><h3>नवीन Group</h3><button onclick="closeNewGroup()" id="bX"></button></div>
+  <input class="field" id="groupName" type="text" maxlength="40" placeholder="Group चे नाव">
+  <div class="chips" id="chips"></div>
+  <input class="field" id="pickSearch" type="text" placeholder="🔍 Members शोधा">
+  <div class="pick-list" id="pickList"></div>
+  <div class="sheet-foot"><button class="btn" id="createBtn" onclick="createGroup()" disabled>Group तयार करा</button></div>
+</div></div>
 
-<button class="fab" onclick="openNewGroup()" aria-label="New group">👥</button>
-
-<!-- NEW GROUP SHEET -->
-<div class="overlay" id="groupOverlay">
-  <div class="sheet">
-    <div class="sheet-head">
-      <h3>👥 नवीन Group</h3>
-      <button class="icon-btn" onclick="closeNewGroup()">✕</button>
-    </div>
-    <input class="field" id="groupName" type="text" maxlength="40" placeholder="Group चे नाव">
-    <div class="chips" id="chips"></div>
-    <input class="field" id="pickSearch" type="text" placeholder="🔍 Members शोधा">
-    <div class="pick-list" id="pickList"></div>
-    <div class="sheet-foot">
-      <button class="btn" id="createBtn" onclick="createGroup()" disabled>Group तयार करा</button>
-    </div>
-  </div>
-</div>
-
-<!-- GROUP CHAT -->
 <div class="gchat" id="gchat">
-  <div class="g-head">
-    <button class="icon-btn" onclick="closeGroupChat()">‹</button>
-    <div class="av-wrap"><div class="av group" id="gAv"></div></div>
-    <div style="min-width:0;flex:1">
-      <div class="g-title" id="gTitle"></div>
-      <div class="g-members" id="gMembers"></div>
-    </div>
-  </div>
+  <div class="g-head"><button onclick="closeGroupChat()" id="gBack"></button><div class="av" id="gAv" style="width:36px;height:36px"></div>
+    <div style="min-width:0;flex:1"><div class="g-title" id="gTitle"></div><div class="g-members" id="gMembers"></div></div></div>
   <div class="msgs" id="msgs"></div>
-  <div class="composer">
-    <textarea id="gInput" rows="1" placeholder="Message लिहा..."></textarea>
-    <button class="send" onclick="sendGroupMessage()">➤</button>
-  </div>
+  <div class="composer"><textarea id="gInput" rows="1" placeholder="Message..."></textarea><button class="send" onclick="sendGroupMessage()">Send</button></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
-/* ================= SUPABASE ================= */
-const SUPABASE_URL = "https://eqglttfffhvoyvrclzse.supabase.co";
-const SUPABASE_KEY = "sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb";
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const sb=supabase.createClient("https://eqglttfffhvoyvrclzse.supabase.co","sb_publishable_rR4xxl0dW5DJrhhjqiFHLw_uJ-HakAb");
+try{document.documentElement.dataset.theme=JSON.parse(localStorage.getItem("gs_theme")||'"dark"')}catch(e){}
+const $=id=>document.getElementById(id);
 
-/* ================= STATE ================= */
-let me = null;
-let allUsers = [];
-let usersMap = {};
-let unreadMessages = {};   // senderId -> count
-let lastMsg = {};          // userId -> {text,time,mine}
-let groups = [];           // [{id,name,created_by,members:[ids]}]
-let groupsMap = {};
-let groupLast = {};        // groupId -> {text,time,sender}
-let groupUnread = {};      // groupId -> count
-let onlineSet = new Set();
-let activeTab = "all";
-let openGroupId = null;
-let renderedMsgIds = new Set();
-let selectedMembers = new Set();
-let realtimeChannel = null, presenceChannel = null;
+/* ICONS + NAV (videos page सारखेच) */
+const P={home:'<path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/>',search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>',reel:'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M3 9h18M9 3l3 6M15 3l3 6"/><path d="M10 13l5 3-5 3z"/>',send:'<path d="M22 3L9.500 13.500M22 3l-7 18-5.500-7.500L2 9z"/>',back:'<path d="M15 5l-7 7 7 7"/>',x:'<path d="M5 5l14 14M19 5L5 19"/>',edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',check:'<path d="M2 13l4 4L14 8M10 15l2 2L21 8"/>'};
+const ic=n=>`<svg viewBox="0 0 24 24">${P[n]}</svg>`;
+$("bBack").innerHTML=ic("back");$("bRead").innerHTML=ic("check");$("bNew").innerHTML=ic("edit");$("bX").innerHTML=ic("x");$("gBack").innerHTML=ic("back");
+function buildNav(name){$("nav").innerHTML=`<button onclick="location.href='timepass.html'">${ic("home")}</button><button onclick="location.href='timepass.html?tab=reels'">${ic("reel")}</button><button class="on">${ic("send")}</button><button onclick="location.href='timepass.html?tab=search'">${ic("search")}</button><button onclick="location.href='insta.html'"><div class="av" style="width:26px;height:26px;font-size:11px;background:linear-gradient(135deg,#ff28cf,#416cff)">${esc(String(name||"?")[0].toUpperCase())}</div></button>`}
+buildNav("?");
 
-/* ================= HELPERS ================= */
-const $ = id => document.getElementById(id);
+/* STATE */
+let me=null,allUsers=[],usersMap={},unreadMessages={},lastMsg={},groups=[],groupsMap={},groupLast={},groupUnread={},onlineSet=new Set();
+let activeTab="all",openGroupId=null,renderedMsgIds=new Set(),selectedMembers=new Set(),realtimeChannel=null,presenceChannel=null;
 
-function esc(t){
-  return String(t ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
+/* HELPERS */
+function esc(t){return String(t??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+const PAL=[["#ff2d95","#7b3ff2"],["#2979ff","#00c6ff"],["#7b3ff2","#ff2d95"],["#00c6ff","#7b3ff2"],["#ff5fa8","#2979ff"],["#4c6fff","#ff2d95"]];
+function pair(id){let h=0;const s=String(id);for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return PAL[h%PAL.length]}
+const avStyle=id=>`background:linear-gradient(135deg,${pair(id)[0]},${pair(id)[1]})`;
+const userName=u=>u?.username||u?.full_name||"GyanSetu User";
+function msgText(m){const t=m?.content??m?.message??m?.text??m?.body??"";return String(t).startsWith("VIDEO:")?"🎬 Video पाठवला":t}
+function fmtTime(iso){if(!iso)return"";const d=new Date(iso),n=new Date();if(d.toDateString()===n.toDateString())return d.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true});const y=new Date();y.setDate(n.getDate()-1);if(d.toDateString()===y.toDateString())return"काल";return d.toLocaleDateString("en-IN",{day:"2-digit",month:"2-digit",year:"2-digit"})}
+const fmtClock=iso=>new Date(iso).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true});
+function dayLabel(iso){const d=new Date(iso),n=new Date();if(d.toDateString()===n.toDateString())return"आज";const y=new Date();y.setDate(n.getDate()-1);if(d.toDateString()===y.toDateString())return"काल";return d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"})}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove("show"),2800)}
+const seenKey=g=>"gs_seen_"+(me?.id||"")+"_"+g;
+function getSeen(g){try{return localStorage.getItem(seenKey(g))||""}catch(e){return""}}
+function setSeen(g,iso){try{localStorage.setItem(seenKey(g),iso)}catch(e){}}
 
-const PALETTE = [
-  ["#ff2d95","#7b3ff2"],["#2979ff","#00c6ff"],["#7b3ff2","#ff2d95"],
-  ["#00c6ff","#7b3ff2"],["#ff5fa8","#2979ff"],["#4c6fff","#ff2d95"]
-];
-function colorPair(id){
-  let h = 0; const s = String(id);
-  for(let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i)) >>> 0;
-  return PALETTE[h % PALETTE.length];
-}
-function avatarStyle(id){
-  const [a,b] = colorPair(id);
-  return `background:linear-gradient(135deg,${a},${b})`;
-}
-function nameColor(id){ return colorPair(id)[0]; }
-
-function userName(u){ return u?.username || u?.full_name || "GyanSetu User"; }
-
-function msgText(m){ return m?.content ?? m?.message ?? m?.text ?? m?.body ?? ""; }
-
-function fmtTime(iso){
-  if(!iso) return "";
-  const d = new Date(iso), n = new Date();
-  const sameDay = d.toDateString() === n.toDateString();
-  if(sameDay) return d.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true});
-  const y = new Date(); y.setDate(n.getDate()-1);
-  if(d.toDateString() === y.toDateString()) return "काल";
-  return d.toLocaleDateString("en-IN",{day:"2-digit",month:"2-digit",year:"2-digit"});
-}
-function fmtClock(iso){
-  return new Date(iso).toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",hour12:true});
-}
-function dayLabel(iso){
-  const d = new Date(iso), n = new Date();
-  if(d.toDateString() === n.toDateString()) return "आज";
-  const y = new Date(); y.setDate(n.getDate()-1);
-  if(d.toDateString() === y.toDateString()) return "काल";
-  return d.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
-}
-
-function toast(msg){
-  const t = $("toast"); t.textContent = msg; t.classList.add("show");
-  clearTimeout(toast._t); toast._t = setTimeout(()=>t.classList.remove("show"),2800);
-}
-
-function seenKey(gid){ return "gs_seen_" + (me?.id||"") + "_" + gid; }
-function getSeen(gid){ try{ return localStorage.getItem(seenKey(gid)) || ""; }catch(e){ return ""; } }
-function setSeen(gid, iso){ try{ localStorage.setItem(seenKey(gid), iso); }catch(e){} }
-
-/* ================= AUTH ================= */
-async function getCurrentUser(){
-  try{
-    const { data, error } = await sb.auth.getUser();
-    if(error){ console.error(error); return null; }
-    me = data?.user || null;
-    return me;
-  }catch(e){ console.error(e); return null; }
-}
-
-/* ================= LOAD DATA ================= */
+/* AUTH + LOAD */
+async function getCurrentUser(){try{const {data,error}=await sb.auth.getUser();if(error){console.error(error);return null}me=data?.user||null;return me}catch(e){console.error(e);return null}}
 async function loadUsers(){
-  const { data, error } = await sb.from("Profiles").select("*").order("username",{ascending:true});
-  if(error) throw error;
-  usersMap = {};
-  (data||[]).forEach(u => usersMap[u.id] = u);
-  allUsers = (data||[]).filter(u => u.id !== me.id);
+  const {data,error}=await sb.from("Profiles").select("*").order("username",{ascending:true});if(error)throw error;
+  usersMap={};(data||[]).forEach(u=>usersMap[u.id]=u);allUsers=(data||[]).filter(u=>u.id!==me.id);
+  const mn=userName(usersMap[me.id]);$("hTitle").textContent=usersMap[me.id]?mn:"Messages";buildNav(mn);
 }
-
 async function loadDirectMessages(){
-  unreadMessages = {}; lastMsg = {};
-  const { data, error } = await sb.from("Messages").select("*")
-    .or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`)
-    .order("created_at",{ascending:false}).limit(600);
-  if(error){ console.error("Messages error:", error); return; }
-  (data||[]).forEach(m => {
-    const mine = m.sender_id === me.id;
-    const other = mine ? m.receiver_id : m.sender_id;
-    if(!lastMsg[other]) lastMsg[other] = { text: msgText(m), time: m.created_at, mine };
-    if(!mine && m.is_read === false){
-      unreadMessages[other] = (unreadMessages[other] || 0) + 1;
-    }
-  });
+  unreadMessages={};lastMsg={};
+  const {data,error}=await sb.from("Messages").select("*").or(`sender_id.eq.${me.id},receiver_id.eq.${me.id}`).order("created_at",{ascending:false}).limit(600);
+  if(error){console.error("Messages error:",error);return}
+  (data||[]).forEach(m=>{const mine=m.sender_id===me.id,o=mine?m.receiver_id:m.sender_id;
+    if(!lastMsg[o])lastMsg[o]={text:msgText(m),time:m.created_at,mine};
+    if(!mine&&m.is_read===false)unreadMessages[o]=(unreadMessages[o]||0)+1});
 }
-
 async function loadGroups(){
-  groups = []; groupsMap = {}; groupLast = {}; groupUnread = {};
-  const { data: mine, error } = await sb.from("GroupMembers").select("group_id").eq("user_id", me.id);
-  if(error){ console.warn("Groups tables नाहीत किंवा error:", error.message); return; }
-  const ids = (mine||[]).map(r => r.group_id);
-  if(!ids.length) return;
-
-  const [g, mem, msgs] = await Promise.all([
-    sb.from("Groups").select("*").in("id", ids),
-    sb.from("GroupMembers").select("group_id,user_id").in("group_id", ids),
-    sb.from("GroupMessages").select("*").in("group_id", ids)
-      .order("created_at",{ascending:false}).limit(600)
-  ]);
-
-  (g.data||[]).forEach(gr => {
-    gr.members = [];
-    groupsMap[gr.id] = gr;
-    groups.push(gr);
-  });
-  (mem.data||[]).forEach(r => { groupsMap[r.group_id]?.members.push(r.user_id); });
-
-  (msgs.data||[]).forEach(m => {
-    if(!groupLast[m.group_id]){
-      groupLast[m.group_id] = { text: m.content, time: m.created_at, sender: m.sender_id };
-    }
-    const seen = getSeen(m.group_id);
-    if(m.sender_id !== me.id && (!seen || m.created_at > seen)){
-      groupUnread[m.group_id] = (groupUnread[m.group_id] || 0) + 1;
-    }
-  });
+  groups=[];groupsMap={};groupLast={};groupUnread={};
+  const {data:mine,error}=await sb.from("GroupMembers").select("group_id").eq("user_id",me.id);
+  if(error){console.warn("Groups tables नाहीत:",error.message);return}
+  const ids=(mine||[]).map(r=>r.group_id);if(!ids.length)return;
+  const [g,mem,msgs]=await Promise.all([sb.from("Groups").select("*").in("id",ids),sb.from("GroupMembers").select("group_id,user_id").in("group_id",ids),sb.from("GroupMessages").select("*").in("group_id",ids).order("created_at",{ascending:false}).limit(600)]);
+  (g.data||[]).forEach(gr=>{gr.members=[];groupsMap[gr.id]=gr;groups.push(gr)});
+  (mem.data||[]).forEach(r=>{groupsMap[r.group_id]?.members.push(r.user_id)});
+  (msgs.data||[]).forEach(m=>{if(!groupLast[m.group_id])groupLast[m.group_id]={text:m.content,time:m.created_at,sender:m.sender_id};
+    const seen=getSeen(m.group_id);if(m.sender_id!==me.id&&(!seen||m.created_at>seen))groupUnread[m.group_id]=(groupUnread[m.group_id]||0)+1});
 }
-
 async function refreshAll(){
-  $("list").innerHTML = `<div class="loading"><div class="loader"></div>Loading...</div>`;
+  $("list").innerHTML=`<div class="loading"><div class="loader"></div>Loading...</div>`;
   try{
-    if(!me) await getCurrentUser();
-    if(!me){
-      $("list").innerHTML = `<div class="error">🔐 Login required.<br>Please login to view GyanSetu chats.</div>`;
-      return;
-    }
-    await loadUsers();
-    await Promise.all([loadDirectMessages(), loadGroups()]);
-    render();
-  }catch(e){
-    console.error(e);
-    $("list").innerHTML = `<div class="error">Load झाले नाही.<br><br>${esc(e.message || e)}</div>`;
-  }
+    if(!me)await getCurrentUser();
+    if(!me){$("list").innerHTML=`<div class="error">🔐 Login required.</div>`;return}
+    await loadUsers();await Promise.all([loadDirectMessages(),loadGroups()]);render();
+  }catch(e){console.error(e);$("list").innerHTML=`<div class="error">Load झाले नाही.<br>${esc(e.message||e)}</div>`}
 }
 
-/* ================= RENDER LIST ================= */
+/* RENDER */
 function buildItems(){
-  const items = [];
-
-  allUsers.forEach(u => {
-    const lm = lastMsg[u.id];
-    items.push({
-      type:"user", id:u.id, name:userName(u), email:u.email || "",
-      sub: lm ? (lm.mine ? "✓ " : "") + lm.text : (u.email || "GyanSetu member"),
-      mine: !!lm?.mine,
-      time: lm?.time || "",
-      unread: unreadMessages[u.id] || 0,
-      online: onlineSet.has(u.id)
-    });
-  });
-
-  groups.forEach(g => {
-    const gl = groupLast[g.id];
-    let sub = `${g.members.length} members`;
-    if(gl){
-      const who = gl.sender === me.id ? "तुम्ही" : userName(usersMap[gl.sender]).split(" ")[0];
-      sub = `${who}: ${gl.text}`;
-    }
-    items.push({
-      type:"group", id:g.id, name:g.name, email:"", sub,
-      time: gl?.time || g.created_at || "",
-      unread: groupUnread[g.id] || 0, online:false
-    });
-  });
-
-  items.sort((a,b) => {
-    if(a.time && b.time) return a.time < b.time ? 1 : -1;
-    if(a.time) return -1;
-    if(b.time) return 1;
-    return a.name.localeCompare(b.name);
-  });
+  const items=[];
+  allUsers.forEach(u=>{const lm=lastMsg[u.id];items.push({type:"user",id:u.id,name:userName(u),email:u.email||"",sub:lm?(lm.mine?"You: ":"")+lm.text:(u.email||"GyanSetu member"),time:lm?.time||"",unread:unreadMessages[u.id]||0,online:onlineSet.has(u.id)})});
+  groups.forEach(g=>{const gl=groupLast[g.id];let sub=`${g.members.length} members`;
+    if(gl){const who=gl.sender===me.id?"You":userName(usersMap[gl.sender]).split(" ")[0];sub=`${who}: ${gl.text}`}
+    items.push({type:"group",id:g.id,name:g.name,email:"",sub,time:gl?.time||g.created_at||"",unread:groupUnread[g.id]||0,online:false})});
+  items.sort((a,b)=>a.time&&b.time?(a.time<b.time?1:-1):a.time?-1:b.time?1:a.name.localeCompare(b.name));
   return items;
 }
-
 function render(){
-  const q = $("searchInput").value.toLowerCase().trim();
-  let items = buildItems();
-
-  const totalUnread = items.filter(i => i.unread > 0).length;
-  const c = $("cntUnread");
-  c.textContent = totalUnread; c.style.display = totalUnread ? "flex" : "none";
-
-  const onlineCount = allUsers.filter(u => onlineSet.has(u.id)).length;
-  $("hSub").textContent = onlineCount ? `🟢 ${onlineCount} online` : "Connect & message";
-
-  if(activeTab === "unread") items = items.filter(i => i.unread > 0);
-  if(activeTab === "groups") items = items.filter(i => i.type === "group");
-  if(activeTab === "online") items = items.filter(i => i.type === "user" && i.online);
-  if(q) items = items.filter(i => i.name.toLowerCase().includes(q) || i.email.toLowerCase().includes(q));
-
+  const q=$("searchInput").value.toLowerCase().trim();let items=buildItems();
+  const tu=items.filter(i=>i.unread>0).length,c=$("cntUnread");c.textContent=tu;c.style.display=tu?"flex":"none";
+  const on=allUsers.filter(u=>onlineSet.has(u.id));
+  $("actRow").style.display=on.length?"flex":"none";
+  $("actRow").innerHTML=on.map(u=>`<div class="ao" data-type="user" data-id="${esc(u.id)}"><div class="av-wrap"><div class="av" style="width:56px;height:56px;font-size:22px;${avStyle(u.id)}">${esc(userName(u)[0].toUpperCase())}</div><span class="dot-online"></span></div><span>${esc(userName(u))}</span></div>`).join("");
+  if(activeTab==="unread")items=items.filter(i=>i.unread>0);
+  if(activeTab==="groups")items=items.filter(i=>i.type==="group");
+  if(activeTab==="online")items=items.filter(i=>i.type==="user"&&i.online);
+  if(q)items=items.filter(i=>i.name.toLowerCase().includes(q)||i.email.toLowerCase().includes(q));
   if(!items.length){
-    let icon = "👥", msg = "सध्या काहीही उपलब्ध नाही.";
-    if(q){ icon = "🔍"; msg = `"<b>${esc(q)}</b>" साठी काही सापडले नाही.`; }
-    else if(activeTab === "unread"){ icon = "✅"; msg = "सगळे messages वाचले आहेत!"; }
-    else if(activeTab === "groups"){ icon = "👥"; msg = "अजून कोणताही Group नाही.<br>खालच्या 👥 बटणाने नवीन Group बनवा."; }
-    else if(activeTab === "online"){ icon = "😴"; msg = "सध्या कोणी online नाही."; }
-    $("list").innerHTML = `<div class="empty"><div class="empty-icon">${icon}</div>${msg}</div>`;
-    return;
+    let m="सध्या काहीही उपलब्ध नाही.";
+    if(q)m=`"<b>${esc(q)}</b>" साठी काही सापडले नाही.`;else if(activeTab==="unread")m="✅ सगळे messages वाचले आहेत!";else if(activeTab==="groups")m="अजून कोणताही Group नाही.<br>वरच्या ✏️ ने नवीन Group बनवा.";else if(activeTab==="online")m="सध्या कोणी online नाही.";
+    $("list").innerHTML=`<div class="empty">${m}</div>`;return;
   }
-
-  $("list").innerHTML = items.map(i => {
-    const letter = esc(i.name.charAt(0).toUpperCase() || "?");
-    const hot = i.unread > 0;
-    return `
-    <div class="item" data-type="${i.type}" data-id="${esc(i.id)}">
-      <div class="av-wrap">
-        <div class="av ${i.type==="group"?"group":""}" style="${avatarStyle(i.id)}">${i.type==="group" ? "👥" : letter}</div>
-        ${i.online ? '<span class="dot-online"></span>' : ''}
-      </div>
-      <div class="mid">
-        <div class="row1">
-          <div class="name">${esc(i.name)}</div>
-          ${i.type==="group" ? '<span class="tag">GROUP</span>' : ''}
-        </div>
-        <div class="sub ${hot?"unread-txt":""}">${esc(i.sub)}</div>
-      </div>
-      <div class="right">
-        <div class="time ${hot?"hot":""}">${i.time ? fmtTime(i.time) : ""}</div>
-        ${hot ? `<span class="badge">${i.unread>99?"99+":i.unread}</span>` : ""}
-      </div>
-    </div>`;
-  }).join("");
+  $("list").innerHTML=items.map(i=>{const hot=i.unread>0;return`<div class="item" data-type="${i.type}" data-id="${esc(i.id)}">
+    <div class="av-wrap"><div class="av" style="width:56px;height:56px;font-size:${i.type==="group"?24:22}px;${avStyle(i.id)}">${i.type==="group"?"👥":esc(i.name.charAt(0).toUpperCase()||"?")}</div>${i.online?'<span class="dot-online"></span>':""}</div>
+    <div class="mid"><div class="name" style="${hot?"font-weight:700":""}">${esc(i.name)}${i.type==="group"?'<span class="tag">GROUP</span>':""}</div>
+    <div class="sub ${hot?"hot":""}">${esc(i.sub)}${i.time?" · "+fmtTime(i.time):""}</div></div>
+    <div class="right">${hot?`<span class="badge">${i.unread>99?"99+":i.unread}</span>`:""}</div></div>`}).join("");
 }
 
-/* ================= EVENTS ================= */
-$("list").addEventListener("click", e => {
-  const el = e.target.closest(".item"); if(!el) return;
-  const id = el.dataset.id;
-  if(el.dataset.type === "group") openGroupChat(id); else openChat(id);
-});
+/* EVENTS */
+function openItem(e){const el=e.target.closest("[data-id]");if(!el)return;const id=el.dataset.id;if(el.dataset.type==="group")openGroupChat(id);else openChat(id)}
+$("list").addEventListener("click",openItem);$("actRow").addEventListener("click",openItem);
+$("tabs").addEventListener("click",e=>{const t=e.target.closest(".tab");if(!t)return;activeTab=t.dataset.tab;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===t));render()});
+$("searchInput").addEventListener("input",render);
+$("searchInput").addEventListener("keydown",e=>{if(e.key==="Escape"){e.target.value="";render()}});
 
-$("tabs").addEventListener("click", e => {
-  const t = e.target.closest(".tab"); if(!t) return;
-  activeTab = t.dataset.tab;
-  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("active", x === t));
-  render();
-});
-
-$("searchInput").addEventListener("input", render);
-$("searchInput").addEventListener("keydown", e => {
-  if(e.key === "Escape"){ e.target.value = ""; render(); }
-});
-
-/* ================= DIRECT CHAT ================= */
-async function openChat(userId){
-  if(!userId) return;
-  if(me){
-    try{
-      await sb.from("Messages").update({ is_read:true })
-        .eq("sender_id", userId).eq("receiver_id", me.id).eq("is_read", false);
-    }catch(e){ console.error(e); }
-  }
-  window.location.href = "message.html?id=" + encodeURIComponent(userId);
+/* DIRECT CHAT */
+async function openChat(uid){
+  if(!uid)return;
+  if(me){try{await sb.from("Messages").update({is_read:true}).eq("sender_id",uid).eq("receiver_id",me.id).eq("is_read",false)}catch(e){console.error(e)}}
+  location.href="message.html?id="+encodeURIComponent(uid);
 }
-
 async function markAllRead(){
-  if(!me) return;
-  try{
-    await sb.from("Messages").update({ is_read:true }).eq("receiver_id", me.id).eq("is_read", false);
-    unreadMessages = {};
-    const now = new Date().toISOString();
-    groups.forEach(g => setSeen(g.id, now));
-    groupUnread = {};
-    render(); toast("✓✓ सर्व messages वाचले");
-  }catch(e){ toast("काहीतरी चुकले"); }
+  if(!me)return;
+  try{await sb.from("Messages").update({is_read:true}).eq("receiver_id",me.id).eq("is_read",false);unreadMessages={};const now=new Date().toISOString();groups.forEach(g=>setSeen(g.id,now));groupUnread={};render();toast("✓✓ सर्व messages वाचले")}catch(e){toast("काहीतरी चुकले")}
 }
 
-/* ================= NEW GROUP ================= */
-function openNewGroup(){
-  selectedMembers = new Set();
-  $("groupName").value = ""; $("pickSearch").value = "";
-  $("groupOverlay").classList.add("show");
-  renderPick(); updateCreateBtn();
-}
-function closeNewGroup(){ $("groupOverlay").classList.remove("show"); }
-
+/* NEW GROUP */
+function openNewGroup(){selectedMembers=new Set();$("groupName").value="";$("pickSearch").value="";$("groupOverlay").classList.add("show");renderPick();updateCreateBtn()}
+function closeNewGroup(){$("groupOverlay").classList.remove("show")}
 function renderPick(){
-  const q = $("pickSearch").value.toLowerCase().trim();
-  const list = allUsers.filter(u => !q || userName(u).toLowerCase().includes(q));
-  $("pickList").innerHTML = list.length ? list.map(u => `
-    <div class="pick ${selectedMembers.has(u.id)?"sel":""}" data-id="${esc(u.id)}">
-      <div class="av" style="${avatarStyle(u.id)}">${esc(userName(u).charAt(0).toUpperCase())}</div>
-      <div class="pn">${esc(userName(u))}</div>
-      <div class="check">✓</div>
-    </div>`).join("") : `<div class="empty">कोणी सापडले नाही</div>`;
-
-  $("chips").innerHTML = [...selectedMembers].map(id => `
-    <span class="chip">${esc(userName(usersMap[id]))} <b data-rm="${esc(id)}">✕</b></span>`).join("");
+  const q=$("pickSearch").value.toLowerCase().trim(),list=allUsers.filter(u=>!q||userName(u).toLowerCase().includes(q));
+  $("pickList").innerHTML=list.length?list.map(u=>`<div class="pick ${selectedMembers.has(u.id)?"sel":""}" data-id="${esc(u.id)}"><div class="av" style="width:42px;height:42px;font-size:17px;${avStyle(u.id)}">${esc(userName(u)[0].toUpperCase())}</div><div class="pn">${esc(userName(u))}</div><div class="check">✓</div></div>`).join(""):`<div class="empty">कोणी सापडले नाही</div>`;
+  $("chips").innerHTML=[...selectedMembers].map(id=>`<span class="chip">${esc(userName(usersMap[id]))} <b data-rm="${esc(id)}">✕</b></span>`).join("");
 }
-function updateCreateBtn(){
-  $("createBtn").disabled = !($("groupName").value.trim() && selectedMembers.size >= 1);
-}
-
-$("pickList").addEventListener("click", e => {
-  const p = e.target.closest(".pick"); if(!p) return;
-  const id = p.dataset.id;
-  selectedMembers.has(id) ? selectedMembers.delete(id) : selectedMembers.add(id);
-  renderPick(); updateCreateBtn();
-});
-$("chips").addEventListener("click", e => {
-  const id = e.target.dataset.rm; if(!id) return;
-  selectedMembers.delete(id); renderPick(); updateCreateBtn();
-});
-$("pickSearch").addEventListener("input", renderPick);
-$("groupName").addEventListener("input", updateCreateBtn);
-$("groupOverlay").addEventListener("click", e => { if(e.target.id === "groupOverlay") closeNewGroup(); });
-
+function updateCreateBtn(){$("createBtn").disabled=!($("groupName").value.trim()&&selectedMembers.size>=1)}
+$("pickList").addEventListener("click",e=>{const p=e.target.closest(".pick");if(!p)return;const id=p.dataset.id;selectedMembers.has(id)?selectedMembers.delete(id):selectedMembers.add(id);renderPick();updateCreateBtn()});
+$("chips").addEventListener("click",e=>{const id=e.target.dataset.rm;if(!id)return;selectedMembers.delete(id);renderPick();updateCreateBtn()});
+$("pickSearch").addEventListener("input",renderPick);$("groupName").addEventListener("input",updateCreateBtn);
+$("groupOverlay").addEventListener("click",e=>{if(e.target.id==="groupOverlay")closeNewGroup()});
 async function createGroup(){
-  const name = $("groupName").value.trim();
-  if(!name || !selectedMembers.size) return;
-  const btn = $("createBtn"); btn.disabled = true; btn.textContent = "तयार होत आहे...";
+  const name=$("groupName").value.trim();if(!name||!selectedMembers.size)return;
+  const btn=$("createBtn");btn.disabled=true;btn.textContent="तयार होत आहे...";
   try{
-    const { data: g, error } = await sb.from("Groups")
-      .insert({ name, created_by: me.id }).select().single();
-    if(error) throw error;
-
-    const rows = [me.id, ...selectedMembers].map(uid => ({ group_id: g.id, user_id: uid }));
-    const { error: e2 } = await sb.from("GroupMembers").insert(rows);
-    if(e2) throw e2;
-
-    closeNewGroup();
-    await loadGroups(); render();
-    toast("✅ Group तयार झाला!");
-    openGroupChat(g.id);
-  }catch(e){
-    console.error(e);
-    toast("Group बनला नाही: " + (e.message || e));
-  }finally{
-    btn.textContent = "Group तयार करा"; updateCreateBtn();
-  }
+    const {data:g,error}=await sb.from("Groups").insert({name,created_by:me.id}).select().single();if(error)throw error;
+    const {error:e2}=await sb.from("GroupMembers").insert([me.id,...selectedMembers].map(uid=>({group_id:g.id,user_id:uid})));if(e2)throw e2;
+    closeNewGroup();await loadGroups();render();toast("✅ Group तयार झाला!");openGroupChat(g.id);
+  }catch(e){console.error(e);toast("Group बनला नाही: "+(e.message||e))}
+  finally{btn.textContent="Group तयार करा";updateCreateBtn()}
 }
 
-/* ================= GROUP CHAT ================= */
+/* GROUP CHAT */
 async function openGroupChat(gid){
-  const g = groupsMap[gid]; if(!g) return;
-  openGroupId = gid; renderedMsgIds = new Set();
-
-  $("gAv").style.cssText = avatarStyle(gid);
-  $("gAv").textContent = "👥";
-  $("gTitle").textContent = g.name;
-  $("gMembers").textContent = g.members.map(id => id === me.id ? "तुम्ही" : userName(usersMap[id]).split(" ")[0]).join(", ");
-  $("msgs").innerHTML = `<div class="loading"><div class="loader"></div></div>`;
-  $("gchat").classList.add("show");
-
-  const { data, error } = await sb.from("GroupMessages").select("*")
-    .eq("group_id", gid).order("created_at",{ascending:true}).limit(300);
-  $("msgs").innerHTML = "";
-  if(error){ $("msgs").innerHTML = `<div class="error">${esc(error.message)}</div>`; return; }
-  if(!data.length){
-    $("msgs").innerHTML = `<div class="empty"><div class="empty-icon">💬</div>पहिला message पाठवा!</div>`;
-  }
-  let lastDay = "";
-  data.forEach(m => { lastDay = appendMsg(m, lastDay, true); });
-  scrollBottom();
-
-  const lastIso = data.length ? data[data.length-1].created_at : new Date().toISOString();
-  setSeen(gid, lastIso); groupUnread[gid] = 0; render();
+  const g=groupsMap[gid];if(!g)return;openGroupId=gid;renderedMsgIds=new Set();
+  $("gAv").style.cssText=`width:36px;height:36px;${avStyle(gid)}`;$("gAv").textContent="👥";$("gTitle").textContent=g.name;
+  $("gMembers").textContent=g.members.map(id=>id===me.id?"You":userName(usersMap[id]).split(" ")[0]).join(", ");
+  $("msgs").innerHTML=`<div class="loading"><div class="loader"></div></div>`;$("gchat").classList.add("show");
+  const {data,error}=await sb.from("GroupMessages").select("*").eq("group_id",gid).order("created_at",{ascending:true}).limit(300);
+  $("msgs").innerHTML="";
+  if(error){$("msgs").innerHTML=`<div class="error">${esc(error.message)}</div>`;return}
+  if(!data.length)$("msgs").innerHTML=`<div class="empty">💬 पहिला message पाठवा!</div>`;
+  let ld="";data.forEach(m=>{ld=appendMsg(m,ld,true)});scrollBottom();
+  setSeen(gid,data.length?data[data.length-1].created_at:new Date().toISOString());groupUnread[gid]=0;render();
 }
-
-function appendMsg(m, lastDay, silent){
-  if(renderedMsgIds.has(m.id)) return lastDay;
-  renderedMsgIds.add(m.id);
-  const box = $("msgs");
-  const empty = box.querySelector(".empty"); if(empty) empty.remove();
-
-  const day = new Date(m.created_at).toDateString();
-  if(day !== lastDay){
-    const s = document.createElement("div");
-    s.className = "day-sep"; s.textContent = dayLabel(m.created_at);
-    box.appendChild(s);
-  }
-  const mine = m.sender_id === me.id;
-  const div = document.createElement("div");
-  div.className = "bub " + (mine ? "me" : "other");
-  const who = mine ? "" :
-    `<div class="who" style="color:${nameColor(m.sender_id)}">${esc(userName(usersMap[m.sender_id]))}</div>`;
-  div.innerHTML = `${who}<div>${esc(m.content).replace(/\n/g,"<br>")}</div><div class="t">${fmtClock(m.created_at)}</div>`;
-  box.appendChild(div);
-  if(!silent) scrollBottom();
-  return day;
+function appendMsg(m,lastDay,silent){
+  if(renderedMsgIds.has(m.id))return lastDay;renderedMsgIds.add(m.id);
+  const box=$("msgs"),em=box.querySelector(".empty");if(em)em.remove();
+  const day=new Date(m.created_at).toDateString();
+  if(day!==lastDay){const s=document.createElement("div");s.className="day-sep";s.textContent=dayLabel(m.created_at);box.appendChild(s)}
+  const mine=m.sender_id===me.id,d=document.createElement("div");d.className="bub "+(mine?"me":"other");
+  const who=mine?"":`<div class="who" style="color:${pair(m.sender_id)[0]}">${esc(userName(usersMap[m.sender_id]))}</div>`;
+  d.innerHTML=`${who}<div>${esc(m.content).replace(/\n/g,"<br>")}</div><div class="t">${fmtClock(m.created_at)}</div>`;
+  box.appendChild(d);if(!silent)scrollBottom();return day;
 }
-function scrollBottom(){ const b = $("msgs"); b.scrollTop = b.scrollHeight; }
-
-function closeGroupChat(){
-  $("gchat").classList.remove("show");
-  openGroupId = null; render();
-}
-
+function scrollBottom(){const b=$("msgs");b.scrollTop=b.scrollHeight}
+function closeGroupChat(){$("gchat").classList.remove("show");openGroupId=null;render()}
 async function sendGroupMessage(){
-  const input = $("gInput"); const text = input.value.trim();
-  if(!text || !openGroupId) return;
-  input.value = ""; input.style.height = "auto";
-  const { data, error } = await sb.from("GroupMessages")
-    .insert({ group_id: openGroupId, sender_id: me.id, content: text }).select().single();
-  if(error){ toast("Send झाले नाही: " + error.message); input.value = text; return; }
-  const lastBub = [...$("msgs").querySelectorAll(".day-sep")].pop();
-  const lastDay = lastBub ? new Date().toDateString() : "";
-  appendMsg(data, lastDay);
-  groupLast[openGroupId] = { text: data.content, time: data.created_at, sender: me.id };
-  setSeen(openGroupId, data.created_at);
+  const i=$("gInput"),text=i.value.trim();if(!text||!openGroupId)return;i.value="";i.style.height="auto";
+  const {data,error}=await sb.from("GroupMessages").insert({group_id:openGroupId,sender_id:me.id,content:text}).select().single();
+  if(error){toast("Send झाले नाही: "+error.message);i.value=text;return}
+  appendMsg(data,new Date().toDateString());
+  groupLast[openGroupId]={text:data.content,time:data.created_at,sender:me.id};setSeen(openGroupId,data.created_at);
 }
-$("gInput").addEventListener("input", function(){
-  this.style.height = "auto"; this.style.height = Math.min(this.scrollHeight,110) + "px";
-});
-$("gInput").addEventListener("keydown", e => {
-  if(e.key === "Enter" && !e.shiftKey && window.innerWidth > 700){ e.preventDefault(); sendGroupMessage(); }
-});
+$("gInput").addEventListener("input",function(){this.style.height="auto";this.style.height=Math.min(this.scrollHeight,110)+"px"});
+$("gInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&innerWidth>700){e.preventDefault();sendGroupMessage()}});
 
-/* ================= REALTIME ================= */
+/* REALTIME */
 function startRealtime(){
-  if(!me) return;
-  if(realtimeChannel) sb.removeChannel(realtimeChannel);
-
-  realtimeChannel = sb.channel("gyansetu-main-" + me.id)
-
-    /* नवीन direct message */
-    .on("postgres_changes",
-      { event:"INSERT", schema:"public", table:"Messages", filter:"receiver_id=eq." + me.id },
-      payload => {
-        const m = payload.new; if(!m?.sender_id || m.sender_id === me.id) return;
-        unreadMessages[m.sender_id] = (unreadMessages[m.sender_id] || 0) + 1;
-        lastMsg[m.sender_id] = { text: msgText(m), time: m.created_at, mine:false };
-        render();
-      })
-
-    /* नवीन user */
-    .on("postgres_changes",
-      { event:"INSERT", schema:"public", table:"Profiles" },
-      async () => { await loadUsers(); render(); })
-
-    /* नवीन group message */
-    .on("postgres_changes",
-      { event:"INSERT", schema:"public", table:"GroupMessages" },
-      payload => {
-        const m = payload.new;
-        if(!groupsMap[m.group_id]) return;
-        groupLast[m.group_id] = { text: m.content, time: m.created_at, sender: m.sender_id };
-        if(m.sender_id === me.id){ render(); return; }
-        if(openGroupId === m.group_id){
-          appendMsg(m, new Date().toDateString());
-          setSeen(m.group_id, m.created_at);
-        }else{
-          groupUnread[m.group_id] = (groupUnread[m.group_id] || 0) + 1;
-        }
-        render();
-      })
-
-    /* मला कोणी नवीन group मध्ये add केले */
-    .on("postgres_changes",
-      { event:"INSERT", schema:"public", table:"GroupMembers", filter:"user_id=eq." + me.id },
-      async () => { await loadGroups(); render(); })
-
+  if(!me)return;if(realtimeChannel)sb.removeChannel(realtimeChannel);
+  realtimeChannel=sb.channel("gyansetu-main-"+me.id)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"Messages",filter:"receiver_id=eq."+me.id},p=>{const m=p.new;if(!m?.sender_id||m.sender_id===me.id)return;unreadMessages[m.sender_id]=(unreadMessages[m.sender_id]||0)+1;lastMsg[m.sender_id]={text:msgText(m),time:m.created_at,mine:false};render()})
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"Profiles"},async()=>{await loadUsers();render()})
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"GroupMessages"},p=>{const m=p.new;if(!groupsMap[m.group_id])return;groupLast[m.group_id]={text:m.content,time:m.created_at,sender:m.sender_id};
+      if(m.sender_id===me.id){render();return}
+      if(openGroupId===m.group_id){appendMsg(m,new Date().toDateString());setSeen(m.group_id,m.created_at)}else groupUnread[m.group_id]=(groupUnread[m.group_id]||0)+1;render()})
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"GroupMembers",filter:"user_id=eq."+me.id},async()=>{await loadGroups();render()})
     .subscribe();
-
-  /* ONLINE PRESENCE */
-  if(presenceChannel) sb.removeChannel(presenceChannel);
-  presenceChannel = sb.channel("gyansetu-presence", { config:{ presence:{ key: me.id } } });
-  presenceChannel
-    .on("presence", { event:"sync" }, () => {
-      onlineSet = new Set(Object.keys(presenceChannel.presenceState()));
-      onlineSet.delete(me.id);
-      render();
-    })
-    .subscribe(async status => {
-      if(status === "SUBSCRIBED") await presenceChannel.track({ at: Date.now() });
-    });
+  if(presenceChannel)sb.removeChannel(presenceChannel);
+  presenceChannel=sb.channel("gyansetu-presence",{config:{presence:{key:me.id}}});
+  presenceChannel.on("presence",{event:"sync"},()=>{onlineSet=new Set(Object.keys(presenceChannel.presenceState()));onlineSet.delete(me.id);render()})
+    .subscribe(async s=>{if(s==="SUBSCRIBED")await presenceChannel.track({at:Date.now()})});
 }
+function goBack(){if(openGroupId){closeGroupChat();return}if(document.referrer)history.back();else location.href="timepass.html"}
 
-/* ================= BACK ================= */
-function goBack(){
-  if(openGroupId){ closeGroupChat(); return; }
-  if(document.referrer) window.history.back();
-  else window.location.href = "home.html";
-}
-
-/* ================= START ================= */
-(async function start(){
-  await getCurrentUser();
-  if(!me){
-    $("list").innerHTML = `<div class="error">🔐 Login required.<br><br>Please login to view GyanSetu chats.</div>`;
-    return;
-  }
-  await refreshAll();
-  startRealtime();
-})();
+(async function(){await getCurrentUser();if(!me){$("list").innerHTML=`<div class="error">🔐 Login required.</div>`;return}await refreshAll();startRealtime()})();
 </script>
 </body>
 </html>
